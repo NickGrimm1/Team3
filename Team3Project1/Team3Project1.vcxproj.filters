@@ -132,9 +132,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Common.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Framework\Camera.h">
       <Filter>Framework</Filter>
     </ClInclude>
@@ -211,6 +208,9 @@
       <Filter>Framework</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateManager.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

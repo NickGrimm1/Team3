@@ -1,0 +1,255 @@
+/**
+<summary>Static Singleton class.
+Holds references to all framework abstractions in the layer below.
+Keeps track of all gamescreens currently active (ie being rendered, accepting input and being updated.
+Keeps track of pause & loading gamestates.
+Drives the Game Loop.
+
+Author: Nick Grimm
+Version: 1.0.0 03/02/2015.</summary>
+*/
+#include <vector>
+
+using namespace std;
+
+class GameStateManager
+{
+public:
+	/**
+	<summary>Initializes the Game State Manager.</summary>
+	*/
+	static bool Initialize()
+	{
+		// TODO: Thread this!!
+
+		if (instance == NULL)
+		{
+			instance = new GameStateManager();
+			if (!GraphicsEngine::Initialize(*graphics))
+				return false;
+			if (!AssetManager::Initialize(*assets))
+				return false;
+			if (!PhysicsEngine::Initialize(*physics))
+				return false;
+			if (!StorageManager::Initialize(*storage))
+				return false;
+			if (!InputManager::Initialize(*input, *this))
+				return false;
+			if (!AudioEngine::Initialize(*audio))
+				return false;
+			if (!NetworkManager::Initialize(*network))
+				return false;
+			if (!DebugManager::Initialize(*debug))
+				return false;
+			isLoaded = true;
+		}
+		return instance->isLoaded;
+	}
+	~GameStateManager()
+	{
+		delete instance;
+	}
+#pragma region Framework Abstractions
+	/**
+	<summary>Gets the game's Graphics Engine.</summary>
+	*/
+	static GraphicsEngine* Graphics() { return Instance()->graphics; }
+	/**
+	<summary>Gets the game's Audio Engine.</summary>
+	*/
+	static AudioEngine* Audio() { return Instance()->audio; }
+	/**
+	<summary>Gets the game's Asset Manager.</summary>
+	*/
+	static AssetManager* Assets() { return Instance()->assets; }
+	/**
+	<summary>Gets the game's Debug Manager.</summary>
+	*/
+	static DebugManager* Debug() { return Instance()->debug; }
+	/**
+	<summary>Gets the game's Input Manager.</summary>
+	*/
+	static InputManager* Input() { return Instance()->input; }
+	/**
+	<summary>Gets the game's Physics Engine.</summary>
+	*/
+	static PhysicsEngine* Physics() { return Instance()->physics; }
+	/**
+	<summary>Gets the game's Storage Manager.</summary>
+	*/
+	static StorageManager* Storage() { return Instance()->storage; }
+	/**
+	<summary>Gets the game's Network Manager.</summary>
+	*/
+	static NetworkManager Network() { return Instance()->network; }
+#pragma Endregion
+#pragma region State Methods
+	/**
+	<summary>Calls the Update </summary>
+	*/
+	static void Update()
+	{
+		for (int i = 0; i < Instance()->gameScreens.size(); i++)
+			Instance()->gameScreens.Update();
+	}
+	/**
+	<summary>Activates a global pause for the game. Note that individual game screens choose their own pause/resume behaviour.</summary>
+	*/
+	static void Pause()
+	{
+		for (int i = 0; i < Instance()->gameScreens.size(); i++)
+			Instance()->gameScreens.Pause();
+	}
+	/**
+	<summary>Activates a global resume for the game. Note that individual game screens choose their own pause/resume behaviour.</summary>
+	*/
+	static void Resume()
+	{
+		for (int i = 0; i < Instance()->gameScreens.size(); i++)
+			Instance()->gameScreens.Resume();
+	}
+	/**
+	<summary>Gets whether the engine has completed loading.</summary>
+	*/
+	static bool IsLoaded()
+	{
+		return Instance()->isLoaded;
+	}
+#pragma endregion
+#pragma region Input Handling
+	/**
+	<summary>Notifies all screens in the stack of a mouse event.</summary>
+	<param name='type'>The event type.</param>
+	<param name='position'>The resolution independent co-ordinates of the mouse cursor.</param>
+	*/
+	static void MouseEvent(MouseEvents::EventType type, Vector2& position)
+	{
+		for (int i = 0; i < Instance()->gameScreens.size(); i++)
+			Instance()->gameScreens[i]->MouseEvent(type, position);
+	}
+	/**
+	<summary>Notifies all screens in the stack that the mouse has moved.</summary>
+	<param name='start'>The resolution independent co-ordinates of the mouse cursor at the start of the frame.</param>
+	<param name='finish'>The resolution independent co-ordinates of the mouse cursor at the end of the frame.</param>
+	*/
+	static void MouseMoved(Vector2& start, Vector2& finish)
+	{
+		for (int i = 0; i < Instance()->gameScreens.size(); i++)
+			Instance()->gameScreens[i]->MouseMoved(start, finish);
+	}
+	/**
+	<summary>Notifies all screens in the stack that the mouse scroll wheel has moved.</summary>
+	<param name='amount'>The amount of the movement.</param>
+	*/
+	static void MouseScrolled(float amount)
+	{
+		for (int i = 0; i < Instance()->gameScreens.size(); i++)
+			Instance()->gameScreens[i]->MouseScrolled(amount);
+	}
+	/**
+	<summary>Notifies all screens in the stack of a keyboard event.</summary>
+	<param name='type'>The event type.</param>
+	<param name='key'>The key.</param>
+	*/
+	static void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key)
+	{
+		for (int i = 0; i < Instance()->gameScreens.size(); i++)
+			Instance()->gameScreens[i]->KeyboardEvent(type, key);
+	}
+	/**
+	<summary>Notifies all screens in the stack of a gamepad event.</summary>
+	<param name='playerID'>The ID for the controller.</param>
+	<param name='type'>The event type.</param>
+	<param name='button'>The button.</param>
+	*/
+	static void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button)
+	{
+		for (int i = 0; i < Instance()->gameScreens.size(); i++)
+			Instance()->gameScreens[i]->GamepadEvent(playerID, type, button);
+	}
+	/**
+	<summary>Notifies all screens in the stack that an analogue control is displaced.</summary>
+	<param name='playerID'>The ID for the controller.</param>
+	<param name='analogueControl'>The control that is displaced.</param>
+	<param name='amount'>The amount of the displacement. For the triggers, only the x co-ordinate is used.</param>
+	*/
+	static void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamePadEvents::AnalogueControl analogueControl, Vector2& amount)
+	{
+		for (int i = 0; i < Instance()->gameScreens.size(); i++)
+			Instance()->gameScreens[i]->GamepadAnalogueDisplacement(playerID, analogueControl, amount);
+	}
+#pragma endregion
+#pragma region Screen Changes
+	/**
+	<summary>Empties the screen stack and adds to the given screen.</summary>
+	<param name='gameScreen'>The new GameScreen to change to.</param>
+	*/
+	static void ChangeScreen(GameScreen* gameScreen)
+	{
+		Instance()->gameScreens.clear();
+		Instance()->gameScreens.push_back(gameScreen);
+	}
+	/**
+	<summary>Adds the new screen to the top of the stack, maintaining the order of screens below it. 2D screens will draw over all others in the order in which they were added.</summary>
+	<param name='gameScreen'>The new GameScreen to add.</param>
+	*/
+	static void AddGameScreen(GameScreen* gameScreen)
+	{
+		Instance()->gameScreens.push_back(gameScreen);
+	}
+	/**
+	<summary>Removes the first instance of a screen from the stack without clearing it. Useful for removing pause & loading screens.</summary>
+	<param name='gameScreen'>The GameScreen to remove.</param>
+	*/
+	static void RemoveGameScreen(GameScreen* gameScreen)
+	{
+		for (vector<GameScreen*>::iterator i = Instance()->gameScreens.begin(); i != Instance()->gameScreens.end(); i++)
+		{
+			if (*i == gameScreen)
+			{
+				Instance()->gameScreens.erase(i);
+				break;
+			}
+		}
+	}
+#pragma endregion
+private:
+#pragma region Contructors
+	/**
+	<summary>Constructor.</summary>
+	*/
+	GameStateManager() { }
+	/**
+	<summary>Copy Constructor. Private & not implemented. We don't want multiples of this class.</summary>
+	*/
+	GameStateManager(GameStateManager const&);
+	/**
+	<summary>Equals operator. Private & not implemented. We don't want multiples of this class.</summary>
+	*/
+	void operator=(GameStateManager const&);
+#pragma endregion
+#pragma region Instancing
+	static GameStateManager* instance;
+	/**
+	<summary>Gets or creates the single instance of the Game State.</summary>
+	*/
+	static GameStateManager* Instance()
+	{
+		if (instance == NULL)
+			instance = new GameStateManager();
+		return instance;
+	}
+#pragma endregion
+#pragma region Framework Components
+	bool isLoaded;
+	GraphicsEngine* graphics;
+	AudioEngine* audio;
+	AssetManager* assets;
+	DebugManager* debug;
+	InputManager* input;
+	PhysicsEngine* physics;
+	StorageManager* storage;
+	NetworkManager* network;
+#pragma endregion
+	vector<GameScreen*> gameScreens;
+};
