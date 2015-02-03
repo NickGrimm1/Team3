@@ -10,23 +10,71 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CubeRobot.cpp" />
+    <ClCompile Include="Frustum.cpp" />
+    <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Matrix4.cpp" />
+    <ClCompile Include="MD5Anim.cpp" />
+    <ClCompile Include="MD5FileData.cpp" />
+    <ClCompile Include="MD5Mesh.cpp" />
+    <ClCompile Include="MD5Node.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="OBJMesh.cpp" />
+    <ClCompile Include="OGLRenderer.cpp" />
+    <ClCompile Include="Plane.cpp" />
+    <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="SceneNode.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="ChildMeshInterface.h" />
+    <ClInclude Include="common.h" />
+    <ClInclude Include="CubeRobot.h" />
+    <ClInclude Include="Frustum.h" />
+    <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="InputDevice.h" />
+    <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Matrix4.h" />
+    <ClInclude Include="MD5Anim.h" />
+    <ClInclude Include="MD5FileData.h" />
+    <ClInclude Include="MD5Mesh.h" />
+    <ClInclude Include="MD5Node.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Mouse.h" />
+    <ClInclude Include="OBJMesh.h" />
+    <ClInclude Include="OGLRenderer.h" />
+    <ClInclude Include="Plane.h" />
+    <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="SceneNode.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="Vector3.h" />
+    <ClInclude Include="Vector4.h" />
+    <ClInclude Include="Window.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{7B7A6F2D-2E22-4DAF-B536-8CEE122ABEDD}</ProjectGuid>
-    <RootNamespace>Team3Project1</RootNamespace>
+    <ProjectGuid>{98D6B51B-CB0A-4389-ADC6-24082B967C3F}</ProjectGuid>
+    <RootNamespace>Shared</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -39,13 +87,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$..\GLEW\include\gl;$..\SOIL</IncludePath>
+    <IncludePath>..\GLEW\include;..\SOIL;$(IncludePath)</IncludePath>
+    <LibraryPath>..\SOIL\$(Configuration);..\GLEW\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>..\GLEW\include;..\SOIL;$(IncludePath)</IncludePath>
+    <LibraryPath>..\GLEW\lib\$(Configuration);..\SOIL\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -57,7 +111,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -65,55 +119,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\Framework\Camera.h" />
-    <ClInclude Include="..\Framework\ChildMeshInterface.h" />
-    <ClInclude Include="..\Framework\common.h" />
-    <ClInclude Include="..\Framework\CubeRobot.h" />
-    <ClInclude Include="..\Framework\Frustum.h" />
-    <ClInclude Include="..\Framework\GameTimer.h" />
-    <ClInclude Include="..\Framework\InputDevice.h" />
-    <ClInclude Include="..\Framework\Keyboard.h" />
-    <ClInclude Include="..\Framework\Matrix4.h" />
-    <ClInclude Include="..\Framework\MD5Anim.h" />
-    <ClInclude Include="..\Framework\MD5FileData.h" />
-    <ClInclude Include="..\Framework\MD5Mesh.h" />
-    <ClInclude Include="..\Framework\MD5Node.h" />
-    <ClInclude Include="..\Framework\Mesh.h" />
-    <ClInclude Include="..\Framework\Mouse.h" />
-    <ClInclude Include="..\Framework\OBJMesh.h" />
-    <ClInclude Include="..\Framework\OGLRenderer.h" />
-    <ClInclude Include="..\Framework\Plane.h" />
-    <ClInclude Include="..\Framework\Quaternion.h" />
-    <ClInclude Include="..\Framework\SceneNode.h" />
-    <ClInclude Include="..\Framework\Shader.h" />
-    <ClInclude Include="..\Framework\Vector2.h" />
-    <ClInclude Include="..\Framework\Vector3.h" />
-    <ClInclude Include="..\Framework\Vector4.h" />
-    <ClInclude Include="..\Framework\Window.h" />
-    <ClInclude Include="Common.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\Framework\Camera.cpp" />
-    <ClCompile Include="..\Framework\CubeRobot.cpp" />
-    <ClCompile Include="..\Framework\Frustum.cpp" />
-    <ClCompile Include="..\Framework\GameTimer.cpp" />
-    <ClCompile Include="..\Framework\Keyboard.cpp" />
-    <ClCompile Include="..\Framework\Matrix4.cpp" />
-    <ClCompile Include="..\Framework\MD5Anim.cpp" />
-    <ClCompile Include="..\Framework\MD5FileData.cpp" />
-    <ClCompile Include="..\Framework\MD5Mesh.cpp" />
-    <ClCompile Include="..\Framework\MD5Node.cpp" />
-    <ClCompile Include="..\Framework\Mesh.cpp" />
-    <ClCompile Include="..\Framework\Mouse.cpp" />
-    <ClCompile Include="..\Framework\OBJMesh.cpp" />
-    <ClCompile Include="..\Framework\OGLRenderer.cpp" />
-    <ClCompile Include="..\Framework\Plane.cpp" />
-    <ClCompile Include="..\Framework\Quaternion.cpp" />
-    <ClCompile Include="..\Framework\SceneNode.cpp" />
-    <ClCompile Include="..\Framework\Shader.cpp" />
-    <ClCompile Include="..\Framework\Window.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
