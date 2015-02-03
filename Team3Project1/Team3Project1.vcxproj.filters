@@ -1,22 +1,139 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Framework">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Framework\Graphics">
+      <UniqueIdentifier>{83f76a01-a6b3-4f1a-bcff-e92d2e801e3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Physics">
+      <UniqueIdentifier>{55002eef-9f52-48aa-8ca4-0a9e7f0e7e26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\User Interface">
+      <UniqueIdentifier>{7b2d1e22-7b42-40f3-bca1-7f6b820aa835}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Common">
+      <UniqueIdentifier>{b659b3c4-a084-47f3-8ffb-83cfb772a496}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Resource Manager">
+      <UniqueIdentifier>{76c86d0f-1e89-4902-bed5-75c4daae5248}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Debug">
+      <UniqueIdentifier>{f8d1fe65-2a87-40c5-9a5d-f0dc0c0f3eb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Loop Manager">
+      <UniqueIdentifier>{8453e873-032d-4564-a567-9160b8e3e505}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Graphics\Windows">
+      <UniqueIdentifier>{6bd02a71-4735-42fa-b964-aeb4fa1bfe0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Graphics\PS3">
+      <UniqueIdentifier>{200d0064-92b3-4643-be15-3b4ac5861edb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Graphics\PS3\Header Files">
+      <UniqueIdentifier>{772a4d05-aa73-4a6f-9a0d-c66597f9999d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Graphics\PS3\Source Files">
+      <UniqueIdentifier>{fc0b9c03-3a5d-4a0b-a7a7-eed34e49012a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Graphics\Windows\Header Files">
+      <UniqueIdentifier>{cbe379a3-aab0-4c38-a473-2d53877e3895}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Graphics\Windows\Source Files">
+      <UniqueIdentifier>{8f0f6b77-08ed-4994-b4d2-13157d58f517}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Common\Header Files">
+      <UniqueIdentifier>{4c76a13a-f78e-4e32-806f-2fb4730ed036}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Common\Source Files">
+      <UniqueIdentifier>{db7c016c-2284-4888-8b3d-46eb960a67d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Debug\Header Files">
+      <UniqueIdentifier>{61d37fd9-b8d7-41cd-bbb0-1a290720426c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Debug\Source Files">
+      <UniqueIdentifier>{93a45ca1-0ba0-48fb-bce5-eafc2f9be96f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Loop Manager\Header Files">
+      <UniqueIdentifier>{64a4f27c-81c9-43dd-9d8b-aacbaa59b249}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Loop Manager\Source Files">
+      <UniqueIdentifier>{ad6e49ec-ff26-4169-ba28-b79c1f0afd16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Resource Manager\Header Files">
+      <UniqueIdentifier>{2d066cfc-b3c2-4a8c-8cf1-92147ba6d3fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Resource Manager\Source Files">
+      <UniqueIdentifier>{9c2b6727-cae1-45e6-a14b-1048eaed6adb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\User Interface\Header Files">
+      <UniqueIdentifier>{45505a93-d824-4823-b210-16bde7a16bbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\User Interface\Source Files">
+      <UniqueIdentifier>{41fef0b0-568e-4b45-affe-ac755147412a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Physics\Header Files">
+      <UniqueIdentifier>{03aa629c-2f8d-4a51-a7f3-1f2abe52be60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Physics\Source Files">
+      <UniqueIdentifier>{70641f57-e449-4b28-894c-11dcf21ef01d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Artificial Intelligence">
+      <UniqueIdentifier>{2dcc95e2-a2cc-4712-b6f2-da28e0fff502}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Artificial Intelligence\Header Files">
+      <UniqueIdentifier>{8f5d6abe-8484-4d98-a766-9752a098c146}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Artificial Intelligence\Source Files">
+      <UniqueIdentifier>{e41fb13d-e937-41de-a3ef-f1cb43bf71f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{a5d4e5c0-b5a1-4e9a-be90-96ff9eb3ee57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Engine\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{eaf05c6d-3ffa-4748-8e3b-216e8ca0cdb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Menus">
+      <UniqueIdentifier>{2555e46a-ae47-4342-a9f1-96873db99edc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\MainGame">
+      <UniqueIdentifier>{b7aa0e69-b1a6-41a0-9179-b00ac9b36128}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\HUD">
+      <UniqueIdentifier>{4a54a704-f9ab-4799-9698-64a23a8706ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Menus\Header Files">
+      <UniqueIdentifier>{a0d6ae3d-44c5-4c07-921a-299f3f7f3fbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\MainGame\Header Files">
+      <UniqueIdentifier>{53dbac4e-656c-4f84-a876-547028f60503}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\HUD\Header Files">
+      <UniqueIdentifier>{d64745cc-b635-4255-bc27-4f89129e332a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Menus\Source Files">
+      <UniqueIdentifier>{86ed78f8-ee66-45b3-a156-4b3159b06bb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\MainGame\Source Files">
+      <UniqueIdentifier>{041853b8-d7a7-414d-bbfd-c8743cb03d2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\HUD\Source Files">
+      <UniqueIdentifier>{fce497ba-4b0f-4e74-8ee4-7eb86f492822}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
-      <Filter>Header Files</Filter>
+      <Filter>Engine\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\Camera.h">
       <Filter>Framework</Filter>
@@ -94,7 +211,7 @@
       <Filter>Framework</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Engine\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -156,7 +273,7 @@
       <Filter>Framework</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Engine\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
