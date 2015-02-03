@@ -64,7 +64,53 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Framework\Camera.h" />
+    <ClInclude Include="..\Framework\ChildMeshInterface.h" />
+    <ClInclude Include="..\Framework\common.h" />
+    <ClInclude Include="..\Framework\CubeRobot.h" />
+    <ClInclude Include="..\Framework\Frustum.h" />
+    <ClInclude Include="..\Framework\GameTimer.h" />
+    <ClInclude Include="..\Framework\InputDevice.h" />
+    <ClInclude Include="..\Framework\Keyboard.h" />
+    <ClInclude Include="..\Framework\Matrix4.h" />
+    <ClInclude Include="..\Framework\MD5Anim.h" />
+    <ClInclude Include="..\Framework\MD5FileData.h" />
+    <ClInclude Include="..\Framework\MD5Mesh.h" />
+    <ClInclude Include="..\Framework\MD5Node.h" />
+    <ClInclude Include="..\Framework\Mesh.h" />
+    <ClInclude Include="..\Framework\Mouse.h" />
+    <ClInclude Include="..\Framework\OBJMesh.h" />
+    <ClInclude Include="..\Framework\OGLRenderer.h" />
+    <ClInclude Include="..\Framework\Plane.h" />
+    <ClInclude Include="..\Framework\Quaternion.h" />
+    <ClInclude Include="..\Framework\SceneNode.h" />
+    <ClInclude Include="..\Framework\Shader.h" />
+    <ClInclude Include="..\Framework\Vector2.h" />
+    <ClInclude Include="..\Framework\Vector3.h" />
+    <ClInclude Include="..\Framework\Vector4.h" />
+    <ClInclude Include="..\Framework\Window.h" />
     <ClInclude Include="Common.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Framework\Camera.cpp" />
+    <ClCompile Include="..\Framework\CubeRobot.cpp" />
+    <ClCompile Include="..\Framework\Frustum.cpp" />
+    <ClCompile Include="..\Framework\GameTimer.cpp" />
+    <ClCompile Include="..\Framework\Keyboard.cpp" />
+    <ClCompile Include="..\Framework\Matrix4.cpp" />
+    <ClCompile Include="..\Framework\MD5Anim.cpp" />
+    <ClCompile Include="..\Framework\MD5FileData.cpp" />
+    <ClCompile Include="..\Framework\MD5Mesh.cpp" />
+    <ClCompile Include="..\Framework\MD5Node.cpp" />
+    <ClCompile Include="..\Framework\Mesh.cpp" />
+    <ClCompile Include="..\Framework\Mouse.cpp" />
+    <ClCompile Include="..\Framework\OBJMesh.cpp" />
+    <ClCompile Include="..\Framework\OGLRenderer.cpp" />
+    <ClCompile Include="..\Framework\Plane.cpp" />
+    <ClCompile Include="..\Framework\Quaternion.cpp" />
+    <ClCompile Include="..\Framework\SceneNode.cpp" />
+    <ClCompile Include="..\Framework\Shader.cpp" />
+    <ClCompile Include="..\Framework\Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
