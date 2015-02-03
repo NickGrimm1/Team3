@@ -92,8 +92,23 @@
     <ClInclude Include="..\Framework\Vector3.h" />
     <ClInclude Include="..\Framework\Vector4.h" />
     <ClInclude Include="..\Framework\Window.h" />
+    <ClInclude Include="AssetManager.h" />
+    <ClInclude Include="AudioEngine.h" />
+    <ClInclude Include="DebugManager.h" />
+    <ClInclude Include="Entity2D.h" />
+    <ClInclude Include="GameScreen.h" />
+    <ClInclude Include="GameScreen2D.h" />
+    <ClInclude Include="GameScreen3D.h" />
     <ClInclude Include="GameStateManager.h" />
+    <ClInclude Include="GraphicsEngine.h" />
+    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="NetworkManager.h" />
+    <ClInclude Include="PhysicsEngine.h" />
+    <ClInclude Include="Rectangle.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="StorageManager.h" />
+    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Camera.cpp" />

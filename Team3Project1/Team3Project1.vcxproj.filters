@@ -23,9 +23,6 @@
     <Filter Include="Framework\Debug">
       <UniqueIdentifier>{f8d1fe65-2a87-40c5-9a5d-f0dc0c0f3eb6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\Loop Manager">
-      <UniqueIdentifier>{8453e873-032d-4564-a567-9160b8e3e505}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Framework\Graphics\Windows">
       <UniqueIdentifier>{6bd02a71-4735-42fa-b964-aeb4fa1bfe0a}</UniqueIdentifier>
     </Filter>
@@ -55,12 +52,6 @@
     </Filter>
     <Filter Include="Framework\Debug\Source Files">
       <UniqueIdentifier>{93a45ca1-0ba0-48fb-bce5-eafc2f9be96f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Loop Manager\Header Files">
-      <UniqueIdentifier>{64a4f27c-81c9-43dd-9d8b-aacbaa59b249}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Loop Manager\Source Files">
-      <UniqueIdentifier>{ad6e49ec-ff26-4169-ba28-b79c1f0afd16}</UniqueIdentifier>
     </Filter>
     <Filter Include="Framework\Resource Manager\Header Files">
       <UniqueIdentifier>{2d066cfc-b3c2-4a8c-8cf1-92147ba6d3fd}</UniqueIdentifier>
@@ -129,6 +120,33 @@
     </Filter>
     <Filter Include="Game\HUD\Source Files">
       <UniqueIdentifier>{fce497ba-4b0f-4e74-8ee4-7eb86f492822}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Network">
+      <UniqueIdentifier>{ecafb3c7-4560-4cd8-ba5d-48e1741eac69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Network\Header Files">
+      <UniqueIdentifier>{20137d88-0d3c-433b-a363-ff63357e6cb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Network\Source Files">
+      <UniqueIdentifier>{6fead6d5-885a-441e-8595-1aaa7d9b2022}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Storage">
+      <UniqueIdentifier>{880f6a9f-fcdf-41dd-ab4a-274552cbe573}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Storage\Header Files">
+      <UniqueIdentifier>{c32e2041-ed4a-419a-8d01-240d43d89e76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Storage\Source Files">
+      <UniqueIdentifier>{2256ae78-9b0d-4b4d-a5b9-addd5fc6dfc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Audio">
+      <UniqueIdentifier>{88a26f10-cfe7-4b56-8db0-5615529cc89c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Audio\Header Files">
+      <UniqueIdentifier>{e90c0381-4806-4331-8e92-1b82330cabdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Audio\Source Files">
+      <UniqueIdentifier>{59146a63-ef9f-4ff6-a2e0-f2012c0c6a7c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -207,11 +225,56 @@
     <ClInclude Include="..\Framework\Window.h">
       <Filter>Framework</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameStateManager.h">
       <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScreen.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScreen2D.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScreen3D.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Framework\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Rectangle.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity2D.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsEngine.h">
+      <Filter>Framework\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugManager.h">
+      <Filter>Framework\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetManager.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Framework\User Interface\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsEngine.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkManager.h">
+      <Filter>Framework\Network\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StorageManager.h">
+      <Filter>Framework\Storage\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioEngine.h">
+      <Filter>Framework\Audio\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

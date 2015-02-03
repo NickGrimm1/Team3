@@ -8,7 +8,17 @@ Drives the Game Loop.
 Author: Nick Grimm
 Version: 1.0.0 03/02/2015.</summary>
 */
+#pragma once
 #include <vector>
+#include "GameScreen.h"
+#include "PhysicsEngine.h"
+#include "GraphicsEngine.h"
+#include "AssetManager.h"
+#include "InputManager.h"
+#include "DebugManager.h"
+#include "AudioEngine.h"
+#include "StorageManager.h"
+#include "NetworkManager.h"
 
 using namespace std;
 
@@ -21,27 +31,28 @@ public:
 	static bool Initialize()
 	{
 		// TODO: Thread this!!
+		// TODO: Add Game Loop!!
 
 		if (instance == NULL)
 		{
 			instance = new GameStateManager();
-			if (!GraphicsEngine::Initialize(*graphics))
+			if (!GraphicsEngine::Initialize(*(instance->graphics)))
 				return false;
-			if (!AssetManager::Initialize(*assets))
+			if (!AssetManager::Initialize(*(instance->assets)))
 				return false;
-			if (!PhysicsEngine::Initialize(*physics))
+			if (!PhysicsEngine::Initialize(*(instance->physics)))
 				return false;
-			if (!StorageManager::Initialize(*storage))
+			if (!StorageManager::Initialize(*(instance->storage)))
 				return false;
-			if (!InputManager::Initialize(*input, *this))
+			if (!InputManager::Initialize(*(instance->input), *instance))
 				return false;
-			if (!AudioEngine::Initialize(*audio))
+			if (!AudioEngine::Initialize(*(instance->audio)))
 				return false;
-			if (!NetworkManager::Initialize(*network))
+			if (!NetworkManager::Initialize(*(instance->network)))
 				return false;
-			if (!DebugManager::Initialize(*debug))
+			if (!DebugManager::Initialize(*(instance->debug)))
 				return false;
-			isLoaded = true;
+			instance->isLoaded = true;
 		}
 		return instance->isLoaded;
 	}
@@ -81,8 +92,8 @@ public:
 	/**
 	<summary>Gets the game's Network Manager.</summary>
 	*/
-	static NetworkManager Network() { return Instance()->network; }
-#pragma Endregion
+	static NetworkManager* Network() { return Instance()->network; }
+#pragma endregion
 #pragma region State Methods
 	/**
 	<summary>Calls the Update </summary>
