@@ -93,6 +93,9 @@
     <ClInclude Include="..\Framework\Window.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Camera.cpp">
@@ -151,6 +154,9 @@
     </ClCompile>
     <ClCompile Include="..\Framework\Window.cpp">
       <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

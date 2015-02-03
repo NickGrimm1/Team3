@@ -93,6 +93,7 @@
     <ClInclude Include="..\Framework\Vector4.h" />
     <ClInclude Include="..\Framework\Window.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Camera.cpp" />
@@ -114,6 +115,7 @@
     <ClCompile Include="..\Framework\SceneNode.cpp" />
     <ClCompile Include="..\Framework\Shader.cpp" />
     <ClCompile Include="..\Framework\Window.cpp" />
+    <ClCompile Include="Renderer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
