@@ -1,3 +1,12 @@
+/**
+<summary>Renderer pipline class,
+contains all the methods and variables needed to output
+grapical elements to screen.
+
+Author: Sherif Salem
+Version: 0.0.1 03/02/2015.</summary>
+*/
+
 #pragma once
 
 #include "../Framework/Frustum.h"

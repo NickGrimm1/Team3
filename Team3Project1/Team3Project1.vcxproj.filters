@@ -297,6 +297,9 @@
     <ClInclude Include="..\Framework\Weather.h">
       <Filter>Framework\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="..\Framework\ParticleEmitter.h">
+      <Filter>Framework\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Light.cpp">
@@ -363,6 +366,9 @@
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Framework\Weather.cpp">
+      <Filter>Framework\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\ParticleEmitter.cpp">
       <Filter>Framework\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
