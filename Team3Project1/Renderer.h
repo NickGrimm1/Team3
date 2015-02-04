@@ -1,4 +1,7 @@
 #pragma once
+
+#include "../Framework/Frustum.h"
+#include "../Framework/SceneNode.h"
 #include "../Framework/Light.h"
 #include "../Framework/Texture.h"
 #include "../Framework/OGLRenderer.h"
@@ -36,11 +39,18 @@ private:
 	//Member variables.
 
 	Texture*	texArray[10];
-	//Light		lightArray[10];
+	//Light*		lightArray[10];
 	Mesh*		meshArray[10];
 
-	Shader*		basicShader, shadowShader, bloomShader, deferredShader, blurShader, combineShader;
+	Shader*		basicShader, 
+				shadowShader, 
+				bloomShader, 
+				deferredShader, 
+				blurShader, 
+				combineShader;
 
+	SceneNode*	root;
 
+	Frustum		frameFrustum;
 
 };

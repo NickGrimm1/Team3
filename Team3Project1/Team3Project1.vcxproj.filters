@@ -291,6 +291,9 @@
     <ClInclude Include="Renderer.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Framework\Weather.h">
+      <Filter>Framework\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Light.cpp">
@@ -355,6 +358,9 @@
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Weather.cpp">
+      <Filter>Framework\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
