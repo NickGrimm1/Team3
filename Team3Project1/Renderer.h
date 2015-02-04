@@ -39,31 +39,30 @@ public:
 
 	void			ToggleDebug(int arg, bool onOff);
 
-private:
-	//Start of render pipeline
-	void			RenderScene(float msec);
-	
+protected:
 	//Rendering pipeline components.
+	virtual void	RenderScene();
+	virtual void	UpdateScene(float msec);
 	void			ShadowPass();
 	void			DeferredLightPass();
 	void			MotionBlurPass();
 	void			BloomPass();
 
-	//Member variables.
+	//SceneNode methods
+	void			BuildNodeLists(SceneNode* from);
+	void			SortNodeLists();
+	void			ClearNodeLists();
+	void			DrawNodes();
+	void			DrawNode(SceneNode*n);
 
+	//Member variables.
 	bool			debugElem[10];
 
 	Texture*		texArray[10];
 	//Light*		lightArray[10];
 	Mesh*			meshArray[10];
 
-	Shader*			basicShader, 
-					shadowShader, 
-					bloomShader, 
-					deferredShader, 
-					blurShader, 
-					combineShader,
-					particleShader;
+	Camera*			camera;
 
 	SceneNode*		root;
 
@@ -72,6 +71,14 @@ private:
 	Weather*		snow, 
 					rain, 
 					sandstorm;
+
+	Shader*			basicShader, 
+					shadowShader, 
+					bloomShader, 
+					deferredShader, 
+					blurShader, 
+					combineShader,
+					particleShader;
 
 	GLuint			bufferFBO, 
 					processFBO, 
@@ -85,5 +92,6 @@ private:
 					lightEmissiveTex, 
 					lightSpecularTex;
 
-	
+	vector<SceneNode*> transparentNodeList;
+	vector<SceneNode*> nodeList;
 };
