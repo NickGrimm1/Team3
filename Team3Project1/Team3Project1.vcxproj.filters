@@ -171,9 +171,6 @@
     <ClInclude Include="GameScreen3D.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Framework\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Rectangle.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
@@ -294,11 +291,14 @@
     <ClInclude Include="..\Framework\Window.h">
       <Filter>Framework\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Weather.h">
+      <Filter>Framework\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Framework\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="..\Framework\Light.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
@@ -357,6 +357,12 @@
       <Filter>Framework\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\Framework\Window.cpp">
+      <Filter>Framework\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Weather.cpp">
       <Filter>Framework\Graphics</Filter>
     </ClCompile>
   </ItemGroup>

@@ -94,6 +94,7 @@
     <ClInclude Include="..\Framework\Vector2.h" />
     <ClInclude Include="..\Framework\Vector3.h" />
     <ClInclude Include="..\Framework\Vector4.h" />
+    <ClInclude Include="..\Framework\Weather.h" />
     <ClInclude Include="..\Framework\Window.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="AudioEngine.h" />
@@ -133,6 +134,7 @@
     <ClCompile Include="..\Framework\SceneNode.cpp" />
     <ClCompile Include="..\Framework\Shader.cpp" />
     <ClCompile Include="..\Framework\Texture.cpp" />
+    <ClCompile Include="..\Framework\Weather.cpp" />
     <ClCompile Include="..\Framework\Window.cpp" />
     <ClCompile Include="Renderer.cpp" />
   </ItemGroup>
