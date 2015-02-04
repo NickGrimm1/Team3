@@ -297,6 +297,15 @@
     <ClInclude Include="..\Framework\Weather.h">
       <Filter>Framework\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="..\Framework\CollisionVolume.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\InertialMatrixHelper.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Spring.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Light.cpp">
@@ -364,6 +373,9 @@
     </ClCompile>
     <ClCompile Include="..\Framework\Weather.cpp">
       <Filter>Framework\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Spring.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

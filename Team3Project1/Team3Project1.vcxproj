@@ -70,10 +70,12 @@
     <ClInclude Include="..\Framework\BumpTexture.h" />
     <ClInclude Include="..\Framework\Camera.h" />
     <ClInclude Include="..\Framework\ChildMeshInterface.h" />
+    <ClInclude Include="..\Framework\CollisionVolume.h" />
     <ClInclude Include="..\Framework\common.h" />
     <ClInclude Include="..\Framework\EmptyTexture.h" />
     <ClInclude Include="..\Framework\Frustum.h" />
     <ClInclude Include="..\Framework\GameTimer.h" />
+    <ClInclude Include="..\Framework\InertialMatrixHelper.h" />
     <ClInclude Include="..\Framework\InputDevice.h" />
     <ClInclude Include="..\Framework\Keyboard.h" />
     <ClInclude Include="..\Framework\Light.h" />
@@ -90,6 +92,7 @@
     <ClInclude Include="..\Framework\Quaternion.h" />
     <ClInclude Include="..\Framework\SceneNode.h" />
     <ClInclude Include="..\Framework\Shader.h" />
+    <ClInclude Include="..\Framework\Spring.h" />
     <ClInclude Include="..\Framework\Texture.h" />
     <ClInclude Include="..\Framework\Vector2.h" />
     <ClInclude Include="..\Framework\Vector3.h" />
@@ -133,6 +136,7 @@
     <ClCompile Include="..\Framework\Quaternion.cpp" />
     <ClCompile Include="..\Framework\SceneNode.cpp" />
     <ClCompile Include="..\Framework\Shader.cpp" />
+    <ClCompile Include="..\Framework\Spring.cpp" />
     <ClCompile Include="..\Framework\Texture.cpp" />
     <ClCompile Include="..\Framework\Weather.cpp" />
     <ClCompile Include="..\Framework\Window.cpp" />

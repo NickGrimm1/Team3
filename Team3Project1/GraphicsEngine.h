@@ -11,12 +11,19 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "../Framework/Light.h"
 #include "../Framework/Texture.h"
 #include "../Framework/Mesh.h"
+#include "../Framework/Keyboard.h"
+#include "Renderer.h"
 
 class GraphicsEngine
 {
 	// TODO: Implement Graphics Engine.
 public:
 	static bool Initialize(GraphicsEngine& out);
+	static bool Destroy(GraphicsEngine& engine);
+
+	bool CreateNewGameWindow(const char* title, unsigned int width, unsigned int height, bool fullScreen); // Presumably this will be different for PS3
+
+	Keyboard& GetKeyboard();
 
 	// Light interface
 	unsigned int AddPointLight(Vector3 lightPosition, float lightRadius, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
@@ -38,6 +45,13 @@ public:
 	bool RemoveMesh(unsigned int meshReference);
 
 	// Textures interface
-	unsigned int AddTexture(const char* filename, bool enableMipMaps, bool enableAnisotropicFiltering);
+	unsigned int AddTexture(const char* filename, bool enableMipMaps = false, bool enableAnisotropicFiltering = false);
 	bool RemoveTexture(unsigned int textureReference);
+
+private:
+	GraphicsEngine();
+	~GraphicsEngine();
+
+	Renderer	renderer;
+	Window		window;
 };
