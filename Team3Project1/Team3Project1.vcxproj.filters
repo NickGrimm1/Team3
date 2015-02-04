@@ -154,6 +154,9 @@
     <Filter Include="Framework\Graphics\Header">
       <UniqueIdentifier>{74b8fdca-48d9-47e7-ae00-47f83cde34fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{adf2d61d-9124-4594-9fb3-582140c6248e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameStateManager.h">
@@ -356,5 +359,25 @@
     <ClCompile Include="..\Framework\Window.cpp">
       <Filter>Framework\Graphics</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Shaders\debugVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\debugFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\TechFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\TechVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\TexturedFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\TexturedVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

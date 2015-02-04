@@ -136,6 +136,14 @@
     <ClCompile Include="..\Framework\Window.cpp" />
     <ClCompile Include="Renderer.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Shaders\debugFragment.glsl" />
+    <None Include="..\Shaders\debugVertex.glsl" />
+    <None Include="..\Shaders\TechFragment.glsl" />
+    <None Include="..\Shaders\TechVertex.glsl" />
+    <None Include="..\Shaders\TexturedFragment.glsl" />
+    <None Include="..\Shaders\TexturedVertex.glsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
