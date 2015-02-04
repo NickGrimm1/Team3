@@ -133,6 +133,30 @@ Matrix4 Matrix4::Rotation(float degrees, const Vector3 &inaxis)	 {
 	return m;
 }
 
+Matrix4 Matrix4::Rotation(Vector3 &x, Vector3 &y, Vector3 &z) {
+
+	Matrix4 m;
+	m.ToIdentity();
+
+	x.Normalise();
+	y.Normalise();
+	z.Normalise();
+
+	m.values[0] = x.x;
+	m.values[1] = x.y;
+	m.values[2] = x.z;
+
+	m.values[4] = y.x;
+	m.values[5] = y.y;
+	m.values[6] = y.z;
+
+	m.values[8]  = z.x;
+	m.values[9]  = z.y;
+	m.values[10] = z.z;
+
+	return m;
+}
+
 Matrix4 Matrix4::Scale( const Vector3 &scale )	{
 	Matrix4 m;
 

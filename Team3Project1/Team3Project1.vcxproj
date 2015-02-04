@@ -67,14 +67,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Framework\BumpTexture.h" />
     <ClInclude Include="..\Framework\Camera.h" />
     <ClInclude Include="..\Framework\ChildMeshInterface.h" />
     <ClInclude Include="..\Framework\common.h" />
     <ClInclude Include="..\Framework\CubeRobot.h" />
+    <ClInclude Include="..\Framework\EmptyTexture.h" />
     <ClInclude Include="..\Framework\Frustum.h" />
     <ClInclude Include="..\Framework\GameTimer.h" />
     <ClInclude Include="..\Framework\InputDevice.h" />
     <ClInclude Include="..\Framework\Keyboard.h" />
+    <ClInclude Include="..\Framework\Light.h" />
     <ClInclude Include="..\Framework\Matrix4.h" />
     <ClInclude Include="..\Framework\MD5Anim.h" />
     <ClInclude Include="..\Framework\MD5FileData.h" />
@@ -88,6 +91,7 @@
     <ClInclude Include="..\Framework\Quaternion.h" />
     <ClInclude Include="..\Framework\SceneNode.h" />
     <ClInclude Include="..\Framework\Shader.h" />
+    <ClInclude Include="..\Framework\Texture.h" />
     <ClInclude Include="..\Framework\Vector2.h" />
     <ClInclude Include="..\Framework\Vector3.h" />
     <ClInclude Include="..\Framework\Vector4.h" />
@@ -116,6 +120,7 @@
     <ClCompile Include="..\Framework\Frustum.cpp" />
     <ClCompile Include="..\Framework\GameTimer.cpp" />
     <ClCompile Include="..\Framework\Keyboard.cpp" />
+    <ClCompile Include="..\Framework\Light.cpp" />
     <ClCompile Include="..\Framework\Matrix4.cpp" />
     <ClCompile Include="..\Framework\MD5Anim.cpp" />
     <ClCompile Include="..\Framework\MD5FileData.cpp" />
@@ -129,6 +134,7 @@
     <ClCompile Include="..\Framework\Quaternion.cpp" />
     <ClCompile Include="..\Framework\SceneNode.cpp" />
     <ClCompile Include="..\Framework\Shader.cpp" />
+    <ClCompile Include="..\Framework\Texture.cpp" />
     <ClCompile Include="..\Framework\Window.cpp" />
     <ClCompile Include="Renderer.cpp" />
   </ItemGroup>

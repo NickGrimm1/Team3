@@ -276,6 +276,18 @@
     <ClInclude Include="AudioEngine.h">
       <Filter>Framework\Audio\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Framework\BumpTexture.h">
+      <Filter>Framework\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\EmptyTexture.h">
+      <Filter>Framework\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Light.h">
+      <Filter>Framework\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Texture.h">
+      <Filter>Framework\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Camera.cpp">
@@ -337,6 +349,12 @@
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Light.cpp">
+      <Filter>Framework\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Texture.cpp">
+      <Filter>Framework\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

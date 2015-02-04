@@ -49,6 +49,9 @@ public:
 	//Analogous to glRotatef
 	static Matrix4 Rotation(float degrees, const Vector3 &axis);
 
+	// Creates a rotation matrix that rotates into the co-ordinate scheme defined by x,y,z
+	static Matrix4 Rotation(Vector3 &x, Vector3 &y, Vector3 &z);
+
 	//Creates a scaling matrix (puts the 'scale' vector down the diagonal)
 	//Analogous to glScalef
 	static Matrix4 Scale(const Vector3 &scale);
