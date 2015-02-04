@@ -6,11 +6,12 @@
 #include "../Framework/Texture.h"
 #include "../Framework/OGLRenderer.h"
 #include "../Framework/Weather.h"
+#include "../Framework/Camera.h"
 
 class Renderer : public OGLRenderer
 {
 public:
-	Renderer(void);
+	Renderer(Window &parent);
 	~Renderer(void);
 
 	void			Render(float msec);
@@ -27,7 +28,7 @@ public:
 	Mesh&			GetMesh(int arg);
 	void			RemoveMesh(int arg);
 
-	void			ToggleDebug(int arg);
+	void			ToggleDebug(int arg, bool onOff);
 
 private:
 	//Start of render pipeline
@@ -74,4 +75,6 @@ private:
 					shadowTex, 
 					lightEmissiveTex, 
 					lightSpecularTex;
+
+	
 };
