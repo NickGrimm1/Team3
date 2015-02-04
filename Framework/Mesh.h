@@ -51,6 +51,11 @@ public:
 	//Generates a coloured quad, going from -1 to 1 on the x and z axis, with adjustable texture coords.
 	static Mesh*	GenerateQuadTexCoordCol(Vector2 scale, Vector2 texCoord, Vector4 colour); //NX 01/11/2012
 
+	// Generates Circle/Cone/Cylinder meshes with subdivs segments to approximate curvature
+	static Mesh* GenerateCircle(unsigned int subdivs);
+	static Mesh* GenerateCone(unsigned int subdivs);
+	static Mesh* GenerateCylinder(unsigned int subdivs);
+
 	//Sets the Mesh's diffuse map. Takes an OpenGL texture 'name'
 	void	SetTexture(GLuint tex)	{texture = tex;}
 	//Gets the Mesh's diffuse map. Returns an OpenGL texture 'name'

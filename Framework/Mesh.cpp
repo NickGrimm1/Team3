@@ -187,6 +187,144 @@ Mesh* Mesh::GenerateQuadTexCoordCol(Vector2 scale, Vector2 texCoord, Vector4 col
 
 	return m;
 }
+
+Mesh* Mesh::GenerateCone(unsigned int subdivs) {
+	Mesh* m = new Mesh();
+	m->type = GL_TRIANGLES;
+	m->numVertices = subdivs * 2; // Need subdiv copies of the tip vertex to maintain normals
+
+	m->vertices = new Vector3[m->numVertices];
+	m->colours = new Vector4[m->numVertices];
+//	m->textureCoords = new Vector2[m->numVertices];
+	//m->vertices[0] = Vector3(0.0f, 0.0f, 0.0f);
+	//m->colours[0] = Vector4(0, 0, 0, 1.0f);
+	//m->textureCoords[0] = Vector2(0.0f, 1.0f);
+	
+	float subdiv_angle = 2 * PI / subdivs;
+	float tex_inc = 1.0f / (float) subdivs;
+	float alpha = 0.0f;
+	for (unsigned int i = 0; i < subdivs; ++i) { // First set of vertices is the bottom circle
+		float s = sin(alpha);
+		float c = cos(alpha);
+		m->vertices[i] = Vector3(s, 1, c);
+		m->colours[i] = Vector4(1, 1, 1, 1.0f);
+		alpha += subdiv_angle;
+	
+		m->vertices[i + subdivs] = Vector3(0,0,0);
+		m->colours[i + subdivs] = Vector4(1,1,1,1);
+
+		//m->textureCoords[i] = Vector2((float) i * tex_inc, 0);
+		//m->textureCoords[i + subdivs] = Vector2((float) i * tex_inc, 1);
+	}	
+	
+//	for (unsigned int i = 0; i < m->numVertices; i++) cout << "tex " << i << " = " << m->textureCoords[i].x << ", " << m->textureCoords[i].y << endl;
+
+	m->indices = new unsigned int[subdivs * 3 + 3];
+	for (unsigned int i = 0; i < subdivs; ++i) {
+		// triangle 1 - base 0, base 1, top - counter clockwise order
+		m->indices[m->numIndices++] = i;
+		m->indices[m->numIndices++] = i + 1;
+		m->indices[m->numIndices++] = i + subdivs;
+	}
+	
+	m->indices[m->numIndices++] = subdivs - 1;
+	m->indices[m->numIndices++] = 0;
+	m->indices[m->numIndices++] = subdivs;
+
+//	m->GenerateNormals();
+//	m->GenerateTangents();
+
+	m->BufferData(); // copy to graphics memory
+	return m;
+}
+
+Mesh* Mesh::GenerateCylinder(unsigned int subdivs) {
+	Mesh* m = new Mesh();
+
+	m->numVertices = (subdivs + 1) * 2;
+	m->vertices = new Vector3[m->numVertices];
+	m->colours = new Vector4[m->numVertices];
+	m->textureCoords = new Vector2[m->numVertices];
+	m->normals = new Vector3[m->numVertices];
+	m->tangents = new Vector3[m->numVertices];
+	m->type = GL_TRIANGLES;
+
+	float subdiv_angle = 2 * PI / subdivs;
+	float alpha = 0.0f;
+	GLfloat tex_res = 1.0f / subdivs;
+	for (unsigned int i = 0; i < subdivs + 1; ++i) {
+		float s = sin(alpha);
+		float c = cos(alpha);
+		m->vertices[i] = Vector3(s, 0, c);
+		m->vertices[i + subdivs + 1] = Vector3(s, 1.0f, c);
+		m->colours[i] = Vector4(0, 0, 0, 1.0f);
+		m->colours[i + subdivs + 1] = Vector4(0, 0, 0, 1.0f);
+		m->normals[i] = Vector3(s, 0, c);
+		m->normals[i + subdivs + 1] = Vector3(s, 0, c);
+		m->normals[i].Normalise();
+		m->normals[i + subdivs + 1].Normalise();
+		m->tangents[i] = Vector3(c, 0, s);
+		m->tangents[i + subdivs + 1] = Vector3(c, 0, s);
+		m->tangents[i].Normalise();
+		m->tangents[i + subdivs + 1].Normalise();
+		m->textureCoords[i] = Vector2(i * tex_res, 0.0f);
+		m->textureCoords[i + subdivs + 1] = Vector2(i * tex_res, 1.0f);
+		alpha += subdiv_angle;
+	}
+
+	// Setup index buffer
+	m->indices = new unsigned int[subdivs * 6];
+	m->numIndices = 0;
+	for (unsigned int i = 0; i < subdivs; ++i) {
+		// triangle 1 - base 0, base 1, top 0 - counter clockwise order
+		m->indices[m->numIndices++] = i;
+		m->indices[m->numIndices++] = i + 1;
+		m->indices[m->numIndices++] = i + subdivs + 1;
+		// triangle 2 - top 0, base 1, top 1
+		m->indices[m->numIndices++] = i + subdivs + 1;
+		m->indices[m->numIndices++] = i + 1;
+		m->indices[m->numIndices++] = i + subdivs + 2;
+	}
+
+	m->BufferData(); // copy to graphics memory
+
+	return m;
+}
+
+Mesh* Mesh::GenerateCircle(unsigned int subdivs) {
+	// Going to draw a unit circle at origin in xz plane
+	
+	Mesh* m = new Mesh();
+	m->type = GL_TRIANGLE_FAN;
+	m->numVertices = subdivs + 2; // Additional vertex at circle centre + repeat first vertex on circumference to close off circle
+
+	m->vertices = new Vector3[m->numVertices];
+	m->colours = new Vector4[m->numVertices];
+	m->textureCoords = new Vector2[m->numVertices];
+	m->normals = new Vector3[m->numVertices];
+	m->vertices[0] = Vector3( 0.0f, 0.0f, 0.0f); // Circle centre at origin
+	m->colours[0] = Vector4(0, 0, 0, 1.0f);
+	m->textureCoords[0] = Vector2(0.0f, 0.0f); // Texel 0,0 at circle centre
+	m->normals[0] = Vector3(0,1,0);
+
+	float subdiv_angle = 2 * PI / subdivs;
+	float alpha = 0.0f;
+	for (unsigned int i = 1; i <= subdivs + 1; ++i) { // length is subdivs + 2
+		float s = sin(alpha);
+		float c = cos(alpha);
+		m->vertices[i] = Vector3(s, 0, c);
+		m->colours[i] = Vector4(0, 0, 0, 1.0f);
+		m->normals[i] = Vector3(0,1,0); // straight up
+		m->textureCoords[i] = Vector2(s, c); // Make sure texture is set to repeat to handle other quadrants
+		alpha += subdiv_angle;
+	}
+
+	m->GenerateTangents();
+
+	m->BufferData(); // copy to graphics memory
+	return m;
+}
+
 void	Mesh::BufferData()	{
 	//GenerateNormals();
 	//GenerateTangents();
