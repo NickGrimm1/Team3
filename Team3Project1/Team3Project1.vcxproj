@@ -71,7 +71,6 @@
     <ClInclude Include="..\Framework\Camera.h" />
     <ClInclude Include="..\Framework\ChildMeshInterface.h" />
     <ClInclude Include="..\Framework\common.h" />
-    <ClInclude Include="..\Framework\CubeRobot.h" />
     <ClInclude Include="..\Framework\EmptyTexture.h" />
     <ClInclude Include="..\Framework\Frustum.h" />
     <ClInclude Include="..\Framework\GameTimer.h" />
@@ -116,7 +115,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Camera.cpp" />
-    <ClCompile Include="..\Framework\CubeRobot.cpp" />
     <ClCompile Include="..\Framework\Frustum.cpp" />
     <ClCompile Include="..\Framework\GameTimer.cpp" />
     <ClCompile Include="..\Framework\Keyboard.cpp" />

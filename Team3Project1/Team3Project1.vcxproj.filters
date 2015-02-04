@@ -148,83 +148,14 @@
     <Filter Include="Framework\Audio\Source Files">
       <UniqueIdentifier>{59146a63-ef9f-4ff6-a2e0-f2012c0c6a7c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Framework\Graphics\Source">
+      <UniqueIdentifier>{9204dbee-856e-4074-827a-87bea79a1507}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Graphics\Header">
+      <UniqueIdentifier>{74b8fdca-48d9-47e7-ae00-47f83cde34fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Framework\Camera.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\ChildMeshInterface.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\common.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\CubeRobot.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\Frustum.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\GameTimer.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\InputDevice.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\Keyboard.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\Matrix4.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\MD5Anim.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\MD5FileData.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\MD5Mesh.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\MD5Node.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\Mesh.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\Mouse.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\OBJMesh.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\OGLRenderer.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\Plane.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\Quaternion.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\SceneNode.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\Shader.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\Vector2.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\Vector3.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\Vector4.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\Window.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
     <ClInclude Include="GameStateManager.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
@@ -277,83 +208,152 @@
       <Filter>Framework\Audio\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\BumpTexture.h">
-      <Filter>Framework\Graphics</Filter>
+      <Filter>Engine\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\EmptyTexture.h">
-      <Filter>Framework\Graphics</Filter>
+      <Filter>Engine\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\Light.h">
-      <Filter>Framework\Graphics</Filter>
+      <Filter>Engine\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\Texture.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Frustum.h">
+      <Filter>Framework\Graphics\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\InputDevice.h">
+      <Filter>Framework\User Interface\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Keyboard.h">
+      <Filter>Framework\User Interface\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\MD5Anim.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\MD5FileData.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\MD5Mesh.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\MD5Node.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Mesh.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Mouse.h">
+      <Filter>Framework\User Interface\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\OBJMesh.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\ChildMeshInterface.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\OGLRenderer.h">
+      <Filter>Framework\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Shader.h">
+      <Filter>Framework\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Camera.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\common.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\GameTimer.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Matrix4.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Plane.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Quaternion.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Vector2.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Vector3.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Vector4.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\SceneNode.h">
+      <Filter>Framework\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Window.h">
       <Filter>Framework\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Framework\Camera.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\CubeRobot.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\Frustum.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\GameTimer.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\Keyboard.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\Matrix4.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\MD5Anim.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\MD5FileData.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\MD5Mesh.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\MD5Node.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\Mesh.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\Mouse.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\OBJMesh.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\OGLRenderer.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\Plane.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\Quaternion.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\SceneNode.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\Shader.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\Window.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\Light.cpp">
       <Filter>Framework\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="..\Framework\Light.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\Framework\Texture.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Frustum.cpp">
+      <Filter>Framework\Graphics\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Keyboard.cpp">
+      <Filter>Framework\User Interface\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\MD5Anim.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\MD5FileData.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\MD5Mesh.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\MD5Node.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Mesh.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Mouse.cpp">
+      <Filter>Framework\User Interface\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\OBJMesh.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\OGLRenderer.cpp">
+      <Filter>Framework\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Shader.cpp">
+      <Filter>Framework\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Camera.cpp">
+      <Filter>Framework\Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\GameTimer.cpp">
+      <Filter>Framework\Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Matrix4.cpp">
+      <Filter>Framework\Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Plane.cpp">
+      <Filter>Framework\Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Quaternion.cpp">
+      <Filter>Framework\Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\SceneNode.cpp">
+      <Filter>Framework\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Window.cpp">
       <Filter>Framework\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
