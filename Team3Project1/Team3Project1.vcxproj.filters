@@ -306,8 +306,8 @@
     <ClInclude Include="..\Framework\Spring.h">
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
-	<ClInclude Include="..\Framework\ParticleEmitter.h">
-      <Filter>Framework\Graphics</Filter>
+    <ClInclude Include="..\Framework\ParticleEmitter.h">
+      <Filter>Engine\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -375,6 +375,15 @@
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Framework\Weather.cpp">
+      <Filter>Framework\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Spring.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\ParticleEmitter.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsEngine.cpp">
       <Filter>Framework\Graphics</Filter>
     </ClCompile>
   </ItemGroup>

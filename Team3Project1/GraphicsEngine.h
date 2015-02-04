@@ -14,14 +14,19 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "../Framework/Keyboard.h"
 #include "Renderer.h"
 
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 720
+#define GAME_TITLE "Team^3 - Endless Racer"
+
 class GraphicsEngine
 {
 	// TODO: Implement Graphics Engine.
 public:
-	static bool Initialize(GraphicsEngine& out);
-	static bool Destroy(GraphicsEngine& engine);
+	static bool Initialize();
+	static bool Destroy();
+	static GraphicsEngine& GetGraphicsEngine() {return *engine;}
 
-	bool CreateNewGameWindow(const char* title, unsigned int width, unsigned int height, bool fullScreen); // Presumably this will be different for PS3
+	bool HasInitialised() {return isInitialised;}
 
 	Keyboard& GetKeyboard();
 
@@ -49,9 +54,12 @@ public:
 	bool RemoveTexture(unsigned int textureReference);
 
 private:
+	static GraphicsEngine* engine;
+
 	GraphicsEngine();
 	~GraphicsEngine();
 
-	Renderer	renderer;
-	Window		window;
+	bool isInitialised;
+
+	Renderer* renderer;
 };

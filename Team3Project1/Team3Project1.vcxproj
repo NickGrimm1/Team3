@@ -142,6 +142,7 @@
     <ClCompile Include="..\Framework\Texture.cpp" />
     <ClCompile Include="..\Framework\Weather.cpp" />
     <ClCompile Include="..\Framework\Window.cpp" />
+    <ClCompile Include="GraphicsEngine.cpp" />
     <ClCompile Include="Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
