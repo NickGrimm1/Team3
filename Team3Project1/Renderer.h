@@ -5,6 +5,7 @@
 #include "../Framework/Light.h"
 #include "../Framework/Texture.h"
 #include "../Framework/OGLRenderer.h"
+#include "../Framework/Weather.h"
 
 class Renderer : public OGLRenderer
 {
@@ -47,10 +48,26 @@ private:
 				bloomShader, 
 				deferredShader, 
 				blurShader, 
-				combineShader;
+				combineShader,
+				particleShader;
 
 	SceneNode*	root;
 
 	Frustum		frameFrustum;
 
+	Weather*	snow, 
+				rain, 
+				sandstorm;
+
+	GLuint		bufferFBO, 
+				processFBO, 
+				pointLightFBO, 
+				shadowFBO, 
+				bufferColourTex[2],
+				bufferDepthTex, 
+				bufferNormalTex, 
+				cubeMap, 
+				shadowTex, 
+				lightEmissiveTex, 
+				lightSpecularTex;
 };
