@@ -88,6 +88,7 @@
     <ClInclude Include="..\Framework\Mouse.h" />
     <ClInclude Include="..\Framework\OBJMesh.h" />
     <ClInclude Include="..\Framework\OGLRenderer.h" />
+    <ClInclude Include="..\Framework\ParticleEmitter.h" />
     <ClInclude Include="..\Framework\Plane.h" />
     <ClInclude Include="..\Framework\Quaternion.h" />
     <ClInclude Include="..\Framework\SceneNode.h" />
@@ -132,6 +133,7 @@
     <ClCompile Include="..\Framework\Mouse.cpp" />
     <ClCompile Include="..\Framework\OBJMesh.cpp" />
     <ClCompile Include="..\Framework\OGLRenderer.cpp" />
+    <ClCompile Include="..\Framework\ParticleEmitter.cpp" />
     <ClCompile Include="..\Framework\Plane.cpp" />
     <ClCompile Include="..\Framework\Quaternion.cpp" />
     <ClCompile Include="..\Framework\SceneNode.cpp" />
