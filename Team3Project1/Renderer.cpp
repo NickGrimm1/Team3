@@ -193,7 +193,7 @@ void Renderer::UpdateScene(float msec)
 {
 	if (camera) 
 	{
-		camera->UpdateCamera(msec);
+		camera->UpdateCamera();
 	}
 	root->Update(msec);
 }

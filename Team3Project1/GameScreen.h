@@ -7,9 +7,9 @@ Version: 0.0.1 03/02/2015.</summary>
 */
 #pragma once
 #include "Entity2D.h"
-#include "Rectangle.h"
-#include "Vector2.h"
+#include "../Framework/Vector2.h"
 #include "InputListener.h"
+#include "Rectangle.h"
 
 class GameScreen : public Entity2D, public InputListener
 {
@@ -18,7 +18,8 @@ public:
 	<summary>Constructor.</summary>
 	<param name='screenBounds'>The boundary of the screen, given in resolution independent co-ordinates. Will ignore input outside and will not draw outside of these bounds. Default is 0,0,1,1.</param>
 	*/
-	GameScreen(Rectangle& screenBounds = Rectangle(0.0f, 0.0f, 1.0f, 1.0f));
+	GameScreen(Rectangle& screenBounds = Rectangle(0.0f, 0.0f, 1.0f, 1.0f)) : screenBounds(screenBounds)
+	{ }
 	virtual ~GameScreen();
 	/**
 	<summary>Allows the screen to run an update loop.</summary>
@@ -55,4 +56,5 @@ protected:
 	<summary>The maximum scroll of the screen in the y direction. (x is up, y is down).</summary>
 	*/
 	Vector2 maxVerticalScroll;
+	Rectangle screenBounds;
 };

@@ -1,16 +1,9 @@
-/******************************************************************************
-Class:Camera
-Implements:
-Author:Rich Davison	<richard.davison4@newcastle.ac.uk>
-Description:FPS-Style camera. Uses the mouse and keyboard from the Window
-class to get movement values!
+/**
+<summary>A somewhat basic 6DOF camera.
 
--_-_-_-_-_-_-_,------,   
-_-_-_-_-_-_-_-|   /\_/\   NYANYANYAN
--_-_-_-_-_-_-~|__( ^ .^) /
-_-_-_-_-_-_-_-""  ""   
-
-*//////////////////////////////////////////////////////////////////////////////
+Author: Nick Grimm
+Version: 0.0.5 05/02/2015.</summary>
+*/
 #pragma once
 #include "Quaternion.h"
 #include "Matrix4.h"
