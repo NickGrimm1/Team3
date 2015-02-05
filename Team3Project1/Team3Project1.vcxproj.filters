@@ -309,6 +309,9 @@
     <ClInclude Include="..\Framework\ParticleEmitter.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GamePad.h">
+      <Filter>Framework\User Interface\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Light.cpp">
@@ -385,6 +388,9 @@
     </ClCompile>
     <ClCompile Include="GraphicsEngine.cpp">
       <Filter>Framework\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePad.cpp">
+      <Filter>Framework\User Interface\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
