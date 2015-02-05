@@ -6,6 +6,7 @@ Version: 0.0.5 05/02/2015.</summary>
 */
 #pragma once
 #include "DrawableEntity2D.h"
+#include "../Framework/Texture.h"
 
 class DrawableTexture2D : public DrawableEntity2D
 {
