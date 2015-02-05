@@ -157,6 +157,15 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{adf2d61d-9124-4594-9fb3-582140c6248e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Framework\Graphics\2D">
+      <UniqueIdentifier>{da1e0a11-281d-417e-9867-c8f5290b114a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Graphics\2D\Header Files">
+      <UniqueIdentifier>{d5ffea42-e02a-4b40-bc3d-6b986ee32a4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Graphics\2D\Source Files">
+      <UniqueIdentifier>{b387d4d2-5c95-4e0a-94c6-5d5ca4d972c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameStateManager.h">
@@ -317,6 +326,9 @@
     </ClInclude>
     <ClInclude Include="DoubleClickableEntity2D.h">
       <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawableTexture2D.h">
+      <Filter>Framework\Graphics\2D\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
