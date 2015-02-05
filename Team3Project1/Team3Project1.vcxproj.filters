@@ -276,6 +276,9 @@
     <ClInclude Include="..\Framework\Vector2.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Framework\Vector3.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\Framework\Vector4.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
@@ -303,8 +306,8 @@
     <ClInclude Include="..\Framework\ParticleEmitter.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Framework\Vector3.h">
-      <Filter>Framework\Common\Header Files</Filter>
+    <ClInclude Include="GamePad.h">
+      <Filter>Framework\User Interface\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GamePad.h">
       <Filter>Engine\Header Files</Filter>
@@ -387,7 +390,11 @@
       <Filter>Framework\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="GamePad.cpp">
+<<<<<<< HEAD
+      <Filter>Framework\User Interface\Source Files</Filter>
+=======
       <Filter>Engine\Source Files</Filter>
+>>>>>>> origin/Main
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
