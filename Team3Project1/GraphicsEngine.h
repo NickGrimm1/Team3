@@ -14,9 +14,14 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "../Framework/Keyboard.h"
 #include "Renderer.h"
 
+#define RENDER_HZ 60
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 #define GAME_TITLE "Team^3 - Endless Racer"
+
+#define MAX_LIGHTS 10
+#define MAX_MESHES 20
+#define MAX_TEXTURES 20
 
 class GraphicsEngine
 {
@@ -53,13 +58,38 @@ public:
 	unsigned int AddTexture(const char* filename, bool enableMipMaps = false, bool enableAnisotropicFiltering = false);
 	bool RemoveTexture(unsigned int textureReference);
 
+	bool StartGraphicsEngineThread();
+
 private:
 	static GraphicsEngine* engine;
 
 	GraphicsEngine();
 	~GraphicsEngine();
 
+	void GraphicsEngineThread();
+
 	bool isInitialised;
 
+	void BuildNodeLists(SceneNode* from);
+	void SortNodeLists();
+	void ClearNodeLists();
+	void DrawNodes();
+
 	Renderer* renderer;
+
+	Texture* textureArray[MAX_TEXTURES];
+	unsigned int numTextures;
+
+	Mesh*	 meshArray[MAX_MESHES];
+	unsigned int numMeshs;
+
+	Light*	 lightArray[MAX_LIGHTS];
+	unsigned int numLights;
+
+	Frustum frameFrustum;
+	Camera* camera;
+
+	SceneNode* sceneRoot;
+	vector<SceneNode*> transparentNodeList;
+	vector<SceneNode*> nodeList;
 };
