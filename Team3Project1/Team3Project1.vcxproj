@@ -110,6 +110,7 @@
     <ClInclude Include="GameScreen3D.h" />
     <ClInclude Include="GameStateManager.h" />
     <ClInclude Include="GraphicsEngine.h" />
+    <ClInclude Include="InputListener.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="PhysicsEngine.h" />

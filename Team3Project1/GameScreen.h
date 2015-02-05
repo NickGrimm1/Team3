@@ -9,8 +9,9 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "Entity2D.h"
 #include "Rectangle.h"
 #include "Vector2.h"
+#include "InputListener.h"
 
-class GameScreen : Entity2D
+class GameScreen : public Entity2D, public InputListener
 {
 public:
 	/**
@@ -41,45 +42,6 @@ public:
 	<summary>Loads assets and performs initial logic for setting up the screen.</summary>
 	*/
 	virtual void LoadContent() = 0;
-	#pragma region Input Handling
-	/**
-	<summary>Handles a mouse event.</summary>
-	<param name='type'>The event type.</param>
-	<param name='position'>The resolution independent co-ordinates of the mouse cursor.</param>
-	*/
-	virtual void MouseEvent(MouseEvents::EventType type, Vector2& position) = 0;
-	/**
-	<summary>Handles when the mouse has moved.</summary>
-	<param name='start'>The resolution independent co-ordinates of the mouse cursor at the start of the frame.</param>
-	<param name='finish'>The resolution independent co-ordinates of the mouse cursor at the end of the frame.</param>
-	*/
-	virtual void MouseMoved(Vector2& start, Vector2& finish) = 0;
-	/**
-	<summary>Handles when the mouse scroll wheel has moved.</summary>
-	<param name='amount'>The amount of the movement.</param>
-	*/
-	virtual void MouseScrolled(float amount) = 0;
-	/**
-	<summary>Handles a keyboard event.</summary>
-	<param name='type'>The event type.</param>
-	<param name='key'>The key.</param>
-	*/
-	virtual void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) = 0;
-	/**
-	<summary>Handles a gamepad event.</summary>
-	<param name='playerID'>The ID for the controller.</param>
-	<param name='type'>The event type.</param>
-	<param name='button'>The button.</param>
-	*/
-	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button) = 0;
-	/**
-	<summary>Handles when an analogue control is displaced.</summary>
-	<param name='playerID'>The ID for the controller.</param>
-	<param name='analogueControl'>The control that is displaced.</param>
-	<param name='amount'>The amount of the displacement. For the triggers, only the x co-ordinate is used.</param>
-	*/
-	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamePadEvents::AnalogueControl analogueControl, Vector2& amount) = 0;
-#pragma endregion
 protected:
 	/**
 	<summary>The current offset (scroll deviation) of the screen.</summary>

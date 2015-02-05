@@ -19,10 +19,13 @@ Version: 1.0.0 03/02/2015.</summary>
 #include "AudioEngine.h"
 #include "StorageManager.h"
 #include "NetworkManager.h"
+#include "../Framework/Keyboard.h"
+#include "../Framework/Mouse.h"
+#include "InputListener.h"
 
 using namespace std;
 
-class GameStateManager
+class GameStateManager : public InputListener
 {
 public:
 	/**
@@ -101,7 +104,7 @@ public:
 	static void Update()
 	{
 		for (int i = 0; i < Instance()->gameScreens.size(); i++)
-			Instance()->gameScreens.Update();
+			Instance()->gameScreens[i]->Update();
 	}
 	/**
 	<summary>Activates a global pause for the game. Note that individual game screens choose their own pause/resume behaviour.</summary>
@@ -109,7 +112,7 @@ public:
 	static void Pause()
 	{
 		for (int i = 0; i < Instance()->gameScreens.size(); i++)
-			Instance()->gameScreens.Pause();
+			Instance()->gameScreens[i]->Pause();
 	}
 	/**
 	<summary>Activates a global resume for the game. Note that individual game screens choose their own pause/resume behaviour.</summary>
@@ -117,7 +120,7 @@ public:
 	static void Resume()
 	{
 		for (int i = 0; i < Instance()->gameScreens.size(); i++)
-			Instance()->gameScreens.Resume();
+			Instance()->gameScreens[i]->Resume();
 	}
 	/**
 	<summary>Gets whether the engine has completed loading.</summary>
@@ -133,17 +136,17 @@ public:
 	<param name='type'>The event type.</param>
 	<param name='position'>The resolution independent co-ordinates of the mouse cursor.</param>
 	*/
-	static void MouseEvent(MouseEvents::EventType type, Vector2& position)
+	static void InputListener::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, Vector2& position)
 	{
 		for (int i = 0; i < Instance()->gameScreens.size(); i++)
-			Instance()->gameScreens[i]->MouseEvent(type, position);
+			Instance()->gameScreens[i]->MouseEvent(type, button, position);
 	}
 	/**
 	<summary>Notifies all screens in the stack that the mouse has moved.</summary>
 	<param name='start'>The resolution independent co-ordinates of the mouse cursor at the start of the frame.</param>
 	<param name='finish'>The resolution independent co-ordinates of the mouse cursor at the end of the frame.</param>
 	*/
-	static void MouseMoved(Vector2& start, Vector2& finish)
+	static void InputListener::MouseMoved(Vector2& start, Vector2& finish)
 	{
 		for (int i = 0; i < Instance()->gameScreens.size(); i++)
 			Instance()->gameScreens[i]->MouseMoved(start, finish);
@@ -152,7 +155,7 @@ public:
 	<summary>Notifies all screens in the stack that the mouse scroll wheel has moved.</summary>
 	<param name='amount'>The amount of the movement.</param>
 	*/
-	static void MouseScrolled(float amount)
+	static void InputListener::MouseScrolled(float amount)
 	{
 		for (int i = 0; i < Instance()->gameScreens.size(); i++)
 			Instance()->gameScreens[i]->MouseScrolled(amount);
@@ -162,7 +165,7 @@ public:
 	<param name='type'>The event type.</param>
 	<param name='key'>The key.</param>
 	*/
-	static void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key)
+	static void InputListener::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key)
 	{
 		for (int i = 0; i < Instance()->gameScreens.size(); i++)
 			Instance()->gameScreens[i]->KeyboardEvent(type, key);
@@ -173,7 +176,7 @@ public:
 	<param name='type'>The event type.</param>
 	<param name='button'>The button.</param>
 	*/
-	static void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button)
+	static void InputListener::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button)
 	{
 		for (int i = 0; i < Instance()->gameScreens.size(); i++)
 			Instance()->gameScreens[i]->GamepadEvent(playerID, type, button);
@@ -184,7 +187,7 @@ public:
 	<param name='analogueControl'>The control that is displaced.</param>
 	<param name='amount'>The amount of the displacement. For the triggers, only the x co-ordinate is used.</param>
 	*/
-	static void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamePadEvents::AnalogueControl analogueControl, Vector2& amount)
+	static void InputListener::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamePadEvents::AnalogueControl analogueControl, Vector2& amount)
 	{
 		for (int i = 0; i < Instance()->gameScreens.size(); i++)
 			Instance()->gameScreens[i]->GamepadAnalogueDisplacement(playerID, analogueControl, amount);

@@ -21,8 +21,28 @@ _-_-_-_-_-_-_-""  ""
 #pragma once
 #include "InputDevice.h"
 
+class InputListener;
+
+namespace KeyboardEvents
+{
+	enum EventType
+	{
+		/**
+		<summary>Key was down last frame, it is still down.</summary>
+		*/
+		KEY_HELD,
+		/**
+		<summary>Key was up last frame, now it is down.</summary>
+		*/
+		KEY_DOWN,
+		/**
+		<summary>Key was down last frame, now it is up.</summary>
+		*/
+		KEY_UP,
+	};
 //http://msdn.microsoft.com/en-us/library/ms645540(VS.85).aspx
-enum KeyboardKeys {
+	enum Key
+	{
 		KEYBOARD_LBUTTON			= 0x01,  // Left mouse button  
 		KEYBOARD_RBUTTON			= 0x02,  // Right mouse button  
 		KEYBOARD_CANCEL				= 0x03,  // Control-break processing  
@@ -167,18 +187,12 @@ enum KeyboardKeys {
 		KEYBOARD_PA1				= 0xFD,  // PA1 key 
 		KEYBOARD_OEM_CLEAR			= 0xFE,   // Clear key 
 		KEYBOARD_MAX				= 0xFF
-};
-
+	};
+}
 class Keyboard : public InputDevice	{
 public:
 	friend class Window;
-
-	//Is this key currently pressed down?
-	bool KeyDown(KeyboardKeys key);
-	//Has this key been held down for multiple frames?
-	bool KeyHeld(KeyboardKeys key);
-	//Is this the first update the key has been pressed for?
-	bool KeyTriggered(KeyboardKeys key);
+	void SetInputListener(InputListener* l) { listener = l; }
 
 protected:
 	Keyboard(HWND &hwnd);
@@ -190,8 +204,10 @@ protected:
 	//Sends the keyboard to sleep
 	virtual void Sleep();
 
-	bool keyStates[KEYBOARD_MAX];		//Is the key down?
-	bool holdStates[KEYBOARD_MAX];		//Has the key been down for multiple updates?
+	bool keyStates[KeyboardEvents::KEYBOARD_MAX];		//Is the key down?
+	bool holdStates[KeyboardEvents::KEYBOARD_MAX];		//Has the key been down for multiple updates?
+
+	InputListener* listener;
 };
 
 

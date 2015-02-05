@@ -1,11 +1,12 @@
 #include "Mouse.h"
+#include "../Team3Project1/GameStateManager.h"
 
 Mouse::Mouse(HWND &hwnd)	{
-	ZeroMemory( buttons,	 sizeof(bool) * MOUSE_MAX );
-	ZeroMemory( holdButtons, sizeof(bool) * MOUSE_MAX );
+	ZeroMemory( buttons,	 sizeof(bool) * MouseEvents::MOUSE_MAX );
+	ZeroMemory( holdButtons, sizeof(bool) * MouseEvents::MOUSE_MAX );
 
-	ZeroMemory( doubleClicks,  sizeof(bool)  * MOUSE_MAX );
-	ZeroMemory( lastClickTime, sizeof(float) * MOUSE_MAX );
+	ZeroMemory( doubleClicks,  sizeof(bool)  * MouseEvents::MOUSE_MAX );
+	ZeroMemory( lastClickTime, sizeof(float) * MouseEvents::MOUSE_MAX );
 
 	lastWheel   = 0;
 	frameWheel  = 0;
@@ -27,6 +28,11 @@ void Mouse::Update(RAWINPUT* raw)	{
 		relativePosition.x +=((float)raw->data.mouse.lLastX ) * sensitivity;
 		relativePosition.y +=((float)raw->data.mouse.lLastY ) * sensitivity;
 
+		if (relativePosition.x != 0 || relativePosition.y != 0)
+		{
+			listener->MouseMoved(absolutePosition, absolutePosition + relativePosition);
+		}
+
 		absolutePosition.x += (float)raw->data.mouse.lLastX;
 		absolutePosition.y += (float)raw->data.mouse.lLastY;
 
@@ -45,9 +51,11 @@ void Mouse::Update(RAWINPUT* raw)	{
 		if(raw->data.mouse.usButtonFlags & RI_MOUSE_WHEEL)	{		
 			if(raw->data.mouse.usButtonData == 120) {
 				frameWheel = 1;
+				listener->MouseScrolled(frameWheel);
 			}
 			else {
 				frameWheel = -1;
+				listener->MouseScrolled(frameWheel);
 			}
 		}
 
@@ -70,12 +78,14 @@ void Mouse::Update(RAWINPUT* raw)	{
 			if(raw->data.mouse.usButtonFlags & buttondowns[i])	{
 				//The button was pressed!
 				buttons[i] = true;
+				listener->MouseEvent(MouseEvents::BUTTON_DOWN, (MouseEvents::MouseButtons)i, GetAbsolutePosition());
 
 				/*
 				If it wasn't too long ago since we last clicked, we trigger a double click!
 				*/
 				if(lastClickTime[i] > 0) {
 					doubleClicks[i] = true;
+					listener->MouseEvent(MouseEvents::BUTTON_DOUBLECLICK, (MouseEvents::MouseButtons)i, GetAbsolutePosition());
 				}
 
 				/*
@@ -87,6 +97,7 @@ void Mouse::Update(RAWINPUT* raw)	{
 				//The button has been released!
 				buttons[i]		= false;
 				holdButtons[i]	= false;
+				listener->MouseEvent(MouseEvents::BUTTON_UP, (MouseEvents::MouseButtons)i, GetAbsolutePosition());
 			}
 		}
 	}
@@ -108,7 +119,7 @@ Updates variables controlling whether a mouse button has been
 held for multiple frames. Also updates relative movement.
 */
 void Mouse::UpdateHolds()	{
-	memcpy(holdButtons,buttons,	MOUSE_MAX * sizeof(bool));
+	memcpy(holdButtons,buttons,	MouseEvents::MOUSE_MAX * sizeof(bool));
 	//We sneak this in here, too. Resets how much the mouse has moved
 	//since last update
 	relativePosition.ToZero();
@@ -122,8 +133,8 @@ movement or buttons until it receives a Wake()
 */
 void Mouse::Sleep()	{
 	isAwake = false;	//Bye bye for now
-	ZeroMemory(holdButtons,  MOUSE_MAX * sizeof(bool) );
-	ZeroMemory(buttons,		MOUSE_MAX * sizeof(bool) );
+	ZeroMemory(holdButtons,  MouseEvents::MOUSE_MAX * sizeof(bool) );
+	ZeroMemory(buttons,		MouseEvents::MOUSE_MAX * sizeof(bool) );
 }
 
 /*
@@ -132,22 +143,6 @@ Forces the mouse pointer to a specific point in absolute space.
 void	Mouse::SetAbsolutePosition(unsigned int x, unsigned int y)	{
 	absolutePosition.x = (float)x;
 	absolutePosition.y = (float)y;
-}
-
-/*
-Returns if the button is down. Doesn't need bounds checking - 
-an INPUT_KEYS enum is always in range
-*/
-bool Mouse::ButtonDown(MouseButtons b)	{
-	return buttons[b];
-}
-
-/*
-Returns if the button is down, and has been held down for multiple updates. 
-Doesn't need bounds checking - an INPUT_KEYS enum is always in range
-*/
-bool Mouse::ButtonHeld(MouseButtons b)	{
-	return holdButtons[b];
 }
 
 /*
@@ -180,13 +175,6 @@ bool	Mouse::WheelMoved()	{
 };
 
 /*
-Returns whether the button was double clicked in this frame
-*/
-bool Mouse::DoubleClicked(MouseButtons button)	{
-	return (buttons[button] && doubleClicks[button]);
-}
-
-/*
 Get the mousewheel movement. Positive values mean the mousewheel
 has moved up, negative down. Can be 0 (no movement)
 */
@@ -200,7 +188,7 @@ since the last UpdateDoubleClick call. Timers going over the double click
 limit set the relevant double click value to false.
 */
 void Mouse::UpdateDoubleClick(float msec)	{
-	for(int i = 0; i < MOUSE_MAX; ++i) {
+	for(int i = 0; i < MouseEvents::MOUSE_MAX; ++i) {
 		if(lastClickTime[i] > 0) {
 			lastClickTime[i] -= msec;
 			if(lastClickTime[i] <= 0.0f) {

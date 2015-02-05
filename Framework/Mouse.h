@@ -16,28 +16,41 @@ _-_-_-_-_-_-_-""  ""
 #include "InputDevice.h"
 #include "Vector2.h"
 
-//Presumably RAW input does actually support those fancy mice with greater
-//than 5 buttons in some capacity, but I have a 5 button mouse so I don't
-//care to find out how ;)
-enum MouseButtons{
-	MOUSE_LEFT		= 0,
-	MOUSE_RIGHT		= 1,
-	MOUSE_MIDDLE	= 2,
-	MOUSE_FOUR		= 3,
-	MOUSE_FIVE		= 4,
-	MOUSE_MAX		= 5
-};
+class InputListener;
 
+namespace MouseEvents
+{
+	enum EventType
+	{
+		/**
+		<summary>Button was down last frame, it is still down.</summary>
+		*/
+		BUTTON_DOWN,
+		/**
+		<summary>Button was up last frame, now it is down.</summary>
+		*/
+		BUTTON_UP,
+		/**
+		<summary>Button was double-clicked.</summary>
+		*/
+		BUTTON_DOUBLECLICK,
+	};
+	//Presumably RAW input does actually support those fancy mice with greater
+	//than 5 buttons in some capacity, but I have a 5 button mouse so I don't
+	//care to find out how ;)
+	enum MouseButtons{
+		MOUSE_LEFT		= 0,
+		MOUSE_RIGHT		= 1,
+		MOUSE_MIDDLE	= 2,
+		MOUSE_FOUR		= 3,
+		MOUSE_FIVE		= 4,
+		MOUSE_MAX		= 5
+	};
+}
 class Mouse : public InputDevice	{
 public:
 	friend class Window;
-
-	//Is this mouse button currently pressed down?
-	bool	ButtonDown(MouseButtons button);
-	//Has this mouse button been held down for multiple frames?
-	bool	ButtonHeld(MouseButtons button);
-	//Has this mouse button been double clicked?
-	bool	DoubleClicked(MouseButtons button);
+	void SetInputListener(InputListener* l) { listener = l; }
 
 	//Get how much this mouse has moved since last frame
 	Vector2	GetRelativePosition();
@@ -88,13 +101,13 @@ protected:
 	//How much as the mouse moved since the last raw packet?
 	Vector2		relativePosition;
 	//Current button down state for each button
-	bool		buttons[MOUSE_MAX];
+	bool		buttons[MouseEvents::MOUSE_MAX];
 	//Current button held state for each button
-	bool		holdButtons[MOUSE_MAX];
+	bool		holdButtons[MouseEvents::MOUSE_MAX];
 	//Current doubleClick counter for each button
-	bool		doubleClicks[MOUSE_MAX];
+	bool		doubleClicks[MouseEvents::MOUSE_MAX];
 	//Counter to remember when last mouse click occured
-	float		lastClickTime[MOUSE_MAX];
+	float		lastClickTime[MouseEvents::MOUSE_MAX];
 
 	//last mousewheel updated position
 	int			lastWheel;
@@ -107,5 +120,7 @@ protected:
 
 	//Mouse pointer sensitivity. Set this negative to get a headache!
 	float		sensitivity;
+
+	InputListener* listener;
 };
 

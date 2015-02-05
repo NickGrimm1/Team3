@@ -306,6 +306,9 @@
     <ClInclude Include="GamePad.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="InputListener.h">
+      <Filter>Framework\User Interface\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Light.cpp">
