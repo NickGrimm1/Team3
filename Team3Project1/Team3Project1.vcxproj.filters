@@ -390,11 +390,7 @@
       <Filter>Framework\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="GamePad.cpp">
-<<<<<<< HEAD
       <Filter>Framework\User Interface\Source Files</Filter>
-=======
-      <Filter>Engine\Source Files</Filter>
->>>>>>> origin/Main
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
