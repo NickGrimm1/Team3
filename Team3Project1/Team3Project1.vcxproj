@@ -116,7 +116,6 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="StorageManager.h" />
     <ClInclude Include="Vector2.h" />
-    <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Camera.cpp" />

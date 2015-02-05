@@ -6,7 +6,7 @@ Author: Nick Grimm
 Version: 0.0.1 03/02/2015.</summary>
 */
 
-#include "Vector3.h"
+#include "../Framework/Vector3.h"
 #include "../Framework/Vector4.h"
 #include "../Framework/Light.h"
 #include "../Framework/Texture.h"
