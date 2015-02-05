@@ -20,13 +20,26 @@ Version: 0.0.1 03/02/2015.</summary>
 
 #define SHADOWSIZE 2048 * 8
 
+struct LightData {
+	Vector4*	lightColour;
+	Vector4*	lightSpecColour;
+
+	Vector3*	lightPos;
+	Vector3*	lightDir;
+	Vector3*	cameraPos;
+
+	float		lightRadius;
+	float		lightAngle;
+	int			lightType;
+};
+
 class Renderer : public OGLRenderer
 {
 public:
 	Renderer(Window &parent);
 	~Renderer(void);
 
-	void			Render(float msec, SceneNode* root);
+	void			Render(float msec, LightData arg_lights);
 
 	void			ToggleDebug(int arg, bool onOff);
 
@@ -41,8 +54,15 @@ protected:
 
 	void			GenerateScreenTexture(GLuint &into, bool depth = false);
 	bool			LoadCheck();
+	bool			ActiveTex();
 	//Member variables.
+	bool			activeTex;
+
 	bool			debugElem[10];
+
+	LightData		lights;
+
+	Mesh*			quad;
 
 	Camera*			camera;
 

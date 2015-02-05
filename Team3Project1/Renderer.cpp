@@ -1,11 +1,13 @@
 #include "Renderer.h"
 
 
+
 Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 {
 	camera	= new Camera();
 	root	= new SceneNode();
-	
+	quad	= Mesh::GenerateQuad();
+
 	//Shader initialisations go here.
 	basicShader		= new Shader(SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
 	shadowShader	= new Shader(SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl");
@@ -13,6 +15,8 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	combineShader	= new Shader(SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
 	particleShader	= new Shader(SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
 
+	if (!LoadCheck())
+		return;
 
 	//Creation of buffers.
 	GenerateScreenTexture(bufferNormalTex);
@@ -90,10 +94,13 @@ Renderer::~Renderer(void)
 {
 	delete camera;
 	delete root;
+
 	/*
 	delete snow;
 	delete rain;
 	delete sandstorm;
+	*/
+
 	delete basicShader;
 	delete shadowShader;
 	delete bloomShader;
@@ -101,7 +108,6 @@ Renderer::~Renderer(void)
 	delete blurShader;
 	delete combineShader;
 	delete particleShader;
-	*/
 
 	//Clear buffers
 	glDeleteTextures(1, &shadowTex);
@@ -116,9 +122,9 @@ Renderer::~Renderer(void)
 }
 
 //Public method to initiate a draw to screen.
-void Renderer::Render(float msec, SceneNode* root)
+void Renderer::Render(float msec, LightData arg_lights)
 {
-
+	lights = arg_lights;
 }
 
 void Renderer::ToggleDebug(int arg, bool onOff)
@@ -130,6 +136,56 @@ void Renderer::ToggleDebug(int arg, bool onOff)
 //Draws Scene to buffer object
 void Renderer::DrawScene()
 {
+	ShadowPass();
+	glBindFramebuffer(GL_FRAMEBUFFER, bufferFBO);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	
+	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
+	
+	//First the Skybox is drawn.
+	glDepthMask(GL_FALSE);
+	SetCurrentShader(skyBoxShader);
+	viewMatrix = camera->BuildViewMatrix();
+	UpdateShaderMatrices();
+	
+	quad->Draw();
+
+	glUseProgram(0);
+	glDepthMask(GL_TRUE);
+
+	//Then the terrain and tree is drawn.
+	//SetCurrentShader(sceneShader);
+	//SetShaderLight(*light);
+
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "shadowTex"), 9);
+	glActiveTexture(GL_TEXTURE9);
+	glBindTexture(GL_TEXTURE_2D, shadowTex);
+	//viewMatrix = camera->BuildViewMatrix();
+	
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "bumpTex"), 1);
+
+	UpdateShaderMatrices();
+
+	/*
+	heightMap->Draw();
+
+	if (lightSpheres) {
+		glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+		DrawNode(lightSphere);
+		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+	}
+	
+	DrawNode(sceneNode);
+	DrawWater();
+	*/
+	modelMatrix.ToIdentity();
+	textureMatrix.ToIdentity();
+	activeTex = false;
+	
+	glUseProgram(0);
+	//if (weatherOn)
+	//	DrawParticles();
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 }
 
@@ -144,22 +200,81 @@ void Renderer::UpdateScene(float msec)
 
 void Renderer::ShadowPass()
 {
+	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	glViewport(0, 0, SHADOWSIZE, SHADOWSIZE);
+	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+	glEnable(GL_DEPTH_TEST);
+
+	SetCurrentShader(shadowShader);
+	projMatrix		= Matrix4::Perspective(300.0f, 10000.0f, (float)width / (float)height, 45.0f);
+	viewMatrix		= Matrix4::BuildViewMatrix(*lights.lightPos, Vector3(2056, 10, 2056));
+	shadowMatrix	= biasMatrix*(projMatrix * viewMatrix);
+
+	UpdateShaderMatrices();
+
+	//heightMap->Draw();
+	//DrawNode(sceneNode);
+	//DrawWater();
+
+	textureMatrix.ToIdentity();
+	modelMatrix.ToIdentity();
+
+	glUseProgram(0);
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	glViewport(0, 0, width, height);
+
+	//glDisable(GL_DEPTH_TEST);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 }
-
+//TODO: finish this
 void Renderer::DeferredLightPass()
 {
 
 }
-
+//TODO: finish this
 void Renderer::BloomPass()
 {
 
 }
-
+//TODO: finish this
 void Renderer::MotionBlurPass()
 {
+	glBindFramebuffer(GL_FRAMEBUFFER, processFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[ActiveTex()], 0);//1
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
+	SetCurrentShader(blurShader);
+	projMatrix = Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
+	viewMatrix.ToIdentity();
+	UpdateShaderMatrices();
+
+	glDisable(GL_DEPTH_TEST);
+
+	glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / (float)width, 1.0f / (float)height);
+
+	//Depending on how the motion blur works, this can be adjusted for one, two or more passes.
+
+	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[activeTex], 0);//1
+	//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 0);
+
+	//quad->SetTexture(bufferColourTex[ActiveTex()]);//0
+	//quad->Draw();
+
+	//
+	////now to swap the colour buffers, and do the second blur Pass
+	//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 1);
+	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[activeTex], 0);//0
+
+	//quad->SetTexture(bufferColourTex[ActiveTex()]);//1
+	//quad->Draw();
+	//
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glUseProgram(0);
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Renderer::GenerateScreenTexture(GLuint &into, bool depth)
@@ -179,4 +294,23 @@ void Renderer::GenerateScreenTexture(GLuint &into, bool depth)
 		GL_UNSIGNED_BYTE, NULL);
 	
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+bool Renderer::LoadCheck()
+{
+	if (!basicShader->LinkProgram())
+		return false;
+	if (!shadowShader->LinkProgram())
+		return false;
+	if (!skyBoxShader->LinkProgram())
+		return false;
+	if (!combineShader->LinkProgram())
+		return false;
+	if (!particleShader->LinkProgram())
+		return false;
+}
+
+bool Renderer::ActiveTex()
+{
+	activeTex = !activeTex;
 }
