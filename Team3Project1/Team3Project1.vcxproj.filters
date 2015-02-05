@@ -177,9 +177,6 @@
     <ClInclude Include="Vector2.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vector3.h">
-      <Filter>Framework\Common\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Entity2D.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
@@ -279,9 +276,6 @@
     <ClInclude Include="..\Framework\Vector2.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Framework\Vector3.h">
-      <Filter>Framework\Common\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Framework\Vector4.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
@@ -309,8 +303,11 @@
     <ClInclude Include="..\Framework\ParticleEmitter.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Framework\Vector3.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="GamePad.h">
-      <Filter>Framework\User Interface\Header Files</Filter>
+      <Filter>Engine\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -390,7 +387,7 @@
       <Filter>Framework\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="GamePad.cpp">
-      <Filter>Framework\User Interface\Source Files</Filter>
+      <Filter>Engine\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -410,6 +407,42 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Shaders\TexturedVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\CombineFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\CombineVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\DeferredPassFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\DeferredPassVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\MainFragShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\MainVertShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\PointToCircleGeom.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\PointToQuadGeom.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\SkyboxFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\SkyboxVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\shadowFrag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\shadowVert.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
