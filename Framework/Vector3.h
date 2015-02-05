@@ -5,14 +5,6 @@ Version History:
 	Added all methods & operator overloads.
 */
 
-class DivideByZeroException
-{
-	virtual const char* reason() const throw()
-	{
-		return "Divide By Zero";
-	}
-};
-
 /**
 <summary>A 3 dimensional Vector.
 
@@ -20,6 +12,7 @@ Author: Nick Grimm
 Version: 1.0.0 05/02/2015.</summary>
 */
 #pragma once
+#include "common.h"
 #include <math.h>
 
 class Vector3
