@@ -3,58 +3,31 @@
 
 Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 {
-	camera	= NULL;
+	camera	= new Camera();
 	root	= new SceneNode();
-	//TODO: Add in all the initialisation stuff.
+	
+
 }
 
 Renderer::~Renderer(void)
 {
-}
-
-unsigned int AddLight(Light &arg)
-{
-
-}
-
-Light& GetLight(int arg)
-{
-
-}
-
-void RemoveLight(int arg)
-{
-
-}
-
-unsigned int AddTexture(Texture &arg)
-{
-
-}
-
-Texture& GetTexture(int arg)
-{
-
-}
-
-void RemoveTexture(int arg)
-{
-
-}
-
-unsigned int AddMesh(Mesh &arg)
-{
-
-}
-
-Mesh& GetMesh(int arg)
-{
-
-}
-
-void RemoveMesh(int arg)
-{
-
+	delete[] texArray;
+	delete[] meshArray;
+	//delete[] lightArray;
+	delete camera;
+	delete root;
+	/*
+	delete snow;
+	delete rain;
+	delete sandstorm;
+	delete basicShader;
+	delete shadowShader;
+	delete bloomShader;
+	delete deferredShader;
+	delete blurShader;
+	delete combineShader;
+	delete particleShader;
+	*/
 }
 
 void ToggleDebug(int arg, bool onOff)
@@ -83,12 +56,7 @@ void ShadowPass()
 
 }
 
-void DefferedLightPass()
-{
-
-}
-
-void MotionBlurPass()
+void DeferredLightPass()
 {
 
 }
@@ -98,29 +66,12 @@ void BloomPass()
 
 }
 
-
-/*-----------SceneNode Methods-----------*/
-void BuildNodeLists(SceneNode* from)
+void MotionBlurPass()
 {
 
 }
 
-void SortNodeLists()
-{
-
-}
-
-void ClearNodeLists()
-{
-
-}
-
-void DrawNodes()
-{
-
-}
-
-void DrawNode(SceneNode* n)
+void GenerateScreenTexture(GLuint &into, bool depth = false)
 {
 
 }

@@ -25,18 +25,6 @@ public:
 
 	void			Render(float msec);
 
-	unsigned int	AddLight(Light &arg);
-	Light&			GetLight(int arg);
-	void			RemoveLight(int arg);
-
-	unsigned int	AddTexture(Texture &arg);
-	Texture&		GetTexture(int arg);
-	void			RemoveTexture(int arg);
-
-	unsigned int	AddMesh(Mesh &arg);
-	Mesh&			GetMesh(int arg);
-	void			RemoveMesh(int arg);
-
 	void			ToggleDebug(int arg, bool onOff);
 
 protected:
@@ -45,22 +33,13 @@ protected:
 	virtual void	UpdateScene(float msec);
 	void			ShadowPass();
 	void			DeferredLightPass();
-	void			MotionBlurPass();
 	void			BloomPass();
+	void			MotionBlurPass();
 
-	//SceneNode methods
-	void			BuildNodeLists(SceneNode* from);
-	void			SortNodeLists();
-	void			ClearNodeLists();
-	void			DrawNodes();
-	void			DrawNode(SceneNode*n);
+	void			GenerateScreenTexture(GLuint &into, bool depth = false);
 
 	//Member variables.
 	bool			debugElem[10];
-
-	Texture*		texArray[10];
-	//Light*		lightArray[10];
-	Mesh*			meshArray[10];
 
 	Camera*			camera;
 
@@ -68,17 +47,18 @@ protected:
 
 	Frustum			frameFrustum;
 
-	Weather*		snow, 
+	/*Weather*		snow, 
 					rain, 
 					sandstorm;
-
-	Shader*			basicShader, 
+					*/
+	/*Shader*			basicShader, 
 					shadowShader, 
 					bloomShader, 
 					deferredShader, 
 					blurShader, 
 					combineShader,
 					particleShader;
+					*/
 
 	GLuint			bufferFBO, 
 					processFBO, 
@@ -91,7 +71,4 @@ protected:
 					shadowTex, 
 					lightEmissiveTex, 
 					lightSpecularTex;
-
-	vector<SceneNode*> transparentNodeList;
-	vector<SceneNode*> nodeList;
 };
