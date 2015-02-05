@@ -22,6 +22,7 @@ Version: 1.0.0 03/02/2015.</summary>
 #include "../Framework/Keyboard.h"
 #include "../Framework/Mouse.h"
 #include "InputListener.h"
+#include "GamePad.h"
 
 using namespace std;
 
@@ -136,39 +137,39 @@ public:
 	<param name='type'>The event type.</param>
 	<param name='position'>The resolution independent co-ordinates of the mouse cursor.</param>
 	*/
-	static void InputListener::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, Vector2& position)
+	void MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, Vector2& position)
 	{
-		for (int i = 0; i < Instance()->gameScreens.size(); i++)
-			Instance()->gameScreens[i]->MouseEvent(type, button, position);
+		for (int i = 0; i < gameScreens.size(); i++)
+			gameScreens[i]->MouseEvent(type, button, position);
 	}
 	/**
 	<summary>Notifies all screens in the stack that the mouse has moved.</summary>
 	<param name='start'>The resolution independent co-ordinates of the mouse cursor at the start of the frame.</param>
 	<param name='finish'>The resolution independent co-ordinates of the mouse cursor at the end of the frame.</param>
 	*/
-	static void InputListener::MouseMoved(Vector2& start, Vector2& finish)
+	void MouseMoved(Vector2& start, Vector2& finish)
 	{
-		for (int i = 0; i < Instance()->gameScreens.size(); i++)
-			Instance()->gameScreens[i]->MouseMoved(start, finish);
+		for (int i = 0; i < gameScreens.size(); i++)
+			gameScreens[i]->MouseMoved(start, finish);
 	}
 	/**
 	<summary>Notifies all screens in the stack that the mouse scroll wheel has moved.</summary>
 	<param name='amount'>The amount of the movement.</param>
 	*/
-	static void InputListener::MouseScrolled(float amount)
+	void MouseScrolled(float amount)
 	{
-		for (int i = 0; i < Instance()->gameScreens.size(); i++)
-			Instance()->gameScreens[i]->MouseScrolled(amount);
+		for (int i = 0; i < gameScreens.size(); i++)
+			gameScreens[i]->MouseScrolled(amount);
 	}
 	/**
 	<summary>Notifies all screens in the stack of a keyboard event.</summary>
 	<param name='type'>The event type.</param>
 	<param name='key'>The key.</param>
 	*/
-	static void InputListener::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key)
+	void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key)
 	{
-		for (int i = 0; i < Instance()->gameScreens.size(); i++)
-			Instance()->gameScreens[i]->KeyboardEvent(type, key);
+		for (int i = 0; i < gameScreens.size(); i++)
+			gameScreens[i]->KeyboardEvent(type, key);
 	}
 	/**
 	<summary>Notifies all screens in the stack of a gamepad event.</summary>
@@ -176,10 +177,10 @@ public:
 	<param name='type'>The event type.</param>
 	<param name='button'>The button.</param>
 	*/
-	static void InputListener::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button)
+	void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button)
 	{
-		for (int i = 0; i < Instance()->gameScreens.size(); i++)
-			Instance()->gameScreens[i]->GamepadEvent(playerID, type, button);
+		for (int i = 0; i < gameScreens.size(); i++)
+			gameScreens[i]->GamepadEvent(playerID, type, button);
 	}
 	/**
 	<summary>Notifies all screens in the stack that an analogue control is displaced.</summary>
@@ -187,10 +188,10 @@ public:
 	<param name='analogueControl'>The control that is displaced.</param>
 	<param name='amount'>The amount of the displacement. For the triggers, only the x co-ordinate is used.</param>
 	*/
-	static void InputListener::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamePadEvents::AnalogueControl analogueControl, Vector2& amount)
+	void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, Vector2& amount)
 	{
-		for (int i = 0; i < Instance()->gameScreens.size(); i++)
-			Instance()->gameScreens[i]->GamepadAnalogueDisplacement(playerID, analogueControl, amount);
+		for (int i = 0; i < gameScreens.size(); i++)
+			gameScreens[i]->GamepadAnalogueDisplacement(playerID, analogueControl, amount);
 	}
 #pragma endregion
 #pragma region Screen Changes

@@ -6,7 +6,7 @@ float GamePad::pointerPosY = 0.0f;
 float GamePad::pointerRelativeX = 0.0f;
 float GamePad::pointerRelativeY = 0.0f;
 
-PadInput GamePad::padFunctions[PADBUTTONS_MAX];
+PadInput GamePad::padFunctions[GamepadEvents::PADBUTTONS_MAX];
 
 void GamePad::Initialise()
 {
@@ -41,7 +41,7 @@ void GamePad::GetJoypadMovement(float &x, float &y)
 }
 
 
-void GamePad::SetPadFunction(PadButtons button, PadInput function)
+void GamePad::SetPadFunction(GamepadEvents::Button button, PadInput function)
 {
 	padFunctions[button] = function;
 }

@@ -7,6 +7,7 @@ Version: 1.0.0 05/02/2015.</summary>
 #pragma once
 #include "..\Framework\Mouse.h"
 #include "..\Framework\Keyboard.h"
+#include "GamePad.h"
 
 class InputListener
 {
@@ -47,5 +48,5 @@ public:
 	<param name='analogueControl'>The control that is displaced.</param>
 	<param name='amount'>The amount of the displacement. For the triggers, only the x co-ordinate is used.</param>
 	*/
-	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamePadEvents::AnalogueControl analogueControl, Vector2& amount) = 0;
+	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, Vector2& amount) = 0;
 };
