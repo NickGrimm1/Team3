@@ -45,3 +45,11 @@ void GamePad::SetPadFunction(PadButtons button, PadInput function)
 {
 	padFunctions[button] = function;
 }
+
+void GamePad::UpdateJoypad()
+{
+	//CellPadData data;
+	//cellPadGetData(0,&data);
+}
+
+

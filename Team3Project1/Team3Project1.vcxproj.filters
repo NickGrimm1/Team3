@@ -309,6 +309,9 @@
     <ClInclude Include="GamePad.h">
       <Filter>Framework\User Interface\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GamePad.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Light.cpp">
@@ -387,7 +390,11 @@
       <Filter>Framework\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="GamePad.cpp">
+<<<<<<< HEAD
       <Filter>Framework\User Interface\Source Files</Filter>
+=======
+      <Filter>Engine\Source Files</Filter>
+>>>>>>> origin/Main
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -407,6 +414,42 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Shaders\TexturedVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\CombineFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\CombineVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\DeferredPassFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\DeferredPassVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\MainFragShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\MainVertShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\PointToCircleGeom.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\PointToQuadGeom.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\SkyboxFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\SkyboxVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\shadowFrag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\shadowVert.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
