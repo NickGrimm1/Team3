@@ -102,8 +102,10 @@
     <ClInclude Include="..\Framework\Window.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="AudioEngine.h" />
+    <ClInclude Include="ClickableEntity2D.h" />
     <ClInclude Include="DebugManager.h" />
-    <ClInclude Include="Entity2D.h" />
+    <ClInclude Include="DoubleClickableEntity2D.h" />
+    <ClInclude Include="DrawableEntity2D.h" />
     <ClInclude Include="GamePad.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="GameScreen2D.h" />

@@ -1,26 +1,39 @@
 /**
+Version History:
+0.0.5 03/02/2015
+0.0.6 05/02/2015
+	Added method to enable/disable input.
+*/
+
+/**
 <summary>Abstract class for representing a screen within the game.
 Holds entities that can be drawn and interacted with.
 
 Author: Nick Grimm
-Version: 0.0.1 03/02/2015.</summary>
+Version: 0.0.5 03/02/2015.</summary>
 */
 #pragma once
-#include "Entity2D.h"
 #include "../Framework/Vector2.h"
 #include "InputListener.h"
 #include "Rectangle.h"
 
-class GameScreen : public Entity2D, public InputListener
+class GameScreen : public Rectangle, public InputListener
 {
 public:
 	/**
 	<summary>Constructor.</summary>
-	<param name='screenBounds'>The boundary of the screen, given in resolution independent co-ordinates. Will ignore input outside and will not draw outside of these bounds. Default is 0,0,1,1.</param>
+	<param name='x'>The left boundary of the screen, given in resolution independent co-ordinates. Will ignore input outside and will not draw left of this line. Default is 0.</param>
+	<param name='x'>The bottom boundary of the screen, given in resolution independent co-ordinates. Will ignore input outside and will not draw under of this line. Default is 0.</param>
+	<param name='x'>The width of the screen, given in resolution independent co-ordinates. Will ignore input outside and will not draw right of the line formed by x + width. Default is 1.</param>
+	<param name='x'>The height of the screen, given in resolution independent co-ordinates. Will ignore input outside and will not draw above the line formed by y + height. Default is 1.</param>
 	*/
-	GameScreen(Rectangle& screenBounds = Rectangle(0.0f, 0.0f, 1.0f, 1.0f)) : screenBounds(screenBounds)
+	GameScreen(float x = 0.0f, float y = 0.0f, float width = 1.0f, float height = 1.0f) : Rectangle(x, y, width, height)
 	{ }
 	virtual ~GameScreen();
+	
+	bool IsInputEnabled() { return inputEnabled; }
+	void setInputEnabled(bool value) { inputEnabled = value; }
+	
 	/**
 	<summary>Allows the screen to run an update loop.</summary>
 	*/
@@ -56,5 +69,5 @@ protected:
 	<summary>The maximum scroll of the screen in the y direction. (x is up, y is down).</summary>
 	*/
 	Vector2 maxVerticalScroll;
-	Rectangle screenBounds;
+	bool inputEnabled;
 };

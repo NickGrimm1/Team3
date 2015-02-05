@@ -174,12 +174,6 @@
     <ClInclude Include="Rectangle.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2.h">
-      <Filter>Framework\Common\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity2D.h">
-      <Filter>Framework\Common\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GraphicsEngine.h">
       <Filter>Framework\Graphics</Filter>
     </ClInclude>
@@ -314,6 +308,15 @@
     </ClInclude>
     <ClInclude Include="InputListener.h">
       <Filter>Framework\User Interface\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawableEntity2D.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickableEntity2D.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DoubleClickableEntity2D.h">
+      <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
