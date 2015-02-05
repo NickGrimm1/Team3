@@ -75,7 +75,7 @@ unsigned int GraphicsEngine::AddSpotLight(Vector3 lightPosition, Vector3 lightTa
 }
 
 bool GraphicsEngine::RemoveLight(unsigned int lightReference) {
-	renderer->RemoveLight(lightReference);
+	
 }
 
 void GraphicsEngine::BuildNodeLists(SceneNode* from) {
