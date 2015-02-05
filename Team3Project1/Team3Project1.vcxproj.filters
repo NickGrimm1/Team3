@@ -174,9 +174,6 @@
     <ClInclude Include="Rectangle.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2.h">
-      <Filter>Framework\Common\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Entity2D.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
@@ -306,6 +303,9 @@
     <ClInclude Include="..\Framework\Vector3.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GamePad.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Light.cpp">
@@ -382,6 +382,9 @@
     </ClCompile>
     <ClCompile Include="GraphicsEngine.cpp">
       <Filter>Framework\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePad.cpp">
+      <Filter>Engine\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -39,3 +39,11 @@ static inline double DegToRad(const double rad)	{
 #define MESHDIR		"../Framework/Meshes/"
 #define TEXTUREDIR  "../Framework/Textures/"
 #define SOUNDSDIR	"../Framework/Sounds/"
+
+class DivideByZeroException
+{
+	virtual const char* reason() const throw()
+	{
+		return "Divide By Zero";
+	}
+};
