@@ -129,7 +129,7 @@ void Renderer::Render(float msec, LightData arg_lights)
 
 void Renderer::ToggleDebug(int arg, bool onOff)
 {
-	switch (onOff)
+	switch (arg)
 	{
 	case (1):
 		//Toggle wireframe
