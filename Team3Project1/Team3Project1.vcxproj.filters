@@ -333,6 +333,12 @@
     <ClInclude Include="DrawableText2D.h">
       <Filter>Framework\Graphics\2D\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UIButton.h">
+      <Filter>Framework\User Interface\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectableEntity2D.h">
+      <Filter>Framework\User Interface\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Light.cpp">

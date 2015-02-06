@@ -1,4 +1,11 @@
 /**
+Version History:
+1.0.0 05/02/2015
+1.0.1 07/02/2015
+	Removed inheritance from DrawableEntity2D to prevent problems of multiple inheritance.
+*/
+
+/**
 <summary>Defines an object that can respond to a single click.
 
 Author: Nick Grimm
@@ -7,18 +14,14 @@ Version: 1.0.0 05/02/2015.</summary>
 #pragma once
 #include "DrawableEntity2D.h"
 
-class ClickableEntity2D : public DrawableEntity2D
+class ClickableEntity2D
 {
 public:
 	/**
 	<summary>Constructor.</summary>
-	<param name='x'>The x position of the entity.</param>
-	<param name='y'>The y position of the entity.</param>
-	<param name='width'>The width of the entity.</param>
-	<param name='height'>The height of the entity.</param>
-	<param name='blendColor'>The colour. Default is White (1,1,1,1).</param>
+	<param name='actionOnClick'>Function pointer to the action to take on click.</param>m>
 	*/
-	ClickableEntity2D(float x, float y, float width, float height, void (*actionOnClick)(float, float), Vector4 blendColor = Vector4(1.0f, 1.0f, 1.0f ,1.0f)) : DrawableEntity2D(x, y, width, height, blendColor), actionOnClick(actionOnClick)
+	ClickableEntity2D(void (*actionOnClick)(float, float)) : actionOnClick(actionOnClick)
 	{ }
 	/**
 	<summary>Process the action this object takes when it is clicked.</summary>
@@ -29,6 +32,11 @@ public:
 	{
 		actionOnClick(x, y);
 	}
+	/**
+	<summary>Sets the action to take on click.</summary>
+	<param name='value'>Function pointer to the action to take on click.</param>m>
+	*/
+	void SetActionOnClick(void (*value)(float, float)) { actionOnClick = value; }
 protected:
 	void (*actionOnClick)(float x, float y);
 };
