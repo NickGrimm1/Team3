@@ -10,7 +10,7 @@ Version: 0.0.5 06/02/2015.</summary>
 
 using namespace std;
 
-class DrawableTexture2D : public DrawableEntity2D
+class DrawableText2D : public DrawableEntity2D
 {
 public:
 	/**
@@ -25,7 +25,7 @@ public:
 	<param name='font'>The font.</param>
 	<param name='text'>The text.</param>
 	*/
-	DrawableTexture2D(float x, float y, float width, float height, const string& text, Font* font, float rotation = 0, Vector2 origin = Vector2(0.5f, 0.5f), Vector4 blendColor = Vector4(1.0f, 1.0f, 1.0f ,1.0f)) : DrawableEntity2D(x, y, width, height, DrawableType::Text, blendColor), font(font), text(text), rotation(rotation), origin(origin)
+	DrawableText2D(float x, float y, float width, float height, const string& text, Font* font, float rotation = 0, Vector2 origin = Vector2(0.5f, 0.5f), Vector4 blendColor = Vector4(1.0f, 1.0f, 1.0f ,1.0f)) : DrawableEntity2D(x, y, width, height, DrawableType::Text, blendColor), font(font), text(text), rotation(rotation), origin(origin)
 	{ }
 
 	/**
