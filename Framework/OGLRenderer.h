@@ -57,6 +57,19 @@ static const float biasValues[16] = {
 };
 static const Matrix4 biasMatrix(const_cast<float*>(biasValues));
 
+struct LightData {
+	Vector4*	lightColour;
+	Vector4*	lightSpecColour;
+
+	Vector3*	lightPos;
+	Vector3*	lightDir;
+	Vector3*	cameraPos;
+
+	float		lightRadius;
+	float		lightAngle;
+	int			lightType;
+};
+
 enum DebugDrawMode {
 	DEBUGDRAW_ORTHO,
 	DEBUGDRAW_PERSPECTIVE

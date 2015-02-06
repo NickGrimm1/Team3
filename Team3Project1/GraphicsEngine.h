@@ -32,18 +32,6 @@ Version: 0.0.1 03/02/2015.</summary>
 #define MAX_MESHES 20
 #define MAX_TEXTURES 20
 
-struct LightData {
-	Vector4*	lightColour;
-	Vector4*	lightSpecColour;
-
-	Vector3*	lightPos;
-	Vector3*	lightDir;
-	Vector3*	cameraPos;
-
-	float		lightRadius;
-	float		lightAngle;
-	int			lightType;
-};
 
 class GraphicsEngine
 {
