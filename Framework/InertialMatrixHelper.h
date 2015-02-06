@@ -4,7 +4,7 @@
  */
 
 
-#include "../../nclgl/Matrix4.h"
+#include "Matrix4.h"
 
 class InertialMatrixHelper {
 public:

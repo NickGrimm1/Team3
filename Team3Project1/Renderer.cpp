@@ -122,8 +122,7 @@ Renderer::~Renderer(void)
 //Public method to initiate a draw to screen.
 void Renderer::Render(SceneNode* sn, Light arg_lights[])
 {
-	//Some method to set the internal array of lights and build the scene node.
-	DrawScene();
+	RenderScene();
 
 }
 
