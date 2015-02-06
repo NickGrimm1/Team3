@@ -30,10 +30,10 @@ _-_-_-_-_-_-_-""  ""
 #include "Quaternion.h"
 #include "Matrix4.h"
 #include "Window.h"
-//#include "light.h"
+#include "light.h"
 
-#include "Shader.h"		//Students make this file...
-#include "Mesh.h"		//And this one...
+#include "Shader.h"
+#include "Mesh.h"
 
 using std::vector;
 
@@ -56,19 +56,6 @@ static const float biasValues[16] = {
 	0.5, 0.5, 0.5, 1.0
 };
 static const Matrix4 biasMatrix(const_cast<float*>(biasValues));
-
-struct LightData {
-	Vector4*	lightColour;
-	Vector4*	lightSpecColour;
-
-	Vector3*	lightPos;
-	Vector3*	lightDir;
-	Vector3*	cameraPos;
-
-	float		lightRadius;
-	float		lightAngle;
-	int			lightType;
-};
 
 enum DebugDrawMode {
 	DEBUGDRAW_ORTHO,
@@ -113,7 +100,7 @@ public:
 	OGLRenderer(Window &parent);
 	virtual ~OGLRenderer(void);
 
-	virtual void	RenderScene(LightData arg_lights)		= 0;
+	virtual void	RenderScene()		= 0;
 	virtual void	UpdateScene(float msec);
 	void			SwapBuffers();
 
@@ -140,6 +127,7 @@ protected:
 	void			SetTextureRepeating(GLuint target, bool state);
 
 	//void			SetShaderLight(const Light &l);
+	void			SetShaderLight(const std::vector<Light*>& lights);
 
 	void			DrawDebugPerspective(Matrix4*matrix = 0);
 	void			DrawDebugOrtho(Matrix4*matrix = 0);

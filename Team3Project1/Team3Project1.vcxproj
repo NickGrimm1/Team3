@@ -106,6 +106,7 @@
     <ClInclude Include="DebugManager.h" />
     <ClInclude Include="DoubleClickableEntity2D.h" />
     <ClInclude Include="DrawableEntity2D.h" />
+    <ClInclude Include="DrawableText2D.h" />
     <ClInclude Include="DrawableTexture2D.h" />
     <ClInclude Include="GamePad.h" />
     <ClInclude Include="GameScreen.h" />
