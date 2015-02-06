@@ -32,6 +32,7 @@ Version: 0.0.1 03/02/2015.</summary>
 #define MAX_MESHES 20
 #define MAX_TEXTURES 20
 
+
 class GraphicsEngine
 {
 	// TODO: Implement Graphics Engine.
