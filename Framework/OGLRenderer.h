@@ -57,19 +57,6 @@ static const float biasValues[16] = {
 };
 static const Matrix4 biasMatrix(const_cast<float*>(biasValues));
 
-struct LightData {
-	Vector4*	lightColour;
-	Vector4*	lightSpecColour;
-
-	Vector3*	lightPos;
-	Vector3*	lightDir;
-	Vector3*	cameraPos;
-
-	float		lightRadius;
-	float		lightAngle;
-	int			lightType;
-};
-
 enum DebugDrawMode {
 	DEBUGDRAW_ORTHO,
 	DEBUGDRAW_PERSPECTIVE
@@ -113,7 +100,7 @@ public:
 	OGLRenderer(Window &parent);
 	virtual ~OGLRenderer(void);
 
-	virtual void	RenderScene(LightData arg_lights)		= 0;
+	virtual void	RenderScene()		= 0;
 	virtual void	UpdateScene(float msec);
 	void			SwapBuffers();
 

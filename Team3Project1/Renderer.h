@@ -17,18 +17,30 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "../Framework/Weather.h"
 #include "../Framework/Camera.h"
 
-
 #define SHADOWSIZE 2048 * 8
 
+/*
+struct LightData {
+	Vector4*	lightColour;
+	Vector4*	lightSpecColour;
 
+	Vector3*	lightPos;
+	Vector3*	lightDir;
+	Vector3*	cameraPos;
+
+	float		lightRadius;
+	float		lightAngle;
+	int			lightType;
+};
+*/
 
 class Renderer : public OGLRenderer
 {
 public:
 	Renderer(Window &parent);
 	~Renderer(void);
-
-	void			RenderScene(LightData arg_lights);
+	void			Render(SceneNode* sn, Light arg_lights[]);
+	void			RenderScene();
 	virtual void	UpdateScene(float msec);
 	void			ToggleDebug(int arg, bool onOff);
 
@@ -49,7 +61,8 @@ protected:
 
 	bool			debugElem[10];
 
-	LightData		lights;
+	vector<Light>	lights;
+	vector<SceneNode*> sceneNodes;
 
 	Mesh*			quad;
 
