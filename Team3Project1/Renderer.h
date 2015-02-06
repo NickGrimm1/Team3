@@ -17,7 +17,9 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "../Framework/Weather.h"
 #include "../Framework/Camera.h"
 
-#define SHADOWSIZE 2048 * 8
+#include <vector>
+
+#define SHADOWSIZE 2048 //* 8 ?
 
 /*
 struct LightData {
@@ -37,18 +39,24 @@ struct LightData {
 class Renderer : public OGLRenderer
 {
 public:
-	Renderer(Window &parent);
+	Renderer(Window &parent, vector<Light*> lightsVec, vector<SceneNode*> sceneNodesVec);
 	~Renderer(void);
-	void			Render(SceneNode* sn, Light arg_lights[]);
+
+	//void			Render(SceneNode* sn, vector<Light*> arg_lights);
 	void			RenderScene();
 	virtual void	UpdateScene(float msec);
 	void			ToggleDebug(int arg, bool onOff);
+
+	GLuint			CreateTexture(const char* filename, bool enableMipMaps = false, bool enableAnisotropicFiltering = false);
+	GLuint			CreateShadowTexture();
+	bool			DestroyTexture(GLuint textureReference);
 
 protected:
 	//Rendering pipeline components.
 	void			DrawScene();
 	void			ShadowPass();
 	void			DeferredLightPass();
+	void			CombineBuffers();
 	void			BloomPass();
 	void			MotionBlurPass();
 
@@ -58,11 +66,15 @@ protected:
 
 	//Member variables.
 	bool			activeTex;
+	unsigned int	nextTextureUnit;
 
 	bool			debugElem[10];
 
-	vector<Light>	lights;
-	vector<SceneNode*> sceneNodes;
+	vector<Light*>&	lights;
+	vector<SceneNode*>& sceneNodes;
+
+	Matrix4 orthographicMatrix;	// Gonna be constantly switching between orthographic (for HUD) and perspective (for scene) projection
+	Matrix4 perspectiveMatrix;	// Rather than constantly regenerating matrices - just keep a copy of each
 
 	Mesh*			quad;
 
@@ -78,8 +90,10 @@ protected:
 	Weather*		sandstorm;
 	*/
 
-	Shader*			basicShader; 
+	Shader*			basicShader;
 	Shader*			shadowShader;
+	Shader*			sceneShader;
+	Shader*			lightingShader;
 	Shader*			skyBoxShader;
 	Shader*			combineShader;
 	Shader*			particleShader;

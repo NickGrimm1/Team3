@@ -90,8 +90,8 @@ public:
 
 	// Light interface
 	unsigned int AddPointLight(Vector3 lightPosition, float lightRadius, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
-	unsigned int AddDirectionalLight(Vector3 lightDirection, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
-	unsigned int AddSpotLight(Vector3 lightPosition, Vector3 lightTarget, Vector3 upVector, float lightRadius, float lightAngle, Vector4 diffuseColour, Vector4 specularColour);
+	unsigned int AddDirectionalLight(Vector3 lightDirection, Vector4 diffuseColour, Vector4 specularColour);
+	unsigned int AddSpotLight(Vector3 lightPosition, Vector3 lightTarget, Vector3 upVector, float lightRadius, float lightAngle, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
 
 	// Return values indicates success of update
 	bool ChangeLightColour(unsigned int lightReference, Vector4 newDiffuseColour, Vector4 newSpecularColour);
@@ -136,7 +136,7 @@ private:
 	Mesh*	 meshArray[MAX_MESHES];
 	unsigned int numMeshs;
 
-	Light*	 lightArray[MAX_LIGHTS];
+	vector<Light*>	lights;
 	unsigned int numLights;
 
 	Frustum frameFrustum;

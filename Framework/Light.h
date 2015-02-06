@@ -51,8 +51,10 @@ public:
 	
 	virtual void DrawLightDeferred(Vector3 camera_pos) = 0;
 	
-	virtual void BindLight() const; // Binds the light source's data into the currently bound shader object
-	virtual void BindLight(unsigned int i) const; // Binds the light source's data into the currently bound shader object at the requested array index
+	void BindLight() const; // Binds the light source's data into the currently bound shader object
+	void BindLight(unsigned int i) const; // Binds the light source's data into the currently bound shader object at the requested array index
+
+	unsigned int GetShadowTexture() const {return shadowTexID;}
 
 protected:
 	Mesh* m; // mesh for use in deferred rendering
@@ -63,12 +65,13 @@ protected:
 	float radius;
 	float angle; // spot lights only
 	unsigned int type;
+	unsigned int shadowTexID;
 };
 
 class PointLight : public Light {
 public:
 	PointLight();
-	PointLight(Vector3 pos, Vector4 col, Vector4 spec, float rad);
+	PointLight(Vector3 pos, Vector4 col, Vector4 spec, float rad, unsigned int shadowTex);
 
 	virtual Matrix4 GetViewMatrix(Vector3 target);
 	virtual Matrix4 GetProjectionMatrix();
@@ -88,7 +91,7 @@ public:
 
 class SpotLight	: public Light {
 public:
-	SpotLight(Vector3 pos, Vector3 target, Vector3 up_vec, Vector4 col, Vector4 spec, float spot_rad, float spot_angle);
+	SpotLight(Vector3 pos, Vector3 target, Vector3 up_vec, Vector4 col, Vector4 spec, float spot_rad, float spot_angle, unsigned int shadowTex);
 
 	virtual Matrix4 GetViewMatrix(Vector3 target); //Ignore target spot lights have a defined direction + position
 	virtual Matrix4 GetProjectionMatrix();

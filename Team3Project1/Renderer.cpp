@@ -1,6 +1,14 @@
 #include "Renderer.h"
 
-Renderer::Renderer(Window &parent) : OGLRenderer(parent)
+// Reserved Texture Units
+#define DEFERRED_LIGHTS_EMISSIVE_TEXTURE_UNIT	0
+#define DEFERRED_LIGHTS_SPECULAR_TEXTURE_UNIT	1
+#define SCENE_RENDER_NORMALS_TEXTURE_UNIT		2
+#define SCENE_RENDER_DEPTH_TEXTURE_UNIT			3
+#define SCENE_RENDER_COLOUR1_TEXTURE_UNIT		4
+#define SCENE_RENDER_COLOUR2_TEXTURE_UNIT		5
+
+Renderer::Renderer(Window &parent, vector<Light*> lightsVec, vector<SceneNode*> sceneNodesVec) : OGLRenderer(parent), lights(lightsVec), sceneNodes(sceneNodesVec)
 {
 	camera	= new Camera();
 	root	= new SceneNode();
@@ -8,13 +16,19 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 
 	//Shader initialisations go here.
 	basicShader		= new Shader(SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
+	sceneShader		= new Shader(SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl");
 	shadowShader	= new Shader(SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl");
+	lightingShader  = new Shader(SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl");
 	skyBoxShader	= new Shader(SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl");
 	combineShader	= new Shader(SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
 	particleShader	= new Shader(SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
 
 	if (!LoadCheck())
 		return;
+
+	// Setup projection matrices - gonna just keep copies of the matrices rather than keep recreating them
+	perspectiveMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float) width / (float) height, 45.0f);
+	orthographicMatrix = Matrix4::Orthographic(-1.0f,1.0f,(float)width, 0.0f,(float)height, 0.0f);
 
 	//Creation of buffers.
 	GenerateScreenTexture(bufferNormalTex);
@@ -40,15 +54,6 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	}
-
-	//And shadow texture buffer.
-	glGenTextures(1, &shadowTex);
-	glBindTexture(GL_TEXTURE_2D, shadowTex);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOWSIZE, SHADOWSIZE, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -81,9 +86,17 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE || !lightEmissiveTex || !lightSpecularTex)
 		return;
 
+	// Create shadow textures as requested
 	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowTex, 0);
+	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowTex, 0);
 	glDrawBuffer(GL_NONE);
+
+
+	glEnable(GL_DEPTH_TEST);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); // Skybox sampling
 
 	init = true;
 }
@@ -106,6 +119,8 @@ Renderer::~Renderer(void)
 	delete blurShader;
 	delete combineShader;
 	delete particleShader;
+	delete sceneShader;
+	delete lightingShader;
 
 	//Clear buffers
 	glDeleteTextures(1, &shadowTex);
@@ -119,11 +134,21 @@ Renderer::~Renderer(void)
 	glDeleteFramebuffers(1, &shadowFBO);
 }
 
-//Public method to initiate a draw to screen.
-void Renderer::Render(SceneNode* sn, Light arg_lights[])
-{
-	RenderScene();
+// Renderer has reference to scene nodes and light list in Graphics Engine, will update automatically
+//void Renderer::Render(SceneNode* sn, vector<Light*> arg_lights)
+//{
+//	RenderScene();
+//
+//}
 
+//Public method to initiate a draw to screen.
+void Renderer::RenderScene() {
+	ShadowPass();
+	DrawScene();
+	DeferredLightPass();
+	CombineBuffers();
+
+	SwapBuffers();
 }
 
 void Renderer::ToggleDebug(int arg, bool onOff)
@@ -156,21 +181,20 @@ void Renderer::ToggleDebug(int arg, bool onOff)
 //Draws Scene to buffer object
 void Renderer::DrawScene()
 {
-	ShadowPass();
 	glBindFramebuffer(GL_FRAMEBUFFER, bufferFBO);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	
 	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
 	
 	//First the Skybox is drawn.
-	glDepthMask(GL_FALSE);
-	SetCurrentShader(skyBoxShader);
-	viewMatrix = camera->BuildViewMatrix();
-	UpdateShaderMatrices();
+//	glDepthMask(GL_FALSE);
+//	SetCurrentShader(skyBoxShader);
+//	viewMatrix = camera->BuildViewMatrix();
+//	UpdateShaderMatrices();
 	
-	quad->Draw();
+//	quad->Draw();
 
-	glUseProgram(0);
+//	glUseProgram(0);
 	glDepthMask(GL_TRUE);
 
 	//Then the terrain and tree is drawn.
@@ -221,24 +245,29 @@ void Renderer::UpdateScene(float msec)
 void Renderer::ShadowPass()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	glViewport(0, 0, SHADOWSIZE, SHADOWSIZE);
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 	glEnable(GL_DEPTH_TEST);
 
 	SetCurrentShader(shadowShader);
-	projMatrix		= Matrix4::Perspective(300.0f, 10000.0f, (float)width / (float)height, 45.0f);
-	viewMatrix		= Matrix4::BuildViewMatrix(*lights.lightPos, Vector3(2056, 10, 2056));
-	shadowMatrix	= biasMatrix*(projMatrix * viewMatrix);
+	for (unsigned int i = 0; i < lights.size(); i++) {
 
-	UpdateShaderMatrices();
+		// Does light cast shadows (does it have a depth texture attached)?
+		if (lights[i]->GetShadowTexture() <= 0) continue; // only process shadow data if light set to cast shadows
 
-	//heightMap->Draw();
-	//DrawNode(sceneNode);
-	//DrawWater();
+		// Attach depth texture to FBO
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, lights[i]->GetShadowTexture(), 0);
+		glClear(GL_DEPTH_BUFFER_BIT);
+		
+		projMatrix		= lights[i]->GetProjectionMatrix();
+		viewMatrix		= lights[i]->GetViewMatrix(Vector3(0,0,0)); // TODO - handle point light shadows properly
+		// don't need shadow matrix till next pass
+		//shadowMatrix	= biasMatrix*(projMatrix * viewMatrix);
 
-	textureMatrix.ToIdentity();
-	modelMatrix.ToIdentity();
+		UpdateShaderMatrices();
+
+		for (unsigned int j = 0; j < sceneNodes.size(); j++) sceneNodes[j]->Draw(*this);
+	}
 
 	glUseProgram(0);
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
@@ -247,13 +276,52 @@ void Renderer::ShadowPass()
 	//glDisable(GL_DEPTH_TEST);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 }
+
 //TODO: finish this
 void Renderer::DeferredLightPass()
 {
+	SetCurrentShader(lightingShader);
+	glBindFramebuffer(GL_FRAMEBUFFER, pointLightFBO);
 
+	glClearColor(0,0,0,1); // Want black background for light textures
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	// additive blending - pixels covered by multiple lights have the values added together
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE, GL_ONE); 
+
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "depthTex"), SCENE_RENDER_DEPTH_TEXTURE_UNIT);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "normTex"), SCENE_RENDER_NORMALS_TEXTURE_UNIT);
+
+	// Bind textures from G-buffer pass
+	glActiveTexture(GL_TEXTURE0 + SCENE_RENDER_DEPTH_TEXTURE_UNIT);
+	glBindTexture(GL_TEXTURE_2D, bufferDepthTex);
+	glActiveTexture(GL_TEXTURE0 + SCENE_RENDER_NORMALS_TEXTURE_UNIT);
+	glBindTexture(GL_TEXTURE_2D, bufferNormalTex);
+
+	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &camera->GetPosition());
+	glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / (float) width, 1.0f / (float) height);
+	viewMatrix = camera->BuildViewMatrix();
+	glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "viewMatrix"),	1, false, (float*) &viewMatrix);
+	glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "projMatrix"),	1, false, (float*) &perspectiveMatrix);
+	UpdateShaderMatrices();
+
+	glEnable(GL_CULL_FACE);
+	
+	// Draw deferred scene lights
+	for (unsigned int i = 0; i < lights.size(); ++i) {
+		lights[i]->DrawLightDeferred(camera->GetPosition());
+	}
+
+	glDisable(GL_BLEND);
+
+	glClearColor(0.2f, 0.2f, 0.2f, 1); // Reset clear colour to grey
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glUseProgram(0);
 }
+
 //TODO: finish this
 void Renderer::BloomPass()
 {
@@ -318,19 +386,43 @@ void Renderer::GenerateScreenTexture(GLuint &into, bool depth)
 
 bool Renderer::LoadCheck()
 {
-	if (!basicShader->LinkProgram())
-		return false;
-	if (!shadowShader->LinkProgram())
-		return false;
-	if (!skyBoxShader->LinkProgram())
-		return false;
-	if (!combineShader->LinkProgram())
-		return false;
-	if (!particleShader->LinkProgram())
-		return false;
+	return (basicShader->LinkProgram()		&&
+			shadowShader->LinkProgram()		&&
+			skyBoxShader->LinkProgram()		&&
+			combineShader->LinkProgram()	&&
+			particleShader->LinkProgram()	&&
+			sceneShader->LinkProgram()		&&
+			lightingShader->LinkProgram());
 }
 
 bool Renderer::ActiveTex()
 {
 	activeTex = !activeTex;
+}
+
+GLuint Renderer::CreateTexture(const char* filename, bool enableMipMaps, bool enableAnisotropicFiltering) {
+	
+	unsigned int flags = false;
+	if (enableMipMaps) flags |= SOIL_FLAG_MIPMAPS;
+	GLuint textureObject = SOIL_load_OGL_texture(filename, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, flags);
+	if (!textureObject)
+		textureObject = 0; // make sure GetTexture will return an error
+	return textureObject;
+}
+
+GLuint Renderer::CreateShadowTexture() {
+	//Create a shadow texture buffer
+	glGenTextures(1, &shadowTex);
+	glBindTexture(GL_TEXTURE_2D, shadowTex);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOWSIZE, SHADOWSIZE, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+	return shadowTex;
+}
+
+bool Renderer::DestroyTexture(GLuint textureReference) {
+	glDeleteTextures(1, &textureReference);
+	return true;
 }

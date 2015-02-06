@@ -108,7 +108,7 @@ PointLight::PointLight() {
 	radius = 0.0f;
 }
 
-PointLight::PointLight(Vector3 pos, Vector4 col, Vector4 spec, float rad) {
+PointLight::PointLight(Vector3 pos, Vector4 col, Vector4 spec, float rad, unsigned int shadowTex) {
 	type = POINT_LIGHT_TYPE;
 	position = pos;
 	direction = Vector3(0,0,0);
@@ -116,6 +116,7 @@ PointLight::PointLight(Vector3 pos, Vector4 col, Vector4 spec, float rad) {
 	specularColour = spec;
 	radius = rad; 
 	angle = 0;
+	shadowTexID = shadowTex;
 }
 
 Matrix4 PointLight::GetViewMatrix(Vector3 target) {
@@ -152,7 +153,7 @@ void DirectionalLight::DrawLightDeferred(Vector3 camera_pos) {
 	// Not to be used in current state - only built for compatibility with tutorial code
 }
 
-SpotLight::SpotLight(Vector3 pos, Vector3 target, Vector3 up_vec, Vector4 col, Vector4 spec, float spot_rad, float spot_angle) {
+SpotLight::SpotLight(Vector3 pos, Vector3 target, Vector3 up_vec, Vector4 col, Vector4 spec, float spot_rad, float spot_angle, unsigned int shadowTex) {
 	type = SPOTLIGHT_LIGHT_TYPE;
 	position = pos;
 	direction = target - pos;
@@ -163,6 +164,7 @@ SpotLight::SpotLight(Vector3 pos, Vector3 target, Vector3 up_vec, Vector4 col, V
 	angle = spot_angle;
 	up = up_vec; // an up vector for rotating the spot light
 	up.Normalise();
+	shadowTexID = shadowTex;
 }
 
 Matrix4 SpotLight::GetViewMatrix(Vector3 target) { //Ignore target spot lights, we have a defined direction + position
@@ -263,4 +265,6 @@ void PointLight::DrawLightDeferred(Vector3 camera_pos) {
 		glCullFace(GL_BACK);
 	}
 	lightMesh->Draw();
+
+	glCullFace(GL_BACK);
 }

@@ -10,6 +10,8 @@ Version: 0.0.1 04/02/2015</summary>
 #include "SOIL.h"
 #include "common.h"
 
+// DK - trying to remove OpenGL specific stuff, just want as wrapper class
+/*
 Texture::Texture(const char* filename, unsigned int flags, GLenum textUnit, std::string mapping) :
 	shaderMapping(mapping)
 {
@@ -20,7 +22,7 @@ Texture::Texture(const char* filename, unsigned int flags, GLenum textUnit, std:
 	}
 	textureUnit = textUnit;
 }
-
+*/
 Texture::Texture(GLuint textName, GLenum textUnit, std::string mapping) :
 	shaderMapping(mapping) 
 {
@@ -34,7 +36,7 @@ Texture::Texture(GLuint textName, GLenum textUnit, std::string mapping) :
 
 Texture::~Texture(void)
 {
-	glDeleteTextures(1, &textureObject);
+	//glDeleteTextures(1, &textureObject);
 }
 
 void Texture::BindTexture(bool set_texture_unit) {
