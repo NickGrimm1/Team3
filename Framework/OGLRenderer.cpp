@@ -252,11 +252,11 @@ void OGLRenderer::SetTextureRepeating( GLuint target, bool repeating )	{
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void OGLRenderer::SetShaderLight(const Light &l) {
-	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "lightPos")   ,1,(float*)&l.GetPosition());
-	glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "lightColour"),1,(float*)&l.GetColour());
-	glUniform1f(glGetUniformLocation(currentShader->GetProgram() , "lightRadius"),l.GetRadius());
-}
+//void OGLRenderer::SetShaderLight(const std::vector<Light*>& lights) {
+//	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "lightPos")   ,1,(float*)&l.GetPosition());
+//	glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "lightColour"),1,(float*)&l.GetDiffuseColour());
+//	glUniform1f(glGetUniformLocation(currentShader->GetProgram() , "lightRadius"),l.GetRadius());
+//}
 
 // GLSL appears to have an issue reading in arrays of structs, so passing individually
 void OGLRenderer::SetShaderLight(const std::vector<Light*>& lights) {
