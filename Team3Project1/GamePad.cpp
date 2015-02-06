@@ -1,5 +1,5 @@
 #include "GamePad.h"
-
+#if _PS3DEBUG
 float GamePad::pointerPosX = 0.0f;
 float GamePad::pointerPosY = 0.0f;
 
@@ -10,7 +10,7 @@ PadInput GamePad::padFunctions[GamepadEvents::PADBUTTONS_MAX];
 
 void GamePad::Initialise()
 {
-	/*
+	
 	if(cellPadInit(1) != CELL_PAD_OK)
 	{
 		std::cout <<"cellPadInit failed!" << std::endl;
@@ -20,12 +20,12 @@ void GamePad::Initialise()
 	{
 		padFunctions[i] = NULL;
 	}
-	*/
+	
 }
 
 void GamePad::Destroy()
 {
-	//cellPadEnd();
+	cellPadEnd();
 }
 
 void GamePad::GetPointerPosition(float &x, float &y)
@@ -48,8 +48,9 @@ void GamePad::SetPadFunction(GamepadEvents::Button button, PadInput function)
 
 void GamePad::UpdateJoypad()
 {
-	//CellPadData data;
-	//cellPadGetData(0,&data);
+	CellPadData data;
+	cellPadGetData(0,&data);
 }
 
 
+#endif
