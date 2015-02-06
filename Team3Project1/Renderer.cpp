@@ -129,7 +129,28 @@ void Renderer::Render(float msec, LightData arg_lights)
 
 void Renderer::ToggleDebug(int arg, bool onOff)
 {
-
+	switch (onOff)
+	{
+	case (1):
+		//Toggle wireframe
+		break;
+	case (2):
+		//Toggle shadows.
+		break;
+	case (3):
+		//Toggle blur.
+		break;
+	case (4):
+		//Toggle deffered lighting.
+		break;
+	case (5):
+		//Toggle something else.
+		break;
+	case (6):
+		//Toggle another thing.
+	default:
+		break;
+	}
 }
 
 /*----------Rendering pipeline-----------*/

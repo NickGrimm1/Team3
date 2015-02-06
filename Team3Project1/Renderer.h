@@ -55,6 +55,7 @@ protected:
 	void			GenerateScreenTexture(GLuint &into, bool depth = false);
 	bool			LoadCheck();
 	bool			ActiveTex();
+
 	//Member variables.
 	bool			activeTex;
 
@@ -70,10 +71,11 @@ protected:
 
 	Frustum			frameFrustum;
 
-	/*Weather*		snow; 
+	/*
+	Weather*		snow; 
 	Weather*		rain; 
 	Weather*		sandstorm;
-					*/
+	*/
 
 	Shader*			basicShader; 
 	Shader*			shadowShader;
