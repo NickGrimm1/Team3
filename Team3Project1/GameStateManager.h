@@ -40,7 +40,7 @@ public:
 		if (instance == NULL)
 		{
 			instance = new GameStateManager();
-			if (!GraphicsEngine::Initialize(*(instance->graphics)))
+			if (!GraphicsEngine::Initialize(instance->graphics))
 				return false;
 			if (!AssetManager::Initialize(*(instance->assets)))
 				return false;
@@ -48,7 +48,7 @@ public:
 				return false;
 			if (!StorageManager::Initialize(*(instance->storage)))
 				return false;
-			if (!InputManager::Initialize(*(instance->input), *instance))
+			if (!InputManager::Initialize(instance->input, instance))
 				return false;
 			if (!AudioEngine::Initialize(*(instance->audio)))
 				return false;

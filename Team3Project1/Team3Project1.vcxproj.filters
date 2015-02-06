@@ -180,9 +180,6 @@
     <ClInclude Include="GameScreen3D.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Rectangle.h">
-      <Filter>Framework\Common\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GraphicsEngine.h">
       <Filter>Framework\Graphics</Filter>
     </ClInclude>
@@ -329,6 +326,9 @@
     </ClInclude>
     <ClInclude Include="DrawableTexture2D.h">
       <Filter>Framework\Graphics\2D\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="T3Rectangle.h">
+      <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

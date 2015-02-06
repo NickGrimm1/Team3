@@ -1,4 +1,11 @@
 /**
+Version History:
+0.0.1 03/02/2015
+0.0.2 05/02/2015
+	Added 2D Methods.
+*/
+
+/**
 <summary>Static Singleton.
 The game's graphics engine.
 
@@ -6,6 +13,7 @@ Author: Nick Grimm
 Version: 0.0.1 03/02/2015.</summary>
 */
 
+#pragma once
 #include "../Framework/Vector3.h"
 #include "../Framework/Vector4.h"
 #include "../Framework/Light.h"
@@ -13,6 +21,7 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "../Framework/Mesh.h"
 #include "../Framework/Keyboard.h"
 #include "Renderer.h"
+#include "DrawableTexture2D.h"
 
 #define RENDER_HZ 60
 #define SCREEN_WIDTH 1280
@@ -27,11 +36,49 @@ class GraphicsEngine
 {
 	// TODO: Implement Graphics Engine.
 public:
-	static bool Initialize();
+#pragma region Entry/Exit
+	/**
+	<summary>Initializes a graphics engine.</summary>
+	<param name='graphics'>The pointer to the resulting graphics engine instance.</summary>
+	<returns>true if a Graphics Engine is initialized and ready.</returns>
+	*/
+	static bool Initialize(GraphicsEngine* out);
+	/**
+	<summary>Destroys the graphics engine. Allows the game to exit cleanly.</summary>
+	<returns>true if the graphics engine has exited.</returns>
+	*/
 	static bool Destroy();
+	/**
+	<summary>Gets whether the graphics engine has initialized and is ready to render.</summary>
+	*/
+	bool HasInitialised() { return isInitialised; }
+	bool StartGraphicsEngineThread();
+#pragma endregion
+#pragma region TwoD
+	/**
+	<summary>Adds a drawable texture to the scene. Idempotent.</summary>
+    <param name="drawableTexture">The drawable texture.</param>
+	*/
+	void AddTextureToScene(DrawableTexture2D* drawableTexture);
+	/**
+	<summary>Removes a drawable texture from the scene.</summary>
+    <param name="drawableTexture">The drawable texture.</param>
+	*/
+	void RemoveTextureFromScene(DrawableTexture2D* drawableTexture);
+	/**
+	<summary>Draws a text string to the screen in the specified font at the specified position, in the specified color. </summary>
+    <param name="text">The text to draw.</param>
+    <param name="fontName">The assetName of the font to use.</param>
+    <param name="position">The position.</param>
+    <param name="color">The colour. Default is White (1,1,1,1).</param>
+    <param name="rotation">The rotation from up in degrees. Default is 0.</param>
+	*/
+    void Draw(const string& text, const string& fontName, const T3Rectangle& position, const Vector4& color = Vector4(1.0f, 1.0f, 1.0f, 1.0f), const float rotation = 0); // TODO: Make a drawable text class for this!!
+#pragma endregion
+	
 	static GraphicsEngine& GetGraphicsEngine() {return *engine;}
 
-	bool HasInitialised() {return isInitialised;}
+	
 
 	Keyboard& GetKeyboard();
 
@@ -58,7 +105,7 @@ public:
 	unsigned int AddTexture(const char* filename, bool enableMipMaps = false, bool enableAnisotropicFiltering = false);
 	bool RemoveTexture(unsigned int textureReference);
 
-	bool StartGraphicsEngineThread();
+	
 
 private:
 	static GraphicsEngine* engine;

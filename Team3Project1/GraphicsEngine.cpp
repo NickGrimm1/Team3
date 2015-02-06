@@ -2,19 +2,25 @@
 
 #include <algorithm>
 
-bool GraphicsEngine::Initialize() {
-	if (engine != NULL) return false; // an engine instance already exists, can't create another
+bool GraphicsEngine::Initialize(GraphicsEngine* out) {
+	if (engine != NULL) 
+		return engine->HasInitialised(); // an engine instance already exists, can't create another, return where we have a success yet.
 	
 	// Otherwise, create new engine
 	engine = new GraphicsEngine();
+
+	out = engine;
 	return engine->HasInitialised();
 }
 
 bool GraphicsEngine::Destroy() {
 
-	if (engine == NULL) return false; // no engine instance to destroy
+	if (engine == NULL) 
+		return true; // no engine instance to destroy, this must be true by default.
 
 	delete engine;
+	engine = NULL;
+
 	return true;
 }
 

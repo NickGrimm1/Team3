@@ -14,7 +14,7 @@ Version: 1.0.0 05/02/2015.</summary>
 #pragma once
 #include "../Framework/Vector2.h"
 
-class Rectangle
+class T3Rectangle
 {
 public:
 #pragma region Variables
@@ -31,12 +31,12 @@ public:
 	<param name='width'>The width.</param>
 	<param name='hieght'>The height.</param>
 	*/
-	Rectangle(float x, float y, float width, float height) : x(x), y(y), width(width), height(height)
+	T3Rectangle(float x, float y, float width, float height) : x(x), y(y), width(width), height(height)
 	{ }
 	/**
 	<summary>Destructor.</summary>
 	*/
-	~Rectangle() {}
+	~T3Rectangle() {}
 #pragma endregion
 #pragma region Methods
 	/**

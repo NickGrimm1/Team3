@@ -117,7 +117,7 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="PhysicsEngine.h" />
-    <ClInclude Include="Rectangle.h" />
+    <ClInclude Include="T3Rectangle.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="StorageManager.h" />
   </ItemGroup>

@@ -15,9 +15,9 @@ Version: 0.0.5 03/02/2015.</summary>
 #pragma once
 #include "../Framework/Vector2.h"
 #include "InputListener.h"
-#include "Rectangle.h"
+#include "T3Rectangle.h"
 
-class GameScreen : public Rectangle, public InputListener
+class GameScreen : public T3Rectangle, public InputListener
 {
 public:
 	/**
@@ -27,7 +27,7 @@ public:
 	<param name='x'>The width of the screen, given in resolution independent co-ordinates. Will ignore input outside and will not draw right of the line formed by x + width. Default is 1.</param>
 	<param name='x'>The height of the screen, given in resolution independent co-ordinates. Will ignore input outside and will not draw above the line formed by y + height. Default is 1.</param>
 	*/
-	GameScreen(float x = 0.0f, float y = 0.0f, float width = 1.0f, float height = 1.0f) : Rectangle(x, y, width, height)
+	GameScreen(float x = 0.0f, float y = 0.0f, float width = 1.0f, float height = 1.0f) : T3Rectangle(x, y, width, height)
 	{ }
 	virtual ~GameScreen();
 	

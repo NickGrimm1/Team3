@@ -5,10 +5,10 @@ Author: Nick Grimm
 Version: 0.0.5 05/02/2015.</summary>
 */
 #pragma once
-#include "Rectangle.h"
+#include "T3Rectangle.h"
 #include "../Framework/Vector4.h"
 
-class DrawableEntity2D : public Rectangle
+class DrawableEntity2D : public T3Rectangle
 {
 public:
 	/**
@@ -19,7 +19,7 @@ public:
 	<param name='height'>The height of the entity.</param>
 	<param name='blendColor'>The colour. Default is White (1,1,1,1).</param>
 	*/
-	DrawableEntity2D(float x, float y, float width, float height, Vector4 blendColor = Vector4(1.0f, 1.0f, 1.0f ,1.0f)) : Rectangle(x, y, width, height), blendColor(blendColor)
+	DrawableEntity2D(float x, float y, float width, float height, Vector4 blendColor = Vector4(1.0f, 1.0f, 1.0f ,1.0f)) : T3Rectangle(x, y, width, height), blendColor(blendColor)
 	{ }
 	/**
 	<summary>Gets the colour to blend this drawable with.</summary>
