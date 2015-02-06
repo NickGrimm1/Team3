@@ -15,7 +15,7 @@ Version: 0.0.5 05/02/2015.</summary>
 #pragma once
 #include "GameScreen.h"
 #include <vector>
-#include "DoubleClickableEntity2D.h"
+#include "ClickableEntity2D.h"
 
 using namespace std;
 
@@ -29,7 +29,7 @@ public:
 	<param name="autoScreenDeviation">True if scroll deviations are calculated. Use false to add many entities before calculating (more efficient). Default is true.</param>
     <param name="entity">The entity.</param>
 	*/
-	void AddEntity(Rectangle* entity, bool autoScreenDeviation = true)
+	void AddEntity(T3Rectangle* entity, bool autoScreenDeviation = true)
     {
 		for (int i = 0; i < entities.size(); i++)
 			if (entities[i] == entity)
@@ -49,9 +49,9 @@ public:
 	<summary>Removes this entity from the screen.</summary>
     <param name="entity">The entity.</param>
 	*/
-    void RemoveEntity(Rectangle* entity)
+    void RemoveEntity(T3Rectangle* entity)
     {
-		for (vector<Rectangle*>::iterator i = entities.begin(); i != entities.end(); i++)
+		for (vector<T3Rectangle*>::iterator i = entities.begin(); i != entities.end(); i++)
 		{
 			if (*i == entity)
 			{
@@ -69,32 +69,49 @@ public:
 	<param name="autoScreenDeviation">True if scroll deviations are calculated. Use false to add many entities before calculating (more efficient). Default is true.</param>
     <param name="drawable">The entity.</param>
 	*/
-    void AddDrawable(DrawableEntity2D* drawable, bool autoScreenDeviation = true)
-    {
-		for (int i = 0; i < drawables.size(); i++)
-			if (drawables[i] == drawable)
-				return;
-
-        AddEntity(drawable, autoScreenDeviation);
-    }
+    void AddDrawable(DrawableEntity2D* drawable, bool autoScreenDeviation = true);
 	/**
 	<summary>Removes a drawable entity. Idempotent.</summary>
     <param name="drawable">The entity.</param>
 	*/
-    void RemoveDrawable(DrawableEntity2D* drawable)
+    void RemoveDrawable(DrawableEntity2D* drawable);
+#pragma endregion
+#pragma region Selectables
+	/**
+	<summary>Adds a selectable entity. Also adds to drawables. Idempotent.</summary>
+	<param name="autoScreenDeviation">True if scroll deviations are calculated. Use false to add many entities before calculating (more efficient). Default is true.</param>
+    <param name="selectable">The entity.</param>
+	*/
+	void AddSelectable(SelectableEntity2D* selectable, bool autoScreenDeviation = true)
     {
-		for (vector<DrawableEntity2D*>::iterator i = drawables.begin(); i != drawables.end(); i++)
+		for (int i = 0; i < selectables.size(); i++)
+			if (selectables[i] == selectable)
+				return;
+
+		selectables.push_back(selectable);
+		for (int i = 0 ;i < selectable->GetDrawables().size(); i++)
+			AddDrawable(selectable->GetDrawables()[i], false);
+        AddEntity(selectable, autoScreenDeviation);
+    }
+	/**
+	<summary>Removes a selectable entity. Provides an option to leave the entity in draw, but remove interactivity. Idempotent.</summary>
+	<param name="removeFromDraw">Remove the entity from draw. Default is true.</param>
+    <param name="selectable">The entity.</param>
+	*/
+	void RemoveSelectable(ClickableEntity2D* selectable, bool removeFromDraw = true)
+    {
+        for (vector<SelectableEntity2D*>::iterator i = selectables.begin(); i != selectables.end(); i++)
 		{
-			if (*i == drawable)
+			if (*i == selectable)
 			{
-				// TODO: Ensure that this is also removed from Graphics & Input.
-				drawables.erase(i);
+				selectables.erase(i);
 				break;
 			}
 		}
 
-        GetMaxScreenDeviation();
-        Scroll(Vector2(), Vector2());
+        if (removeFromDraw)
+			for (int i = 0 ;i < selectable->GetDrawables().size(); i++)
+				RemoveDrawable(selectable->GetDrawables()[i]);
     }
 #pragma endregion
 #pragma region Clickables
@@ -110,8 +127,7 @@ public:
 				return;
 
 		clickables.push_back(clickable);
-        AddDrawable(clickable, false);
-        AddEntity(clickable, autoScreenDeviation);
+		AddSelectable(clickable);
     }
 	/**
 	<summary>Removes a clickable entity. Provides an option to leave the entity in draw, but remove interactivity. Idempotent.</summary>
@@ -128,52 +144,58 @@ public:
 				break;
 			}
 		}
-
-        if (removeFromDraw)
-            RemoveDrawable(clickable);
+		RemoveSelectable(clickable, removeFromDraw);
     }
 #pragma endregion
-#pragma region DoubleClickables
+protected:
 	/**
-	<summary>Adds a double clickable entity. Also adds to clickables. Idempotent.</summary>
-	<param name="autoScreenDeviation">True if scroll deviations are calculated. Use false to add many entities before calculating (more efficient). Default is true.</param>
-    <param name="doubleClickable">The entity.</param>
+	<summary>Gets the maximum screen deviations for scroll.</summary>
 	*/
-	void AddDoubleClickable(DoubleClickableEntity2D* doubleClickable, bool autoScreenDeviation = true)
-    {
-		for (int i = 0; i < doubleClickables.size(); i++)
-		if (doubleClickables[i] == doubleClickable)
-			return;
+	void GetMaxScreenDeviation()
+	{
+		maxDeviationUp = 0;
+		maxDeviationDown = 0;
+		maxDeviationLeft = 0;
+		maxDeviationRight = 0;
 
-		doubleClickables.push_back(doubleClickable);
-        AddClickable(doubleClickable, autoScreenDeviation);
-    }
-	/**
-	<summary>Removes a double clickable entity. Also removes from clickables. Provides an option to leave the entity in draw, but remove interactivity. Idempotent.</summary>
-	<param name="removeFromDraw">True if no longer drawable. Default is true.</param>
-    <param name="doubleClickable">The entity.</param>
-	*/
-	void RemoveDoubleClickable(DoubleClickableEntity2D* doubleClickable, bool removeFromDraw = true)
-    {
-        for (vector<DoubleClickableEntity2D*>::iterator i = doubleClickables.begin(); i != doubleClickables.end(); i++)
+		for (int i = 0; i < entities.size(); i++)
 		{
-			if (*i == doubleClickable)
+			float excessUp = GetTop() + entities[i]->GetTop();
+			float excessRight = GetRight() - entities[i]->GetRight();
+
+			if (entities[i]->y < maxDeviationDown)
 			{
-				doubleClickables.erase(i);
-				break;
+				maxDeviationDown = entities[i]->y;
+			}
+			if (entities[i]->x < maxDeviationLeft)
+			{
+				maxDeviationLeft = entities[i]->x;
+			}
+
+			if (excessUp > maxDeviationUp)
+			{
+				maxDeviationUp = excessUp;
+			}
+			if (excessRight < maxDeviationRight)
+			{
+				maxDeviationRight = excessRight;
 			}
 		}
-
-        RemoveClickable(doubleClickable);
-        if (removeFromDraw)
-        {
-            RemoveDrawable(doubleClickable);
-        }
-    }
-#pragma endregion
+	}
+	float maxDeviationUp;
+	float maxDeviationDown;
+	float maxDeviationLeft;
+	float maxDeviationRight;
+	/**
+	<summary>Notifies all screens in the stack of a mouse event.</summary>
+	<param name='type'>The event type.</param>
+	<param name='position'>The resolution independent co-ordinates of the mouse cursor.</param>
+	*/
+	virtual void MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, Vector2& position);
 private:
-	vector<Rectangle*> entities;
+	vector<T3Rectangle*> entities;
 	vector<DrawableEntity2D*> drawables;
 	vector<ClickableEntity2D*> clickables;
-	vector<DoubleClickableEntity2D*> doubleClickables;
+	vector<SelectableEntity2D*> selectables;
+	int currentSelected;
 };

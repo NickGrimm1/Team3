@@ -11,15 +11,17 @@ Version History:
 Author: Nick Grimm
 Version: 1.0.0 05/02/2015.</summary>
 */
+#pragma once
+#include "SelectableEntity2D.h"
 
-class ClickableEntity2D
+class ClickableEntity2D : public SelectableEntity2D
 {
 public:
 	/**
 	<summary>Constructor.</summary>
 	<param name='actionOnClick'>Function pointer to the action to take on click.</param>m>
 	*/
-	ClickableEntity2D(void (*actionOnClick)(float, float)) : actionOnClick(actionOnClick)
+	ClickableEntity2D(float x, float y, float width, float height, void (*actionOnSelect)(), void (*actionOnClick)(float, float)) : SelectableEntity2D(x, y, width, height, actionOnSelect), actionOnClick(actionOnClick)
 	{ }
 	/**
 	<summary>Process the action this object takes when it is clicked.</summary>

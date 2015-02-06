@@ -13,19 +13,18 @@ Version: 0.0.5 07/02/2015.</summary>
 
 using namespace std;
 
-class UIButton : public T3Rectangle, public ClickableEntity2D, public SelectableEntity2D
+class UIButton : public ClickableEntity2D
 {
 public:
 	UIButton(float x, float y, float width, float height, void (*actionOnSelect)(), void (*actionOnClick)(float, float), DrawableTexture2D* texture, DrawableText2D* text)
-		: T3Rectangle(x, y, width, height), SelectableEntity2D(actionOnSelect), ClickableEntity2D(actionOnClick), texture(texture), text(text)
-	{ }
+		: ClickableEntity2D(x, y, width, height, actionOnSelect, actionOnClick)
+	{
+		drawables.push_back(texture);
+		drawables.push_back(text);
+	}
 	
 	DrawableTexture2D* GetTexture();
 	void SetTexture(DrawableTexture2D* value);
 	DrawableText2D* GetText();
 	void SetText(DrawableText2D* value);
-	vector<DrawableEntity2D*> GetDrawables();
-private:
-	DrawableTexture2D* texture;
-	DrawableText2D* text;
 };

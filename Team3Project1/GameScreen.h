@@ -23,9 +23,9 @@ public:
 	/**
 	<summary>Constructor.</summary>
 	<param name='x'>The left boundary of the screen, given in resolution independent co-ordinates. Will ignore input outside and will not draw left of this line. Default is 0.</param>
-	<param name='x'>The bottom boundary of the screen, given in resolution independent co-ordinates. Will ignore input outside and will not draw under of this line. Default is 0.</param>
-	<param name='x'>The width of the screen, given in resolution independent co-ordinates. Will ignore input outside and will not draw right of the line formed by x + width. Default is 1.</param>
-	<param name='x'>The height of the screen, given in resolution independent co-ordinates. Will ignore input outside and will not draw above the line formed by y + height. Default is 1.</param>
+	<param name='y'>The bottom boundary of the screen, given in resolution independent co-ordinates. Will ignore input outside and will not draw under of this line. Default is 0.</param>
+	<param name='width'>The width of the screen, given in resolution independent co-ordinates. Will ignore input outside and will not draw right of the line formed by x + width. Default is 1.</param>
+	<param name='height'>The height of the screen, given in resolution independent co-ordinates. Will ignore input outside and will not draw above the line formed by y + height. Default is 1.</param>
 	*/
 	GameScreen(float x = 0.0f, float y = 0.0f, float width = 1.0f, float height = 1.0f) : T3Rectangle(x, y, width, height)
 	{ }
