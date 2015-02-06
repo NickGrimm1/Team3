@@ -100,7 +100,7 @@ public:
 	OGLRenderer(Window &parent);
 	virtual ~OGLRenderer(void);
 
-	virtual void	RenderScene(LightData arg_lights)		= 0;
+	virtual void	RenderScene()		= 0;
 	virtual void	UpdateScene(float msec);
 	void			SwapBuffers();
 
