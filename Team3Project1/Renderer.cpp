@@ -1,7 +1,5 @@
 #include "Renderer.h"
 
-
-
 Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 {
 	camera	= new Camera();
@@ -122,9 +120,11 @@ Renderer::~Renderer(void)
 }
 
 //Public method to initiate a draw to screen.
-void Renderer::Render(float msec, LightData arg_lights)
+void Renderer::Render(SceneNode* sn, Light arg_lights[])
 {
-	lights = arg_lights;
+	//Some method to set the internal array of lights and build the scene node.
+	DrawScene();
+
 }
 
 void Renderer::ToggleDebug(int arg, bool onOff)

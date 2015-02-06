@@ -258,6 +258,16 @@ void OGLRenderer::SetShaderLight(const Light &l) {
 	glUniform1f(glGetUniformLocation(currentShader->GetProgram() , "lightRadius"),l.GetRadius());
 }
 
+// GLSL appears to have an issue reading in arrays of structs, so passing individually
+void OGLRenderer::SetShaderLight(const std::vector<Light*>& lights) {
+
+	
+	for (unsigned int i = 0; i < lights.size(); ++i) {
+		lights[i]->BindLight(i);
+	}
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "numLights"), lights.size());
+}
+
 #ifdef OPENGL_DEBUGGING
 void OGLRenderer::DebugCallback(GLuint source, GLuint type,GLuint id, GLuint severity,
 	int length, const char* message, void* userParam)	{
