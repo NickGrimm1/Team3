@@ -7,6 +7,7 @@ Version: 0.0.5 06/02/2015.</summary>
 #pragma once
 #include "DrawableEntity2D.h"
 #include <string>
+#include "Font.h"
 
 using namespace std;
 

@@ -327,9 +327,6 @@
     <ClInclude Include="ClickableEntity2D.h">
       <Filter>Framework\User Interface\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DoubleClickableEntity2D.h">
-      <Filter>Framework\User Interface\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DrawableText2D.h">
       <Filter>Framework\Graphics\2D\Header Files</Filter>
     </ClInclude>
@@ -338,6 +335,9 @@
     </ClInclude>
     <ClInclude Include="SelectableEntity2D.h">
       <Filter>Framework\User Interface\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -418,6 +418,9 @@
     </ClCompile>
     <ClCompile Include="GamePad.cpp">
       <Filter>Framework\User Interface\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScreen2D.cpp">
+      <Filter>Engine\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
