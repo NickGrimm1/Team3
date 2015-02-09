@@ -1,7 +1,7 @@
 /**
 <summary> PS3 gamepad input handler, static
 Author: Matthew Johnson
-Version: 0.0.1 </summary>
+Version: 0.0.2 </summary>
 **/
 // TODO: Make sure that PC version doesn't try to compile this
 #pragma once 
@@ -37,13 +37,18 @@ namespace GamepadEvents
 		BUTTON_PRESS,
 		BUTTON_HELD,
 	};
-	enum AnalogueControl
+	//analoagues handles in the "Button" enum 
+	/*enum AnalogueControl
 	{
 		LEFT_STICK,
 		RIGHT_STICK,
 		LEFT_TRIGGER,
 		RIGHT_TRIGGER,
-	};
+	};*/
+	//All buttons are listed in the enum below so that 
+	// the CellPadData struct from the ps3 API can be used
+	// buttons listed in the same order as in that struct
+	//making access easier.
 	enum Button
 	{
 		INPUT_SELECT	= 0,
