@@ -16,6 +16,7 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "../Framework/OGLRenderer.h"
 #include "../Framework/Weather.h"
 #include "../Framework/Camera.h"
+#include "../Framework/Mesh.h"
 
 #include <vector>
 
@@ -49,7 +50,13 @@ public:
 
 	GLuint			CreateTexture(const char* filename, bool enableMipMaps = false, bool enableAnisotropicFiltering = false);
 	GLuint			CreateShadowTexture();
+	GLuint			CreateCubeTexture(const char* filename);
 	bool			DestroyTexture(GLuint textureReference);
+
+	void			SetSkyBoxTexture(GLuint tex) {skyBoxTex = tex;}
+
+	Vector4			GetAmbientColour() const {return ambientLightColour;}
+	void			SetAmbientColour(Vector4& colour) {ambientLightColour = colour;}
 
 protected:
 	//Rendering pipeline components.
@@ -57,6 +64,7 @@ protected:
 	void			ShadowPass();
 	void			DeferredLightPass();
 	void			CombineBuffers();
+	void			DrawSkybox();
 	void			BloomPass();
 	void			MotionBlurPass();
 
@@ -102,14 +110,18 @@ protected:
 	Shader*			blurShader;
 	
 	GLuint			gbufferFBO;
-	GLuint			processFBO;
-	GLuint			pointLightFBO;
+	GLuint			postProcessingFBO;
+	GLuint			deferredLightingFBO;
 	GLuint			shadowFBO;
-	GLuint			bufferColourTex[2];
-	GLuint			bufferDepthTex;
-	GLuint			bufferNormalTex;
-	GLuint			cubeMap;
-	GLuint			shadowTex;
+	GLuint			gbufferColourTex;
+	GLuint			gbufferDepthTex;
+	GLuint			gbufferNormalTex;
+	GLuint			skyBoxTex;
 	GLuint			lightEmissiveTex;
 	GLuint			lightSpecularTex;
+	GLuint			postProcessingTex[2]; // At start of post-processing, postProcessingTex[0] holds the rendered scene
+
+	Vector4			ambientLightColour; // The scenes ambient light settings
+
+	Mesh*			screenMesh;			// A quad mesh for drawing screen filling textures
 };

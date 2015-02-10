@@ -21,16 +21,16 @@ Renderer::Renderer(Window &parent, vector<Light*> lightsVec, vector<SceneNode*> 
 
 	// Setup projection matrices - gonna just keep copies of the matrices rather than keep recreating them
 	perspectiveMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float) width / (float) height, 45.0f);
-	orthographicMatrix = Matrix4::Orthographic(-1.0f,1.0f,(float)width, 0.0f,(float)height, 0.0f);
-
+	orthographicMatrix = Matrix4::Orthographic(-1.0f,1.0f,(float)width, 0.0f,(float)height, 0.0f); // For HUD Elements only
+	Matrix4::Orthographic(-1,1,1,-1,1,-1);
 	//Creation of buffers.
-	GenerateScreenTexture(bufferNormalTex);
+	GenerateScreenTexture(gbufferNormalTex);
 	GenerateScreenTexture(lightEmissiveTex);
 	GenerateScreenTexture(lightSpecularTex);
 
 	//Generate scene depth texture buffer.
-	glGenTextures(1, &bufferDepthTex);
-	glBindTexture(GL_TEXTURE_2D, bufferDepthTex);
+	glGenTextures(1, &gbufferDepthTex);
+	glBindTexture(GL_TEXTURE_2D, gbufferDepthTex);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -38,40 +38,38 @@ Renderer::Renderer(Window &parent, vector<Light*> lightsVec, vector<SceneNode*> 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, width, height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
 
 	//And colour texture buffer.
-	for (int i = 0; i < 2; ++i) {
-		glGenTextures(1, &bufferColourTex[i]);
-		glBindTexture(GL_TEXTURE_2D, bufferColourTex[i]);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	}
+	glGenTextures(1, &gbufferColourTex);
+	glBindTexture(GL_TEXTURE_2D, gbufferColourTex);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	glGenFramebuffers(1, &gbufferFBO);		//Render the scene into this.
-	glGenFramebuffers(1, &processFBO);		//PP in this.
-	glGenFramebuffers(1, &shadowFBO);		//Shadow pre-render in this one.
-	glGenFramebuffers(1, &pointLightFBO);	
+	glGenFramebuffers(1, &gbufferFBO);			//Render the scene into this.
+	glGenFramebuffers(1, &postProcessingFBO);	//PP in this.
+	glGenFramebuffers(1, &shadowFBO);			//Shadow pre-render in this one.
+	glGenFramebuffers(1, &deferredLightingFBO);	//Deferred lighting in this FBO.
 
 	GLenum buffers[2];
 	buffers[0] = GL_COLOR_ATTACHMENT0;
 	buffers[1] = GL_COLOR_ATTACHMENT1;
 
 	glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[0], 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, bufferNormalTex, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, bufferDepthTex, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, bufferDepthTex, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufferColourTex, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gbufferNormalTex, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, gbufferDepthTex, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, gbufferDepthTex, 0);
 	glDrawBuffers(2, buffers);
 
 	//Check FBO attachment success with this command
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE || !bufferDepthTex || !bufferColourTex[0]) {
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE || !gbufferDepthTex || !gbufferColourTex || !gbufferNormalTex) {
 		return;
 	}
 
-	glBindFramebuffer(GL_FRAMEBUFFER, pointLightFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, deferredLightingFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, lightEmissiveTex, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, lightSpecularTex, 0);
 	glDrawBuffers(2, buffers);
@@ -84,8 +82,12 @@ Renderer::Renderer(Window &parent, vector<Light*> lightsVec, vector<SceneNode*> 
 	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowTex, 0);
 	glDrawBuffer(GL_NONE);
 
+	// TODO - Create Process FBO
+
+	ambientLightColour = DEFAULT_AMBIENT_LIGHT_COLOUR;
 
 	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_STENCIL_TEST);
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
@@ -116,14 +118,17 @@ Renderer::~Renderer(void)
 	delete lightingShader;
 
 	//Clear buffers
-	glDeleteTextures(1, &shadowTex);
-	glDeleteTextures(2, bufferColourTex);
-	glDeleteTextures(1, &bufferDepthTex);
-	glDeleteTextures(1, &bufferNormalTex);
+	//glDeleteTextures(1, &shadowTex); - TODO - handle deletion of shadow textures
+	glDeleteTextures(1, &gbufferColourTex);
+	glDeleteTextures(1, &gbufferDepthTex);
+	glDeleteTextures(1, &gbufferNormalTex);
 	glDeleteTextures(1, &lightEmissiveTex);
 	glDeleteTextures(1, &lightSpecularTex);
+	glDeleteTextures(2, postProcessingTex);
+	glDeleteTextures(1, &skyBoxTex);
 	glDeleteFramebuffers(1, &gbufferFBO);
-	glDeleteFramebuffers(1, &processFBO);
+	glDeleteFramebuffers(1, &postProcessingFBO);
+	glDeleteFramebuffers(1, &deferredLightingFBO);
 	glDeleteFramebuffers(1, &shadowFBO);
 }
 
@@ -136,10 +141,15 @@ Renderer::~Renderer(void)
 
 //Public method to initiate a draw to screen.
 void Renderer::RenderScene() {
+
+	// Main Render
 	ShadowPass();
 	DrawScene();
 	DeferredLightPass();
 	CombineBuffers();
+
+	// Post-Processing
+	//TODO
 
 	SwapBuffers();
 }
@@ -196,7 +206,6 @@ void Renderer::DrawScene()
 
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	
-	
 	SetCurrentShader(sceneShader);
 	
 	// Bind Shader variables
@@ -245,7 +254,8 @@ void Renderer::DrawScene()
 	// TODO - handle particle systems
 	//if (weatherOn)
 	//	DrawParticles();
-
+	
+	glDisable(GL_STENCIL_TEST); // Believe can disable here
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
@@ -267,9 +277,6 @@ void Renderer::ShadowPass()
 		
 		projMatrix		= lights[i]->GetProjectionMatrix();
 		viewMatrix		= lights[i]->GetViewMatrix(Vector3(0,0,0)); // TODO - handle point light shadows properly
-		// don't need shadow matrix till next pass
-		//shadowMatrix	= biasMatrix*(projMatrix * viewMatrix);
-
 		UpdateShaderMatrices();
 
 		for (unsigned int j = 0; j < sceneNodes.size(); j++) sceneNodes[j]->Draw(*this);
@@ -285,7 +292,7 @@ void Renderer::ShadowPass()
 void Renderer::DeferredLightPass()
 {
 	SetCurrentShader(lightingShader);
-	glBindFramebuffer(GL_FRAMEBUFFER, pointLightFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, deferredLightingFBO);
 
 	glClearColor(0,0,0,1); // Want black background for light textures
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -299,16 +306,16 @@ void Renderer::DeferredLightPass()
 
 	// Bind textures from G-buffer pass
 	glActiveTexture(GL_TEXTURE0 + GBUFFER_DEPTH_TEXTURE_UNIT);
-	glBindTexture(GL_TEXTURE_2D, bufferDepthTex);
+	glBindTexture(GL_TEXTURE_2D, gbufferDepthTex);
 	glActiveTexture(GL_TEXTURE0 + GBUFFER_NORMALS_TEXTURE_UNIT);
-	glBindTexture(GL_TEXTURE_2D, bufferNormalTex);
+	glBindTexture(GL_TEXTURE_2D, gbufferNormalTex);
 
-	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &camera->GetPosition());
-	glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / (float) width, 1.0f / (float) height);
 	viewMatrix = camera->BuildViewMatrix();
 	glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "viewMatrix"),	1, false, (float*) &viewMatrix);
 	glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "projMatrix"),	1, false, (float*) &perspectiveMatrix);
-	UpdateShaderMatrices();
+
+	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &camera->GetPosition());
+	glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / (float) width, 1.0f / (float) height);
 
 	glEnable(GL_CULL_FACE);
 	
@@ -325,6 +332,74 @@ void Renderer::DeferredLightPass()
 	glUseProgram(0);
 }
 
+void Renderer::CombineBuffers() {// merge scene render with lighting pass
+	glDisable(GL_DEPTH_TEST);
+
+	SetCurrentShader(combineShader);
+	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[0], 0); // the final picture
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, gbufferDepthTex, 0); // Stencil buffer from the first pass render
+	
+	// Setup matrices
+	projMatrix = Matrix4::Orthographic(-1,1,1,-1,1,-1);
+	modelMatrix.ToIdentity();
+	viewMatrix.ToIdentity();
+	textureMatrix.ToIdentity();
+	UpdateShaderMatrices();
+
+	// Bind textures in shaders
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), GBUFFER_COLOUR_TEXTURE_UNIT);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "normalTex"), GBUFFER_NORMALS_TEXTURE_UNIT);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "emissiveTex"), DEFERRED_LIGHTS_EMISSIVE_TEXTURE_UNIT);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "specularTex"), DEFERRED_LIGHTS_SPECULAR_TEXTURE_UNIT);
+	glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "ambientLight"), 1, (float*) &ambientLightColour);
+
+	// Setup texture units
+	glActiveTexture(GL_TEXTURE0 + GBUFFER_COLOUR_TEXTURE_UNIT);
+	glBindTexture(GL_TEXTURE_2D , gbufferColourTex);
+
+	glActiveTexture(GL_TEXTURE0 + GBUFFER_NORMALS_TEXTURE_UNIT);
+	glBindTexture(GL_TEXTURE_2D, gbufferNormalTex); // attaching normal texture from g-buffer pass as have stored shadow map data in the w value of the normals
+
+	glActiveTexture(GL_TEXTURE0 + DEFERRED_LIGHTS_EMISSIVE_TEXTURE_UNIT);
+	glBindTexture(GL_TEXTURE_2D, lightEmissiveTex);
+
+	glActiveTexture(GL_TEXTURE0 + DEFERRED_LIGHTS_SPECULAR_TEXTURE_UNIT);
+	glBindTexture(GL_TEXTURE_2D, lightSpecularTex);
+
+	glStencilMask(GL_FALSE); // Keep the stencil intact for drawing the skybox
+	screenMesh->Draw(); // Render scene
+	glStencilMask(GL_TRUE);
+
+	DrawSkybox(); // Finally, draw the skybox
+	
+	glEnable(GL_DEPTH_TEST);
+	glUseProgram(0);
+}
+
+void Renderer::DrawSkybox() { // Draw skybox only where screen has not previously been written to
+	glEnable(GL_STENCIL_TEST);
+	glStencilFunc(GL_NOTEQUAL, 1, 1); // Stencil test should only pass if stencil buffer not already set to 1 (from scene render)
+	glDepthMask(GL_FALSE); // Disable writes to the depth buffer
+	
+	SetCurrentShader(skyBoxShader);
+	
+	// Bind shader variables
+	viewMatrix = camera->BuildViewMatrix();
+	projMatrix = perspectiveMatrix;
+	UpdateShaderMatrices();
+
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "cubeTex"), SKYBOX_TEXTURE_UNIT);
+	glActiveTexture(GL_TEXTURE0 + SKYBOX_TEXTURE_UNIT);
+	glBindTexture(GL_TEXTURE_2D , skyBoxTex);
+
+	screenMesh->Draw();
+
+	glUseProgram(0);
+	glDisable(GL_STENCIL_TEST); // finished with the stencil for now
+	glDepthMask(GL_TRUE); // Enables writes to the depth buffer
+}
+
 //TODO: finish this
 void Renderer::BloomPass()
 {
@@ -333,8 +408,8 @@ void Renderer::BloomPass()
 //TODO: finish this
 void Renderer::MotionBlurPass()
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, processFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[ActiveTex()], 0);//1
+	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[ActiveTex()], 0);//1
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 	SetCurrentShader(blurShader);
@@ -401,6 +476,7 @@ bool Renderer::LoadCheck()
 bool Renderer::ActiveTex()
 {
 	activeTex = !activeTex;
+	return activeTex;
 }
 
 GLuint Renderer::CreateTexture(const char* filename, bool enableMipMaps, bool enableAnisotropicFiltering) {
@@ -415,6 +491,7 @@ GLuint Renderer::CreateTexture(const char* filename, bool enableMipMaps, bool en
 
 GLuint Renderer::CreateShadowTexture() {
 	//Create a shadow texture buffer
+	GLuint shadowTex;
 	glGenTextures(1, &shadowTex);
 	glBindTexture(GL_TEXTURE_2D, shadowTex);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

@@ -48,7 +48,7 @@ GraphicsEngine::~GraphicsEngine() {
 
 bool GraphicsEngine::StartGraphicsEngineThread() {
 
-
+	return true; // TODO - return thread start status
 }
 
 void GraphicsEngine::GraphicsEngineThread() {
