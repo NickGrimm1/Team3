@@ -1,12 +1,5 @@
 #include "Renderer.h"
-
-// Reserved Texture Units
-#define DEFERRED_LIGHTS_EMISSIVE_TEXTURE_UNIT	0
-#define DEFERRED_LIGHTS_SPECULAR_TEXTURE_UNIT	1
-#define SCENE_RENDER_NORMALS_TEXTURE_UNIT		2
-#define SCENE_RENDER_DEPTH_TEXTURE_UNIT			3
-#define SCENE_RENDER_COLOUR1_TEXTURE_UNIT		4
-#define SCENE_RENDER_COLOUR2_TEXTURE_UNIT		5
+#include "GraphicsCommon.h"
 
 Renderer::Renderer(Window &parent, vector<Light*> lightsVec, vector<SceneNode*> sceneNodesVec) : OGLRenderer(parent), lights(lightsVec), sceneNodes(sceneNodesVec)
 {
@@ -57,7 +50,7 @@ Renderer::Renderer(Window &parent, vector<Light*> lightsVec, vector<SceneNode*> 
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	glGenFramebuffers(1, &bufferFBO);		//Render the scene into this.
+	glGenFramebuffers(1, &gbufferFBO);		//Render the scene into this.
 	glGenFramebuffers(1, &processFBO);		//PP in this.
 	glGenFramebuffers(1, &shadowFBO);		//Shadow pre-render in this one.
 	glGenFramebuffers(1, &pointLightFBO);	
@@ -66,7 +59,7 @@ Renderer::Renderer(Window &parent, vector<Light*> lightsVec, vector<SceneNode*> 
 	buffers[0] = GL_COLOR_ATTACHMENT0;
 	buffers[1] = GL_COLOR_ATTACHMENT1;
 
-	glBindFramebuffer(GL_FRAMEBUFFER, bufferFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[0], 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, bufferNormalTex, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, bufferDepthTex, 0);
@@ -129,7 +122,7 @@ Renderer::~Renderer(void)
 	glDeleteTextures(1, &bufferNormalTex);
 	glDeleteTextures(1, &lightEmissiveTex);
 	glDeleteTextures(1, &lightSpecularTex);
-	glDeleteFramebuffers(1, &bufferFBO);
+	glDeleteFramebuffers(1, &gbufferFBO);
 	glDeleteFramebuffers(1, &processFBO);
 	glDeleteFramebuffers(1, &shadowFBO);
 }
@@ -168,78 +161,92 @@ void Renderer::ToggleDebug(int arg, bool onOff)
 		//Toggle deffered lighting.
 		break;
 	case (5):
-		//Toggle something else.
+		//Toggle bloom.
 		break;
 	case (6):
-		//Toggle another thing.
+		//Toggle particle systems.
 	default:
 		break;
 	}
 }
 
 /*----------Rendering pipeline-----------*/
-//Draws Scene to buffer object
-void Renderer::DrawScene()
-{
-	glBindFramebuffer(GL_FRAMEBUFFER, bufferFBO);
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	
-	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
-	
-	//First the Skybox is drawn.
-//	glDepthMask(GL_FALSE);
-//	SetCurrentShader(skyBoxShader);
-//	viewMatrix = camera->BuildViewMatrix();
-//	UpdateShaderMatrices();
-	
-//	quad->Draw();
-
-//	glUseProgram(0);
-	glDepthMask(GL_TRUE);
-
-	//Then the terrain and tree is drawn.
-	//SetCurrentShader(sceneShader);
-	//SetShaderLight(*light);
-
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "shadowTex"), 9);
-	glActiveTexture(GL_TEXTURE9);
-	glBindTexture(GL_TEXTURE_2D, shadowTex);
-	//viewMatrix = camera->BuildViewMatrix();
-	
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "bumpTex"), 1);
-
-	UpdateShaderMatrices();
-
-	/*
-	heightMap->Draw();
-
-	if (lightSpheres) {
-		glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-		DrawNode(lightSphere);
-		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-	}
-	
-	DrawNode(sceneNode);
-	DrawWater();
-	*/
-	modelMatrix.ToIdentity();
-	textureMatrix.ToIdentity();
-	activeTex = false;
-	
-	glUseProgram(0);
-	//if (weatherOn)
-	//	DrawParticles();
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-}
-
 void Renderer::UpdateScene(float msec)
 {
 	if (camera) 
 	{
 		camera->UpdateCamera();
 	}
+
+	// Update scene data
 	root->Update(msec);
+
+	//TODO - update particle systems
+}
+
+//Draws Scene to buffer object
+void Renderer::DrawScene()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
+
+	// Use stencil buffer to track unaltered pixels. Use to draw skybox later
+	glEnable(GL_STENCIL_TEST);
+	glStencilFunc(GL_ALWAYS, 1, 1); // Always passes
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	
+	
+	SetCurrentShader(sceneShader);
+	
+	// Bind Shader variables
+	viewMatrix = camera->BuildViewMatrix();
+	projMatrix = perspectiveMatrix;
+	UpdateShaderMatrices();
+	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &camera->GetPosition());
+
+	// Pass any light/shadow data for any lights which generate shadows into the renderer
+	unsigned int shadowCount = 0;
+	char buffer[20];
+	for (unsigned int i = 0; i < lights.size(); i++) {
+		if (lights[i]->GetShadowTexture() > 0) { // Shadow depth texture exists for light, so use
+			// Calculate the view projection matrix for the light so can sample shadow map (binding to textureMatrix for the minute
+			Matrix4 shadowMatrix = biasMatrix * lights[i]->GetProjectionMatrix() * lights[i]->GetViewMatrix(Vector3(0,0,0)); // TODO - handle point light shadows properly
+			
+			sprintf_s(buffer, 20, "shadowProjMatrix[%d]", i);
+			glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), buffer), 1, false, (float*) &shadowMatrix);
+			
+			// Bind shadow texture
+			sprintf_s(buffer, 20, "shadowTex[%d]", i);
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), buffer), SHADOW_TEXTURE_UNIT + shadowCount);
+			glActiveTexture(GL_TEXTURE0 + SHADOW_TEXTURE_UNIT + shadowCount);
+			glBindTexture(GL_TEXTURE_2D, lights[i]->GetShadowTexture());
+			
+			// Bind light data
+
+			lights[i]->BindLight(shadowCount);
+
+			shadowCount++;
+		}
+	}
+
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "numShadows"), shadowCount);
+			
+	// Draw Scene - for the minute, let meshes handle 
+	for (unsigned int j = 0; j < sceneNodes.size(); j++) sceneNodes[j]->Draw(*this);
+
+	
+	modelMatrix.ToIdentity();
+	textureMatrix.ToIdentity();
+	activeTex = false; // TODO - assume this has something to do with disabling textures
+	
+	glUseProgram(0);
+
+	// TODO - handle particle systems
+	//if (weatherOn)
+	//	DrawParticles();
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void Renderer::ShadowPass()
@@ -247,8 +254,7 @@ void Renderer::ShadowPass()
 	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
 	glViewport(0, 0, SHADOWSIZE, SHADOWSIZE);
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-	glEnable(GL_DEPTH_TEST);
-
+	
 	SetCurrentShader(shadowShader);
 	for (unsigned int i = 0; i < lights.size(); i++) {
 
@@ -273,12 +279,9 @@ void Renderer::ShadowPass()
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	glViewport(0, 0, width, height);
 
-	//glDisable(GL_DEPTH_TEST);
-
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-//TODO: finish this
 void Renderer::DeferredLightPass()
 {
 	SetCurrentShader(lightingShader);
@@ -291,13 +294,13 @@ void Renderer::DeferredLightPass()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE, GL_ONE); 
 
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "depthTex"), SCENE_RENDER_DEPTH_TEXTURE_UNIT);
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "normTex"), SCENE_RENDER_NORMALS_TEXTURE_UNIT);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "depthTex"), GBUFFER_DEPTH_TEXTURE_UNIT);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "normTex"), GBUFFER_NORMALS_TEXTURE_UNIT);
 
 	// Bind textures from G-buffer pass
-	glActiveTexture(GL_TEXTURE0 + SCENE_RENDER_DEPTH_TEXTURE_UNIT);
+	glActiveTexture(GL_TEXTURE0 + GBUFFER_DEPTH_TEXTURE_UNIT);
 	glBindTexture(GL_TEXTURE_2D, bufferDepthTex);
-	glActiveTexture(GL_TEXTURE0 + SCENE_RENDER_NORMALS_TEXTURE_UNIT);
+	glActiveTexture(GL_TEXTURE0 + GBUFFER_NORMALS_TEXTURE_UNIT);
 	glBindTexture(GL_TEXTURE_2D, bufferNormalTex);
 
 	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &camera->GetPosition());

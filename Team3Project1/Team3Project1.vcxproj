@@ -114,6 +114,7 @@
     <ClInclude Include="GameScreen2D.h" />
     <ClInclude Include="GameScreen3D.h" />
     <ClInclude Include="GameStateManager.h" />
+    <ClInclude Include="GraphicsCommon.h" />
     <ClInclude Include="GraphicsEngine.h" />
     <ClInclude Include="InputListener.h" />
     <ClInclude Include="InputManager.h" />

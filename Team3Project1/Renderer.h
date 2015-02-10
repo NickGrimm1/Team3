@@ -101,7 +101,7 @@ protected:
 	Shader*			deferredShader;
 	Shader*			blurShader;
 	
-	GLuint			bufferFBO;
+	GLuint			gbufferFBO;
 	GLuint			processFBO;
 	GLuint			pointLightFBO;
 	GLuint			shadowFBO;

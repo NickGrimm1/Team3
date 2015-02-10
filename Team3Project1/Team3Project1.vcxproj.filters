@@ -342,6 +342,9 @@
     <ClInclude Include="MathHelper.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GraphicsCommon.h">
+      <Filter>Framework\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Light.cpp">

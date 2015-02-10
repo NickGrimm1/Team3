@@ -8,6 +8,7 @@ uniform int useDiffuseTex;
 uniform int useNormalTex;	// Enables use of the normal map texture for calculation
 uniform sampler2DShadow shadowTex[MAX_SHADOWS];
 
+// TODO - some of this data isn't needed for this pass - light colour at least
 uniform	vec4 lightColour[MAX_SHADOWS];
 uniform	vec4 lightSpecColour[MAX_SHADOWS];
 uniform vec3 lightPos[MAX_SHADOWS];
