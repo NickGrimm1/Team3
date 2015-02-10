@@ -333,6 +333,36 @@
     <ClInclude Include="DrawableText2D.h">
       <Filter>Framework\Graphics\2D\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Framework\CollisionHelper.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\PhysicsNode.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Constraint.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\DebugDrawer.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\PhysicsSystem.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\MyGame.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\GameEntity.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\CubeRobot.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Vehicle.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\GameClass.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Light.cpp">
@@ -412,6 +442,30 @@
     </ClCompile>
     <ClCompile Include="GamePad.cpp">
       <Filter>Framework\User Interface\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\CollisionHelper.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\PhysicsNode.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\PhysicsSystem.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\MyGame.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\GameEntity.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\CubeRobot.cpp">
+      <Filter>Framework\Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Vehicle.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\GameClass.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

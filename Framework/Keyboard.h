@@ -194,6 +194,13 @@ public:
 	friend class Window;
 	void SetInputListener(InputListener* l) { listener = l; }
 
+	//Is this key currently pressed down?
+	bool KeyDown(KeyboardEvents::Key key);
+	//Has this key been held down for multiple frames?
+	bool KeyHeld(KeyboardEvents::Key key);
+	//Is this the first update the key has been pressed for?
+	bool KeyTriggered(KeyboardEvents::Key key);
+
 protected:
 	Keyboard(HWND &hwnd);
 	~Keyboard(void){}

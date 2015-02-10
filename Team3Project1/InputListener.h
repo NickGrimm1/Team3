@@ -34,7 +34,7 @@ public:
 	<param name='type'>The event type.</param>
 	<param name='key'>The key.</param>
 	*/
-	virtual void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) = 0;
+	virtual void KeyboardEvent(/*KeyboardEvents::*/EventType type, /*KeyboardEvents::*/Key key) = 0;
 	/**
 	<summary>Notifies all screens in the stack of a gamepad event.</summary>
 	<param name='playerID'>The ID for the controller.</param>

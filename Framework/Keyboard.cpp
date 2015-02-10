@@ -34,6 +34,33 @@ void Keyboard::Sleep()	{
 }
 
 /*
+Returns if the key is down. Doesn't need bounds checking - 
+a KeyboardKeys enum is always in range
+*/
+bool Keyboard::KeyDown(KeyboardEvents::Key key)	{
+	return keyStates[key];
+}
+
+/*
+Returns if the key is down, and has been held down for multiple updates. 
+Doesn't need bounds checking - a KeyboardKeys enum is always in range
+*/
+bool Keyboard::KeyHeld(KeyboardEvents::Key key)	{
+	if(KeyDown(key) && holdStates[key]) {
+		return true;
+	}
+	return false;
+}
+
+/*
+Returns true only if the key is down, but WASN't down last update.
+Doesn't need bounds checking - a KeyboardKeys enum is always in range
+*/
+bool Keyboard::KeyTriggered(KeyboardEvents::Key key)	 {
+	return (KeyDown(key) && !KeyHeld(key));
+}
+
+/*
 Updates the keyboard state with data received from the OS.
 */
 void Keyboard::Update(RAWINPUT* raw)	{

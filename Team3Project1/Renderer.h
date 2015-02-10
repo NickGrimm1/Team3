@@ -17,6 +17,8 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "../Framework/Weather.h"
 #include "../Framework/Camera.h"
 
+#include <algorithm>
+
 #define SHADOWSIZE 2048 * 8
 
 /*
@@ -43,6 +45,24 @@ public:
 	void			RenderScene();
 	virtual void	UpdateScene(float msec);
 	void			ToggleDebug(int arg, bool onOff);
+
+	void	SetCamera(Camera*c);
+
+	void	AddNode(SceneNode* n);
+
+	void	RemoveNode(SceneNode* n);
+
+	//Statics
+	static bool Initialise() {
+		instance = new Renderer(Window::GetWindow());
+		return instance->HasInitialised();
+	}
+
+	static void Destroy() {
+		delete instance;
+	}
+	
+	static Renderer&GetRenderer() { return *instance;}
 
 protected:
 	//Rendering pipeline components.
@@ -98,4 +118,24 @@ protected:
 	GLuint			shadowTex;
 	GLuint			lightEmissiveTex;
 	GLuint			lightSpecularTex;
+
+	//Renderer(Window &parent);
+	//virtual ~Renderer(void);
+
+	void	BuildNodeLists(SceneNode* from);
+	void	SortNodeLists();
+	void	ClearNodeLists();
+	void	DrawNodes();
+	void	DrawNode(SceneNode*n);
+
+
+
+	Shader*		simpleShader;
+
+
+
+	vector<SceneNode*> transparentNodeList;
+	vector<SceneNode*> nodeList;
+
+	static Renderer*	instance;
 };

@@ -70,10 +70,16 @@
     <ClInclude Include="..\Framework\BumpTexture.h" />
     <ClInclude Include="..\Framework\Camera.h" />
     <ClInclude Include="..\Framework\ChildMeshInterface.h" />
+    <ClInclude Include="..\Framework\CollisionHelper.h" />
     <ClInclude Include="..\Framework\CollisionVolume.h" />
     <ClInclude Include="..\Framework\common.h" />
+    <ClInclude Include="..\Framework\Constraint.h" />
+    <ClInclude Include="..\Framework\CubeRobot.h" />
+    <ClInclude Include="..\Framework\DebugDrawer.h" />
     <ClInclude Include="..\Framework\EmptyTexture.h" />
     <ClInclude Include="..\Framework\Frustum.h" />
+    <ClInclude Include="..\Framework\GameClass.h" />
+    <ClInclude Include="..\Framework\GameEntity.h" />
     <ClInclude Include="..\Framework\GameTimer.h" />
     <ClInclude Include="..\Framework\InertialMatrixHelper.h" />
     <ClInclude Include="..\Framework\InputDevice.h" />
@@ -86,9 +92,12 @@
     <ClInclude Include="..\Framework\MD5Node.h" />
     <ClInclude Include="..\Framework\Mesh.h" />
     <ClInclude Include="..\Framework\Mouse.h" />
+    <ClInclude Include="..\Framework\MyGame.h" />
     <ClInclude Include="..\Framework\OBJMesh.h" />
     <ClInclude Include="..\Framework\OGLRenderer.h" />
     <ClInclude Include="..\Framework\ParticleEmitter.h" />
+    <ClInclude Include="..\Framework\PhysicsNode.h" />
+    <ClInclude Include="..\Framework\PhysicsSystem.h" />
     <ClInclude Include="..\Framework\Plane.h" />
     <ClInclude Include="..\Framework\Quaternion.h" />
     <ClInclude Include="..\Framework\SceneNode.h" />
@@ -98,6 +107,7 @@
     <ClInclude Include="..\Framework\Vector2.h" />
     <ClInclude Include="..\Framework\Vector3.h" />
     <ClInclude Include="..\Framework\Vector4.h" />
+    <ClInclude Include="..\Framework\Vehicle.h" />
     <ClInclude Include="..\Framework\Weather.h" />
     <ClInclude Include="..\Framework\Window.h" />
     <ClInclude Include="AssetManager.h" />
@@ -124,7 +134,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Camera.cpp" />
+    <ClCompile Include="..\Framework\CollisionHelper.cpp" />
+    <ClCompile Include="..\Framework\CubeRobot.cpp" />
     <ClCompile Include="..\Framework\Frustum.cpp" />
+    <ClCompile Include="..\Framework\GameClass.cpp" />
+    <ClCompile Include="..\Framework\GameEntity.cpp" />
     <ClCompile Include="..\Framework\GameTimer.cpp" />
     <ClCompile Include="..\Framework\Keyboard.cpp" />
     <ClCompile Include="..\Framework\Light.cpp" />
@@ -135,15 +149,19 @@
     <ClCompile Include="..\Framework\MD5Node.cpp" />
     <ClCompile Include="..\Framework\Mesh.cpp" />
     <ClCompile Include="..\Framework\Mouse.cpp" />
+    <ClCompile Include="..\Framework\MyGame.cpp" />
     <ClCompile Include="..\Framework\OBJMesh.cpp" />
     <ClCompile Include="..\Framework\OGLRenderer.cpp" />
     <ClCompile Include="..\Framework\ParticleEmitter.cpp" />
+    <ClCompile Include="..\Framework\PhysicsNode.cpp" />
+    <ClCompile Include="..\Framework\PhysicsSystem.cpp" />
     <ClCompile Include="..\Framework\Plane.cpp" />
     <ClCompile Include="..\Framework\Quaternion.cpp" />
     <ClCompile Include="..\Framework\SceneNode.cpp" />
     <ClCompile Include="..\Framework\Shader.cpp" />
     <ClCompile Include="..\Framework\Spring.cpp" />
     <ClCompile Include="..\Framework\Texture.cpp" />
+    <ClCompile Include="..\Framework\Vehicle.cpp" />
     <ClCompile Include="..\Framework\Weather.cpp" />
     <ClCompile Include="..\Framework\Window.cpp" />
     <ClCompile Include="GamePad.cpp" />
