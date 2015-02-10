@@ -3,7 +3,7 @@
 mathematical functions & algorithms.
 
 Author: Nick Grimm
-Version: 0.0.5 05/02/2015.</summary>
+Version: 0.0.5 10/02/2015.</summary>
 */
 #pragma once
 #include "../Framework/Vector2.h"

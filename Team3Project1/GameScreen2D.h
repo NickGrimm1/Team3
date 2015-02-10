@@ -3,6 +3,8 @@ Version History:
 0.0.5 03/02/2015
 0.0.6 05/02/2015
 	Added Methods to add/remove entities. Needs to integrate with GraphicsEngine still.
+0.0.7 10/02/2015
+	Implemented input handlers.
 */
 
 /**

@@ -66,12 +66,8 @@ void GraphicsEngine::GraphicsEngineThread() {
 	}
 }
 
-Keyboard& GraphicsEngine::GetKeyboard() {
-	return *(Window::GetKeyboard());
-}
-
 // TODO - deal with castsShadows
-unsigned int GraphicsEngine::AddPointLight(Vector3 lightPosition, float lightRadius, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow) {
+/*unsigned int GraphicsEngine::AddPointLight(Vector3 lightPosition, float lightRadius, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow) {
 	if (numLights >= MAX_LIGHTS) return -1; // no more space for lights
 	unsigned int shadowTex = castsShadow ? renderer->CreateShadowTexture() : 0;
 	PointLight* l = new PointLight(lightPosition, diffuseColour, specularColour, lightRadius, shadowTex);
@@ -100,7 +96,7 @@ bool GraphicsEngine::RemoveLight(unsigned int lightReference) {
 		renderer->DestroyTexture(shadowTex);
 	delete lights[lightReference];
 	lights.erase(lights.begin() + lightReference);
-}
+}*/
 
 void GraphicsEngine::BuildNodeLists(SceneNode* from) {
 
