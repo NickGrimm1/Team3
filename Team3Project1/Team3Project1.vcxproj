@@ -117,6 +117,7 @@
     <ClInclude Include="GraphicsEngine.h" />
     <ClInclude Include="InputListener.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="MathHelper.h" />
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="SelectableEntity2D.h" />

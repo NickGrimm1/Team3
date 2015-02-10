@@ -30,7 +30,7 @@ void Mouse::Update(RAWINPUT* raw)	{
 
 		if (relativePosition.x != 0 || relativePosition.y != 0)
 		{
-			listener->MouseMoved(absolutePosition, absolutePosition + relativePosition);
+			listener->MouseMoved(absolutePosition + relativePosition);
 		}
 
 		absolutePosition.x += (float)raw->data.mouse.lLastX;
@@ -51,11 +51,11 @@ void Mouse::Update(RAWINPUT* raw)	{
 		if(raw->data.mouse.usButtonFlags & RI_MOUSE_WHEEL)	{		
 			if(raw->data.mouse.usButtonData == 120) {
 				frameWheel = 1;
-				listener->MouseScrolled(frameWheel);
+				listener->MouseScrolled(absolutePosition, frameWheel);
 			}
 			else {
 				frameWheel = -1;
-				listener->MouseScrolled(frameWheel);
+				listener->MouseScrolled(absolutePosition, frameWheel);
 			}
 		}
 

@@ -31,6 +31,10 @@ namespace MouseEvents
 		*/
 		BUTTON_UP,
 		/**
+		<summary>Button was clicked (Down then up in quick sucession).</summary>
+		*/
+		BUTTON_CLICK,
+		/**
 		<summary>Button was double-clicked.</summary>
 		*/
 		BUTTON_DOUBLECLICK,

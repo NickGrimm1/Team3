@@ -23,12 +23,12 @@ public:
 	<param name='start'>The resolution independent co-ordinates of the mouse cursor at the start of the frame.</param>
 	<param name='finish'>The resolution independent co-ordinates of the mouse cursor at the end of the frame.</param>
 	*/
-	virtual void MouseMoved(Vector2& start, Vector2& finish) = 0;
+	virtual void MouseMoved(Vector2& finish) = 0;
 	/**
 	<summary>Notifies all screens in the stack that the mouse scroll wheel has moved.</summary>
 	<param name='amount'>The amount of the movement.</param>
 	*/
-	virtual void MouseScrolled(float amount) = 0;
+	virtual void MouseScrolled(Vector2& position, float amount) = 0;
 	/**
 	<summary>Notifies all screens in the stack of a keyboard event.</summary>
 	<param name='type'>The event type.</param>

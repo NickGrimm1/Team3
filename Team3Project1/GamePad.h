@@ -37,14 +37,14 @@ namespace GamepadEvents
 		BUTTON_PRESS,
 		BUTTON_HELD,
 	};
-	//analoagues handles in the "Button" enum 
-	/*enum AnalogueControl
+	// This allows us to call an alternative method for input handling when we want to know how much an analogue control has moved.
+	enum AnalogueControl
 	{
 		LEFT_STICK,
 		RIGHT_STICK,
 		LEFT_TRIGGER,
 		RIGHT_TRIGGER,
-	};*/
+	};
 	//All buttons are listed in the enum below so that 
 	// the CellPadData struct from the ps3 API can be used
 	// buttons listed in the same order as in that struct
@@ -55,7 +55,7 @@ namespace GamepadEvents
 		INPUT_L3		= 1,
 		INPUT_R3		= 2,
 		INPUT_START		= 3,
-		INPUT_UP		= 3, INPUT_RIGHT	= 5,
+		INPUT_UP		= 4, INPUT_RIGHT	= 5,
 		INPUT_DOWN		= 6, INPUT_LEFT		= 7,
 		INPUT_L2		= 8,
 		INPUT_R2		= 9,

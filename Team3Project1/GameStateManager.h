@@ -147,19 +147,19 @@ public:
 	<param name='start'>The resolution independent co-ordinates of the mouse cursor at the start of the frame.</param>
 	<param name='finish'>The resolution independent co-ordinates of the mouse cursor at the end of the frame.</param>
 	*/
-	void MouseMoved(Vector2& start, Vector2& finish)
+	void MouseMoved(Vector2& finish)
 	{
 		for (int i = 0; i < gameScreens.size(); i++)
-			gameScreens[i]->MouseMoved(start, finish);
+			gameScreens[i]->MouseMoved(finish);
 	}
 	/**
 	<summary>Notifies all screens in the stack that the mouse scroll wheel has moved.</summary>
 	<param name='amount'>The amount of the movement.</param>
 	*/
-	void MouseScrolled(float amount)
+	void MouseScrolled(Vector2& position, float amount)
 	{
 		for (int i = 0; i < gameScreens.size(); i++)
-			gameScreens[i]->MouseScrolled(amount);
+			gameScreens[i]->MouseScrolled(position, amount);
 	}
 	/**
 	<summary>Notifies all screens in the stack of a keyboard event.</summary>
