@@ -26,6 +26,7 @@ Version: 0.0.3 06/02/2015.</summary>
 #include "Renderer.h"
 #include "DrawableTexture2D.h"
 #include "DrawableText2D.h"
+#include "DrawableEntity3D.h"
 
 #define RENDER_HZ 60
 #define SCREEN_WIDTH 1280
@@ -71,48 +72,43 @@ public:
 	*/
 	void RemoveTextureFromScene(DrawableTexture2D* drawableTexture);
 	/**
-	<summary>Adds a drawable text string to the screen in the specified font at the specified position, in the specified color. Indempotent.</summary>
+	<summary>Adds a drawable text string to the scene in the specified font at the specified position, in the specified color. Indempotent.</summary>
     <param name="drawableTexture">The drawable text.</param>
 	*/
     void AddDrawableTextToScene(DrawableText2D* drawableText);
 	/**
-	<summary>Removes a drawable text string to the screen in the specified font at the specified position, in the specified color. Indempotent.</summary>
+	<summary>Removes a drawable text string from the scene in the specified font at the specified position, in the specified color. Indempotent.</summary>
     <param name="drawableTexture">The drawable text.</param>
 	*/
 	void RemoveDrawableTextFromScene(DrawableText2D* drawableText);
 #pragma endregion
+#pragma region ThreeD
+	/**
+	<summary>Adds a 3D drawable entity to the scene. Indempotent.</summary>
+    <param name="drawable">The drawable object.</param>
+	<param name="parent">A drawable object that this object uses as its parent in the scene. NULL attaches the entity to the scene root. Default is NULL.</param>
+	*/
+	void AddDrawable(DrawableEntity3D* drawable, DrawableEntity3D* parent = NULL);
+	/**
+	<summary>Removes a 3D drawable object from the scene. Indempotent.</summary>
+    <param name="drawable">The drawable object.</param>
+	<param name="removeChildren">if true will also remove all children of this object from the scene, false will reattach children to the parent node. Default is true.</param>
+	*/
+	void RemoveDrawable(DrawableEntity3D* drawable, bool removeChildren = true);
+	/**
+	<summary>Adds a light to the scene. Indempotent.</summary>
+    <param name="light">The light.</param>
+	*/
+	void AddLight(Light* light);
+	/**
+	<summary>Removes a light to the scene. Indempotent.</summary>
+    <param name="light">The light.</param>
+	*/
+	void RemoveLight(Light* light);
+#pragma endregion	
 	
-	static GraphicsEngine& GetGraphicsEngine() {return *engine;}
-
-	
-
-	Keyboard& GetKeyboard();
-
-	// Light interface
-	unsigned int AddPointLight(Vector3 lightPosition, float lightRadius, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
-	unsigned int AddDirectionalLight(Vector3 lightDirection, Vector4 diffuseColour, Vector4 specularColour);
-	unsigned int AddSpotLight(Vector3 lightPosition, Vector3 lightTarget, Vector3 upVector, float lightRadius, float lightAngle, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
-
-	// Return values indicates success of update
-	bool ChangeLightColour(unsigned int lightReference, Vector4 newDiffuseColour, Vector4 newSpecularColour);
-	bool ChangeLightPosition(unsigned int lightReference, Vector3 newLightPosition);
-	bool ChangeLightRadius(unsigned int lightReference, float newLightRadius);
-	bool ChangeLightAngle(unsigned int lightReference, float newLightAngle);
-	bool ChangeLightTarget(unsigned int lightReference, Vector3 newLightTarget, Vector3 newUpVector);
-			
-	// Return values indicates success of update
-	bool RemoveLight(unsigned int lightReference);
-
-	// Mesh interface
-	unsigned int AddMesh(Mesh* mesh);
-	bool RemoveMesh(unsigned int meshReference);
-
-	// Textures interface
-	unsigned int AddTexture(const char* filename, bool enableMipMaps = false, bool enableAnisotropicFiltering = false);
-	bool RemoveTexture(unsigned int textureReference);
-
-	
-
+	// We don't actually need this since the GSM already holds the reference :)
+	//static GraphicsEngine& GetGraphicsEngine() {return *engine;}
 private:
 	static GraphicsEngine* engine;
 
