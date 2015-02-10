@@ -178,6 +178,9 @@
     <Filter Include="Framework\Graphics\Common\3D\Source Files">
       <UniqueIdentifier>{d95af220-a299-45e3-a458-26d2df988fec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FixFilters">
+      <UniqueIdentifier>{58315856-025d-43fd-ba38-57b0b2205940}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameStateManager.h">
@@ -356,6 +359,9 @@
     </ClInclude>
     <ClInclude Include="..\Framework\Light.h">
       <Filter>Framework\Graphics\Common\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsCommon.h">
+      <Filter>Engine\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
