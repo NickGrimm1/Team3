@@ -104,7 +104,7 @@ public:
 	*/
 	static void Update()
 	{
-		for (int i = 0; i < Instance()->gameScreens.size(); i++)
+		for (unsigned int i = 0; i < Instance()->gameScreens.size(); i++)
 			Instance()->gameScreens[i]->Update();
 	}
 	/**
@@ -112,7 +112,7 @@ public:
 	*/
 	static void Pause()
 	{
-		for (int i = 0; i < Instance()->gameScreens.size(); i++)
+		for (unsigned int i = 0; i < Instance()->gameScreens.size(); i++)
 			Instance()->gameScreens[i]->Pause();
 	}
 	/**
@@ -120,7 +120,7 @@ public:
 	*/
 	static void Resume()
 	{
-		for (int i = 0; i < Instance()->gameScreens.size(); i++)
+		for (unsigned int i = 0; i < Instance()->gameScreens.size(); i++)
 			Instance()->gameScreens[i]->Resume();
 	}
 	/**
@@ -139,7 +139,7 @@ public:
 	*/
 	void MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, Vector2& position)
 	{
-		for (int i = 0; i < gameScreens.size(); i++)
+		for (unsigned int i = 0; i < gameScreens.size(); i++)
 			gameScreens[i]->MouseEvent(type, button, position);
 	}
 	/**
@@ -149,7 +149,7 @@ public:
 	*/
 	void MouseMoved(Vector2& finish)
 	{
-		for (int i = 0; i < gameScreens.size(); i++)
+		for (unsigned int i = 0; i < gameScreens.size(); i++)
 			gameScreens[i]->MouseMoved(finish);
 	}
 	/**
@@ -158,7 +158,7 @@ public:
 	*/
 	void MouseScrolled(Vector2& position, float amount)
 	{
-		for (int i = 0; i < gameScreens.size(); i++)
+		for (unsigned int i = 0; i < gameScreens.size(); i++)
 			gameScreens[i]->MouseScrolled(position, amount);
 	}
 	/**
@@ -168,7 +168,7 @@ public:
 	*/
 	void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key)
 	{
-		for (int i = 0; i < gameScreens.size(); i++)
+		for (unsigned int i = 0; i < gameScreens.size(); i++)
 			gameScreens[i]->KeyboardEvent(type, key);
 	}
 	/**
@@ -179,7 +179,7 @@ public:
 	*/
 	void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button)
 	{
-		for (int i = 0; i < gameScreens.size(); i++)
+		for (unsigned int i = 0; i < gameScreens.size(); i++)
 			gameScreens[i]->GamepadEvent(playerID, type, button);
 	}
 	/**
@@ -190,7 +190,7 @@ public:
 	*/
 	void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, Vector2& amount)
 	{
-		for (int i = 0; i < gameScreens.size(); i++)
+		for (unsigned int i = 0; i < gameScreens.size(); i++)
 			gameScreens[i]->GamepadAnalogueDisplacement(playerID, analogueControl, amount);
 	}
 #pragma endregion

@@ -33,7 +33,7 @@ public:
 	*/
 	void AddEntity(T3Rectangle* entity, bool autoScreenDeviation = true)
     {
-		for (int i = 0; i < entities.size(); i++)
+		for (unsigned int i = 0; i < entities.size(); i++)
 			if (entities[i] == entity)
 				return;
 
@@ -86,12 +86,12 @@ public:
 	*/
 	void AddSelectable(SelectableEntity2D* selectable, bool autoScreenDeviation = true)
     {
-		for (int i = 0; i < selectables.size(); i++)
+		for (unsigned int i = 0; i < selectables.size(); i++)
 			if (selectables[i] == selectable)
 				return;
 
 		selectables.push_back(selectable);
-		for (int i = 0 ;i < selectable->GetDrawables().size(); i++)
+		for (unsigned int i = 0 ;i < selectable->GetDrawables().size(); i++)
 			AddDrawable(selectable->GetDrawables()[i], false);
         AddEntity(selectable, autoScreenDeviation);
     }
@@ -112,7 +112,7 @@ public:
 		}
 
         if (removeFromDraw)
-			for (int i = 0 ;i < selectable->GetDrawables().size(); i++)
+			for (unsigned int i = 0 ;i < selectable->GetDrawables().size(); i++)
 				RemoveDrawable(selectable->GetDrawables()[i]);
     }
 #pragma endregion
@@ -124,7 +124,7 @@ public:
 	*/
 	void AddClickable(ClickableEntity2D* clickable, bool autoScreenDeviation = true)
     {
-        for (int i = 0; i < clickables.size(); i++)
+        for (unsigned int i = 0; i < clickables.size(); i++)
 			if (clickables[i] == clickable)
 				return;
 
@@ -160,7 +160,7 @@ protected:
 		maxDeviationLeft = 0;
 		maxDeviationRight = 0;
 
-		for (int i = 0; i < entities.size(); i++)
+		for (unsigned int i = 0; i < entities.size(); i++)
 		{
 			float excessUp = GetTop() + entities[i]->GetTop();
 			float excessRight = GetRight() - entities[i]->GetRight();

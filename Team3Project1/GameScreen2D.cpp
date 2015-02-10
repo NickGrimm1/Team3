@@ -9,7 +9,7 @@
 */
 void GameScreen2D::AddDrawable(DrawableEntity2D* drawable, bool autoScreenDeviation)
 {
-	for (int i = 0; i < drawables.size(); i++)
+	for (unsigned int i = 0; i < drawables.size(); i++)
 		if (drawables[i] == drawable)
 			return;
 
@@ -58,7 +58,7 @@ void GameScreen2D::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseBut
 			// If type is click & button is left, iterate over clickables
 			if (button == MouseEvents::MOUSE_LEFT && type == MouseEvents::BUTTON_CLICK)
 			{
-				for (int i = 0; i < clickables.size(); i++)
+				for (unsigned int i = 0; i < clickables.size(); i++)
 				{
 					// Test if click is within bounds of clickables
 					if (MathHelper::Contains(position, *clickables[i]))
@@ -86,7 +86,7 @@ void GameScreen2D::MouseMoved(Vector2& finish)
 		if (MathHelper::Contains(finish, *this))
 		{
 			// Check if the finish location is within bounds of a selectable
-			for (int i = 0; i < selectables.size(); i++)
+			for (unsigned int i = 0; i < selectables.size(); i++)
 			{
 				// If it is, call Select()
 				selectables[i]->Select();
@@ -138,7 +138,7 @@ void GameScreen2D::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEven
 			if (button == GamepadEvents::INPUT_CROSS)
 			{
 				// Find the currently selected entity in clickables, and 'Click' it
-				for (int i = 0; i < clickables.size(); i++)
+				for (unsigned int i = 0; i < clickables.size(); i++)
 				{
 					if (clickables[i] == selectables[currentSelected])
 						clickables[i]->Click(0.0f, 0.0f);
