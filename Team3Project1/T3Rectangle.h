@@ -13,6 +13,9 @@ Version: 1.0.0 05/02/2015.</summary>
 */
 #pragma once
 #include "../Framework/Vector2.h"
+#include <vector>
+
+using namespace std;
 
 class T3Rectangle
 {
@@ -54,9 +57,13 @@ public:
 	/**
 	<summary>Gets an array of the corners of the rectangle. Clockwise from bottom left.</summary>
 	*/
-	Vector2* GetCorners() const 
+	vector<Vector2> GetCorners() const 
 	{
-		Vector2 output[4] = { Vector2(x, y), Vector2(x, GetTop()), Vector2(GetRight(), GetTop()), Vector2(GetRight(), y) };
+		vector<Vector2> output;
+		output.push_back(Vector2(x, y));
+		output.push_back(Vector2(x, GetTop()));
+		output.push_back(Vector2(GetRight(), GetTop()));
+		output.push_back(Vector2(GetRight(), y));
 		return output;
 	}
 #pragma endregion

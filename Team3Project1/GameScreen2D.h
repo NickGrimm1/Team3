@@ -204,7 +204,7 @@ protected:
 	<summary>Notifies all screens in the stack that the mouse scroll wheel has moved.</summary>
 	<param name='amount'>The amount of the movement.</param>
 	*/
-	virtual void MouseScrolled(Vector2& position, float amount);
+	virtual void MouseScrolled(Vector2& position, int amount);
 	/**
 	<summary>Notifies all screens in the stack of a keyboard event.</summary>
 	<param name='type'>The event type.</param>
