@@ -154,6 +154,7 @@
     <ClCompile Include="..\Framework\Window.cpp" />
     <ClCompile Include="GamePad.cpp" />
     <ClCompile Include="GameScreen2D.cpp" />
+    <ClCompile Include="GameScreen3D.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
     <ClCompile Include="Renderer.cpp" />
   </ItemGroup>

@@ -9,19 +9,26 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "GameScreen.h"
 #include "../Framework/Vector3.h"
 #include "../Framework/Vector4.h"
+#include "DrawableEntity3D.h"
+#include <vector>
+#include "../Framework/Light.h"
+#include "../Framework/Camera.h"
+
+using namespace std;
 
 class GameScreen3D : GameScreen
 {
-	// TODO: Implement GameScreen3D.
-	
-	// SetPlayer
-	// RemovePlayer
-	// AddDrawable
-	// RemoveDrawable
-	// unsigned int AddPointLight(Vector3 lightPosition, float lightRadius, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
-	// unsigned int AddDirectionalLight(Vector3 lightDirection, Vector4 diffuseColour, Vector4 specularColour);
-	// unsigned int AddSpotLight(Vector3 lightPosition, Vector3 lightTarget, Vector3 upVector, float lightRadius, float lightAngle, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
-	// Remove Light
+public:
+	void SetPlayer(DrawableEntity3D* value) { player = value; }
+	void RemovePlayer() 
+	{
+		player = NULL; 
+	}
+	void AddDrawable(DrawableEntity3D* value);
+	void RemoveDrawable(DrawableEntity3D* value);
+	void AddLight(Light* value);
+	void RemoveLight(Light* value);
+	void SetCamera(Camera* value) { camera = value; }
 
 	// Move these to Light.h? Probably...
 	/*bool ChangeLightColour(unsigned int lightReference, Vector4 newDiffuseColour, Vector4 newSpecularColour);
@@ -29,4 +36,9 @@ class GameScreen3D : GameScreen
 	bool ChangeLightRadius(unsigned int lightReference, float newLightRadius);
 	bool ChangeLightAngle(unsigned int lightReference, float newLightAngle);
 	bool ChangeLightTarget(unsigned int lightReference, Vector3 newLightTarget, Vector3 newUpVector);*/
+protected:
+	DrawableEntity3D* player;
+	vector<DrawableEntity3D*> drawables;
+	vector<Light*> lights;
+	Camera* camera;
 };

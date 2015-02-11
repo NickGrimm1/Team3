@@ -446,6 +446,9 @@
     <ClCompile Include="..\Framework\Light.cpp">
       <Filter>Framework\Graphics\Common\Source</Filter>
     </ClCompile>
+    <ClCompile Include="GameScreen3D.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\debugVertex.glsl">

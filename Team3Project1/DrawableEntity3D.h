@@ -16,11 +16,14 @@ public:
 	<param name='mesh'>The model mesh.</param>
 	<param name='shader'>The shader to use.</param>
 	<param name='texture'>The texture to use.</param>
+	<param name='bumpTexture'>The bump map to use.</param>
+	<param name='boundingRadius'>The bounding radius of the object. Denotes the object's maximum size for view frustrum culling.</param>
 	<param name='origin'>The origin position of the model in world space relative to its parent. Default is (0, 0, 0).</param>
 	<param name='rotation'>The rotation of the model in world space relative to its parent. Default is (0, 0, 0).</param>
 	<param name='scale'>The scale of the model in world space relative to its parent. Default is (0, 0, 0).</param>
 	*/
-	DrawableEntity3D(Mesh* Mesh, Shader* shader, Texture* texture, const Vector3& origin = Vector3(), const Quaternion& rotation = Quaternion(), const Vector3& scale = Vector3()) : mesh(mesh), shader(shader), texture(texture), origin(origin), rotation(rotation), scale(scale)
+	DrawableEntity3D(Mesh* Mesh, Shader* shader, Texture* texture, Texture* bumpTexture, float boundingRadius, const Vector3& origin = Vector3(), const Quaternion& rotation = Quaternion(), const Vector3& scale = Vector3()) 
+		: mesh(mesh), shader(shader), texture(texture), origin(origin), rotation(rotation), scale(scale), boundingRadius(boundingRadius), bumpTexture(bumpTexture)
 	{ }
 	
 	/**
@@ -101,4 +104,6 @@ protected:
 	Vector3 scale;
 	Vector3 origin;
 	Quaternion rotation;
+	float boundingRadius;
+	Texture* bumpTexture;
 };
