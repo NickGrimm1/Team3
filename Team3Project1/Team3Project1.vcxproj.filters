@@ -363,6 +363,15 @@
     <ClInclude Include="GraphicsCommon.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ChaseCamera.h">
+      <Filter>Framework\Graphics\Common\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeCamera.h">
+      <Filter>Framework\Graphics\Common\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="OffsetCamera.h">
+      <Filter>Framework\Graphics\Common\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Texture.cpp">
@@ -397,9 +406,6 @@
     </ClCompile>
     <ClCompile Include="..\Framework\Shader.cpp">
       <Filter>Framework\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\Camera.cpp">
-      <Filter>Framework\Common\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Framework\GameTimer.cpp">
       <Filter>Framework\Common\Source Files</Filter>
@@ -448,6 +454,12 @@
     </ClCompile>
     <ClCompile Include="GameScreen3D.cpp">
       <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Camera.cpp">
+      <Filter>Framework\Graphics\Common\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="OffsetCamera.cpp">
+      <Filter>Framework\Graphics\Common\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

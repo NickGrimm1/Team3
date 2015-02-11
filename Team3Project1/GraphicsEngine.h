@@ -105,6 +105,11 @@ public:
     <param name="light">The light.</param>
 	*/
 	void RemoveLight(Light* light);
+	/**
+	<summary>Sets the camera for the scene.</summary>
+    <param name="camera">The camera.</param>
+	*/
+	void SetCamera(Camera* camera);
 #pragma endregion	
 	
 	// We don't actually need this since the GSM already holds the reference :)

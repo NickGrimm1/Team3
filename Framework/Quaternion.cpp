@@ -147,3 +147,34 @@ Quaternion Quaternion::FromMatrix(const Matrix4 &m)	{
 
 	return q;
 }
+
+Vector3 Quaternion::GetEulerAngles()
+{
+	float gimbalTest = x * y + z  * w;
+	if (abs(gimbalTest - 0.5f) < 0.00001f) // Due North
+	{
+		return Vector3(
+			0, // Pitch
+			2 * atan2(x, w),// Yaw
+			PI / 2// Roll
+			);
+	}
+	if (abs(gimbalTest + 0.5f) < 0.00001f) // Due South
+	{
+		return Vector3(
+			0, // Pitch
+			-2 * atan2(x, w),// Yaw
+			-PI / 2// Roll
+			);
+	}
+
+	float xSq = x * x;
+	float ySq = y * y;
+	float zSq = z * z;
+
+	return Vector3(
+		atan2(2 * x * w - 2 * y * z, 1 - 2 * xSq - 2 * zSq), // Pitch
+		atan2(2 * x * y - 2 * x * z, 1 - 2 * ySq - 2 * zSq), // Yaw
+		asin(2 * x * y + 2 * z * w) // Roll
+		);
+}

@@ -35,7 +35,7 @@ public:
 	void RemoveDrawable(DrawableEntity3D* value);
 	void AddLight(Light* value);
 	void RemoveLight(Light* value);
-	void SetCamera(Camera* value) { camera = value; }
+	void SetCamera(Camera* value);
 	virtual void Update()
 	{
 		if (camera != NULL)

@@ -103,13 +103,16 @@
     <ClInclude Include="..\Framework\Window.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="AudioEngine.h" />
+    <ClInclude Include="ChaseCamera.h" />
     <ClInclude Include="ClickableEntity2D.h" />
     <ClInclude Include="DebugManager.h" />
     <ClInclude Include="DrawableEntity2D.h" />
     <ClInclude Include="DrawableEntity3D.h" />
     <ClInclude Include="DrawableText2D.h" />
     <ClInclude Include="DrawableTexture2D.h" />
+    <ClInclude Include="OffsetCamera.h" />
     <ClInclude Include="Font.h" />
+    <ClInclude Include="FreeCamera.h" />
     <ClInclude Include="GamePad.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="GameScreen2D.h" />
@@ -156,6 +159,7 @@
     <ClCompile Include="GameScreen2D.cpp" />
     <ClCompile Include="GameScreen3D.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
+    <ClCompile Include="OffsetCamera.cpp" />
     <ClCompile Include="Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>

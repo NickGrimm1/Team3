@@ -5,10 +5,14 @@ Polls the camera for keyboard / mouse movement.
 Should be done once per frame! Pass it the msec since
 last frame (default value is for simplicities sake...)
 */
-void Camera::UpdateCamera()	{
-	//Bounds check the pitch, to be between straight up and straight down ;)
-	pitch = min(pitch,90.0f);
-	pitch = max(pitch,-90.0f);
+void Camera::UpdateCamera()	
+{
+	if(pitch < 0) {
+		pitch += 360.0f;
+	}
+	if(pitch > 360.0f) {
+		pitch -= 360.0f;
+	}
 
 	if(yaw < 0) {
 		yaw += 360.0f;

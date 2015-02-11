@@ -48,6 +48,12 @@ public:
 	static Quaternion EulerAnglesToQuaternion(float pitch, float yaw, float roll);
 	static Quaternion AxisAngleToQuaterion(const Vector3& vector, float degrees);
 
+	/**
+	<summary>Gets the Euler angles represented by this Quarternion.</summary>
+	<returns>Vector3(Pitch, Yaw, Roll).</returns>
+	*/
+	Vector3 GetEulerAngles();
+
 	static void RotatePointByQuaternion(const Quaternion &q, Vector3 &point);
 
 	static Quaternion FromMatrix(const Matrix4 &m);

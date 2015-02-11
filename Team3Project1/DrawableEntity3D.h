@@ -54,6 +54,24 @@ public:
 	*/
 	void SetTexture(Texture* value) { texture = value; }
 	/**
+	<summary>Gets the bump texture to use for this entity.</summary>
+	*/
+	Texture* GetBumpTexture() const { return bumpTexture; }
+	/**
+	<summary>Sets the bump texture to use for this entity.</summary>
+	<param name='value'>The bump texture.</param>
+	*/
+	void SetBumpTexture(Texture* value) { bumpTexture = value; }
+	/**
+	<summary>Gets the bounding radius of this entity.</summary>
+	*/
+	float GetBoundingRadius() const { return boundingRadius; }
+	/**
+	<summary>Sets the bounding radius of this entity.</summary>
+	<param name='value'>The bounding radius.</param>
+	*/
+	void SetBoundingRadius(float value) { boundingRadius = value; }
+	/**
 	<summary>Gets the origin position of this entity relative to its parent.</summary>
 	*/
 	Vector3 GetOriginPosition() const { return origin; }
