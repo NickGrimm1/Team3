@@ -1,9 +1,16 @@
 /**
+Version History:
+0.0.1 03/02/2015
+0.0.5 11/02/2015
+	Implemented Methods.
+*/
+
+/**
 <summary>Abstract class for representing a 3D perspective screen within the game.
 Holds entities that can be drawn and interacted with.
 
 Author: Nick Grimm
-Version: 0.0.1 03/02/2015.</summary>
+Version: 0.0.5 11/02/2015.</summary>
 */
 #pragma once
 #include "GameScreen.h"
@@ -29,7 +36,11 @@ public:
 	void AddLight(Light* value);
 	void RemoveLight(Light* value);
 	void SetCamera(Camera* value) { camera = value; }
-
+	virtual void Update()
+	{
+		if (camera != NULL)
+			camera->UpdateCamera();
+	}
 	// Move these to Light.h? Probably...
 	/*bool ChangeLightColour(unsigned int lightReference, Vector4 newDiffuseColour, Vector4 newSpecularColour);
 	bool ChangeLightPosition(unsigned int lightReference, Vector3 newLightPosition);
