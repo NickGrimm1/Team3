@@ -126,19 +126,13 @@ private:
 
 	Renderer* renderer;
 
-	Texture* textureArray[MAX_TEXTURES];
-	unsigned int numTextures;
-
-	Mesh*	 meshArray[MAX_MESHES];
-	unsigned int numMeshs;
-
-	vector<Light*>	lights;
-	unsigned int numLights;
-
 	Frustum frameFrustum;
 	Camera* camera;
 
-	SceneNode* sceneRoot;
-	vector<SceneNode*> transparentNodeList;
-	vector<SceneNode*> nodeList;
+	// Scene Elements
+	SceneNode* sceneRoot; // Scene heirarchy
+	vector<Light*> lights; // Scene lighting
+	vector<DrawableEntity2D*> overlayElementsList; // HUD/Menu overlay items
+	vector<SceneNode*> transparentGameEntityList; // list of transparent game elements sorted by distance from camera
+	vector<SceneNode*> gameEntityList; // list of opaque game elements sorted by distance from camera
 };
