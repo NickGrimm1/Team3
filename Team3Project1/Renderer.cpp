@@ -1,10 +1,14 @@
 #include "Renderer.h"
 #include "GraphicsCommon.h"
+#include "DrawableEntity3D.h"
 
-Renderer::Renderer(Window &parent, vector<Light*> lightsVec, vector<SceneNode*> sceneNodesVec) : OGLRenderer(parent), lights(lightsVec), sceneNodes(sceneNodesVec)
+Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>& sceneNodesVec, vector<DrawableEntity2D*>& overlayVec) : 
+	OGLRenderer(parent), 
+	lights(lightsVec), 
+	sceneNodes(sceneNodesVec), 
+	overlayElements(overlayVec)
 {
 	camera	= new Camera();
-	root	= new SceneNode();
 	quad	= Mesh::GenerateQuad();
 
 	//Shader initialisations go here.
@@ -99,7 +103,6 @@ Renderer::Renderer(Window &parent, vector<Light*> lightsVec, vector<SceneNode*> 
 Renderer::~Renderer(void)
 {
 	delete camera;
-	delete root;
 
 	/*
 	delete snow;
@@ -132,13 +135,6 @@ Renderer::~Renderer(void)
 	glDeleteFramebuffers(1, &shadowFBO);
 }
 
-// Renderer has reference to scene nodes and light list in Graphics Engine, will update automatically
-//void Renderer::Render(SceneNode* sn, vector<Light*> arg_lights)
-//{
-//	RenderScene();
-//
-//}
-
 //Public method to initiate a draw to screen.
 void Renderer::RenderScene() {
 
@@ -150,6 +146,9 @@ void Renderer::RenderScene() {
 
 	// Post-Processing
 	//TODO
+
+	// Draw HUD/Menu overlay
+	Draw2DOverlay(); // TODO - Draw HUD first and use stencil to optimise main render pass
 
 	SwapBuffers();
 }
@@ -187,9 +186,6 @@ void Renderer::UpdateScene(float msec)
 	{
 		camera->UpdateCamera();
 	}
-
-	// Update scene data
-	root->Update(msec);
 
 	//TODO - update particle systems
 }
@@ -232,7 +228,6 @@ void Renderer::DrawScene()
 			glBindTexture(GL_TEXTURE_2D, lights[i]->GetShadowTexture());
 			
 			// Bind light data
-
 			lights[i]->BindLight(shadowCount);
 
 			shadowCount++;
@@ -241,13 +236,38 @@ void Renderer::DrawScene()
 
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "numShadows"), shadowCount);
 			
-	// Draw Scene - for the minute, let meshes handle 
-	for (unsigned int j = 0; j < sceneNodes.size(); j++) sceneNodes[j]->Draw(*this);
+	// Draw Scene
+	for (unsigned int i = 0; i < sceneNodes.size(); i++) {
+		DrawableEntity3D& entity = *sceneNodes[i]->GetDrawableEntity();
 
-	
-	modelMatrix.ToIdentity();
-	textureMatrix.ToIdentity();
-	activeTex = false; // TODO - assume this has something to do with disabling textures
+		// Handle colour and bump textures
+		if (entity.GetTexture()->GetTextureName() > 0) {
+			glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+			glBindTexture(GL_TEXTURE_2D, entity.GetTexture()->GetTextureName());
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);	
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 1);	
+		}
+		else
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 0);	
+		
+		if (entity.GetBumpTexture()->GetTextureName() > 0) {
+			glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_NORMAL_TEXTURE_UNIT);
+			glBindTexture(GL_TEXTURE_2D, entity.GetBumpTexture()->GetTextureName());
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "normalTex"), MESH_OBJECT_NORMAL_TEXTURE_UNIT);
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 1);	
+		}
+		else
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
+			
+		// ignore shader for the minute
+		
+		modelMatrix = sceneNodes[i]->GetWorldTransform() * Matrix4::Scale(entity.GetScale());
+		glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"),	1,false, (float*)&modelMatrix);
+		
+		textureMatrix.ToIdentity(); // add to texture/drawableentity class
+
+		entity.GetMesh()->Draw();
+	}
 	
 	glUseProgram(0);
 
@@ -279,7 +299,14 @@ void Renderer::ShadowPass()
 		viewMatrix		= lights[i]->GetViewMatrix(Vector3(0,0,0)); // TODO - handle point light shadows properly
 		UpdateShaderMatrices();
 
-		for (unsigned int j = 0; j < sceneNodes.size(); j++) sceneNodes[j]->Draw(*this);
+		// Draw Scene
+		for (unsigned int j = 0; j < sceneNodes.size(); j++) {
+			DrawableEntity3D& entity = *sceneNodes[j]->GetDrawableEntity();
+			modelMatrix = sceneNodes[j]->GetWorldTransform() * Matrix4::Scale(entity.GetScale());
+			glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"),	1,false, (float*)&modelMatrix);
+			entity.GetMesh()->Draw();
+		}
+	
 	}
 
 	glUseProgram(0);
@@ -441,6 +468,12 @@ void Renderer::MotionBlurPass()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glUseProgram(0);
 	glEnable(GL_DEPTH_TEST);
+}
+
+void Renderer::Draw2DOverlay() {
+
+
+
 }
 
 void Renderer::GenerateScreenTexture(GLuint &into, bool depth)

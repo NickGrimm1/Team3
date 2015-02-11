@@ -25,7 +25,7 @@ out Vertex {
 
 void main(void)	{
 	OUT.colour = nodeColour;
-	OUT.texCoord = texCoord;
+	OUT.texCoord = (textureMatrix * vec4(texCoord, 0.0, 1.0)).xy;
 	mat3 normalMatrix = transpose(inverse(mat3(modelMatrix)));  //TODO - pass into shader rather than calc each time
 	OUT.normal = normalize(normalMatrix * normalize(normal));
 	//OUT.normal = normal;

@@ -17,6 +17,7 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "../Framework/Weather.h"
 #include "../Framework/Camera.h"
 #include "../Framework/Mesh.h"
+#include "DrawableEntity2D.h"
 
 #include <vector>
 
@@ -40,10 +41,9 @@ struct LightData {
 class Renderer : public OGLRenderer
 {
 public:
-	Renderer(Window &parent, vector<Light*> lightsVec, vector<SceneNode*> sceneNodesVec);
+	Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>& sceneNodesVec, vector<DrawableEntity2D*>& overlayVec);
 	~Renderer(void);
 
-	//void			Render(SceneNode* sn, vector<Light*> arg_lights);
 	void			RenderScene();
 	virtual void	UpdateScene(float msec);
 	void			ToggleDebug(int arg, bool onOff);
@@ -67,6 +67,7 @@ protected:
 	void			DrawSkybox();
 	void			BloomPass();
 	void			MotionBlurPass();
+	void			Draw2DOverlay();
 
 	void			GenerateScreenTexture(GLuint &into, bool depth = false);
 	bool			LoadCheck();
@@ -79,7 +80,8 @@ protected:
 	bool			debugElem[10];
 
 	vector<Light*>&	lights;
-	vector<SceneNode*>& sceneNodes;
+	vector<SceneNode*>& sceneNodes; // game elements to draw (opaque), sorted by distance from camera, closest first.
+	vector<DrawableEntity2D*>& overlayElements; // HUD/Menu elements, sorted by "distance" from camera (overlay level). Closest first
 
 	Matrix4 orthographicMatrix;	// Gonna be constantly switching between orthographic (for HUD) and perspective (for scene) projection
 	Matrix4 perspectiveMatrix;	// Rather than constantly regenerating matrices - just keep a copy of each
@@ -87,8 +89,6 @@ protected:
 	Mesh*			quad;
 
 	Camera*			camera;
-
-	SceneNode*		root;
 
 	Frustum			frameFrustum;
 

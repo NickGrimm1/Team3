@@ -29,7 +29,7 @@ GraphicsEngine::GraphicsEngine() {
 	
 	if (!Window::Initialise(GAME_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT, false)) return;
 	
-	renderer = new Renderer(Window::GetWindow(), lights, nodeList);
+	renderer = new Renderer(Window::GetWindow(), lights, gameEntityList, overlayElementsList);
 	if (!renderer->HasInitialised()) return;
 
 	isInitialised = true; // Graphics Engine has initialised successfully
@@ -54,11 +54,13 @@ bool GraphicsEngine::StartGraphicsEngineThread() {
 void GraphicsEngine::GraphicsEngineThread() {
 	while (true) {
 		// Update data in scene nodes
+		sceneRoot->Update(1.0f / RENDER_HZ); // TODO - sort out proper timestep value - or remove timestep if not needed
+
+		// Build Node lists
 		BuildNodeLists(sceneRoot);
 		SortNodeLists();
 		
 		// Render data
-		DrawNodes();
 		renderer->RenderScene();
 
 		// Clear node lists in preparation for next render cycle
@@ -107,9 +109,9 @@ void GraphicsEngine::BuildNodeLists(SceneNode* from) {
 
 		if (from->GetColour().w < 1.0f) 
 			//transparent - add to transparent list
-			transparentNodeList.push_back(from);
+			transparentGameEntityList.push_back(from);
 		else
-			nodeList.push_back(from);
+			gameEntityList.push_back(from);
 	}
 
 	// Note - gonna check children regardless - cos an arm might be inside the plane
@@ -119,8 +121,8 @@ void GraphicsEngine::BuildNodeLists(SceneNode* from) {
 
 void GraphicsEngine::SortNodeLists() {
 	// Sort both lists by order of distance from camera
-	std::sort(transparentNodeList.begin(), transparentNodeList.end(), SceneNode::CompareByCameraDistance);
-	std::sort(nodeList.begin(), nodeList.end(), SceneNode::CompareByCameraDistance);
+	std::sort(transparentGameEntityList.begin(), transparentGameEntityList.end(), SceneNode::CompareByCameraDistance);
+	std::sort(gameEntityList.begin(), gameEntityList.end(), SceneNode::CompareByCameraDistance);
 }
 
 void GraphicsEngine::DrawNodes() {
@@ -132,6 +134,61 @@ void GraphicsEngine::DrawNodes() {
 }
 
 void GraphicsEngine::ClearNodeLists() {
-	transparentNodeList.clear();
-	nodeList.clear();
+	transparentGameEntityList.clear();
+	gameEntityList.clear();
+}
+
+void GraphicsEngine::AddDrawable(DrawableEntity3D* drawable, DrawableEntity3D* parent) {
+	// TODO - is it worth checking node already in scene graph
+	
+	// if no parent - add drawable as child of sceneRoot
+	if (parent == NULL) {
+		sceneRoot->AddChild(new SceneNode(drawable));
+	}
+	else
+	{
+		sceneRoot->AddChildToParent(drawable, parent);
+	}
+}
+
+void GraphicsEngine::RemoveDrawable(DrawableEntity3D* drawable, bool removeChildren) {
+	sceneRoot->RemoveChild(drawable, true, removeChildren);
+}
+
+void GraphicsEngine::AddTextureToScene(DrawableTexture2D* drawableTexture) {
+	// TODO - is it worth checking already in list
+	overlayElementsList.push_back(drawableTexture);
+}
+
+void GraphicsEngine::RemoveTextureFromScene(DrawableTexture2D* drawableTexture) {
+	for (auto i = overlayElementsList.begin(); i != overlayElementsList.end(); ++i) {
+		if ((*i) == drawableTexture) {
+			overlayElementsList.erase(i);
+		}
+	}
+}
+
+void GraphicsEngine::AddDrawableTextToScene(DrawableText2D* drawableText) {
+	// TODO - is it worth checking already in list
+	overlayElementsList.push_back(drawableText);
+}
+
+void GraphicsEngine::RemoveDrawableTextFromScene(DrawableText2D* drawableText) {
+	for (auto i = overlayElementsList.begin(); i != overlayElementsList.end(); ++i) {
+		if ((*i) == drawableText) {
+			overlayElementsList.erase(i);
+		}
+	}
+}
+
+void GraphicsEngine::AddLight(Light* light) {
+	lights.push_back(light);
+}
+
+void GraphicsEngine::RemoveLight(Light* light) {
+	for (auto i = lights.begin(); i != lights.end(); ++i) {
+		if ((*i) == light) {
+			lights.erase(i);
+		}
+	}
 }

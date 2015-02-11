@@ -21,12 +21,14 @@ _-_-_-_-_-_-_-""  ""
 #include "Matrix4.h"
 #include "Vector3.h"
 #include "Vector4.h"
-#include "Mesh.h"
+#include "../Team3Project1/DrawableEntity3D.h"
 #include <vector>
 
 class SceneNode	{
 public:
 	 SceneNode(Mesh*m = NULL, Vector4 colour = Vector4(1,1,1,1));
+	 SceneNode(DrawableEntity3D *entity);
+
 	~SceneNode(void);
 
 	void			SetTransform(const Matrix4 &matrix) { transform = matrix;}
@@ -43,9 +45,10 @@ public:
 	void			SetModelScale(const Vector3 &s)		{modelScale = s;}
 
 	void			AddChild(SceneNode* s);
-	bool			RemoveChild(SceneNode* s,bool recursive = true);
+	void			AddChildToParent(DrawableEntity3D* child, DrawableEntity3D* parent);
+	bool			RemoveChild(DrawableEntity3D* toDelete, bool recursive = true, bool removeChildren = true);
 
-	float			GetBoundingRadius() const	{return boundingRadius;}
+	float			GetBoundingRadius() const	{return boundingRadius;} // sceneElement->GetBoundingRadius();}
 	void			SetBoundingRadius(float f)	{boundingRadius = f;}
 
 	float			GetCameraDistance() const	{return distanceFromCamera;}
@@ -53,6 +56,9 @@ public:
 
 	void			SetMesh(Mesh*m)				{mesh = m;}
 	Mesh*			GetMesh()					{return mesh;}
+
+	void				SetDrawableEntity(DrawableEntity3D* entity) {sceneElement = entity;}
+	DrawableEntity3D*	GetDrawableEntity() {return sceneElement;}
 
 	bool	IsAwake()	{return awake;}
 	void	Wake()		{awake = true;}
@@ -65,6 +71,7 @@ public:
 	static bool		CompareByZ(SceneNode*a,SceneNode*b) ;
 
 protected:
+	DrawableEntity3D* sceneElement;
 	Matrix4		worldTransform;
 	Matrix4		transform;
 	SceneNode*	parent;
@@ -72,8 +79,8 @@ protected:
 	float		boundingRadius;
 	Vector4		colour;
 	Vector3		modelScale;
-	Mesh*		mesh;
 	bool		awake;
+	Mesh*		mesh;
 	std::vector<SceneNode*>		children;
 };
 
