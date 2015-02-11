@@ -461,6 +461,9 @@
     <ClCompile Include="OffsetCamera.cpp">
       <Filter>Framework\Graphics\Common\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\debugVertex.glsl">

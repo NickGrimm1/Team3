@@ -159,6 +159,7 @@
     <ClCompile Include="GameScreen2D.cpp" />
     <ClCompile Include="GameScreen3D.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="OffsetCamera.cpp" />
     <ClCompile Include="Renderer.cpp" />
   </ItemGroup>
