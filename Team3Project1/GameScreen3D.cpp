@@ -43,3 +43,8 @@ void GameScreen3D::RemoveLight(Light* value)
 		}
 	}
 }
+void GameScreen3D::SetCamera(Camera* value)
+{
+	camera = value;
+	GameStateManager::Graphics()->SetCamera(value);
+}

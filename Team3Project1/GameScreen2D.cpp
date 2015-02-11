@@ -99,7 +99,7 @@ void GameScreen2D::MouseMoved(Vector2& finish)
 <summary>Notifies all screens in the stack that the mouse scroll wheel has moved.</summary>
 <param name='amount'>The amount of the movement.</param>
 */
-void GameScreen2D::MouseScrolled(Vector2& position, float amount)
+void GameScreen2D::MouseScrolled(Vector2& position, int amount)
 {
 	// Check if input is being accepted
 	if (inputEnabled)

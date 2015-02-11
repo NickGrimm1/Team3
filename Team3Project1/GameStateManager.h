@@ -156,7 +156,7 @@ public:
 	<summary>Notifies all screens in the stack that the mouse scroll wheel has moved.</summary>
 	<param name='amount'>The amount of the movement.</param>
 	*/
-	void MouseScrolled(Vector2& position, float amount)
+	void MouseScrolled(Vector2& position, int amount)
 	{
 		for (unsigned int i = 0; i < gameScreens.size(); i++)
 			gameScreens[i]->MouseScrolled(position, amount);
