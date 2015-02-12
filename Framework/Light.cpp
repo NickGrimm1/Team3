@@ -137,16 +137,23 @@ DirectionalLight::DirectionalLight(Vector3 dir, Vector4 col, Vector4 spec) {
 	angle = 0;
 }
 
-Matrix4 DirectionalLight::GetViewMatrix(Vector3 target) { // could Allow directional lights to cast shadows by building viewpoint by using target as light pos, but not implementing seriously now
-	Matrix4 m;
-	m.ToIdentity();	
-	return m; // not to be used in current state
+Matrix4 DirectionalLight::GetViewMatrix(Vector3 target) {
+	Matrix4 m = Matrix4::BuildViewMatrix(target - (direction * 100.0f), direction);
+	return m;
 }
 
 Matrix4 DirectionalLight::GetProjectionMatrix() {
-	Matrix4 m;
-	m.ToIdentity();	
-	return m; // not to be used in current state
+	Matrix4 m = Matrix4::Orthographic(znear, zfar, right, left, top, bottom);
+	return m;
+}
+
+void DirectionalLight::UpdateLightVolume(float n, float f, float r, float l, float t, float b) {
+	znear = n;
+	zfar = f;
+	right = r;
+	left = l;
+	top = t;
+	bottom = b;
 }
 
 void DirectionalLight::DrawLightDeferred(Vector3 camera_pos) {

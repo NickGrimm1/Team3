@@ -47,7 +47,7 @@ public:
 	void SetType(unsigned int t);
 
 	virtual Matrix4 GetViewMatrix(Vector3 target) = 0; // returns the view matrix for the camera
-	virtual Matrix4 GetProjectionMatrix() = 0; // returns the view matrix for the camera
+	virtual Matrix4 GetProjectionMatrix() = 0; // returns the projection matrix for the camera
 	
 	virtual void DrawLightDeferred(Vector3 camera_pos) = 0;
 	
@@ -84,16 +84,19 @@ protected:
 class DirectionalLight : public Light { // Only limited implementation
 public:
 	DirectionalLight(Vector3 dir, Vector4 col, Vector4 spec);
-	virtual Matrix4 GetViewMatrix(Vector3 target); // could allow directional lights to cast shadows by building viewpoint by using target as light pos
+	virtual Matrix4 GetViewMatrix(Vector3 target);
 	virtual Matrix4 GetProjectionMatrix();
 	virtual void DrawLightDeferred(Vector3 camera_pos);
+	static void UpdateLightVolume(float n, float f, float r, float l, float t, float b);
+private:
+	static float znear, zfar, right, left, top, bottom;
 };
 
 class SpotLight	: public Light {
 public:
 	SpotLight(Vector3 pos, Vector3 target, Vector3 up_vec, Vector4 col, Vector4 spec, float spot_rad, float spot_angle, unsigned int shadowTex);
 
-	virtual Matrix4 GetViewMatrix(Vector3 target); //Ignore target spot lights have a defined direction + position
+	virtual Matrix4 GetViewMatrix(Vector3 target); // Ignore target, spot lights have a defined direction + position
 	virtual Matrix4 GetProjectionMatrix();
 	virtual void DrawLightDeferred(Vector3 camera_pos);
 	static bool IsInSpotlight(Vector3 world_pos, Light* l);
