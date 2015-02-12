@@ -10,5 +10,5 @@ class DebugManager
 {
 	// TODO: Implement Debug Manager.
 public:
-	static bool Initialize(DebugManager& out);
+	static bool Initialize(DebugManager*& out) { return true; }
 };

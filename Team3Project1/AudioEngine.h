@@ -10,5 +10,5 @@ class AudioEngine
 {
 	// TODO: Implement Physics Engine.
 public:
-	static bool Initialize(AudioEngine& out);
+	static bool Initialize(AudioEngine*& out) { return true; }
 };

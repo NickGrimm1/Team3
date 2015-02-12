@@ -10,5 +10,5 @@ class StorageManager
 {
 	// TODO: Implement Physics Engine.
 public:
-	static bool Initialize(StorageManager& out);
+	static bool Initialize(StorageManager*& out) { return true; }
 };

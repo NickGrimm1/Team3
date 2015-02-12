@@ -50,7 +50,7 @@ public:
 	<param name='graphics'>The pointer to the resulting graphics engine instance.</summary>
 	<returns>true if a Graphics Engine is initialized and ready.</returns>
 	*/
-	static bool Initialize(GraphicsEngine* out);
+	static bool Initialize(GraphicsEngine*& out);
 	/**
 	<summary>Destroys the graphics engine. Allows the game to exit cleanly.</summary>
 	<returns>true if the graphics engine has exited.</returns>

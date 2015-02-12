@@ -10,5 +10,5 @@ class AssetManager
 {
 	// TODO: Implement Asset Manager.
 public:
-	static bool Initialize(AssetManager& out);
+	static bool Initialize(AssetManager*& out) { return true; }
 };

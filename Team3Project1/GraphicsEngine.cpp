@@ -1,13 +1,16 @@
 #include "GraphicsEngine.h"
-
+#include <iostream>
 #include <algorithm>
 
-bool GraphicsEngine::Initialize(GraphicsEngine* out) {
+GraphicsEngine* GraphicsEngine::engine = NULL;
+
+bool GraphicsEngine::Initialize(GraphicsEngine*& out) {
 	if (engine != NULL) 
 		return engine->HasInitialised(); // an engine instance already exists, can't create another, return where we have a success yet.
 	
 	// Otherwise, create new engine
 	engine = new GraphicsEngine();
+	engine->sceneRoot = new SceneNode();
 
 	out = engine;
 	return engine->HasInitialised();
@@ -48,6 +51,8 @@ GraphicsEngine::~GraphicsEngine() {
 
 void GraphicsEngine::Run() {
 	while (true) {
+		//std::cout << "Graphics is Running";
+
 		// Update data in scene nodes
 		sceneRoot->Update(1.0f / RENDER_HZ); // TODO - sort out proper timestep value - or remove timestep if not needed
 
@@ -186,4 +191,9 @@ void GraphicsEngine::RemoveLight(Light* light) {
 			lights.erase(i);
 		}
 	}
+}
+
+void GraphicsEngine::SetCamera(Camera* camera)
+{
+	// TODO: Implement!!
 }

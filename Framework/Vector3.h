@@ -396,8 +396,8 @@ public:
 			y /= l;
 			z /= l;
 		}
-		else
-			throw DivideByZeroException();
+		//else
+			//throw DivideByZeroException();
 	}
 	/**
 	<summary>Finds the normal of the this vector without modifying it.</summary>

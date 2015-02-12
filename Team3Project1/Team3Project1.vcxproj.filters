@@ -470,6 +470,12 @@
     <ClCompile Include="PhysicsEngine.cpp">
       <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameStateManager.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Framework\User Interface\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\debugVertex.glsl">

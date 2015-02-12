@@ -23,6 +23,7 @@ Version: 1.0.0 03/02/2015.</summary>
 #include "../Framework/Mouse.h"
 #include "InputListener.h"
 #include "GamePad.h"
+#include <iostream>
 
 using namespace std;
 
@@ -39,39 +40,44 @@ public:
 		{
 			instance = new GameStateManager();
 			Instance()->isRunning = true;
+
 			if (!GraphicsEngine::Initialize(instance->graphics))
 				return false;
-			if (!AssetManager::Initialize(*(instance->assets)))
+			/*if (!AssetManager::Initialize(instance->assets))
 				return false;
-			if (!PhysicsEngine::Initialize(*(instance->physics)))
+			if (!PhysicsEngine::Initialize(instance->physics))
 				return false;
-			if (!StorageManager::Initialize(*(instance->storage)))
+			if (!StorageManager::Initialize(instance->storage))
 				return false;
 			if (!InputManager::Initialize(instance->input))
 				return false;
-			if (!AudioEngine::Initialize(*(instance->audio)))
+			if (!AudioEngine::Initialize(instance->audio))
 				return false;
-			if (!NetworkManager::Initialize(*(instance->network)))
+			if (!NetworkManager::Initialize(instance->network))
 				return false;
-			if (!DebugManager::Initialize(*(instance->debug)))
-				return false;
+			if (!DebugManager::Initialize(instance->debug))
+				return false;*/
 			instance->isLoaded = true;
 
 			// Start Threads
 			Instance()->graphics->Start();
-			Instance()->graphics->Run();
-			Instance()->physics->Start();
-			Instance()->physics->Run();
-			Instance()->input->Start();
-			Instance()->input->Run();
+			//Instance()->physics->Start();
+			//Instance()->input->Start();
 
 			// Game Loop (Kind of)
-			while(Instance()->isRunning) { }
-
+			while(Instance()->isRunning) 
+			{
+				Sleep(1000);
+			}
+			
 			// Clean up
 			Instance()->graphics->Join();
-			Instance()->physics->Join();
-			Instance()->input->Join();
+			//Instance()->physics->Join();
+			//Instance()->input->Join();
+
+			// Destroy everything
+			GraphicsEngine::Destroy();
+			// TODO: The remaining destroys
 		}
 		return instance->isLoaded;
 	}

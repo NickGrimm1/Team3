@@ -12,6 +12,6 @@ class PhysicsEngine : public Thread
 {
 	// TODO: Implement Physics Engine.
 public:
-	static bool Initialize(PhysicsEngine& out);
+	static bool Initialize(PhysicsEngine*& out) { return true; }
 	void Run();
 };

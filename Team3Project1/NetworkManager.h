@@ -10,5 +10,5 @@ class NetworkManager
 {
 	// TODO: Implement Physics Engine.
 public:
-	static bool Initialize(NetworkManager& out);
+	static bool Initialize(NetworkManager*& out) { return true; }
 };

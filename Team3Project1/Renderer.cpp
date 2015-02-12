@@ -10,6 +10,7 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 {
 	camera	= new Camera();
 	quad	= Mesh::GenerateQuad();
+	screenMesh = quad;
 
 	//Shader initialisations go here.
 	basicShader		= new Shader(SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");

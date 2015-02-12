@@ -35,10 +35,10 @@ static inline double DegToRad(const double rad)	{
 #define max(a,b)    (((a) > (b)) ? (a) : (b))
 #define min(a,b)    (((a) < (b)) ? (a) : (b))
 
-#define SHADERDIR	"../Framework/Shaders/"
-#define MESHDIR		"../Framework/Meshes/"
-#define TEXTUREDIR  "../Framework/Textures/"
-#define SOUNDSDIR	"../Framework/Sounds/"
+#define SHADERDIR	"../Resources/Shaders/"
+#define MESHDIR		"../Resources/Meshes/"
+#define TEXTUREDIR  "../Resources/Textures/"
+#define SOUNDSDIR	"../Resources/Sounds/"
 
 class DivideByZeroException
 {
