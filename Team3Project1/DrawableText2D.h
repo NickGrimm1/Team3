@@ -1,8 +1,15 @@
 /**
+Version History:
+0.0.5 05/02/2015
+0.0.6 12/02/2015
+	Actually implemented getters & setters.
+*/
+
+/**
 <summary>Represents a drawable text string.
 
 Author: Nick Grimm
-Version: 0.0.5 06/02/2015.</summary>
+Version: 0.0.6 12/02/2015.</summary>
 */
 #pragma once
 #include "DrawableEntity2D.h"
@@ -30,41 +37,41 @@ public:
 	{ }
 
 	/**
-	<summary>Gets the texture.</summary>
+	<summary>Gets the font.</summary>
 	*/
-	Font* GetFont() const;
+	Font* GetFont() const { return font; }
 	/**
-	<summary>Sets the texture.</summary>
-	<param name='value'>The texture.</param>
+	<summary>Sets the font.</summary>
+	<param name='value'>The font.</param>
 	*/
-	void SetFont(Font* value);
+	void SetFont(Font* value) { font = value; }
 	/**
 	<summary>Gets the text string.</summary>
 	*/
-	string& GetText() const;
+	string GetText() const { return text; }
 	/**
 	<summary>Sets the text string.</summary>
 	<param name='value'>The text.</param>
 	*/
-	void SetText(const string& value);
+	void SetText(const string& value) { text = value; }
 	/**
 	<summary>Gets the rotation.</summary>
 	*/
-	float GetRotation() const;
+	float GetRotation() const { return rotation; }
 	/**
 	<summary>Sets the rotation.</summary>
 	<param name='value'>The rotation in degrees from up. Default is 0.</param>
 	*/
-	void SetRotation(const float value);
+	void SetRotation(const float value) { rotation = value; }
 	/**
 	<summary>Gets the origin of rotation.</summary>
 	*/
-	Vector2& GetOrigin() const;
+	Vector2 GetOrigin() const { return origin; }
 	/**
 	<summary>Sets the origin of rotation.</summary>
 	<param name='value'>The origin around which this object will rotate, relative to the object's draw area. Default is the center (0.5, 0.5).</param>
 	*/
-	void SetOrigin(const Vector2& value);
+	void SetOrigin(const Vector2& value) { origin = value; }
 protected:
 	Font* font;
 	string text;
