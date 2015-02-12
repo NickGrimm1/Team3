@@ -55,11 +55,22 @@ void GraphicsEngine::Run() {
 
 		// Update data in scene nodes
 		sceneRoot->Update(1.0f / RENDER_HZ); // TODO - sort out proper timestep value - or remove timestep if not needed
+		
+		// Reset scene bounding box volume
+		boundingMax = Vector3(0,0,0);
+		boundingMin = Vector3(0,0,0);		
 
 		// Build Node lists
 		BuildNodeLists(sceneRoot);
 		SortNodeLists();
 		
+		// Update directional lights with scene bounding box
+		// Transform bounding volume by camera transform
+		Matrix4 viewMatrix = camera->BuildViewMatrix();
+		Vector3 camMin = viewMatrix * boundingMin;
+		Vector3 camMax = viewMatrix * boundingMax;
+		DirectionalLight::UpdateLightVolume(camMin.z, camMax.z, camMax.x, camMin.x, camMax.y, camMin.y);
+
 		// Render data
 		renderer->RenderScene();
 
@@ -106,6 +117,14 @@ void GraphicsEngine::BuildNodeLists(SceneNode* from) {
 		// Get distance from camera
 		Vector3 dir = from->GetWorldTransform().GetPositionVector() - camera->GetPosition();
 		from->SetCameraDistance(Vector3::Dot(dir, dir)); // gonna save ourselves a sqrt and compare distance^2
+
+		Vector3 pos = from->GetWorldTransform().GetPositionVector();
+		if (pos.x < boundingMin.x) boundingMin.x = pos.x; 
+		if (pos.y < boundingMin.y) boundingMin.y = pos.y; 
+		if (pos.z < boundingMin.z) boundingMin.z = pos.z;
+		if (pos.x > boundingMax.x) boundingMax.x = pos.x; 
+		if (pos.y > boundingMax.y) boundingMax.y = pos.y; 
+		if (pos.z > boundingMax.z) boundingMax.z = pos.z;
 
 		if (from->GetColour().w < 1.0f) 
 			//transparent - add to transparent list

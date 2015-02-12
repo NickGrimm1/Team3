@@ -27,7 +27,7 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	// Setup projection matrices - gonna just keep copies of the matrices rather than keep recreating them
 	perspectiveMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float) width / (float) height, 45.0f);
 	orthographicMatrix = Matrix4::Orthographic(-1.0f,1.0f,(float)width, 0.0f,(float)height, 0.0f); // For HUD Elements only
-	Matrix4::Orthographic(-1,1,1,-1,1,-1);
+	
 	//Creation of buffers.
 	GenerateScreenTexture(gbufferNormalTex);
 	GenerateScreenTexture(lightEmissiveTex);
