@@ -46,12 +46,7 @@ GraphicsEngine::~GraphicsEngine() {
 	Window::Destroy();
 }
 
-bool GraphicsEngine::StartGraphicsEngineThread() {
-
-	return true; // TODO - return thread start status
-}
-
-void GraphicsEngine::GraphicsEngineThread() {
+void GraphicsEngine::Run() {
 	while (true) {
 		// Update data in scene nodes
 		sceneRoot->Update(1.0f / RENDER_HZ); // TODO - sort out proper timestep value - or remove timestep if not needed

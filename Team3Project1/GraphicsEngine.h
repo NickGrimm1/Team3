@@ -6,6 +6,8 @@ Version History:
 0.0.3 06/02/2015
 	Changed 2D text method to take DrawableText.
 	Added Depth indexing for 2D.
+0.0.4 12/02/2015
+	This became a thread class :)
 */
 
 /**
@@ -27,6 +29,7 @@ Version: 0.0.3 06/02/2015.</summary>
 #include "DrawableTexture2D.h"
 #include "DrawableText2D.h"
 #include "DrawableEntity3D.h"
+#include "Thread.h"
 
 #define RENDER_HZ 60
 #define SCREEN_WIDTH 1280
@@ -38,9 +41,8 @@ Version: 0.0.3 06/02/2015.</summary>
 #define MAX_TEXTURES 20
 
 
-class GraphicsEngine
+class GraphicsEngine : public Thread
 {
-	// TODO: Implement Graphics Engine.
 public:
 #pragma region Entry/Exit
 	/**
@@ -58,7 +60,7 @@ public:
 	<summary>Gets whether the graphics engine has initialized and is ready to render.</summary>
 	*/
 	bool HasInitialised() { return isInitialised; }
-	bool StartGraphicsEngineThread();
+	void Run();
 #pragma endregion
 #pragma region TwoD
 	/**
@@ -119,8 +121,6 @@ private:
 
 	GraphicsEngine();
 	~GraphicsEngine();
-
-	void GraphicsEngineThread();
 
 	bool isInitialised;
 

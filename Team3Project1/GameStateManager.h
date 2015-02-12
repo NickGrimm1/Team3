@@ -34,12 +34,11 @@ public:
 	*/
 	static bool Initialize()
 	{
-		// TODO: Thread this!!
-		// TODO: Add Game Loop!!
-
+		// Initialize
 		if (instance == NULL)
 		{
 			instance = new GameStateManager();
+			Instance()->isRunning = true;
 			if (!GraphicsEngine::Initialize(instance->graphics))
 				return false;
 			if (!AssetManager::Initialize(*(instance->assets)))
@@ -48,7 +47,7 @@ public:
 				return false;
 			if (!StorageManager::Initialize(*(instance->storage)))
 				return false;
-			if (!InputManager::Initialize(instance->input, instance))
+			if (!InputManager::Initialize(instance->input))
 				return false;
 			if (!AudioEngine::Initialize(*(instance->audio)))
 				return false;
@@ -57,6 +56,22 @@ public:
 			if (!DebugManager::Initialize(*(instance->debug)))
 				return false;
 			instance->isLoaded = true;
+
+			// Start Threads
+			Instance()->graphics->Start();
+			Instance()->graphics->Run();
+			Instance()->physics->Start();
+			Instance()->physics->Run();
+			Instance()->input->Start();
+			Instance()->input->Run();
+
+			// Game Loop (Kind of)
+			while(Instance()->isRunning) { }
+
+			// Clean up
+			Instance()->graphics->Join();
+			Instance()->physics->Join();
+			Instance()->input->Join();
 		}
 		return instance->isLoaded;
 	}
@@ -267,4 +282,5 @@ private:
 	NetworkManager* network;
 #pragma endregion
 	vector<GameScreen*> gameScreens;
+	bool isRunning;
 };

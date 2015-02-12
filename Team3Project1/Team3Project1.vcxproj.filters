@@ -195,9 +195,6 @@
     <ClInclude Include="GameScreen3D.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DebugManager.h">
-      <Filter>Framework\Debug</Filter>
-    </ClInclude>
     <ClInclude Include="AssetManager.h">
       <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
@@ -372,6 +369,12 @@
     <ClInclude Include="OffsetCamera.h">
       <Filter>Framework\Graphics\Common\Header</Filter>
     </ClInclude>
+    <ClInclude Include="Thread.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugManager.h">
+      <Filter>Framework\Debug\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Texture.cpp">
@@ -463,6 +466,12 @@
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread.cpp">
+      <Filter>Framework\Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsEngine.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
