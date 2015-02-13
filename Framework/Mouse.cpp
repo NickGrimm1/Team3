@@ -3,15 +3,15 @@
 
 Mouse::Mouse(HWND &hwnd)	{
 	ZeroMemory( buttons,	 sizeof(bool) * MouseEvents::MOUSE_MAX );
-	ZeroMemory( holdButtons, sizeof(bool) * MouseEvents::MOUSE_MAX );
-
 	ZeroMemory( doubleClicks,  sizeof(bool)  * MouseEvents::MOUSE_MAX );
 	ZeroMemory( lastClickTime, sizeof(float) * MouseEvents::MOUSE_MAX );
+	ZeroMemory( lastMouseDown, sizeof(float) * MouseEvents::MOUSE_MAX );
 
 	lastWheel   = 0;
 	frameWheel  = 0;
 	sensitivity = 0.07f;	//Chosen for no other reason than it's a nice value for my Deathadder ;)
 	clickLimit  = 200.0f;
+	doubleClickLimit = 400.f;
 
 	rid.usUsagePage = HID_USAGE_PAGE_GENERIC; 
     rid.usUsage		= HID_USAGE_GENERIC_MOUSE; 
@@ -20,30 +20,27 @@ Mouse::Mouse(HWND &hwnd)	{
     RegisterRawInputDevices(&rid, 1, sizeof(rid));
 }
 
-void Mouse::Update(RAWINPUT* raw)	{
+void Mouse::Update(RAWINPUT* raw, float msec)	
+{
 	if(isAwake)	{
-		/*
-		Update the absolute and relative mouse movements
-		*/
-		relativePosition.x +=((float)raw->data.mouse.lLastX ) * sensitivity;
-		relativePosition.y +=((float)raw->data.mouse.lLastY ) * sensitivity;
-
-		if (relativePosition.x != 0 || relativePosition.y != 0)
+		// Get the current position
+		position.x += (float)raw->data.mouse.lLastX;
+		position.y += (float)raw->data.mouse.lLastY;
+		// Is this different from lasat frame?
+		Vector2 mouseMove = position - lastPosition;
+		if (mouseMove != 0)
 		{
-			//listener->MouseMoved(absolutePosition + relativePosition);
+			// Convert to resolution-independent
+			float newX = mouseMove.x / Window::GetWindow().GetScreenSize().x;
+			float newY = mouseMove.y / Window::GetWindow().GetScreenSize().y;
+			GameStateManager::Instance()->MouseMoved(Vector2(newX, newY));
 		}
+		// Clamp the current position to bounds
+		position.x = max(position.x, 0.0f);
+		position.x = min(position.x, bounds.x);
 
-		absolutePosition.x += (float)raw->data.mouse.lLastX;
-		absolutePosition.y += (float)raw->data.mouse.lLastY;
-
-		/*
-		Bounds check the absolute position of the mouse, so it doesn't disappear off screen edges...
-		*/
-		absolutePosition.x = max(absolutePosition.x, 0.0f);
-		absolutePosition.x = min(absolutePosition.x,absolutePositionBounds.x);
-
-		absolutePosition.y = max(absolutePosition.y, 0.0f);
-		absolutePosition.y = min(absolutePosition.y,absolutePositionBounds.y);
+		position.y = max(position.y, 0.0f);
+		position.y = min(position.y, bounds.y);
 	
 		/*
 		TODO: How framerate independent is this?
@@ -51,11 +48,11 @@ void Mouse::Update(RAWINPUT* raw)	{
 		if(raw->data.mouse.usButtonFlags & RI_MOUSE_WHEEL)	{		
 			if(raw->data.mouse.usButtonData == 120) {
 				frameWheel = 1;
-				//listener->MouseScrolled(absolutePosition, frameWheel);
+				GameStateManager::Instance()->MouseScrolled(position, frameWheel);
 			}
 			else {
 				frameWheel = -1;
-				//listener->MouseScrolled(absolutePosition, frameWheel);
+				GameStateManager::Instance()->MouseScrolled(position, frameWheel);
 			}
 		}
 
@@ -74,30 +71,49 @@ void Mouse::Update(RAWINPUT* raw)	{
 										RI_MOUSE_BUTTON_4_UP,
 										RI_MOUSE_BUTTON_5_UP};
 		
-		for(int i = 0; i < 5; ++i) {
-			if(raw->data.mouse.usButtonFlags & buttondowns[i])	{
-				//The button was pressed!
-				buttons[i] = true;
-				//listener->MouseEvent(MouseEvents::BUTTON_DOWN, (MouseEvents::MouseButtons)i, GetAbsolutePosition());
+		Vector2 resIndependentPosition;
+		resIndependentPosition.x = position.x / Window::GetWindow().GetScreenSize().x;
+		resIndependentPosition.y = position.y / Window::GetWindow().GetScreenSize().y;
 
-				/*
-				If it wasn't too long ago since we last clicked, we trigger a double click!
-				*/
-				if(lastClickTime[i] > 0) {
-					doubleClicks[i] = true;
-					//listener->MouseEvent(MouseEvents::BUTTON_DOUBLECLICK, (MouseEvents::MouseButtons)i, GetAbsolutePosition());
+		for(int i = 0; i < MouseEvents::MOUSE_MAX; ++i) 
+		{
+			// Add the time on for clicks & double clicks.
+			lastMouseDown[i] += msec;
+			lastClickTime[i] += msec;
+
+			if(raw->data.mouse.usButtonFlags & buttondowns[i])	
+			{
+				if (!buttons[i])
+				{
+					// Mouse Down
+					GameStateManager::Instance()->MouseEvent(MouseEvents::BUTTON_DOWN, (MouseEvents::MouseButtons)i, resIndependentPosition);
+					buttons[i] = true;
+					lastMouseDown[i] = 0;
 				}
-
-				/*
-				No matter whether the mouse was double clicked or not, we reset the clicklimit
-				*/
-				lastClickTime[i] = clickLimit;
+				else
+				{
+					// Mouse Held
+					GameStateManager::Instance()->MouseEvent(MouseEvents::BUTTON_HELD, (MouseEvents::MouseButtons)i, resIndependentPosition);
+				}
 			}
-			else if(raw->data.mouse.usButtonFlags & buttonps[i])	{
+			else if(raw->data.mouse.usButtonFlags & buttonps[i])	
+			{
 				//The button has been released!
 				buttons[i]		= false;
-				holdButtons[i]	= false;
-				//listener->MouseEvent(MouseEvents::BUTTON_UP, (MouseEvents::MouseButtons)i, GetAbsolutePosition());
+				GameStateManager::Instance()->MouseEvent(MouseEvents::BUTTON_UP, (MouseEvents::MouseButtons)i, resIndependentPosition);
+
+				// Check if down then up is within time to count as a click
+				if (lastMouseDown[i] < clickLimit)
+				{
+					GameStateManager::Instance()->MouseEvent(MouseEvents::BUTTON_CLICK, (MouseEvents::MouseButtons)i, resIndependentPosition);
+
+					// Check if this is a double click
+					if (lastClickTime[i] < doubleClickLimit)
+					{
+						GameStateManager::Instance()->MouseEvent(MouseEvents::BUTTON_DOUBLECLICK, (MouseEvents::MouseButtons)i, resIndependentPosition);
+						lastClickTime[i] = 0;
+					}
+				}
 			}
 		}
 	}
@@ -115,25 +131,11 @@ void	Mouse::SetMouseSensitivity(float amount)	{
 }
 
 /*
-Updates variables controlling whether a mouse button has been
-held for multiple frames. Also updates relative movement.
-*/
-void Mouse::UpdateHolds()	{
-	memcpy(holdButtons,buttons,	MouseEvents::MOUSE_MAX * sizeof(bool));
-	//We sneak this in here, too. Resets how much the mouse has moved
-	//since last update
-	relativePosition.ToZero();
-	//And the same for the mouse wheel
-	frameWheel = 0;
-}
-
-/*
 Sends the mouse to sleep, so it doesn't process any
 movement or buttons until it receives a Wake()
 */
 void Mouse::Sleep()	{
 	isAwake = false;	//Bye bye for now
-	ZeroMemory(holdButtons,  MouseEvents::MOUSE_MAX * sizeof(bool) );
 	ZeroMemory(buttons,		MouseEvents::MOUSE_MAX * sizeof(bool) );
 }
 
@@ -141,30 +143,23 @@ void Mouse::Sleep()	{
 Forces the mouse pointer to a specific point in absolute space.
 */
 void	Mouse::SetAbsolutePosition(unsigned int x, unsigned int y)	{
-	absolutePosition.x = (float)x;
-	absolutePosition.y = (float)y;
-}
-
-/*
-Returns how much the mouse has moved by since the last frame.
-*/
-Vector2	Mouse::GetRelativePosition()	{
-	return relativePosition;
+	position.x = (float)x;
+	position.y = (float)y;
 }
 
 /*
 Returns the mouse pointer position in absolute space.
 */
 Vector2 Mouse::GetAbsolutePosition()	{
-	return absolutePosition;
+	return position;
 }
 
 /*
 Returns how much the mouse has moved by since the last frame.
 */
 void Mouse::SetAbsolutePositionBounds(unsigned int maxX, unsigned int maxY)	{
-	absolutePositionBounds.x = (float)maxX;
-	absolutePositionBounds.y = (float)maxY;	
+	bounds.x = (float)maxX;
+	bounds.y = (float)maxY;	
 }
 
 /*
@@ -180,21 +175,4 @@ has moved up, negative down. Can be 0 (no movement)
 */
 int		Mouse::GetWheelMovement()	{
 	return (int)frameWheel;
-}
-
-/*
-Updates the double click timers for each mouse button. msec is milliseconds
-since the last UpdateDoubleClick call. Timers going over the double click
-limit set the relevant double click value to false.
-*/
-void Mouse::UpdateDoubleClick(float msec)	{
-	for(int i = 0; i < MouseEvents::MOUSE_MAX; ++i) {
-		if(lastClickTime[i] > 0) {
-			lastClickTime[i] -= msec;
-			if(lastClickTime[i] <= 0.0f) {
-				doubleClicks[i]  = false;
-				lastClickTime[i] = 0.0f;
-			}
-		}
-	}	
 }

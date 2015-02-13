@@ -168,10 +168,8 @@ bool	Window::UpdateWindow() {
 
 	float diff = timer->GetMS()-elapsedMS;
 
-	Window::GetMouse()->UpdateDoubleClick(diff);
 
 	Window::GetKeyboard()->UpdateHolds();
-	Window::GetMouse()->UpdateHolds();
 
 	while(PeekMessage(&msg,windowHandle,0,0,PM_REMOVE)) {
 		CheckMessages(msg); 
@@ -199,12 +197,14 @@ void Window::CheckMessages(MSG &msg)	{
 			GetRawInputData((HRAWINPUT)msg.lParam, RID_INPUT, lpb, &dwSize,sizeof(RAWINPUTHEADER));
 			RAWINPUT* raw = (RAWINPUT*)lpb;
 
+			float diff = timer->GetMS()-elapsedMS;
+
 			if (keyboard && raw->header.dwType == RIM_TYPEKEYBOARD) {
-				Window::GetKeyboard()->Update(raw);
+				Window::GetKeyboard()->Update(raw, diff);
 			}
 
 			if (mouse && raw->header.dwType == RIM_TYPEMOUSE) {
-				Window::GetMouse()->Update(raw);
+				Window::GetMouse()->Update(raw, diff);
 			}
 			delete lpb;
 		}break;

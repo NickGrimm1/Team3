@@ -36,7 +36,7 @@ void Keyboard::Sleep()	{
 /*
 Updates the keyboard state with data received from the OS.
 */
-void Keyboard::Update(RAWINPUT* raw)	{
+void Keyboard::Update(RAWINPUT* raw, float msec)	{
 	if(isAwake)	{
 		DWORD key = (DWORD)raw->data.keyboard.VKey;
 

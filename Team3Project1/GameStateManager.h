@@ -174,8 +174,8 @@ public:
 	*/
 	void MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, Vector2& position)
 	{
-		for (unsigned int i = 0; i < gameScreens.size(); i++)
-			gameScreens[i]->MouseEvent(type, button, position);
+		for (unsigned int i = 0; i < instance->gameScreens.size(); i++)
+			instance->gameScreens[i]->MouseEvent(type, button, position);
 	}
 	/**
 	<summary>Notifies all screens in the stack that the mouse has moved.</summary>
@@ -184,8 +184,8 @@ public:
 	*/
 	void MouseMoved(Vector2& finish)
 	{
-		for (unsigned int i = 0; i < gameScreens.size(); i++)
-			gameScreens[i]->MouseMoved(finish);
+		for (unsigned int i = 0; i < instance->gameScreens.size(); i++)
+			instance->gameScreens[i]->MouseMoved(finish);
 	}
 	/**
 	<summary>Notifies all screens in the stack that the mouse scroll wheel has moved.</summary>
@@ -193,8 +193,8 @@ public:
 	*/
 	void MouseScrolled(Vector2& position, int amount)
 	{
-		for (unsigned int i = 0; i < gameScreens.size(); i++)
-			gameScreens[i]->MouseScrolled(position, amount);
+		for (unsigned int i = 0; i < instance->gameScreens.size(); i++)
+			instance->gameScreens[i]->MouseScrolled(position, amount);
 	}
 	/**
 	<summary>Notifies all screens in the stack of a keyboard event.</summary>
@@ -263,6 +263,15 @@ public:
 		}
 	}
 #pragma endregion
+	/**
+	<summary>Gets or creates the single instance of the Game State.</summary>
+	*/
+	static GameStateManager* Instance()
+	{
+		if (instance == NULL)
+			instance = new GameStateManager();
+		return instance;
+	}
 private:
 #pragma region Contructors
 	/**
@@ -280,15 +289,6 @@ private:
 #pragma endregion
 #pragma region Instancing
 	static GameStateManager* instance;
-	/**
-	<summary>Gets or creates the single instance of the Game State.</summary>
-	*/
-	static GameStateManager* Instance()
-	{
-		if (instance == NULL)
-			instance = new GameStateManager();
-		return instance;
-	}
 #pragma endregion
 #pragma region Framework Components
 	bool isLoaded;

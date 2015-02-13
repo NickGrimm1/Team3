@@ -200,7 +200,7 @@ protected:
 	//Update the holdStates array...call this each frame!
 	virtual void UpdateHolds();	
 	//Update the keyStates array etc...call this each frame!
-	virtual void Update(RAWINPUT* raw);
+	virtual void Update(RAWINPUT* raw, float msec);
 	//Sends the keyboard to sleep
 	virtual void Sleep();
 
