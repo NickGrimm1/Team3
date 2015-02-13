@@ -11,6 +11,7 @@ bool GraphicsEngine::Initialize(GraphicsEngine*& out) {
 	// Otherwise, create new engine
 	engine = new GraphicsEngine();
 	engine->sceneRoot = new SceneNode();
+	engine->camera = NULL;
 
 	out = engine;
 	return engine->HasInitialised();
@@ -50,7 +51,9 @@ GraphicsEngine::~GraphicsEngine() {
 }
 
 void GraphicsEngine::Run() {
-	while (true) {
+	isRunning = true;
+	
+	while (isRunning) {
 		//std::cout << "Graphics is Running";
 
 		// Update data in scene nodes
@@ -66,10 +69,13 @@ void GraphicsEngine::Run() {
 		
 		// Update directional lights with scene bounding box
 		// Transform bounding volume by camera transform
-		Matrix4 viewMatrix = camera->BuildViewMatrix();
-		Vector3 camMin = viewMatrix * boundingMin;
-		Vector3 camMax = viewMatrix * boundingMax;
-		DirectionalLight::UpdateLightVolume(camMin.z, camMax.z, camMax.x, camMin.x, camMax.y, camMin.y);
+		if (camera != NULL) // Check if we have a camera - the game may not have initialised yet!!!
+		{
+			Matrix4 viewMatrix = camera->BuildViewMatrix();
+			Vector3 camMin = viewMatrix * boundingMin;
+			Vector3 camMax = viewMatrix * boundingMax;
+			DirectionalLight::UpdateLightVolume(camMin.z, camMax.z, camMax.x, camMin.x, camMax.y, camMin.y);
+		}
 
 		// Render data
 		renderer->RenderScene();

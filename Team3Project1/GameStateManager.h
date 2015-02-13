@@ -63,12 +63,6 @@ public:
 			Instance()->graphics->Start();
 			//Instance()->physics->Start();
 			//Instance()->input->Start();
-
-			// Game Loop (Kind of)
-			while(Instance()->isRunning) 
-			{
-				Sleep(1000);
-			}
 			
 			// Clean up
 			Instance()->graphics->Join();
@@ -80,6 +74,10 @@ public:
 			// TODO: The remaining destroys
 		}
 		return instance->isLoaded;
+	}
+	void Exit()
+	{
+		graphics->Terminate();
 	}
 	~GameStateManager()
 	{

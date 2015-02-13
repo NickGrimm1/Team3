@@ -137,6 +137,14 @@ DirectionalLight::DirectionalLight(Vector3 dir, Vector4 col, Vector4 spec) {
 	angle = 0;
 }
 
+// TODO: Check these & assign
+float DirectionalLight::znear = 0;
+float DirectionalLight::zfar = 0;
+float DirectionalLight::right = 0;
+float DirectionalLight::left = 0;
+float DirectionalLight::top = 0;
+float DirectionalLight::bottom = 0;
+
 Matrix4 DirectionalLight::GetViewMatrix(Vector3 target) {
 	Matrix4 m = Matrix4::BuildViewMatrix(target - (direction * 100.0f), direction);
 	return m;
