@@ -30,7 +30,7 @@ void Mouse::Update(RAWINPUT* raw)	{
 
 		if (relativePosition.x != 0 || relativePosition.y != 0)
 		{
-			listener->MouseMoved(absolutePosition + relativePosition);
+			//listener->MouseMoved(absolutePosition + relativePosition);
 		}
 
 		absolutePosition.x += (float)raw->data.mouse.lLastX;
@@ -51,11 +51,11 @@ void Mouse::Update(RAWINPUT* raw)	{
 		if(raw->data.mouse.usButtonFlags & RI_MOUSE_WHEEL)	{		
 			if(raw->data.mouse.usButtonData == 120) {
 				frameWheel = 1;
-				listener->MouseScrolled(absolutePosition, frameWheel);
+				//listener->MouseScrolled(absolutePosition, frameWheel);
 			}
 			else {
 				frameWheel = -1;
-				listener->MouseScrolled(absolutePosition, frameWheel);
+				//listener->MouseScrolled(absolutePosition, frameWheel);
 			}
 		}
 
@@ -78,14 +78,14 @@ void Mouse::Update(RAWINPUT* raw)	{
 			if(raw->data.mouse.usButtonFlags & buttondowns[i])	{
 				//The button was pressed!
 				buttons[i] = true;
-				listener->MouseEvent(MouseEvents::BUTTON_DOWN, (MouseEvents::MouseButtons)i, GetAbsolutePosition());
+				//listener->MouseEvent(MouseEvents::BUTTON_DOWN, (MouseEvents::MouseButtons)i, GetAbsolutePosition());
 
 				/*
 				If it wasn't too long ago since we last clicked, we trigger a double click!
 				*/
 				if(lastClickTime[i] > 0) {
 					doubleClicks[i] = true;
-					listener->MouseEvent(MouseEvents::BUTTON_DOUBLECLICK, (MouseEvents::MouseButtons)i, GetAbsolutePosition());
+					//listener->MouseEvent(MouseEvents::BUTTON_DOUBLECLICK, (MouseEvents::MouseButtons)i, GetAbsolutePosition());
 				}
 
 				/*
@@ -97,7 +97,7 @@ void Mouse::Update(RAWINPUT* raw)	{
 				//The button has been released!
 				buttons[i]		= false;
 				holdButtons[i]	= false;
-				listener->MouseEvent(MouseEvents::BUTTON_UP, (MouseEvents::MouseButtons)i, GetAbsolutePosition());
+				//listener->MouseEvent(MouseEvents::BUTTON_UP, (MouseEvents::MouseButtons)i, GetAbsolutePosition());
 			}
 		}
 	}

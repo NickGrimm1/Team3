@@ -54,6 +54,7 @@ void GraphicsEngine::Run() {
 	
 	while (isRunning) {
 		//std::cout << "Graphics is Running";
+		
 
 		// Update data in scene nodes
 		sceneRoot->Update(1.0f / RENDER_HZ); // TODO - sort out proper timestep value - or remove timestep if not needed

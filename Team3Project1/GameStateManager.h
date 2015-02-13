@@ -51,6 +51,7 @@ public:
 				return false;
 			if (!InputManager::Initialize(instance->input))
 				return false;
+
 			if (!AudioEngine::Initialize(instance->audio))
 				return false;
 			if (!NetworkManager::Initialize(instance->network))
@@ -63,6 +64,9 @@ public:
 			Instance()->graphics->Start();
 			Instance()->physics->Start();
 			Instance()->input->Start();
+
+			while (instance->isRunning)
+				Window::GetWindow().UpdateWindow();
 
 			// Clean up
 			Instance()->graphics->Join();
