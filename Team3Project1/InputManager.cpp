@@ -1,11 +1,11 @@
 #include "InputManager.h"
-#include <iostream>
+
+InputManager* InputManager::instance = NULL;
 
 void InputManager::Run()
 {
-	while(true)
+	isRunning = true;
+	while(isRunning)
 	{
-		std::cout << "Input is Running";
-		Sleep(10);
 	}
 }

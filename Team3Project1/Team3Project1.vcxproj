@@ -111,6 +111,7 @@
     <ClInclude Include="DrawableEntity3D.h" />
     <ClInclude Include="DrawableText2D.h" />
     <ClInclude Include="DrawableTexture2D.h" />
+    <ClInclude Include="EntryPoint.h" />
     <ClInclude Include="OffsetCamera.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FreeCamera.h" />
@@ -157,6 +158,9 @@
     <ClCompile Include="..\Framework\Texture.cpp" />
     <ClCompile Include="..\Framework\Weather.cpp" />
     <ClCompile Include="..\Framework\Window.cpp" />
+    <ClCompile Include="AssetManager.cpp" />
+    <ClCompile Include="AudioEngine.cpp" />
+    <ClCompile Include="DebugManager.cpp" />
     <ClCompile Include="GamePad.cpp" />
     <ClCompile Include="GameScreen2D.cpp" />
     <ClCompile Include="GameScreen3D.cpp" />
@@ -164,9 +168,11 @@
     <ClCompile Include="GraphicsEngine.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="OffsetCamera.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="StorageManager.cpp" />
     <ClCompile Include="Thread.cpp" />
   </ItemGroup>
   <ItemGroup>

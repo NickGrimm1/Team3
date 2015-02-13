@@ -12,6 +12,26 @@ class InputManager : public Thread
 {
 	// TODO: Implement Input Manager.
 public:
-	static bool Initialize(InputManager*& out) { return true; }
+	static bool Initialize(InputManager*& out) 
+	{
+		if (instance == NULL)
+			instance = new InputManager();
+		
+		out = instance;
+		return true; 
+	}
+	static void Destroy()
+	{
+		if (instance != NULL)
+			delete instance;
+		instance = NULL;
+	}
+
 	void Run();
+	void Terminate() { isRunning = false; }
+private:
+	InputManager() { }
+	~InputManager() { }
+	static InputManager* instance;
+	bool isRunning;
 };

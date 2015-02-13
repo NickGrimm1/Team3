@@ -43,7 +43,7 @@ public:
 
 			if (!GraphicsEngine::Initialize(instance->graphics))
 				return false;
-			/*if (!AssetManager::Initialize(instance->assets))
+			if (!AssetManager::Initialize(instance->assets))
 				return false;
 			if (!PhysicsEngine::Initialize(instance->physics))
 				return false;
@@ -56,32 +56,44 @@ public:
 			if (!NetworkManager::Initialize(instance->network))
 				return false;
 			if (!DebugManager::Initialize(instance->debug))
-				return false;*/
+				return false;
 			instance->isLoaded = true;
 
 			// Start Threads
 			Instance()->graphics->Start();
-			//Instance()->physics->Start();
-			//Instance()->input->Start();
-			
+			Instance()->physics->Start();
+			Instance()->input->Start();
+
 			// Clean up
 			Instance()->graphics->Join();
-			//Instance()->physics->Join();
-			//Instance()->input->Join();
-
-			// Destroy everything
-			GraphicsEngine::Destroy();
-			// TODO: The remaining destroys
+			Instance()->physics->Join();
+			Instance()->input->Join();
 		}
 		return instance->isLoaded;
 	}
 	void Exit()
 	{
 		graphics->Terminate();
+		physics->Terminate();
+		input->Terminate();
+
+		// Destroy everything
+		GraphicsEngine::Destroy();
+		AssetManager::Destroy();
+		PhysicsEngine::Destroy();
+		StorageManager::Destroy();
+		InputManager::Destroy();
+		AudioEngine::Destroy();
+		NetworkManager::Destroy();
+		DebugManager::Destroy();
+
+		if (instance != NULL)
+			delete instance;
+		instance = NULL;
 	}
 	~GameStateManager()
 	{
-		delete instance;
+		
 	}
 #pragma region Framework Abstractions
 	/**

@@ -71,15 +71,6 @@
     <Filter Include="Framework\Physics\Source Files">
       <UniqueIdentifier>{70641f57-e449-4b28-894c-11dcf21ef01d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\Artificial Intelligence">
-      <UniqueIdentifier>{2dcc95e2-a2cc-4712-b6f2-da28e0fff502}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Artificial Intelligence\Header Files">
-      <UniqueIdentifier>{8f5d6abe-8484-4d98-a766-9752a098c146}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Artificial Intelligence\Source Files">
-      <UniqueIdentifier>{e41fb13d-e937-41de-a3ef-f1cb43bf71f9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine">
       <UniqueIdentifier>{a5d4e5c0-b5a1-4e9a-be90-96ff9eb3ee57}</UniqueIdentifier>
     </Filter>
@@ -177,6 +168,15 @@
     </Filter>
     <Filter Include="Framework\Graphics\Common\3D\Source Files">
       <UniqueIdentifier>{d95af220-a299-45e3-a458-26d2df988fec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Audio\Artificial Intelligence">
+      <UniqueIdentifier>{2dcc95e2-a2cc-4712-b6f2-da28e0fff502}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Audio\Artificial Intelligence\Header Files">
+      <UniqueIdentifier>{8f5d6abe-8484-4d98-a766-9752a098c146}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Audio\Artificial Intelligence\Source Files">
+      <UniqueIdentifier>{e41fb13d-e937-41de-a3ef-f1cb43bf71f9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -372,6 +372,9 @@
     <ClInclude Include="DebugManager.h">
       <Filter>Framework\Debug\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EntryPoint.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Texture.cpp">
@@ -475,6 +478,21 @@
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
       <Filter>Framework\User Interface\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StorageManager.cpp">
+      <Filter>Framework\Storage\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetManager.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioEngine.cpp">
+      <Filter>Framework\Audio\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkManager.cpp">
+      <Filter>Framework\Network\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugManager.cpp">
+      <Filter>Framework\Debug\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

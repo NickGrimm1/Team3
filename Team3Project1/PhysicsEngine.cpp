@@ -1,11 +1,13 @@
 #include "PhysicsEngine.h"
-#include <iostream>
+
+PhysicsEngine* PhysicsEngine::instance = NULL;
 
 void PhysicsEngine::Run()
 {
-	while (true)
+	isRunning = true;
+
+	while (isRunning)
 	{
-		std::cout << "Physics is Running";
-		Sleep(10);
+		
 	}
 }

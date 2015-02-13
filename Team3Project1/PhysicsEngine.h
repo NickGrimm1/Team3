@@ -12,6 +12,25 @@ class PhysicsEngine : public Thread
 {
 	// TODO: Implement Physics Engine.
 public:
-	static bool Initialize(PhysicsEngine*& out) { return true; }
+	static bool Initialize(PhysicsEngine*& out) 
+	{
+		if (instance == NULL)
+			instance = new PhysicsEngine();
+
+		out = instance;
+		return true; 
+	}
+	static void Destroy()
+	{
+		if (instance != NULL)
+			delete instance;
+		instance = NULL;
+	}
 	void Run();
+	void Terminate() { isRunning = false; }
+private:
+	PhysicsEngine() { }
+	~PhysicsEngine() { }
+	static PhysicsEngine* instance;
+	bool isRunning;
 };

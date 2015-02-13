@@ -24,7 +24,6 @@ Version: 0.0.3 06/02/2015.</summary>
 #include "../Framework/Light.h"
 #include "../Framework/Texture.h"
 #include "../Framework/Mesh.h"
-#include "../Framework/Keyboard.h"
 #include "Renderer.h"
 #include "DrawableTexture2D.h"
 #include "DrawableText2D.h"
