@@ -23,7 +23,7 @@ Version: 0.0.5 11/02/2015.</summary>
 
 using namespace std;
 
-class GameScreen3D : GameScreen
+class GameScreen3D : public GameScreen
 {
 public:
 	void SetPlayer(DrawableEntity3D* value) { player = value; }

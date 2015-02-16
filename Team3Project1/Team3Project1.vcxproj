@@ -112,6 +112,7 @@
     <ClInclude Include="DrawableText2D.h" />
     <ClInclude Include="DrawableTexture2D.h" />
     <ClInclude Include="EntryPoint.h" />
+    <ClInclude Include="GraphicsTestScreen.h" />
     <ClInclude Include="LoadedMesh.h" />
     <ClInclude Include="LoadedTexture.h" />
     <ClInclude Include="OffsetCamera.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="GameScreen3D.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
+    <ClCompile Include="GraphicsTestScreen.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="NetworkManager.cpp" />

@@ -1,0 +1,35 @@
+#include "GraphicsTestScreen.h"
+#include "../Framework/Mesh.h"
+#include "../Framework/Light.h"
+#include "GameStateManager.h"
+
+GraphicsTestScreen::GraphicsTestScreen(void)
+{
+	LoadContent(); // TODO - I assume the asset manager will call this automatically
+}
+
+GraphicsTestScreen::~GraphicsTestScreen(void)
+{
+}
+
+void GraphicsTestScreen::LoadContent() {
+	quad = Mesh::GenerateQuad();
+	drawables.push_back(new DrawableEntity3D(
+		quad, 
+		NULL, 
+		new Texture("D:\\Visual Studio 2012\\Projects\\Graphics For Games\\Textures\\Blend Swap\\Grass\\Grass_Color.tga", 0, 0, "diffuseTex"), 
+		NULL, 
+		50.0f, 
+		Vector3(0,0,0), 
+		Quaternion::EulerAnglesToQuaternion(0,0,0), 
+		Vector3(10,10,10)));
+
+	SpotLight::SetConeMesh(Mesh::GenerateCone(20));
+	SpotLight::SetCircleMesh(Mesh::GenerateCircle(20));
+	light = new SpotLight(Vector3(0, 50, 0), Vector3(0,0,0), Vector3(1,0,0), Vector4(1,1,1,1), Vector4(1,1,1,1), 1000.0f, 45.0f, 0);
+	GameStateManager::Graphics()->AddLight(light);
+
+	Camera* camera = new Camera();
+	camera->SetPosition(Vector3(0, -10, -10));
+	GameStateManager::Graphics()->SetCamera(camera);
+}

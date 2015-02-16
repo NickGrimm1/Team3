@@ -57,7 +57,6 @@ public:
 	unsigned int GetShadowTexture() const {return shadowTexID;}
 
 protected:
-	Mesh* m; // mesh for use in deferred rendering
 	Vector3 position;
 	Vector3 direction; // for spot/directional lights
 	Vector4 diffuseColour;

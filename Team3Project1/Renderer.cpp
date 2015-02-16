@@ -282,6 +282,8 @@ void Renderer::DrawScene()
 
 void Renderer::ShadowPass()
 {
+	if (shadowFBO == 0) return; // no shadows
+
 	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
 	glViewport(0, 0, SHADOWSIZE, SHADOWSIZE);
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);

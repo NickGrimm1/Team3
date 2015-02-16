@@ -381,6 +381,9 @@
     <ClInclude Include="LoadedMesh.h">
       <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GraphicsTestScreen.h">
+      <Filter>Game\MainGame\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Texture.cpp">
@@ -499,6 +502,9 @@
     </ClCompile>
     <ClCompile Include="DebugManager.cpp">
       <Filter>Framework\Debug\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsTestScreen.cpp">
+      <Filter>Game\MainGame\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

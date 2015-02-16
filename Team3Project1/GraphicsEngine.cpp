@@ -221,4 +221,5 @@ void GraphicsEngine::RemoveLight(Light* light) {
 void GraphicsEngine::SetCamera(Camera* camera)
 {
 	// TODO: Implement!!
+	camera = camera;
 }

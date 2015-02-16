@@ -64,22 +64,25 @@ public:
 			Instance()->graphics->Start();
 			Instance()->physics->Start();
 			Instance()->input->Start();
-
-			while (instance->isRunning)
-				Window::GetWindow().UpdateWindow();
-
-			// Clean up
-			Instance()->graphics->Join();
-			Instance()->physics->Join();
-			Instance()->input->Join();
 		}
 		return instance->isLoaded;
 	}
+
+	void Start() {
+		while (instance->isRunning)
+			Window::GetWindow().UpdateWindow();
+	}
+
 	void Exit()
 	{
 		graphics->Terminate();
 		physics->Terminate();
 		input->Terminate();
+
+		// Clean up
+		graphics->Join();
+		physics->Join();
+		input->Join();
 
 		// Destroy everything
 		GraphicsEngine::Destroy();
