@@ -155,6 +155,7 @@ OGLRenderer::OGLRenderer(Window &window)	{
 			return;
 		}
 	}
+	init = true;
 }
 
 /*

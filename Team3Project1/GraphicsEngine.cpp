@@ -118,7 +118,8 @@ bool GraphicsEngine::RemoveLight(unsigned int lightReference) {
 }*/
 
 void GraphicsEngine::BuildNodeLists(SceneNode* from) {
-
+	if (from->GetDrawableEntity() != NULL) {
+	/*
 	if (frameFrustum.InsideFrustum(*from)) {
 		// Get distance from camera
 		Vector3 dir = from->GetWorldTransform().GetPositionVector() - camera->GetPosition();
@@ -132,11 +133,14 @@ void GraphicsEngine::BuildNodeLists(SceneNode* from) {
 		if (pos.y > boundingMax.y) boundingMax.y = pos.y; 
 		if (pos.z > boundingMax.z) boundingMax.z = pos.z;
 
-		if (from->GetColour().w < 1.0f) 
+		if (from->GetColour().w < 1.0f)
 			//transparent - add to transparent list
 			transparentGameEntityList.push_back(from);
 		else
+		*/
 			gameEntityList.push_back(from);
+//	}
+
 	}
 
 	// Note - gonna check children regardless - cos an arm might be inside the plane
@@ -218,8 +222,8 @@ void GraphicsEngine::RemoveLight(Light* light) {
 	}
 }
 
-void GraphicsEngine::SetCamera(Camera* camera)
+void GraphicsEngine::SetCamera(Camera* cam)
 {
 	// TODO: Implement!!
-	camera = camera;
+	camera = cam;
 }

@@ -22,7 +22,7 @@ public:
 	<param name='rotation'>The rotation of the model in world space relative to its parent. Default is (0, 0, 0).</param>
 	<param name='scale'>The scale of the model in world space relative to its parent. Default is (0, 0, 0).</param>
 	*/
-	DrawableEntity3D(Mesh* Mesh, Shader* shader, Texture* texture, Texture* bumpTexture, float boundingRadius, const Vector3& origin = Vector3(), const Quaternion& rotation = Quaternion(), const Vector3& scale = Vector3()) 
+	DrawableEntity3D(Mesh* mesh, Shader* shader, Texture* texture, Texture* bumpTexture, float boundingRadius, const Vector3& origin = Vector3(), const Quaternion& rotation = Quaternion(), const Vector3& scale = Vector3()) 
 		: mesh(mesh), shader(shader), texture(texture), origin(origin), rotation(rotation), scale(scale), boundingRadius(boundingRadius), bumpTexture(bumpTexture)
 	{ }
 	

@@ -8,6 +8,10 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	sceneNodes(sceneNodesVec), 
 	overlayElements(overlayVec)
 {
+	// Check OGLRenderer initialised ok
+	if (!init) return;
+	init = false;
+
 	camera	= new Camera();
 	quad	= Mesh::GenerateQuad();
 	screenMesh = quad;
@@ -140,16 +144,16 @@ Renderer::~Renderer(void)
 void Renderer::RenderScene() {
 
 	// Main Render
-	ShadowPass();
+//	ShadowPass();
 	DrawScene();
-	DeferredLightPass();
-	CombineBuffers();
+//	DeferredLightPass();
+//	CombineBuffers();
 
 	// Post-Processing
 	//TODO
 
 	// Draw HUD/Menu overlay
-	Draw2DOverlay(); // TODO - Draw HUD first and use stencil to optimise main render pass
+//	Draw2DOverlay(); // TODO - Draw HUD first and use stencil to optimise main render pass
 
 	SwapBuffers();
 }
@@ -194,13 +198,15 @@ void Renderer::UpdateScene(float msec)
 //Draws Scene to buffer object
 void Renderer::DrawScene()
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//	glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
 
 	// Use stencil buffer to track unaltered pixels. Use to draw skybox later
 	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_ALWAYS, 1, 1); // Always passes
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
+	glClearColor(0.2f, 0.2f, 0.2f, 0.2f);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	
 	SetCurrentShader(sceneShader);
@@ -242,7 +248,7 @@ void Renderer::DrawScene()
 		DrawableEntity3D& entity = *sceneNodes[i]->GetDrawableEntity();
 
 		// Handle colour and bump textures
-		if (entity.GetTexture()->GetTextureName() > 0) {
+		if (entity.GetTexture() && entity.GetTexture()->GetTextureName() > 0) {
 			glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 			glBindTexture(GL_TEXTURE_2D, entity.GetTexture()->GetTextureName());
 			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);	
@@ -251,7 +257,7 @@ void Renderer::DrawScene()
 		else
 			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 0);	
 		
-		if (entity.GetBumpTexture()->GetTextureName() > 0) {
+		if (entity.GetBumpTexture() && entity.GetBumpTexture()->GetTextureName() > 0) {
 			glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_NORMAL_TEXTURE_UNIT);
 			glBindTexture(GL_TEXTURE_2D, entity.GetBumpTexture()->GetTextureName());
 			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "normalTex"), MESH_OBJECT_NORMAL_TEXTURE_UNIT);

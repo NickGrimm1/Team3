@@ -111,7 +111,7 @@ public:
 	<summary>Sets the camera for the scene.</summary>
     <param name="camera">The camera.</param>
 	*/
-	void SetCamera(Camera* camera);
+	void SetCamera(Camera* cam);
 #pragma endregion	
 	
 	// We don't actually need this since the GSM already holds the reference :)
