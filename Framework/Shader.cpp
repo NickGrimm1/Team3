@@ -1,12 +1,13 @@
 #include "Shader.h"
 
 Shader::Shader(string vFile, string fFile, string gFile)	{
+	
 	program		= glCreateProgram();
 	objects[SHADER_VERTEX]		= GenerateShader(vFile	 ,GL_VERTEX_SHADER);
-	objects[SHADER_FRAGMENT]	= GenerateShader(fFile,GL_FRAGMENT_SHADER);
+	if (!loadFailed) objects[SHADER_FRAGMENT]	= GenerateShader(fFile,GL_FRAGMENT_SHADER);
 	objects[SHADER_GEOMETRY]	= 0;
 
-	if(!gFile.empty()) {
+	if(!loadFailed && !gFile.empty()) {
 		objects[SHADER_GEOMETRY]	= GenerateShader(gFile,GL_GEOMETRY_SHADER);
 		glAttachShader(program,objects[SHADER_GEOMETRY]);
 	}
@@ -42,7 +43,7 @@ bool	Shader::LoadShaderFile(string from, string &into)	{
 		into += temp + "\n";
 	}
 
-	cout << into << endl << endl;
+//	cout << into << endl << endl;
 
 	file.close();
 	cout << "Loaded shader text!" << endl << endl;
