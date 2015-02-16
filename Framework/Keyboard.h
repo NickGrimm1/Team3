@@ -27,6 +27,7 @@ namespace KeyboardEvents
 {
 	enum EventType
 	{
+		KEY_PRESS,
 		/**
 		<summary>Key was down last frame, it is still down.</summary>
 		*/
@@ -192,22 +193,21 @@ namespace KeyboardEvents
 class Keyboard : public InputDevice	{
 public:
 	friend class Window;
-	void SetInputListener(InputListener* l) { listener = l; }
+	void SetPressLimit(float value) { pressLimit = value; }
 
 protected:
 	Keyboard(HWND &hwnd);
 	~Keyboard(void){}
-	//Update the holdStates array...call this each frame!
-	virtual void UpdateHolds();	
 	//Update the keyStates array etc...call this each frame!
 	virtual void Update(RAWINPUT* raw, float msec);
 	//Sends the keyboard to sleep
 	virtual void Sleep();
 
 	bool keyStates[KeyboardEvents::KEYBOARD_MAX];		//Is the key down?
-	bool holdStates[KeyboardEvents::KEYBOARD_MAX];		//Has the key been down for multiple updates?
+	bool prevStates[KeyboardEvents::KEYBOARD_MAX];		//Has the key been down for multiple updates?
+	float lastKeyDown[KeyboardEvents::KEYBOARD_MAX];
 
-	InputListener* listener;
+	float pressLimit;
 };
 
 

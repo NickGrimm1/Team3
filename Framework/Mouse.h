@@ -121,7 +121,5 @@ protected:
 
 	//Mouse pointer sensitivity. Set this negative to get a headache!
 	float sensitivity;
-
-	InputListener* listener;
 };
 
