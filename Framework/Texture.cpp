@@ -11,7 +11,7 @@ Version: 0.0.1 04/02/2015</summary>
 #include "common.h"
 
 // DK - trying to remove OpenGL specific stuff, just want as wrapper class
-/*
+// NG - Just added this back for time being so we can load assets. Probably end up with a common header and conditional compile cpp?
 Texture::Texture(const char* filename, unsigned int flags, GLenum textUnit, std::string mapping) :
 	shaderMapping(mapping)
 {
@@ -22,7 +22,7 @@ Texture::Texture(const char* filename, unsigned int flags, GLenum textUnit, std:
 	}
 	textureUnit = textUnit;
 }
-*/
+
 Texture::Texture(GLuint textName, GLenum textUnit, std::string mapping) :
 	shaderMapping(mapping) 
 {

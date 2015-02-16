@@ -375,11 +375,8 @@
     <ClInclude Include="EntryPoint.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Spline.h">
-      <Filter>Framework\Common\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TrackSegment.h">
-      <Filter>Framework\Common\Header Files</Filter>
+    <ClInclude Include="LoadedTexture.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -499,12 +496,6 @@
     </ClCompile>
     <ClCompile Include="DebugManager.cpp">
       <Filter>Framework\Debug\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Spline.cpp">
-      <Filter>Framework\Common\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TrackSegment.cpp">
-      <Filter>Framework\Common\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -112,6 +112,7 @@
     <ClInclude Include="DrawableText2D.h" />
     <ClInclude Include="DrawableTexture2D.h" />
     <ClInclude Include="EntryPoint.h" />
+    <ClInclude Include="LoadedTexture.h" />
     <ClInclude Include="OffsetCamera.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FreeCamera.h" />
@@ -128,12 +129,10 @@
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="SelectableEntity2D.h" />
-    <ClInclude Include="Spline.h" />
     <ClInclude Include="T3Rectangle.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="StorageManager.h" />
     <ClInclude Include="Thread.h" />
-    <ClInclude Include="TrackSegment.h" />
     <ClInclude Include="UIButton.h" />
   </ItemGroup>
   <ItemGroup>
@@ -174,10 +173,8 @@
     <ClCompile Include="OffsetCamera.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="Spline.cpp" />
     <ClCompile Include="StorageManager.cpp" />
     <ClCompile Include="Thread.cpp" />
-    <ClCompile Include="TrackSegment.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Resources\Shaders\CombineFragment.glsl" />
