@@ -41,7 +41,7 @@ Texture* AssetManager::LoadTexture(void* callerID, string filePath)
 	else
 	{
 		// Load this texture in...
-		Texture* newTexture = new Texture(filePath.c_str(), 0, 0, "");
+		Texture* newTexture = new Texture(filePath.c_str(), 0, 0, "texture0");
 		loadedTextures.insert(pair<string, LoadedTexture>(filePath, LoadedTexture(newTexture, callerID)));
 		return newTexture;
 	}
