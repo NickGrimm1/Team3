@@ -112,6 +112,7 @@
     <ClInclude Include="DrawableText2D.h" />
     <ClInclude Include="DrawableTexture2D.h" />
     <ClInclude Include="EntryPoint.h" />
+    <ClInclude Include="LoadedMesh.h" />
     <ClInclude Include="LoadedTexture.h" />
     <ClInclude Include="OffsetCamera.h" />
     <ClInclude Include="Font.h" />

@@ -378,6 +378,9 @@
     <ClInclude Include="LoadedTexture.h">
       <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LoadedMesh.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Texture.cpp">

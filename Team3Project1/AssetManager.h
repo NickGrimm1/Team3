@@ -15,11 +15,10 @@ Version: 0.0.1 03/02/2015.</summary>
 #pragma once
 #include <vector>
 #include <map>
-#include "../Framework/Texture.h"
 //#include "Font.h"
-#include "../Framework/Mesh.h"
 #include "../Framework/Shader.h"
 #include "LoadedTexture.h"
+#include "LoadedMesh.h"
 
 using namespace std;
 
@@ -35,12 +34,7 @@ public:
 		out = instance;
 		return true; 
 	}
-	static bool Destroy()
-	{
-		if (instance != NULL)
-			delete instance;
-		instance = NULL;
-	}
+	static void Destroy();
 
 	Texture* LoadTexture(void* callerID, string filePath);
 	void UnloadTexture(void* callerID, string filePath);
@@ -48,8 +42,8 @@ public:
 	//Font* LoadFont(void* callerID, string filePath);
 	//void UnloadFont(void* callerID, string filePath);
 
-	//Mesh* LoadMesh(void* callerID, string filePath);
-	//void UnloadMesh(void* callerID, string filePath);
+	Mesh* LoadMesh(void* callerID, string filePath);
+	void UnloadMesh(void* callerID, string filePath);
 
 	//Shader* LoadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath = "");
 	//void UnloadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath = "");
@@ -67,7 +61,7 @@ private:
 	
 	map<string, LoadedTexture> loadedTextures;
 	//map<string, map<Font*, vector<void*>>> loadedFonts;
-	map<string, map<Mesh*, vector<void*>>> loadedMeshes;
+	map<string, LoadedMesh> loadedMeshes;
 
 	map<string, map<unsigned int, vector<void*>>> loadedVertexShaders;
 	map<string, map<unsigned int, vector<void*>>> loadedFragmentShaders;
