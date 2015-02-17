@@ -228,6 +228,7 @@
     <ClInclude Include="DrawableTexture2D.h" />
     <ClInclude Include="EntryPoint.h" />
     <ClInclude Include="GraphicsTestScreen.h" />
+    <ClInclude Include="LoadedFont.h" />
     <ClInclude Include="LoadedMesh.h" />
     <ClInclude Include="LoadedShader.h" />
     <ClInclude Include="LoadedShaderPart.h" />

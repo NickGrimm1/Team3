@@ -393,6 +393,9 @@
     <ClInclude Include="Texture.h">
       <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LoadedFont.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">

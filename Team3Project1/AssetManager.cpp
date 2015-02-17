@@ -41,14 +41,13 @@ Texture* AssetManager::LoadTexture(void* callerID, string filePath)
 	if (i != loadedTextures.end())
 	{
 		// Check if this caller already has this texture loaded
-		for (int j = 0; j < loadedTextures[filePath].callerIDs.size(); j++)
+		for (unsigned int j = 0; j < loadedTextures[filePath].callerIDs.size(); j++)
 		{
 			if (loadedTextures[filePath].callerIDs[j] == callerID)
 				return loadedTextures[filePath].texture; // It has, simply return
-
-			loadedTextures[filePath].callerIDs.push_back(callerID); // It hasn't, add this caller, then return.
-			return loadedTextures[filePath].texture;
 		}
+		loadedTextures[filePath].callerIDs.push_back(callerID); // It hasn't, add this caller, then return.
+		return loadedTextures[filePath].texture;
 	}
 	else
 	{
@@ -95,14 +94,13 @@ Mesh* AssetManager::LoadMesh(void* callerID, string filePath)
 	if (i != loadedMeshes.end())
 	{
 		// Check if this caller already has this mesh loaded
-		for (int j = 0; j < loadedMeshes[filePath].callerIDs.size(); j++)
+		for (unsigned int j = 0; j < loadedMeshes[filePath].callerIDs.size(); j++)
 		{
 			if (loadedMeshes[filePath].callerIDs[j] == callerID)
 				return loadedMeshes[filePath].mesh; // It has, simply return
-
-			loadedMeshes[filePath].callerIDs.push_back(callerID); // It hasn't, add this caller, then return.
-			return loadedMeshes[filePath].mesh;
 		}
+		loadedMeshes[filePath].callerIDs.push_back(callerID); // It hasn't, add this caller, then return.
+		return loadedMeshes[filePath].mesh;
 	}
 	else
 	{
@@ -163,14 +161,13 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 	if (i != loadedShaders.end())
 	{
 		// Check if this caller already has this shader loaded
-		for (int j = 0; j < loadedShaders[shaderName].callerIDs.size(); j++)
+		for (unsigned int j = 0; j < loadedShaders[shaderName].callerIDs.size(); j++)
 		{
 			if (loadedShaders[shaderName].callerIDs[j] == callerID)
 				return loadedShaders[shaderName].shader; // It has, simply return
-
-			loadedShaders[shaderName].callerIDs.push_back(callerID); // It hasn't, add this caller, then return.
-			return loadedShaders[shaderName].shader;
 		}
+		loadedShaders[shaderName].callerIDs.push_back(callerID); // It hasn't, add this caller, then return.
+		return loadedShaders[shaderName].shader;
 	}
 	else
 	{
@@ -202,7 +199,7 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 		{
 			// Add this shader to the caller list.
 			loadedShaderParts[fragmentShaderFilePath].callerIDs.push_back(newShader);
-			vertexShader = loadedShaderParts[fragmentShaderFilePath].shaderPart;
+			fragmentShader = loadedShaderParts[fragmentShaderFilePath].shaderPart;
 		}
 		else
 		{
@@ -221,7 +218,7 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 			{
 				// Add this shader to the caller list.
 				loadedShaderParts[geometryShaderFilePath].callerIDs.push_back(newShader);
-				vertexShader = loadedShaderParts[geometryShaderFilePath].shaderPart;
+				geometryShader = loadedShaderParts[geometryShaderFilePath].shaderPart;
 			}
 			else
 			{
@@ -244,6 +241,7 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 		newShader->LinkProgram();
 		// TODO Release Context
 #endif
+		return newShader;
 	}
 }
 void AssetManager::UnloadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath)
@@ -334,5 +332,59 @@ void AssetManager::UnloadShader(void* callerID, string vertexShaderFilePath, str
 		delete loadedShaders[shaderName].shader;
 		// TODO Release Context
 		i = loadedShaders.erase(i);
+	}
+}
+
+Font* AssetManager::LoadFont(void* callerID, string filePath, unsigned int xCount, unsigned int yCount)
+{
+	// Check if this font is already loaded
+	map<string, LoadedFont>::iterator i = loadedFonts.find(filePath);
+	if (i != loadedFonts.end())
+	{
+		// Check if this caller already has this font loaded
+		for (unsigned int j = 0; j < loadedFonts[filePath].callerIDs.size(); j++)
+		{
+			if (loadedFonts[filePath].callerIDs[j] == callerID)
+				return loadedFonts[filePath].font; // It has, simply return
+		}
+		loadedFonts[filePath].callerIDs.push_back(callerID); // It hasn't, add this caller, then return.
+		return loadedFonts[filePath].font;
+	}
+	else
+	{
+		// Load this font in...
+		// TODO Get Context
+		Font* newFont = new Font(xCount, yCount);
+		newFont->SetTexture(LoadTexture(newFont, filePath));
+		// TODO Release Context
+		loadedFonts.insert(pair<string, LoadedFont>(filePath, LoadedFont(newFont, callerID)));
+		return newFont;
+	}
+}
+
+void AssetManager::UnloadFont(void* callerID, string filePath)
+{
+	// Check if this font is actually loaded...
+	map<string, LoadedFont>::iterator i = loadedFonts.find(filePath);
+	if (i == loadedFonts.end())
+		return; // This texture does not exist, ignore.
+
+	// This font does exist. Remove the caller from the list of owners.
+	for (vector<void*>::iterator i = loadedFonts[filePath].callerIDs.begin(); i != loadedFonts[filePath].callerIDs.end(); i++)
+	{
+		if (*i == callerID)
+		{
+			i = loadedFonts[filePath].callerIDs.erase(i);
+			break;
+		}
+	}
+
+	// No owners left? delete
+	if (loadedFonts[filePath].callerIDs.size() == 0)
+	{
+		// TODO Get Context
+		UnloadTexture(loadedFonts[filePath].font, filePath);
+		// TODO Release Context
+		i = loadedFonts.erase(i);
 	}
 }

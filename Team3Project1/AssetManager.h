@@ -15,7 +15,7 @@ Version: 0.0.1 03/02/2015.</summary>
 #pragma once
 #include <vector>
 #include <map>
-//#include "Font.h"
+#include "LoadedFont.h"
 #include "LoadedShader.h"
 #include "LoadedTexture.h"
 #include "LoadedMesh.h"
@@ -40,8 +40,8 @@ public:
 	Texture* LoadTexture(void* callerID, string filePath);
 	void UnloadTexture(void* callerID, string filePath);
 
-	//Font* LoadFont(void* callerID, string filePath);
-	//void UnloadFont(void* callerID, string filePath);
+	Font* LoadFont(void* callerID, string filePath, unsigned int xCount, unsigned int yCount);
+	void UnloadFont(void* callerID, string filePath);
 
 	Mesh* LoadMesh(void* callerID, string filePath);
 	void UnloadMesh(void* callerID, string filePath);
@@ -61,7 +61,7 @@ private:
 	static AssetManager* instance;
 	
 	map<string, LoadedTexture> loadedTextures;
-	//map<string, map<Font*, vector<void*>>> loadedFonts;
+	map<string, LoadedFont> loadedFonts;
 	map<string, LoadedMesh> loadedMeshes;
 
 	map<string, LoadedShaderPart> loadedShaderParts;
