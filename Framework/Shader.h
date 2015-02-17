@@ -18,7 +18,6 @@ _-_-_-_-_-_-_-""  ""
 #if WINDOWS_BUILD
 #include "OGLRenderer.h"
 #endif
-#include "../Team3Project1/ShaderPart.h"
 
 namespace ShaderType
 {
@@ -31,6 +30,9 @@ namespace ShaderType
 }
 
 using namespace std;
+
+class ShaderPart;
+
 class Shader	
 {
 public:
@@ -47,7 +49,6 @@ public:
 	ShaderPart* GetVertex() { return vertexShader; }
 	void SetFragment(ShaderPart* value) { fragmentShader = value; }
 	ShaderPart* GetFragment() { return fragmentShader; }
-	static ShaderPart* LoadShaderFile(string filename, ShaderType::Type type);
 protected:
 #if WINDOWS_BUILD
 	GLuint program;

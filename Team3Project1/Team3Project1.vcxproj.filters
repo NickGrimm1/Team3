@@ -515,6 +515,9 @@
     <ClCompile Include="..\Framework\Shader.cpp">
       <Filter>Framework\Resource Manager\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderPart.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\debugVertex.glsl">

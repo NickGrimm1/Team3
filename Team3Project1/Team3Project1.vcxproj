@@ -295,6 +295,7 @@
     <ClCompile Include="OffsetCamera.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="ShaderPart.cpp" />
     <ClCompile Include="StorageManager.cpp" />
     <ClCompile Include="Thread.cpp" />
   </ItemGroup>

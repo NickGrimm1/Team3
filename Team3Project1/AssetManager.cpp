@@ -6,6 +6,7 @@ AssetManager* AssetManager::instance = NULL;
 
 void AssetManager::Destroy()
 {
+	// TODO Get Context
 	for (map<string, LoadedTexture>::iterator i = instance->loadedTextures.begin(); i != instance->loadedTextures.end(); i++)
 	{
 		delete i->second.texture;
@@ -26,6 +27,7 @@ void AssetManager::Destroy()
 		delete i->second.shaderPart;
 		i = instance->loadedShaderParts.erase(i);
 	}
+	// TODO Release Context
 
 	if (instance != NULL)
 		delete instance;
@@ -51,7 +53,9 @@ Texture* AssetManager::LoadTexture(void* callerID, string filePath)
 	else
 	{
 		// Load this texture in...
+		// TODO Get Context
 		Texture* newTexture = new Texture(filePath.c_str(), 0, 0, "texture0");
+		// TODO Release Context
 		loadedTextures.insert(pair<string, LoadedTexture>(filePath, LoadedTexture(newTexture, callerID)));
 		return newTexture;
 	}
@@ -77,7 +81,9 @@ void AssetManager::UnloadTexture(void* callerID, string filePath)
 	// No owners left? delete
 	if (loadedTextures[filePath].callerIDs.size() == 0)
 	{
+		// TODO Get Context
 		delete loadedTextures[filePath].texture;
+		// TODO Release Context
 		i = loadedTextures.erase(i);
 	}
 }
@@ -88,7 +94,7 @@ Mesh* AssetManager::LoadMesh(void* callerID, string filePath)
 	map<string, LoadedMesh>::iterator i = loadedMeshes.find(filePath);
 	if (i != loadedMeshes.end())
 	{
-		// Check if this caller already has this texture loaded
+		// Check if this caller already has this mesh loaded
 		for (int j = 0; j < loadedMeshes[filePath].callerIDs.size(); j++)
 		{
 			if (loadedMeshes[filePath].callerIDs[j] == callerID)
@@ -104,11 +110,15 @@ Mesh* AssetManager::LoadMesh(void* callerID, string filePath)
 		Mesh* newMesh;
 		if (filePath.substr(filePath.length() - 4, 3) == "obj")
 		{
+			// TODO Get Context
 			newMesh = new OBJMesh(filePath);
+			// TODO Release Context
 		}
 		else if (filePath.substr(filePath.length() - 4, 3) == "md5")
 		{
+			// TODO Get Context
 			newMesh = new MD5Mesh(MD5FileData(filePath));
+			// TODO Release Context
 		}
 		else
 			return NULL; // Unrecognised fileType. OOOPS!!
@@ -138,7 +148,9 @@ void AssetManager::UnloadMesh(void* callerID, string filePath)
 	// No owners left? delete
 	if (loadedMeshes[filePath].callerIDs.size() == 0)
 	{
+		// TODO Get Context
 		delete loadedMeshes[filePath].mesh;
+		// TODO Release Context
 		i = loadedMeshes.erase(i);
 	}
 }
@@ -166,7 +178,9 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 		ShaderPart* vertexShader = NULL;
 		ShaderPart* fragmentShader = NULL;
 		ShaderPart* geometryShader = NULL;
+		// TODO Get Context
 		Shader* newShader = new Shader();
+		// TODO Release Context
 
 		map<string, LoadedShaderPart>::iterator j = loadedShaderParts.find(vertexShaderFilePath);
 		if (j != loadedShaderParts.end())
@@ -178,7 +192,9 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 		else
 		{
 			// Load this vertex shader
-			vertexShader = Shader::LoadShaderFile(vertexShaderFilePath, ShaderType::VERTEX);
+			// TODO Get Context
+			vertexShader = ShaderPart::LoadShaderFile(vertexShaderFilePath, ShaderType::VERTEX);
+			// TODO Release Context
 			loadedShaderParts.insert(pair<string, LoadedShaderPart>(vertexShaderFilePath, LoadedShaderPart(vertexShader, newShader)));
 		}
 		j = loadedShaderParts.find(fragmentShaderFilePath);
@@ -191,7 +207,9 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 		else
 		{
 			// Load this fragment shader
-			fragmentShader = Shader::LoadShaderFile(fragmentShaderFilePath, ShaderType::FRAGMENT);
+			// TODO Get Context
+			fragmentShader = ShaderPart::LoadShaderFile(fragmentShaderFilePath, ShaderType::FRAGMENT);
+			// TODO Release Context
 			loadedShaderParts.insert(pair<string, LoadedShaderPart>(fragmentShaderFilePath, LoadedShaderPart(fragmentShader, newShader)));
 			
 		}
@@ -208,7 +226,9 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 			else
 			{
 				// Load this geometry shader
-				geometryShader = Shader::LoadShaderFile(geometryShaderFilePath, ShaderType::GEOMETRY);
+				// TODO Get Context
+				geometryShader = ShaderPart::LoadShaderFile(geometryShaderFilePath, ShaderType::GEOMETRY);
+				// TODO Release Context
 				loadedShaderParts.insert(pair<string, LoadedShaderPart>(geometryShaderFilePath, LoadedShaderPart(geometryShader, newShader)));
 				
 			}
@@ -220,7 +240,9 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 		
 #if WINDOWS_BUILD
 		newShader->SetGeometry(geometryShader);
+		// TODO Get Context
 		newShader->LinkProgram();
+		// TODO Release Context
 #endif
 	}
 }
@@ -230,9 +252,9 @@ void AssetManager::UnloadShader(void* callerID, string vertexShaderFilePath, str
 	string shaderName = vertexShaderFilePath.append(fragmentShaderFilePath).append(geometryShaderFilePath);
 	map<string, LoadedShader>::iterator i = loadedShaders.find(shaderName);
 	if (i == loadedShaders.end())
-		return; // This texture does not exist, ignore.
+		return; // This shader does not exist, ignore.
 
-	// This texture does exist. Remove the caller from the list of owners.
+	// This shader does exist. Remove the caller from the list of owners.
 	for (vector<void*>::iterator i = loadedShaders[shaderName].callerIDs.begin(); i != loadedShaders[shaderName].callerIDs.end(); i++)
 	{
 		if (*i == callerID)
@@ -260,7 +282,9 @@ void AssetManager::UnloadShader(void* callerID, string vertexShaderFilePath, str
 		}
 		if (j->second.callerIDs.size() == 0)
 		{
+			// TODO Get Context
 			delete loadedShaderParts[vertexShaderFilePath].shaderPart;
+			// TODO Release Context
 			j = loadedShaderParts.erase(j);
 		}
 		j = loadedShaderParts.find(fragmentShaderFilePath);
@@ -277,7 +301,9 @@ void AssetManager::UnloadShader(void* callerID, string vertexShaderFilePath, str
 		}
 		if (j->second.callerIDs.size() == 0)
 		{
+			// TODO Get Context
 			delete loadedShaderParts[fragmentShaderFilePath].shaderPart;
+			// TODO Release Context
 			j = loadedShaderParts.erase(j);
 		}
 		if (geometryShaderFilePath != "")
@@ -296,13 +322,17 @@ void AssetManager::UnloadShader(void* callerID, string vertexShaderFilePath, str
 			}
 			if (j->second.callerIDs.size() == 0)
 			{
+				// TODO Get Context
 				delete loadedShaderParts[geometryShaderFilePath].shaderPart;
+				// TODO Release Context
 				j = loadedShaderParts.erase(j);
 			}
 		}
 
 		// Remove the shader.
+		// TODO Get Context
 		delete loadedShaders[shaderName].shader;
+		// TODO Release Context
 		i = loadedShaders.erase(i);
 	}
 }
