@@ -71,7 +71,7 @@ time lighting tutorial, uncomment both OBJ_USE_NORMALS and OBJ_USE_TANGENTS_BUMP
 
 //New! 
 
-#define OBJ_FIX_TEXTURES
+//#define OBJ_FIX_TEXTURES
 
 
 #pragma once
@@ -86,7 +86,8 @@ time lighting tutorial, uncomment both OBJ_USE_NORMALS and OBJ_USE_TANGENTS_BUMP
 #include "Mesh.h"
 #include "ChildMeshInterface.h"
 
-#define OBJOBJECT		"object"	//the current line of the obj file defines the start of a new material
+#define OBJOBJECT1		"object"	//the current line of the obj file defines the start of a new material
+#define OBJOBJECT2		"o"
 #define OBJMTLLIB		"mtllib"
 #define OBJUSEMTL		"usemtl"	//the current line of the obj file defines the start of a new material
 #define OBJMESH			"g"			//the current line of the obj file defines the start of a new face
@@ -95,6 +96,7 @@ time lighting tutorial, uncomment both OBJ_USE_NORMALS and OBJ_USE_TANGENTS_BUMP
 #define OBJTEX			"vt"		//the current line of the obj file defines texture coordinates
 #define OBJNORM			"vn"		//the current line of the obj file defines a normal
 #define OBJFACE			"f"			//the current line of the obj file defines a face
+#define OBJSMOOTHSHADE	"s"			//the current line of the obj file defines whether smooth shading across polygons is enabled - TODO
 
 #define MTLNEW			"newmtl"
 #define MTLDIFFUSE		"Kd"
@@ -148,11 +150,9 @@ public:
 	virtual void Draw();
 
 protected:
-	void	SetTexturesFromMTL(string &mtlFile, string &mtlType);
+	void	SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, MTLInfo>& materials);
 
 	void	FixTextures(MTLInfo &info);
-
-	map <string, MTLInfo> materials;
 };
 
 #endif
