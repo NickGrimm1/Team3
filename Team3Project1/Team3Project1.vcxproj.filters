@@ -544,16 +544,16 @@
     <None Include="..\Resources\Shaders\PointToQuadGeom.glsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\Resources\Shaders\SkyboxFragment.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\SkyboxVertex.glsl">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="..\Resources\Shaders\shadowFrag.glsl">
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\shadowVert.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\SkyBoxFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\SkyBoxVertex.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

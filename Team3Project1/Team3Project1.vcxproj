@@ -188,8 +188,8 @@
     <None Include="..\Resources\Shaders\PointToQuadGeom.glsl" />
     <None Include="..\Resources\Shaders\shadowFrag.glsl" />
     <None Include="..\Resources\Shaders\shadowVert.glsl" />
-    <None Include="..\Resources\Shaders\SkyboxFragment.glsl" />
-    <None Include="..\Resources\Shaders\SkyboxVertex.glsl" />
+    <None Include="..\Resources\Shaders\SkyBoxFragment.glsl" />
+    <None Include="..\Resources\Shaders\SkyBoxVertex.glsl" />
     <None Include="..\Shaders\debugFragment.glsl" />
     <None Include="..\Shaders\debugVertex.glsl" />
     <None Include="..\Shaders\TechFragment.glsl" />
