@@ -1,5 +1,5 @@
 #pragma once
-#include "../Framework/Texture.h"
+#include "Texture.h"
 #include <vector>
 
 using namespace std;

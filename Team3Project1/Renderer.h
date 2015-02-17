@@ -12,7 +12,7 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "../Framework/Frustum.h"
 #include "../Framework/SceneNode.h"
 #include "../Framework/Light.h"
-#include "../Framework/Texture.h"
+#include "Texture.h"
 #include "../Framework/OGLRenderer.h"
 #include "../Framework/Weather.h"
 #include "../Framework/Camera.h"

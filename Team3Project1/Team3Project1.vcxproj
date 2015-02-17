@@ -212,7 +212,6 @@
     <ClInclude Include="..\Framework\SceneNode.h" />
     <ClInclude Include="..\Framework\Shader.h" />
     <ClInclude Include="..\Framework\Spring.h" />
-    <ClInclude Include="..\Framework\Texture.h" />
     <ClInclude Include="..\Framework\Vector2.h" />
     <ClInclude Include="..\Framework\Vector3.h" />
     <ClInclude Include="..\Framework\Vector4.h" />
@@ -253,6 +252,7 @@
     <ClInclude Include="T3Rectangle.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="StorageManager.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Thread.h" />
     <ClInclude Include="UIButton.h" />
   </ItemGroup>
@@ -277,7 +277,6 @@
     <ClCompile Include="..\Framework\SceneNode.cpp" />
     <ClCompile Include="..\Framework\Shader.cpp" />
     <ClCompile Include="..\Framework\Spring.cpp" />
-    <ClCompile Include="..\Framework\Texture.cpp" />
     <ClCompile Include="..\Framework\Weather.cpp" />
     <ClCompile Include="..\Framework\Window.cpp" />
     <ClCompile Include="AssetManager.cpp" />
@@ -297,6 +296,7 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ShaderPart.cpp" />
     <ClCompile Include="StorageManager.cpp" />
+    <ClCompile Include="TextureWindows.cpp" />
     <ClCompile Include="Thread.cpp" />
   </ItemGroup>
   <ItemGroup>

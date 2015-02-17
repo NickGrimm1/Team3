@@ -216,9 +216,6 @@
     <ClInclude Include="..\Framework\EmptyTexture.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Framework\Texture.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Framework\Frustum.h">
       <Filter>Framework\Graphics\Common\Header</Filter>
     </ClInclude>
@@ -393,11 +390,11 @@
     <ClInclude Include="..\Framework\Shader.h">
       <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Framework\Texture.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Framework\Frustum.cpp">
       <Filter>Framework\Graphics\Common\Source</Filter>
     </ClCompile>
@@ -516,6 +513,9 @@
       <Filter>Framework\Resource Manager\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ShaderPart.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureWindows.cpp">
       <Filter>Framework\Resource Manager\Source Files</Filter>
     </ClCompile>
   </ItemGroup>

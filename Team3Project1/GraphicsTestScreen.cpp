@@ -18,8 +18,8 @@ void GraphicsTestScreen::LoadContent() {
 	quad = Mesh::GenerateQuad();
 	DrawableEntity3D* ent = new DrawableEntity3D(
 		quad, 
-		NULL, 
-		new Texture("D:\\Visual Studio 2012\\Projects\\Graphics For Games\\Textures\\Blend Swap\\Grass\\Grass_Color.tga", 0, 0, "diffuseTex"), 
+		NULL,
+		GameStateManager::Assets()->LoadTexture(this, "D:\\Visual Studio 2012\\Projects\\Graphics For Games\\Textures\\Blend Swap\\Grass\\Grass_Color.tga"),
 		NULL, 
 		50.0f, 
 		Vector3(0,0,0), 
