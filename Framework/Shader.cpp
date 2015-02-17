@@ -1,89 +1,87 @@
 #include "Shader.h"
 
-Shader::Shader(string vFile, string fFile, string gFile)	{
-	
-	program		= glCreateProgram();
-	objects[SHADER_VERTEX]		= GenerateShader(vFile	 ,GL_VERTEX_SHADER);
-	if (!loadFailed) objects[SHADER_FRAGMENT]	= GenerateShader(fFile,GL_FRAGMENT_SHADER);
-	objects[SHADER_GEOMETRY]	= 0;
-
-	if(!loadFailed && !gFile.empty()) {
-		objects[SHADER_GEOMETRY]	= GenerateShader(gFile,GL_GEOMETRY_SHADER);
-		glAttachShader(program,objects[SHADER_GEOMETRY]);
-	}
-
-	glAttachShader(program,objects[SHADER_VERTEX]);
-	glAttachShader(program,objects[SHADER_FRAGMENT]);
-
-	SetDefaultAttributes();
+Shader::Shader()	
+{
+#if WINDOWS_BUILD
+	program	= glCreateProgram();
+#endif	
 }
 
-Shader::~Shader(void)	{
-	for(int i = 0; i < 3; ++i) {
-		glDetachShader(program, objects[i]);
-		glDeleteShader(objects[i]);
-	}
+Shader::~Shader(void)	
+{
+#if WINDOWS_BUILD
+	glDetachShader(program, vertexShader->shader);
+	glDetachShader(program, fragmentShader->shader);
+	glDetachShader(program, geometryShader->shader);
 	glDeleteProgram(program);
+#endif	
 }
 
-bool	Shader::LoadShaderFile(string from, string &into)	{
-	ifstream	file;
-	string		temp;
-
-	cout << "Loading shader text from " << from << endl << endl;
-
-	file.open(from.c_str());
-	if(!file.is_open()){
-		cout << "File does not exist!" << endl;
-		return false;
+ShaderPart* Shader::LoadShaderFile(string filename, ShaderType::Type type)
+{
+#if WINDOWS_BUILD
+	ifstream file;
+	string temp;
+	string into;
+#if DEBUG
+	printf << "Loading shader text from " << filename << endl << endl;
+#endif
+	file.open(filename.c_str());
+	if(!file.is_open())
+	{
+#if DEBUG
+		printf << "File does not exist!" << endl;
+#endif
+		return NULL;
 	}
 
 	while(!file.eof()){
 		getline(file,temp);
 		into += temp + "\n";
 	}
-
-//	cout << into << endl << endl;
-
 	file.close();
+#if DEBUG
 	cout << "Loaded shader text!" << endl << endl;
-	return true;
-}
 
-GLuint	Shader::GenerateShader(string from, GLenum type)	{
 	cout << "Compiling Shader..." << endl;
-
-	string load;
-	if(!LoadShaderFile(from,load)) {
-		cout << "Compiling failed!" << endl;
-		loadFailed = true;
-		return 0;
-	}
+#endif
 
 	GLuint shader = glCreateShader(type);
-
-	const char *chars = load.c_str();
+	const char *chars = into.c_str();
 	glShaderSource(shader, 1, &chars, NULL);
 	glCompileShader(shader);
 
 	GLint status;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
 
-	if (status == GL_FALSE)	{
+	if (status == GL_FALSE)	
+	{
+#if DEBUG
 		cout << "Compiling failed!" << endl;
 		char error[512];
 		glGetInfoLogARB(shader, sizeof(error), NULL, error);
 		cout << error;
-		loadFailed = true;
-		return 0;
+#endif
+		return NULL;
 	}
+#if DEBUG
 	cout << "Compiling success!" << endl << endl;
-	loadFailed = false;
-	return shader;
+#endif
+	return new ShaderPart(shader);
+#endif
 }
 
-bool Shader::LinkProgram()	{
-	if(loadFailed) {
+#if WINDOWS_BUILD
+bool Shader::LinkProgram()	
+{
+	glAttachShader(program, vertexShader->shader);
+	glAttachShader(program, fragmentShader->shader);
+	if (geometryShader != NULL)
+		glAttachShader(program, geometryShader->shader);
+	SetDefaultAttributes();
+
+	if(loadFailed) 
+	{
 		return false;
 	}
 	glLinkProgram(program); 
@@ -91,16 +89,20 @@ bool Shader::LinkProgram()	{
 	GLint code;
 	glGetProgramiv(program, GL_LINK_STATUS, &code);
 
-	if (code == GL_FALSE)	{
+	if (code == GL_FALSE)	
+	{
+#if DEBUG
 		cout << "Linking failed!" << endl;
 		char error[512];
 		glGetInfoLogARB(program, sizeof(error), NULL, error);
 		cout << error;
+#endif
 		loadFailed = true;
 	}
 
 	return code == GL_TRUE ?  true : false;
 }
+
 
 void	Shader::SetDefaultAttributes()	{
 	glBindAttribLocation(program, VERTEX_BUFFER,  "position");
@@ -111,3 +113,4 @@ void	Shader::SetDefaultAttributes()	{
 
 	glBindAttribLocation(program, MAX_BUFFER+1,  "transformIndex");
 }
+#endif

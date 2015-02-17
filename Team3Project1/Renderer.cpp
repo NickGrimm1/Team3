@@ -1,6 +1,7 @@
 #include "Renderer.h"
 #include "GraphicsCommon.h"
 #include "DrawableEntity3D.h"
+#include "GameStateManager.h"
 
 Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>& sceneNodesVec, vector<DrawableEntity2D*>& overlayVec) : 
 	OGLRenderer(parent), 
@@ -17,13 +18,13 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	screenMesh = quad;
 
 	//Shader initialisations go here.
-	basicShader		= new Shader(SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
-	sceneShader		= new Shader(SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl");
-	shadowShader	= new Shader(SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl");
-	lightingShader  = new Shader(SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl");
-	skyBoxShader	= new Shader(SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl");
-	combineShader	= new Shader(SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
-	particleShader	= new Shader(SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
+	basicShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
+	sceneShader	= GameStateManager::Assets()->LoadShader(this, SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl");
+	shadowShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl");
+	lightingShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl");
+	skyBoxShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl");
+	combineShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
+	particleShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
 
 	if (!LoadCheck())
 		return;
@@ -506,13 +507,13 @@ void Renderer::GenerateScreenTexture(GLuint &into, bool depth)
 
 bool Renderer::LoadCheck()
 {
-	return (basicShader->LinkProgram()		&&
-			shadowShader->LinkProgram()		&&
-			skyBoxShader->LinkProgram()		&&
-			combineShader->LinkProgram()	&&
-			particleShader->LinkProgram()	&&
-			sceneShader->LinkProgram()		&&
-			lightingShader->LinkProgram());
+	return (basicShader != NULL		&&
+			shadowShader != NULL	&&
+			skyBoxShader != NULL	&&
+			combineShader != NULL	&&
+			particleShader != NULL	&&
+			sceneShader != NULL		&&
+			lightingShader != NULL);
 }
 
 bool Renderer::ActiveTex()

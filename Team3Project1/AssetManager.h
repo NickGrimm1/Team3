@@ -16,9 +16,10 @@ Version: 0.0.1 03/02/2015.</summary>
 #include <vector>
 #include <map>
 //#include "Font.h"
-#include "../Framework/Shader.h"
+#include "LoadedShader.h"
 #include "LoadedTexture.h"
 #include "LoadedMesh.h"
+#include "LoadedShaderPart.h"
 
 using namespace std;
 
@@ -45,8 +46,8 @@ public:
 	Mesh* LoadMesh(void* callerID, string filePath);
 	void UnloadMesh(void* callerID, string filePath);
 
-	//Shader* LoadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath = "");
-	//void UnloadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath = "");
+	Shader* LoadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath = "");
+	void UnloadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath = "");
 
 	// Generate Heightmap
 	// Load audio
@@ -63,8 +64,6 @@ private:
 	//map<string, map<Font*, vector<void*>>> loadedFonts;
 	map<string, LoadedMesh> loadedMeshes;
 
-	map<string, map<unsigned int, vector<void*>>> loadedVertexShaders;
-	map<string, map<unsigned int, vector<void*>>> loadedFragmentShaders;
-	map<string, map<unsigned int, vector<void*>>> loadedGeometryShaders;
-	map<string, map<Shader*, vector<void*>>> loadedShaders;
+	map<string, LoadedShaderPart> loadedShaderParts;
+	map<string, LoadedShader> loadedShaders;
 };

@@ -252,9 +252,6 @@
     <ClInclude Include="..\Framework\ChildMeshInterface.h">
       <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Framework\Shader.h">
-      <Filter>Framework\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="..\Framework\common.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
@@ -384,6 +381,18 @@
     <ClInclude Include="GraphicsTestScreen.h">
       <Filter>Game\MainGame\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LoadedShader.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadedShaderPart.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderPart.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Shader.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Texture.cpp">
@@ -415,9 +424,6 @@
     </ClCompile>
     <ClCompile Include="..\Framework\OBJMesh.cpp">
       <Filter>Framework\Resource Manager\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\Shader.cpp">
-      <Filter>Framework\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\Framework\GameTimer.cpp">
       <Filter>Framework\Common\Source Files</Filter>
@@ -505,6 +511,9 @@
     </ClCompile>
     <ClCompile Include="GraphicsTestScreen.cpp">
       <Filter>Game\MainGame\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Shader.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

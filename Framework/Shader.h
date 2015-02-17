@@ -15,30 +15,47 @@ _-_-_-_-_-_-_-""  ""
 *//////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-
-
+#if WINDOWS_BUILD
 #include "OGLRenderer.h"
+#endif
+#include "../Team3Project1/ShaderPart.h"
 
-#define SHADER_VERTEX   0
-#define SHADER_FRAGMENT 1
-#define SHADER_GEOMETRY 2
+namespace ShaderType
+{
+	enum Type
+	{
+		VERTEX = 0,
+		FRAGMENT = 1,
+		GEOMETRY = 2,
+	};
+}
 
 using namespace std;
-class Shader	{
+class Shader	
+{
 public:
-	Shader(string vertex, string fragment , string geometry = "");
+	Shader();
 	~Shader(void);
 
-	GLuint  GetProgram() { return program;}
+#if WINDOWS_BUILD
+	GLuint  GetProgram() { return program; }
 	bool	LinkProgram();
-
+	void SetGeometry(ShaderPart* value) { geometryShader = value; }
+	ShaderPart* GetGeometry() { return geometryShader; }
+#endif
+	void SetVertex(ShaderPart* value) { vertexShader = value; }
+	ShaderPart* GetVertex() { return vertexShader; }
+	void SetFragment(ShaderPart* value) { fragmentShader = value; }
+	ShaderPart* GetFragment() { return fragmentShader; }
+	static ShaderPart* LoadShaderFile(string filename, ShaderType::Type type);
 protected:
-	bool	LoadShaderFile(string from, string &into);
-	GLuint	GenerateShader(string from, GLenum type);
-	void	SetDefaultAttributes();
-
-	GLuint objects[3];
+#if WINDOWS_BUILD
 	GLuint program;
+	ShaderPart* geometryShader;
+	void SetDefaultAttributes();
+#endif
+	ShaderPart* vertexShader;
+	ShaderPart* fragmentShader;
 
 	bool loadFailed;
 };

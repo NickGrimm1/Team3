@@ -8,13 +8,23 @@ void AssetManager::Destroy()
 {
 	for (map<string, LoadedTexture>::iterator i = instance->loadedTextures.begin(); i != instance->loadedTextures.end(); i++)
 	{
-		delete (*i).second.texture;
+		delete i->second.texture;
 		i = instance->loadedTextures.erase(i);
 	}
 	for (map<string, LoadedMesh>::iterator i = instance->loadedMeshes.begin(); i != instance->loadedMeshes.end(); i++)
 	{
-		delete (*i).second.mesh;
+		delete i->second.mesh;
 		i = instance->loadedMeshes.erase(i);
+	}
+	for (map<string, LoadedShader>::iterator i = instance->loadedShaders.begin(); i != instance->loadedShaders.end(); i++)
+	{
+		delete i->second.shader;
+		i = instance->loadedShaders.erase(i);
+	}
+	for (map<string, LoadedShaderPart>::iterator i = instance->loadedShaderParts.begin(); i != instance->loadedShaderParts.end(); i++)
+	{
+		delete i->second.shaderPart;
+		i = instance->loadedShaderParts.erase(i);
 	}
 
 	if (instance != NULL)
@@ -90,7 +100,7 @@ Mesh* AssetManager::LoadMesh(void* callerID, string filePath)
 	}
 	else
 	{
-		// Load this texture in...
+		// Load this mesh in...
 		Mesh* newMesh;
 		if (filePath.substr(filePath.length() - 4, 3) == "obj")
 		{
@@ -110,12 +120,12 @@ Mesh* AssetManager::LoadMesh(void* callerID, string filePath)
 
 void AssetManager::UnloadMesh(void* callerID, string filePath)
 {
-	// Check if this texture is actually loaded...
+	// Check if this mesh is actually loaded...
 	map<string, LoadedMesh>::iterator i = loadedMeshes.find(filePath);
 	if (i == loadedMeshes.end())
 		return; // This texture does not exist, ignore.
 
-	// This texture does exist. Remove the caller from the list of owners.
+	// This mesh does exist. Remove the caller from the list of owners.
 	for (vector<void*>::iterator i = loadedMeshes[filePath].callerIDs.begin(); i != loadedMeshes[filePath].callerIDs.end(); i++)
 	{
 		if (*i == callerID)
@@ -130,5 +140,169 @@ void AssetManager::UnloadMesh(void* callerID, string filePath)
 	{
 		delete loadedMeshes[filePath].mesh;
 		i = loadedMeshes.erase(i);
+	}
+}
+
+Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath)
+{
+	// Check if the shader as a whole is already loaded
+	string shaderName = vertexShaderFilePath.append(fragmentShaderFilePath).append(geometryShaderFilePath);
+	map<string, LoadedShader>::iterator i = loadedShaders.find(shaderName);
+	if (i != loadedShaders.end())
+	{
+		// Check if this caller already has this shader loaded
+		for (int j = 0; j < loadedShaders[shaderName].callerIDs.size(); j++)
+		{
+			if (loadedShaders[shaderName].callerIDs[j] == callerID)
+				return loadedShaders[shaderName].shader; // It has, simply return
+
+			loadedShaders[shaderName].callerIDs.push_back(callerID); // It hasn't, add this caller, then return.
+			return loadedShaders[shaderName].shader;
+		}
+	}
+	else
+	{
+		// Check if any of these shader parts are already loaded
+		ShaderPart* vertexShader = NULL;
+		ShaderPart* fragmentShader = NULL;
+		ShaderPart* geometryShader = NULL;
+		Shader* newShader = new Shader();
+
+		map<string, LoadedShaderPart>::iterator j = loadedShaderParts.find(vertexShaderFilePath);
+		if (j != loadedShaderParts.end())
+		{
+			// Add this shader to the caller list.
+			loadedShaderParts[vertexShaderFilePath].callerIDs.push_back(newShader);
+			vertexShader = loadedShaderParts[vertexShaderFilePath].shaderPart;
+		}
+		else
+		{
+			// Load this vertex shader
+			vertexShader = Shader::LoadShaderFile(vertexShaderFilePath, ShaderType::VERTEX);
+			loadedShaderParts.insert(pair<string, LoadedShaderPart>(vertexShaderFilePath, LoadedShaderPart(vertexShader, newShader)));
+		}
+		j = loadedShaderParts.find(fragmentShaderFilePath);
+		if (j != loadedShaderParts.end())
+		{
+			// Add this shader to the caller list.
+			loadedShaderParts[fragmentShaderFilePath].callerIDs.push_back(newShader);
+			vertexShader = loadedShaderParts[fragmentShaderFilePath].shaderPart;
+		}
+		else
+		{
+			// Load this fragment shader
+			fragmentShader = Shader::LoadShaderFile(fragmentShaderFilePath, ShaderType::FRAGMENT);
+			loadedShaderParts.insert(pair<string, LoadedShaderPart>(fragmentShaderFilePath, LoadedShaderPart(fragmentShader, newShader)));
+			
+		}
+
+		if (geometryShaderFilePath != "")
+		{
+			j = loadedShaderParts.find(geometryShaderFilePath);
+			if (j != loadedShaderParts.end())
+			{
+				// Add this shader to the caller list.
+				loadedShaderParts[geometryShaderFilePath].callerIDs.push_back(newShader);
+				vertexShader = loadedShaderParts[geometryShaderFilePath].shaderPart;
+			}
+			else
+			{
+				// Load this geometry shader
+				geometryShader = Shader::LoadShaderFile(geometryShaderFilePath, ShaderType::GEOMETRY);
+				loadedShaderParts.insert(pair<string, LoadedShaderPart>(geometryShaderFilePath, LoadedShaderPart(geometryShader, newShader)));
+				
+			}
+		}
+
+		// Load this Shader
+		newShader->SetVertex(vertexShader);
+		newShader->SetFragment(fragmentShader);
+		
+#if WINDOWS_BUILD
+		newShader->SetGeometry(geometryShader);
+		newShader->LinkProgram();
+#endif
+	}
+}
+void AssetManager::UnloadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath)
+{
+	// Check if this shader is actually loaded...
+	string shaderName = vertexShaderFilePath.append(fragmentShaderFilePath).append(geometryShaderFilePath);
+	map<string, LoadedShader>::iterator i = loadedShaders.find(shaderName);
+	if (i == loadedShaders.end())
+		return; // This texture does not exist, ignore.
+
+	// This texture does exist. Remove the caller from the list of owners.
+	for (vector<void*>::iterator i = loadedShaders[shaderName].callerIDs.begin(); i != loadedShaders[shaderName].callerIDs.end(); i++)
+	{
+		if (*i == callerID)
+		{
+			i = loadedShaders[shaderName].callerIDs.erase(i);
+			break;
+		}
+	}
+
+	// No owners left? delete
+	if (loadedShaders[shaderName].callerIDs.size() == 0)
+	{
+		// Check each shader part & remove the shader from the callers list, removing the shader part where no users are left.
+		map<string, LoadedShaderPart>::iterator j = loadedShaderParts.find(vertexShaderFilePath);
+		if (j != loadedShaderParts.end()) // Strictly speaking, if it was we somehow have a shader that's missing this part :/ but it's easier for the next checks if we have an iterator to it.
+		{
+			for (vector<void*>::iterator k = j->second.callerIDs.begin(); k != j->second.callerIDs.end(); k++)
+			{
+				if (*k == callerID)
+				{
+					k = j->second.callerIDs.erase(k);
+					break;
+				}
+			}
+		}
+		if (j->second.callerIDs.size() == 0)
+		{
+			delete loadedShaderParts[vertexShaderFilePath].shaderPart;
+			j = loadedShaderParts.erase(j);
+		}
+		j = loadedShaderParts.find(fragmentShaderFilePath);
+		if (j != loadedShaderParts.end()) // Strictly speaking, if it was we somehow have a shader that's missing this part :/ but it's easier for the next checks if we have an iterator to it.
+		{
+			for (vector<void*>::iterator k = j->second.callerIDs.begin(); k != j->second.callerIDs.end(); k++)
+			{
+				if (*k == callerID)
+				{
+					k = j->second.callerIDs.erase(k);
+					break;
+				}
+			}
+		}
+		if (j->second.callerIDs.size() == 0)
+		{
+			delete loadedShaderParts[fragmentShaderFilePath].shaderPart;
+			j = loadedShaderParts.erase(j);
+		}
+		if (geometryShaderFilePath != "")
+		{
+			j = loadedShaderParts.find(geometryShaderFilePath);
+			if (j != loadedShaderParts.end()) // Strictly speaking, if it was we somehow have a shader that's missing this part :/ but it's easier for the next checks if we have an iterator to it.
+			{
+				for (vector<void*>::iterator k = j->second.callerIDs.begin(); k != j->second.callerIDs.end(); k++)
+				{
+					if (*k == callerID)
+					{
+						k = j->second.callerIDs.erase(k);
+						break;
+					}
+				}
+			}
+			if (j->second.callerIDs.size() == 0)
+			{
+				delete loadedShaderParts[geometryShaderFilePath].shaderPart;
+				j = loadedShaderParts.erase(j);
+			}
+		}
+
+		// Remove the shader.
+		delete loadedShaders[shaderName].shader;
+		i = loadedShaders.erase(i);
 	}
 }
