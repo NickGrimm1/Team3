@@ -12,8 +12,6 @@ x64/
 build/
 [Bb]in/
 [Oo]bj/
-Team3Project1/Debug
-Team3Project1/Release
 
 # Enable "build/" folder in the NuGet Packages folder since NuGet packages use it for MSBuild targets
 !packages/*/build/
@@ -163,3 +161,7 @@ Framework/nclgl.vcxproj.filters
 *.tlog
 *.idb
 *.lastbuildstate
+*.exe
+*.exe.*
+Debug\*.obj
+Release\*.obj
