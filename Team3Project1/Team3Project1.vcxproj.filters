@@ -237,9 +237,6 @@
     <ClInclude Include="..\Framework\MD5Node.h">
       <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Framework\Mesh.h">
-      <Filter>Framework\Resource Manager\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Framework\Mouse.h">
       <Filter>Framework\User Interface\Header Files</Filter>
     </ClInclude>
@@ -396,6 +393,12 @@
     <ClInclude Include="LoadedFont.h">
       <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">
@@ -414,9 +417,6 @@
       <Filter>Framework\Resource Manager\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Framework\MD5Node.cpp">
-      <Filter>Framework\Resource Manager\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\Mesh.cpp">
       <Filter>Framework\Resource Manager\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Framework\Mouse.cpp">
@@ -519,6 +519,9 @@
       <Filter>Framework\Resource Manager\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TextureWindows.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
       <Filter>Framework\Resource Manager\Source Files</Filter>
     </ClCompile>
   </ItemGroup>

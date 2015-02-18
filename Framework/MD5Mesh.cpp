@@ -54,8 +54,8 @@ shader class "SetDefaultAttributes" function...
 
 */
 #ifdef MD5_USE_HARDWARE_SKINNING
-void MD5Mesh::BufferExtraData() {
-	glBindVertexArray(arrayObject);
+void MD5Mesh::BufferExtraData() { // TODO: Fix Interleaving on MD5...
+	/*glBindVertexArray(arrayObject);
 
 	glGenBuffers(1, &weightObject);
 	glBindBuffer(GL_ARRAY_BUFFER, weightObject);
@@ -63,7 +63,7 @@ void MD5Mesh::BufferExtraData() {
 	glVertexAttribPointer(MAX_BUFFER, 2, GL_FLOAT, GL_FALSE, 0, 0); 
 	glEnableVertexAttribArray(MAX_BUFFER);
 
-	glBindVertexArray(0);
+	glBindVertexArray(0);*/
 }
 #endif
 
@@ -87,10 +87,10 @@ void	MD5Mesh::SkinVertices(const MD5Skeleton &skel) {
 		*/
 		for(int j = 0; j < subMesh.numverts; ++j) {
 			//UV coords can be copied straight over to the Mesh textureCoord array
-			target->textureCoords[j]   = subMesh.verts[j].texCoords;
+			target->vertices[j].texCoord   = subMesh.verts[j].texCoords;
 
 			//And we should start off with a Vector of 0,0,0
-			target->vertices[j].ToZero();
+			target->vertices[j].position.ToZero();
 
 			/*
 			Each vertex has a number of weights, determined by weightElements. The first
@@ -110,7 +110,7 @@ void	MD5Mesh::SkinVertices(const MD5Skeleton &skel) {
 				building up a weighted vertex position.
 				*/
 
-				target->vertices[j] += ((joint.transform * weight.position) * weight.weightValue);				
+				target->vertices[j].position += ((joint.transform * weight.position) * weight.weightValue);				
 			}
 		}
 
@@ -143,8 +143,8 @@ void	MD5Mesh::SkinVertices(const MD5Skeleton &skel) {
 //It's worth pointing out that the glBufferSubData function never allocates new memory
 //on the graphics card!
 //*/
-void MD5Mesh::RebufferData()	{
-	glBindBuffer(GL_ARRAY_BUFFER, bufferObject[VERTEX_BUFFER]);
+void MD5Mesh::RebufferData()	{ // TODO: Fix Interleaving on MD5...
+	/*glBindBuffer(GL_ARRAY_BUFFER, bufferObject[VERTEX_BUFFER]);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, numVertices*sizeof(Vector3), (void*)vertices);
 
 	if(textureCoords) {
@@ -155,7 +155,7 @@ void MD5Mesh::RebufferData()	{
 	if (colours)	{
 		glBindBuffer(GL_ARRAY_BUFFER, bufferObject[COLOUR_BUFFER]);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, numVertices*sizeof(Vector4), (void*)colours);
-	}
+	}*/
 
 #ifdef MD5_USE_NORMALS
 	if(normals) {
@@ -171,9 +171,9 @@ void MD5Mesh::RebufferData()	{
 	}
 #endif
 
-	if(indices) {
+	/*if(indices) {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferObject[INDEX_BUFFER]);
 		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, numVertices*sizeof(unsigned int), (void*)indices);
-	}
+	}*/
 }
 #endif

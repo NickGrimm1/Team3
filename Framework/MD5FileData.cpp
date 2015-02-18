@@ -492,9 +492,10 @@ void MD5FileData::CreateMeshes()	{
 
 		rootMesh->AddChild(target);
 
-		target->texture		  = subMesh.texIndex;				//Assign the diffuse map
-		target->vertices	  = new Vector3[subMesh.numverts];	//Make vertex	mem
-		target->textureCoords = new Vector2[subMesh.numverts];	//Make texCoord mem
+		// TODO: Fix Interleaving on MD5...
+		//target->texture		  = subMesh.texIndex;				//Assign the diffuse map
+		//target->vertices	  = new Vector3[subMesh.numverts];	//Make vertex	mem
+		//target->textureCoords = new Vector2[subMesh.numverts];	//Make texCoord mem
 #ifdef MD5_USE_HARDWARE_SKINNING
 		target->weights		  = new Vector2[subMesh.numverts];	//Make weight mem
 #endif

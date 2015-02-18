@@ -50,13 +50,13 @@ bool Shader::LinkProgram()
 	return code == GL_TRUE ?  true : false;
 }
 
-void	Shader::SetDefaultAttributes()	{
-	glBindAttribLocation(program, VERTEX_BUFFER,  "position");
-	glBindAttribLocation(program, COLOUR_BUFFER,  "colour");
-	glBindAttribLocation(program, NORMAL_BUFFER,  "normal");
-	glBindAttribLocation(program, TANGENT_BUFFER, "tangent");
-	glBindAttribLocation(program, TEXTURE_BUFFER, "texCoord");
-
-	glBindAttribLocation(program, MAX_BUFFER+1,  "transformIndex");
-}
+//void	Shader::SetDefaultAttributes()	{
+//	glBindAttribLocation(program, VERTEX_BUFFER,  "position");
+//	glBindAttribLocation(program, COLOUR_BUFFER,  "colour");
+//	glBindAttribLocation(program, NORMAL_BUFFER,  "normal");
+//	glBindAttribLocation(program, TANGENT_BUFFER, "tangent");
+//	glBindAttribLocation(program, TEXTURE_BUFFER, "texCoord");
+//
+//	glBindAttribLocation(program, MAX_BUFFER+1,  "transformIndex");
+//}
 #endif

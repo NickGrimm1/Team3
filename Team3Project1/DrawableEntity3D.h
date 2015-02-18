@@ -5,7 +5,7 @@ Author: Nick Grimm
 Version: 0.0.5 10/02/2015.</summary>
 */
 #pragma once
-#include "../Framework/Mesh.h"
+#include "Mesh.h"
 #include "Texture.h"
 
 class DrawableEntity3D

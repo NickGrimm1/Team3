@@ -406,7 +406,7 @@ DebugDrawData::DebugDrawData() {
 }
 
 void DebugDrawData::Draw() {
-	if(lines.empty()) {
+	/*if(lines.empty()) {
 		return;
 	}
 	glBindVertexArray(array);
@@ -427,5 +427,5 @@ void DebugDrawData::Draw() {
 	glBindVertexArray(0);
 	glDeleteBuffers(2,buffers);
 
-	Clear();
+	Clear();*/
 }

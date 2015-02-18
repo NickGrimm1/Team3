@@ -1,5 +1,5 @@
 #include "OBJMesh.h"
-#ifdef WEEK_2_CODE
+#include "../Team3Project1/GameStateManager.h"
 /*
 OBJ files look generally something like this:
 
@@ -183,7 +183,9 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 			}
 		}
 		else{
-			std::cout << "OBJMesh::LoadOBJMesh Unknown file data:" << currentLine << std::endl;
+#if DEBUG
+			printf << "OBJMesh::LoadOBJMesh Unknown file data:" << currentLine << std::endl;
+#endif
 		}
 	}
 
@@ -216,33 +218,31 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 
 			m->numVertices	= sm->vertIndices.size();
 
-			m->vertices		= new Vector3[m->numVertices];
-			for(unsigned int j = 0; j < sm->vertIndices.size(); ++j) {
-				m->vertices[j] = inputVertices[sm->vertIndices[j]-1];
+			m->vertices	= new Vertex[m->numVertices];
+			for(unsigned int j = 0; j < sm->vertIndices.size(); ++j)
+			{
+				m->vertices[j] = inputVertices[sm->vertIndices[j] - 1];
 			}
 
-			if(!sm->texIndices.empty())	{
-				m->textureCoords	= new Vector2[m->numVertices];
-				for(unsigned int j = 0; j < sm->texIndices.size(); ++j) {
-					m->textureCoords[j] = inputTexCoords[sm->texIndices[j]-1];
+			if(!sm->texIndices.empty())	
+			{
+				for(unsigned int j = 0; j < sm->texIndices.size(); ++j) 
+				{
+					m->vertices[j].texCoord = inputTexCoords[sm->texIndices[j] - 1];
 				}
 			}
 
-#ifdef OBJ_USE_NORMALS
 			if(sm->normIndices.empty()) {
 				m->GenerateNormals();
 			}
-			else{
-				m->normals		= new Vector3[m->numVertices];
-
+			else
+			{
 				for(unsigned int j = 0; j < sm->normIndices.size(); ++j) {
-					m->normals[j] = inputNormals[sm->normIndices[j]-1];
+					m->vertices[j].normal = inputNormals[sm->normIndices[j]-1];
 				}
 			}
-#endif
-#ifdef OBJ_USE_TANGENTS_BUMPMAPS
+
 			m->GenerateTangents();
-#endif
 
 			m->BufferData();
 
@@ -281,7 +281,7 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 		map <string, MTLInfo>::iterator i = materials.find(mtlType);
 		if(i != materials.end()) {
 			if(!i->second.diffuse.empty())	{
-				texture = i->second.diffuseNum;
+				
 			}
 
 			if(!i->second.bump.empty())	{
@@ -337,10 +337,6 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 				currentMTL.diffuse = currentMTL.diffuse.substr(at+1);
 			}
 			*/
-
-			if(!currentMTL.diffuse.empty()) {
-				currentMTL.diffuseNum = SOIL_load_OGL_texture(string(TEXTUREDIR + currentMTL.diffuse).c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y | SOIL_FLAG_TEXTURE_REPEATS);
-			}
 		}
 		else if(currentLine == MTLBUMPMAP || currentLine == MTLBUMPMAPALT) {
 			f >> currentMTL.bump;
@@ -352,10 +348,6 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 			else if(currentMTL.bump.find_last_of('\\') != string::npos) {
 				int at = currentMTL.bump.find_last_of('\\');
 				currentMTL.bump = currentMTL.bump.substr(at+1);
-			}
-
-			if(!currentMTL.bump.empty()) {
-				currentMTL.bumpNum = SOIL_load_OGL_texture(string(TEXTUREDIR + currentMTL.bump).c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y | SOIL_FLAG_TEXTURE_REPEATS);
 			}
 		}
 	}
@@ -373,11 +365,13 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 		map <string, MTLInfo>::iterator i = materials.find(mtlType);
 		if(i != materials.end()) {
 			if(!i->second.diffuse.empty())	{
-				texture = i->second.diffuseNum;
+				texture = GameStateManager::Assets()->LoadTexture(this, string(TEXTUREDIR + currentMTL.diffuse));
+				texturePath = string(TEXTUREDIR + currentMTL.diffuse);
 			}
 
 			if(!i->second.bump.empty())	{
-	//TODO			bumpTexture = i->second.bumpNum;
+				bumpTexture = GameStateManager::Assets()->LoadTexture(this, string(TEXTUREDIR + currentMTL.bump));
+				bumpPath = string(TEXTUREDIR + currentMTL.bump);
 			}
 
 			return;
@@ -405,4 +399,3 @@ void	OBJMesh::FixTextures(MTLInfo &info) {
 		info.bumpNum = SOIL_load_OGL_texture(string(TEXTUREDIR + info.bump).c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y |  SOIL_FLAG_TEXTURE_REPEATS);
 	}
 }
-#endif

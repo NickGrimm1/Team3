@@ -1,5 +1,5 @@
 #pragma once
-#include "../Framework/Mesh.h"
+#include "Mesh.h"
 #include <vector>
 
 using namespace std;

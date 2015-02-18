@@ -1,5 +1,5 @@
 #include "GraphicsTestScreen.h"
-#include "../Framework/Mesh.h"
+#include "Mesh.h"
 #include "../Framework/Light.h"
 #include "GameStateManager.h"
 

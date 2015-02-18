@@ -23,7 +23,7 @@ Version: 0.0.3 06/02/2015.</summary>
 #include "../Framework/Vector4.h"
 #include "../Framework/Light.h"
 #include "Texture.h"
-#include "../Framework/Mesh.h"
+#include "Mesh.h"
 #include "Renderer.h"
 #include "DrawableTexture2D.h"
 #include "DrawableText2D.h"

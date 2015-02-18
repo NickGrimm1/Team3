@@ -80,10 +80,10 @@ time lighting tutorial, uncomment both OBJ_USE_NORMALS and OBJ_USE_TANGENTS_BUMP
 #include <string>
 #include <sstream>
 #include <map>
-
+#include "../Team3Project1/GameStateManager.h"
 #include "Vector3.h"
 #include "Vector2.h"
-#include "Mesh.h"
+#include "../Team3Project1/Mesh.h"
 #include "ChildMeshInterface.h"
 
 #define OBJOBJECT1		"object"	//the current line of the obj file defines the start of a new material
@@ -130,8 +130,8 @@ struct MTLInfo {
 	string bump;
 	string diffuse;
 
-	GLuint bumpNum;
-	GLuint diffuseNum;
+	unsigned int bumpNum;
+	unsigned int diffuseNum;
 
 	MTLInfo() {
 		bumpNum		= 0;
@@ -144,7 +144,11 @@ class OBJMesh : public Mesh, public ChildMeshInterface	{
 public:
 	OBJMesh(void){};
 	OBJMesh(std::string filename){LoadOBJMesh(filename);};
-	~OBJMesh(void){};
+	~OBJMesh(void)
+	{
+		GameStateManager::Assets()->UnloadTexture(this, texturePath);
+		GameStateManager::Assets()->UnloadTexture(this, bumpPath);
+	};
 	bool	LoadOBJMesh(std::string filename);
 
 	virtual void Draw();
@@ -153,6 +157,9 @@ protected:
 	void	SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, MTLInfo>& materials);
 
 	void	FixTextures(MTLInfo &info);
+
+	string texturePath;
+	string bumpPath;
 };
 
 #endif

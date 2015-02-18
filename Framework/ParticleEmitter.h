@@ -43,8 +43,9 @@ _-_-_-_-_-_-_-""  ""
 #include "../Framework/Vector3.h"
 #include "../Framework/Vector4.h"
 #include "../Framework/OGLRenderer.h"
-#include "../Framework/Mesh.h"
+#include "../Team3Project1/Mesh.h"
 #include <vector>
+#include "../Team3Project1/Texture.h"
 
 struct Particle {
 	Vector3 position;
@@ -61,7 +62,7 @@ public:
 
 	virtual void Draw();
 
-	void	SetParticleTexture(GLuint tex)	{ texture = tex; }
+	void	SetParticleTexture(Texture* tex)	{ texture = tex; }
 
 	float	GetParticleRate()				{return particleRate;}
 	void	SetParticleRate(float rate)		{particleRate = rate;}

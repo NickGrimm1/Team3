@@ -202,7 +202,6 @@
     <ClInclude Include="..\Framework\MD5FileData.h" />
     <ClInclude Include="..\Framework\MD5Mesh.h" />
     <ClInclude Include="..\Framework\MD5Node.h" />
-    <ClInclude Include="..\Framework\Mesh.h" />
     <ClInclude Include="..\Framework\Mouse.h" />
     <ClInclude Include="..\Framework\OBJMesh.h" />
     <ClInclude Include="..\Framework\OGLRenderer.h" />
@@ -233,6 +232,7 @@
     <ClInclude Include="LoadedShader.h" />
     <ClInclude Include="LoadedShaderPart.h" />
     <ClInclude Include="LoadedTexture.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="OffsetCamera.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FreeCamera.h" />
@@ -256,6 +256,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Thread.h" />
     <ClInclude Include="UIButton.h" />
+    <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Camera.cpp" />
@@ -268,7 +269,6 @@
     <ClCompile Include="..\Framework\MD5FileData.cpp" />
     <ClCompile Include="..\Framework\MD5Mesh.cpp" />
     <ClCompile Include="..\Framework\MD5Node.cpp" />
-    <ClCompile Include="..\Framework\Mesh.cpp" />
     <ClCompile Include="..\Framework\Mouse.cpp" />
     <ClCompile Include="..\Framework\OBJMesh.cpp" />
     <ClCompile Include="..\Framework\OGLRenderer.cpp" />
@@ -291,6 +291,7 @@
     <ClCompile Include="GraphicsTestScreen.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="OffsetCamera.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />

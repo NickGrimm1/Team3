@@ -7,7 +7,7 @@ Version: 0.0.1 04/02/2015</summary>
 */
 
 #include "Light.h"
-#include "Mesh.h"
+#include "../Team3Project1/Mesh.h"
 #include "OBJMesh.h"
 
 Mesh* PointLight::lightMesh = NULL;//new OBJMesh(MESHDIR"ico.obj");
