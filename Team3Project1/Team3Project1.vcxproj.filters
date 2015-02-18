@@ -396,6 +396,9 @@
     <ClInclude Include="LoadedFont.h">
       <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MutexClass.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">
@@ -521,24 +524,15 @@
     <ClCompile Include="TextureWindows.cpp">
       <Filter>Framework\Resource Manager\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MutexClass.cpp">
+      <Filter>Framework\Common\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Shaders\debugVertex.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\Shaders\debugFragment.glsl">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="..\Shaders\TechFragment.glsl">
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Shaders\TechVertex.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\Shaders\TexturedFragment.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\Shaders\TexturedVertex.glsl">
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\CombineFragment.glsl">
@@ -575,6 +569,18 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\SkyBoxVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\TexturedVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\debugFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\debugVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\TexturedFragment.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
