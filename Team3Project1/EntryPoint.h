@@ -18,6 +18,5 @@ namespace EntryPoint
 		GraphicsTestScreen* game = new GraphicsTestScreen();
 		GameStateManager::Instance()->AddGameScreen(game);
 		GameStateManager::Instance()->Start();
-
 	}
 }

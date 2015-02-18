@@ -40,23 +40,16 @@ Mesh::~Mesh(void)	{
 	delete[]colours;
 }
 
-void Mesh::Draw(bool update)	{
-	if(update) {
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture);
+void Mesh::Draw()	{
 
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, bumpTexture);
+	glBindVertexArray(arrayObject);
+	if(bufferObject[INDEX_BUFFER]) {
+		glDrawElements(type, numIndices, GL_UNSIGNED_INT, 0);
 	}
-
-		glBindVertexArray(arrayObject);
-		if(bufferObject[INDEX_BUFFER]) {
-			glDrawElements(type, numIndices, GL_UNSIGNED_INT, 0);
-		}
-		else{
-			glDrawArrays(type, 0, numVertices);	//Draw the triangle!
-		}
-		glBindVertexArray(0);	
+	else{
+		glDrawArrays(type, 0, numVertices);	//Draw the triangle!
+	}
+	glBindVertexArray(0);	
 }
 
 Mesh* Mesh::GenerateTriangle()	{
@@ -64,9 +57,9 @@ Mesh* Mesh::GenerateTriangle()	{
 	m->numVertices = 3;
 
 	m->vertices = new Vector3[m->numVertices];
-	m->vertices[0] = Vector3(0.0f,	0.5f,	0.0f);
-	m->vertices[1] = Vector3(0.5f,  -0.5f,	0.0f);
-	m->vertices[2] = Vector3(-0.5f, -0.5f,	0.0f);
+	m->vertices[0] = Vector3(0.0f,	5.5f,	0.0f);
+	m->vertices[1] = Vector3(5.5f,  -5.5f,	0.0f);
+	m->vertices[2] = Vector3(-5.5f, -5.5f,	0.0f);
 
 	m->textureCoords = new Vector2[m->numVertices];
 	m->textureCoords[0] = Vector2(0.5f,	0.0f);
@@ -319,7 +312,7 @@ Mesh* Mesh::GenerateCircle(unsigned int subdivs) {
 		alpha += subdiv_angle;
 	}
 
-	m->GenerateTangents();
+	//m->GenerateTangents(); // TODO - set tangents by hand
 
 	m->BufferData(); // copy to graphics memory
 	return m;

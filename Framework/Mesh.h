@@ -39,7 +39,7 @@ public:
 	Mesh(void);
 	virtual ~Mesh(void);
 
-	virtual void Draw(bool update = true);
+	virtual void Draw();
 
 	//Generates a single triangle, with RGB colours
 	static Mesh*	GenerateTriangle();
@@ -73,6 +73,9 @@ public:
 	void	DrawDebugTangents(float length = 5.0f);
 
 	bool	TransformsTexCoords() { return transformCoords;}
+
+	GLuint GetArrayObject() {return arrayObject;}
+	GLuint GetVertexBuffer() {return bufferObject[VERTEX_BUFFER];}
 
 protected:
 	//Buffers all VBO data into graphics memory. Required before drawing!

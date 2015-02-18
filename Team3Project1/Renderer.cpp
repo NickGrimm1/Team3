@@ -91,7 +91,16 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowTex, 0);
 	glDrawBuffer(GL_NONE);
 
-	// TODO - Create Process FBO
+	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
+	glGenTextures(2, postProcessingTex);
+	for (unsigned int i = 0; i < 2; i++) {
+		glBindTexture(GL_TEXTURE_2D, postProcessingTex[i]);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	}
 
 	ambientLightColour = DEFAULT_AMBIENT_LIGHT_COLOUR;
 
@@ -100,8 +109,9 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
-	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); // Skybox sampling
+	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); // cube sampling
 
+	wglMakeCurrent(deviceContext, NULL);
 	init = true;
 }
 
@@ -143,11 +153,14 @@ Renderer::~Renderer(void)
 //Public method to initiate a draw to screen.
 void Renderer::RenderScene() {
 
+	openglMutex.lock_mutex(); // prevent other threads from accessing OpenGL during rendering
+	wglMakeCurrent(deviceContext, renderContext);
+
 	// Main Render
-//	ShadowPass();
+	ShadowPass();
 	DrawScene();
-//	DeferredLightPass();
-//	CombineBuffers();
+	DeferredLightPass();
+	CombineBuffers();
 
 	// Post-Processing
 	//TODO
@@ -156,6 +169,8 @@ void Renderer::RenderScene() {
 //	Draw2DOverlay(); // TODO - Draw HUD first and use stencil to optimise main render pass
 
 	SwapBuffers();
+	wglMakeCurrent(deviceContext, NULL);
+	openglMutex.unlock_mutex();
 }
 
 void Renderer::ToggleDebug(int arg, bool onOff)
@@ -198,8 +213,7 @@ void Renderer::UpdateScene(float msec)
 //Draws Scene to buffer object
 void Renderer::DrawScene()
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-//	glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
 
 	// Use stencil buffer to track unaltered pixels. Use to draw skybox later
 	glEnable(GL_STENCIL_TEST);
@@ -210,12 +224,14 @@ void Renderer::DrawScene()
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	
 	SetCurrentShader(sceneShader);
-	
+//	SetCurrentShader(basicShader);
+
 	// Bind Shader variables
 	viewMatrix = camera->BuildViewMatrix();
 	projMatrix = perspectiveMatrix;
 	UpdateShaderMatrices();
 	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &camera->GetPosition());
+	glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "nodeColour"), 1, (float*) &Vector4(1,1,1,1));
 
 	// Pass any light/shadow data for any lights which generate shadows into the renderer
 	unsigned int shadowCount = 0;
@@ -275,6 +291,10 @@ void Renderer::DrawScene()
 
 		entity.GetMesh()->Draw();
 	}
+
+//	for (unsigned int i = 0; i < lights.size(); i++) {
+//		lights[i]->DrawLightDeferred(camera->GetPosition());
+//	}
 	
 	glUseProgram(0);
 
@@ -288,8 +308,6 @@ void Renderer::DrawScene()
 
 void Renderer::ShadowPass()
 {
-	if (shadowFBO == 0) return; // no shadows
-
 	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
 	glViewport(0, 0, SHADOWSIZE, SHADOWSIZE);
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
@@ -370,14 +388,14 @@ void Renderer::DeferredLightPass()
 
 void Renderer::CombineBuffers() {// merge scene render with lighting pass
 	glDisable(GL_DEPTH_TEST);
-
+	
 	SetCurrentShader(combineShader);
 	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[0], 0); // the final picture
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, gbufferDepthTex, 0); // Stencil buffer from the first pass render
 	
 	// Setup matrices
-	projMatrix = Matrix4::Orthographic(-1,1,1,-1,1,-1);
+	projMatrix = Matrix4::Orthographic(-1,1,1,-1,-1,1);
 	modelMatrix.ToIdentity();
 	viewMatrix.ToIdentity();
 	textureMatrix.ToIdentity();
@@ -407,10 +425,13 @@ void Renderer::CombineBuffers() {// merge scene render with lighting pass
 	screenMesh->Draw(); // Render scene
 	glStencilMask(GL_TRUE);
 
-	DrawSkybox(); // Finally, draw the skybox
+//	DrawSkybox(); // Finally, draw the skybox
 	
 	glEnable(GL_DEPTH_TEST);
 	glUseProgram(0);
+	
+	DrawFrameBufferTex(postProcessingTex[0]);
+	
 }
 
 void Renderer::DrawSkybox() { // Draw skybox only where screen has not previously been written to
@@ -449,8 +470,8 @@ void Renderer::MotionBlurPass()
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 	SetCurrentShader(blurShader);
-	projMatrix = Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
-	viewMatrix.ToIdentity();
+	projMatrix = Matrix4::Orthographic(-1,1,1,-1,-1,1);
+	modelMatrix.ToIdentity();
 	UpdateShaderMatrices();
 
 	glDisable(GL_DEPTH_TEST);
@@ -477,6 +498,28 @@ void Renderer::MotionBlurPass()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glUseProgram(0);
 	glEnable(GL_DEPTH_TEST);
+}
+
+void Renderer::DrawFrameBufferTex(GLuint fboTex) {
+	glDisable(GL_DEPTH_TEST);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0); // draw the result to screen
+	
+	SetCurrentShader(basicShader);
+		
+	glActiveTexture(GL_TEXTURE26);
+	glBindTexture(GL_TEXTURE_2D, fboTex);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 26);
+	
+	projMatrix = Matrix4::Orthographic(-1,1,1,-1,-1,1);
+	modelMatrix.ToIdentity();
+	viewMatrix.ToIdentity();
+	textureMatrix.ToIdentity();
+	UpdateShaderMatrices();
+	screenMesh->Draw();
+
+	glEnable(GL_DEPTH_TEST);
+
+	glUseProgram(0);
 }
 
 void Renderer::Draw2DOverlay() {
@@ -522,16 +565,22 @@ bool Renderer::ActiveTex()
 }
 
 GLuint Renderer::CreateTexture(const char* filename, bool enableMipMaps, bool enableAnisotropicFiltering) {
-	
+	openglMutex.lock_mutex();
+
 	unsigned int flags = false;
 	if (enableMipMaps) flags |= SOIL_FLAG_MIPMAPS;
 	GLuint textureObject = SOIL_load_OGL_texture(filename, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, flags);
 	if (!textureObject)
 		textureObject = 0; // make sure GetTexture will return an error
+
+	openglMutex.unlock_mutex();
+
 	return textureObject;
 }
 
 GLuint Renderer::CreateShadowTexture() {
+	openglMutex.lock_mutex();
+	
 	//Create a shadow texture buffer
 	GLuint shadowTex;
 	glGenTextures(1, &shadowTex);
@@ -541,10 +590,28 @@ GLuint Renderer::CreateShadowTexture() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOWSIZE, SHADOWSIZE, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+	
+	openglMutex.unlock_mutex();
+
 	return shadowTex;
 }
 
 bool Renderer::DestroyTexture(GLuint textureReference) {
+	openglMutex.lock_mutex();
+
 	glDeleteTextures(1, &textureReference);
+	
+	openglMutex.unlock_mutex();
 	return true;
+}
+
+bool Renderer::GetRenderContextForThread() {
+	openglMutex.lock_mutex();
+	return (0 != wglMakeCurrent(deviceContext, renderContext));
+}
+
+bool Renderer::DropRenderContextForThread() {
+	bool result = (0 != wglMakeCurrent(deviceContext, NULL));
+	openglMutex.unlock_mutex(); 
+	return result;
 }

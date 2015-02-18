@@ -59,18 +59,22 @@ public:
 			if (!DebugManager::Initialize(instance->debug))
 				return false;
 			instance->isLoaded = true;
-
-			// Start Threads
-			Instance()->graphics->Start();
-			Instance()->physics->Start();
-			Instance()->input->Start();
 		}
 		return instance->isLoaded;
 	}
 
 	void Start() {
-		while (instance->isRunning)
+		// Start Threads
+		Instance()->graphics->Start();
+		Instance()->physics->Start();
+		Instance()->input->Start();
+
+		while (instance->isRunning) {
 			Window::GetWindow().UpdateWindow();
+			for (unsigned int i = 0; i < gameScreens.size(); i++) {
+				gameScreens[i]->Update();
+			}
+		}
 	}
 
 	void Exit()

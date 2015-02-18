@@ -43,6 +43,9 @@ Version: 0.0.3 06/02/2015.</summary>
 class GraphicsEngine : public Thread
 {
 public:
+	bool GetRenderContext() {return renderer->GetRenderContextForThread();}
+	bool DropRenderContext() {return renderer->DropRenderContextForThread();}
+
 #pragma region Entry/Exit
 	/**
 	<summary>Initializes a graphics engine.</summary>
@@ -113,7 +116,11 @@ public:
 	*/
 	void SetCamera(Camera* cam);
 #pragma endregion	
-	
+
+	PointLight* AddPointLight(Vector3 lightPosition, float lightRadius, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
+	DirectionalLight* AddDirectionalLight(Vector3 lightDirection, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
+	SpotLight* AddSpotLight(Vector3 lightPosition, Vector3 lightTarget, Vector3 upVector, float lightRadius, float lightAngle, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
+		
 	// We don't actually need this since the GSM already holds the reference :)
 	//static GraphicsEngine& GetGraphicsEngine() {return *engine;}
 private:
@@ -144,4 +151,7 @@ private:
 	Vector3 boundingMin, boundingMax; // Defines a bounding box for the VISIBLE scene, built each frame from the nodes that pass frustum culling.
 
 	bool isRunning;
+
+	int width;
+	int height;
 };
