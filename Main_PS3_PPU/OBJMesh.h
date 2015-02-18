@@ -80,14 +80,14 @@ time lighting tutorial, uncomment both OBJ_USE_NORMALS and OBJ_USE_TANGENTS_BUMP
 #include <string>
 #include <sstream>
 #include <map>
-
+#include <vector>
 //#include "Vector3.h"
 //#include "Vector2.h"
 #include <vectormath/cpp/vectormath_aos.h> 
 //Vectormath::Aos::Vector3 vec3(1,2,3);
 
 #include "Mesh.h"
-//#include "ChildMeshInterface.h"
+#include "ChildMeshInterface.h"
 
 #define OBJOBJECT		"object"	//the current line of the obj file defines the start of a new material
 #define OBJMTLLIB		"mtllib"
@@ -110,51 +110,55 @@ time lighting tutorial, uncomment both OBJ_USE_NORMALS and OBJ_USE_TANGENTS_BUMP
 #define MTLBUMPMAP		"map_bump"
 #define MTLBUMPMAPALT	"bump"
 
-
+using namespace std;
 //
 ///*
 //OBJSubMesh structs are used to temporarily keep the data loaded 
 //in from the OBJ files, before being parsed into a series of
 //Meshes
 //*/
-//struct OBJSubMesh {
-//	//std::vector<int> texIndices;
-////	std::vector<int> vertIndices;
-//	//std::vector<int> normIndices;
-//
-//	int indexOffset;
-////	string mtlType;
-////	string mtlSrc;
-//};
-//
-//struct MTLInfo {
-//	//string bump;
-////string diffuse;
-//
-//	//GLuint bumpNum;
-//	//GLuint diffuseNum;
-//
-//	MTLInfo() {
-//	//	bumpNum		= 0;
-//	//	diffuseNum	= 0;
-//	}
-//	//this is all we care about...
-//};
-//
-//class OBJMesh : public Mesh, public ChildMeshInterface	{
-//public:
-//	OBJMesh(void){};
-//	OBJMesh(std::string filename){LoadOBJMesh(filename);};
-//	~OBJMesh(void){};
-//	bool	LoadOBJMesh(std::string filename);
-//
-//	virtual void Draw();
-//
-//protected:
-////	void	SetTexturesFromMTL(string &mtlFile, string &mtlType);
-//
-//	void	FixTextures(MTLInfo &info);
-//
-////	map <string, MTLInfo> materials;
-//};
+struct OBJSubMesh 
+{
+	std::vector<int> texIndices;
+	std::vector<int> vertIndices;
+	std::vector<int> normIndices;
+
+	int indexOffset;
+	string mtlType;
+	string mtlSrc;
+};
+
+struct MTLInfo
+{
+	string bump;
+	string diffuse;
+
+	unsigned int bumpNum;
+	unsigned int diffuseNum;
+
+		MTLInfo()
+		{
+			bumpNum		= 0;
+			diffuseNum	= 0;
+		}
+	//this is all we care about...
+};
+
+class OBJMesh : public Mesh, public ChildMeshInterface	
+{
+public:
+	OBJMesh(void){};
+	OBJMesh(std::string filename){LoadOBJMesh(filename);};
+	~OBJMesh(void){};
+	bool	LoadOBJMesh(std::string filename);
+
+	virtual void Draw();
+
+protected:
+	void	SetTexturesFromMTL(string &mtlFile, string &mtlType);
+
+	void	FixTextures(MTLInfo &info);
+
+	map <string, MTLInfo> materials;
+};
 
