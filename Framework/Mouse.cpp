@@ -33,7 +33,7 @@ void Mouse::Update(RAWINPUT* raw, float msec)
 			// Convert to resolution-independent
 			float newX = mouseMove.x / Window::GetWindow().GetScreenSize().x;
 			float newY = mouseMove.y / Window::GetWindow().GetScreenSize().y;
-			GameStateManager::Instance()->MouseMoved(Vector2(25 * newX, 25 * newY));
+			GameStateManager::Instance()->MouseMoved(Vector2(newX, newY));
 		}
 		// Clamp the current position to bounds
 		position.x = max(position.x, 0.0f);

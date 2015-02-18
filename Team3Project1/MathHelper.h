@@ -47,4 +47,9 @@ namespace MathHelper
 	{
 		return Vector3(Lerp(v1.x, v2.x, amount), Lerp(v1.y, v2.y, amount), Lerp(v1.z, v2.z, amount));
 	}
+
+	float RadiansToDegrees(float radians)
+	{
+		return radians / (2 * PI);
+	}
 };
