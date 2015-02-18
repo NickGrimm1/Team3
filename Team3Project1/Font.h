@@ -4,6 +4,22 @@
 Author: Nick Grimm
 Version: 0.0.1 05/02/2015.</summary>
 */
+#pragma once
+#include "Texture.h"
+
 class Font
 {
+public:
+	Font(unsigned int xCount, unsigned int yCount, Texture* texure = NULL) 
+		: texture(texture), xCount(xCount), yCount(yCount)
+	{ }
+	~Font() { }
+	Texture* GetTexture() { return texture; }
+	void SetTexture(Texture* value) { texture = value; }
+	unsigned int GetXCount() { return xCount; }
+	unsigned int GetYCount() { return yCount; }
+private:
+	Texture* texture;
+	unsigned int xCount;
+	unsigned int yCount;
 };

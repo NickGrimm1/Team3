@@ -41,17 +41,16 @@ public:
 			instance = new GameStateManager();
 			Instance()->isRunning = true;
 
-			if (!GraphicsEngine::Initialize(instance->graphics))
-				return false;
 			if (!AssetManager::Initialize(instance->assets))
 				return false;
+			if (!GraphicsEngine::Initialize(instance->graphics))
+				return false;	
 			if (!PhysicsEngine::Initialize(instance->physics))
 				return false;
 			if (!StorageManager::Initialize(instance->storage))
 				return false;
 			if (!InputManager::Initialize(instance->input))
 				return false;
-
 			if (!AudioEngine::Initialize(instance->audio))
 				return false;
 			if (!NetworkManager::Initialize(instance->network))

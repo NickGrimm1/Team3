@@ -5,8 +5,24 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="PS3_DEBUG|Win32">
+      <Configuration>PS3_DEBUG</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="PS3_RELEASE|Win32">
+      <Configuration>PS3_RELEASE</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="WINDOWS_DEBUG|Win32">
+      <Configuration>WINDOWS_DEBUG</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="WINDOWS_RELEASE|Win32">
+      <Configuration>WINDOWS_RELEASE</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
@@ -21,7 +37,33 @@
     <PlatformToolset>v100</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v100</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='WINDOWS_DEBUG|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v100</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v100</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PS3_RELEASE|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v100</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='WINDOWS_RELEASE|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v100</PlatformToolset>
@@ -34,11 +76,31 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='WINDOWS_DEBUG|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='PS3_RELEASE|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='WINDOWS_RELEASE|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>..\GLEW\include;..\SOIL;..\;$(IncludePath)</IncludePath>
+    <LibraryPath>..\GLEW\lib;..\SOIL\$(Configuration);..\$(Configuration)\;.\Framework\$(Configuration)\;..\GLEW\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|Win32'">
+    <IncludePath>..\GLEW\include;..\SOIL;..\;$(IncludePath)</IncludePath>
+    <LibraryPath>..\GLEW\lib;..\SOIL\$(Configuration);..\$(Configuration)\;.\Framework\$(Configuration)\;..\GLEW\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='WINDOWS_DEBUG|Win32'">
     <IncludePath>..\GLEW\include;..\SOIL;..\;$(IncludePath)</IncludePath>
     <LibraryPath>..\GLEW\lib;..\SOIL\$(Configuration);..\$(Configuration)\;.\Framework\$(Configuration)\;..\GLEW\lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -53,6 +115,30 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions); PS3_BUILD</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='WINDOWS_DEBUG|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions); WINDOWS_BUILD</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -61,6 +147,36 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_PS3DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PS3_RELEASE|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions); PS3_BUILD</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='WINDOWS_RELEASE|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions); WINDOWS_BUILD</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -96,7 +212,6 @@
     <ClInclude Include="..\Framework\SceneNode.h" />
     <ClInclude Include="..\Framework\Shader.h" />
     <ClInclude Include="..\Framework\Spring.h" />
-    <ClInclude Include="..\Framework\Texture.h" />
     <ClInclude Include="..\Framework\Vector2.h" />
     <ClInclude Include="..\Framework\Vector3.h" />
     <ClInclude Include="..\Framework\Vector4.h" />
@@ -113,7 +228,10 @@
     <ClInclude Include="DrawableTexture2D.h" />
     <ClInclude Include="EntryPoint.h" />
     <ClInclude Include="GraphicsTestScreen.h" />
+    <ClInclude Include="LoadedFont.h" />
     <ClInclude Include="LoadedMesh.h" />
+    <ClInclude Include="LoadedShader.h" />
+    <ClInclude Include="LoadedShaderPart.h" />
     <ClInclude Include="LoadedTexture.h" />
     <ClInclude Include="MutexClass.h" />
     <ClInclude Include="OffsetCamera.h" />
@@ -132,9 +250,11 @@
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="SelectableEntity2D.h" />
+    <ClInclude Include="ShaderPart.h" />
     <ClInclude Include="T3Rectangle.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="StorageManager.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Thread.h" />
     <ClInclude Include="UIButton.h" />
   </ItemGroup>
@@ -159,7 +279,6 @@
     <ClCompile Include="..\Framework\SceneNode.cpp" />
     <ClCompile Include="..\Framework\Shader.cpp" />
     <ClCompile Include="..\Framework\Spring.cpp" />
-    <ClCompile Include="..\Framework\Texture.cpp" />
     <ClCompile Include="..\Framework\Weather.cpp" />
     <ClCompile Include="..\Framework\Window.cpp" />
     <ClCompile Include="AssetManager.cpp" />
@@ -178,7 +297,9 @@
     <ClCompile Include="OffsetCamera.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="ShaderPart.cpp" />
     <ClCompile Include="StorageManager.cpp" />
+    <ClCompile Include="TextureWindows.cpp" />
     <ClCompile Include="Thread.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -145,7 +145,7 @@ OGLRenderer::OGLRenderer(Window &window)	{
 
 	window.SetRenderer(this);					//Tell our window about the new renderer! (Which will in turn resize the renderer window to fit...)
 
-	if(!debugDrawingRenderer) {
+	/*if(!debugDrawingRenderer) {
 		debugDrawShader		 = new Shader(SHADERDIR"/DebugVertex.glsl", SHADERDIR"DebugFragment.glsl");
 		orthoDebugData		 = new DebugDrawData();
 		perspectiveDebugData = new DebugDrawData();
@@ -154,7 +154,7 @@ OGLRenderer::OGLRenderer(Window &window)	{
 		if(!debugDrawShader->LinkProgram()) {
 			return;
 		}
-	}
+	}*/
 	init = true;
 }
 
@@ -165,7 +165,7 @@ OGLRenderer::~OGLRenderer(void)	{
 	delete orthoDebugData;
 	delete perspectiveDebugData;
 	delete currentShader;
-	delete debugDrawShader;
+	//delete debugDrawShader;
 	wglDeleteContext(renderContext);
 }
 

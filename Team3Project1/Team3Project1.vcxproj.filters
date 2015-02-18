@@ -216,9 +216,6 @@
     <ClInclude Include="..\Framework\EmptyTexture.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Framework\Texture.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Framework\Frustum.h">
       <Filter>Framework\Graphics\Common\Header</Filter>
     </ClInclude>
@@ -251,9 +248,6 @@
     </ClInclude>
     <ClInclude Include="..\Framework\ChildMeshInterface.h">
       <Filter>Framework\Resource Manager\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\Shader.h">
-      <Filter>Framework\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\common.h">
       <Filter>Framework\Common\Header Files</Filter>
@@ -384,14 +378,26 @@
     <ClInclude Include="GraphicsTestScreen.h">
       <Filter>Game\MainGame\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MutexClass.h">
-      <Filter>Framework\Common\Header Files</Filter>
+    <ClInclude Include="LoadedShader.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadedShaderPart.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderPart.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Shader.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadedFont.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Framework\Texture.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Framework\Frustum.cpp">
       <Filter>Framework\Graphics\Common\Source</Filter>
     </ClCompile>
@@ -418,9 +424,6 @@
     </ClCompile>
     <ClCompile Include="..\Framework\OBJMesh.cpp">
       <Filter>Framework\Resource Manager\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\Shader.cpp">
-      <Filter>Framework\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\Framework\GameTimer.cpp">
       <Filter>Framework\Common\Source Files</Filter>
@@ -509,15 +512,33 @@
     <ClCompile Include="GraphicsTestScreen.cpp">
       <Filter>Game\MainGame\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MutexClass.cpp">
-      <Filter>Framework\Common\Source Files</Filter>
+    <ClCompile Include="..\Framework\Shader.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderPart.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureWindows.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Shaders\debugVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\debugFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
     <None Include="..\Shaders\TechFragment.glsl">
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Shaders\TechVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\TexturedFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\TexturedVertex.glsl">
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\CombineFragment.glsl">
@@ -554,18 +575,6 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\SkyBoxVertex.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\debugVertex.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\debugFragment.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\TexturedFragment.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\TexturedVertex.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

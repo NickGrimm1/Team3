@@ -30,9 +30,15 @@ void GraphicsTestScreen::LoadContent() {
 	
 	ent = new DrawableEntity3D(
 		quad, 
+<<<<<<< HEAD
 		NULL, 
 		new Texture("D:\\Visual Studio 2012\\Projects\\Graphics For Games\\Textures\\Blend Swap\\Grass\\Grass_Color.tga", SOIL_FLAG_MIPMAPS, 0, "diffuseTex"), 
 		new BumpTexture("D:\\Visual Studio 2012\\Projects\\Graphics For Games\\Textures\\Blend Swap\\Grass\\Grass_Normal.tga", SOIL_FLAG_MIPMAPS, 1, "normalTex"),
+=======
+		NULL,
+		GameStateManager::Assets()->LoadTexture(this, "D:\\Visual Studio 2012\\Projects\\Graphics For Games\\Textures\\Blend Swap\\Grass\\Grass_Color.tga"),
+		NULL, 
+>>>>>>> 9d41bd981f6a2453d7c15db5ad2e1f81baaab1a5
 		50.0f, 
 		Vector3(0,0,0), 
 		Quaternion::FromMatrix(Matrix4::Rotation(90.0f, Vector3(-1,0,0))),

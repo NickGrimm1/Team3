@@ -6,7 +6,7 @@ Version: 0.0.5 10/02/2015.</summary>
 */
 #pragma once
 #include "../Framework/Mesh.h"
-#include "../Framework/Texture.h"
+#include "Texture.h"
 
 class DrawableEntity3D
 {
