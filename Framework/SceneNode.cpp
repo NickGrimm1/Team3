@@ -52,6 +52,14 @@ bool SceneNode::CompareByZ(SceneNode* a,SceneNode* b)  {
 }
 
 void SceneNode::Update(float msec)	 {
+	if (sceneElement) {
+		transform = Matrix4::Translation(sceneElement->GetOriginPosition()) * sceneElement->GetRotation().ToMatrix();
+	}
+	else
+	{
+		transform.ToIdentity();
+	}
+
 	if(parent) {
 		worldTransform = parent->worldTransform * transform;
 	}

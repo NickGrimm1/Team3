@@ -82,7 +82,7 @@ protected:
 
 class DirectionalLight : public Light { // Only limited implementation
 public:
-	DirectionalLight(Vector3 dir, Vector4 col, Vector4 spec);
+	DirectionalLight(Vector3 dir, Vector4 col, Vector4 spec, unsigned int shadowTex);
 	virtual Matrix4 GetViewMatrix(Vector3 target);
 	virtual Matrix4 GetProjectionMatrix();
 	virtual void DrawLightDeferred(Vector3 camera_pos);

@@ -48,7 +48,7 @@ public:
 	void			AddChildToParent(DrawableEntity3D* child, DrawableEntity3D* parent);
 	bool			RemoveChild(DrawableEntity3D* toDelete, bool recursive = true, bool removeChildren = true);
 
-	float			GetBoundingRadius() const	{return boundingRadius;} // sceneElement->GetBoundingRadius();}
+	float			GetBoundingRadius() const	{return sceneElement->GetBoundingRadius();}
 	void			SetBoundingRadius(float f)	{boundingRadius = f;}
 
 	float			GetCameraDistance() const	{return distanceFromCamera;}
