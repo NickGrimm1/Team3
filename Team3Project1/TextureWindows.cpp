@@ -12,6 +12,11 @@ Texture::Texture(string filename)
 	}
 }
 
+Texture::~Texture()
+{
+	glDeleteTextures(1, &textureObject);
+}
+
 void Texture::SetRepeating(bool repeat) {
 	repeating = repeat;
 	glBindTexture(GL_TEXTURE_2D, textureObject);

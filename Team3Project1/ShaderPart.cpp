@@ -1,21 +1,50 @@
 #include "ShaderPart.h"
 #include <fstream>
 #include "../Framework/Shader.h"
+#include <stdio.h>
 
-ShaderPart* ShaderPart::LoadShaderFile(string filename, ShaderType::Type type)
-{
 #if WINDOWS_BUILD
+ShaderPart::ShaderPart(string raw, ShaderType::Type type) 
+{
+	shader = glCreateShader(type);
+	const char *chars = raw.c_str();
+	glShaderSource(shader, 1, &chars, NULL);
+	glCompileShader(shader);
+
+	GLint status;
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
+
+	if (status == GL_FALSE)	
+	{
+#if DEBUG
+		printf("Compiling failed!\n");
+		char error[512];
+		glGetInfoLogARB(shader, sizeof(error), NULL, error);
+		cout << error;
+#endif
+		return;
+	}
+#if DEBUG
+	printf("Compiling success!\n\n");
+#endif
+}
+
+string ShaderPart::LoadShaderFile(string filename)
+{
+
 	ifstream file;
 	string temp;
 	string into;
 #if DEBUG
-	printf << "Loading shader text from " << filename << endl << endl;
+	printf("Loading shader text from ");
+	printf(filename.c_str());
+	printf("\n\n");
 #endif
 	file.open(filename.c_str());
 	if(!file.is_open())
 	{
 #if DEBUG
-		printf << "File does not exist!" << endl;
+	printf("File does not exist!\n");
 #endif
 		return NULL;
 	}
@@ -26,32 +55,11 @@ ShaderPart* ShaderPart::LoadShaderFile(string filename, ShaderType::Type type)
 	}
 	file.close();
 #if DEBUG
-	cout << "Loaded shader text!" << endl << endl;
+	printf("Loaded shader text!\n");
 
-	cout << "Compiling Shader..." << endl;
+	printf("Compiling Shader...\n");
 #endif
 
-	GLuint shader = glCreateShader(type);
-	const char *chars = into.c_str();
-	glShaderSource(shader, 1, &chars, NULL);
-	glCompileShader(shader);
-
-	GLint status;
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
-
-	if (status == GL_FALSE)	
-	{
-#if DEBUG
-		cout << "Compiling failed!" << endl;
-		char error[512];
-		glGetInfoLogARB(shader, sizeof(error), NULL, error);
-		cout << error;
-#endif
-		return NULL;
-	}
-#if DEBUG
-	cout << "Compiling success!" << endl << endl;
-#endif
-	return new ShaderPart(shader);
-#endif
+	return into;
 }
+#endif

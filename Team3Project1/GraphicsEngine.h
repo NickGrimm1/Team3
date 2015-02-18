@@ -53,6 +53,10 @@ public:
 	<returns>true if a Graphics Engine is initialized and ready.</returns>
 	*/
 	static bool Initialize(GraphicsEngine*& out);
+	static bool LoadContent()
+	{
+		return engine->renderer->LoadShaders();
+	}
 	/**
 	<summary>Destroys the graphics engine. Allows the game to exit cleanly.</summary>
 	<returns>true if the graphics engine has exited.</returns>

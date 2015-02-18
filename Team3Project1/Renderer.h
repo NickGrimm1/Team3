@@ -64,6 +64,7 @@ public:
 	bool			GetRenderContextForThread();
 	bool			DropRenderContextForThread();
 
+	bool LoadShaders();
 protected:
 	//Rendering pipeline components.
 	void			DrawScene();

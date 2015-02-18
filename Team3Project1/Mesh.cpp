@@ -32,11 +32,16 @@ void Mesh::Draw(bool update)
 #if WINDOWS_BUILD
 	if(update) 
 	{
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture->GetTextureName());
-
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, bumpTexture->GetTextureName());
+		if (texture)
+		{
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, texture->GetTextureName());
+		}
+		if (bumpTexture)
+		{
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D, bumpTexture->GetTextureName());
+		}
 	}
 
 	glBindVertexArray(arrayObject);
@@ -53,18 +58,18 @@ void	Mesh::BufferData()
 {
 	glBindVertexArray(arrayObject);
 
+	// Buffer Vertices
+	glGenBuffers(1, &bufferObject[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, bufferObject[0]);
+	glBufferData(GL_ARRAY_BUFFER, numVertices * sizeof(Vertex), vertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+
 	// Set Vertex attributes
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0); // Position
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Vector3))); // Normal
 	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Vector3) + sizeof(Vector3))); // Color
 	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Vector3) + sizeof(Vector3) + sizeof(Vector4))); // TexCoord
 	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Vector3) + sizeof(Vector3) + sizeof(Vector4) + sizeof(Vector2))); // Tangent
-
-	// Buffer Vertices
-	glGenBuffers(1, &bufferObject[0]);
-	glBindBuffer(GL_ARRAY_BUFFER, bufferObject[0]);
-	glBufferData(GL_ARRAY_BUFFER, numVertices * sizeof(Vertex), vertices, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
 
 	// Buffer Indices
 	if(indices) 

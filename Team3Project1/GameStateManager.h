@@ -45,6 +45,8 @@ public:
 				return false;
 			if (!GraphicsEngine::Initialize(instance->graphics))
 				return false;	
+			if (!GraphicsEngine::LoadContent())
+				return false;	
 			if (!PhysicsEngine::Initialize(instance->physics))
 				return false;
 			if (!StorageManager::Initialize(instance->storage))

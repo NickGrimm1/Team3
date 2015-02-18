@@ -17,17 +17,7 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	quad	= Mesh::GenerateQuad();
 	screenMesh = quad;
 
-	//Shader initialisations go here.
-	basicShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
-	sceneShader	= GameStateManager::Assets()->LoadShader(this, SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl");
-	shadowShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl");
-	lightingShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl");
-	skyBoxShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl");
-	combineShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
-	particleShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
-
-	if (!LoadCheck())
-		return;
+	
 
 	// Setup projection matrices - gonna just keep copies of the matrices rather than keep recreating them
 	perspectiveMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float) width / (float) height, 45.0f);
@@ -114,6 +104,20 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 
 	wglMakeCurrent(deviceContext, NULL);
 	init = true;
+}
+
+bool Renderer::LoadShaders()
+{
+	//Shader initialisations go here.
+	basicShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
+	sceneShader	= GameStateManager::Assets()->LoadShader(this, SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl");
+	shadowShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl");
+	lightingShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl");
+	skyBoxShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl");
+	combineShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
+	particleShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
+
+	return LoadCheck();
 }
 
 Renderer::~Renderer(void)
@@ -424,7 +428,7 @@ void Renderer::CombineBuffers() {// merge scene render with lighting pass
 	glBindTexture(GL_TEXTURE_2D, lightSpecularTex);
 
 	glStencilMask(GL_FALSE); // Keep the stencil intact for drawing the skybox
-	screenMesh->Draw(); // Render scene
+	screenMesh->Draw(false); // Render scene
 	glStencilMask(GL_TRUE);
 
 //	DrawSkybox(); // Finally, draw the skybox

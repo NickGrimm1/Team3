@@ -184,7 +184,7 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 		}
 		else{
 #if DEBUG
-			printf << "OBJMesh::LoadOBJMesh Unknown file data:" << currentLine << std::endl;
+			printf ("OBJMesh::LoadOBJMesh Unknown file data:", currentLine, "\n");
 #endif
 		}
 	}

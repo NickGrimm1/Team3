@@ -23,9 +23,11 @@ namespace ShaderType
 {
 	enum Type
 	{
-		VERTEX = 0,
-		FRAGMENT = 1,
-		GEOMETRY = 2,
+#if WINDOWS_BUILD
+		VERTEX = GL_VERTEX_SHADER,
+		FRAGMENT = GL_FRAGMENT_SHADER,
+		GEOMETRY = GL_GEOMETRY_SHADER,
+#endif
 	};
 }
 

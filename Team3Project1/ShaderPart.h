@@ -10,14 +10,15 @@ class ShaderPart
 {
 public:
 #if WINDOWS_BUILD
-	ShaderPart(GLuint shader) : shader(shader)
-	{
-	}
+	ShaderPart(string raw, ShaderType::Type type);
 	~ShaderPart()
 	{
 		glDeleteShader(shader);
 	}
 	GLuint shader;
 #endif
-	static ShaderPart* LoadShaderFile(string filename, ShaderType::Type type);
+	static string LoadShaderFile(string filename);
+private:
+	ShaderPart(const ShaderPart& in);
+	ShaderPart operator=(const ShaderPart& in);
 };

@@ -121,7 +121,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions); PS3_BUILD</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions); PS3_BUILD; DEBUG</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -133,7 +133,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions); WINDOWS_BUILD</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions); WINDOWS_BUILD; DEBUG</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -233,6 +233,7 @@
     <ClInclude Include="LoadedShader.h" />
     <ClInclude Include="LoadedShaderPart.h" />
     <ClInclude Include="LoadedTexture.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="MutexClass.h" />
     <ClInclude Include="OffsetCamera.h" />
     <ClInclude Include="Font.h" />
@@ -269,7 +270,6 @@
     <ClCompile Include="..\Framework\MD5FileData.cpp" />
     <ClCompile Include="..\Framework\MD5Mesh.cpp" />
     <ClCompile Include="..\Framework\MD5Node.cpp" />
-    <ClCompile Include="..\Framework\Mesh.cpp" />
     <ClCompile Include="..\Framework\Mouse.cpp" />
     <ClCompile Include="..\Framework\OBJMesh.cpp" />
     <ClCompile Include="..\Framework\OGLRenderer.cpp" />
@@ -292,6 +292,7 @@
     <ClCompile Include="GraphicsTestScreen.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MutexClass.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="OffsetCamera.cpp" />
