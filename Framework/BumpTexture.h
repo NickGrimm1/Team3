@@ -12,7 +12,7 @@ Version: 0.0.1 04/02/2015</summary>
 
 class BumpTexture : public Texture {
 public:
-	BumpTexture(const char* filename, unsigned int flags, GLenum textUnit, std::string shaderMapping) : Texture(filename, flags, textUnit, shaderMapping) {}
+	/*BumpTexture(const char* filename, unsigned int flags, GLenum textUnit, std::string shaderMapping) : Texture(filename, flags, textUnit, shaderMapping) {} // TODO - FIX!
 	~BumpTexture() {}
 
 	virtual void BindTexture(bool set_texture_unit) {
@@ -24,5 +24,5 @@ public:
 			glActiveTexture(GL_TEXTURE0 + textureUnit);
 			glBindTexture(GL_TEXTURE_2D, textureObject);
 		}
-	}
+	}*/
 };

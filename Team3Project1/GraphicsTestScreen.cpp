@@ -26,16 +26,13 @@ void GraphicsTestScreen::LoadContent() {
 	Mesh* coneMesh = Mesh::GenerateCone(20);
 	quad = Mesh::GenerateQuad();
 	cylinder = Mesh::GenerateCylinder(20);
-	cout << "Quad Obj = " << quad->GetVertexBuffer() << endl;
+	//cout << "Quad Obj = " << quad->GetVertexBuffer() << endl;
 	
 	ent = new DrawableEntity3D(
 		quad, 
 		NULL, 
-		new Texture("D:\\Visual Studio 2012\\Projects\\Graphics For Games\\Textures\\Blend Swap\\Grass\\Grass_Color.tga", SOIL_FLAG_MIPMAPS, 0, "diffuseTex"), 
-		new BumpTexture("D:\\Visual Studio 2012\\Projects\\Graphics For Games\\Textures\\Blend Swap\\Grass\\Grass_Normal.tga", SOIL_FLAG_MIPMAPS, 1, "normalTex"),
-		NULL,
-		GameStateManager::Assets()->LoadTexture(this, "D:\\Visual Studio 2012\\Projects\\Graphics For Games\\Textures\\Blend Swap\\Grass\\Grass_Color.tga"),
-		NULL, 
+		GameStateManager::Assets()->LoadTexture(this, "D:\\Visual Studio 2012\\Projects\\Graphics For Games\\Textures\\Blend Swap\\Grass\\Grass_Color.tga"), 
+		GameStateManager::Assets()->LoadTexture(this, "D:\\Visual Studio 2012\\Projects\\Graphics For Games\\Textures\\Blend Swap\\Grass\\Grass_Normal.tga"),
 		50.0f, 
 		Vector3(0,0,0), 
 		Quaternion::FromMatrix(Matrix4::Rotation(90.0f, Vector3(-1,0,0))),
@@ -45,8 +42,8 @@ void GraphicsTestScreen::LoadContent() {
 
 	ent = new DrawableEntity3D(
 		cylinder, 
-		NULL, 
-		new Texture("D:\\Visual Studio 2012\\Projects\\Graphics For Games\\Textures\\calvin.bmp", SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y, 0, "diffuseTex"), 
+		NULL,
+		GameStateManager::Assets()->LoadTexture(this, "D:\\Visual Studio 2012\\Projects\\Graphics For Games\\Textures\\calvin.bmp"), 
 		NULL,
 		10.0f, 
 		Vector3(5,0,5), 
@@ -57,10 +54,10 @@ void GraphicsTestScreen::LoadContent() {
 	GameStateManager::Graphics()->AddDrawable(ent);
 
 	
-	cout << "Cone Mesh Obj = " << coneMesh->GetVertexBuffer() << endl;
+	//cout << "Cone Mesh Obj = " << coneMesh->GetVertexBuffer() << endl;
 	SpotLight::SetConeMesh(coneMesh);
 	Mesh* circleMesh = Mesh::GenerateCircle(20);
-	cout << "Circle Mesh Obj = " << circleMesh->GetVertexBuffer() << endl;
+	//cout << "Circle Mesh Obj = " << circleMesh->GetVertexBuffer() << endl;
 	SpotLight::SetCircleMesh(Mesh::GenerateCircle(20));
 	Mesh* sphereMesh = new OBJMesh(MESHDIR"sphere.obj");
 	PointLight::SetMesh(sphereMesh);
