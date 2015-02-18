@@ -29,7 +29,7 @@ public:
 	*/
 	GameScreen(float x = 0.0f, float y = 0.0f, float width = 1.0f, float height = 1.0f) : T3Rectangle(x, y, width, height)
 	{ }
-	virtual ~GameScreen();
+	virtual ~GameScreen() {};
 	
 	bool IsInputEnabled() { return inputEnabled; }
 	void setInputEnabled(bool value) { inputEnabled = value; }
@@ -51,7 +51,7 @@ public:
 	<param name='start'>The start of the scroll.</param>
 	<param name='finish'>The end of the scroll.</param>
 	*/
-	virtual void Scroll(Vector2& start, Vector2& finish);
+	virtual void Scroll(Vector2& start, Vector2& finish) {};
 	/**
 	<summary>Loads assets and performs initial logic for setting up the screen.</summary>
 	*/

@@ -41,17 +41,16 @@ public:
 			instance = new GameStateManager();
 			Instance()->isRunning = true;
 
-			if (!GraphicsEngine::Initialize(instance->graphics))
-				return false;
 			if (!AssetManager::Initialize(instance->assets))
 				return false;
+			if (!GraphicsEngine::Initialize(instance->graphics))
+				return false;	
 			if (!PhysicsEngine::Initialize(instance->physics))
 				return false;
 			if (!StorageManager::Initialize(instance->storage))
 				return false;
 			if (!InputManager::Initialize(instance->input))
 				return false;
-
 			if (!AudioEngine::Initialize(instance->audio))
 				return false;
 			if (!NetworkManager::Initialize(instance->network))
@@ -59,27 +58,34 @@ public:
 			if (!DebugManager::Initialize(instance->debug))
 				return false;
 			instance->isLoaded = true;
-
-			// Start Threads
-			Instance()->graphics->Start();
-			Instance()->physics->Start();
-			Instance()->input->Start();
-
-			while (instance->isRunning)
-				Window::GetWindow().UpdateWindow();
-
-			// Clean up
-			Instance()->graphics->Join();
-			Instance()->physics->Join();
-			Instance()->input->Join();
 		}
 		return instance->isLoaded;
 	}
+
+	void Start() {
+		// Start Threads
+		Instance()->graphics->Start();
+		Instance()->physics->Start();
+		Instance()->input->Start();
+
+		while (instance->isRunning) {
+			Window::GetWindow().UpdateWindow();
+			for (unsigned int i = 0; i < gameScreens.size(); i++) {
+				gameScreens[i]->Update();
+			}
+		}
+	}
+
 	void Exit()
 	{
 		graphics->Terminate();
 		physics->Terminate();
 		input->Terminate();
+
+		// Clean up
+		graphics->Join();
+		physics->Join();
+		input->Join();
 
 		// Destroy everything
 		GraphicsEngine::Destroy();

@@ -33,7 +33,7 @@ _-_-_-_-_-_-_-""  ""
 #include "light.h"
 
 #include "Shader.h"
-#include "Mesh.h"
+#include "../Team3Project1/Mesh.h"
 
 using std::vector;
 

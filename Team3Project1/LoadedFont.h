@@ -1,16 +1,16 @@
 #pragma once
-#include "Mesh.h"
+#include "Font.h"
 #include <vector>
 
 using namespace std;
 
-class LoadedMesh
+class LoadedFont
 {
 public:
-	LoadedMesh(Mesh* mesh = NULL, void* callerID = NULL) : mesh(mesh)
+	LoadedFont(Font* font = NULL, void* callerID = NULL) : font(font)
 	{
 		callerIDs.push_back(callerID);
 	}
-	Mesh* mesh;
+	Font* font;
 	vector<void*> callerIDs;
 };

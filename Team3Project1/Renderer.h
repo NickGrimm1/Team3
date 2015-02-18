@@ -12,12 +12,13 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "../Framework/Frustum.h"
 #include "../Framework/SceneNode.h"
 #include "../Framework/Light.h"
-#include "../Framework/Texture.h"
+#include "Texture.h"
 #include "../Framework/OGLRenderer.h"
 #include "../Framework/Weather.h"
 #include "../Framework/Camera.h"
-#include "../Framework/Mesh.h"
+#include "Mesh.h"
 #include "DrawableEntity2D.h"
+#include "MutexClass.h"
 
 #include <vector>
 
@@ -44,6 +45,8 @@ public:
 	Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>& sceneNodesVec, vector<DrawableEntity2D*>& overlayVec);
 	~Renderer(void);
 
+	void			SetCamera(Camera* cam) {camera = cam;};
+
 	void			RenderScene();
 	virtual void	UpdateScene(float msec);
 	void			ToggleDebug(int arg, bool onOff);
@@ -58,6 +61,9 @@ public:
 	Vector4			GetAmbientColour() const {return ambientLightColour;}
 	void			SetAmbientColour(Vector4& colour) {ambientLightColour = colour;}
 
+	bool			GetRenderContextForThread();
+	bool			DropRenderContextForThread();
+
 protected:
 	//Rendering pipeline components.
 	void			DrawScene();
@@ -67,6 +73,7 @@ protected:
 	void			DrawSkybox();
 	void			BloomPass();
 	void			MotionBlurPass();
+	void			DrawFrameBufferTex(GLuint fboTex);
 	void			Draw2DOverlay();
 
 	void			GenerateScreenTexture(GLuint &into, bool depth = false);
@@ -124,4 +131,6 @@ protected:
 	Vector4			ambientLightColour; // The scenes ambient light settings
 
 	Mesh*			screenMesh;			// A quad mesh for drawing screen filling textures
+
+	MutexClass		openglMutex;		// Prevents different threads for using OpenGL at same time	
 };

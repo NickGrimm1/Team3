@@ -21,7 +21,7 @@ _-_-_-_-_-_-_-""  ""
 #ifdef WEEK_2_CODE
 #pragma once
 
-#include "Mesh.h"
+#include "../Team3Project1/Mesh.h"
 #include <vector>
 
 class ChildMeshInterface	{

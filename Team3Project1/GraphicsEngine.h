@@ -22,8 +22,8 @@ Version: 0.0.3 06/02/2015.</summary>
 #include "../Framework/Vector3.h"
 #include "../Framework/Vector4.h"
 #include "../Framework/Light.h"
-#include "../Framework/Texture.h"
-#include "../Framework/Mesh.h"
+#include "Texture.h"
+#include "Mesh.h"
 #include "Renderer.h"
 #include "DrawableTexture2D.h"
 #include "DrawableText2D.h"
@@ -43,6 +43,9 @@ Version: 0.0.3 06/02/2015.</summary>
 class GraphicsEngine : public Thread
 {
 public:
+	bool GetRenderContext() {return renderer->GetRenderContextForThread();}
+	bool DropRenderContext() {return renderer->DropRenderContextForThread();}
+
 #pragma region Entry/Exit
 	/**
 	<summary>Initializes a graphics engine.</summary>
@@ -111,9 +114,13 @@ public:
 	<summary>Sets the camera for the scene.</summary>
     <param name="camera">The camera.</param>
 	*/
-	void SetCamera(Camera* camera);
+	void SetCamera(Camera* cam);
 #pragma endregion	
-	
+
+	PointLight* AddPointLight(Vector3 lightPosition, float lightRadius, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
+	DirectionalLight* AddDirectionalLight(Vector3 lightDirection, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
+	SpotLight* AddSpotLight(Vector3 lightPosition, Vector3 lightTarget, Vector3 upVector, float lightRadius, float lightAngle, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
+		
 	// We don't actually need this since the GSM already holds the reference :)
 	//static GraphicsEngine& GetGraphicsEngine() {return *engine;}
 private:
@@ -144,4 +151,7 @@ private:
 	Vector3 boundingMin, boundingMax; // Defines a bounding box for the VISIBLE scene, built each frame from the nodes that pass frustum culling.
 
 	bool isRunning;
+
+	int width;
+	int height;
 };

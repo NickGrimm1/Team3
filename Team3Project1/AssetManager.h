@@ -15,10 +15,11 @@ Version: 0.0.1 03/02/2015.</summary>
 #pragma once
 #include <vector>
 #include <map>
-//#include "Font.h"
-#include "../Framework/Shader.h"
+#include "LoadedFont.h"
+#include "LoadedShader.h"
 #include "LoadedTexture.h"
 #include "LoadedMesh.h"
+#include "LoadedShaderPart.h"
 
 using namespace std;
 
@@ -39,14 +40,14 @@ public:
 	Texture* LoadTexture(void* callerID, string filePath);
 	void UnloadTexture(void* callerID, string filePath);
 
-	//Font* LoadFont(void* callerID, string filePath);
-	//void UnloadFont(void* callerID, string filePath);
+	Font* LoadFont(void* callerID, string filePath, unsigned int xCount, unsigned int yCount);
+	void UnloadFont(void* callerID, string filePath);
 
 	Mesh* LoadMesh(void* callerID, string filePath);
 	void UnloadMesh(void* callerID, string filePath);
 
-	//Shader* LoadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath = "");
-	//void UnloadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath = "");
+	Shader* LoadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath = "");
+	void UnloadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath = "");
 
 	// Generate Heightmap
 	// Load audio
@@ -60,11 +61,9 @@ private:
 	static AssetManager* instance;
 	
 	map<string, LoadedTexture> loadedTextures;
-	//map<string, map<Font*, vector<void*>>> loadedFonts;
+	map<string, LoadedFont> loadedFonts;
 	map<string, LoadedMesh> loadedMeshes;
 
-	map<string, map<unsigned int, vector<void*>>> loadedVertexShaders;
-	map<string, map<unsigned int, vector<void*>>> loadedFragmentShaders;
-	map<string, map<unsigned int, vector<void*>>> loadedGeometryShaders;
-	map<string, map<Shader*, vector<void*>>> loadedShaders;
+	map<string, LoadedShaderPart> loadedShaderParts;
+	map<string, LoadedShader> loadedShaders;
 };

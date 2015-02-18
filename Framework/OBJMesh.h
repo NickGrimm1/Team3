@@ -71,7 +71,7 @@ time lighting tutorial, uncomment both OBJ_USE_NORMALS and OBJ_USE_TANGENTS_BUMP
 
 //New! 
 
-#define OBJ_FIX_TEXTURES
+//#define OBJ_FIX_TEXTURES
 
 
 #pragma once
@@ -80,13 +80,14 @@ time lighting tutorial, uncomment both OBJ_USE_NORMALS and OBJ_USE_TANGENTS_BUMP
 #include <string>
 #include <sstream>
 #include <map>
-
+#include "../Team3Project1/GameStateManager.h"
 #include "Vector3.h"
 #include "Vector2.h"
-#include "Mesh.h"
+#include "../Team3Project1/Mesh.h"
 #include "ChildMeshInterface.h"
 
-#define OBJOBJECT		"object"	//the current line of the obj file defines the start of a new material
+#define OBJOBJECT1		"object"	//the current line of the obj file defines the start of a new material
+#define OBJOBJECT2		"o"
 #define OBJMTLLIB		"mtllib"
 #define OBJUSEMTL		"usemtl"	//the current line of the obj file defines the start of a new material
 #define OBJMESH			"g"			//the current line of the obj file defines the start of a new face
@@ -95,6 +96,7 @@ time lighting tutorial, uncomment both OBJ_USE_NORMALS and OBJ_USE_TANGENTS_BUMP
 #define OBJTEX			"vt"		//the current line of the obj file defines texture coordinates
 #define OBJNORM			"vn"		//the current line of the obj file defines a normal
 #define OBJFACE			"f"			//the current line of the obj file defines a face
+#define OBJSMOOTHSHADE	"s"			//the current line of the obj file defines whether smooth shading across polygons is enabled - TODO
 
 #define MTLNEW			"newmtl"
 #define MTLDIFFUSE		"Kd"
@@ -128,8 +130,8 @@ struct MTLInfo {
 	string bump;
 	string diffuse;
 
-	GLuint bumpNum;
-	GLuint diffuseNum;
+	unsigned int bumpNum;
+	unsigned int diffuseNum;
 
 	MTLInfo() {
 		bumpNum		= 0;
@@ -142,17 +144,22 @@ class OBJMesh : public Mesh, public ChildMeshInterface	{
 public:
 	OBJMesh(void){};
 	OBJMesh(std::string filename){LoadOBJMesh(filename);};
-	~OBJMesh(void){};
+	~OBJMesh(void)
+	{
+		GameStateManager::Assets()->UnloadTexture(this, texturePath);
+		GameStateManager::Assets()->UnloadTexture(this, bumpPath);
+	};
 	bool	LoadOBJMesh(std::string filename);
 
 	virtual void Draw();
 
 protected:
-	void	SetTexturesFromMTL(string &mtlFile, string &mtlType);
+	void	SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, MTLInfo>& materials);
 
 	void	FixTextures(MTLInfo &info);
 
-	map <string, MTLInfo> materials;
+	string texturePath;
+	string bumpPath;
 };
 
 #endif

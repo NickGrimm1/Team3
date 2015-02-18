@@ -63,7 +63,7 @@ than performing everything on the GPU.
 #include "Vector3.h"
 #include "Vector2.h"
 
-#include "Mesh.h"
+#include "../Team3Project1/Mesh.h"
 #include "MD5Anim.h"
 #include "MD5FileData.h"
 

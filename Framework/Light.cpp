@@ -7,7 +7,7 @@ Version: 0.0.1 04/02/2015</summary>
 */
 
 #include "Light.h"
-#include "Mesh.h"
+#include "../Team3Project1/Mesh.h"
 #include "OBJMesh.h"
 
 Mesh* PointLight::lightMesh = NULL;//new OBJMesh(MESHDIR"ico.obj");
@@ -127,7 +127,7 @@ Matrix4 PointLight::GetProjectionMatrix() {
 	return Matrix4::Perspective(1.0f, radius, 1, 45.0f);
 }
 
-DirectionalLight::DirectionalLight(Vector3 dir, Vector4 col, Vector4 spec) {
+DirectionalLight::DirectionalLight(Vector3 dir, Vector4 col, Vector4 spec, unsigned int shadowTex) {
 	type = DIRECTIONAL_LIGHT_TYPE;
 	position = Vector3(0,0,0);
 	direction = dir;
@@ -135,6 +135,7 @@ DirectionalLight::DirectionalLight(Vector3 dir, Vector4 col, Vector4 spec) {
 	specularColour = spec;
 	radius = 0; 
 	angle = 0;
+	shadowTexID = shadowTex;
 }
 
 // TODO: Check these & assign
@@ -211,7 +212,8 @@ void SpotLight::DrawLightDeferred(Vector3 camera_pos) {
 						Matrix4::Scale(Vector3(cone_base_radius, radius, cone_base_radius)); 
 	glUniformMatrix4fv(glGetUniformLocation(shaderObject, "modelMatrix"), 1, false, (float*) &transform);
 
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
+	glDisable(GL_CULL_FACE);
 	if (IsInSpotlight(camera_pos, this)) {
 	// camera is inside the light volume!
 		//cout << "in spotlight" << endl;

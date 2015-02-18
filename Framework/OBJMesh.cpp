@@ -1,5 +1,5 @@
 #include "OBJMesh.h"
-#ifdef WEEK_2_CODE
+#include "../Team3Project1/GameStateManager.h"
 /*
 OBJ files look generally something like this:
 
@@ -34,6 +34,11 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 	std::vector<Vector3>inputVertices;
 	std::vector<Vector3>inputNormals;
 
+	/* 
+	Stores the loaded in materials
+	*/
+	map <string, MTLInfo> materials;
+
 	/*
 	SubMeshes temporarily get kept in here
 	*/
@@ -50,10 +55,17 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 		f >> currentLine;
 
 		if(currentLine == OBJCOMMENT) {		//This line is a comment, ignore it
+			getline(f, currentLine);
 			continue;
+		}
+		else if(currentLine == OBJSMOOTHSHADE) {
+			getline(f, currentLine);
+			continue; // TODO - implement
 		}
 		else if(currentLine == OBJMTLLIB) {
 			f >> currentMtlLib;
+			getline(f, currentLine); // handle file name with spaces
+			currentMtlLib.append(currentLine);
 		}
 		else if(currentLine == OBJUSEMTL) {
 			currentMesh = new OBJSubMesh();
@@ -65,12 +77,13 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 
 			currentMesh->mtlType = currentMtlType;
 		}
-		else if(currentLine == OBJMESH || currentLine == OBJOBJECT) {	//This line is a submesh!
+		else if(currentLine == OBJMESH || currentLine == OBJOBJECT1 || currentLine == OBJOBJECT2) {	//This line is a submesh!
 			currentMesh = new OBJSubMesh();
 			inputSubMeshes.push_back(currentMesh);
 
 			currentMesh->mtlSrc = currentMtlLib;
 			currentMesh->mtlType = currentMtlType;
+			getline(f, currentLine); // TODO - maybe save obj name
 		}
 		else if(currentLine == OBJVERT) {	//This line is a vertex
 			Vector3 vertex;
@@ -170,7 +183,9 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 			}
 		}
 		else{
-			std::cout << "OBJMesh::LoadOBJMesh Unknown file data:" << currentLine << std::endl;
+#if DEBUG
+			printf << "OBJMesh::LoadOBJMesh Unknown file data:" << currentLine << std::endl;
+#endif
 		}
 	}
 
@@ -199,37 +214,35 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 				m = new OBJMesh();
 			}
 
-			m->SetTexturesFromMTL(sm->mtlSrc, sm->mtlType);
+			m->SetTexturesFromMTL(sm->mtlSrc, sm->mtlType, materials);
 
 			m->numVertices	= sm->vertIndices.size();
 
-			m->vertices		= new Vector3[m->numVertices];
-			for(unsigned int j = 0; j < sm->vertIndices.size(); ++j) {
-				m->vertices[j] = inputVertices[sm->vertIndices[j]-1];
+			m->vertices	= new Vertex[m->numVertices];
+			for(unsigned int j = 0; j < sm->vertIndices.size(); ++j)
+			{
+				m->vertices[j] = inputVertices[sm->vertIndices[j] - 1];
 			}
 
-			if(!sm->texIndices.empty())	{
-				m->textureCoords	= new Vector2[m->numVertices];
-				for(unsigned int j = 0; j < sm->texIndices.size(); ++j) {
-					m->textureCoords[j] = inputTexCoords[sm->texIndices[j]-1];
+			if(!sm->texIndices.empty())	
+			{
+				for(unsigned int j = 0; j < sm->texIndices.size(); ++j) 
+				{
+					m->vertices[j].texCoord = inputTexCoords[sm->texIndices[j] - 1];
 				}
 			}
 
-#ifdef OBJ_USE_NORMALS
 			if(sm->normIndices.empty()) {
 				m->GenerateNormals();
 			}
-			else{
-				m->normals		= new Vector3[m->numVertices];
-
+			else
+			{
 				for(unsigned int j = 0; j < sm->normIndices.size(); ++j) {
-					m->normals[j] = inputNormals[sm->normIndices[j]-1];
+					m->vertices[j].normal = inputNormals[sm->normIndices[j]-1];
 				}
 			}
-#endif
-#ifdef OBJ_USE_TANGENTS_BUMPMAPS
+
 			m->GenerateTangents();
-#endif
 
 			m->BufferData();
 
@@ -253,30 +266,31 @@ all of the children of 'this' will be drawn
 */
 void OBJMesh::Draw() {
 	Mesh::Draw();
+
 	for(unsigned int i = 0; i < children.size(); ++i) {
 		children.at(i)->Draw();
 	}
 };
 
-void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType) {
+void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, MTLInfo>& materials) {
 	if(mtlType.empty() || mtlFile.empty()) {
 		return;
 	}
 
-	map <string, MTLInfo>::iterator i = materials.find(mtlType);
+	if (materials.size() > 0) {
+		map <string, MTLInfo>::iterator i = materials.find(mtlType);
+		if(i != materials.end()) {
+			if(!i->second.diffuse.empty())	{
+				
+			}
 
-	if(i != materials.end()) {
-		if(!i->second.diffuse.empty())	{
-			texture = i->second.diffuseNum;
+			if(!i->second.bump.empty())	{
+	//TODO			bumpTexture = i->second.bumpNum;
+			}
+
+			return;
 		}
-
-		if(!i->second.bump.empty())	{
-			bumpTexture = i->second.bumpNum;
-		}
-
-		return;
 	}
-
 	std::ifstream f(string(MESHDIR + mtlFile).c_str(),std::ios::in);
 
 	if(!f) {//Oh dear, it can't find the file :(
@@ -310,8 +324,11 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType) {
 		}
 		else if(currentLine == MTLDIFFUSEMAP) {
 			f >> currentMTL.diffuse;
+			currentLine.clear();
+			getline(f, currentLine); // handle file name with spaces
+			currentMTL.diffuse.append(currentLine);
 
-			if(currentMTL.diffuse.find_last_of('/') != string::npos) {
+/*			if(currentMTL.diffuse.find_last_of('/') != string::npos) {
 				int at = currentMTL.diffuse.find_last_of('/');
 				currentMTL.diffuse = currentMTL.diffuse.substr(at+1);
 			}
@@ -319,10 +336,7 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType) {
 				int at = currentMTL.diffuse.find_last_of('\\');
 				currentMTL.diffuse = currentMTL.diffuse.substr(at+1);
 			}
-
-			if(!currentMTL.diffuse.empty()) {
-				currentMTL.diffuseNum = SOIL_load_OGL_texture(string(TEXTUREDIR + currentMTL.diffuse).c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y | SOIL_FLAG_TEXTURE_REPEATS);
-			}
+			*/
 		}
 		else if(currentLine == MTLBUMPMAP || currentLine == MTLBUMPMAPALT) {
 			f >> currentMTL.bump;
@@ -335,10 +349,6 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType) {
 				int at = currentMTL.bump.find_last_of('\\');
 				currentMTL.bump = currentMTL.bump.substr(at+1);
 			}
-
-			if(!currentMTL.bump.empty()) {
-				currentMTL.bumpNum = SOIL_load_OGL_texture(string(TEXTUREDIR + currentMTL.bump).c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y | SOIL_FLAG_TEXTURE_REPEATS);
-			}
 		}
 	}
 
@@ -349,7 +359,24 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType) {
 	materials.insert(std::make_pair(currentMTLName,currentMTL));
 
 	
-	SetTexturesFromMTL(mtlFile,mtlType);
+//	SetTexturesFromMTL(mtlFile,mtlType, materials);
+	// Recheck if material has been loaded - if not, does not exist
+	if (materials.size() > 0) {
+		map <string, MTLInfo>::iterator i = materials.find(mtlType);
+		if(i != materials.end()) {
+			if(!i->second.diffuse.empty())	{
+				texture = GameStateManager::Assets()->LoadTexture(this, string(TEXTUREDIR + currentMTL.diffuse));
+				texturePath = string(TEXTUREDIR + currentMTL.diffuse);
+			}
+
+			if(!i->second.bump.empty())	{
+				bumpTexture = GameStateManager::Assets()->LoadTexture(this, string(TEXTUREDIR + currentMTL.bump));
+				bumpPath = string(TEXTUREDIR + currentMTL.bump);
+			}
+
+			return;
+		}
+	}
 }
 
 /*
@@ -372,4 +399,3 @@ void	OBJMesh::FixTextures(MTLInfo &info) {
 		info.bumpNum = SOIL_load_OGL_texture(string(TEXTUREDIR + info.bump).c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y |  SOIL_FLAG_TEXTURE_REPEATS);
 	}
 }
-#endif
