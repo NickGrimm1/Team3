@@ -21,7 +21,7 @@ GraphicsTestScreen::~GraphicsTestScreen(void)
 
 void GraphicsTestScreen::LoadContent() {
 	//Mesh* coneMesh = Mesh::GenerateCone(20);
-	quad = Mesh::GenerateQuad();
+	quad = GameStateManager::Assets()->LoadCylinder(this, 20);
 	//cylinder = Mesh::GenerateCylinder(20);
 	//cout << "Quad Obj = " << quad->GetVertexBuffer() << endl;
 	

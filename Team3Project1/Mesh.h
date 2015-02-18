@@ -36,7 +36,7 @@ public:
 	//Generates a single white quad, going from 0 to 1 on the x and y axis.
 	static Mesh* GenerateQuadAlt();
 	//Generates a single white quad, going from -0.5 to 0.5 on the x and y axis.
-	Mesh* Mesh::GenerateQuadCentral();
+	static Mesh* Mesh::GenerateQuadCentral();
 	//Generates a coloured quad, going from -1 to 1 on the x and z axis, with adjustable texture coords.
 	static Mesh* GenerateQuadTexCoordCol(Vector2 scale, Vector2 texCoord, Vector4 colour); //NX 01/11/2012
 	// Generates Circle/Cone/Cylinder meshes with subdivs segments to approximate curvature

@@ -27,14 +27,7 @@ class AssetManager
 {
 	// TODO: Implement Asset Manager.
 public:
-	static bool Initialize(AssetManager*& out) 
-	{ 
-		if (instance == NULL)
-			instance = new AssetManager();
-
-		out = instance;
-		return true; 
-	}
+	static bool Initialize(AssetManager*& out);
 	static void Destroy();
 
 	Texture* LoadTexture(void* callerID, string filePath);
@@ -45,6 +38,35 @@ public:
 
 	Mesh* LoadMesh(void* callerID, string filePath);
 	void UnloadMesh(void* callerID, string filePath);
+
+	//Generates a single triangle, with RGB colours
+	Mesh* LoadTriangle(void* callerID);
+	//Generates a single white quad, going from -1 to 1 on the x and y axis.
+	Mesh* LoadQuad(void* callerID);
+	//Generates a single white quad, going from 0 to 1 on the x and y axis.
+	Mesh* LoadQuadAlt(void* callerID);
+	//Generates a single white quad, going from -0.5 to 0.5 on the x and y axis.
+	Mesh* LoadQuadCentral(void* callerID);
+	//Generates a coloured quad, going from -1 to 1 on the x and z axis, with adjustable texture coords.
+	Mesh* LoadQuadTexCoordCol(void* callerID, Vector2 scale, Vector2 texCoord, Vector4 colour); //NX 01/11/2012
+	// Generates Circle/Cone/Cylinder meshes with subdivs segments to approximate curvature
+	Mesh* LoadCircle(void* callerID, unsigned int subdivs);
+	Mesh* LoadCone(void* callerID, unsigned int subdivs);
+	Mesh* LoadCylinder(void* callerID, unsigned int subdivs);
+	//Generates a single triangle, with RGB colours
+	void UnloadTriangle(void* callerID);
+	//Generates a single white quad, going from -1 to 1 on the x and y axis.
+	void UnloadQuad(void* callerID);
+	//Generates a single white quad, going from 0 to 1 on the x and y axis.
+	void UnloadQuadAlt(void* callerID);
+	//Generates a single white quad, going from -0.5 to 0.5 on the x and y axis.
+	void UnloadQuadCentral(void* callerID);
+	//Generates a coloured quad, going from -1 to 1 on the x and z axis, with adjustable texture coords.
+	void UnloadQuadTexCoordCol(void* callerID, Vector2 scale, Vector2 texCoord, Vector4 colour); //NX 01/11/2012
+	// Generates Circle/Cone/Cylinder meshes with subdivs segments to approximate curvature
+	void UnloadCircle(void* callerID, unsigned int subdivs);
+	void UnloadCone(void* callerID, unsigned int subdivs);
+	void UnloadCylinder(void* callerID, unsigned int subdivs);
 
 	Shader* LoadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath = "");
 	void UnloadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath = "");
@@ -66,4 +88,23 @@ private:
 
 	map<string, LoadedShaderPart> loadedShaderParts;
 	map<string, LoadedShader> loadedShaders;
+
+	Mesh* triangle;
+	Mesh* quad;
+	Mesh* quadAlt;
+	Mesh* quadCentral;
+	Mesh* quadTexCoordCol;
+	Mesh* circle;
+	Mesh* cone;
+	Mesh* cylinder;
+
+	vector<void*> triangleUsers;
+	vector<void*> quadUsers;
+	vector<void*> quadAltUsers;
+	vector<void*> quadCentralUsers;
+	vector<void*> quadTexCoordColUsers;
+	
+	map<unsigned int, LoadedMesh> circleUsers;
+	map<unsigned int, LoadedMesh> coneUsers;
+	map<unsigned int, LoadedMesh> cylinderUsers;
 };

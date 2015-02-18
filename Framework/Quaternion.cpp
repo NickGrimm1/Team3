@@ -1,5 +1,4 @@
 #include "Quaternion.h"
-#include "../Team3Project1/MathHelper.h"
 
 Quaternion::Quaternion(void)
 {
@@ -156,16 +155,16 @@ Vector3 Quaternion::GetEulerAngles()
 	{
 		return Vector3(
 			0, // Pitch
-			MathHelper::RadiansToDegrees(2 * atan2(x, w)),// Yaw
-			MathHelper::RadiansToDegrees(PI / 2)// Roll
+			RadToDeg(2 * atan2(x, w)),// Yaw
+			RadToDeg(PI / 2)// Roll
 			);
 	}
 	if (abs(gimbalTest + 0.5f) < 0.00001f) // Due South
 	{
 		return Vector3(
 			0, // Pitch
-			MathHelper::RadiansToDegrees(-2 * atan2(x, w)),// Yaw
-			MathHelper::RadiansToDegrees(-PI / 2)// Roll
+			RadToDeg(-2 * atan2(x, w)),// Yaw
+			RadToDeg(-PI / 2)// Roll
 			);
 	}
 
@@ -174,8 +173,8 @@ Vector3 Quaternion::GetEulerAngles()
 	float zSq = z * z;
 
 	return Vector3(
-		MathHelper::RadiansToDegrees(atan2(2 * x * w - 2 * y * z, 1 - 2 * xSq - 2 * zSq)), // Pitch
-		MathHelper::RadiansToDegrees(atan2(2 * x * y - 2 * x * z, 1 - 2 * ySq - 2 * zSq)), // Yaw
-		MathHelper::RadiansToDegrees(asin(2 * x * y + 2 * z * w)) // Roll
+		RadToDeg(atan2(2 * x * w - 2 * y * z, 1 - 2 * xSq - 2 * zSq)), // Pitch
+		RadToDeg(atan2(2 * x * y - 2 * x * z, 1 - 2 * ySq - 2 * zSq)), // Yaw
+		RadToDeg(asin(2 * x * y + 2 * z * w)) // Roll
 		);
 }

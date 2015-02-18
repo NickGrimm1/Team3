@@ -393,9 +393,6 @@
     <ClInclude Include="LoadedFont.h">
       <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Framework\Mesh.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MutexClass.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>

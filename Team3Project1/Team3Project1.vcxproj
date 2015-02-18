@@ -202,7 +202,6 @@
     <ClInclude Include="..\Framework\MD5FileData.h" />
     <ClInclude Include="..\Framework\MD5Mesh.h" />
     <ClInclude Include="..\Framework\MD5Node.h" />
-    <ClInclude Include="..\Framework\Mesh.h" />
     <ClInclude Include="..\Framework\Mouse.h" />
     <ClInclude Include="..\Framework\OBJMesh.h" />
     <ClInclude Include="..\Framework\OGLRenderer.h" />

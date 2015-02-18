@@ -5,6 +5,24 @@
 
 AssetManager* AssetManager::instance = NULL;
 
+
+bool AssetManager::Initialize(AssetManager*& out) 
+{ 
+	if (instance == NULL)
+		instance = new AssetManager();
+
+	instance->triangle = NULL;
+	instance->quad = NULL;
+	instance->quadAlt = NULL;
+	instance->quadCentral = NULL;
+	instance->quadTexCoordCol = NULL;
+	instance->circle = NULL;
+	instance->cone = NULL;
+	instance->cylinder = NULL;
+
+	out = instance;
+	return true; 
+}
 void AssetManager::Destroy()
 {
 	GameStateManager::Graphics()->GetRenderContext();
@@ -151,6 +169,404 @@ void AssetManager::UnloadMesh(void* callerID, string filePath)
 		delete loadedMeshes[filePath].mesh;
 		GameStateManager::Graphics()->DropRenderContext();
 		i = loadedMeshes.erase(i);
+	}
+}
+
+//Generates a single triangle, with RGB colours
+Mesh* AssetManager::LoadTriangle(void* callerID)
+{
+	// Check if this mesh is already loaded...
+	if (triangle)
+	{
+		for (unsigned int i = 0; i < triangleUsers.size(); i++)
+		{
+			if (triangleUsers[i] == callerID)
+				return triangle; // It has, simply return
+		}
+		triangleUsers.push_back(callerID); // It hasn't, add this caller, then return.
+		return triangle;
+	}
+	else
+	{
+		GameStateManager::Graphics()->GetRenderContext();
+		triangle = Mesh::GenerateTriangle();
+		GameStateManager::Graphics()->DropRenderContext();
+		triangleUsers.push_back(callerID);
+		return triangle;
+	}
+}
+//Generates a single white quad, going from -1 to 1 on the x and y axis.
+Mesh* AssetManager::LoadQuad(void* callerID)
+{
+	// Check if this mesh is already loaded...
+	if (quad)
+	{
+		for (unsigned int i = 0; i < quadUsers.size(); i++)
+		{
+			if (quadUsers[i] == callerID)
+				return quad; // It has, simply return
+		}
+		quadUsers.push_back(callerID); // It hasn't, add this caller, then return.
+		return quad;
+	}
+	else
+	{
+		GameStateManager::Graphics()->GetRenderContext();
+		quad = Mesh::GenerateQuad();
+		GameStateManager::Graphics()->DropRenderContext();
+		quadUsers.push_back(callerID);
+		return quad;
+	}
+}
+//Generates a single white quad, going from 0 to 1 on the x and y axis.
+Mesh* AssetManager::LoadQuadAlt(void* callerID)
+{
+	// Check if this mesh is already loaded...
+	if (quadAlt)
+	{
+		for (unsigned int i = 0; i < quadAltUsers.size(); i++)
+		{
+			if (quadAltUsers[i] == callerID)
+				return quadAlt; // It has, simply return
+		}
+		quadAltUsers.push_back(callerID); // It hasn't, add this caller, then return.
+		return quadAlt;
+	}
+	else
+	{
+		GameStateManager::Graphics()->GetRenderContext();
+		quadAlt = Mesh::GenerateQuadAlt();
+		GameStateManager::Graphics()->DropRenderContext();
+		quadAltUsers.push_back(callerID);
+		return quadAlt;
+	}
+}
+//Generates a single white quad, going from -0.5 to 0.5 on the x and y axis.
+Mesh* AssetManager::LoadQuadCentral(void* callerID)
+{
+	// Check if this mesh is already loaded...
+	if (quadCentral)
+	{
+		for (unsigned int i = 0; i < quadCentralUsers.size(); i++)
+		{
+			if (quadCentralUsers[i] == callerID)
+				return quadCentral; // It has, simply return
+		}
+		quadCentralUsers.push_back(callerID); // It hasn't, add this caller, then return.
+		return quadCentral;
+	}
+	else
+	{
+		GameStateManager::Graphics()->GetRenderContext();
+		quadCentral = Mesh::GenerateQuadCentral();
+		GameStateManager::Graphics()->DropRenderContext();
+		quadCentralUsers.push_back(callerID);
+		return quadCentral;
+	}
+}
+//Generates a coloured quad, going from -1 to 1 on the x and z axis, with adjustable texture coords.
+Mesh* AssetManager::LoadQuadTexCoordCol(void* callerID, Vector2 scale, Vector2 texCoord, Vector4 colour)
+{
+	// Check if this mesh is already loaded...
+	if (quadTexCoordCol)
+	{
+		for (unsigned int i = 0; i < quadTexCoordColUsers.size(); i++)
+		{
+			if (quadTexCoordColUsers[i] == callerID)
+				return quadTexCoordCol; // It has, simply return
+		}
+		quadTexCoordColUsers.push_back(callerID); // It hasn't, add this caller, then return.
+		return quadTexCoordCol;
+	}
+	else
+	{
+		GameStateManager::Graphics()->GetRenderContext();
+		quadTexCoordCol = Mesh::GenerateQuad();
+		GameStateManager::Graphics()->DropRenderContext();
+		quadTexCoordColUsers.push_back(callerID);
+		return quadTexCoordCol;
+	}
+}
+// Generates Circle/Cone/Cylinder meshes with subdivs segments to approximate curvature
+Mesh* AssetManager::LoadCircle(void* callerID, unsigned int subdivs)
+{
+	// Check if this mesh is already loaded
+	map<unsigned int, LoadedMesh>::iterator i = circleUsers.find(subdivs);
+	if (i != circleUsers.end())
+	{
+		// Check if this caller already has this mesh loaded
+		for (unsigned int j = 0; j < circleUsers[subdivs].callerIDs.size(); j++)
+		{
+			if (circleUsers[subdivs].callerIDs[j] == callerID)
+				return circleUsers[subdivs].mesh; // It has, simply return
+		}
+		circleUsers[subdivs].callerIDs.push_back(callerID); // It hasn't, add this caller, then return.
+		return circleUsers[subdivs].mesh;
+	}
+	else
+	{
+		// Load this mesh in...
+		GameStateManager::Graphics()->GetRenderContext();
+		circleUsers.insert(pair<unsigned int, LoadedMesh>(subdivs, LoadedMesh(Mesh::GenerateCircle(subdivs), callerID)));
+		GameStateManager::Graphics()->DropRenderContext();
+		return circleUsers[subdivs].mesh;
+	}
+}
+Mesh* AssetManager::LoadCone(void* callerID, unsigned int subdivs)
+{
+	// Check if this mesh is already loaded
+	map<unsigned int, LoadedMesh>::iterator i = coneUsers.find(subdivs);
+	if (i != coneUsers.end())
+	{
+		// Check if this caller already has this mesh loaded
+		for (unsigned int j = 0; j < coneUsers[subdivs].callerIDs.size(); j++)
+		{
+			if (coneUsers[subdivs].callerIDs[j] == callerID)
+				return coneUsers[subdivs].mesh; // It has, simply return
+		}
+		coneUsers[subdivs].callerIDs.push_back(callerID); // It hasn't, add this caller, then return.
+		return coneUsers[subdivs].mesh;
+	}
+	else
+	{
+		// Load this mesh in...
+		GameStateManager::Graphics()->GetRenderContext();
+		coneUsers.insert(pair<unsigned int, LoadedMesh>(subdivs, LoadedMesh(Mesh::GenerateCone(subdivs), callerID)));
+		GameStateManager::Graphics()->DropRenderContext();
+		return coneUsers[subdivs].mesh;
+	}
+}
+Mesh* AssetManager::LoadCylinder(void* callerID, unsigned int subdivs)
+{
+	// Check if this mesh is already loaded
+	map<unsigned int, LoadedMesh>::iterator i = cylinderUsers.find(subdivs);
+	if (i != cylinderUsers.end())
+	{
+		// Check if this caller already has this mesh loaded
+		for (unsigned int j = 0; j < cylinderUsers[subdivs].callerIDs.size(); j++)
+		{
+			if (cylinderUsers[subdivs].callerIDs[j] == callerID)
+				return cylinderUsers[subdivs].mesh; // It has, simply return
+		}
+		cylinderUsers[subdivs].callerIDs.push_back(callerID); // It hasn't, add this caller, then return.
+		return cylinderUsers[subdivs].mesh;
+	}
+	else
+	{
+		// Load this mesh in...
+		GameStateManager::Graphics()->GetRenderContext();
+		cylinderUsers.insert(pair<unsigned int, LoadedMesh>(subdivs, LoadedMesh(Mesh::GenerateCone(subdivs), callerID)));
+		GameStateManager::Graphics()->DropRenderContext();
+		return cylinderUsers[subdivs].mesh;
+	}
+}
+//Generates a single triangle, with RGB colours
+void AssetManager::UnloadTriangle(void* callerID)
+{
+	// Check if this mesh is actually loaded...
+	if (!triangle)
+		return; // This texture does not exist, ignore.
+
+	// This mesh does exist. Remove the caller from the list of owners.
+	for (vector<void*>::iterator i = triangleUsers.begin(); i != triangleUsers.end(); i++)
+	{
+		if (*i == callerID)
+		{
+			i = triangleUsers.erase(i);
+			break;
+		}
+	}
+
+	// No owners left? delete
+	if (triangleUsers.size() == 0)
+	{
+		GameStateManager::Graphics()->GetRenderContext();
+		delete triangle;
+		triangle = NULL;
+		GameStateManager::Graphics()->DropRenderContext();
+	}
+}
+//Generates a single white quad, going from -1 to 1 on the x and y axis.
+void AssetManager::UnloadQuad(void* callerID)
+{
+	// Check if this mesh is actually loaded...
+	if (!quad)
+		return; // This texture does not exist, ignore.
+
+	// This mesh does exist. Remove the caller from the list of owners.
+	for (vector<void*>::iterator i = quadUsers.begin(); i != quadUsers.end(); i++)
+	{
+		if (*i == callerID)
+		{
+			i = quadUsers.erase(i);
+			break;
+		}
+	}
+
+	// No owners left? delete
+	if (quadUsers.size() == 0)
+	{
+		GameStateManager::Graphics()->GetRenderContext();
+		delete quad;
+		quad = NULL;
+		GameStateManager::Graphics()->DropRenderContext();
+	}
+}
+//Generates a single white quad, going from 0 to 1 on the x and y axis.
+void AssetManager::UnloadQuadAlt(void* callerID)
+{
+	// Check if this mesh is actually loaded...
+	if (!quadAlt)
+		return; // This texture does not exist, ignore.
+
+	// This mesh does exist. Remove the caller from the list of owners.
+	for (vector<void*>::iterator i = quadAltUsers.begin(); i != quadAltUsers.end(); i++)
+	{
+		if (*i == callerID)
+		{
+			i = quadAltUsers.erase(i);
+			break;
+		}
+	}
+
+	// No owners left? delete
+	if (quadAltUsers.size() == 0)
+	{
+		GameStateManager::Graphics()->GetRenderContext();
+		delete quadAlt;
+		quadAlt = NULL;
+		GameStateManager::Graphics()->DropRenderContext();
+	}
+}
+//Generates a single white quad, going from -0.5 to 0.5 on the x and y axis.
+void AssetManager::UnloadQuadCentral(void* callerID)
+{
+	// Check if this mesh is actually loaded...
+	if (!quadCentral)
+		return; // This texture does not exist, ignore.
+
+	// This mesh does exist. Remove the caller from the list of owners.
+	for (vector<void*>::iterator i = quadCentralUsers.begin(); i != quadCentralUsers.end(); i++)
+	{
+		if (*i == callerID)
+		{
+			i = quadCentralUsers.erase(i);
+			break;
+		}
+	}
+
+	// No owners left? delete
+	if (quadCentralUsers.size() == 0)
+	{
+		GameStateManager::Graphics()->GetRenderContext();
+		delete quadCentral;
+		quadCentral = NULL;
+		GameStateManager::Graphics()->DropRenderContext();
+	}
+}
+//Generates a coloured quad, going from -1 to 1 on the x and z axis, with adjustable texture coords.
+void AssetManager::UnloadQuadTexCoordCol(void* callerID, Vector2 scale, Vector2 texCoord, Vector4 colour)
+{
+	// Check if this mesh is actually loaded...
+	if (!quadTexCoordCol)
+		return; // This texture does not exist, ignore.
+
+	// This mesh does exist. Remove the caller from the list of owners.
+	for (vector<void*>::iterator i = quadTexCoordColUsers.begin(); i != quadTexCoordColUsers.end(); i++)
+	{
+		if (*i == callerID)
+		{
+			i = quadTexCoordColUsers.erase(i);
+			break;
+		}
+	}
+
+	// No owners left? delete
+	if (quadTexCoordColUsers.size() == 0)
+	{
+		GameStateManager::Graphics()->GetRenderContext();
+		delete quadTexCoordCol;
+		quadTexCoordCol = NULL;
+		GameStateManager::Graphics()->DropRenderContext();
+	}
+}
+// Generates Circle/Cone/Cylinder meshes with subdivs segments to approximate curvature
+void AssetManager::UnloadCircle(void* callerID, unsigned int subdivs)
+{
+	// Check if this mesh is actually loaded...
+	map<unsigned int, LoadedMesh>::iterator i = circleUsers.find(subdivs);
+	if (i == circleUsers.end())
+		return; // This texture does not exist, ignore.
+
+	// This mesh does exist. Remove the caller from the list of owners.
+	for (vector<void*>::iterator i = circleUsers[subdivs].callerIDs.begin(); i != circleUsers[subdivs].callerIDs.end(); i++)
+	{
+		if (*i == callerID)
+		{
+			i = circleUsers[subdivs].callerIDs.erase(i);
+			break;
+		}
+	}
+
+	// No owners left? delete
+	if (circleUsers[subdivs].callerIDs.size() == 0)
+	{
+		GameStateManager::Graphics()->GetRenderContext();
+		delete circleUsers[subdivs].mesh;
+		GameStateManager::Graphics()->DropRenderContext();
+		i = circleUsers.erase(i);
+	}
+}
+void AssetManager::UnloadCone(void* callerID, unsigned int subdivs)
+{
+	// Check if this mesh is actually loaded...
+	map<unsigned int, LoadedMesh>::iterator i = coneUsers.find(subdivs);
+	if (i == coneUsers.end())
+		return; // This texture does not exist, ignore.
+
+	// This mesh does exist. Remove the caller from the list of owners.
+	for (vector<void*>::iterator i = coneUsers[subdivs].callerIDs.begin(); i != coneUsers[subdivs].callerIDs.end(); i++)
+	{
+		if (*i == callerID)
+		{
+			i = coneUsers[subdivs].callerIDs.erase(i);
+			break;
+		}
+	}
+
+	// No owners left? delete
+	if (coneUsers[subdivs].callerIDs.size() == 0)
+	{
+		GameStateManager::Graphics()->GetRenderContext();
+		delete coneUsers[subdivs].mesh;
+		GameStateManager::Graphics()->DropRenderContext();
+		i = coneUsers.erase(i);
+	}
+}
+void AssetManager::UnloadCylinder(void* callerID, unsigned int subdivs)
+{
+	// Check if this mesh is actually loaded...
+	map<unsigned int, LoadedMesh>::iterator i = cylinderUsers.find(subdivs);
+	if (i == cylinderUsers.end())
+		return; // This texture does not exist, ignore.
+
+	// This mesh does exist. Remove the caller from the list of owners.
+	for (vector<void*>::iterator i = cylinderUsers[subdivs].callerIDs.begin(); i != cylinderUsers[subdivs].callerIDs.end(); i++)
+	{
+		if (*i == callerID)
+		{
+			i = cylinderUsers[subdivs].callerIDs.erase(i);
+			break;
+		}
+	}
+
+	// No owners left? delete
+	if (cylinderUsers[subdivs].callerIDs.size() == 0)
+	{
+		GameStateManager::Graphics()->GetRenderContext();
+		delete cylinderUsers[subdivs].mesh;
+		GameStateManager::Graphics()->DropRenderContext();
+		i = cylinderUsers.erase(i);
 	}
 }
 
