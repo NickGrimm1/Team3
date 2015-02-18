@@ -34,8 +34,7 @@ void GraphicsTestScreen::LoadContent() {
 		Vector3(0,0,0), 
 		Quaternion::FromMatrix(Matrix4::Rotation(90.0f, Vector3(-1,0,0))),
 		Vector3(50,50,50));
-	drawables.push_back(ent);
-	GameStateManager::Graphics()->AddDrawable(ent);
+	AddDrawable(ent);
 
 	/*ent = new DrawableEntity3D(
 		cylinder, 

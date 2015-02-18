@@ -47,7 +47,7 @@ public:
 	bool ChangeLightRadius(unsigned int lightReference, float newLightRadius);
 	bool ChangeLightAngle(unsigned int lightReference, float newLightAngle);
 	bool ChangeLightTarget(unsigned int lightReference, Vector3 newLightTarget, Vector3 newUpVector);*/
-protected:
+private:
 	DrawableEntity3D* player;
 	vector<DrawableEntity3D*> drawables;
 	vector<Light*> lights;
