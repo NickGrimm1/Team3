@@ -244,6 +244,7 @@ public:
 	*/
 	static void ChangeScreen(GameScreen* gameScreen)
 	{
+		gameScreen->LoadContent();
 		Instance()->gameScreens.clear();
 		Instance()->gameScreens.push_back(gameScreen);
 	}
@@ -253,6 +254,7 @@ public:
 	*/
 	static void AddGameScreen(GameScreen* gameScreen)
 	{
+		gameScreen->LoadContent();
 		Instance()->gameScreens.push_back(gameScreen);
 	}
 	/**

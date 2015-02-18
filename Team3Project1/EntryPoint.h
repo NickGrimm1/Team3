@@ -15,8 +15,8 @@ namespace EntryPoint
 	{
 		// TODO: Get a new gameScreen up for splash/menu etc.
 
-		//GraphicsTestScreen* game = new GraphicsTestScreen();
-		//GameStateManager::Instance()->AddGameScreen(game);
-		//GameStateManager::Instance()->Start();
+		GraphicsTestScreen* game = new GraphicsTestScreen();
+		GameStateManager::Instance()->AddGameScreen(game);
+		GameStateManager::Instance()->Start();
 	}
 }

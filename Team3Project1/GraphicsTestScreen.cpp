@@ -11,9 +11,6 @@
 
 GraphicsTestScreen::GraphicsTestScreen(void)
 {
-	GameStateManager::Graphics()->GetRenderContext();
-	LoadContent(); // TODO - I assume the asset manager will call this automatically
-	GameStateManager::Graphics()->DropRenderContext();
 }
 
 GraphicsTestScreen::~GraphicsTestScreen(void)
@@ -23,16 +20,16 @@ GraphicsTestScreen::~GraphicsTestScreen(void)
 }
 
 void GraphicsTestScreen::LoadContent() {
-	Mesh* coneMesh = Mesh::GenerateCone(20);
+	//Mesh* coneMesh = Mesh::GenerateCone(20);
 	quad = Mesh::GenerateQuad();
-	cylinder = Mesh::GenerateCylinder(20);
+	//cylinder = Mesh::GenerateCylinder(20);
 	//cout << "Quad Obj = " << quad->GetVertexBuffer() << endl;
 	
 	ent = new DrawableEntity3D(
 		quad, 
-		NULL, 
-		GameStateManager::Assets()->LoadTexture(this, "D:\\Visual Studio 2012\\Projects\\Graphics For Games\\Textures\\Blend Swap\\Grass\\Grass_Color.tga"), 
-		GameStateManager::Assets()->LoadTexture(this, "D:\\Visual Studio 2012\\Projects\\Graphics For Games\\Textures\\Blend Swap\\Grass\\Grass_Normal.tga"),
+		NULL,
+		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"snowflake.png"), 
+		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"snowflake.png"),
 		50.0f, 
 		Vector3(0,0,0), 
 		Quaternion::FromMatrix(Matrix4::Rotation(90.0f, Vector3(-1,0,0))),
@@ -40,7 +37,7 @@ void GraphicsTestScreen::LoadContent() {
 	drawables.push_back(ent);
 	GameStateManager::Graphics()->AddDrawable(ent);
 
-	ent = new DrawableEntity3D(
+	/*ent = new DrawableEntity3D(
 		cylinder, 
 		NULL,
 		GameStateManager::Assets()->LoadTexture(this, "D:\\Visual Studio 2012\\Projects\\Graphics For Games\\Textures\\calvin.bmp"), 
@@ -51,19 +48,19 @@ void GraphicsTestScreen::LoadContent() {
 		Vector3(2,10,2));
 
 	drawables.push_back(ent);
-	GameStateManager::Graphics()->AddDrawable(ent);
+	GameStateManager::Graphics()->AddDrawable(ent);*/
 
 	
 	//cout << "Cone Mesh Obj = " << coneMesh->GetVertexBuffer() << endl;
-	SpotLight::SetConeMesh(coneMesh);
-	Mesh* circleMesh = Mesh::GenerateCircle(20);
+	//SpotLight::SetConeMesh(coneMesh);
+	//Mesh* circleMesh = Mesh::GenerateCircle(20);
 	//cout << "Circle Mesh Obj = " << circleMesh->GetVertexBuffer() << endl;
-	SpotLight::SetCircleMesh(Mesh::GenerateCircle(20));
-	Mesh* sphereMesh = new OBJMesh(MESHDIR"sphere.obj");
-	PointLight::SetMesh(sphereMesh);
+	//SpotLight::SetCircleMesh(Mesh::GenerateCircle(20));
+	//Mesh* sphereMesh = new OBJMesh(MESHDIR"sphere.obj");
+	//PointLight::SetMesh(sphereMesh);
 
 
-	light = GameStateManager::Graphics()->AddSpotLight(Vector3(0, 0, 0), Vector3(0,1,0), Vector3(1,0,0), 1.0f, 45.0f, Vector4(1,1,1,1), Vector4(1,1,1,1), false);
+	//light = GameStateManager::Graphics()->AddSpotLight(Vector3(0, 0, 0), Vector3(0,1,0), Vector3(1,0,0), 1.0f, 45.0f, Vector4(1,1,1,1), Vector4(1,1,1,1), false);
 	
 	//PointLight* l = GameStateManager::Graphics()->AddPointLight(Vector3(0,5,0), 10, Vector4(1,1,1,1), Vector4(1,1,1,1), false); 
 
