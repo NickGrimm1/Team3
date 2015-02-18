@@ -165,3 +165,9 @@ Framework/nclgl.vcxproj.filters
 *.exe.*
 Debug\*.obj
 Release\*.obj
+*\Debug\*.obj
+*\Release\*.obj
+*\PS3_DEBUG\*.obj
+*\PS3_RELEASE\*.obj
+*\WINDOWS_DEBUG\*.obj
+*\WINDOWS_RELEASE\*.obj
