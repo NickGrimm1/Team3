@@ -292,6 +292,7 @@ void Renderer::DrawScene()
 		entity.GetMesh()->Draw();
 	}
 
+	// Test deferred lights
 //	for (unsigned int i = 0; i < lights.size(); i++) {
 //		lights[i]->DrawLightDeferred(camera->GetPosition());
 //	}
