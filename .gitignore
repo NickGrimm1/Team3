@@ -14,6 +14,7 @@ build/
 [Oo]bj/
 Team3Project1/Debug
 Team3Project1/Release
+[Dd]oc/
 
 # Enable "build/" folder in the NuGet Packages folder since NuGet packages use it for MSBuild targets
 !packages/*/build/
