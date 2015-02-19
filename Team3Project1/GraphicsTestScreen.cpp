@@ -16,6 +16,7 @@ GraphicsTestScreen::GraphicsTestScreen(void)
 GraphicsTestScreen::~GraphicsTestScreen(void)
 {
 	delete quad;
+	delete cylinder;
 	delete light;
 }
 
@@ -37,9 +38,9 @@ void GraphicsTestScreen::LoadContent() {
 		Vector3(50,50,50));
 	GameStateManager::Graphics()->AddDrawable(ent);
 
-	quad = GameStateManager::Assets()->LoadCylinder(this, 20);
+	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
 	ent = new DrawableEntity3D(
-		quad, 
+		cylinder, 
 		NULL,
 		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp"), 
 		NULL,
