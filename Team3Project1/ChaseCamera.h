@@ -20,17 +20,9 @@ public:
 	void UpdateCamera() 
 	{
 		// Get new target position
-		expectedPosition = targetEntity->GetOriginPosition() +  offset;
-		Vector3 pitchYawRoll = targetEntity->GetRotation().GetEulerAngles();
-		expectedPitch = pitchYawRoll.x + pitchOffset;
-		expectedYaw = pitchYawRoll.y + yawOffset;
-		expectedRoll = pitchYawRoll.z + rollOffset;
-
-		// Linearly interpolate to this position
-		pitch = MathHelper::Lerp(pitch, expectedPitch, 0.05f);
-		yaw = MathHelper::Lerp(yaw, expectedYaw, 0.05f);
-		roll = MathHelper::Lerp(roll, expectedRoll, 0.05f);
-		position = MathHelper::Lerp(position, expectedPosition, 0.05f);
+		expectedPosition = targetEntity->GetOriginPosition() + offset;
+		Matrix4 expectedRotation = targetEntity->GetRotation().ToMatrix() * Quaternion::EulerAnglesToQuaternion(pitchOffset, yawOffset, rollOffset).ToMatrix();
+		rotation = MathHelper::Lerp(rotation, expectedRotation, 0.05f);
 
 		Camera::UpdateCamera();
 	}

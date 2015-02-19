@@ -11,7 +11,7 @@ class OffsetCamera : public Camera
 {
 public:
 	OffsetCamera(DrawableEntity3D* targetEntity, const Vector3& positionOffset, float pitchOffset, float yawOffset, float rollOffset) 
-		: Camera(targetEntity), offset(positionOffset), pitchOffset(pitchOffset), yawOffset(yawOffset), rollOffset(rollOffset)
+		: Camera(targetEntity, pitchOffset, yawOffset, rollOffset, positionOffset, targetEntity->GetOriginPosition()), offset(positionOffset), pitchOffset(pitchOffset), yawOffset(yawOffset), rollOffset(rollOffset)
 	{ }
 	
 	Vector3 GetPositionOffset() const { return offset; }

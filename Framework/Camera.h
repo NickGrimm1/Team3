@@ -30,8 +30,8 @@ public:
 	<param name='target'>The initial target position. Default is (0, 0, -1).</param>
 	<param name='up'>The initial up vector. Default is (0, 1, 0).</param>
 	*/
-	Camera(DrawableEntity3D* targetEntity = NULL, float pitch = 0, float yaw = 0, float roll = 0, Vector3 position = Vector3(), Vector3 target = Vector3(0, 0, -1), Vector3 up = Vector3(0, 1, 0))
-		: pitch(pitch), yaw(yaw), roll(roll), position(position), originalTarget(target), originalUp(up), invertY(invertY), targetEntity(targetEntity)
+	Camera(DrawableEntity3D* targetEntity = NULL, float pitch = 0, float yaw = 0, float roll = 0, Vector3 position = Vector3(), Vector3 target = Vector3(0, 0, -1), bool invertY = false)
+		: position(position), originalTarget((target - position).Normal()), originalUp(Vector3::UnitOrthogonal((target - position).Normal(), Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix() * Vector3::UnitX())), invertY(invertY), targetEntity(targetEntity), originalRight(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix() * Vector3::UnitX()), rotation(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix())
 	{ }
 	~Camera(void){}
 
@@ -46,36 +46,8 @@ public:
 	*/
 	void SetPosition(const Vector3& value) { position = value;}
 	/**
-	<summary>Gets the current Yaw.</summary>
-	*/
-	float GetYaw() const { return yaw;}
-	/**
-	<summary>Sets the current Yaw.</summary>
-	<param name='value'>The yaw.</param>
-	*/
-	void SetYaw(const float value) {yaw = value;}
-	/**
-	<summary>Gets the current pitch.</summary>
-	*/
-	float GetPitch() const { return pitch;}
-	/**
-	<summary>Sets the current pitch.</summary>
-	<param name='value'>The pitch.</param>
-	*/
-	void SetPitch(const float value) {pitch = value;}
-	/**
-	<summary>Gets the current roll.</summary>
-	*/
-	float GetRoll() const { return roll;}
-	/**
-	<summary>Sets the current roll.</summary>
-	<param name='value'>The roll.</param>
-	*/
-	void SetRoll(const float value) {roll = value;}
-	
-	/**
 	<summary>Adds movement to this camera's position, automatically calculates rotation.</summary>
-	<param name='value'>The amount of movement to add in the original axes provided.</param>
+	<param name='value'>The amount of movement to add in the original axes provided. (eg if (0,0,-1) was originally 'forward', moving (0,0,-1) will move the camera 1 unit along its current forward vector.</param>
 	*/
 	void AddMovement(const Vector3& value) { position += rotation * value; }
 	/**
@@ -87,17 +59,35 @@ public:
 	<summary>Adds pitch to this camera's rotation.</summary>
 	<param name='value'>The amount of pitch to add.</param>
 	*/
-	void AddPitch(const float value) { pitch += value; }
+	void AddPitch(const float value) 
+	{
+		rotatedRight = rotation * originalRight;
+		rotatedRight.Normalise();
+		if (!invertY)
+			rotation = rotation * Matrix4::Rotation(value, rotatedRight);
+		else
+			rotation = rotation * Matrix4::Rotation(-value, rotatedRight);
+	}
 	/**
 	<summary>Adds yaw to this camera's rotation.</summary>
 	<param name='value'>The amount of yaw to add.</param>
 	*/
-	void AddYaw(const float value) { yaw += value; }
+	void AddYaw(const float value) 
+	{ 
+		rotatedUp = rotation * originalUp;
+		rotatedUp.Normalise();
+		rotation =  rotation * Matrix4::Rotation(value, rotatedUp);
+	}
 	/**
 	<summary>Adds roll to this camera's rotation.</summary>
 	<param name='value'>The amount of roll to add.</param>
 	*/
-	void AddRoll(const float value) { roll += value; }
+	void AddRoll(const float value) 
+	{
+		rotatedTarget = rotation * originalTarget;
+		rotatedTarget.Normalise();
+		rotation =  rotation * Matrix4::Rotation(value, rotatedTarget);
+	}
 
 	/**
 	<summary>Updates the camera</summary>
@@ -109,15 +99,14 @@ public:
 	*/
 	Matrix4 BuildViewMatrix();
 protected:
-	float yaw;
-	float pitch;
-	float roll;
 	Vector3 position;
 	Matrix4 rotation;
 	Vector3 originalUp;
+	Vector3 originalRight;
 	Vector3 originalTarget;
 	Vector3 rotatedTarget;
 	Vector3 rotatedUp;
+	Vector3 rotatedRight;
 	bool invertY;
 	DrawableEntity3D* targetEntity;
 };
