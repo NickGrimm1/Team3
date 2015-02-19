@@ -4,6 +4,7 @@
 Shader::Shader()	
 {
 #if WINDOWS_BUILD
+	loadFailed = false;
 	program	= glCreateProgram();
 #endif	
 }

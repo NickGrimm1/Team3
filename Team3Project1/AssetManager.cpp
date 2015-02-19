@@ -355,7 +355,7 @@ Mesh* AssetManager::LoadCylinder(void* callerID, unsigned int subdivs)
 	{
 		// Load this mesh in...
 		GameStateManager::Graphics()->GetRenderContext();
-		cylinderUsers.insert(pair<unsigned int, LoadedMesh>(subdivs, LoadedMesh(Mesh::GenerateCone(subdivs), callerID)));
+		cylinderUsers.insert(pair<unsigned int, LoadedMesh>(subdivs, LoadedMesh(Mesh::GenerateCylinder(subdivs), callerID)));
 		GameStateManager::Graphics()->DropRenderContext();
 		return cylinderUsers[subdivs].mesh;
 	}
@@ -661,9 +661,11 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 #if WINDOWS_BUILD
 		newShader->SetGeometry(geometryShader);
 		GameStateManager::Graphics()->GetRenderContext();
-		newShader->LinkProgram();
+		bool loadOk = newShader->LinkProgram();
 		GameStateManager::Graphics()->DropRenderContext();
+		if (!loadOk) return NULL; // Check link status
 #endif
+		loadedShaders.insert(pair<string, LoadedShader>(shaderName, LoadedShader(newShader, callerID)));
 		return newShader;
 	}
 }

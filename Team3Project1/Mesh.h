@@ -12,14 +12,6 @@ public:
 	Mesh();
 	virtual ~Mesh();
 
-	//Sets the Mesh's diffuse map. Takes an OpenGL texture 'name'
-	void SetTexture(Texture* tex)	{texture = tex;}
-	//Gets the Mesh's diffuse map. Returns an OpenGL texture 'name'
-	Texture* GetTexture()	{return texture;}
-	//Sets the Mesh's bump map. Takes an OpenGL texture 'name'
-	void SetBumpMap(Texture* tex)	{bumpTexture = tex;}
-	//Gets the Mesh's bump map. Returns an OpenGL texture 'name'
-	Texture* GetBumpMap()	{return bumpTexture;}
 	void SetColour(Vector4* colour) 
 	{
 		for (unsigned int i = 0; i < numVertices; i++)
@@ -64,9 +56,6 @@ protected:
 	unsigned int numIndices;
 	bool transformCoords;
 	// OpenGL texture name for the diffuse map
-	Texture* texture;
-	//OpenGL texture name for the bump map
-	Texture* bumpTexture;
 
 #if WINDOWS_BUILD
 	//VAO for this mesh

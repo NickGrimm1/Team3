@@ -6,8 +6,6 @@ Mesh::Mesh()
 	glGenVertexArrays(1, &arrayObject);
 	type = GL_TRIANGLES;
 #endif
-	texture = NULL;
-	bumpTexture	= NULL;
 	numVertices = 0;
 	numIndices = 0;
 	vertices = NULL;
@@ -30,20 +28,6 @@ Mesh::~Mesh(void)
 void Mesh::Draw(bool update)	
 {
 #if WINDOWS_BUILD
-	if(update) 
-	{
-		if (texture)
-		{
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, texture->GetTextureName());
-		}
-		if (bumpTexture)
-		{
-			glActiveTexture(GL_TEXTURE1);
-			glBindTexture(GL_TEXTURE_2D, bumpTexture->GetTextureName());
-		}
-	}
-
 	glBindVertexArray(arrayObject);
 	if(numIndices > 0)
 		glDrawElements(type, numIndices, GL_UNSIGNED_INT, 0);
@@ -59,10 +43,14 @@ void	Mesh::BufferData()
 	glBindVertexArray(arrayObject);
 
 	// Buffer Vertices
-	glGenBuffers(1, &bufferObject[0]);
+	glGenBuffers(1, bufferObject);
 	glBindBuffer(GL_ARRAY_BUFFER, bufferObject[0]);
 	glBufferData(GL_ARRAY_BUFFER, numVertices * sizeof(Vertex), vertices, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
+	glEnableVertexAttribArray(4);
 
 	// Set Vertex attributes
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0); // Position

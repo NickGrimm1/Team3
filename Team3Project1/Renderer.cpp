@@ -17,8 +17,6 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	quad	= Mesh::GenerateQuad();
 	screenMesh = quad;
 
-	
-
 	// Setup projection matrices - gonna just keep copies of the matrices rather than keep recreating them
 	perspectiveMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float) width / (float) height, 45.0f);
 	orthographicMatrix = Matrix4::Orthographic(-1.0f,1.0f,(float)width, 0.0f,(float)height, 0.0f); // For HUD Elements only
@@ -99,7 +97,7 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glDisable(GL_STENCIL_TEST);
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); // cube sampling
 
 	wglMakeCurrent(deviceContext, NULL);
@@ -120,6 +118,17 @@ bool Renderer::LoadShaders()
 	return LoadCheck();
 }
 
+bool Renderer::LoadCheck()
+{
+	return (basicShader != NULL		&&
+			shadowShader != NULL	&&
+			skyBoxShader != NULL	&&
+			combineShader != NULL	&&
+			particleShader != NULL	&&
+			sceneShader != NULL		&&
+			lightingShader != NULL);
+}
+
 Renderer::~Renderer(void)
 {
 	delete camera;
@@ -133,7 +142,6 @@ Renderer::~Renderer(void)
 	delete basicShader;
 	delete shadowShader;
 	delete bloomShader;
-	delete deferredShader;
 	delete blurShader;
 	delete combineShader;
 	delete particleShader;
@@ -159,7 +167,9 @@ Renderer::~Renderer(void)
 void Renderer::RenderScene() {
 
 	openglMutex.lock_mutex(); // prevent other threads from accessing OpenGL during rendering
-	wglMakeCurrent(deviceContext, renderContext);
+	if (!wglMakeCurrent(deviceContext, renderContext)) {
+		cout << "Renderer::RenderScene() - unable to obtain rendering context!!!" << endl;
+	}
 
 	// Main Render
 	ShadowPass();
@@ -219,7 +229,7 @@ void Renderer::UpdateScene(float msec)
 void Renderer::DrawScene()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
-
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	// Use stencil buffer to track unaltered pixels. Use to draw skybox later
 	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_ALWAYS, 1, 1); // Always passes
@@ -310,6 +320,7 @@ void Renderer::DrawScene()
 	
 	glDisable(GL_STENCIL_TEST); // Believe can disable here
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//	DrawFrameBufferTex(gbufferColourTex);
 }
 
 void Renderer::ShadowPass()
@@ -551,17 +562,6 @@ void Renderer::GenerateScreenTexture(GLuint &into, bool depth)
 		GL_UNSIGNED_BYTE, NULL);
 	
 	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-bool Renderer::LoadCheck()
-{
-	return (basicShader != NULL		&&
-			shadowShader != NULL	&&
-			skyBoxShader != NULL	&&
-			combineShader != NULL	&&
-			particleShader != NULL	&&
-			sceneShader != NULL		&&
-			lightingShader != NULL);
 }
 
 bool Renderer::ActiveTex()

@@ -105,5 +105,7 @@ protected:
 
 	std::vector<Particle*>	particles;	//Active particles stay in here :)
 	std::vector<Particle*>	freeList;	//'Spare' particles stay in here...
+
+	Texture* texture;
 };
 

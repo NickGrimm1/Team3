@@ -114,7 +114,6 @@ protected:
 	Shader*			combineShader;
 	Shader*			particleShader;
 	Shader*			bloomShader;
-	Shader*			deferredShader;
 	Shader*			blurShader;
 	
 	GLuint			gbufferFBO;

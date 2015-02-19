@@ -160,6 +160,8 @@ protected:
 
 	string texturePath;
 	string bumpPath;
+	Texture* texture;
+	Texture* bumpTexture;
 };
 
 #endif
