@@ -56,6 +56,9 @@ void GraphicsEngine::Run() {
 	
 	while (isRunning) {
 		//std::cout << "Graphics is Running";
+
+		// TODO - add/remove requested items from scene lists
+
 		renderer->UpdateScene(1.0f / RENDER_HZ); // TODO - use proper frame time
 
 		// Update data in scene nodes
@@ -86,6 +89,13 @@ void GraphicsEngine::Run() {
 			DirectionalLight::UpdateLightVolume(camMin.z, camMax.z, camMax.x, camMin.x, camMax.y, camMin.y);
 		}
 
+		// Sort HUD elements
+		
+		std::sort(overlayElementsList.begin(), overlayElementsList.end(), 
+			[] (const void* a, const void* b) {
+				return (((DrawableEntity2D*) a)->GetDepth() < ((DrawableEntity2D*) b)->GetDepth());
+		});
+	
 		// Render data
 		renderer->RenderScene();
 

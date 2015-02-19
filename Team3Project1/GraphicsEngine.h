@@ -152,6 +152,7 @@ private:
 	vector<SceneNode*> transparentGameEntityList; // list of transparent game elements sorted by distance from camera
 	vector<SceneNode*> gameEntityList; // list of opaque game elements sorted by distance from camera
 
+
 	Vector3 boundingMin, boundingMax; // Defines a bounding box for the VISIBLE scene, built each frame from the nodes that pass frustum culling.
 
 	bool isRunning;

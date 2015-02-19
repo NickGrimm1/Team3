@@ -53,7 +53,7 @@ void AssetManager::Destroy()
 	instance = NULL;
 }
 
-Texture* AssetManager::LoadTexture(void* callerID, string filePath)
+Texture* AssetManager::LoadTexture(void* callerID, string filePath, unsigned int flags)
 {
 	// Check if this texture is already loaded
 	map<string, LoadedTexture>::iterator i = loadedTextures.find(filePath);
@@ -72,7 +72,7 @@ Texture* AssetManager::LoadTexture(void* callerID, string filePath)
 	{
 		// Load this texture in...
 		GameStateManager::Graphics()->GetRenderContext();
-		Texture* newTexture = new Texture(filePath);
+		Texture* newTexture = new Texture(filePath, flags);
 		GameStateManager::Graphics()->DropRenderContext();
 		loadedTextures.insert(pair<string, LoadedTexture>(filePath, LoadedTexture(newTexture, callerID)));
 		return newTexture;
@@ -780,7 +780,7 @@ Font* AssetManager::LoadFont(void* callerID, string filePath, unsigned int xCoun
 		// Load this font in...
 		GameStateManager::Graphics()->GetRenderContext();
 		Font* newFont = new Font(xCount, yCount);
-		newFont->SetTexture(LoadTexture(newFont, filePath));
+		newFont->SetTexture(LoadTexture(newFont, filePath, SOIL_FLAG_COMPRESS_TO_DXT));
 		GameStateManager::Graphics()->DropRenderContext();
 		loadedFonts.insert(pair<string, LoadedFont>(filePath, LoadedFont(newFont, callerID)));
 		return newFont;

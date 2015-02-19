@@ -30,26 +30,25 @@ void GraphicsTestScreen::LoadContent() {
 	ent = new DrawableEntity3D(
 		quad,
 		NULL,
-		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.tga"),
+		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.tga", SOIL_FLAG_MIPMAPS),
 		NULL,
 		50.0f,
 		Vector3(0,0,0),
-		Quaternion::FromMatrix(Matrix4::Rotation(90.0f, Vector3(-1,0,0))),
+		Quaternion::FromMatrix(Matrix4::Rotation(90.0f, Vector3(1,0,0))),
 		Vector3(50,50,50));
-	GameStateManager::Graphics()->AddDrawable(ent);
+	AddDrawable(ent);
 
 	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
 	ent = new DrawableEntity3D(
 		cylinder, 
 		NULL,
-		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp"), 
+		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", SOIL_FLAG_INVERT_Y), 
 		NULL,
 		10.0f, 
 		Vector3(5,0,5), 
 		Quaternion::EulerAnglesToQuaternion(0,0,0),
 		Vector3(2,10,2));
-
-	GameStateManager::Graphics()->AddDrawable(ent);
+	AddDrawable(ent);
 
 	
 	//cout << "Cone Mesh Obj = " << coneMesh->GetVertexBuffer() << endl;
@@ -69,6 +68,8 @@ void GraphicsTestScreen::LoadContent() {
 	camera->SetPosition(Vector3(0,10.0f, 80.0f));
 	//camera->AddYaw(180.0f);
 	GameStateManager::Graphics()->SetCamera(camera);
+
+	
 }
 
 void GraphicsTestScreen::Update() { 

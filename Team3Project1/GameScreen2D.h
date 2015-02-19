@@ -21,7 +21,7 @@ Version: 0.0.5 05/02/2015.</summary>
 
 using namespace std;
 
-class GameScreen2D : GameScreen
+class GameScreen2D : public GameScreen
 {
 	// TODO: Implement GameScreen 2D.
 public:
