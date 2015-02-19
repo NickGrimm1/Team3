@@ -100,12 +100,37 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 		case KeyboardEvents::KEYBOARD_SPACE:
 			camera->AddMovement(Vector3(0,-1,0));
 			break;
+		case KeyboardEvents::KEYBOARD_LEFT:
+			camera->AddYaw(1);
+			break;
+		case KeyboardEvents::KEYBOARD_RIGHT:
+			camera->AddYaw(-1);
+			break;
+		case KeyboardEvents::KEYBOARD_UP:
+			camera->AddPitch(1);
+			break;
+		case KeyboardEvents::KEYBOARD_DOWN:
+			camera->AddPitch(-1);
+			break;
+		case KeyboardEvents::KEYBOARD_Q:
+			camera->AddRoll(-1);
+			break;
+		case KeyboardEvents::KEYBOARD_E:
+			camera->AddRoll(1);
+			break;
 		}
-		
+		break;
+	case KeyboardEvents::KEY_PRESS:
+		switch (key) {
+
+		case KeyboardEvents::KEYBOARD_ESCAPE:
+			GameStateManager::Instance()->Exit();
+			break;
+		}
 	}
 }
 	
 void GraphicsTestScreen::MouseMoved(Vector2& finish) {
-	camera->AddPitch(-finish.y);
-	camera->AddYaw(finish.x);
+	//camera->AddPitch(-finish.y);
+	//camera->AddYaw(finish.x);
 }

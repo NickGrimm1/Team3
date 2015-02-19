@@ -28,10 +28,9 @@ void Camera::UpdateCamera()
 		roll -= 360.0f;
 	}
 
-	rotation = Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix();
-
 	rotatedTarget = position + (rotation * originalTarget);
 	rotatedUp = rotation * originalUp;
+	rotatedRight = rotation * originalRight;
 }
 
 /*
