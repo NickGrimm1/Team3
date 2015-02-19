@@ -17,8 +17,9 @@ _-_-_-_-_-_-_-|   /\_/\   NYANYANYAN
 _-_-_-_-_-_-_-""  ""      
  
 *//////////////////////////////////////////////////////////////////////////////
-
+#if WINDOWS_BUILD
 #pragma once
+
 #include<windows.h>
 
 /*
@@ -53,3 +54,4 @@ protected:
 	bool			isAwake;		//Is the device awake...
 	RAWINPUTDEVICE	rid;			//Windows OS hook 
 };
+#endif

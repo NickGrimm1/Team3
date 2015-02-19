@@ -20,6 +20,7 @@ _-_-_-_-_-_-_-""  ""
 #include "scenenode.h"
 #include "Input.h"
 #include "common.h"
+//#include "../Framework/common.h"
 #include <vectormath/cpp/vectormath_aos.h>
 
 using namespace Vectormath::Aos;

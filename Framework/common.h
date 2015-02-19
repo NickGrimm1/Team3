@@ -11,7 +11,7 @@ _-_-_-_-_-_-_-""  ""
 *//////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-
+ #if WINDOWS_BUILD
 #define WEEK_2_CODE
 #define WEEK_3_CODE
 
@@ -47,3 +47,5 @@ class DivideByZeroException
 		return "Divide By Zero";
 	}
 };
+
+#endif
