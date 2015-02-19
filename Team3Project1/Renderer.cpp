@@ -3,6 +3,9 @@
 #include "DrawableEntity3D.h"
 #include "GameStateManager.h"
 
+
+#include "TextMesh.h"
+
 Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>& sceneNodesVec, vector<DrawableEntity2D*>& overlayVec) : 
 	OGLRenderer(parent), 
 	lights(lightsVec), 
@@ -97,7 +100,7 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glDisable(GL_STENCIL_TEST);
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); // cube sampling
 
 	wglMakeCurrent(deviceContext, NULL);
@@ -114,7 +117,7 @@ bool Renderer::LoadShaders()
 	skyBoxShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl");
 	combineShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
 	particleShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
-
+	hudShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl");
 	return LoadCheck();
 }
 
@@ -126,7 +129,8 @@ bool Renderer::LoadCheck()
 			combineShader != NULL	&&
 			particleShader != NULL	&&
 			sceneShader != NULL		&&
-			lightingShader != NULL);
+			lightingShader != NULL	&&
+			hudShader != NULL);
 }
 
 Renderer::~Renderer(void)
@@ -139,14 +143,14 @@ Renderer::~Renderer(void)
 	delete sandstorm;
 	*/
 
-	delete basicShader;
-	delete shadowShader;
-	delete bloomShader;
-	delete blurShader;
-	delete combineShader;
-	delete particleShader;
-	delete sceneShader;
-	delete lightingShader;
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl"); //basicShader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl"); //sceneShader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl"); //shadowShader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl"); //lightingShader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl"); //skyBoxShader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl"); //combineShader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl"); //particleShader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl"); //hudShader
 
 	//Clear buffers
 	//glDeleteTextures(1, &shadowTex); - TODO - handle deletion of shadow textures
@@ -181,7 +185,7 @@ void Renderer::RenderScene() {
 	//TODO
 
 	// Draw HUD/Menu overlay
-//	Draw2DOverlay(); // TODO - Draw HUD first and use stencil to optimise main render pass
+	Draw2DOverlay(); // TODO - Draw HUD first and use stencil to optimise main render pass
 
 	SwapBuffers();
 	wglMakeCurrent(deviceContext, NULL);
@@ -412,7 +416,7 @@ void Renderer::CombineBuffers() {// merge scene render with lighting pass
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, gbufferDepthTex, 0); // Stencil buffer from the first pass render
 	
 	// Setup matrices
-	projMatrix = Matrix4::Orthographic(-1,1,1,-1,-1,1);
+	projMatrix = Matrix4::Orthographic(-1,1,1,-1,1,-1);
 	modelMatrix.ToIdentity();
 	viewMatrix.ToIdentity();
 	textureMatrix.ToIdentity();
@@ -487,7 +491,7 @@ void Renderer::MotionBlurPass()
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 	SetCurrentShader(blurShader);
-	projMatrix = Matrix4::Orthographic(-1,1,1,-1,-1,1);
+	projMatrix = Matrix4::Orthographic(-1,1,1,-1,1,-1);
 	modelMatrix.ToIdentity();
 	UpdateShaderMatrices();
 
@@ -527,7 +531,7 @@ void Renderer::DrawFrameBufferTex(GLuint fboTex) {
 	glBindTexture(GL_TEXTURE_2D, fboTex);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 26);
 	
-	projMatrix = Matrix4::Orthographic(-1,1,1,-1,-1,1);
+	projMatrix = Matrix4::Orthographic(-1,1,1,-1,1,-1);
 	modelMatrix.ToIdentity();
 	viewMatrix.ToIdentity();
 	textureMatrix.ToIdentity();
@@ -541,8 +545,62 @@ void Renderer::DrawFrameBufferTex(GLuint fboTex) {
 
 void Renderer::Draw2DOverlay() {
 
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	
+	SetCurrentShader(hudShader);
+	projMatrix = orthographicMatrix;
+	viewMatrix.ToIdentity();
 
+	for (unsigned int i = 0; i < overlayElements.size(); i++) {
 
+		glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "blendColour"), 1, (float*) &overlayElements[i]->GetColor());
+		
+		switch (overlayElements[i]->GetType()) {
+		case DrawableType::Text:
+			Draw2DText((DrawableText2D&) *overlayElements[i]);
+			break;
+		case DrawableType::Texture:
+			Draw2DTexture((DrawableTexture2D&) *overlayElements[i]);
+			break;
+		default:
+			cout << "Renderer::Draw2DOverlay() - Unidentified 2D element type, " << overlayElements.size() << endl;
+		}
+	}
+
+	glUseProgram(0);
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
+}
+
+void Renderer::Draw2DText(DrawableText2D& text) {
+	TextMesh* textMesh = new TextMesh(text.GetText(), *text.GetFont());
+	
+	Vector3 origin = Vector3(text.GetOrigin().x * text.width, text.GetOrigin().y * text.height, 0);
+	Matrix4 rotation = Matrix4::Translation(origin) * Matrix4::Rotation(text.GetRotation(), Vector3(0,0,-1)) * Matrix4::Translation(origin * -1.0f);
+	modelMatrix = Matrix4::Translation(Vector3(text.x, height - text.y, 0)) * rotation * Matrix4::Scale(Vector3(text.width / (float) text.GetText().length(), text.height, 1));
+	textureMatrix.ToIdentity();	
+	UpdateShaderMatrices();
+
+	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+	glBindTexture(GL_TEXTURE_2D, text.GetFont()->GetTexture()->GetTextureName());
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+	
+	textMesh->Draw();
+}
+
+void Renderer::Draw2DTexture(DrawableTexture2D& texture) {
+	Vector3 origin = Vector3(texture.GetOrigin().x * texture.width, texture.GetOrigin().y * texture.height, 0);
+	Matrix4 rotation = Matrix4::Translation(origin) * Matrix4::Rotation(texture.GetRotation(), Vector3(0,0,-1)) * Matrix4::Translation(origin * -1.0f);
+	modelMatrix = Matrix4::Translation(Vector3(texture.x, height - texture.y, 0)) * rotation * Matrix4::Scale(Vector3(texture.width, texture.height, 1));
+	textureMatrix.ToIdentity();	
+	UpdateShaderMatrices();
+
+	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+	glBindTexture(GL_TEXTURE_2D, texture.GetTexture()->GetTextureName());
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+
+	screenMesh->Draw();
 }
 
 void Renderer::GenerateScreenTexture(GLuint &into, bool depth)

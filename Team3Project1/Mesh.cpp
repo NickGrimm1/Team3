@@ -208,16 +208,16 @@ Mesh* Mesh::GenerateQuad()
 		Vector2(0.0f, 1.0f),
 		Vector3(1.0f, 0.0f,0.0f));
 	m->vertices[1] = Vertex(
-		Vector3(-1.0f,1.0f, 0.0f),
-		Vector3(0.0f, 0.0f,-1.0f),
-		Vector4(1.0f, 1.0f,1.0f,1.0f),
-		Vector2(0.0f, 0.0f),
-		Vector3(1.0f, 0.0f,0.0f));
-	m->vertices[2] = Vertex(
 		Vector3(1.0f, -1.0f, 0.0f),
 		Vector3(0.0f, 0.0f,-1.0f),
 		Vector4(1.0f, 1.0f,1.0f,1.0f),
 		Vector2(1.0f, 1.0f),
+		Vector3(1.0f, 0.0f,0.0f));
+	m->vertices[2] = Vertex(
+		Vector3(-1.0f,1.0f, 0.0f),
+		Vector3(0.0f, 0.0f,-1.0f),
+		Vector4(1.0f, 1.0f,1.0f,1.0f),
+		Vector2(0.0f, 0.0f),
 		Vector3(1.0f, 0.0f,0.0f));
 	m->vertices[3] = Vertex(
 		Vector3(1.0f, 1.0f, 0.0f),

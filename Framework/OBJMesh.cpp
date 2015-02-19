@@ -365,12 +365,12 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 		map <string, MTLInfo>::iterator i = materials.find(mtlType);
 		if(i != materials.end()) {
 			if(!i->second.diffuse.empty())	{
-				texture = GameStateManager::Assets()->LoadTexture(this, string(TEXTUREDIR + currentMTL.diffuse));
+				texture = GameStateManager::Assets()->LoadTexture(this, string(TEXTUREDIR + currentMTL.diffuse), 0);
 				texturePath = string(TEXTUREDIR + currentMTL.diffuse);
 			}
 
 			if(!i->second.bump.empty())	{
-				bumpTexture = GameStateManager::Assets()->LoadTexture(this, string(TEXTUREDIR + currentMTL.bump));
+				bumpTexture = GameStateManager::Assets()->LoadTexture(this, string(TEXTUREDIR + currentMTL.bump), 0);
 				bumpPath = string(TEXTUREDIR + currentMTL.bump);
 			}
 

@@ -7,7 +7,10 @@ Author: Nick Grimm
 Version: 0.0.3 06/02/2015.</summary>
 */
 
+
+// FOR TESTING PURPOSES - REMOVE IN FINAL BUILD
 #include "GraphicsTestScreen.h"
+#include "HudTestScreen.h"
 
 namespace EntryPoint
 {
@@ -17,6 +20,10 @@ namespace EntryPoint
 
 		GraphicsTestScreen* game = new GraphicsTestScreen();
 		GameStateManager::Instance()->AddGameScreen(game);
+
+		HudTestScreen* hud = new HudTestScreen();
+		GameStateManager::Instance()->AddGameScreen(hud);
+
 		GameStateManager::Instance()->Start();
 	}
 }

@@ -399,6 +399,12 @@
     <ClInclude Include="Mesh.h">
       <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TextMesh.h">
+      <Filter>Framework\Graphics\Common\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="HudTestScreen.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">
@@ -527,6 +533,12 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Framework\Resource Manager\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TextMesh.cpp">
+      <Filter>Framework\Graphics\Common\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="HudTestScreen.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\TechFragment.glsl">
@@ -581,6 +593,9 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\TexturedVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\BlendedFragment.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

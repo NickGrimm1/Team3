@@ -25,15 +25,16 @@ public:
 	<summary>Constructor.</summary>
 	<param name='x'>The x position of the entity.</param>
 	<param name='y'>The y position of the entity.</param>
+	<param name='depth>The depth of the entity on screen.</param>
 	<param name='width'>The width of the entity.</param>
 	<param name='height'>The height of the entity.</param>
-	<param name='blendColor'>The colour. Default is White (1,1,1,1).</param>
-	<param name='rotation'>The rotation in degrees from up. Default is 0.</param>
-	<param name='origin'>The origin around which this object will rotate, relative to the object's draw area. Default is the center (0.5, 0.5).</param>
-	<param name='font'>The font.</param>
 	<param name='text'>The text.</param>
+	<param name='font'>The font.</param>
+	<param name='rotation'>The rotation in degrees from up (Clockwise). Default is 0.</param>
+	<param name='origin'>The origin around which this object will rotate, relative to the object's draw area. Default is the center (0.5, 0.5).</param>
+	<param name='blendColor'>The colour. Default is White (1,1,1,1).</param>	
 	*/
-	DrawableText2D(float x, float y, float width, float height, const string& text, Font* font, float rotation = 0, Vector2 origin = Vector2(0.5f, 0.5f), Vector4 blendColor = Vector4(1.0f, 1.0f, 1.0f ,1.0f)) : DrawableEntity2D(x, y, width, height, DrawableType::Text, blendColor), font(font), text(text), rotation(rotation), origin(origin)
+	DrawableText2D(float x, float y, int depth, float width, float height, const string& text, Font* font, float rotation = 0, Vector2 origin = Vector2(0.5f, 0.5f), Vector4 blendColor = Vector4(1.0f, 1.0f, 1.0f ,1.0f)) : DrawableEntity2D(x, y, depth, width, height, DrawableType::Text, blendColor), font(font), text(text), rotation(rotation), origin(origin)
 	{ }
 
 	/**

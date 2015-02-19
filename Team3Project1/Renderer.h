@@ -18,6 +18,8 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "../Framework/Camera.h"
 #include "Mesh.h"
 #include "DrawableEntity2D.h"
+#include "DrawableText2D.h"
+#include "DrawableTexture2D.h"
 #include "MutexClass.h"
 
 #include <vector>
@@ -74,8 +76,11 @@ protected:
 	void			DrawSkybox();
 	void			BloomPass();
 	void			MotionBlurPass();
-	void			DrawFrameBufferTex(GLuint fboTex);
+	void			DrawFrameBufferTex(GLuint fboTex); // Draw the texture passed to it to screen
+	
 	void			Draw2DOverlay();
+	void			Draw2DText(DrawableText2D& text);
+	void			Draw2DTexture(DrawableTexture2D& texture);
 
 	void			GenerateScreenTexture(GLuint &into, bool depth = false);
 	bool			LoadCheck();
@@ -115,6 +120,7 @@ protected:
 	Shader*			particleShader;
 	Shader*			bloomShader;
 	Shader*			blurShader;
+	Shader*			hudShader;
 	
 	GLuint			gbufferFBO;
 	GLuint			postProcessingFBO;

@@ -9,7 +9,7 @@ using namespace std;
 class Texture
 {
 public:
-	Texture(string filename);
+	Texture(string filename, unsigned int flags);
 	~Texture();
 	void SetRepeating(bool repeat);
 	void SetAnistropicFiltering(bool enable);
