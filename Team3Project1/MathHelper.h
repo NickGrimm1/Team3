@@ -47,9 +47,18 @@ namespace MathHelper
 	{
 		return Vector3(Lerp(v1.x, v2.x, amount), Lerp(v1.y, v2.y, amount), Lerp(v1.z, v2.z, amount));
 	}
-
-	float RadiansToDegrees(float radians)
+	/**
+	<summary>Linearly interpolates between 2 floats.</summary>
+	<param name='f1'>The first float.</param>
+	<param name='f2'>The second (target) float.</param>
+	<param name='amount'>The amount to interpolate.</param>
+	<returns>The final value of f1 moved amount towards f2.</returns>
+	*/
+	Matrix4& Lerp(Matrix4 m1, Matrix4 m2, float amount)
 	{
-		return radians / (2 * PI);
+		Matrix4 out;
+		for (int i = 0; i < 16; i++)
+			out.values[i] = m1.values[i] + (m2.values[i] - m1.values[i]) * amount;
+		return out;
 	}
 };

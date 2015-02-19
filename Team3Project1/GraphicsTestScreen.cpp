@@ -66,7 +66,7 @@ void GraphicsTestScreen::LoadContent() {
 
 	camera = new FreeCamera();
 	camera->SetPosition(Vector3(0,10.0f, 80.0f));
-	camera->SetYaw(180.0f);
+	//camera->AddYaw(180.0f);
 	GameStateManager::Graphics()->SetCamera(camera);
 }
 

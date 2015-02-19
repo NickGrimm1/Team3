@@ -3,11 +3,8 @@
 void OffsetCamera::UpdateCamera() 
 {
 	// Lock this to the target.
-	position = targetEntity->GetOriginPosition() +  offset;
-	Vector3 pitchYawRoll = targetEntity->GetRotation().GetEulerAngles();
-	pitch = pitchYawRoll.x + pitchOffset;
-	yaw = pitchYawRoll.y + yawOffset;
-	roll = pitchYawRoll.z + rollOffset;
+	position = targetEntity->GetOriginPosition() + offset;
+	rotation = targetEntity->GetRotation().ToMatrix() * Quaternion::EulerAnglesToQuaternion(pitchOffset, yawOffset, rollOffset).ToMatrix();
 
 	Camera::UpdateCamera();
 }

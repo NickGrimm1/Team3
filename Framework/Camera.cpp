@@ -7,27 +7,6 @@ last frame (default value is for simplicities sake...)
 */
 void Camera::UpdateCamera()	
 {
-	if(pitch < 0) {
-		pitch += 360.0f;
-	}
-	if(pitch > 360.0f) {
-		pitch -= 360.0f;
-	}
-
-	if(yaw < 0) {
-		yaw += 360.0f;
-	}
-	if(yaw > 360.0f) {
-		yaw -= 360.0f;
-	}
-
-	if(roll < 0) {
-		roll += 360.0f;
-	}
-	if(roll > 360.0f) {
-		roll -= 360.0f;
-	}
-
 	rotatedTarget = position + (rotation * originalTarget);
 	rotatedUp = rotation * originalUp;
 	rotatedRight = rotation * originalRight;
