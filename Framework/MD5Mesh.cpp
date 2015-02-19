@@ -87,10 +87,10 @@ void	MD5Mesh::SkinVertices(const MD5Skeleton &skel) {
 		*/
 		for(int j = 0; j < subMesh.numverts; ++j) {
 			//UV coords can be copied straight over to the Mesh textureCoord array
-			target->vertices[j].texCoord   = subMesh.verts[j].texCoords;
+			target->vertices[j].SetTexCoord(subMesh.verts[j].texCoords);
 
 			//And we should start off with a Vector of 0,0,0
-			target->vertices[j].position.ToZero();
+			target->vertices[j].SetPosition(Vector3());
 
 			/*
 			Each vertex has a number of weights, determined by weightElements. The first
@@ -110,7 +110,7 @@ void	MD5Mesh::SkinVertices(const MD5Skeleton &skel) {
 				building up a weighted vertex position.
 				*/
 
-				target->vertices[j].position += ((joint.transform * weight.position) * weight.weightValue);				
+				target->vertices[j].SetPosition(target->vertices[j].GetPosition() + ((joint.transform * weight.position) * weight.weightValue));				
 			}
 		}
 

@@ -228,7 +228,7 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 			{
 				for(unsigned int j = 0; j < sm->texIndices.size(); ++j) 
 				{
-					m->vertices[j].texCoord = inputTexCoords[sm->texIndices[j] - 1];
+					m->vertices[j].SetTexCoord(inputTexCoords[sm->texIndices[j] - 1]);
 				}
 			}
 
@@ -238,7 +238,7 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 			else
 			{
 				for(unsigned int j = 0; j < sm->normIndices.size(); ++j) {
-					m->vertices[j].normal = inputNormals[sm->normIndices[j]-1];
+					m->vertices[j].SetNormal(inputNormals[sm->normIndices[j]-1]);
 				}
 			}
 
