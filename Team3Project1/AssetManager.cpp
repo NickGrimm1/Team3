@@ -125,13 +125,13 @@ Mesh* AssetManager::LoadMesh(void* callerID, string filePath)
 	{
 		// Load this mesh in...
 		Mesh* newMesh;
-		if (filePath.substr(filePath.length() - 4, 3) == "obj")
+		if (filePath.substr(filePath.length() - 3, 3) == "obj")
 		{
 			GameStateManager::Graphics()->GetRenderContext();
 			newMesh = new OBJMesh(filePath);
 			GameStateManager::Graphics()->DropRenderContext();
 		}
-		else if (filePath.substr(filePath.length() - 4, 3) == "md5")
+		else if (filePath.substr(filePath.length() - 3, 3) == "md5")
 		{
 			GameStateManager::Graphics()->GetRenderContext();
 			newMesh = new MD5Mesh(MD5FileData(filePath));
