@@ -1,25 +1,21 @@
 #include "Shader.h"
 #include "../Team3Project1/ShaderPart.h"
 
+#if WINDOWS_BUILD
 Shader::Shader()	
 {
-#if WINDOWS_BUILD
 	loadFailed = false;
 	program	= glCreateProgram();
-#endif	
 }
 
 Shader::~Shader(void)	
 {
-#if WINDOWS_BUILD
 	glDetachShader(program, vertexShader->shader);
 	glDetachShader(program, fragmentShader->shader);
 	glDetachShader(program, geometryShader->shader);
 	glDeleteProgram(program);
-#endif	
 }
 
-#if WINDOWS_BUILD
 bool Shader::LinkProgram()	
 {
 	glAttachShader(program, vertexShader->shader);

@@ -28,6 +28,10 @@ namespace ShaderType
 		FRAGMENT = GL_FRAGMENT_SHADER,
 		GEOMETRY = GL_GEOMETRY_SHADER,
 #endif
+#if PS3_BUILD
+		VERTEX = 0;
+		FRAGMENT = 0;
+#endif
 	};
 }
 
