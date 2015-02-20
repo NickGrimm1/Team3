@@ -67,6 +67,7 @@ public:
 	bool			DropRenderContextForThread();
 
 	bool LoadShaders();
+	bool LoadAssets();
 protected:
 	//Rendering pipeline components.
 	void			DrawScene();
@@ -99,8 +100,8 @@ protected:
 	Matrix4 orthographicMatrix;	// Gonna be constantly switching between orthographic (for HUD) and perspective (for scene) projection
 	Matrix4 perspectiveMatrix;	// Rather than constantly regenerating matrices - just keep a copy of each
 
-	Mesh*			quad;
-
+	Mesh*			screenMesh;			// A quad mesh for drawing screen filling textures
+	
 	Camera*			camera;
 
 	Frustum			frameFrustum;
@@ -135,8 +136,6 @@ protected:
 	GLuint			postProcessingTex[2]; // At start of post-processing, postProcessingTex[0] holds the rendered scene
 
 	Vector4			ambientLightColour; // The scenes ambient light settings
-
-	Mesh*			screenMesh;			// A quad mesh for drawing screen filling textures
 
 	MutexClass		openglMutex;		// Prevents different threads for using OpenGL at same time	
 };

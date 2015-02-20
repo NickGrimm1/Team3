@@ -30,14 +30,9 @@ Version: 0.0.3 06/02/2015.</summary>
 #include "DrawableEntity3D.h"
 #include "Thread.h"
 
-#define RENDER_HZ 60
-#define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 720
-#define GAME_TITLE "Team^3 - Endless Racer"
 
-#define MAX_LIGHTS 10
-#define MAX_MESHES 20
-#define MAX_TEXTURES 20
+
+
 
 
 class GraphicsEngine : public Thread
@@ -53,9 +48,11 @@ public:
 	<returns>true if a Graphics Engine is initialized and ready.</returns>
 	*/
 	static bool Initialize(GraphicsEngine*& out);
+	
 	static bool LoadContent()
 	{
-		return engine->renderer->LoadShaders();
+		return (engine->renderer->LoadShaders() &&
+				engine->renderer->LoadAssets());
 	}
 	/**
 	<summary>Destroys the graphics engine. Allows the game to exit cleanly.</summary>

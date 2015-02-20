@@ -17,8 +17,7 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	init = false;
 
 	camera	= new Camera();
-	quad	= Mesh::GenerateQuad();
-	screenMesh = quad;
+	//screenMesh = Mesh::GenerateQuad();
 
 	// Setup projection matrices - gonna just keep copies of the matrices rather than keep recreating them
 	perspectiveMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float) width / (float) height, 45.0f);
@@ -131,6 +130,27 @@ bool Renderer::LoadCheck()
 			sceneShader != NULL		&&
 			lightingShader != NULL	&&
 			hudShader != NULL);
+}
+
+bool Renderer::LoadAssets() {
+	// Load Meshes required for rendering operations
+	
+	Mesh* circle = GameStateManager::Assets()->LoadCircle(this, 20); // Circle for spotlight rendering
+	Mesh* quad = GameStateManager::Assets()->LoadQuad(this); // Quad for rendering textures to screen
+	Mesh* sphere = GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
+	Mesh* cone = GameStateManager::Assets()->LoadCone(this, 20); // Cone for spotlight rendering
+	
+	if (!sphere || !cone || !circle || !quad) {
+		cout << "Renderer::LoadAssets() - unable to load rendering assets";
+		return false;
+	}
+	
+	PointLight::SetMesh(sphere);
+	SpotLight::SetCircleMesh(circle);
+	SpotLight::SetConeMesh(cone);
+	screenMesh = quad;
+
+	return true;
 }
 
 Renderer::~Renderer(void)

@@ -1,4 +1,5 @@
 #include "GraphicsEngine.h"
+#include "GraphicsCommon.h"
 #include <algorithm>
 
 GraphicsEngine* GraphicsEngine::engine = NULL;

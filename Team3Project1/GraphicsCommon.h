@@ -13,4 +13,9 @@
 #define SKYBOX_TEXTURE_UNIT						7
 #define SHADOW_TEXTURE_UNIT						10
 
-#define DEFAULT_AMBIENT_LIGHT_COLOUR Vector4(0.5, 0.5, 0.5, 1.0);
+#define DEFAULT_AMBIENT_LIGHT_COLOUR Vector4(0.2f, 0.2f, 0.2f, 1.0f);
+
+#define RENDER_HZ 60
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 720
+#define GAME_TITLE "Team^3 - Endless Racer"

@@ -85,10 +85,10 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 		switch (key) {
 
 		case KeyboardEvents::KEYBOARD_W:
-			camera->AddMovement(Vector3(0,0,1));
+			camera->AddMovement(Vector3(0,0,-1));
 			break;
 		case KeyboardEvents::KEYBOARD_S:
-			camera->AddMovement(Vector3(0,0,-1));
+			camera->AddMovement(Vector3(0,0,1));
 			break;
 		case KeyboardEvents::KEYBOARD_A:
 			camera->AddMovement(Vector3(1,0,0));
