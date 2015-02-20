@@ -24,7 +24,7 @@ _-_-_-_-_-_-_-""  ""
 #include "Camera.h"
 
 
-#include "Shader.h"
+#include "../Framework/Shader.h"
 
 
 #include <sysutil/sysutil_sysparam.h>			//And know about cellVideoOut etc
@@ -38,8 +38,6 @@ using namespace cell::Gcm;
 #define COMMAND_SIZE	(65536)			//64KB
 #define BUFFER_SIZE		(1024*1024)		//1MB
 
-class VertexShader;
-class FragmentShader;
 class SceneNode;
 class Camera;
 
@@ -92,7 +90,7 @@ public:
 	static CellGcmTexture* LoadGTF(std::string name);
 
 protected:
-	void	SetCurrentShader(VertexShader & vert, FragmentShader &frag);
+	void	SetCurrentShader(Shader* currentShader);
 	void	SetTextureSampler(CGparameter sampler, const CellGcmTexture *texture);
 
 	void ClearBuffer(); //Clear the screen
@@ -124,8 +122,8 @@ protected:
 	//currentShader, and kept setting it wrong and breaking
 	//everything? Now there's two shaders to keep track of, have
 	//fun!
-	FragmentShader*		currentFrag;	//currently assigned fragment shader
-	VertexShader*		currentVert;	//currently assigned vertex shader
+	// No there isn't Rich - they are bound together by the AssetManager - HA! ;)
+	Shader* currentShader;
 
 	Camera*			camera;			//Current viewpoint origin
 	SceneNode*			root;			//The scenegraph the renderer is drawing

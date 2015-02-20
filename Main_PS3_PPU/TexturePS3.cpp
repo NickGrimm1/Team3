@@ -1,8 +1,17 @@
 #if PS3_BUILD
-#include "Texture.h"
-Texture(string filename, unsigned int flags);
+#include "TexturePS3.h"
+
+Texture::Texture(string filename, unsigned int flags)
 {
 	// TODO: Sort if this is TGA or GTF and load accordingly.
+	if (filePath.substr(filePath.length() - 4, 3) == "tga")
+	{
+		texture = LoadTGA();
+	}
+	else if (filePath.substr(filePath.length() - 4, 3) == "gtf")
+	{
+		texture = LoadGTF();
+	}
 }
 
 /*

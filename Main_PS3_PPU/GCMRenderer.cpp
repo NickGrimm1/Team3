@@ -291,12 +291,11 @@ ridiculous, but it is because vertex shaders can be ran from system memory,
 while fragment shaders MUST be ran in graphics memory, and so its address
 must be 'offsettable'. 
 */
-void	GCMRenderer::SetCurrentShader(VertexShader & vert, FragmentShader &frag) {
-	currentFrag = &frag;
-	currentVert = &vert;
+void	GCMRenderer::SetCurrentShader(Shader* shader) {
+	currentShader = shader;
 
-	cellGcmSetFragmentProgram(currentFrag->program, currentFrag->offset);
-	cellGcmSetVertexProgram(currentVert->program, currentVert->ucode);
+	cellGcmSetFragmentProgram(currentShader->GetFragment()->GetProgram(), currentShader->GetFragment()->GetOffset());
+	cellGcmSetVertexProgram(currentShader->GetVertex()->GetProgram(), currentShader->GetVertex()->GetUCode());
 }
 
 //Sets the camera. Can be NULL
@@ -332,7 +331,7 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		//GCC complains about function returns being used as parameters passed
 		//around, or we'd just use GetWorldTransform as the function param
 		Matrix4 transform = n->GetWorldTransform();
-		currentVert->SetParameter("modelMat", transform);
+		currentShader->GetVertex()->SetParameter("modelMat", transform);
 
 		/*
 		If your SceneNodes can have their own texture, handle the setting of it
@@ -341,13 +340,13 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		make it more intuitive to place it here, instead.
 		*/
 	
-		SetTextureSampler(currentFrag->GetParameter("texture"),n->GetMesh()->GetDefaultTexture());
+		SetTextureSampler(currentShader->GetFragment()->GetParameter("texture"),n->GetMesh()->GetDefaultTexture());
 
 		/*
 		The GCM Mesh class needs the current vertex shader, fragment
 		shader is just sent for convenience, in case it's needed in future...
 		*/
-		n->GetMesh()->Draw(*currentVert,*currentFrag);
+		n->GetMesh()->Draw(*(currentShader->GetVertex()),*(currentShader->GetFragment()));
 	}
 
 	//Remember to draw our children!
@@ -534,7 +533,7 @@ void	GCMRenderer::SetTextureSampler(CGparameter sampler, const CellGcmTexture *t
 		return; //cellGcmCgGetParameterResource dies on an invalid parameter!
 	}
 	//Get a pointer to the actual bound texture unit for this sampler
-	CGresource unitResource = (CGresource)(cellGcmCgGetParameterResource(currentFrag->program, sampler) - CG_TEXUNIT0);
+	CGresource unitResource = (CGresource)(cellGcmCgGetParameterResource(currentShader->GetFragment()->GetProgram(), sampler) - CG_TEXUNIT0);
 
 	cellGcmSetTexture(unitResource, texture);		//Set texture unit to sample from the given texture
 
