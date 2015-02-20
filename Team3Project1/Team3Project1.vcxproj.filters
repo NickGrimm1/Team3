@@ -399,6 +399,57 @@
     <ClInclude Include="Mesh.h">
       <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Framework\CollisionHelper.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Constraint.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\DebugDrawer.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\GameClass.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\GameEntity.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\MyGame.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Octree.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\PhysicsNode.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\PhysicsSystem.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Vehicle.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\SpringDemo.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\SoundEntity.h">
+      <Filter>Framework\Audio\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Sound.h">
+      <Filter>Framework\Audio\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\SoundEmitter.h">
+      <Filter>Framework\Audio\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\SoundManager.h">
+      <Filter>Framework\Audio\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\SoundSystem.h">
+      <Filter>Framework\Audio\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Debuff.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">
@@ -526,6 +577,54 @@
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\CollisionHelper.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\GameClass.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\GameEntity.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Main.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\MyGame.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Octree.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\PhysicsNode.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\PhysicsSystem.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\SpringDemo.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Vehicle.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\SoundEntity.cpp">
+      <Filter>Framework\Audio\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Sound.cpp">
+      <Filter>Framework\Audio\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\SoundEmitter.cpp">
+      <Filter>Framework\Audio\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\SoundManager.cpp">
+      <Filter>Framework\Audio\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\SoundSystem.cpp">
+      <Filter>Framework\Audio\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Debuff.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

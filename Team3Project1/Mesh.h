@@ -44,6 +44,9 @@ public:
 	static Mesh* GenerateCone(unsigned int subdivs);
 	static Mesh* GenerateCylinder(unsigned int subdivs);
 
+	int GetNumVertices() {return NumVertices;}
+	Vector3* GetVertices() {return Vertices; }
+
 protected:
 	//Buffers all VBO data into graphics memory. Required before drawing!
 	void BufferData();
@@ -56,12 +59,17 @@ protected:
 	
 	//Pointer to vertex data
 	Vertex*		vertices;
+	//Pointer to vertex position attribute data (badly named...?)
+	Vector3*	Vertices;
 	//Pointer to vertex indices attribute data
 	unsigned int*	indices;
 	//Number of vertices for this mesh
 	unsigned int numVertices;
 	//Number of indices for this mesh
 	unsigned int numIndices;
+
+	//Number of vertices for this mesh
+	GLuint	NumVertices;
 	bool transformCoords;
 	// OpenGL texture name for the diffuse map
 	Texture* texture;

@@ -29,6 +29,8 @@ struct LightData {
 	Vector4*	lightColour;
 	Vector4*	lightSpecColour;
 
+
+
 	Vector3*	lightPos;
 	Vector3*	lightDir;
 	Vector3*	cameraPos;
@@ -65,6 +67,7 @@ public:
 	bool			DropRenderContextForThread();
 
 	bool LoadShaders();
+	static Renderer&GetRenderer() { return *instance;}
 protected:
 	//Rendering pipeline components.
 	void			DrawScene();
@@ -134,4 +137,6 @@ protected:
 	Mesh*			screenMesh;			// A quad mesh for drawing screen filling textures
 
 	MutexClass		openglMutex;		// Prevents different threads for using OpenGL at same time	
+
+	static Renderer*	instance;
 };

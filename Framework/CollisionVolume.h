@@ -20,7 +20,8 @@ enum CollisionVolumeType {
 	COLLISION_AABB,
 	COLLISION_PLANE,
 	COLLISION_LINE,
-	COLLISION_CAPSULE
+	COLLISION_CAPSULE,
+	COLLISION_VOL_BBAA
 };
 
 class CollisionVolume {
@@ -43,6 +44,9 @@ public:
 	virtual void SetPosition(const Vector3& pos) {
 		m_pos = pos;
 	}
+	float GetRadius() const {
+		return m_radius;
+	}
 
 	Vector3 m_pos; // the centre of the sphere
 	float m_radius;
@@ -58,10 +62,27 @@ public:
 	Vector3 m_pos;
 	Vector3 m_halfdims;
 
+    Vector3 getHalfDimensions() const { return m_halfdims; }
 	virtual void SetPosition(const Vector3& pos) {
 		m_pos = pos;
 	}
 };
+
+
+class CollisionBBAA : public CollisionVolume {
+public:
+	CollisionBBAA(Vector3 halfDim): halfDim(halfDim) {}
+
+	CollisionVolumeType GetType() const {
+		return COLLISION_VOL_BBAA;
+	}
+
+	Vector3 getHalfDimensions() const { return halfDim; }
+
+private:
+	Vector3 halfDim;
+};
+
 
 class CollisionPlane : public CollisionVolume {
 public:
@@ -69,6 +90,14 @@ public:
 		m_normal = n;
 		m_distance = d;
 		type = COLLISION_PLANE;
+	}
+
+	Vector3 GetNormal() const {
+		return m_normal;
+	}
+
+	float GetDistance() const {
+		return m_distance;
 	}
 	Vector3 m_normal; //Unit-length plane normal
 	float	m_distance; //Distance from origin

@@ -109,6 +109,7 @@ public:
 	{
 		return (abs(x - in.x < 0.00001f) && abs(y - in.y < 0.00001f) && abs(z - in.z < 0.00001f));
 	}
+	
 	/**
 	<summary>Compares this vector with another.</summary>
 	<param name='in'>The second vector.</param>
