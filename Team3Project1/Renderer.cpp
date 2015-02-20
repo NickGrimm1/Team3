@@ -607,6 +607,7 @@ void Renderer::Draw2DText(DrawableText2D& text) {
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 	
 	textMesh->Draw();
+	delete textMesh;
 }
 
 void Renderer::Draw2DTexture(DrawableTexture2D& texture) {
@@ -650,6 +651,7 @@ bool Renderer::ActiveTex()
 
 GLuint Renderer::CreateTexture(const char* filename, bool enableMipMaps, bool enableAnisotropicFiltering) {
 	openglMutex.lock_mutex();
+	wglMakeCurrent(deviceContext, renderContext);
 
 	unsigned int flags = false;
 	if (enableMipMaps) flags |= SOIL_FLAG_MIPMAPS;
@@ -657,6 +659,7 @@ GLuint Renderer::CreateTexture(const char* filename, bool enableMipMaps, bool en
 	if (!textureObject)
 		textureObject = 0; // make sure GetTexture will return an error
 
+	wglMakeCurrent(deviceContext, NULL);
 	openglMutex.unlock_mutex();
 
 	return textureObject;
@@ -664,6 +667,7 @@ GLuint Renderer::CreateTexture(const char* filename, bool enableMipMaps, bool en
 
 GLuint Renderer::CreateShadowTexture() {
 	openglMutex.lock_mutex();
+	wglMakeCurrent(deviceContext, renderContext);
 	
 	//Create a shadow texture buffer
 	GLuint shadowTex;
@@ -675,6 +679,7 @@ GLuint Renderer::CreateShadowTexture() {
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOWSIZE, SHADOWSIZE, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
 	
+	wglMakeCurrent(deviceContext, NULL);
 	openglMutex.unlock_mutex();
 
 	return shadowTex;
@@ -682,9 +687,11 @@ GLuint Renderer::CreateShadowTexture() {
 
 bool Renderer::DestroyTexture(GLuint textureReference) {
 	openglMutex.lock_mutex();
+	wglMakeCurrent(deviceContext, renderContext);
 
 	glDeleteTextures(1, &textureReference);
 	
+	wglMakeCurrent(deviceContext, NULL);
 	openglMutex.unlock_mutex();
 	return true;
 }
