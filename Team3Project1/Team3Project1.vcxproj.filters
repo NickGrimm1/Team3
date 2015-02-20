@@ -405,6 +405,12 @@
     <ClInclude Include="HudTestScreen.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TrackSegment.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Spline.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">
@@ -540,6 +546,12 @@
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TexturePS3.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Spline.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackSegment.cpp">
       <Filter>Framework\Resource Manager\Source Files</Filter>
     </ClCompile>
   </ItemGroup>

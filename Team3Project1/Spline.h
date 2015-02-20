@@ -13,7 +13,7 @@ Author: Derek Kelly
 Version: 0.0.1 16/02/2015</summary>
 */
 
-#include "../Framework/Mesh.h"
+#include "Mesh.h"
 #include "../Framework/Vector3.h"
 
 class Spline : public Mesh {
