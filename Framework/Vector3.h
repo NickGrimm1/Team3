@@ -344,6 +344,11 @@ public:
 	{
 		return Vector3(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x);
 	}
+
+	static Vector3	doubleCross(const Vector3& v1, const Vector3& v2)
+{
+	return Cross(Cross(v1, v2), v1);
+}
 	/**
 	<summary>Finds the cross product (Vector Product) of this and another vector.</summary>
 	<param name='in'>The other vector.</param>
@@ -489,3 +494,4 @@ public:
 	}
 #pragma endregion
 };
+

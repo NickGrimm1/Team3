@@ -35,37 +35,33 @@ protected:
 
 class CollisionSphere : public CollisionVolume {
 public:
-	CollisionSphere(const Vector3& p, float r) {
-		m_pos = p;
-		m_radius = r;
-		type = COLLISION_SPHERE;
+
+	CollisionSphere(float radius): radius(radius) {}
+
+	CollisionVolumeType GetType() const {
+		return COLLISION_SPHERE;
 	}
 
-	virtual void SetPosition(const Vector3& pos) {
-		m_pos = pos;
-	}
 	float GetRadius() const {
-		return m_radius;
+		return radius;
 	}
 
-	Vector3 m_pos; // the centre of the sphere
-	float m_radius;
+private:
+	float radius;
 };
 
-class CollisionAABB : public CollisionVolume { // Axis Alligned Bounded Box
+class CollisionAABB : public CollisionVolume {
 public:
-	CollisionAABB(const Vector3& pos, const Vector3& dimensions) {
-		m_pos = pos;
-		m_halfdims = dimensions * 0.5f;
-		type = COLLISION_AABB;
-	}
-	Vector3 m_pos;
-	Vector3 m_halfdims;
+	CollisionAABB(Vector3 halfDim): halfDim(halfDim) {}
 
-    Vector3 getHalfDimensions() const { return m_halfdims; }
-	virtual void SetPosition(const Vector3& pos) {
-		m_pos = pos;
+	CollisionVolumeType GetType() const {
+		return COLLISION_AABB;
 	}
+
+	Vector3 getHalfDimensions() const { return halfDim; }
+
+private:
+	Vector3 halfDim;
 };
 
 

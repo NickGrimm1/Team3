@@ -66,8 +66,14 @@ public:
 	bool			GetRenderContextForThread();
 	bool			DropRenderContextForThread();
 
-	bool LoadShaders();
-	static Renderer&GetRenderer() { return *instance;}
+	bool            LoadShaders();
+	void			RemoveNode(SceneNode* n);
+	static			Renderer&GetRenderer() { return *instance;}
+
+	static	void	Destroy() {delete instance;}
+	static bool Initialise() {  instance = new Renderer( Window::GetWindow());  return instance->HasInitialised();}
+	void	AddNode(SceneNode* n);
+	void	RemoveNode(SceneNode* n);
 protected:
 	//Rendering pipeline components.
 	void			DrawScene();
@@ -99,6 +105,7 @@ protected:
 
 	Mesh*			quad;
 
+	SceneNode*		root;
 	Camera*			camera;
 
 	Frustum			frameFrustum;

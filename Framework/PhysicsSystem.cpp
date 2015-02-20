@@ -594,10 +594,10 @@ void	PhysicsSystem::NarrowPhaseCollisions() {
 					}
 					continue;
 				}*/
-		   	case COLLISION_VOL_AABB:
+		   	case COLLISION_AABB:
 								switch(sv->GetType()) 
 								{
-									 case COLLISION_VOL_AABB:
+									 case COLLISION_AABB:
 				    					
 									  if (CollisionHelper::AABBCollision(first, second )) 
 									  {
@@ -632,7 +632,7 @@ void	PhysicsSystem::NarrowPhaseCollisions() {
 		case COLLISION_VOL_BBAA:
 								switch(sv->GetType()) 
 								{
-									 case COLLISION_VOL_AABB:
+									 case COLLISION_AABB:
 				    					
 									  if (CollisionHelper::BBAACollision(first, second )) 
 									  {

@@ -621,3 +621,10 @@ bool Renderer::DropRenderContextForThread() {
 	openglMutex.unlock_mutex(); 
 	return result;
 }
+
+void	Renderer::AddNode(SceneNode* n) {
+	root->AddChild(n);
+}
+void	Renderer::RemoveNode(SceneNode* n) {
+	root->RemoveChild(n);
+}
