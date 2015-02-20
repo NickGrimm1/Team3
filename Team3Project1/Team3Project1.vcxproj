@@ -303,6 +303,7 @@
     <ClCompile Include="ShaderPart.cpp" />
     <ClCompile Include="StorageManager.cpp" />
     <ClCompile Include="TextMesh.cpp" />
+    <ClCompile Include="TexturePS3.cpp" />
     <ClCompile Include="TextureWindows.cpp" />
     <ClCompile Include="Thread.cpp" />
   </ItemGroup>

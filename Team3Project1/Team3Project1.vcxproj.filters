@@ -539,6 +539,9 @@
     <ClCompile Include="HudTestScreen.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TexturePS3.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\TechFragment.glsl">
