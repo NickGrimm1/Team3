@@ -269,8 +269,8 @@ public:
 	{
 		if (scalar != 0)
 			return Vector2(x / scalar, y / scalar);
-		else
-			throw DivideByZeroException();
+		//else
+			//throw DivideByZeroException();
 	}
 	/**
 	<summary>Divides this vector by a scalar, modifying this.</summary>
@@ -284,8 +284,8 @@ public:
 			x /= scalar;
 			y /= scalar;
 		}
-		else
-			throw DivideByZeroException();
+		//else
+			//throw DivideByZeroException();
 	}
 	/**
 	<summary>Divides a vector by a scalar without altering the vector.</summary>
@@ -358,8 +358,8 @@ public:
 			x /= l;
 			y /= l;
 		}
-		else
-			throw DivideByZeroException();
+		//else
+			//throw DivideByZeroException();
 	}
 	/**
 	<summary>Finds the normal of the this vector without modifying it.</summary>

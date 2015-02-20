@@ -42,6 +42,7 @@ void GameScreen2D::RemoveDrawable(DrawableEntity2D* drawable)
 	RemoveEntity(drawable);
 }
 
+#if WINDOWS_BUILD
 /**
 <summary>Notifies all screens in the stack of a mouse event.</summary>
 <param name='type'>The event type.</param>
@@ -121,6 +122,7 @@ void GameScreen2D::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents:
 {
 	// Not implemented in 2D. Can be overridden for specific screens if neccessary.
 }
+#endif
 /**
 <summary>Notifies all screens in the stack of a gamepad event.</summary>
 <param name='playerID'>The ID for the controller.</param>

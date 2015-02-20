@@ -1,3 +1,5 @@
+#if WINDOWS_BUILD
+
 /*
 Class:OGLRenderer
 Author:Rich Davison	<richard.davison4@newcastle.ac.uk>
@@ -429,3 +431,5 @@ void DebugDrawData::Draw() {
 
 	Clear();*/
 }
+
+#endif

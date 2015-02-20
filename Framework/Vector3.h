@@ -275,8 +275,8 @@ public:
 	{
 		if (scalar != 0)
 			return Vector3(x / scalar, y / scalar, z / scalar);
-		else
-			throw DivideByZeroException();
+		//else
+			//throw DivideByZeroException();
 	}
 	/**
 	<summary>Divides this vector by a scalar, modifying this.</summary>
@@ -291,8 +291,8 @@ public:
 			y /= scalar;
 			z /= scalar;
 		}
-		else
-			throw DivideByZeroException();
+		//else
+			//throw DivideByZeroException();
 	}
 	/**
 	<summary>Divides a vector by a scalar without altering the vector.</summary>

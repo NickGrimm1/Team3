@@ -71,7 +71,9 @@ public:
 		Instance()->input->Start();
 
 		while (instance->isRunning) {
+#if WINDOWS_BUILD
 			Window::GetWindow().UpdateWindow();
+#endif
 			for (unsigned int i = 0; i < gameScreens.size(); i++) {
 				gameScreens[i]->Update();
 			}
@@ -175,6 +177,7 @@ public:
 	}
 #pragma endregion
 #pragma region Input Handling
+#if WINDOWS_BUILD
 	/**
 	<summary>Notifies all screens in the stack of a mouse event.</summary>
 	<param name='type'>The event type.</param>
@@ -214,6 +217,7 @@ public:
 		for (unsigned int i = 0; i < gameScreens.size(); i++)
 			gameScreens[i]->KeyboardEvent(type, key);
 	}
+#endif
 	/**
 	<summary>Notifies all screens in the stack of a gamepad event.</summary>
 	<param name='playerID'>The ID for the controller.</param>

@@ -2,6 +2,7 @@
 #include <fstream>
 #include "../Framework/Shader.h"
 #include <stdio.h>
+#include "Vertex.h"
 
 #if WINDOWS_BUILD
 ShaderPart::ShaderPart(string raw, ShaderType::Type type) 
@@ -136,7 +137,7 @@ function, which takes a CGparameter and a pointer to some float data,
 and the function works out the rest. Simpler, but more likely to go
 wrong when incorrect data is sent to it. 
 */
-void	Shader::SetParameter(std::string name, float*data) {
+void	ShaderPart::SetParameter(std::string name, float*data) {
 	CGparameter p = GetParameter(name);
 
 	//DON'T try to set a non-existent parameter. GCM will instantly

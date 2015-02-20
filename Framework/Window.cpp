@@ -1,3 +1,5 @@
+#if WINDOWS_BUILD
+
 #include "Window.h"
 #include "Mouse.h"
 #include "Keyboard.h"
@@ -336,3 +338,5 @@ void	Window::ShowOSPointer(bool show)	{
 		ShowCursor(0);
 	}
 }
+
+#endif

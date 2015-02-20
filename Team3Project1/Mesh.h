@@ -2,18 +2,15 @@
 #if WINDOWS_BUILD
 #include "../Framework/OGLRenderer.h"
 #endif
-#if PS3_BUILD
-#include <sysutil/sysutil_sysparam.h>	
-#include <cell/gcm.h>
-#endif
 #include "Vertex.h"
 #include "Texture.h"
+#include "ShaderPart.h"
 
+#if WINDOWS_BUILD
 namespace PrimitiveType
 {
 	enum Type
 	{
-#if WINDOWS_BUILD
 		POINTS = GL_POINTS,
 		LINES = GL_LINES,
 		LINE_LOOP = GL_LINE_LOOP,
@@ -23,20 +20,9 @@ namespace PrimitiveType
 		TRIANGLE_FAN = GL_TRIANGLE_FAN,
 		QUADS = GL_QUADS,
 		QUAD_STRIP = GL_QUAD_STRIP,
-#endif
-#if PS3_BUILD
-		POINTS = CELL_GCM_PRIMITIVE_POINTS,
-		LINES = CELL_GCM_PRIMITIVE_LINES,
-		LINE_LOOP = CELL_GCM_PRIMITIVE_LINE_LOOP,
-		LINE_STRIP = CELL_GCM_PRIMITIVE_LINE_STRIP,
-		TRIANGLES = CELL_GCM_PRIMITIVE_TRIANGLES,
-		TRIANGLE_STRIP = CELL_GCM_PRIMITIVE_TRIANGLE_STRIP,
-		TRIANGLE_FAN = CELL_GCM_PRIMITIVE_TRIANGLE_FAN,
-		QUADS = CELL_GCM_PRIMITIVE_QUADS,
-		QUAD_STRIP = CELL_GCM_PRIMITIVE_QUAD_STRIP,
-#endif
 	};
 }
+#endif
 
 class Mesh
 {
@@ -56,7 +42,7 @@ public:
 	virtual void Draw(bool update = true);
 #endif
 #if PS3_BUILD
-	virtual void Mesh::Draw(ShaderPart &vertex, ShaderPart &fragment)
+	virtual void Mesh::Draw(ShaderPart &vertex, ShaderPart &fragment);
 #endif
 
 	//Generates a single triangle, with RGB colours
@@ -92,12 +78,16 @@ protected:
 
 	// Primitive type for this mesh (GL_TRIANGLES...etc)
 	unsigned int type;
-	
-#if WINDOWS_BUILD
-	// Pointer to vertex indices attribute data
-	unsigned int* indices;
+
 	//Buffers all VBO data into graphics memory. Required before drawing!
 	void BufferData();
+	
+	// Pointer to vertex indices attribute data
+	short* indices;
+
+	void GetMemory(unsigned int vertices, unsigned int indices);
+
+#if WINDOWS_BUILD
 	//VAO for this mesh
 	GLuint arrayObject;
 	//VBOs for this mesh
@@ -106,7 +96,5 @@ protected:
 #if PS3_BUILD
 	// Offsets for each of the vertex attributes
 	unsigned int vertexOffsets[VertexAttributes::MAX];
-	// Pointer to vertex indices attribute data
-	short* indices;
 #endif
 };

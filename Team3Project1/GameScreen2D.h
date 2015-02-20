@@ -188,6 +188,7 @@ protected:
 	float maxDeviationDown;
 	float maxDeviationLeft;
 	float maxDeviationRight;
+#if WINDOWS_BUILD
 	/**
 	<summary>Notifies all screens in the stack of a mouse event.</summary>
 	<param name='type'>The event type.</param>
@@ -211,6 +212,7 @@ protected:
 	<param name='key'>The key.</param>
 	*/
 	virtual void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key);
+#endif
 	/**
 	<summary>Notifies all screens in the stack of a gamepad event.</summary>
 	<param name='playerID'>The ID for the controller.</param>

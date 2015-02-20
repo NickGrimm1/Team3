@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 /******************************************************************************
 Class:Keyboard
 Implements:InputDevice
@@ -211,4 +212,4 @@ protected:
 };
 
 
-
+#endif

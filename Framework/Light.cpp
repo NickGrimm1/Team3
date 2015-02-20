@@ -1,3 +1,5 @@
+#if WINDOWS_BUILD
+
 /**
 <summary>Light
 Implements a Light class that allows creation of Spot, Point and Directional lights for traditional and deferred rendering
@@ -285,3 +287,5 @@ void PointLight::DrawLightDeferred(Vector3 camera_pos) {
 
 	glCullFace(GL_BACK);
 }
+
+#endif

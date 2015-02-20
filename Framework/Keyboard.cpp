@@ -1,3 +1,5 @@
+#if WINDOWS_BUILD
+
 #include "Keyboard.h"
 #include "../Team3Project1/GameStateManager.h"
 
@@ -72,3 +74,5 @@ void Keyboard::Update(RAWINPUT* raw, float msec)	{
 		}
 	}
 }
+
+#endif

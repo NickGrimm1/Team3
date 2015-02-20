@@ -607,9 +607,16 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 		else
 		{
 			// Load this vertex shader
+#if WINDOWS_BUILD
 			string raw = ShaderPart::LoadShaderFile(vertexShaderFilePath);
+#endif
 			GameStateManager::Graphics()->GetRenderContext();
+#if WINDOWS_BUILD
 			vertexShader = new ShaderPart(raw, ShaderType::VERTEX);
+#endif
+#if PS3_BUILD
+			vertexShader = new ShaderPart(vertexShaderFilePath, ShaderType::VERTEX);
+#endif
 			GameStateManager::Graphics()->DropRenderContext();
 			loadedShaderParts.insert(pair<string, LoadedShaderPart>(vertexShaderFilePath, LoadedShaderPart(vertexShader, newShader)));
 		}
@@ -623,14 +630,22 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 		else
 		{
 			// Load this fragment shader
+#if WINDOWS_BUILD
 			string raw = ShaderPart::LoadShaderFile(fragmentShaderFilePath);
+#endif
 			GameStateManager::Graphics()->GetRenderContext();
+#if WINDOWS_BUILD
 			fragmentShader = new ShaderPart(raw, ShaderType::FRAGMENT);
+#endif
+#if PS3_BUILD
+			fragmentShader = new ShaderPart(fragmentShaderFilePath, ShaderType::FRAGMENT);
+#endif
 			GameStateManager::Graphics()->DropRenderContext();
 			loadedShaderParts.insert(pair<string, LoadedShaderPart>(fragmentShaderFilePath, LoadedShaderPart(fragmentShader, newShader)));
 			
 		}
 
+#if WINDOWS_BUILD
 		if (geometryShaderFilePath != "")
 		{
 			j = loadedShaderParts.find(geometryShaderFilePath);
@@ -653,6 +668,7 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 		}
 		else
 			geometryShader = NULL;
+#endif
 
 		// Load this Shader
 		newShader->SetVertex(vertexShader);

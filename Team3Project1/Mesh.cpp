@@ -18,19 +18,17 @@ Mesh::Mesh()
 
 	transformCoords = true;
 }
-
+#if WINDOWS_BUILD
 Mesh::~Mesh(void)	
 {
-#if WINDOWS_BUILD
 	glDeleteVertexArrays(1, &arrayObject);			//Delete our VAO
 	glDeleteBuffers(1, bufferObject);		//Delete our VBOs
 	if (vertices)
 		delete[]vertices;
 	if (indices)
 		delete[]indices;
-#endif
 }
-#if WINDOWS_BUILD
+
 void Mesh::Draw(bool update)	
 {
 	glBindVertexArray(arrayObject);
@@ -41,81 +39,7 @@ void Mesh::Draw(bool update)
 
 	glBindVertexArray(0);
 }
-#endif
-#if PS3_BUILD
-void Mesh::Draw(ShaderPart &vertex, ShaderPart &fragment)
-{
-	cellGcmSetVertexDataArray(vertex.GetAttributeIndex(VertexAttributes::POSITION),
-		0, 
-		sizeof(Vertex), 
-		3, 
-		CELL_GCM_VERTEX_F, 
-		CELL_GCM_LOCATION_LOCAL, 
-		(uint32_t)vertexOffsets[VertexAttributes::POSITION]
-	);
 
-	if(vertexOffsets[VertexAttributes::NORMAL])
-	{
-		cellGcmSetVertexDataArray(vertex.GetAttributeIndex(VertexAttributes::NORMAL),
-			0, 
-			sizeof(Vertex), 
-			2, 
-			CELL_GCM_VERTEX_F, 
-			CELL_GCM_LOCATION_LOCAL, 
-			(uint32_t)vertexOffsets[VertexAttributes::NORMAL]
-		);
-	}
-
-	if(vertexOffsets[VertexAttributes::COLOUR])	
-	{
-		cellGcmSetVertexDataArray(vertex.GetAttributeIndex(VertexAttributes::COLOUR),
-			0, 
-			sizeof(Vertex), 
-			4, 
-			CELL_GCM_VERTEX_UB, 
-			CELL_GCM_LOCATION_LOCAL, 
-			(uint32_t)vertexOffsets[VertexAttributes::COLOUR]
-		);
-	}
-
-	if(vertexOffsets[VertexAttributes::TEXCOORD])
-	{
-		cellGcmSetVertexDataArray(vertex.GetAttributeIndex(VertexAttributes::TEXCOORD),
-			0, 
-			sizeof(Vertex), 
-			2, 
-			CELL_GCM_VERTEX_F, 
-			CELL_GCM_LOCATION_LOCAL, 
-			(uint32_t)vertexOffsets[VertexAttributes::TEXCOORD]
-		);
-	}
-
-	if(vertexOffsets[VertexAttributes::TANGENT])
-	{
-		cellGcmSetVertexDataArray(vertex.GetAttributeIndex(VertexAttributes::TANGENT),
-			0, 
-			sizeof(Vertex), 
-			2, 
-			CELL_GCM_VERTEX_F, 
-			CELL_GCM_LOCATION_LOCAL, 
-			(uint32_t)vertexOffsets[VertexAttributes::TANGENT]
-		);
-	}
-
-	if(vertexOffsets[VertexAttributes::MAX]) 
-	{	//If we have indices
-
-		cellGcmSetDrawIndexArray(type, numIndices, CELL_GCM_DRAW_INDEX_ARRAY_TYPE_16,
-			CELL_GCM_LOCATION_LOCAL, vertexOffsets[VertexAttributes::MAX]);
-	}
-	else{
-		//else just draw an ordered list of vertices
-		cellGcmSetDrawArrays(type, 0, numVertices);
-	}
-}
-#endif
-
-#if WINDOWS_BUILD
 void	Mesh::BufferData()	
 {
 	glBindVertexArray(arrayObject);
@@ -142,10 +66,17 @@ void	Mesh::BufferData()
 	{
 		glGenBuffers(1, &bufferObject[1]);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferObject[1]);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(GLuint), indices, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(short), indices, GL_STATIC_DRAW);
 	}
 
 	glBindVertexArray(0);
+}
+
+void Mesh::GetMemory(unsigned int vertices, unsigned int indices)
+{
+	this->vertices = new Vertex[numVertices];
+	if (indices)
+		this->indices = new short[numIndices];
 }
 #endif
 
@@ -183,7 +114,7 @@ void	Mesh::GenerateNormals()
 		}
 	}
 
-	for(GLuint i = 0; i < numVertices; ++i)
+	for(unsigned int i = 0; i < numVertices; ++i)
 	{
 		vertices[i].GetNormal().Normalise();
 	}
@@ -217,7 +148,7 @@ void Mesh::GenerateTangents()
 			vertices[i + 2].SetTangent(tangent);
 		}
 	}
-	for(GLuint i = 0; i < numVertices; ++i)
+	for(unsigned int i = 0; i < numVertices; ++i)
 	{
 		vertices[i].SetTangent(vertices[i].GetTangent().Normal());
 	}
@@ -244,12 +175,7 @@ Mesh* Mesh::GenerateTriangle()
 	Mesh*m = new Mesh();
 	m->numVertices = 3;
 
-#if WINDOWS_BUILD
-	m->vertices = new Vertex[m->numVertices];
-#endif
-#if PS3_BUILD
-	m->vertices = (Vertex*)GCMRenderer::localMemoryAlign(128, sizeof(Vertex) * 3);
-#endif
+	m->GetMemory(m->numVertices, 0);
 
 	m->vertices[0] = Vertex(
 		Vector3(0.0f, 0.5f,	0.0f),
@@ -270,16 +196,7 @@ Mesh* Mesh::GenerateTriangle()
 	m->GenerateNormals();
 	m->GenerateTangents();
 	
-#if WINDOWS_BUILD
 	m->BufferData();
-#endif
-#if PS3_BUILD
-	cellGcmAddressToOffset(vertices->x, &m->vertexOffsets[VertexAttributes::POSITION]);
-	cellGcmAddressToOffset(vertices->nX, &m->vertexOffsets[VertexAttributes::NORMAL]);
-	cellGcmAddressToOffset(vertices->rgba, &m->vertexOffsets[VertexAttributes::COLOUR]);
-	cellGcmAddressToOffset(vertices->tX, &m->vertexOffsets[VertexAttributes::TEXCOORD]);
-	cellGcmAddressToOffset(vertices->tnX, &m->vertexOffsets[VertexAttributes::TANGENT]);
-#endif
 
 	return m;
 }
@@ -292,7 +209,7 @@ Mesh* Mesh::GenerateQuad()
 
 	m->type = PrimitiveType::TRIANGLE_STRIP;
 
-	m->vertices	= new Vertex[m->numVertices];
+	m->GetMemory(m->numVertices, 0);
 
 	m->vertices[0] = Vertex(
 		Vector3(-1.0f, -1.0f, 0.0f),
@@ -319,16 +236,7 @@ Mesh* Mesh::GenerateQuad()
 		Vector2(1.0f, 0.0f),
 		Vector3(1.0f, 0.0f,0.0f));
 
-#if WINDOWS_BUILD
 	m->BufferData();
-#endif
-#if PS3_BUILD
-	cellGcmAddressToOffset(vertices->x, &m->vertexOffsets[VertexAttributes::POSITION]);
-	cellGcmAddressToOffset(vertices->nX, &m->vertexOffsets[VertexAttributes::NORMAL]);
-	cellGcmAddressToOffset(vertices->rgba, &m->vertexOffsets[VertexAttributes::COLOUR]);
-	cellGcmAddressToOffset(vertices->tX, &m->vertexOffsets[VertexAttributes::TEXCOORD]);
-	cellGcmAddressToOffset(vertices->tnX, &m->vertexOffsets[VertexAttributes::TANGENT]);
-#endif
 
 	return m;
 }
@@ -341,7 +249,7 @@ Mesh* Mesh::GenerateQuadAlt()
 
 	m->type = PrimitiveType::TRIANGLE_STRIP;
 
-	m->vertices	= new Vertex[m->numVertices];
+	m->GetMemory(m->numVertices, 0);
 
 	m->vertices[0] = Vertex(
 		Vector3(0.0f, 0.0f, 0.0f),
@@ -368,16 +276,7 @@ Mesh* Mesh::GenerateQuadAlt()
 		Vector2(1.0f, 1.0f),
 		Vector3(1.0f, 0.0f,0.0f));
 
-#if WINDOWS_BUILD
 	m->BufferData();
-#endif
-#if PS3_BUILD
-	cellGcmAddressToOffset(vertices->x, &m->vertexOffsets[VertexAttributes::POSITION]);
-	cellGcmAddressToOffset(vertices->nX, &m->vertexOffsets[VertexAttributes::NORMAL]);
-	cellGcmAddressToOffset(vertices->rgba, &m->vertexOffsets[VertexAttributes::COLOUR]);
-	cellGcmAddressToOffset(vertices->tX, &m->vertexOffsets[VertexAttributes::TEXCOORD]);
-	cellGcmAddressToOffset(vertices->tnX, &m->vertexOffsets[VertexAttributes::TANGENT]);
-#endif
 
 	return m;
 }
@@ -390,7 +289,7 @@ Mesh* Mesh::GenerateQuadCentral()
 
 	m->type = PrimitiveType::TRIANGLE_STRIP;
 
-	m->vertices	= new Vertex[m->numVertices];
+	m->GetMemory(m->numVertices, 0);
 
 	m->vertices[0] = Vertex(
 		Vector3(-0.5f, -0.5f, 0.0f),
@@ -417,16 +316,7 @@ Mesh* Mesh::GenerateQuadCentral()
 		Vector2(1.0f, 1.0f),
 		Vector3(1.0f, 0.0f,0.0f));
 
-#if WINDOWS_BUILD
 	m->BufferData();
-#endif
-#if PS3_BUILD
-	cellGcmAddressToOffset(vertices->x, &m->vertexOffsets[VertexAttributes::POSITION]);
-	cellGcmAddressToOffset(vertices->nX, &m->vertexOffsets[VertexAttributes::NORMAL]);
-	cellGcmAddressToOffset(vertices->rgba, &m->vertexOffsets[VertexAttributes::COLOUR]);
-	cellGcmAddressToOffset(vertices->tX, &m->vertexOffsets[VertexAttributes::TEXCOORD]);
-	cellGcmAddressToOffset(vertices->tnX, &m->vertexOffsets[VertexAttributes::TANGENT]);
-#endif
 
 	return m;
 }
@@ -437,7 +327,7 @@ Mesh* Mesh::GenerateCone(unsigned int subdivs)
 	
 	m->numVertices = subdivs * 2; // Need subdiv copies of the tip vertex to maintain normals
 
-	m->vertices = new Vertex[m->numVertices];
+	m->GetMemory(m->numVertices, subdivs * 3 + 3);
 	
 	float subdiv_angle = 2 * PI / subdivs;
 	float tex_inc = 1.0f / (float) subdivs;
@@ -456,13 +346,6 @@ Mesh* Mesh::GenerateCone(unsigned int subdivs)
 		m->vertices[i].SetTexCoord(Vector2((float) i * tex_inc, 0));
 		m->vertices[i + subdivs].SetTexCoord(Vector2((float) i * tex_inc, 1));
 	}	
-	
-#if WINDOWS_BUILD
-	m->indices = new unsigned int[subdivs * 3 + 3];
-#endif
-#if PS3_BUILD
-	m->indices = (short*)GCMRenderer::localMemoryAlign(128, sizeof(short) * (subdivs * 3 + 3));
-#endif
 
 	for (unsigned int i = 0; i < subdivs; ++i) 
 	{
@@ -479,17 +362,8 @@ Mesh* Mesh::GenerateCone(unsigned int subdivs)
 	m->GenerateNormals();
 	m->GenerateTangents();
 
-#if WINDOWS_BUILD
+
 	m->BufferData();
-#endif
-#if PS3_BUILD
-	cellGcmAddressToOffset(vertices->x, &m->vertexOffsets[VertexAttributes::POSITION]);
-	cellGcmAddressToOffset(vertices->nX, &m->vertexOffsets[VertexAttributes::NORMAL]);
-	cellGcmAddressToOffset(vertices->rgba, &m->vertexOffsets[VertexAttributes::COLOUR]);
-	cellGcmAddressToOffset(vertices->tX, &m->vertexOffsets[VertexAttributes::TEXCOORD]);
-	cellGcmAddressToOffset(vertices->tnX, &m->vertexOffsets[VertexAttributes::TANGENT]);
-	cellGcmAddressToOffset(indices, &m->vertexOffsets[VertexAttributes::MAX]);
-#endif
 
 	return m;
 }
@@ -499,7 +373,7 @@ Mesh* Mesh::GenerateCylinder(unsigned int subdivs)
 	Mesh* m = new Mesh();
 
 	m->numVertices = (subdivs + 1) * 2;
-	m->vertices = new Vertex[m->numVertices];
+	m->GetMemory(m->numVertices, subdivs * 6);
 
 	float subdiv_angle = 2 * PI / subdivs;
 	float alpha = 0.0f;
@@ -519,14 +393,6 @@ Mesh* Mesh::GenerateCylinder(unsigned int subdivs)
 		m->vertices[i + subdivs + 1].SetTexCoord(Vector2(i * tex_res, 1.0f));
 		alpha += subdiv_angle;
 	}
-
-	// Setup index buffer
-#if WINDOWS_BUILD
-	m->indices = new unsigned int[subdivs * 6];
-#endif
-#if PS3_BUILD
-	m->indices = (short*)GCMRenderer::localMemoryAlign(128, sizeof(short) * subdivs * 6);
-#endif
 	
 	m->numIndices = 0;
 	for (unsigned int i = 0; i < subdivs; ++i) {
@@ -540,17 +406,7 @@ Mesh* Mesh::GenerateCylinder(unsigned int subdivs)
 		m->indices[m->numIndices++] = i + subdivs + 2;
 	}
 
-#if WINDOWS_BUILD
 	m->BufferData();
-#endif
-#if PS3_BUILD
-	cellGcmAddressToOffset(vertices->x, &m->vertexOffsets[VertexAttributes::POSITION]);
-	cellGcmAddressToOffset(vertices->nX, &m->vertexOffsets[VertexAttributes::NORMAL]);
-	cellGcmAddressToOffset(vertices->rgba, &m->vertexOffsets[VertexAttributes::COLOUR]);
-	cellGcmAddressToOffset(vertices->tX, &m->vertexOffsets[VertexAttributes::TEXCOORD]);
-	cellGcmAddressToOffset(vertices->tnX, &m->vertexOffsets[VertexAttributes::TANGENT]);
-	cellGcmAddressToOffset(indices, &m->vertexOffsets[VertexAttributes::MAX]);
-#endif
 
 	return m;
 }
@@ -565,7 +421,7 @@ Mesh* Mesh::GenerateCircle(unsigned int subdivs)
 
 	m->numVertices = subdivs + 2; // Additional vertex at circle centre + repeat first vertex on circumference to close off circle
 
-	m->vertices = new Vertex[m->numVertices];
+	m->GetMemory(m->numVertices, 0);
 
 	m->vertices[0].SetPosition(Vector3(0.0f, 0.0f, 0.0f)); // Circle centre at origin
 	m->vertices[0].SetColor(Vector4(0, 0, 0, 1.0f));
@@ -587,16 +443,7 @@ Mesh* Mesh::GenerateCircle(unsigned int subdivs)
 
 	m->GenerateTangents();
 
-#if WINDOWS_BUILD
 	m->BufferData();
-#endif
-#if PS3_BUILD
-	cellGcmAddressToOffset(vertices->x, &m->vertexOffsets[VertexAttributes::POSITION]);
-	cellGcmAddressToOffset(vertices->nX, &m->vertexOffsets[VertexAttributes::NORMAL]);
-	cellGcmAddressToOffset(vertices->rgba, &m->vertexOffsets[VertexAttributes::COLOUR]);
-	cellGcmAddressToOffset(vertices->tX, &m->vertexOffsets[VertexAttributes::TEXCOORD]);
-	cellGcmAddressToOffset(vertices->tnX, &m->vertexOffsets[VertexAttributes::TANGENT]);
-#endif
 
 	return m;
 }

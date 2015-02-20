@@ -1,3 +1,5 @@
+#if WINDOWS_BUILD
+
 #include "Mouse.h"
 #include "../Team3Project1/GameStateManager.h"
 
@@ -177,3 +179,5 @@ has moved up, negative down. Can be 0 (no movement)
 int		Mouse::GetWheelMovement()	{
 	return (int)frameWheel;
 }
+
+#endif

@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 /******************************************************************************
 Class:Mouse
 Implements:InputDevice
@@ -123,3 +124,4 @@ protected:
 	float sensitivity;
 };
 
+#endif

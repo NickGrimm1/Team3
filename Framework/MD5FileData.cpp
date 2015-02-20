@@ -514,7 +514,7 @@ void MD5FileData::CreateMeshes()	{
 		target->numIndices    = subMesh.numtris*3; //Each tri has 3 points....
 		target->numVertices   = subMesh.numverts;
 
-		target->indices		  = new unsigned int[target->numIndices]; //Make mem for indices
+		target->indices		  = new short[target->numIndices]; //Make mem for indices
 
 		/*
 		Here we go through each tri, and put its indices in the Mesh index buffer. You'll see

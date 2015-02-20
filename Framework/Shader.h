@@ -29,8 +29,8 @@ namespace ShaderType
 		GEOMETRY = GL_GEOMETRY_SHADER,
 #endif
 #if PS3_BUILD
-		VERTEX = 0;
-		FRAGMENT = 0;
+		VERTEX = 0,
+		FRAGMENT = 0,
 #endif
 	};
 }
