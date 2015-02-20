@@ -7,12 +7,7 @@ Version: 0.0.1 04/02/2015</summary>
 */
 
 #include "Light.h"
-#include "../Team3Project1/Mesh.h"
-#include "OBJMesh.h"
-
-Mesh* PointLight::lightMesh = NULL;//new OBJMesh(MESHDIR"ico.obj");
-Mesh* SpotLight::lightCone = NULL; //Mesh::GenerateCone(20);
-Mesh* SpotLight::lightBase = NULL;
+#include "Shader.h"
 
 Vector3 Light::GetPosition() const {
 	return position;
@@ -127,6 +122,11 @@ Matrix4 PointLight::GetProjectionMatrix() {
 	return Matrix4::Perspective(1.0f, radius, 1, 45.0f);
 }
 
+Matrix4 PointLight::GetModelMatrix() {
+	return Matrix4::Translation(position) *	
+			Matrix4::Scale(Vector3(radius, radius, radius));
+}
+
 DirectionalLight::DirectionalLight(Vector3 dir, Vector4 col, Vector4 spec, unsigned int shadowTex) {
 	type = DIRECTIONAL_LIGHT_TYPE;
 	position = Vector3(0,0,0);
@@ -165,8 +165,8 @@ void DirectionalLight::UpdateLightVolume(float n, float f, float r, float l, flo
 	bottom = b;
 }
 
-void DirectionalLight::DrawLightDeferred(Vector3 camera_pos) {
-	// Not to be used in current state - only built for compatibility with tutorial code
+Matrix4 DirectionalLight::GetModelMatrix() {
+	return Matrix4();
 }
 
 SpotLight::SpotLight(Vector3 pos, Vector3 target, Vector3 up_vec, Vector4 col, Vector4 spec, float spot_rad, float spot_angle, unsigned int shadowTex) {
@@ -193,12 +193,8 @@ Matrix4 SpotLight::GetProjectionMatrix() { //Ignore target spot lights, we have 
 	return shadowProjMatrix;
 }
 
-void SpotLight::DrawLightDeferred(Vector3 camera_pos) {
-	GLint shaderObject = 0;
-	glGetIntegerv(GL_CURRENT_PROGRAM, &shaderObject);
-
-	BindLight();
-
+Matrix4 SpotLight::GetModelMatrix() {
+	// Calculate model matrices for deferred rendering
 	float cone_base_radius = tan(angle / 2.0f * PI / 180.0f) * radius;
 		
 	Vector3 s = Vector3::Cross(up, direction);
@@ -207,36 +203,20 @@ void SpotLight::DrawLightDeferred(Vector3 camera_pos) {
 	u.Normalise();
 	Matrix4 Rotation = Matrix4::Rotation(u, direction, s);
 
-	Matrix4 transform = Matrix4::Translation(position) * 
-						Rotation * 
-						Matrix4::Scale(Vector3(cone_base_radius, radius, cone_base_radius)); 
-	glUniformMatrix4fv(glGetUniformLocation(shaderObject, "modelMatrix"), 1, false, (float*) &transform);
+	return Matrix4::Translation(position) * Rotation * Matrix4::Scale(Vector3(cone_base_radius, radius, cone_base_radius)); 
+}
 
-	//glEnable(GL_CULL_FACE);
-	glDisable(GL_CULL_FACE);
-	if (IsInSpotlight(camera_pos, this)) {
-	// camera is inside the light volume!
-		//cout << "in spotlight" << endl;
-		glCullFace(GL_FRONT);
-	}
-	else {
-		glCullFace(GL_BACK);
-	}
-	lightCone->Draw();
+Matrix4 SpotLight::GetBaseModelMatrix() {
+	float cone_base_radius = tan(angle / 2.0f * PI / 180.0f) * radius;
+		
+	Vector3 s = Vector3::Cross(up, direction);
+	s.Normalise();
+	Vector3 u = Vector3::Cross(s, direction);
+	u.Normalise();
+	Matrix4 Rotation = Matrix4::Rotation(u, direction, s);
 
-	// Need to close off the cone to prevent issues looking down cone axis whilst in camera in cone
-	transform = Matrix4::Translation(position) * Rotation * Matrix4::Translation(Vector3(0, radius, 0)) *
-						Matrix4::Scale(Vector3(cone_base_radius, radius, cone_base_radius)) * Matrix4::Rotation(180.0f, Vector3(1,0,0)); 
-	glUniformMatrix4fv(glGetUniformLocation(shaderObject, "modelMatrix"), 1, false, (float*) &transform);
-
-	if (IsInSpotlight(camera_pos, this)) { // If inside the cone, looking down the axis, need to draw a base to prevent base being discarded
-	// camera is inside the light volume!
-		glCullFace(GL_FRONT);
-		lightBase->Draw();
-	}
-
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	return Matrix4::Translation(position) * Rotation * Matrix4::Translation(Vector3(0, radius, 0)) * 
+		Matrix4::Scale(Vector3(cone_base_radius, radius, cone_base_radius)) * Matrix4::Rotation(180.0f, Vector3(1,0,0)); 
 }
 
 /* Spot lights - emits a cone of light angle of alpha
@@ -245,7 +225,7 @@ A fragment will be lit if
 2. within cone of light
 dot(a,b) = |a| * |b| * cos angle
 calc dot product between cones central axis and vector from cone origin and fragment (normalised)
-if less than cos alpha, then within cone.
+if greater than cos alpha, then within cone.
 */
 
 bool SpotLight::IsInSpotlight(Vector3 world_pos, Light* light) {
@@ -260,30 +240,4 @@ bool SpotLight::IsInSpotlight(Vector3 world_pos, Light* light) {
 		return (dist < light->GetRadius());
 	}
 	return false; // not in cone shape
-}
-
-void PointLight::DrawLightDeferred(Vector3 camera_pos) {
-	GLint shaderObject = 0;
-	glGetIntegerv(GL_CURRENT_PROGRAM, &shaderObject);
-	glEnable(GL_CULL_FACE);
-	
-	BindLight(); // Set up light details in shader
-
-	// Set up mesh
-	Matrix4 transform = Matrix4::Translation(position) *	
-						Matrix4::Scale(Vector3(radius, radius, radius));
-	glUniformMatrix4fv(glGetUniformLocation(shaderObject, "modelMatrix"), 1, false, (float*) &transform);
-	
-		
-	float dist = (position - camera_pos).Length();
-	if (dist < radius) {
-	// camera is inside the light volume!
-		glCullFace(GL_FRONT);
-	}
-	else {
-		glCullFace(GL_BACK);
-	}
-	lightMesh->Draw();
-
-	glCullFace(GL_BACK);
 }

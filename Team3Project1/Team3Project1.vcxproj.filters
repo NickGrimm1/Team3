@@ -568,9 +568,6 @@
     <None Include="..\Resources\Shaders\CombineVertex.glsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\Resources\Shaders\DeferredPassFragment.glsl">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="..\Resources\Shaders\DeferredPassVertex.glsl">
       <Filter>Shaders</Filter>
     </None>
@@ -611,6 +608,9 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\BlendedFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\DeferredPassFragment.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

@@ -12,8 +12,6 @@ Version: 0.0.1 04/02/2015</summary>
 #include "Vector4.h"
 #include "Matrix4.h"
 
-class Mesh;
-
 #define POINT_LIGHT_TYPE 0
 #define DIRECTIONAL_LIGHT_TYPE 1
 #define SPOTLIGHT_LIGHT_TYPE 2
@@ -48,14 +46,13 @@ public:
 
 	virtual Matrix4 GetViewMatrix(Vector3 target) = 0; // returns the view matrix for the camera
 	virtual Matrix4 GetProjectionMatrix() = 0; // returns the projection matrix for the camera
-	
-	virtual void DrawLightDeferred(Vector3 camera_pos) = 0;
+	virtual Matrix4 GetModelMatrix() = 0; // returns the model matrix for the camera
 	
 	void BindLight() const; // Binds the light source's data into the currently bound shader object
 	void BindLight(unsigned int i) const; // Binds the light source's data into the currently bound shader object at the requested array index
 
 	unsigned int GetShadowTexture() const {return shadowTexID;}
-
+	
 protected:
 	Vector3 position;
 	Vector3 direction; // for spot/directional lights
@@ -74,10 +71,7 @@ public:
 
 	virtual Matrix4 GetViewMatrix(Vector3 target);
 	virtual Matrix4 GetProjectionMatrix();
-	virtual void DrawLightDeferred(Vector3 camera_pos);
-	static void SetMesh(Mesh* m) {lightMesh = m;}
-protected:
-	static Mesh* lightMesh;
+	virtual Matrix4 GetModelMatrix();
 };
 
 class DirectionalLight : public Light { // Only limited implementation
@@ -85,7 +79,7 @@ public:
 	DirectionalLight(Vector3 dir, Vector4 col, Vector4 spec, unsigned int shadowTex);
 	virtual Matrix4 GetViewMatrix(Vector3 target);
 	virtual Matrix4 GetProjectionMatrix();
-	virtual void DrawLightDeferred(Vector3 camera_pos);
+	virtual Matrix4 GetModelMatrix();
 	static void UpdateLightVolume(float n, float f, float r, float l, float t, float b);
 private:
 	static float znear, zfar, right, left, top, bottom;
@@ -97,13 +91,10 @@ public:
 
 	virtual Matrix4 GetViewMatrix(Vector3 target); // Ignore target, spot lights have a defined direction + position
 	virtual Matrix4 GetProjectionMatrix();
-	virtual void DrawLightDeferred(Vector3 camera_pos);
+	virtual Matrix4 GetModelMatrix();
+	Matrix4 GetBaseModelMatrix(); // The model matrix for the cone base
 	static bool IsInSpotlight(Vector3 world_pos, Light* l);
-	static void SetConeMesh(Mesh* m) {lightCone = m;}
-	static void SetCircleMesh(Mesh* m) {lightBase = m;} 
 	Vector3 GetUp() {return up;}
 protected:
-	static Mesh* lightCone;
-	static Mesh* lightBase;
 	Vector3 up;
 };

@@ -122,34 +122,29 @@ bool Renderer::LoadShaders()
 
 bool Renderer::LoadCheck()
 {
-	return (basicShader != NULL		&&
-			shadowShader != NULL	&&
-			skyBoxShader != NULL	&&
-			combineShader != NULL	&&
-			particleShader != NULL	&&
-			sceneShader != NULL		&&
-			lightingShader != NULL	&&
-			hudShader != NULL);
+	return (basicShader		!= NULL		&&
+			shadowShader	!= NULL		&&
+			skyBoxShader	!= NULL		&&
+			combineShader	!= NULL		&&
+			particleShader	!= NULL		&&
+			sceneShader		!= NULL		&&
+			lightingShader	!= NULL		&&
+			hudShader		!= NULL);
 }
 
 bool Renderer::LoadAssets() {
 	// Load Meshes required for rendering operations
 	
-	Mesh* circle = GameStateManager::Assets()->LoadCircle(this, 20); // Circle for spotlight rendering
-	Mesh* quad = GameStateManager::Assets()->LoadQuad(this); // Quad for rendering textures to screen
-	Mesh* sphere = GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
-	Mesh* cone = GameStateManager::Assets()->LoadCone(this, 20); // Cone for spotlight rendering
+	circleMesh = GameStateManager::Assets()->LoadCircle(this, 20); // Circle for spotlight rendering
+	screenMesh = GameStateManager::Assets()->LoadQuad(this); // Quad for rendering textures to screen
+	sphereMesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
+	coneMesh = GameStateManager::Assets()->LoadCone(this, 20); // Cone for spotlight rendering
 	
-	if (!sphere || !cone || !circle || !quad) {
+	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh) {
 		cout << "Renderer::LoadAssets() - unable to load rendering assets";
 		return false;
 	}
 	
-	PointLight::SetMesh(sphere);
-	SpotLight::SetCircleMesh(circle);
-	SpotLight::SetConeMesh(cone);
-	screenMesh = quad;
-
 	return true;
 }
 
@@ -166,7 +161,7 @@ Renderer::~Renderer(void)
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl"); //basicShader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl"); //sceneShader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl"); //shadowShader
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl"); //lightingShader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl"); // deferred lighting shader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl"); //skyBoxShader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl"); //combineShader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl"); //particleShader
@@ -406,17 +401,24 @@ void Renderer::DeferredLightPass()
 	glBindTexture(GL_TEXTURE_2D, gbufferNormalTex);
 
 	viewMatrix = camera->BuildViewMatrix();
-	glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "viewMatrix"),	1, false, (float*) &viewMatrix);
-	glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "projMatrix"),	1, false, (float*) &perspectiveMatrix);
-
 	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &camera->GetPosition());
 	glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / (float) width, 1.0f / (float) height);
 
-	glEnable(GL_CULL_FACE);
-	
 	// Draw deferred scene lights
 	for (unsigned int i = 0; i < lights.size(); ++i) {
-		lights[i]->DrawLightDeferred(camera->GetPosition());
+		switch (lights[i]->GetType()) {
+		case POINT_LIGHT_TYPE:
+			DrawDeferredPointLight(lights[i]);
+			break;
+		case DIRECTIONAL_LIGHT_TYPE:
+			DrawDeferredDirectionalLight(lights[i]);
+			break;
+		case SPOTLIGHT_LIGHT_TYPE:
+			DrawDeferredSpotLight(lights[i]);
+			break;
+		default:
+			cout << "Renderer::DeferredLightPass() - Unknown Deferred Light type" << endl;
+		}
 	}
 
 	glDisable(GL_BLEND);
@@ -425,6 +427,65 @@ void Renderer::DeferredLightPass()
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glUseProgram(0);
+}
+
+void Renderer::DrawDeferredPointLight(Light* l) {
+	projMatrix = perspectiveMatrix;
+	modelMatrix = l->GetModelMatrix();
+	UpdateShaderMatrices();
+	
+	l->BindLight(); // Set up light details in shader
+
+	glEnable(GL_CULL_FACE);
+	float dist = (l->GetPosition() - camera->GetPosition()).Length();
+	if (dist < l->GetRadius()) {
+		// camera is inside the light volume!
+		glCullFace(GL_FRONT);
+	}
+	else {
+		glCullFace(GL_BACK);
+	}
+	sphereMesh->Draw();
+
+	glCullFace(GL_BACK);
+}
+
+void Renderer::DrawDeferredSpotLight(Light* l) {
+	projMatrix = perspectiveMatrix;
+	modelMatrix = l->GetModelMatrix();
+	UpdateShaderMatrices();
+
+	l->BindLight();
+
+
+	glEnable(GL_CULL_FACE);
+	//glDisable(GL_CULL_FACE);
+	bool inSpotlight = SpotLight::IsInSpotlight(camera->GetPosition(), l);
+	if (inSpotlight) {
+		// camera is inside the light volume!
+		glCullFace(GL_FRONT);
+	}
+	else {
+		glCullFace(GL_BACK);
+	}
+	coneMesh->Draw();
+
+	// If inside the cone, looking down the axis, need to draw a circular base to prevent base being discarded
+	glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"), 1, false, (float*) &((SpotLight*) l)->GetBaseModelMatrix());
+
+	if (inSpotlight) { 
+	// camera is inside the light volume!
+		glCullFace(GL_FRONT);
+		circleMesh->Draw();
+	}
+
+	glCullFace(GL_BACK);
+
+}
+
+void Renderer::DrawDeferredDirectionalLight(Light* l) {
+
+
 }
 
 void Renderer::CombineBuffers() {// merge scene render with lighting pass

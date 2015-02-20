@@ -72,7 +72,12 @@ protected:
 	//Rendering pipeline components.
 	void			DrawScene();
 	void			ShadowPass();
+
 	void			DeferredLightPass();
+	void			DrawDeferredPointLight(Light* l);
+	void			DrawDeferredSpotLight(Light* l);
+	void			DrawDeferredDirectionalLight(Light* l);
+
 	void			CombineBuffers();
 	void			DrawSkybox();
 	void			BloomPass();
@@ -102,7 +107,10 @@ protected:
 	Matrix4 hudMatrix; // For drawing HUD Elements only
 
 	Mesh*			screenMesh;			// A quad mesh for drawing screen filling textures
-	
+	Mesh*			sphereMesh;			// A sphere mesh for drawing deferred point lights
+	Mesh*			coneMesh;			// A cone mesh for drawing deferred spot lights
+	Mesh*			circleMesh;			// A circle mesh for drawing deferred spot lights
+
 	Camera*			camera;
 
 	Frustum			frameFrustum;
