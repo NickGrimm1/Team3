@@ -252,14 +252,12 @@
     <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="SelectableEntity2D.h" />
     <ClInclude Include="ShaderPart.h" />
-    <ClInclude Include="Spline.h" />
     <ClInclude Include="T3Rectangle.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="StorageManager.h" />
     <ClInclude Include="TextMesh.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Thread.h" />
-    <ClInclude Include="TrackSegment.h" />
     <ClInclude Include="UIButton.h" />
   </ItemGroup>
   <ItemGroup>
@@ -303,13 +301,11 @@
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ShaderPart.cpp" />
-    <ClCompile Include="Spline.cpp" />
     <ClCompile Include="StorageManager.cpp" />
     <ClCompile Include="TextMesh.cpp" />
     <ClCompile Include="TexturePS3.cpp" />
     <ClCompile Include="TextureWindows.cpp" />
     <ClCompile Include="Thread.cpp" />
-    <ClCompile Include="TrackSegment.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Resources\Shaders\BlendedFragment.glsl" />

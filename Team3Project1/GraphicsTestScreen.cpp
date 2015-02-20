@@ -50,6 +50,17 @@ void GraphicsTestScreen::LoadContent() {
 		Vector3(2,10,2));
 	AddDrawable(ent);
 
+	Mesh* car = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
+	AddDrawable(new DrawableEntity3D(
+		GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj"),
+		NULL,
+		NULL,
+		NULL,
+		25.0f,
+		Vector3(-25, 5, 0),
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		Vector3(5,5,5)));
+
 	
 	//light = GameStateManager::Graphics()->AddSpotLight(Vector3(0, 0, 0), Vector3(0,1,0), Vector3(1,0,0), 1.0f, 45.0f, Vector4(1,1,1,1), Vector4(1,1,1,1), false);
 	
@@ -82,10 +93,10 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 			camera->AddMovement(Vector3(0,0,1));
 			break;
 		case KeyboardEvents::KEYBOARD_A:
-			camera->AddMovement(Vector3(1,0,0));
+			camera->AddMovement(Vector3(-1,0,0));
 			break;
 		case KeyboardEvents::KEYBOARD_D:
-			camera->AddMovement(Vector3(-1,0,0));
+			camera->AddMovement(Vector3(1,0,0));
 			break;
 		case KeyboardEvents::KEYBOARD_SHIFT:
 			camera->AddMovement(Vector3(0,1,0));

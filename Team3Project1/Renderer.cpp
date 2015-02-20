@@ -463,7 +463,7 @@ void Renderer::CombineBuffers() {// merge scene render with lighting pass
 	glBindTexture(GL_TEXTURE_2D, lightSpecularTex);
 
 	glStencilMask(GL_FALSE); // Keep the stencil intact for drawing the skybox
-	screenMesh->Draw(false); // Render scene
+	screenMesh->Draw(); // Render scene
 	glStencilMask(GL_TRUE);
 
 //	DrawSkybox(); // Finally, draw the skybox

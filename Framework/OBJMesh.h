@@ -130,12 +130,12 @@ struct MTLInfo {
 	string bump;
 	string diffuse;
 
-	unsigned int bumpNum;
-	unsigned int diffuseNum;
+	Texture* bumpNum;
+	Texture* diffuseNum;
 
 	MTLInfo() {
-		bumpNum		= 0;
-		diffuseNum	= 0;
+		bumpNum		= NULL;
+		diffuseNum	= NULL;
 	}
 	//this is all we care about...
 };
@@ -143,7 +143,7 @@ struct MTLInfo {
 class OBJMesh : public Mesh, public ChildMeshInterface	{
 public:
 	OBJMesh(void){};
-	OBJMesh(std::string filename){LoadOBJMesh(filename);};
+	OBJMesh(std::string filename) : texture(NULL), bumpTexture(NULL) {LoadOBJMesh(filename);};
 	~OBJMesh(void)
 	{
 		GameStateManager::Assets()->UnloadTexture(this, texturePath);

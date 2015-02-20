@@ -31,7 +31,7 @@ Mesh::~Mesh(void)
 #endif
 }
 #if WINDOWS_BUILD
-void Mesh::Draw(bool update)	
+void Mesh::Draw()	
 {
 	glBindVertexArray(arrayObject);
 	if(numIndices > 0)
