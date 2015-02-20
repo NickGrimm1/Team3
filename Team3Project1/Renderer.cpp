@@ -17,11 +17,11 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	init = false;
 
 	camera	= new Camera();
-	//screenMesh = Mesh::GenerateQuad();
 
 	// Setup projection matrices - gonna just keep copies of the matrices rather than keep recreating them
 	perspectiveMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float) width / (float) height, 45.0f);
-	orthographicMatrix = Matrix4::Orthographic(-1.0f,1.0f,(float)width, 0.0f,(float)height, 0.0f); // For HUD Elements only
+	orthographicMatrix = Matrix4::Orthographic(-1,1,1,-1,1,-1); // for drawing full screen quads
+	hudMatrix = Matrix4::Orthographic(-1.0f,1.0f,(float)width, 0.0f,(float)height, 0.0f); // For HUD Elements only
 	
 	//Creation of buffers.
 	GenerateScreenTexture(gbufferNormalTex);
@@ -436,7 +436,7 @@ void Renderer::CombineBuffers() {// merge scene render with lighting pass
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, gbufferDepthTex, 0); // Stencil buffer from the first pass render
 	
 	// Setup matrices
-	projMatrix = Matrix4::Orthographic(-1,1,1,-1,1,-1);
+	projMatrix = orthographicMatrix;
 	modelMatrix.ToIdentity();
 	viewMatrix.ToIdentity();
 	textureMatrix.ToIdentity();
@@ -511,7 +511,7 @@ void Renderer::MotionBlurPass()
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 	SetCurrentShader(blurShader);
-	projMatrix = Matrix4::Orthographic(-1,1,1,-1,1,-1);
+	projMatrix = orthographicMatrix;
 	modelMatrix.ToIdentity();
 	UpdateShaderMatrices();
 
@@ -551,7 +551,7 @@ void Renderer::DrawFrameBufferTex(GLuint fboTex) {
 	glBindTexture(GL_TEXTURE_2D, fboTex);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 26);
 	
-	projMatrix = Matrix4::Orthographic(-1,1,1,-1,1,-1);
+	projMatrix = orthographicMatrix;
 	modelMatrix.ToIdentity();
 	viewMatrix.ToIdentity();
 	textureMatrix.ToIdentity();
@@ -569,7 +569,7 @@ void Renderer::Draw2DOverlay() {
 	glEnable(GL_BLEND);
 	
 	SetCurrentShader(hudShader);
-	projMatrix = orthographicMatrix;
+	projMatrix = hudMatrix;
 	viewMatrix.ToIdentity();
 
 	for (unsigned int i = 0; i < overlayElements.size(); i++) {

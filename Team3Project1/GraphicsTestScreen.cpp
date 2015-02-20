@@ -51,18 +51,9 @@ void GraphicsTestScreen::LoadContent() {
 	AddDrawable(ent);
 
 	
-	//cout << "Cone Mesh Obj = " << coneMesh->GetVertexBuffer() << endl;
-	//SpotLight::SetConeMesh(coneMesh);
-	//Mesh* circleMesh = Mesh::GenerateCircle(20);
-	//cout << "Circle Mesh Obj = " << circleMesh->GetVertexBuffer() << endl;
-	//SpotLight::SetCircleMesh(Mesh::GenerateCircle(20));
-	//Mesh* sphereMesh = new OBJMesh(MESHDIR"sphere.obj");
-	//PointLight::SetMesh(sphereMesh);
-
-
 	//light = GameStateManager::Graphics()->AddSpotLight(Vector3(0, 0, 0), Vector3(0,1,0), Vector3(1,0,0), 1.0f, 45.0f, Vector4(1,1,1,1), Vector4(1,1,1,1), false);
 	
-	//PointLight* l = GameStateManager::Graphics()->AddPointLight(Vector3(0,5,0), 10, Vector4(1,1,1,1), Vector4(1,1,1,1), false); 
+	PointLight* l = GameStateManager::Graphics()->AddPointLight(Vector3(0,20,0), 50, Vector4(1,1,1,1), Vector4(1,1,1,1), false); 
 
 	camera = new FreeCamera();
 	camera->SetPosition(Vector3(0,10.0f, 80.0f));

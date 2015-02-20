@@ -98,7 +98,8 @@ protected:
 	vector<DrawableEntity2D*>& overlayElements; // HUD/Menu elements, sorted by "distance" from camera (overlay level). Closest first
 
 	Matrix4 orthographicMatrix;	// Gonna be constantly switching between orthographic (for HUD) and perspective (for scene) projection
-	Matrix4 perspectiveMatrix;	// Rather than constantly regenerating matrices - just keep a copy of each
+	Matrix4 perspectiveMatrix;	// for drawing full screen quads (post-processing)
+	Matrix4 hudMatrix; // For drawing HUD Elements only
 
 	Mesh*			screenMesh;			// A quad mesh for drawing screen filling textures
 	
