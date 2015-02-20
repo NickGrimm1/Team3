@@ -2,9 +2,11 @@
 #if WINDOWS_BUILD
 #include "../Framework/OGLRenderer.h"
 #endif
+#if PS3_BUILD
+#include "../Main_PS3_PPU/ShaderPart.h"
+#endif
 #include "Vertex.h"
 #include "Texture.h"
-#include "ShaderPart.h"
 
 #if WINDOWS_BUILD
 namespace PrimitiveType

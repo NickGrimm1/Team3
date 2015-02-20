@@ -257,7 +257,8 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="StorageManager.h" />
     <ClInclude Include="TextMesh.h" />
-    <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureWindows.h" />
+    <ClInclude Include="TextureCommon.h" />
     <ClInclude Include="Thread.h" />
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="Vertex.h" />
@@ -305,7 +306,6 @@
     <ClCompile Include="ShaderPart.cpp" />
     <ClCompile Include="StorageManager.cpp" />
     <ClCompile Include="TextMesh.cpp" />
-    <ClCompile Include="TexturePS3.cpp" />
     <ClCompile Include="TextureWindows.cpp" />
     <ClCompile Include="Thread.cpp" />
   </ItemGroup>

@@ -387,9 +387,6 @@
     <ClInclude Include="..\Framework\Shader.h">
       <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Framework\Resource Manager\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="LoadedFont.h">
       <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
@@ -407,6 +404,12 @@
     </ClInclude>
     <ClInclude Include="Vertex.h">
       <Filter>Framework\Graphics\Common\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureCommon.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureWindows.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -541,9 +544,6 @@
     </ClCompile>
     <ClCompile Include="HudTestScreen.cpp">
       <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TexturePS3.cpp">
-      <Filter>Framework\Resource Manager\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

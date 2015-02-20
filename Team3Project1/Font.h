@@ -5,7 +5,12 @@ Author: Nick Grimm
 Version: 0.0.1 05/02/2015.</summary>
 */
 #pragma once
-#include "Texture.h"
+#if WINDOWS_BUILD
+#include "TextureWindows.h"
+#endif
+#if PS3_BUILD
+#include "../Main_PS3_PPU/TexturePS3.h"
+#endif
 
 class Font
 {
