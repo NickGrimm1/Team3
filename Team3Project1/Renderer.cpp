@@ -46,6 +46,15 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
+	//And velocity buffer
+	glGenTextures(1, &gbufferVelocity);
+	glBindTexture(GL_TEXTURE_2D, gbufferVelocity);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, width, height, 0, GL_RG, GL_HALF_FLOAT, 0);
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glGenFramebuffers(1, &gbufferFBO);			//Render the scene into this.
@@ -53,19 +62,21 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glGenFramebuffers(1, &shadowFBO);			//Shadow pre-render in this one.
 	glGenFramebuffers(1, &deferredLightingFBO);	//Deferred lighting in this FBO.
 
-	GLenum buffers[2];
+	GLenum buffers[3];
 	buffers[0] = GL_COLOR_ATTACHMENT0;
 	buffers[1] = GL_COLOR_ATTACHMENT1;
+	buffers[2] = GL_COLOR_ATTACHMENT2;
 
 	glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufferColourTex, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gbufferNormalTex, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, gbufferDepthTex, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, gbufferDepthTex, 0);
-	glDrawBuffers(2, buffers);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gbufferVelocity, 0);
+	glDrawBuffers(3, buffers);
 
 	//Check FBO attachment success with this command
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE || !gbufferDepthTex || !gbufferColourTex || !gbufferNormalTex) {
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE || !gbufferDepthTex || !gbufferColourTex || !gbufferNormalTex || !gbufferVelocity) {
 		return;
 	}
 
@@ -83,8 +94,8 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glDrawBuffer(GL_NONE);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
-	glGenTextures(2, postProcessingTex);
-	for (unsigned int i = 0; i < 2; i++) {
+	glGenTextures(3, postProcessingTex);
+	for (unsigned int i = 0; i < 3; i++) {
 		glBindTexture(GL_TEXTURE_2D, postProcessingTex[i]);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -116,6 +127,7 @@ bool Renderer::LoadShaders()
 	skyBoxShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl");
 	combineShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
 	particleShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
+	blurShader	= GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlurFragment.glsl");
 	hudShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl");
 	return LoadCheck();
 }
@@ -129,6 +141,7 @@ bool Renderer::LoadCheck()
 			particleShader != NULL	&&
 			sceneShader != NULL		&&
 			lightingShader != NULL	&&
+			blurShader != NULL		&&
 			hudShader != NULL);
 }
 
@@ -170,16 +183,17 @@ Renderer::~Renderer(void)
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl"); //skyBoxShader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl"); //combineShader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl"); //particleShader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlurFragment.glsl");
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl"); //hudShader
 
 	//Clear buffers
-	//glDeleteTextures(1, &shadowTex); - TODO - handle deletion of shadow textures
 	glDeleteTextures(1, &gbufferColourTex);
 	glDeleteTextures(1, &gbufferDepthTex);
 	glDeleteTextures(1, &gbufferNormalTex);
+	glDeleteTextures(1, &gbufferVelocity);
 	glDeleteTextures(1, &lightEmissiveTex);
 	glDeleteTextures(1, &lightSpecularTex);
-	glDeleteTextures(2, postProcessingTex);
+	glDeleteTextures(3, postProcessingTex);
 	glDeleteTextures(1, &skyBoxTex);
 	glDeleteFramebuffers(1, &gbufferFBO);
 	glDeleteFramebuffers(1, &postProcessingFBO);
@@ -202,7 +216,7 @@ void Renderer::RenderScene() {
 	CombineBuffers();
 
 	// Post-Processing
-	//TODO
+	MotionBlurPass();
 
 	// Draw HUD/Menu overlay
 	Draw2DOverlay(); // TODO - Draw HUD first and use stencil to optimise main render pass
@@ -372,6 +386,7 @@ void Renderer::ShadowPass()
 			DrawableEntity3D& entity = *sceneNodes[j]->GetDrawableEntity();
 			modelMatrix = sceneNodes[j]->GetWorldTransform() * Matrix4::Scale(entity.GetScale());
 			glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"),	1,false, (float*)&modelMatrix);
+			
 			entity.GetMesh()->Draw();
 		}
 	

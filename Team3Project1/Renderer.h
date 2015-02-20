@@ -24,6 +24,7 @@ Version: 0.0.1 03/02/2015.</summary>
 
 #include <vector>
 
+#define SAMPLENUM 3
 #define SHADOWSIZE 2048 //* 8 ?
 
 /*
@@ -66,8 +67,8 @@ public:
 	bool			GetRenderContextForThread();
 	bool			DropRenderContextForThread();
 
-	bool LoadShaders();
-	bool LoadAssets();
+	bool			LoadShaders();
+	bool			LoadAssets();
 protected:
 	//Rendering pipeline components.
 	void			DrawScene();
@@ -124,17 +125,21 @@ protected:
 	Shader*			blurShader;
 	Shader*			hudShader;
 	
-	GLuint			gbufferFBO;
+	GLuint			gbufferFBO; //Geometry buffer
 	GLuint			postProcessingFBO;
 	GLuint			deferredLightingFBO;
 	GLuint			shadowFBO;
+
 	GLuint			gbufferColourTex;
 	GLuint			gbufferDepthTex;
 	GLuint			gbufferNormalTex;
+	GLuint			gbufferVelocity;
+
 	GLuint			skyBoxTex;
 	GLuint			lightEmissiveTex;
 	GLuint			lightSpecularTex;
-	GLuint			postProcessingTex[2]; // At start of post-processing, postProcessingTex[0] holds the rendered scene
+	GLuint			postProcessingTex[3]; // At start of post-processing, postProcessingTex[0] holds the rendered scene
+	GLuint			downSampleTex[SAMPLENUM * 2];
 
 	Vector4			ambientLightColour; // The scenes ambient light settings
 

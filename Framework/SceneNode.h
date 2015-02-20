@@ -35,6 +35,9 @@ public:
 	const Matrix4&	GetTransform() const				{ return transform;}
 	Matrix4			GetWorldTransform() const			{ return worldTransform;}
 
+	void			SetPrevMVP(const Matrix4 mvp) 		{ prevFrameMVP = mvp; }
+	Matrix4			GetPrevMVP() const					{ return prevFrameMVP; }
+
 	virtual void	Update(float msec);
 	virtual void	Draw(const OGLRenderer & r);
 
@@ -74,6 +77,7 @@ protected:
 	DrawableEntity3D* sceneElement;
 	Matrix4		worldTransform;
 	Matrix4		transform;
+	Matrix4		prevFrameMVP;
 	SceneNode*	parent;
 	float		distanceFromCamera;
 	float		boundingRadius;

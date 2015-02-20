@@ -309,6 +309,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Resources\Shaders\BlendedFragment.glsl" />
+    <None Include="..\Resources\Shaders\BlurFragment.glsl" />
     <None Include="..\Resources\Shaders\CombineFragment.glsl" />
     <None Include="..\Resources\Shaders\CombineVertex.glsl" />
     <None Include="..\Resources\Shaders\debugFragment.glsl" />

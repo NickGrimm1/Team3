@@ -601,5 +601,8 @@
     <None Include="..\Resources\Shaders\BlendedFragment.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="..\Resources\Shaders\BlurFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
