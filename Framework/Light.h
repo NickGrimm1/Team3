@@ -42,16 +42,16 @@ public:
 	void SetAngle(float a);
 
 	unsigned int GetType() const; // POINT, SPOT or DIRECTIONAL
-	void SetType(unsigned int t);
 
+	virtual Matrix4 GetModelMatrix() = 0; // returns the model matrix for the camera
 	virtual Matrix4 GetViewMatrix(Vector3 target) = 0; // returns the view matrix for the camera
 	virtual Matrix4 GetProjectionMatrix() = 0; // returns the projection matrix for the camera
-	virtual Matrix4 GetModelMatrix() = 0; // returns the model matrix for the camera
 	
 	void BindLight() const; // Binds the light source's data into the currently bound shader object
 	void BindLight(unsigned int i) const; // Binds the light source's data into the currently bound shader object at the requested array index
 
 	unsigned int GetShadowTexture() const {return shadowTexID;}
+	void SetShadowTexture(unsigned int tex) {shadowTexID = tex;}
 	
 protected:
 	Vector3 position;
@@ -74,7 +74,7 @@ public:
 	virtual Matrix4 GetModelMatrix();
 };
 
-class DirectionalLight : public Light { // Only limited implementation
+class DirectionalLight : public Light {
 public:
 	DirectionalLight(Vector3 dir, Vector4 col, Vector4 spec, unsigned int shadowTex);
 	virtual Matrix4 GetViewMatrix(Vector3 target);

@@ -61,10 +61,6 @@ unsigned int Light::GetType() const {
 	return type;
 }
 
-void Light::SetType(unsigned int t) {
-	type = t;
-}
-
 void Light::BindLight() const {
 	GLint shaderObject = 0;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &shaderObject);
@@ -119,7 +115,7 @@ Matrix4 PointLight::GetViewMatrix(Vector3 target) {
 }
 
 Matrix4 PointLight::GetProjectionMatrix() {
-	return Matrix4::Perspective(1.0f, radius, 1, 45.0f);
+	return Matrix4::Perspective(1.0f, radius, 1, 90.0f);
 }
 
 Matrix4 PointLight::GetModelMatrix() {
@@ -185,13 +181,11 @@ SpotLight::SpotLight(Vector3 pos, Vector3 target, Vector3 up_vec, Vector4 col, V
 }
 
 Matrix4 SpotLight::GetViewMatrix(Vector3 target) { //Ignore target spot lights, we have a defined direction + position
-	return Matrix4::BuildViewMatrix(position, position + direction);
+	return Matrix4::BuildViewMatrix(position, position + direction, up);
 }
 
-Matrix4 SpotLight::GetProjectionMatrix() { //Ignore target spot lights, we have a defined direction + position
-	float cone_base_radius = tan(angle / 2.0f * PI / 180.0f) * radius;
-	Matrix4 shadowProjMatrix = Matrix4::Perspective(25.0f, radius, 1, angle); // move projection closer to object increase performance of z-buffer
-	return shadowProjMatrix;
+Matrix4 SpotLight::GetProjectionMatrix() {
+	return Matrix4::Perspective(1.0f, radius, 1, angle); // move projection closer to object increase performance of z-buffer
 }
 
 Matrix4 SpotLight::GetModelMatrix() {
