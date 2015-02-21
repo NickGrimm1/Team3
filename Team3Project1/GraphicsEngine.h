@@ -124,6 +124,10 @@ public:
 		
 	// We don't actually need this since the GSM already holds the reference :)
 	//static GraphicsEngine& GetGraphicsEngine() {return *engine;}
+
+
+	// Debugging
+	void DrawDeferredLights(bool on) {renderer->DrawDeferredLights(on);}
 private:
 	static GraphicsEngine* engine;
 

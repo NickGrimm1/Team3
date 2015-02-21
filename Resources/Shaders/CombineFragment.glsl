@@ -24,4 +24,5 @@ void main() {
 	gl_FragColor.xyz += diffuse * light * shadow; // lambert
 	gl_FragColor.xyz += specular * shadow; // specular
 	gl_FragColor.a = 1.0;
+	//gl_FragColor = vec4(shadow, shadow, shadow, 1);
 }

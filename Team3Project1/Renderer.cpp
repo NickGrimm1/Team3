@@ -95,6 +95,8 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 
 	ambientLightColour = DEFAULT_AMBIENT_LIGHT_COLOUR;
 
+	drawDeferredLights = false;
+
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_STENCIL_TEST);
 	glCullFace(GL_BACK);
@@ -200,17 +202,20 @@ void Renderer::RenderScene() {
 	//TODO
 
 	// Draw HUD/Menu overlay
-	Draw2DOverlay(); // TODO - Draw HUD first and use stencil to optimise main render pass
+	Draw2DOverlay();
 
 	SwapBuffers();
 	wglMakeCurrent(deviceContext, NULL);
 	openglMutex.unlock_mutex();
 }
 
-void Renderer::ToggleDebug(int arg, bool onOff)
+void Renderer::ToggleDebug(int arg, bool on)
 {
 	switch (arg)
 	{
+	case DEBUG_DRAW_DEFERRED_LIGHTS:
+		drawDeferredLights = on;
+		break;
 	case (1):
 		//Toggle wireframe
 		break;
@@ -326,11 +331,24 @@ void Renderer::DrawScene()
 		entity.GetMesh()->Draw();
 	}
 
-	// Test deferred lights
-//	for (unsigned int i = 0; i < lights.size(); i++) {
-//		lights[i]->DrawLightDeferred(camera->GetPosition());
-//	}
-	
+	if (drawDeferredLights) {
+		// Draw Deferred lights
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 0);
+		for (unsigned int i = 0; i < lights.size(); i++) {
+			modelMatrix = lights[i]->GetModelMatrix();
+			UpdateShaderMatrices();
+			switch (lights[i]->GetType()) {
+			case POINT_LIGHT_TYPE:
+				sphereMesh->Draw();
+				break;
+			case SPOTLIGHT_LIGHT_TYPE:
+				coneMesh->Draw();
+				break;
+			}
+		}
+	}
+
 	glUseProgram(0);
 
 	// TODO - handle particle systems

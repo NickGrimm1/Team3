@@ -68,6 +68,9 @@ public:
 
 	bool LoadShaders();
 	bool LoadAssets();
+
+	void DrawDeferredLights(bool on) {drawDeferredLights = on;}
+
 protected:
 	//Rendering pipeline components.
 	void			DrawScene();
@@ -96,6 +99,8 @@ protected:
 	bool			activeTex;
 	unsigned int	nextTextureUnit;
 
+	// Debugging
+	bool			drawDeferredLights;
 	bool			debugElem[10];
 
 	vector<Light*>&	lights;

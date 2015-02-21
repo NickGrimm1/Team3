@@ -73,6 +73,7 @@ Texture* AssetManager::LoadTexture(void* callerID, string filePath, unsigned int
 		// Load this texture in...
 		GameStateManager::Graphics()->GetRenderContext();
 		Texture* newTexture = new Texture(filePath, flags);
+		newTexture->SetRepeating(true);
 		GameStateManager::Graphics()->DropRenderContext();
 		loadedTextures.insert(pair<string, LoadedTexture>(filePath, LoadedTexture(newTexture, callerID)));
 		return newTexture;
