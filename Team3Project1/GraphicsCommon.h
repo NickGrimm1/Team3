@@ -13,7 +13,7 @@
 #define SKYBOX_TEXTURE_UNIT						7
 #define SHADOW_TEXTURE_UNIT						10
 
-#define DEFAULT_AMBIENT_LIGHT_COLOUR Vector4(0.2f, 0.2f, 0.2f, 1.0f);
+#define DEFAULT_AMBIENT_LIGHT_COLOUR Vector4(0.0f, 0.0f, 0.0f, 1.0f);
 
 #define RENDER_HZ 60
 #define SCREEN_WIDTH 1280

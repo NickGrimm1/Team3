@@ -484,8 +484,15 @@ void Renderer::DrawDeferredSpotLight(Light* l) {
 }
 
 void Renderer::DrawDeferredDirectionalLight(Light* l) {
+	projMatrix = orthographicMatrix;
+	viewMatrix.ToIdentity();
+	modelMatrix = l->GetModelMatrix();
+	UpdateShaderMatrices();
 
-
+	l->BindLight();
+	glDisable(GL_CULL_FACE);
+	screenMesh->Draw();
+	glEnable(GL_CULL_FACE);
 }
 
 void Renderer::CombineBuffers() {// merge scene render with lighting pass

@@ -131,6 +131,7 @@ DirectionalLight::DirectionalLight(Vector3 dir, Vector4 col, Vector4 spec, unsig
 	type = DIRECTIONAL_LIGHT_TYPE;
 	position = Vector3(0,0,0);
 	direction = dir;
+	direction.Normalise();
 	diffuseColour = col;
 	specularColour = spec;
 	radius = 0; 
