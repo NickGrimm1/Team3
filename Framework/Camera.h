@@ -31,7 +31,7 @@ public:
 	<param name='up'>The initial up vector. Default is (0, 1, 0).</param>
 	*/
 	Camera(DrawableEntity3D* targetEntity = NULL, float pitch = 0, float yaw = 0, float roll = 0, Vector3 position = Vector3(), Vector3 target = Vector3(0, 0, -1), bool invertY = false)
-		: position(position), originalTarget((target - position).Normal()), originalUp(Vector3::UnitOrthogonal((target - position).Normal(), Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix() * Vector3::UnitX())), invertY(invertY), targetEntity(targetEntity), originalRight(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix() * Vector3::UnitX()), rotation(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix())
+		: position(position), originalTarget((target - position).Normal()), originalUp(Vector3::UnitOrthogonal(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix() * Vector3::UnitX(), (target - position).Normal())), invertY(invertY), targetEntity(targetEntity), originalRight(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix() * Vector3::UnitX()), rotation(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix())
 	{ }
 	~Camera(void){}
 

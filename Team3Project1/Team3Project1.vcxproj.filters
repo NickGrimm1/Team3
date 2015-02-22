@@ -568,9 +568,6 @@
     <None Include="..\Resources\Shaders\CombineVertex.glsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\Resources\Shaders\DeferredPassFragment.glsl">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="..\Resources\Shaders\DeferredPassVertex.glsl">
       <Filter>Shaders</Filter>
     </None>
@@ -584,12 +581,6 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\PointToQuadGeom.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\shadowFrag.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\shadowVert.glsl">
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\SkyBoxFragment.glsl">
@@ -611,6 +602,15 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\BlendedFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\DeferredPassFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\ShadowFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\ShadowVertex.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
