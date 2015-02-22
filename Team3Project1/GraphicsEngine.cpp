@@ -102,7 +102,7 @@ void GraphicsEngine::Run() {
 
 // TODO - deal with castsShadows
 PointLight* GraphicsEngine::AddPointLight(Vector3 lightPosition, float lightRadius, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow) {
-	unsigned int shadowTex = castsShadow ? renderer->CreateShadowTexture() : 0;
+	unsigned int shadowTex = castsShadow ? renderer->CreateShadowCube() : 0;
 	PointLight* l = new PointLight(lightPosition, diffuseColour, specularColour, lightRadius, shadowTex);
 	lights.push_back(l);
 	return l;

@@ -7,6 +7,7 @@ uniform sampler2D normalTex;
 uniform int useDiffuseTex;
 uniform int useNormalTex;	// Enables use of the normal map texture for calculation
 uniform sampler2DShadow shadowTex[MAX_SHADOWS];
+uniform samplerCube shadowCube[MAX_SHADOWS];
 
 // TODO - some of this data isn't needed for this pass - light colour at least
 uniform	vec4 lightColour[MAX_SHADOWS];
@@ -29,6 +30,7 @@ in Vertex {
 	vec3 binormal;
 	vec3 worldPos;
 	vec4 shadowProj[MAX_SHADOWS];
+	vec3 shadowPos;
 } IN;
 
 out vec4 gl_FragColor[2];
@@ -73,18 +75,29 @@ void main(void)	{
 	float shadow = 0.0; // start at zero, shadowed, if depth text indicates its not in shadow in one of the lights, will be 1.0 or greater
 	bool shadowData = false;
 
+	// TODO - take into account lights not casting shadows
 	for (int i = 0; i < numShadows; i++) {
 
 		if (lightType[i] == 2 && !inSpotlight(i)) continue; // if not in spotlight, no need to calculate for this light
 		shadowData = true;
-		if (IN.shadowProj[i].w > 0.0) {
+		if (lightType[i] > 0 && IN.shadowProj[i].w > 0.0) {
 			shadow += textureProj(shadowTex[i], IN.shadowProj[i]); // samples based on a different clip space - if in shadow returns 0, otherwise 1
+		}
+
+		if (lightType[i] == 0) {
+			vec3 shadowDir = IN.shadowPos - lightPos[i];
+			float worldDepth = length(shadowDir);
+			shadowDir = normalize(shadowDir);
+			float shadowDepth = texture(shadowCube[0], shadowDir).r;
+			if (worldDepth <= shadowDepth) {
+				shadow += 1.0f;
+			}
 		}
 	}
 
 	if (shadowData)
 		// passing shadow data in the w coord of the normal through to combine shader.
-		gl_FragColor[1] = vec4(normal.xyz * 0.5 + 0.5, shadow / numShadows);  // [-0.5,0.5] -> [0.0, 1] tex coords
+		gl_FragColor[1] = vec4(normal.xyz * 0.5 + 0.5, shadow / float(numShadows));  // [-0.5,0.5] -> [0.0, 1] tex coords
 	else
 		gl_FragColor[1] = vec4(normal.xyz * 0.5 + 0.5, 1);  // [-0.5,0.5] -> [0.0, 1] tex coords
 }

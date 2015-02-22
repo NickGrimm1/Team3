@@ -53,8 +53,9 @@ public:
 	void			ToggleDebug(int arg, bool onOff);
 
 	GLuint			CreateTexture(const char* filename, bool enableMipMaps = false, bool enableAnisotropicFiltering = false);
-	GLuint			CreateShadowTexture();
 	GLuint			CreateCubeTexture(const char* filename);
+	GLuint			CreateShadowTexture();
+	GLuint			CreateShadowCube();
 	bool			DestroyTexture(GLuint textureReference);
 
 	void			SetSkyBoxTexture(GLuint tex) {skyBoxTex = tex;}
@@ -78,6 +79,7 @@ protected:
 	//Rendering pipeline components.
 	void			DrawScene();
 	void			ShadowPass();
+	void			DrawNodes(bool enableTextures);
 
 	void			DeferredLightPass();
 	void			DrawDeferredPointLight(Light* l);
@@ -147,6 +149,7 @@ protected:
 	GLuint			gbufferColourTex;
 	GLuint			gbufferDepthTex;
 	GLuint			gbufferNormalTex;
+	GLuint			shadowDepthTex; // unfortunately required for omni-directional shadows
 	GLuint			skyBoxTex;
 	GLuint			lightEmissiveTex;
 	GLuint			lightSpecularTex;

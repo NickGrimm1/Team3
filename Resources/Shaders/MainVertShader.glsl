@@ -21,6 +21,7 @@ out Vertex {
 	vec3 binormal;
 	vec3 worldPos;
 	vec4 shadowProj[10];
+	vec3 shadowPos;
 } OUT;
 
 void main(void)	{
@@ -36,5 +37,6 @@ void main(void)	{
 	for (int i = 0; i < 10; i++) {
 		OUT.shadowProj[i] = shadowProjMatrix[i] * modelMatrix * vec4(position + (normal * 0.5) , 1);
 	}
+	OUT.shadowPos = (modelMatrix * vec4(position + (normal * 0.5), 1.0)).xyz; // world space space position shifted towards light source to avoid shadow acne
 	gl_Position = projMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
 }
