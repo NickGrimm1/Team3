@@ -50,7 +50,6 @@ public:
 	void			SetCamera(Camera* cam) {camera = cam;};
 
 	void			RenderScene();
-	virtual void	UpdateScene(float msec);
 	void			ToggleDebug(int arg, bool onOff);
 
 	GLuint			CreateTexture(const char* filename, bool enableMipMaps = false, bool enableAnisotropicFiltering = false);
@@ -72,6 +71,10 @@ public:
 	void DrawDeferredLights(bool on) {drawDeferredLights = on;}
 
 protected:
+
+	Matrix4			cameraMatrix; // Get camera matrix once at start of scene
+
+
 	//Rendering pipeline components.
 	void			DrawScene();
 	void			ShadowPass();

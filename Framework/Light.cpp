@@ -135,31 +135,33 @@ DirectionalLight::DirectionalLight(Vector3 dir, Vector4 col, Vector4 spec, unsig
 	shadowTexID = shadowTex;
 }
 
-// TODO: Check these & assign
-float DirectionalLight::znear = 0;
-float DirectionalLight::zfar = 0;
-float DirectionalLight::right = 0;
-float DirectionalLight::left = 0;
-float DirectionalLight::top = 0;
-float DirectionalLight::bottom = 0;
+Vector3 DirectionalLight::boundingMin = Vector3(0,0,0);
+Vector3 DirectionalLight::boundingMax = Vector3(0,0,0);
 
 Matrix4 DirectionalLight::GetViewMatrix(Vector3 target) {
-	Matrix4 m = Matrix4::BuildViewMatrix(target - (direction * 100.0f), direction);
+	// Take target as average of scene bounding box
+	Vector3 sceneCentre = Vector3((boundingMin.x + boundingMax.x) / 2.0f,
+									(boundingMin.y + boundingMax.y) / 2.0f,
+									(boundingMin.z + boundingMax.z) / 2.0f);
+
+	Matrix4 m = Matrix4::BuildViewMatrix(sceneCentre - (direction * 100.0f), sceneCentre, Vector3(0,1,0));
 	return m;
 }
 
 Matrix4 DirectionalLight::GetProjectionMatrix() {
-	Matrix4 m = Matrix4::Orthographic(znear, zfar, right, left, top, bottom);
+	// Translate scene AABB into camera viewspace
+	Matrix4 camMatrix = DirectionalLight::GetViewMatrix(Vector3(0,0,0));
+	Vector3 camMin = camMatrix * boundingMin;
+	Vector3 camMax = camMatrix * boundingMax;
+	
+	Matrix4 m = Matrix4::Orthographic(1, camMax.z, camMax.x, camMin.x, camMax.y, camMin.y);
+//	Matrix4 m = Matrix4::Perspective(1.0f, 10000.0, 1, 90); // move projection closer to object increase performance of z-buffer
 	return m;
 }
 
-void DirectionalLight::UpdateLightVolume(float n, float f, float r, float l, float t, float b) {
-	znear = n;
-	zfar = f;
-	right = r;
-	left = l;
-	top = t;
-	bottom = b;
+void DirectionalLight::UpdateLightVolume(Vector3& min, Vector3& max) {
+	boundingMin = min;
+	boundingMax = max;
 }
 
 Matrix4 DirectionalLight::GetModelMatrix() {

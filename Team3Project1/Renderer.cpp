@@ -191,6 +191,8 @@ void Renderer::RenderScene() {
 	if (!wglMakeCurrent(deviceContext, renderContext)) {
 		cout << "Renderer::RenderScene() - unable to obtain rendering context!!!" << endl;
 	}
+	glClear(GL_COLOR_BUFFER_BIT);
+	cameraMatrix = camera->BuildViewMatrix();
 
 	// Main Render
 	ShadowPass();
@@ -238,17 +240,6 @@ void Renderer::ToggleDebug(int arg, bool on)
 	}
 }
 
-/*----------Rendering pipeline-----------*/
-void Renderer::UpdateScene(float msec)
-{
-	if (camera) 
-	{
-		camera->UpdateCamera();
-	}
-
-	//TODO - update particle systems
-}
-
 //Draws Scene to buffer object
 void Renderer::DrawScene()
 {
@@ -266,10 +257,10 @@ void Renderer::DrawScene()
 //	SetCurrentShader(basicShader);
 
 	// Bind Shader variables
-	viewMatrix = camera->BuildViewMatrix();
+	viewMatrix = cameraMatrix;
 	projMatrix = perspectiveMatrix;
 	UpdateShaderMatrices();
-	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &camera->GetPosition());
+	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &cameraMatrix.GetPositionVector());
 	glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "nodeColour"), 1, (float*) &Vector4(1,1,1,1));
 
 	// Pass any light/shadow data for any lights which generate shadows into the renderer
@@ -278,7 +269,7 @@ void Renderer::DrawScene()
 	for (unsigned int i = 0; i < lights.size(); i++) {
 		if (lights[i]->GetShadowTexture() > 0) { // Shadow depth texture exists for light, so use
 			// Calculate the view projection matrix for the light so can sample shadow map (binding to textureMatrix for the minute
-			Matrix4 shadowMatrix = biasMatrix * lights[i]->GetProjectionMatrix() * lights[i]->GetViewMatrix(Vector3(0,0,0)); // TODO - handle point light shadows properly
+			Matrix4 shadowMatrix = biasMatrix * lights[i]->GetProjectionMatrix() * lights[i]->GetViewMatrix(Vector3(cameraMatrix.GetPositionVector()));
 			
 			sprintf_s(buffer, 20, "shadowProjMatrix[%d]", i);
 			glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), buffer), 1, false, (float*) &shadowMatrix);
@@ -377,7 +368,7 @@ void Renderer::ShadowPass()
 		glClear(GL_DEPTH_BUFFER_BIT);
 		
 		projMatrix		= lights[i]->GetProjectionMatrix();
-		viewMatrix		= lights[i]->GetViewMatrix(Vector3(0,0,0)); // TODO - handle point light shadows properly
+		viewMatrix		= lights[i]->GetViewMatrix(cameraMatrix.GetPositionVector());
 		UpdateShaderMatrices();
 
 		// Draw Scene
@@ -387,7 +378,7 @@ void Renderer::ShadowPass()
 			glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"),	1,false, (float*)&modelMatrix);
 			entity.GetMesh()->Draw();
 		}
-	
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
 	}
 
 	glUseProgram(0);
@@ -418,8 +409,8 @@ void Renderer::DeferredLightPass()
 	glActiveTexture(GL_TEXTURE0 + GBUFFER_NORMALS_TEXTURE_UNIT);
 	glBindTexture(GL_TEXTURE_2D, gbufferNormalTex);
 
-	viewMatrix = camera->BuildViewMatrix();
-	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &camera->GetPosition());
+	viewMatrix = cameraMatrix;
+	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &cameraMatrix.GetPositionVector());
 	glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / (float) width, 1.0f / (float) height);
 
 	// Draw deferred scene lights
@@ -455,7 +446,7 @@ void Renderer::DrawDeferredPointLight(Light* l) {
 	l->BindLight(); // Set up light details in shader
 
 	glEnable(GL_CULL_FACE);
-	float dist = (l->GetPosition() - camera->GetPosition()).Length();
+	float dist = (l->GetPosition() - cameraMatrix.GetPositionVector()).Length();
 	if (dist < l->GetRadius()) {
 		// camera is inside the light volume!
 		glCullFace(GL_FRONT);
@@ -478,7 +469,7 @@ void Renderer::DrawDeferredSpotLight(Light* l) {
 
 	glEnable(GL_CULL_FACE);
 	//glDisable(GL_CULL_FACE);
-	bool inSpotlight = SpotLight::IsInSpotlight(camera->GetPosition(), l);
+	bool inSpotlight = SpotLight::IsInSpotlight(cameraMatrix.GetPositionVector(), l);
 	if (inSpotlight) {
 		// camera is inside the light volume!
 		glCullFace(GL_FRONT);
@@ -569,7 +560,7 @@ void Renderer::DrawSkybox() { // Draw skybox only where screen has not previousl
 	SetCurrentShader(skyBoxShader);
 	
 	// Bind shader variables
-	viewMatrix = camera->BuildViewMatrix();
+	viewMatrix = cameraMatrix;
 	projMatrix = perspectiveMatrix;
 	UpdateShaderMatrices();
 

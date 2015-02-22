@@ -119,7 +119,7 @@ public:
 #pragma endregion	
 
 	PointLight* AddPointLight(Vector3 lightPosition, float lightRadius, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
-	DirectionalLight* AddDirectionalLight(Vector3 lightDirection, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
+	DirectionalLight* AddDirectionalLight(Vector3 lightDirection, Vector4 diffuseColour, Vector4 specularColour);
 	SpotLight* AddSpotLight(Vector3 lightPosition, Vector3 lightTarget, Vector3 upVector, float lightRadius, float lightAngle, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
 		
 	// We don't actually need this since the GSM already holds the reference :)

@@ -80,9 +80,10 @@ public:
 	virtual Matrix4 GetViewMatrix(Vector3 target);
 	virtual Matrix4 GetProjectionMatrix();
 	virtual Matrix4 GetModelMatrix();
-	static void UpdateLightVolume(float n, float f, float r, float l, float t, float b);
+	static void UpdateLightVolume(Vector3& min, Vector3& max);
 private:
-	static float znear, zfar, right, left, top, bottom;
+	static Vector3 boundingMin;
+	static Vector3 boundingMax;
 };
 
 class SpotLight	: public Light {
