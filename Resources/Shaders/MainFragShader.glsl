@@ -88,7 +88,7 @@ void main(void)	{
 			vec3 shadowDir = IN.shadowPos - lightPos[i];
 			float worldDepth = length(shadowDir);
 			shadowDir = normalize(shadowDir);
-			float shadowDepth = texture(shadowCube[0], shadowDir).r;
+			float shadowDepth = texture(shadowCube[i], shadowDir).r;
 			if (worldDepth <= shadowDepth) {
 				shadow += 1.0f;
 			}

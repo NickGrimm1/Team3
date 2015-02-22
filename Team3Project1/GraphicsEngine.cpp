@@ -76,22 +76,20 @@ void GraphicsEngine::Run() {
 		
 		// Update directional lights with scene bounding box
 		// Transform bounding volume by camera transform
-		if (camera != NULL) // Check if we have a camera - the game may not have initialised yet!!!
-		{
-		//	Matrix4 viewMatrix = camera->BuildViewMatrix();
-		//	Vector3 camMin = viewMatrix * boundingMin;
-		//	Vector3 camMax = viewMatrix * boundingMax;
-		//	DirectionalLight::UpdateLightVolume(camMin, camMax);
-			DirectionalLight::UpdateLightVolume(boundingMin, boundingMax);
-		}
+		DirectionalLight::UpdateLightVolume(boundingMin, boundingMax);
 
 		// Sort HUD elements
-		
 		std::sort(overlayElementsList.begin(), overlayElementsList.end(), 
 			[] (const void* a, const void* b) {
 				return (((DrawableEntity2D*) a)->GetDepth() < ((DrawableEntity2D*) b)->GetDepth());
 		});
 	
+		// Sort Point Lights to the front of the lights list
+		std::sort(lights.begin(), lights.end(), 
+			[] (const void* a, const void* b) {
+				return (((Light*) a)->GetType() < ((Light*) b)->GetType());
+		});
+
 		// Render data
 		renderer->RenderScene();
 

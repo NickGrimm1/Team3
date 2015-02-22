@@ -7,7 +7,6 @@
 
 //TODO - remove
 #include <iostream>
-#include "../Framework/BumpTexture.h"
 
 GraphicsTestScreen::GraphicsTestScreen(void)
 {
@@ -15,28 +14,63 @@ GraphicsTestScreen::GraphicsTestScreen(void)
 
 GraphicsTestScreen::~GraphicsTestScreen(void)
 {
-	delete quad;
-	delete cylinder;
-	delete light;
+	// Unload Content
+
+	// Remove Lights
+	RemoveLight(spotLight);
+	RemoveLight(pointLight);
+	RemoveLight(directionalLight);
+	delete pointLight;
+	delete spotLight;
+	delete directionalLight;
+
+	// Remove Drawables/Game entities
+	for (vector<DrawableEntity3D*>::iterator i = gameEntities.begin(); i != gameEntities.end(); i++) {
+		RemoveDrawable(*i);
+		delete *i;
+	}
+	gameEntities.clear();
+
+	// Unload textures/meshes/assets
+	GameStateManager::Assets()->UnloadQuad(this);
+	GameStateManager::Assets()->UnloadCylinder(this, 20);
+	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"Nova Car.obj");
+	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Grass_Color.tga");
+	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"calvin.bmp");
 }
 
 void GraphicsTestScreen::LoadContent() {
-	//Mesh* coneMesh = Mesh::GenerateCone(20);
-
-	//cylinder = Mesh::GenerateCylinder(20);
-	//cout << "Quad Obj = " << quad->GetVertexBuffer() << endl;
 	
 	quad = GameStateManager::Assets()->LoadQuad(this);
+	DrawableEntity3D* ent;
+	for (unsigned int i = 0; i < 8; i++) {
+		for (unsigned int j = 0; j < 8; j++) {
+			ent = new DrawableEntity3D(
+				quad,
+				NULL,
+				GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.tga", SOIL_FLAG_MIPMAPS),
+				NULL,
+				50.0f,
+				Vector3(-350.0f + i * 100.0f,0,-350.0f + j * 100.0f),
+				Quaternion::FromMatrix(Matrix4::Rotation(90.0f, Vector3(1,0,0))),
+				Vector3(50,50,1));
+			gameEntities.push_back(ent);
+			AddDrawable(ent);
+		}
+	}
+/*
 	ent = new DrawableEntity3D(
 		quad,
 		NULL,
 		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.tga", SOIL_FLAG_MIPMAPS),
 		NULL,
-		50.0f,
+		400.0f,
 		Vector3(0,0,0),
 		Quaternion::FromMatrix(Matrix4::Rotation(90.0f, Vector3(1,0,0))),
-		Vector3(50,50,50));
-	AddDrawable(ent);
+		Vector3(400,400,1));
+		gameEntities.push_back(ent);
+		AddDrawable(ent);
+		*/
 
 	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
 	ent = new DrawableEntity3D(
@@ -44,34 +78,51 @@ void GraphicsTestScreen::LoadContent() {
 		NULL,
 		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", SOIL_FLAG_INVERT_Y), 
 		NULL,
-		10.0f, 
-		Vector3(5,0,5), 
+		30.0f, 
+		Vector3(35,0,35), 
 		Quaternion::EulerAnglesToQuaternion(0,0,0),
-		Vector3(2,10,2));
+		Vector3(15,30,15));
+	gameEntities.push_back(ent);
+	AddDrawable(ent);
+
+	circle = GameStateManager::Assets()->LoadCircle(this, 20);
+	ent = new DrawableEntity3D(
+		circle, 
+		NULL,
+		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", SOIL_FLAG_INVERT_Y), 
+		NULL,
+		30.0f, // needs same bounding radius as cylinder
+		Vector3(35,30,35), 
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		Vector3(15,1,15));
+	gameEntities.push_back(ent);
 	AddDrawable(ent);
 
 	Mesh* car = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
-	AddDrawable(new DrawableEntity3D(
+	ent = new DrawableEntity3D(
 		GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj"),
 		NULL,
 		NULL,
 		NULL,
 		25.0f,
-		Vector3(-25, 5, 0),
+		Vector3(-25, 20, 0),
 		Quaternion::EulerAnglesToQuaternion(0,0,0),
-		Vector3(5,5,5)));
-
+		Vector3(5,5,5));
+	gameEntities.push_back(ent);
+	AddDrawable(ent);
 	
-	//light = GameStateManager::Graphics()->AddSpotLight(Vector3(0, 0, 0), Vector3(0,1,0), Vector3(1,0,0), 1.0f, 45.0f, Vector4(1,1,1,1), Vector4(1,1,1,1), false);
 	
-	PointLight* l = GameStateManager::Graphics()->AddPointLight(Vector3(0,20,0), 50, Vector4(1,1,1,1), Vector4(1,1,1,1), false); 
+	spotLight = GameStateManager::Graphics()->AddSpotLight(Vector3(-10, 40, -10), Vector3(35,0,35), Vector3(0,1,0), 2000.0f, 45.0f, Vector4(1,0,0,1), Vector4(0,0,1,1), true);
+	spotLight = GameStateManager::Graphics()->AddSpotLight(Vector3(50, 40, 50), Vector3(35,0,35), Vector3(0,1,0), 2000.0f, 90.0f, Vector4(0.5,0.5,0.5,1), Vector4(0,0,1,1), true);
+	pointLight = GameStateManager::Graphics()->AddPointLight(Vector3(-50,60,-50), 500, Vector4(1,0,1,1), Vector4(0,0.5,0,1), true); 
+	pointLight = GameStateManager::Graphics()->AddPointLight(Vector3(50,60,50), 500, Vector4(0,1,0,1), Vector4(0,0.5,0,1), true); 
+	
+//	directionalLight = GameStateManager::Graphics()->AddDirectionalLight(Vector3(-1, -1, -1), Vector4(1,1,1,1), Vector4(0,0,0,1));
 
 	camera = new FreeCamera();
-	camera->SetPosition(Vector3(0,10.0f, 80.0f));
-	//camera->AddYaw(180.0f);
-	GameStateManager::Graphics()->SetCamera(camera);
-
+	camera->SetPosition(Vector3(0,10,80));
 	
+	GameStateManager::Graphics()->SetCamera(camera);
 }
 
 void GraphicsTestScreen::Update() { 
@@ -122,6 +173,9 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 		case KeyboardEvents::KEYBOARD_E:
 			camera->AddRoll(1);
 			break;
+		case KeyboardEvents::KEYBOARD_1:
+		GameStateManager::Graphics()->DrawDeferredLights(drawDeferredLights = !drawDeferredLights);
+		break;
 		}
 		break;
 	case KeyboardEvents::KEY_PRESS:
