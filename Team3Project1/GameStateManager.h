@@ -80,28 +80,39 @@ public:
 
 	void Exit()
 	{
-		graphics->Terminate();
-		physics->Terminate();
-		input->Terminate();
-
-		// Clean up
-		graphics->Join();
-		physics->Join();
-		input->Join();
-
-		// Destroy everything
-		GraphicsEngine::Destroy();
-		AssetManager::Destroy();
-		PhysicsEngine::Destroy();
-		StorageManager::Destroy();
-		InputManager::Destroy();
-		AudioEngine::Destroy();
-		NetworkManager::Destroy();
-		DebugManager::Destroy();
-
 		if (instance != NULL)
+		{
+			instance->isRunning = false;
+			vector<GameScreen*>::iterator i = instance->gameScreens.begin();
+			while (i != instance->gameScreens.end())
+			{
+				(*i)->UnloadContent();
+				delete *i;
+				i = instance->gameScreens.erase(i);
+			}
+
+			graphics->Terminate();
+			physics->Terminate();
+			input->Terminate();
+
+			// Clean up
+			graphics->Join();
+			physics->Join();
+			input->Join();
+
+			// Destroy everything
+			GraphicsEngine::Destroy();
+			AssetManager::Destroy();
+			PhysicsEngine::Destroy();
+			StorageManager::Destroy();
+			InputManager::Destroy();
+			AudioEngine::Destroy();
+			NetworkManager::Destroy();
+			DebugManager::Destroy();
+
 			delete instance;
-		instance = NULL;
+			instance = NULL;
+		}
 	}
 	~GameStateManager()
 	{
@@ -245,7 +256,14 @@ public:
 	static void ChangeScreen(GameScreen* gameScreen)
 	{
 		gameScreen->LoadContent();
-		Instance()->gameScreens.clear();
+		vector<GameScreen*>::iterator i = instance->gameScreens.begin();
+		while (i != instance->gameScreens.end())
+		{
+			(*i)->UnloadContent();
+			delete *i;
+			i = instance->gameScreens.erase(i);
+		}
+
 		Instance()->gameScreens.push_back(gameScreen);
 	}
 	/**
@@ -267,6 +285,8 @@ public:
 		{
 			if (*i == gameScreen)
 			{
+				(*i)->UnloadContent();
+				delete *i;
 				Instance()->gameScreens.erase(i);
 				break;
 			}
@@ -278,8 +298,6 @@ public:
 	*/
 	static GameStateManager* Instance()
 	{
-		if (instance == NULL)
-			instance = new GameStateManager();
 		return instance;
 	}
 private:

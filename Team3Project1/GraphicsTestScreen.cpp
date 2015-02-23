@@ -14,29 +14,7 @@ GraphicsTestScreen::GraphicsTestScreen(void)
 
 GraphicsTestScreen::~GraphicsTestScreen(void)
 {
-	// Unload Content
-
-	// Remove Lights
-	RemoveLight(spotLight);
-	RemoveLight(pointLight);
-	RemoveLight(directionalLight);
-	delete pointLight;
-	delete spotLight;
-	delete directionalLight;
-
-	// Remove Drawables/Game entities
-	for (vector<DrawableEntity3D*>::iterator i = gameEntities.begin(); i != gameEntities.end(); i++) {
-		RemoveDrawable(*i);
-		delete *i;
-	}
 	gameEntities.clear();
-
-	// Unload textures/meshes/assets
-	GameStateManager::Assets()->UnloadQuad(this);
-	GameStateManager::Assets()->UnloadCylinder(this, 20);
-	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"Nova Car.obj");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Grass_Color.tga");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"calvin.bmp");
 }
 
 void GraphicsTestScreen::LoadContent() {

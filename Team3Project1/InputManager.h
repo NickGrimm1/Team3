@@ -28,7 +28,6 @@ public:
 	}
 
 	void Run();
-	void Terminate() { isRunning = false; }
 private:
 	InputManager() { }
 	~InputManager() { }

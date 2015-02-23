@@ -64,7 +64,6 @@ public:
 	*/
 	bool HasInitialised() { return isInitialised; }
 	void Run();
-	void Terminate() { isRunning = false; }
 #pragma endregion
 #pragma region TwoD
 	/**

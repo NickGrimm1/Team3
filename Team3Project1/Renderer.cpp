@@ -173,8 +173,6 @@ bool Renderer::LoadAssets() {
 
 Renderer::~Renderer(void)
 {
-	delete camera;
-
 	/*
 	delete snow;
 	delete rain;

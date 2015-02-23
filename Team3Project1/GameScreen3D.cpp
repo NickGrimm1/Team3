@@ -16,6 +16,8 @@ GameScreen3D::~GameScreen3D()
 		RemoveLight(*j);
 	}
 	// Clear Camera
+	if (camera)
+		delete camera;
 	GameStateManager::Graphics()->SetCamera(NULL);
 }
 void GameScreen3D::AddDrawable(DrawableEntity3D* value) 
@@ -33,8 +35,9 @@ void GameScreen3D::RemoveDrawable(DrawableEntity3D* value)
 	{
 		if (*i == value)
 		{
-			i = drawables.erase(i);
 			GameStateManager::Graphics()->RemoveDrawable(value);
+			delete *i;
+			i = drawables.erase(i);
 			break;
 		}
 	}
@@ -63,8 +66,9 @@ void GameScreen3D::RemoveLight(Light* value)
 	{
 		if (*i == value)
 		{
-			i = lights.erase(i);
 			GameStateManager::Graphics()->RemoveLight(value);
+			delete *i;
+			i = lights.erase(i);
 			break;
 		}
 	}

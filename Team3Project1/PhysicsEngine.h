@@ -27,7 +27,6 @@ public:
 		instance = NULL;
 	}
 	void Run();
-	void Terminate() { isRunning = false; }
 private:
 	PhysicsEngine() { }
 	~PhysicsEngine() { }
