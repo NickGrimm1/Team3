@@ -155,6 +155,18 @@ bool Renderer::LoadCheck()
 			hudShader		!= NULL);
 }
 
+void Renderer::UnloadShaders()
+{
+	GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
+	GameStateManager::Assets()->LoadShader(this, SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl");
+	GameStateManager::Assets()->LoadShader(this, SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl");
+	GameStateManager::Assets()->LoadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl");
+	GameStateManager::Assets()->LoadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl");
+	GameStateManager::Assets()->LoadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
+	GameStateManager::Assets()->LoadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
+	GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl");
+}
+
 bool Renderer::LoadAssets() {
 	// Load Meshes required for rendering operations
 	
@@ -171,6 +183,13 @@ bool Renderer::LoadAssets() {
 	return true;
 }
 
+void Renderer::UnloadAssets() {
+	GameStateManager::Assets()->LoadCircle(this, 20); // Circle for spotlight rendering
+	GameStateManager::Assets()->LoadQuad(this); // Quad for rendering textures to screen
+	GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
+	GameStateManager::Assets()->LoadCone(this, 20); // Cone for spotlight rendering
+}
+
 Renderer::~Renderer(void)
 {
 	/*
@@ -178,7 +197,7 @@ Renderer::~Renderer(void)
 	delete rain;
 	delete sandstorm;
 	*/
-
+/*
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl"); //basicShader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl"); //sceneShader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl"); //shadowShader
@@ -187,9 +206,12 @@ Renderer::~Renderer(void)
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl"); //combineShader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl"); //particleShader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl"); //hudShader
+	
+*/
+
+	currentShader = NULL;
 
 	//Clear buffers
-	//glDeleteTextures(1, &shadowTex); - TODO - handle deletion of shadow textures
 	glDeleteTextures(1, &gbufferColourTex);
 	glDeleteTextures(1, &gbufferDepthTex);
 	glDeleteTextures(1, &gbufferNormalTex);

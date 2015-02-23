@@ -30,28 +30,24 @@ public:
 	virtual ~GameScreen2D()
 	{
 		// Clear clickables. RemoveClickable also calls RemoveSelectable, RemoveDrawable & RemoveEntity.
-		vector<ClickableEntity2D*>::iterator i = clickables.begin();
-		while (i != clickables.end())
+		while (!clickables.empty())
 		{
-			RemoveClickable(*i);
+			RemoveClickable(clickables.front());
 		}
 		// Clear remaining selectables.
-		vector<SelectableEntity2D*>::iterator j = selectables.begin();
-		while (j != selectables.end())
+		while (!selectables.empty())
 		{
-			RemoveSelectable(*j);
+			RemoveSelectable(selectables.front());
 		}
 		// Clear remaining drawables.
-		vector<DrawableEntity2D*>::iterator k = drawables.begin();
-		while (k != drawables.end())
+		while (!drawables.empty())
 		{
-			RemoveDrawable(*k);
+			RemoveDrawable(drawables.front());
 		}
 		// Clear any remaining entities.
-		vector<T3Rectangle*>::iterator l = entities.begin();
-		while (l != entities.end())
+		while (!entities.empty())
 		{
-			RemoveEntity(*l);
+			RemoveEntity(entities.front());
 		}
 	}
 #pragma region Entity

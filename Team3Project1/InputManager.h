@@ -32,5 +32,4 @@ private:
 	InputManager() { }
 	~InputManager() { }
 	static InputManager* instance;
-	bool isRunning;
 };

@@ -31,5 +31,4 @@ private:
 	PhysicsEngine() { }
 	~PhysicsEngine() { }
 	static PhysicsEngine* instance;
-	bool isRunning;
 };

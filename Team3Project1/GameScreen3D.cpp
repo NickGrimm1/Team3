@@ -4,16 +4,14 @@
 GameScreen3D::~GameScreen3D()
 {
 	// Clear drawables.
-	vector<DrawableEntity3D*>::iterator i = drawables.begin();
-	while (i != drawables.end())
+	while (!drawables.empty())
 	{
-		RemoveDrawable(*i);
+		RemoveDrawable(drawables.front());
 	}
 	// Clear lights
-	vector<Light*>::iterator j = lights.begin();
-	while (j != lights.end())
+	while (!lights.empty())
 	{
-		RemoveLight(*j);
+		RemoveLight(lights.front());
 	}
 	// Clear Camera
 	if (camera)

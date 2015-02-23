@@ -76,6 +76,7 @@ public:
 				gameScreens[i]->Update();
 			}
 		}
+		instance->Destroy();
 	}
 
 	void Exit()
@@ -83,14 +84,11 @@ public:
 		if (instance != NULL)
 		{
 			instance->isRunning = false;
-			vector<GameScreen*>::iterator i = instance->gameScreens.begin();
-			while (i != instance->gameScreens.end())
-			{
-				(*i)->UnloadContent();
-				delete *i;
-				i = instance->gameScreens.erase(i);
-			}
+		}
+	}
 
+	void Destroy() {
+		if (instance != NULL) {
 			graphics->Terminate();
 			physics->Terminate();
 			input->Terminate();
@@ -100,9 +98,20 @@ public:
 			physics->Join();
 			input->Join();
 
+			vector<GameScreen*>::iterator i = instance->gameScreens.begin();
+			while (i != instance->gameScreens.end())
+			{
+				(*i)->UnloadContent();
+				delete *i;
+				i = instance->gameScreens.erase(i);
+			}
+
+			// Unload Engine Assets
+			GraphicsEngine::UnloadContent();
+
 			// Destroy everything
+			AssetManager::Destroy(); // Do not destroy before graphics in Windows Build - requires OpenGL context
 			GraphicsEngine::Destroy();
-			AssetManager::Destroy();
 			PhysicsEngine::Destroy();
 			StorageManager::Destroy();
 			InputManager::Destroy();

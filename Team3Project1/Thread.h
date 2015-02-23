@@ -27,8 +27,8 @@ protected:
 	friend DWORD thread_ftn(LPVOID T);
 	HANDLE thread_handle;
 	DWORD tid;
+	bool isRunning;
 private:
 	Thread(const Thread& src);
 	Thread& operator=(const Thread& rhs);
-	bool isRunning;
 };

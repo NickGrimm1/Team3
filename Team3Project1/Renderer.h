@@ -24,22 +24,7 @@ Version: 0.0.1 03/02/2015.</summary>
 
 #include <vector>
 
-#define SHADOWSIZE 2048 //* 8 ?
-
-/*
-struct LightData {
-	Vector4*	lightColour;
-	Vector4*	lightSpecColour;
-
-	Vector3*	lightPos;
-	Vector3*	lightDir;
-	Vector3*	cameraPos;
-
-	float		lightRadius;
-	float		lightAngle;
-	int			lightType;
-};
-*/
+#define SHADOWSIZE 2048
 
 class Renderer : public OGLRenderer
 {
@@ -68,6 +53,8 @@ public:
 
 	bool LoadShaders();
 	bool LoadAssets();
+	void UnloadShaders();
+	void UnloadAssets();
 
 	void DrawDeferredLights(bool on) {drawDeferredLights = on;}
 

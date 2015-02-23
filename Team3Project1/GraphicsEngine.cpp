@@ -45,6 +45,7 @@ GraphicsEngine::~GraphicsEngine() {
 	// TODO
 	// Delete local array data - if not handled elsewhere
 
+	// Fin
 	delete renderer;
 	Window::Destroy();
 }
@@ -53,8 +54,65 @@ void GraphicsEngine::Run() {
 	isRunning = true;
 	
 	while (isRunning) {
-		// TODO - add/remove requested items from scene lists
-		camera->UpdateCamera();
+
+		// add/remove requested items from scene lists
+		contentGuard.lock_mutex();
+
+		// Add/Remove Game objects
+		for (unsigned int i = 0; i < addGameList.size(); i++) {
+			if (addGameList[i].second == NULL) {
+				// if no parent - add drawable as child of sceneRoot
+				sceneRoot->AddChild(new SceneNode(addGameList[i].first));
+			}
+			else
+			{
+				sceneRoot->AddChildToParent(addGameList[i].first, addGameList[i].second);
+			}
+		}
+		addGameList.clear();
+
+		for (unsigned int i = 0; i < removeGameList.size(); i++) {
+			sceneRoot->RemoveChild(removeGameList[i].first, removeGameList[i].second);
+		}
+		removeGameList.clear();
+
+		// Add/Remove HUD elements
+		for (unsigned int i = 0; i < addHudList.size(); i++) {
+			overlayElementsList.push_back(addHudList[i]);
+		}
+		addHudList.clear();
+
+		for (unsigned int i = 0; i < removeHudList.size(); i++) {
+			for (auto j = overlayElementsList.begin(); j != overlayElementsList.end(); ++j) {
+				if ((*j) == removeHudList[i]) {
+					overlayElementsList.erase(j);
+				}
+			}
+		}
+		removeHudList.clear();
+
+		for (unsigned int i = 0; i < addLightsList.size(); i++) {
+			lights.push_back(addLightsList[i]);
+		}
+		addLightsList.clear();
+
+		// Add/Remove lights
+		for (unsigned int l = 0; l < removeLightsList.size(); l++) {
+			for (auto i = lights.begin(); i != lights.end(); ++i) {
+				if ((*i) == removeLightsList[l]) {
+					unsigned int shadowTex = (*i)->GetShadowTexture();
+					if (shadowTex > 0) 
+						renderer->DestroyTexture(shadowTex);
+					lights.erase(i);
+				}
+			}
+		}
+		removeLightsList.clear();
+
+		contentGuard.unlock_mutex();
+			
+		// Update camera
+		camera->UpdateCamera(); // may need to remove
 
 		// Update data in scene nodes
 		sceneRoot->Update(1.0f / RENDER_HZ); // TODO - sort out proper timestep value - or remove timestep if not needed
@@ -98,7 +156,6 @@ void GraphicsEngine::Run() {
 	}
 }
 
-// TODO - deal with castsShadows
 PointLight* GraphicsEngine::AddPointLight(Vector3 lightPosition, float lightRadius, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow) {
 	unsigned int shadowTex = castsShadow ? renderer->CreateShadowCube() : 0;
 	PointLight* l = new PointLight(lightPosition, diffuseColour, specularColour, lightRadius, shadowTex);
@@ -170,61 +227,55 @@ void GraphicsEngine::ClearNodeLists() {
 }
 
 void GraphicsEngine::AddDrawable(DrawableEntity3D* drawable, DrawableEntity3D* parent) {
-	// TODO - is it worth checking node already in scene graph
 	
-	// if no parent - add drawable as child of sceneRoot
-	if (parent == NULL) {
-		sceneRoot->AddChild(new SceneNode(drawable));
-	}
-	else
-	{
-		sceneRoot->AddChildToParent(drawable, parent);
-	}
+	contentGuard.lock_mutex();
+	// TODO - is it worth checking node already in scene graph
+	addGameList.push_back(pair<DrawableEntity3D*, DrawableEntity3D*>(drawable, parent));
+	contentGuard.unlock_mutex();
 }
 
 void GraphicsEngine::RemoveDrawable(DrawableEntity3D* drawable, bool removeChildren) {
-	sceneRoot->RemoveChild(drawable, true, removeChildren);
+	contentGuard.lock_mutex();
+	removeGameList.push_back(pair<DrawableEntity3D*, bool>(drawable, removeChildren));
+	contentGuard.unlock_mutex();
 }
 
 void GraphicsEngine::AddTextureToScene(DrawableTexture2D* drawableTexture) {
 	// TODO - is it worth checking already in list
-	overlayElementsList.push_back(drawableTexture);
+	contentGuard.lock_mutex();
+	addHudList.push_back(drawableTexture);
+	contentGuard.unlock_mutex();
 }
 
 void GraphicsEngine::RemoveTextureFromScene(DrawableTexture2D* drawableTexture) {
-	for (auto i = overlayElementsList.begin(); i != overlayElementsList.end(); ++i) {
-		if ((*i) == drawableTexture) {
-			overlayElementsList.erase(i);
-		}
-	}
+	contentGuard.lock_mutex();
+	removeHudList.push_back(drawableTexture);
+	contentGuard.unlock_mutex();
 }
 
 void GraphicsEngine::AddDrawableTextToScene(DrawableText2D* drawableText) {
 	// TODO - is it worth checking already in list
-	overlayElementsList.push_back(drawableText);
+	contentGuard.lock_mutex();
+	addHudList.push_back(drawableText);
+	contentGuard.unlock_mutex();
 }
 
 void GraphicsEngine::RemoveDrawableTextFromScene(DrawableText2D* drawableText) {
-	for (auto i = overlayElementsList.begin(); i != overlayElementsList.end(); ++i) {
-		if ((*i) == drawableText) {
-			overlayElementsList.erase(i);
-		}
-	}
+	contentGuard.lock_mutex();
+	removeHudList.push_back(drawableText);
+	contentGuard.unlock_mutex();
 }
 
 void GraphicsEngine::AddLight(Light* light) {
-	lights.push_back(light);
+	contentGuard.lock_mutex();
+	addLightsList.push_back(light);
+	contentGuard.unlock_mutex();
 }
 
 void GraphicsEngine::RemoveLight(Light* light) {
-	for (auto i = lights.begin(); i != lights.end(); ++i) {
-		if ((*i) == light) {
-			unsigned int shadowTex = light->GetShadowTexture();
-			if (shadowTex > 0) 
-				renderer->DestroyTexture(shadowTex);
-			lights.erase(i);
-		}
-	}
+	contentGuard.lock_mutex();
+	removeLightsList.push_back(light);
+	contentGuard.unlock_mutex();
 }
 
 void GraphicsEngine::SetCamera(Camera* cam)

@@ -12,7 +12,9 @@ Shader::~Shader(void)
 {
 	glDetachShader(program, vertexShader->shader);
 	glDetachShader(program, fragmentShader->shader);
-	glDetachShader(program, geometryShader->shader);
+	if (geometryShader) {
+		glDetachShader(program, geometryShader->shader);
+	}
 	glDeleteProgram(program);
 }
 

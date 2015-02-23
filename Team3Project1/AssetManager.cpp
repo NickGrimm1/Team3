@@ -26,25 +26,29 @@ bool AssetManager::Initialize(AssetManager*& out)
 void AssetManager::Destroy()
 {
 	GameStateManager::Graphics()->GetRenderContext();
-	for (map<string, LoadedTexture>::iterator i = instance->loadedTextures.begin(); i != instance->loadedTextures.end(); i++)
+	while (!instance->loadedTextures.empty())
 	{
-		delete i->second.texture;
-		i = instance->loadedTextures.erase(i);
+		map<string, LoadedTexture>::iterator i = instance->loadedTextures.begin();
+		delete (*i).second.texture;
+		instance->loadedTextures.erase(i);
 	}
-	for (map<string, LoadedMesh>::iterator i = instance->loadedMeshes.begin(); i != instance->loadedMeshes.end(); i++)
+	while (!instance->loadedMeshes.empty()) 
 	{
-		delete i->second.mesh;
-		i = instance->loadedMeshes.erase(i);
+		map<string, LoadedMesh>::iterator i = instance->loadedMeshes.begin();
+		delete (*i).second.mesh;
+		instance->loadedMeshes.erase(i);
 	}
-	for (map<string, LoadedShader>::iterator i = instance->loadedShaders.begin(); i != instance->loadedShaders.end(); i++)
+	while (!instance->loadedShaders.empty())
 	{
-		delete i->second.shader;
-		i = instance->loadedShaders.erase(i);
+		map<string, LoadedShader>::iterator i = instance->loadedShaders.begin();
+		delete (*i).second.shader;
+		instance->loadedShaders.erase(i);
 	}
-	for (map<string, LoadedShaderPart>::iterator i = instance->loadedShaderParts.begin(); i != instance->loadedShaderParts.end(); i++)
+	while (!instance->loadedShaderParts.empty())
 	{
-		delete i->second.shaderPart;
-		i = instance->loadedShaderParts.erase(i);
+		map<string, LoadedShaderPart>::iterator i = instance->loadedShaderParts.begin();
+		delete (*i).second.shaderPart;
+		instance->loadedShaderParts.erase(i);
 	}
 	GameStateManager::Graphics()->DropRenderContext();
 
@@ -673,7 +677,9 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 void AssetManager::UnloadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath)
 {
 	// Check if this shader is actually loaded...
-	string shaderName = vertexShaderFilePath.append(fragmentShaderFilePath).append(geometryShaderFilePath);
+	string shaderName = vertexShaderFilePath;
+	shaderName.append(fragmentShaderFilePath);
+	shaderName.append(geometryShaderFilePath);
 	map<string, LoadedShader>::iterator i = loadedShaders.find(shaderName);
 	if (i == loadedShaders.end())
 		return; // This shader does not exist, ignore.

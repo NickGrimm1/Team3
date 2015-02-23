@@ -1,4 +1,4 @@
-/**
+ /**
 Version History:
 0.0.1 03/02/2015
 0.0.2 05/02/2015
@@ -54,6 +54,12 @@ public:
 		return (engine->renderer->LoadShaders() &&
 				engine->renderer->LoadAssets());
 	}
+	
+	static void UnloadContent()
+	{
+		engine->renderer->UnloadShaders();
+		engine->renderer->UnloadAssets();
+	}
 	/**
 	<summary>Destroys the graphics engine. Allows the game to exit cleanly.</summary>
 	<returns>true if the graphics engine has exited.</returns>
@@ -101,11 +107,6 @@ public:
 	*/
 	void RemoveDrawable(DrawableEntity3D* drawable, bool removeChildren = true);
 	/**
-	<summary>Adds a light to the scene. Indempotent.</summary>
-    <param name="light">The light.</param>
-	*/
-	void AddLight(Light* light);
-	/**
 	<summary>Removes a light to the scene. Indempotent.</summary>
     <param name="light">The light.</param>
 	*/
@@ -140,6 +141,12 @@ private:
 	void ClearNodeLists();
 	void DrawNodes();
 
+	/**
+	<summary>Adds a light to the scene. Indempotent.</summary>
+    <param name="light">The light.</param>
+	*/
+	void AddLight(Light* light);
+
 	Renderer* renderer;
 
 	Frustum frameFrustum;
@@ -152,10 +159,15 @@ private:
 	vector<SceneNode*> transparentGameEntityList; // list of transparent game elements sorted by distance from camera
 	vector<SceneNode*> gameEntityList; // list of opaque game elements sorted by distance from camera
 
+	MutexClass contentGuard;
+	vector<Light*> addLightsList; // lights to be added during next update
+	vector<Light*> removeLightsList; // lights to be removed during next update
+	vector<DrawableEntity2D*> addHudList; // HUD elements to be added at next update
+	vector<DrawableEntity2D*> removeHudList; // HUD elements to be removed at next update
+	vector<pair<DrawableEntity3D*, DrawableEntity3D*>> addGameList; // Game elements to be added at next update
+	vector<pair<DrawableEntity3D*, bool>> removeGameList; // Game elements to be removed at next update
 
 	Vector3 boundingMin, boundingMax; // Defines a bounding box for the VISIBLE scene, built each frame from the nodes that pass frustum culling.
-
-	bool isRunning;
 
 	int width;
 	int height;
