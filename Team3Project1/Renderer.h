@@ -79,7 +79,7 @@ protected:
 	void			BloomPass();
 	void			MotionBlurPass();
 	void			DrawFrameBufferTex(GLuint fboTex); // Draw the texture passed to it to screen
-	
+
 	void			Draw2DOverlay();
 	void			Draw2DText(DrawableText2D& text);
 	void			Draw2DTexture(DrawableTexture2D& texture);
@@ -126,6 +126,7 @@ protected:
 	Shader*			gaussianShader;
 	Shader*			downSampleShader;
 	Shader*			bloomFinalShader;
+	Shader*			velocityShader;
 	Shader*			motionBlurShader;
 	Shader*			hudShader;
 	

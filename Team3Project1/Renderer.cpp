@@ -158,6 +158,7 @@ bool Renderer::LoadShaders()
 	gaussianShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"GaussianFragment.glsl");
 	downSampleShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"DownSampleFragment.glsl");
 	bloomFinalShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BloomFinalFragment.glsl");
+	velocityShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"VelocityVertex.glsl", SHADERDIR"VelocityFragment.glsl");
 	motionBlurShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlurFragment.glsl");
 	hudShader		 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BrightPassFragment.glsl");
 	return LoadCheck();
@@ -177,6 +178,7 @@ bool Renderer::LoadCheck()
 			gaussianShader		!= NULL &&
 			downSampleShader	!= NULL &&
 			bloomFinalShader	!= NULL &&
+			velocityShader		!= NULL &&
 			motionBlurShader	!= NULL &&
 			hudShader			!= NULL);
 }
@@ -224,6 +226,7 @@ Renderer::~Renderer(void)
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"GaussianFragment.glsl");//Gaussian Blur Shader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"DownSampleFragment.glsl");//Downsample Shader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BloomFinalShader.glsl");//Final bloom Shader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"VelocityVertex.glsl", SHADERDIR"VelocityFragment.glsl");//VBuffer Shader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlurFragment.glsl");//Motion blur Shader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl"); //hudShader
 
@@ -258,10 +261,15 @@ void Renderer::RenderScene() {
 	CombineBuffers();
 
 	// Post-Processing
-	MotionBlurPass();
+	//BloomPass();
+	//MotionBlurPass();
+
+	DrawFrameBufferTex(postProcessingTex[0]);
 
 	// Draw HUD/Menu overlay
 	Draw2DOverlay(); // TODO - Draw HUD first and use stencil to optimise main render pass
+
+	
 
 	SwapBuffers();
 	wglMakeCurrent(deviceContext, NULL);
@@ -380,6 +388,7 @@ void Renderer::DrawScene()
 		// ignore shader for the minute
 		
 		modelMatrix = sceneNodes[i]->GetWorldTransform() * Matrix4::Scale(entity.GetScale());
+		sceneNodes[i]->SetPrevMVP(modelMatrix);
 		glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"),	1,false, (float*)&modelMatrix);
 		
 		textureMatrix.ToIdentity(); // add to texture/drawableentity class
@@ -527,9 +536,6 @@ void Renderer::CombineBuffers() {// merge scene render with lighting pass
 	
 	glEnable(GL_DEPTH_TEST);
 	glUseProgram(0);
-	
-	DrawFrameBufferTex(postProcessingTex[0]);
-	
 }
 
 void Renderer::DrawSkybox() { // Draw skybox only where screen has not previously been written to
@@ -568,7 +574,7 @@ void Renderer::BloomPass()
 	/*-----------------------------Bright pass filter-----------------------------*/
 
 	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[ActiveTex()], 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[1], 0);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 	SetCurrentShader(brightPassShader);
@@ -577,7 +583,7 @@ void Renderer::BloomPass()
 	UpdateShaderMatrices();
 
 	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-	glBindTexture(GL_TEXTURE_2D, postProcessingTex[ActiveTex()]);
+	glBindTexture(GL_TEXTURE_2D, postProcessingTex[0]);
 
 	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "luminance"), 0.09f);
 	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "middleGrey"), 0.18f);
@@ -593,7 +599,7 @@ void Renderer::BloomPass()
 	UpdateShaderMatrices();
 
 	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-	glBindTexture(GL_TEXTURE_2D, postProcessingTex[ActiveTex()]);
+	glBindTexture(GL_TEXTURE_2D, postProcessingTex[1]);
 
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 
@@ -720,7 +726,14 @@ void Renderer::BloomPass()
 void Renderer::MotionBlurPass()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[ActiveTex()], 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufferVelocity, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	SetCurrentShader(velocityShader);
+	UpdateShaderMatrices();
+
+	//Some method that mimics the initial draw call, pulling the Previous MVP into the mix.
+	
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[1], 0);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 	SetCurrentShader(motionBlurShader);
@@ -733,8 +746,7 @@ void Renderer::MotionBlurPass()
 	glActiveTexture(GL_TEXTURE0 + GBUFFER_VELOCITY_UNIT);
 	glBindTexture(GL_TEXTURE_2D, gbufferVelocity);
 	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-	glBindTexture(GL_TEXTURE_2D, postProcessingTex[ActiveTex()]);
-
+	glBindTexture(GL_TEXTURE_2D, postProcessingTex[0]);
 
 	//TODO: Create a method that does the currFPS/TargetFPS calc
 	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "velocityScale"), 1.0);
