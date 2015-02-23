@@ -8,7 +8,7 @@
 #endif
 #include "Vertex.h"
 #include "Texture.h"
-#include "ShaderPart.h"
+
 
 namespace PrimitiveType
 {
