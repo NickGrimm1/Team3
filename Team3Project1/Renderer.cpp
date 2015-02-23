@@ -208,14 +208,21 @@ bool Renderer::LoadCheck()
 
 void Renderer::UnloadShaders()
 {
-	GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
-	GameStateManager::Assets()->LoadShader(this, SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl");
-	GameStateManager::Assets()->LoadShader(this, SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl");
-	GameStateManager::Assets()->LoadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl");
-	GameStateManager::Assets()->LoadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl");
-	GameStateManager::Assets()->LoadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
-	GameStateManager::Assets()->LoadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
-	GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl");
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl");
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl");
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl");
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl");
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BrightPassFragment.glsl");//Bright-pass Shader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BloomCombFragment.glsl");//Bloom combine Shader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"GaussianFragment.glsl");//Gaussian Blur Shader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"DownSampleFragment.glsl");//Downsample Shader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BloomFinalShader.glsl");//Final bloom Shader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"VelocityVertex.glsl", SHADERDIR"VelocityFragment.glsl");//VBuffer Shader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlurFragment.glsl");//Motion blur Shader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl");
 }
 
 bool Renderer::LoadAssets() {
@@ -248,24 +255,6 @@ Renderer::~Renderer(void)
 	delete rain;
 	delete sandstorm;
 	*/
-/*
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl"); //basicShader
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl"); //sceneShader
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl"); //shadowShader
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl"); // deferred lighting shader
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl"); //skyBoxShader
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl"); //combineShader
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl"); //particleShader
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BrightPassFragment.glsl");//Bright-pass Shader
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BloomCombFragment.glsl");//Bloom combine Shader
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"GaussianFragment.glsl");//Gaussian Blur Shader
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"DownSampleFragment.glsl");//Downsample Shader
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BloomFinalShader.glsl");//Final bloom Shader
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"VelocityVertex.glsl", SHADERDIR"VelocityFragment.glsl");//VBuffer Shader
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlurFragment.glsl");//Motion blur Shader
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl"); //hudShader
-
-*/
 
 	currentShader = NULL;
 
