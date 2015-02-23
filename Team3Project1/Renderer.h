@@ -24,7 +24,23 @@ Version: 0.0.1 03/02/2015.</summary>
 
 #include <vector>
 
-#define SHADOWSIZE 2048
+#define SAMPLENUM 3
+#define SHADOWSIZE 2048 //* 8 ?
+
+/*
+struct LightData {
+	Vector4*	lightColour;
+	Vector4*	lightSpecColour;
+
+	Vector3*	lightPos;
+	Vector3*	lightDir;
+	Vector3*	cameraPos;
+
+	float		lightRadius;
+	float		lightAngle;
+	int			lightType;
+};
+*/
 
 class Renderer : public OGLRenderer
 {
@@ -125,24 +141,35 @@ protected:
 	Shader*			skyBoxShader;
 	Shader*			combineShader;
 	Shader*			particleShader;
-	Shader*			bloomShader;
-	Shader*			blurShader;
+	Shader*			brightPassShader;
+	Shader*			bloomCombShader;
+	Shader*			gaussianShader;
+	Shader*			downSampleShader;
+	Shader*			bloomFinalShader;
+	Shader*			velocityShader;
+	Shader*			motionBlurShader;
 	Shader*			hudShader;
 	
-	GLuint			gbufferFBO;
+	GLuint			gbufferFBO; //Geometry buffer
 	GLuint			postProcessingFBO;
 	GLuint			deferredLightingFBO;
 	GLuint			shadowFBO;
+
 	GLuint			gbufferColourTex;
 	GLuint			gbufferDepthTex;
 	GLuint			gbufferNormalTex;
 	GLuint			shadowDepthTex; // unfortunately required for omni-directional shadows
+	GLuint			gbufferVelocity;
+
 	GLuint			skyBoxTex;
 	GLuint			lightEmissiveTex;
 	GLuint			lightSpecularTex;
-	GLuint			postProcessingTex[2]; // At start of post-processing, postProcessingTex[0] holds the rendered scene
+	GLuint			postProcessingTex[3]; // At start of post-processing, postProcessingTex[0] holds the rendered scene
+	GLuint			downSampleTex[SAMPLENUM * 2];
 
 	Vector4			ambientLightColour; // The scenes ambient light settings
 
 	MutexClass		openglMutex;		// Prevents different threads for using OpenGL at same time	
+
+	float			samples[3];
 };

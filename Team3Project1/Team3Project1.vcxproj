@@ -1,25 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|PS3">
+      <Configuration>Debug</Configuration>
+      <Platform>PS3</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="PS3_DEBUG|PS3">
+      <Configuration>PS3_DEBUG</Configuration>
+      <Platform>PS3</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="PS3_DEBUG|Win32">
       <Configuration>PS3_DEBUG</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="PS3_RELEASE|PS3">
+      <Configuration>PS3_RELEASE</Configuration>
+      <Platform>PS3</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="PS3_RELEASE|Win32">
       <Configuration>PS3_RELEASE</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|PS3">
+      <Configuration>Release</Configuration>
+      <Platform>PS3</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="WINDOWS_DEBUG|PS3">
+      <Configuration>WINDOWS_DEBUG</Configuration>
+      <Platform>PS3</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="WINDOWS_DEBUG|Win32">
       <Configuration>WINDOWS_DEBUG</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="WINDOWS_RELEASE|PS3">
+      <Configuration>WINDOWS_RELEASE</Configuration>
+      <Platform>PS3</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="WINDOWS_RELEASE|Win32">
       <Configuration>WINDOWS_RELEASE</Configuration>
@@ -69,6 +93,24 @@
     <PlatformToolset>v100</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='WINDOWS_DEBUG|PS3'">
+    <PlatformToolset>SNC</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='WINDOWS_RELEASE|PS3'">
+    <PlatformToolset>SNC</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|PS3'">
+    <PlatformToolset>SNC</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|PS3'">
+    <PlatformToolset>SNC</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">
+    <PlatformToolset>SNC</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='PS3_RELEASE|PS3'">
+    <PlatformToolset>SNC</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -183,6 +225,11 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">
+    <ClCompile>
+      <PreprocessorDefinitions>PS3_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Framework\BumpTexture.h" />
@@ -313,12 +360,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Resources\Shaders\BlendedFragment.glsl" />
+    <None Include="..\Resources\Shaders\BloomCombFragment.glsl" />
+    <None Include="..\Resources\Shaders\BloomFinalFragment.glsl" />
+    <None Include="..\Resources\Shaders\BlurFragment.glsl" />
+    <None Include="..\Resources\Shaders\BrightPassFragment.glsl" />
     <None Include="..\Resources\Shaders\CombineFragment.glsl" />
     <None Include="..\Resources\Shaders\CombineVertex.glsl" />
     <None Include="..\Resources\Shaders\debugFragment.glsl" />
     <None Include="..\Resources\Shaders\debugVertex.glsl" />
     <None Include="..\Resources\Shaders\DeferredPassFragment.glsl" />
     <None Include="..\Resources\Shaders\DeferredPassVertex.glsl" />
+    <None Include="..\Resources\Shaders\DownSampleFragment.glsl" />
     <None Include="..\Resources\Shaders\MainFragShader.glsl" />
     <None Include="..\Resources\Shaders\MainVertShader.glsl" />
     <None Include="..\Resources\Shaders\PointToCircleGeom.glsl" />

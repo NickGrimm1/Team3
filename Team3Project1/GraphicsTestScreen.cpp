@@ -196,6 +196,6 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 }
 	
 void GraphicsTestScreen::MouseMoved(Vector2& finish) {
-	//camera->AddPitch(-finish.y);
-	//camera->AddYaw(finish.x);
+	camera->AddPitch(-finish.y);
+	camera->AddYaw(finish.x);
 }
