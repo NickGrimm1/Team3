@@ -25,6 +25,35 @@ class GameScreen2D : public GameScreen
 {
 	// TODO: Implement GameScreen 2D.
 public:
+	GameScreen2D(float x = 0.0f, float y = 0.0f, float width = 1.0f, float height = 1.0f) : GameScreen(x, y, width, height)
+	{ }
+	virtual ~GameScreen2D()
+	{
+		// Clear clickables. RemoveClickable also calls RemoveSelectable, RemoveDrawable & RemoveEntity.
+		vector<ClickableEntity2D*>::iterator i = clickables.begin();
+		while (i != clickables.end())
+		{
+			RemoveClickable(*i);
+		}
+		// Clear remaining selectables.
+		vector<SelectableEntity2D*>::iterator j = selectables.begin();
+		while (j != selectables.end())
+		{
+			RemoveSelectable(*j);
+		}
+		// Clear remaining drawables.
+		vector<DrawableEntity2D*>::iterator k = drawables.begin();
+		while (k != drawables.end())
+		{
+			RemoveDrawable(*k);
+		}
+		// Clear any remaining entities.
+		vector<T3Rectangle*>::iterator l = entities.begin();
+		while (l != entities.end())
+		{
+			RemoveEntity(*l);
+		}
+	}
 #pragma region Entity
 	/**
 	<summary>Adds an entity to the screen. Does not add to any other collection. Use addDrawable(...) to draw etc. Idempotent.</summary>
@@ -58,6 +87,11 @@ public:
 			if (*i == entity)
 			{
 				// TODO: Ensure that this is also removed from Graphics & Input.
+				if (*i)
+				{
+					delete *i;
+					*i = NULL;
+				}
 				entities.erase(i);
 				break;
 			}
@@ -100,7 +134,7 @@ public:
 	<param name="removeFromDraw">Remove the entity from draw. Default is true.</param>
     <param name="selectable">The entity.</param>
 	*/
-	void RemoveSelectable(ClickableEntity2D* selectable, bool removeFromDraw = true)
+	void RemoveSelectable(SelectableEntity2D* selectable, bool removeFromDraw = true)
     {
         for (vector<SelectableEntity2D*>::iterator i = selectables.begin(); i != selectables.end(); i++)
 		{

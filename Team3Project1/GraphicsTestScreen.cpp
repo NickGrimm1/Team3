@@ -41,6 +41,15 @@ GraphicsTestScreen::~GraphicsTestScreen(void)
 
 void GraphicsTestScreen::LoadContent() {
 	
+	// Use of this method: It's abstract, so you must implement it.
+	//
+	// Use this to call GameStateManager::Assets()->Load* for meshes, textures etc. Note the reference to this in each Load call.
+	// This is so the AssetManager knows who is using this object - It does not matter how many times Load* is called, the AssetManager will not add extra user counts.
+	//
+	// Note the use below of a single pointer to the object ent, which is then used many times over to add new objects to the scene.
+	// This is perfectly fine practice - internally the GameScreen holds all the pointers and will clean up on exit.
+	// If you need to remove or change an entity before the game screen is disposed of (A pick-up perhaps) then it will require it's own unique named variable.
+
 	quad = GameStateManager::Assets()->LoadQuad(this);
 	DrawableEntity3D* ent;
 	for (unsigned int i = 0; i < 8; i++) {
@@ -124,6 +133,39 @@ void GraphicsTestScreen::LoadContent() {
 	
 	GameStateManager::Graphics()->SetCamera(camera);
 }
+void GraphicsTestScreen::UnloadContent()
+{
+	// Use of this method: It's abstract, so you must implement it.
+	//
+	// Use this to call GameStateManager::Assets()->Unload* for meshes, textures etc that were loaded in LoadContent(). Not the reference to this in Unload*.
+	// In LoadContent() above, LoadTexture was called many times upon Grass_Color.tga and calvin.bmp. - the reference to this ensures that it only needs to be unloaded by this method once.
+	//
+	// IMPORTANT: DO NOT DIRECTLY DELETE ASSETS, always call GameStateManager::Assets()->Unload*. It is possible to have multiple GameScreens - the asset may still be in use elsewhere.
+	//
+	// Remember to clean up any pointers you may have added either here or in the destructor - however DO NOT DELETE pointers that have been added to Entities/Drawables.
+	// Entity pointer(s) will be handled automatically by the parent destructor.
+	//
+	// RemoveDrawable() etc will also be called automatically upon destruction so calling it is uneccessary.
+
+	GameStateManager::Assets()->UnloadQuad(this);
+	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Grass_Color.tga"),
+	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"calvin.bmp"),
+	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"Nova Car.obj");
+	
+	
+	spotLight = GameStateManager::Graphics()->AddSpotLight(Vector3(-10, 40, -10), Vector3(35,0,35), Vector3(0,1,0), 2000.0f, 45.0f, Vector4(1,0,0,1), Vector4(0,0,1,1), true);
+	spotLight = GameStateManager::Graphics()->AddSpotLight(Vector3(50, 40, 50), Vector3(35,0,35), Vector3(0,1,0), 2000.0f, 90.0f, Vector4(0.5,0.5,0.5,1), Vector4(0,0,1,1), true);
+	pointLight = GameStateManager::Graphics()->AddPointLight(Vector3(-50,60,-50), 500, Vector4(1,0,1,1), Vector4(0,0.5,0,1), true); 
+	pointLight = GameStateManager::Graphics()->AddPointLight(Vector3(50,60,50), 500, Vector4(0,1,0,1), Vector4(0,0.5,0,1), true); 
+	
+//	directionalLight = GameStateManager::Graphics()->AddDirectionalLight(Vector3(-1, -1, -1), Vector4(1,1,1,1), Vector4(0,0,0,1));
+
+	camera = new FreeCamera();
+	camera->SetPosition(Vector3(0,10,80));
+	
+	GameStateManager::Graphics()->SetCamera(camera);
+}
+
 
 void GraphicsTestScreen::Update() { 
 	//Matrix4 m = Matrix4::Rotation(0.016f, Vector3(0,1,0));

@@ -26,6 +26,26 @@ using namespace std;
 class GameScreen3D : public GameScreen
 {
 public:
+	GameScreen3D(float x = 0.0f, float y = 0.0f, float width = 1.0f, float height = 1.0f)
+		: GameScreen(x, y, width, height)
+	{ }
+	virtual ~GameScreen3D()
+	{
+		// Clear drawables.
+		vector<DrawableEntity3D*>::iterator i = drawables.begin();
+		while (i != drawables.end())
+		{
+			RemoveDrawable(*i);
+		}
+		// Clear lights
+		vector<Light*>::iterator j = lights.begin();
+		while (j != lights.end())
+		{
+			RemoveLight(*j);
+		}
+		// Clear Camera
+
+	}
 	void SetPlayer(DrawableEntity3D* value) { player = value; }
 	void RemovePlayer() 
 	{

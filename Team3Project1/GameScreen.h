@@ -56,6 +56,10 @@ public:
 	<summary>Loads assets and performs initial logic for setting up the screen.</summary>
 	*/
 	virtual void LoadContent() = 0;
+	/**
+	<summary>Unloads assets. Intended for the programmer to unload all assets called using LoadContent().</summary>
+	*/
+	virtual void UnloadContent() = 0;
 protected:
 	/**
 	<summary>The current offset (scroll deviation) of the screen.</summary>

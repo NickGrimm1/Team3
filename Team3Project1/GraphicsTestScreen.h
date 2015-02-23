@@ -10,6 +10,7 @@ public:
 
 	virtual void LoadContent();
 	virtual void Update();
+	virtual void UnloadContent();
 
 	// Input Listener methods - implemented
 	virtual void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key);
