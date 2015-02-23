@@ -121,17 +121,17 @@ void GraphicsTestScreen::LoadContent() {
 	AddDrawable(ent);
 	
 	
-	spotLight = GameStateManager::Graphics()->AddSpotLight(Vector3(-10, 40, -10), Vector3(35,0,35), Vector3(0,1,0), 2000.0f, 45.0f, Vector4(1,0,0,1), Vector4(0,0,1,1), true);
-	spotLight = GameStateManager::Graphics()->AddSpotLight(Vector3(50, 40, 50), Vector3(35,0,35), Vector3(0,1,0), 2000.0f, 90.0f, Vector4(0.5,0.5,0.5,1), Vector4(0,0,1,1), true);
-	pointLight = GameStateManager::Graphics()->AddPointLight(Vector3(-50,60,-50), 500, Vector4(1,0,1,1), Vector4(0,0.5,0,1), true); 
-	pointLight = GameStateManager::Graphics()->AddPointLight(Vector3(50,60,50), 500, Vector4(0,1,0,1), Vector4(0,0.5,0,1), true); 
+	AddSpotLight(Vector3(-10, 40, -10), Vector3(35,0,35), Vector3(0,1,0), 2000.0f, 45.0f, Vector4(1,0,0,1), Vector4(0,0,1,1), true);
+	AddSpotLight(Vector3(50, 40, 50), Vector3(35,0,35), Vector3(0,1,0), 2000.0f, 90.0f, Vector4(0.5,0.5,0.5,1), Vector4(0,0,1,1), true);
+	AddPointLight(Vector3(-50,60,-50), 500, Vector4(1,0,1,1), Vector4(0,0.5,0,1), true); 
+	AddPointLight(Vector3(50,60,50), 500, Vector4(0,1,0,1), Vector4(0,0.5,0,1), true); 
 	
 //	directionalLight = GameStateManager::Graphics()->AddDirectionalLight(Vector3(-1, -1, -1), Vector4(1,1,1,1), Vector4(0,0,0,1));
 
 	camera = new FreeCamera();
 	camera->SetPosition(Vector3(0,10,80));
 	
-	GameStateManager::Graphics()->SetCamera(camera);
+	SetCamera(camera);
 }
 void GraphicsTestScreen::UnloadContent()
 {
@@ -151,19 +151,6 @@ void GraphicsTestScreen::UnloadContent()
 	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Grass_Color.tga"),
 	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"calvin.bmp"),
 	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"Nova Car.obj");
-	
-	
-	spotLight = GameStateManager::Graphics()->AddSpotLight(Vector3(-10, 40, -10), Vector3(35,0,35), Vector3(0,1,0), 2000.0f, 45.0f, Vector4(1,0,0,1), Vector4(0,0,1,1), true);
-	spotLight = GameStateManager::Graphics()->AddSpotLight(Vector3(50, 40, 50), Vector3(35,0,35), Vector3(0,1,0), 2000.0f, 90.0f, Vector4(0.5,0.5,0.5,1), Vector4(0,0,1,1), true);
-	pointLight = GameStateManager::Graphics()->AddPointLight(Vector3(-50,60,-50), 500, Vector4(1,0,1,1), Vector4(0,0.5,0,1), true); 
-	pointLight = GameStateManager::Graphics()->AddPointLight(Vector3(50,60,50), 500, Vector4(0,1,0,1), Vector4(0,0.5,0,1), true); 
-	
-//	directionalLight = GameStateManager::Graphics()->AddDirectionalLight(Vector3(-1, -1, -1), Vector4(1,1,1,1), Vector4(0,0,0,1));
-
-	camera = new FreeCamera();
-	camera->SetPosition(Vector3(0,10,80));
-	
-	GameStateManager::Graphics()->SetCamera(camera);
 }
 
 
