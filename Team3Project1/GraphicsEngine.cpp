@@ -1,4 +1,5 @@
 #include "GraphicsEngine.h"
+#include "GraphicsCommon.h"
 #include <algorithm>
 
 GraphicsEngine* GraphicsEngine::engine = NULL;
@@ -42,10 +43,7 @@ GraphicsEngine::GraphicsEngine() {
 
 GraphicsEngine::~GraphicsEngine() {
 	// TODO
-	// Delete remaining Texture data from OpenGL
-	// Delete remaining Mesh data from OpenGL
-
-	// Delete local array data
+	// Delete local array data - if not handled elsewhere
 
 	delete renderer;
 	Window::Destroy();
@@ -55,11 +53,8 @@ void GraphicsEngine::Run() {
 	isRunning = true;
 	
 	while (isRunning) {
-		//std::cout << "Graphics is Running";
-
 		// TODO - add/remove requested items from scene lists
-
-		renderer->UpdateScene(1.0f / RENDER_HZ); // TODO - use proper frame time
+		camera->UpdateCamera();
 
 		// Update data in scene nodes
 		sceneRoot->Update(1.0f / RENDER_HZ); // TODO - sort out proper timestep value - or remove timestep if not needed
@@ -81,21 +76,20 @@ void GraphicsEngine::Run() {
 		
 		// Update directional lights with scene bounding box
 		// Transform bounding volume by camera transform
-		if (camera != NULL) // Check if we have a camera - the game may not have initialised yet!!!
-		{
-			Matrix4 viewMatrix = camera->BuildViewMatrix();
-			Vector3 camMin = viewMatrix * boundingMin;
-			Vector3 camMax = viewMatrix * boundingMax;
-			DirectionalLight::UpdateLightVolume(camMin.z, camMax.z, camMax.x, camMin.x, camMax.y, camMin.y);
-		}
+		DirectionalLight::UpdateLightVolume(boundingMin, boundingMax);
 
 		// Sort HUD elements
-		
 		std::sort(overlayElementsList.begin(), overlayElementsList.end(), 
 			[] (const void* a, const void* b) {
 				return (((DrawableEntity2D*) a)->GetDepth() < ((DrawableEntity2D*) b)->GetDepth());
 		});
 	
+		// Sort Point Lights to the front of the lights list
+		std::sort(lights.begin(), lights.end(), 
+			[] (const void* a, const void* b) {
+				return (((Light*) a)->GetType() < ((Light*) b)->GetType());
+		});
+
 		// Render data
 		renderer->RenderScene();
 
@@ -106,15 +100,15 @@ void GraphicsEngine::Run() {
 
 // TODO - deal with castsShadows
 PointLight* GraphicsEngine::AddPointLight(Vector3 lightPosition, float lightRadius, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow) {
-	unsigned int shadowTex = castsShadow ? renderer->CreateShadowTexture() : 0;
+	unsigned int shadowTex = castsShadow ? renderer->CreateShadowCube() : 0;
 	PointLight* l = new PointLight(lightPosition, diffuseColour, specularColour, lightRadius, shadowTex);
 	lights.push_back(l);
 	return l;
 }
 
-DirectionalLight* GraphicsEngine::AddDirectionalLight(Vector3 lightDirection, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow) {
-	unsigned int shadowTex = castsShadow ? renderer->CreateShadowTexture() : 0;
-	DirectionalLight* l = new DirectionalLight(lightDirection, diffuseColour, specularColour, shadowTex);
+DirectionalLight* GraphicsEngine::AddDirectionalLight(Vector3 lightDirection, Vector4 diffuseColour, Vector4 specularColour) {
+	//unsigned int shadowTex = castsShadow ? renderer->CreateShadowTexture() : 0;
+	DirectionalLight* l = new DirectionalLight(lightDirection, diffuseColour, specularColour, 0);
 	lights.push_back(l);
 	return l;
 }
@@ -135,12 +129,13 @@ void GraphicsEngine::BuildNodeLists(SceneNode* from) {
 			from->SetCameraDistance(Vector3::Dot(dir, dir)); // gonna save ourselves a sqrt and compare distance^2
 
 			Vector3 pos = from->GetWorldTransform().GetPositionVector();
-			if (pos.x < boundingMin.x) boundingMin.x = pos.x; 
-			if (pos.y < boundingMin.y) boundingMin.y = pos.y; 
-			if (pos.z < boundingMin.z) boundingMin.z = pos.z;
-			if (pos.x > boundingMax.x) boundingMax.x = pos.x; 
-			if (pos.y > boundingMax.y) boundingMax.y = pos.y; 
-			if (pos.z > boundingMax.z) boundingMax.z = pos.z;
+			float boundingRadius = from->GetDrawableEntity()->GetBoundingRadius();
+			if (pos.x - boundingRadius < boundingMin.x) boundingMin.x = pos.x - boundingRadius; 
+			if (pos.y - boundingRadius < boundingMin.y) boundingMin.y = pos.y - boundingRadius; 
+			if (pos.z - boundingRadius < boundingMin.z) boundingMin.z = pos.z - boundingRadius;
+			if (pos.x + boundingRadius > boundingMax.x) boundingMax.x = pos.x + boundingRadius; 
+			if (pos.y + boundingRadius > boundingMax.y) boundingMax.y = pos.y + boundingRadius; 
+			if (pos.z + boundingRadius > boundingMax.z) boundingMax.z = pos.z + boundingRadius;
 
 			if (from->GetColour().w < 1.0f)
 				//transparent - add to transparent list

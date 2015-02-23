@@ -10,5 +10,6 @@ public:
 
 protected:
 	void LoadContent();
+	void UnloadContent();
 };
 

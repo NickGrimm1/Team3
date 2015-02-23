@@ -405,6 +405,12 @@
     <ClInclude Include="HudTestScreen.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TrackSegment.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Spline.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">
@@ -542,6 +548,12 @@
     <ClCompile Include="TexturePS3.cpp">
       <Filter>Framework\Resource Manager\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Spline.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackSegment.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\TechFragment.glsl">
@@ -554,9 +566,6 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\CombineVertex.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\DeferredPassFragment.glsl">
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\DeferredPassVertex.glsl">
@@ -572,12 +581,6 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\PointToQuadGeom.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\shadowFrag.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\shadowVert.glsl">
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\SkyBoxFragment.glsl">
@@ -599,6 +602,15 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\BlendedFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\DeferredPassFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\ShadowFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\ShadowVertex.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

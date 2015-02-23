@@ -53,7 +53,7 @@ public:
 	bool TransformsTexCoords() { return transformCoords;}
 
 #if WINDOWS_BUILD
-	virtual void Draw(bool update = true);
+	virtual void Draw();
 #endif
 #if PS3_BUILD
 	virtual void Mesh::Draw(ShaderPart &vertex, ShaderPart &fragment)

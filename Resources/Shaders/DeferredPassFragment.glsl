@@ -46,13 +46,27 @@ void main() {
 
 
 	float dist = length(lightPos - pos);
-	float atten = 1.0 - clamp(dist / lightRadius, 0.0, 1.0);
+	float atten = 1.0;
+	if (lightType != 1) { // no attenuation of directional lights
+		atten = 1.0 - clamp(dist / lightRadius, 0.0, 1.0);
+	}
 	
+	if (lightType == 1) {
+		if (dot(normal, lightDir) > 0) discard;
+	}
+
 	if (atten == 0.0 || (lightType == 2 && !inSpotlight(pos))) {
 		discard;
 	}
 
-	vec3 incident = normalize(lightPos - pos);
+	vec3 incident;
+	if (lightType == 1) {
+		incident = -lightDir;
+	}
+	else {
+		incident = normalize(lightPos - pos);
+	}
+
 	vec3 viewDir = normalize(cameraPos - pos);
 	vec3 halfDir = normalize(incident + viewDir);
 

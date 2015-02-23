@@ -73,6 +73,7 @@ Texture* AssetManager::LoadTexture(void* callerID, string filePath, unsigned int
 		// Load this texture in...
 		GameStateManager::Graphics()->GetRenderContext();
 		Texture* newTexture = new Texture(filePath, flags);
+		newTexture->SetRepeating(true);
 		GameStateManager::Graphics()->DropRenderContext();
 		loadedTextures.insert(pair<string, LoadedTexture>(filePath, LoadedTexture(newTexture, callerID)));
 		return newTexture;
@@ -125,13 +126,13 @@ Mesh* AssetManager::LoadMesh(void* callerID, string filePath)
 	{
 		// Load this mesh in...
 		Mesh* newMesh;
-		if (filePath.substr(filePath.length() - 4, 3) == "obj")
+		if (filePath.substr(filePath.length() - 3, 3) == "obj")
 		{
 			GameStateManager::Graphics()->GetRenderContext();
 			newMesh = new OBJMesh(filePath);
 			GameStateManager::Graphics()->DropRenderContext();
 		}
-		else if (filePath.substr(filePath.length() - 4, 3) == "md5")
+		else if (filePath.substr(filePath.length() - 3, 3) == "md5")
 		{
 			GameStateManager::Graphics()->GetRenderContext();
 			newMesh = new MD5Mesh(MD5FileData(filePath));

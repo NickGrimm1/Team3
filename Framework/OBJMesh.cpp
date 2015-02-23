@@ -214,8 +214,6 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 				m = new OBJMesh();
 			}
 
-			m->SetTexturesFromMTL(sm->mtlSrc, sm->mtlType, materials);
-
 			m->numVertices	= sm->vertIndices.size();
 
 			m->vertices	= new Vertex[m->numVertices];
@@ -246,6 +244,8 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 
 			m->BufferData();
 
+			m->SetTexturesFromMTL(sm->mtlSrc, sm->mtlType, materials);
+
 			if(i != 0) {
 				AddChild(m);
 			}	
@@ -265,6 +265,22 @@ automatically be used by this overloaded function. Once 'this' has been drawn,
 all of the children of 'this' will be drawn
 */
 void OBJMesh::Draw() {
+#if WINDOWS_BUILD
+	GLint prog = 0;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &prog);
+
+	if (texture) {
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture->GetTextureName());
+		glUniform1i(glGetUniformLocation(prog, "useDiffuseTex"), 1);
+	}
+	if (bumpTexture) {
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, bumpTexture->GetTextureName());
+		glUniform1i(glGetUniformLocation(prog, "useDiffuseTex"), 1);
+	}
+#endif
+
 	Mesh::Draw();
 
 	for(unsigned int i = 0; i < children.size(); ++i) {
@@ -281,11 +297,13 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 		map <string, MTLInfo>::iterator i = materials.find(mtlType);
 		if(i != materials.end()) {
 			if(!i->second.diffuse.empty())	{
-				
+				texture = i->second.diffuseNum;
+				texturePath = string(TEXTUREDIR + i->second.diffuse);
 			}
 
 			if(!i->second.bump.empty())	{
-	//TODO			bumpTexture = i->second.bumpNum;
+				bumpTexture = i->second.bumpNum;
+				bumpPath = string(TEXTUREDIR + i->second.bump);
 			}
 
 			return;
@@ -337,6 +355,10 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 				currentMTL.diffuse = currentMTL.diffuse.substr(at+1);
 			}
 			*/
+
+			if (!currentMTL.diffuse.empty()) {
+				currentMTL.diffuseNum = GameStateManager::Assets()->LoadTexture(this, string(TEXTUREDIR + currentMTL.diffuse), SOIL_FLAG_INVERT_Y);
+			}
 		}
 		else if(currentLine == MTLBUMPMAP || currentLine == MTLBUMPMAPALT) {
 			f >> currentMTL.bump;
@@ -348,6 +370,10 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 			else if(currentMTL.bump.find_last_of('\\') != string::npos) {
 				int at = currentMTL.bump.find_last_of('\\');
 				currentMTL.bump = currentMTL.bump.substr(at+1);
+			}
+
+			if (!currentMTL.bump.empty()) {
+				currentMTL.bumpNum = GameStateManager::Assets()->LoadTexture(this, string(TEXTUREDIR + currentMTL.bump), 0);
 			}
 		}
 	}
@@ -365,12 +391,12 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 		map <string, MTLInfo>::iterator i = materials.find(mtlType);
 		if(i != materials.end()) {
 			if(!i->second.diffuse.empty())	{
-				texture = GameStateManager::Assets()->LoadTexture(this, string(TEXTUREDIR + currentMTL.diffuse), 0);
+				texture = i->second.diffuseNum;
 				texturePath = string(TEXTUREDIR + currentMTL.diffuse);
 			}
 
 			if(!i->second.bump.empty())	{
-				bumpTexture = GameStateManager::Assets()->LoadTexture(this, string(TEXTUREDIR + currentMTL.bump), 0);
+				bumpTexture = i->second.bumpNum;
 				bumpPath = string(TEXTUREDIR + currentMTL.bump);
 			}
 
@@ -396,6 +422,6 @@ void	OBJMesh::FixTextures(MTLInfo &info) {
 
 		info.bump = temp;
 
-		info.bumpNum = SOIL_load_OGL_texture(string(TEXTUREDIR + info.bump).c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y |  SOIL_FLAG_TEXTURE_REPEATS);
+//		info.bumpNum = SOIL_load_OGL_texture(string(TEXTUREDIR + info.bump).c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y |  SOIL_FLAG_TEXTURE_REPEATS);
 	}
 }

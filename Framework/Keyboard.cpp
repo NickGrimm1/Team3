@@ -70,5 +70,7 @@ void Keyboard::Update(RAWINPUT* raw, float msec)	{
 				}
 			}
 		}
+
+		memcpy(prevStates, keyStates, KeyboardEvents::KEYBOARD_MAX * sizeof(bool));
 	}
 }

@@ -110,3 +110,10 @@ void HudTestScreen::LoadContent() {
 		Vector2(0.5f, 0.5f),
 		Vector4(0,0,1,1.0f)));
 }
+
+void HudTestScreen::UnloadContent()
+{
+	GameStateManager::Assets()->UnloadFont(this, TEXTUREDIR"tahoma.tga");
+	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Grass_Color.tga");
+	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"calvin.bmp");
+}

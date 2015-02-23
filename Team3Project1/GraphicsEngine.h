@@ -30,14 +30,9 @@ Version: 0.0.3 06/02/2015.</summary>
 #include "DrawableEntity3D.h"
 #include "Thread.h"
 
-#define RENDER_HZ 60
-#define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 720
-#define GAME_TITLE "Team^3 - Endless Racer"
 
-#define MAX_LIGHTS 10
-#define MAX_MESHES 20
-#define MAX_TEXTURES 20
+
+
 
 
 class GraphicsEngine : public Thread
@@ -53,9 +48,11 @@ public:
 	<returns>true if a Graphics Engine is initialized and ready.</returns>
 	*/
 	static bool Initialize(GraphicsEngine*& out);
+	
 	static bool LoadContent()
 	{
-		return engine->renderer->LoadShaders();
+		return (engine->renderer->LoadShaders() &&
+				engine->renderer->LoadAssets());
 	}
 	/**
 	<summary>Destroys the graphics engine. Allows the game to exit cleanly.</summary>
@@ -67,7 +64,6 @@ public:
 	*/
 	bool HasInitialised() { return isInitialised; }
 	void Run();
-	void Terminate() { isRunning = false; }
 #pragma endregion
 #pragma region TwoD
 	/**
@@ -122,11 +118,15 @@ public:
 #pragma endregion	
 
 	PointLight* AddPointLight(Vector3 lightPosition, float lightRadius, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
-	DirectionalLight* AddDirectionalLight(Vector3 lightDirection, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
+	DirectionalLight* AddDirectionalLight(Vector3 lightDirection, Vector4 diffuseColour, Vector4 specularColour);
 	SpotLight* AddSpotLight(Vector3 lightPosition, Vector3 lightTarget, Vector3 upVector, float lightRadius, float lightAngle, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
 		
 	// We don't actually need this since the GSM already holds the reference :)
 	//static GraphicsEngine& GetGraphicsEngine() {return *engine;}
+
+
+	// Debugging
+	void DrawDeferredLights(bool on) {renderer->DrawDeferredLights(on);}
 private:
 	static GraphicsEngine* engine;
 

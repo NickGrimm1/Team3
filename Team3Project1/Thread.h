@@ -13,10 +13,14 @@ using std::string;
 class Thread
 {
 public:
-	Thread(){}
+	Thread()
+	{
+		isRunning = false;
+	}
 	virtual ~Thread(){ CloseHandle(thread_handle);}
 	virtual void Start();
 	virtual void Join();
+	virtual void Terminate();
 	virtual DWORD get_id() const {return tid;}
 protected:
 	virtual void Run() = 0;
@@ -26,4 +30,5 @@ protected:
 private:
 	Thread(const Thread& src);
 	Thread& operator=(const Thread& rhs);
+	bool isRunning;
 };

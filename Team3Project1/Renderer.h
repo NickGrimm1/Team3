@@ -50,12 +50,12 @@ public:
 	void			SetCamera(Camera* cam) {camera = cam;};
 
 	void			RenderScene();
-	virtual void	UpdateScene(float msec);
 	void			ToggleDebug(int arg, bool onOff);
 
 	GLuint			CreateTexture(const char* filename, bool enableMipMaps = false, bool enableAnisotropicFiltering = false);
-	GLuint			CreateShadowTexture();
 	GLuint			CreateCubeTexture(const char* filename);
+	GLuint			CreateShadowTexture();
+	GLuint			CreateShadowCube();
 	bool			DestroyTexture(GLuint textureReference);
 
 	void			SetSkyBoxTexture(GLuint tex) {skyBoxTex = tex;}
@@ -67,11 +67,25 @@ public:
 	bool			DropRenderContextForThread();
 
 	bool LoadShaders();
+	bool LoadAssets();
+
+	void DrawDeferredLights(bool on) {drawDeferredLights = on;}
+
 protected:
+
+	Matrix4			cameraMatrix; // Get camera matrix once at start of scene
+
+
 	//Rendering pipeline components.
 	void			DrawScene();
 	void			ShadowPass();
+	void			DrawNodes(bool enableTextures);
+
 	void			DeferredLightPass();
+	void			DrawDeferredPointLight(Light* l);
+	void			DrawDeferredSpotLight(Light* l);
+	void			DrawDeferredDirectionalLight(Light* l);
+
 	void			CombineBuffers();
 	void			DrawSkybox();
 	void			BloomPass();
@@ -90,6 +104,8 @@ protected:
 	bool			activeTex;
 	unsigned int	nextTextureUnit;
 
+	// Debugging
+	bool			drawDeferredLights;
 	bool			debugElem[10];
 
 	vector<Light*>&	lights;
@@ -97,9 +113,13 @@ protected:
 	vector<DrawableEntity2D*>& overlayElements; // HUD/Menu elements, sorted by "distance" from camera (overlay level). Closest first
 
 	Matrix4 orthographicMatrix;	// Gonna be constantly switching between orthographic (for HUD) and perspective (for scene) projection
-	Matrix4 perspectiveMatrix;	// Rather than constantly regenerating matrices - just keep a copy of each
+	Matrix4 perspectiveMatrix;	// for drawing full screen quads (post-processing)
+	Matrix4 hudMatrix; // For drawing HUD Elements only
 
-	Mesh*			quad;
+	Mesh*			screenMesh;			// A quad mesh for drawing screen filling textures
+	Mesh*			sphereMesh;			// A sphere mesh for drawing deferred point lights
+	Mesh*			coneMesh;			// A cone mesh for drawing deferred spot lights
+	Mesh*			circleMesh;			// A circle mesh for drawing deferred spot lights
 
 	Camera*			camera;
 
@@ -129,14 +149,13 @@ protected:
 	GLuint			gbufferColourTex;
 	GLuint			gbufferDepthTex;
 	GLuint			gbufferNormalTex;
+	GLuint			shadowDepthTex; // unfortunately required for omni-directional shadows
 	GLuint			skyBoxTex;
 	GLuint			lightEmissiveTex;
 	GLuint			lightSpecularTex;
 	GLuint			postProcessingTex[2]; // At start of post-processing, postProcessingTex[0] holds the rendered scene
 
 	Vector4			ambientLightColour; // The scenes ambient light settings
-
-	Mesh*			screenMesh;			// A quad mesh for drawing screen filling textures
 
 	MutexClass		openglMutex;		// Prevents different threads for using OpenGL at same time	
 };

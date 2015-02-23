@@ -22,7 +22,7 @@ Mesh::Mesh()
 Mesh::~Mesh(void)	
 {
 #if WINDOWS_BUILD
-	glDeleteVertexArrays(1, &arrayObject);			//Delete our VAO
+	glDeleteVertexArrays(1, &arrayObject);	//Delete our VAO
 	glDeleteBuffers(1, bufferObject);		//Delete our VBOs
 	if (vertices)
 		delete[]vertices;
@@ -31,7 +31,7 @@ Mesh::~Mesh(void)
 #endif
 }
 #if WINDOWS_BUILD
-void Mesh::Draw(bool update)	
+void Mesh::Draw()	
 {
 	glBindVertexArray(arrayObject);
 	if(numIndices > 0)
@@ -295,28 +295,28 @@ Mesh* Mesh::GenerateQuad()
 	m->vertices	= new Vertex[m->numVertices];
 
 	m->vertices[0] = Vertex(
-		Vector3(-1.0f, -1.0f, 0.0f),
-		Vector3(0.0f, 0.0f,-1.0f),
-		Vector4(1.0f, 1.0f,1.0f,1.0f),
-		Vector2(0.0f, 1.0f),
-		Vector3(1.0f, 0.0f,0.0f));
-	m->vertices[1] = Vertex(
-		Vector3(1.0f, -1.0f, 0.0f),
-		Vector3(0.0f, 0.0f,-1.0f),
-		Vector4(1.0f, 1.0f,1.0f,1.0f),
-		Vector2(1.0f, 1.0f),
-		Vector3(1.0f, 0.0f,0.0f));
-	m->vertices[2] = Vertex(
-		Vector3(-1.0f,1.0f, 0.0f),
-		Vector3(0.0f, 0.0f,-1.0f),
+		Vector3(-1.0f, -1.0f, 0.0f), // bottom left
+		Vector3(0.0f, 0.0f,1.0f),
 		Vector4(1.0f, 1.0f,1.0f,1.0f),
 		Vector2(0.0f, 0.0f),
 		Vector3(1.0f, 0.0f,0.0f));
-	m->vertices[3] = Vertex(
-		Vector3(1.0f, 1.0f, 0.0f),
-		Vector3(0.0f, 0.0f,-1.0f),
+	m->vertices[1] = Vertex(		// bottom right
+		Vector3(1.0f, -1.0f, 0.0f),
+		Vector3(0.0f, 0.0f,1.0f),
 		Vector4(1.0f, 1.0f,1.0f,1.0f),
 		Vector2(1.0f, 0.0f),
+		Vector3(1.0f, 0.0f,0.0f));
+	m->vertices[2] = Vertex(		// top left
+		Vector3(-1.0f,1.0f, 0.0f),
+		Vector3(0.0f, 0.0f,1.0f),
+		Vector4(1.0f, 1.0f,1.0f,1.0f),
+		Vector2(0.0f, 1.0f),
+		Vector3(1.0f, 0.0f,0.0f));
+	m->vertices[3] = Vertex(		// top right
+		Vector3(1.0f, 1.0f, 0.0f),
+		Vector3(0.0f, 0.0f,1.0f),
+		Vector4(1.0f, 1.0f,1.0f,1.0f),
+		Vector2(1.0f, 1.0f),
 		Vector3(1.0f, 0.0f,0.0f));
 
 #if WINDOWS_BUILD
@@ -571,6 +571,7 @@ Mesh* Mesh::GenerateCircle(unsigned int subdivs)
 	m->vertices[0].SetColor(Vector4(0, 0, 0, 1.0f));
 	m->vertices[0].SetTexCoord(Vector2(0.0f, 0.0f)); // Texel 0,0 at circle centre
 	m->vertices[0].SetNormal(Vector3(0,1,0));
+	m->vertices[0].SetTangent(Vector3(1,0,0));
 
 	float subdiv_angle = 2 * PI / subdivs;
 	float alpha = 0.0f;
@@ -582,10 +583,9 @@ Mesh* Mesh::GenerateCircle(unsigned int subdivs)
 		m->vertices[i].SetColor(Vector4(0, 0, 0, 1.0f));
 		m->vertices[i].SetNormal(Vector3(0,1,0)); // straight up
 		m->vertices[i].SetTexCoord(Vector2(s, c)); // Make sure texture is set to repeat to handle other quadrants
+		m->vertices[i].SetTangent(Vector3(1,0,0));
 		alpha += subdiv_angle;
 	}
-
-	m->GenerateTangents();
 
 #if WINDOWS_BUILD
 	m->BufferData();
