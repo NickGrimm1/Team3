@@ -1,23 +1,28 @@
 #include "Shader.h"
 #include "../Team3Project1/ShaderPart.h"
 
-#if WINDOWS_BUILD
+
 Shader::Shader()	
 {
+	#if WINDOWS_BUILD
 	loadFailed = false;
 	program	= glCreateProgram();
+	#endif
 }
 
 Shader::~Shader(void)	
 {
+	#if WINDOWS_BUILD
 	glDetachShader(program, vertexShader->shader);
 	glDetachShader(program, fragmentShader->shader);
 	glDetachShader(program, geometryShader->shader);
 	glDeleteProgram(program);
+	#endif
 }
 
 bool Shader::LinkProgram()	
 {
+	#if WINDOWS_BUILD
 	glAttachShader(program, vertexShader->shader);
 	glAttachShader(program, fragmentShader->shader);
 	if (geometryShader != NULL)
@@ -32,23 +37,32 @@ bool Shader::LinkProgram()
 
 	GLint code;
 	glGetProgramiv(program, GL_LINK_STATUS, &code);
-
+	#endif
+	#if WINDOWS_BUILD
 	if (code == GL_FALSE)	
 	{
-#if DEBUG
+	
+		#if DEBUG
 		cout << "Linking failed!" << endl;
 		char error[512];
 		glGetInfoLogARB(program, sizeof(error), NULL, error);
 		cout << error;
-#endif
+		#endif
+		#if WINDOWS_BUILD
 		loadFailed = true;
+		#endif
 	}
-
+	#endif
+	#if WINDOWS_BUILD
 	return code == GL_TRUE ?  true : false;
+	#endif
+
+	return true;
 }
 
 void	Shader::SetDefaultAttributes()	
 {
+	#if WINDOWS_BUILD
 	glBindAttribLocation(program, 0, "position");
 	glBindAttribLocation(program, 1, "normal");
 	glBindAttribLocation(program, 2, "colour");
@@ -56,5 +70,5 @@ void	Shader::SetDefaultAttributes()
 	glBindAttribLocation(program, 4, "tangent");
 
 	//glBindAttribLocation(program, MAX_BUFFER+1,  "transformIndex");
+	#endif
 }
-#endif

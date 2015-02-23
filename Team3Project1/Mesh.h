@@ -49,6 +49,7 @@ public:
 	{
 		for (unsigned int i = 0; i < numVertices; i++)
 			vertices[i].SetColor(colour[i]);
+			
 	} 
 	bool TransformsTexCoords() { return transformCoords;}
 
