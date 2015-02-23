@@ -226,6 +226,11 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">
+    <ClCompile>
+      <PreprocessorDefinitions>PS3_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Framework\BumpTexture.h" />
     <ClInclude Include="..\Framework\Camera.h" />
