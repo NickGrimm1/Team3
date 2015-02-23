@@ -10,7 +10,7 @@ Spline::Spline(const Vector3& a, const Vector3& b, const Vector3& c, unsigned in
 	ctrlPoints[1] = b;
 	ctrlPoints[2] = c;
 	numVertices = subdivisions + 1;
-	vertices = new Vector3[numVertices];
+	vertices = new Vertex[numVertices];
 
 	// Build spline
 	for (unsigned int i = 0; i <= subdivisions; ++i) { // bezier spline has subdivisions segments
@@ -21,10 +21,9 @@ Spline::Spline(const Vector3& a, const Vector3& b, const Vector3& c, unsigned in
 		bezier.y = -1.0f * tvec.x + tvec.y + 0.5f * tvec.z;
 		bezier.z = 0.5f * tvec.x;
 
-		vertices[i] = 
-			ctrlPoints[0] * bezier.x + 
-			ctrlPoints[1] * bezier.y + 
-			ctrlPoints[2] * bezier.z;
+		vertices[i].SetPosition(ctrlPoints[0] * bezier.x + 
+								ctrlPoints[1] * bezier.y + 
+								ctrlPoints[2] * bezier.z);
 	}
 
 	// Buffer data
@@ -51,8 +50,8 @@ void Spline::DrawControlPoints() {
 	glPointSize(5.0f);
 	glBindVertexArray(arrayObject); // Make mesh VAO currently bound object
 	glBindBuffer(GL_ARRAY_BUFFER, controlVBO);
-	glVertexAttribPointer(VERTEX_BUFFER, 3, GL_FLOAT, GL_FALSE, 0, 0); //Specifies that in the currently bound array index VERTEX_BUFFER points to 3 Floats. 
-	glEnableVertexAttribArray(VERTEX_BUFFER); // Enables VERTEX BUFFER to be an index in the VAO?
+	glVertexAttribPointer(VertexAttributes::POSITION, 3, GL_FLOAT, GL_FALSE, 0, 0); //Specifies that in the currently bound array index VERTEX_BUFFER points to 3 Floats. 
+	glEnableVertexAttribArray(VertexAttributes::POSITION); // Enables VERTEX BUFFER to be an index in the VAO?
 	glDrawArrays(type, 0, 3);
 
 	glBindVertexArray(0); // unbind current VAO
@@ -61,9 +60,9 @@ void Spline::DrawControlPoints() {
 void Spline::Draw() { // Method assumes that the Shader in use has been bound
 	type = GL_LINE_STRIP;
 	glBindVertexArray(arrayObject); // Make mesh VAO currently bound object
-	glBindBuffer(GL_ARRAY_BUFFER, bufferObject[VERTEX_BUFFER]);
-	glVertexAttribPointer(VERTEX_BUFFER, 3, GL_FLOAT, GL_FALSE, 0, 0); //Specifies that in the currently bound array index VERTEX_BUFFER points to 3 Floats. 
-	glEnableVertexAttribArray(VERTEX_BUFFER); // Enables VERTEX BUFFER to be an index in the VAO?
+	glBindBuffer(GL_ARRAY_BUFFER, bufferObject[0]);
+	glVertexAttribPointer(VertexAttributes::POSITION, 3, GL_FLOAT, GL_FALSE, 0, 0); //Specifies that in the currently bound array index VERTEX_BUFFER points to 3 Floats. 
+	glEnableVertexAttribArray(VertexAttributes::POSITION); // Enables VERTEX BUFFER to be an index in the VAO?
 	glDrawArrays(type, 0, numVertices);
 
 	glBindVertexArray(0); // unbind current VAO

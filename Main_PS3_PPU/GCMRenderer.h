@@ -31,7 +31,7 @@ _-_-_-_-_-_-_-""  ""
 #include <vectormath/cpp/vectormath_aos.h>
 #include <cell/gcm.h>
 #include <Cg/cg.h>
-#include "../Framework/OBJMesh.h"
+//#include "../Framework/OBJMesh.h"
 using namespace Vectormath::Aos;
 using namespace cell::Gcm;
 

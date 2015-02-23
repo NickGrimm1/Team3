@@ -8,6 +8,7 @@
 #endif
 #include "Vertex.h"
 #include "Texture.h"
+#include "ShaderPart.h"
 
 namespace PrimitiveType
 {
@@ -49,6 +50,7 @@ public:
 	{
 		for (unsigned int i = 0; i < numVertices; i++)
 			vertices[i].SetColor(colour[i]);
+			
 	} 
 	bool TransformsTexCoords() { return transformCoords;}
 
@@ -56,7 +58,7 @@ public:
 	virtual void Draw();
 #endif
 #if PS3_BUILD
-	virtual void Mesh::Draw(ShaderPart &vertex, ShaderPart &fragment)
+	virtual void Mesh::Draw(ShaderPart &vertex, ShaderPart &fragment);
 #endif
 
 	//Generates a single triangle, with RGB colours

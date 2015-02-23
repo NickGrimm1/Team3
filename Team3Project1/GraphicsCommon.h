@@ -24,3 +24,6 @@
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 #define GAME_TITLE "Team^3 - Endless Racer"
+
+// Debug settings
+#define DEBUG_DRAW_DEFERRED_LIGHTS 0

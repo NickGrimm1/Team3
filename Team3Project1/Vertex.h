@@ -54,7 +54,7 @@ public:
 		a = value.w;
 	}
 #endif
-#if PS3_BUILD
+	#if PS3_BUILD
 	Vector4 GetColor() const 
 	{
 		int a = rgba / (256 * 256 * 256);
@@ -69,9 +69,9 @@ public:
 		rgba = value.x * 255 
 			+ (256 + value.y * 255) 
 			+ ((256 * 256) + value.z * 255)
-			+ ((256 * 256 * 256) + value.z * 255)
+			+ ((256 * 256 * 256) + value.z * 255);
 	}
-#endif
+	#endif
 	Vector2 GetTexCoord() const { return Vector2(tX, tY); }
 	void SetTexCoord(const Vector2& value)
 	{

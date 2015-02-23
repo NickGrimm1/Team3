@@ -51,12 +51,12 @@ public:
 	void			SetCamera(Camera* cam) {camera = cam;};
 
 	void			RenderScene();
-	virtual void	UpdateScene(float msec);
 	void			ToggleDebug(int arg, bool onOff);
 
 	GLuint			CreateTexture(const char* filename, bool enableMipMaps = false, bool enableAnisotropicFiltering = false);
-	GLuint			CreateShadowTexture();
 	GLuint			CreateCubeTexture(const char* filename);
+	GLuint			CreateShadowTexture();
+	GLuint			CreateShadowCube();
 	bool			DestroyTexture(GLuint textureReference);
 
 	void			SetSkyBoxTexture(GLuint tex) {skyBoxTex = tex;}
@@ -67,19 +67,32 @@ public:
 	bool			GetRenderContextForThread();
 	bool			DropRenderContextForThread();
 
-	bool			LoadShaders();
-	bool			LoadAssets();
+	bool LoadShaders();
+	bool LoadAssets();
+
+	void DrawDeferredLights(bool on) {drawDeferredLights = on;}
+
 protected:
+
+	Matrix4			cameraMatrix; // Get camera matrix once at start of scene
+
+
 	//Rendering pipeline components.
 	void			DrawScene();
 	void			ShadowPass();
+	void			DrawNodes(bool enableTextures);
+
 	void			DeferredLightPass();
+	void			DrawDeferredPointLight(Light* l);
+	void			DrawDeferredSpotLight(Light* l);
+	void			DrawDeferredDirectionalLight(Light* l);
+
 	void			CombineBuffers();
 	void			DrawSkybox();
 	void			BloomPass();
 	void			MotionBlurPass();
 	void			DrawFrameBufferTex(GLuint fboTex); // Draw the texture passed to it to screen
-
+	
 	void			Draw2DOverlay();
 	void			Draw2DText(DrawableText2D& text);
 	void			Draw2DTexture(DrawableTexture2D& texture);
@@ -92,6 +105,8 @@ protected:
 	bool			activeTex;
 	unsigned int	nextTextureUnit;
 
+	// Debugging
+	bool			drawDeferredLights;
 	bool			debugElem[10];
 
 	vector<Light*>&	lights;
@@ -103,6 +118,9 @@ protected:
 	Matrix4 hudMatrix; // For drawing HUD Elements only
 
 	Mesh*			screenMesh;			// A quad mesh for drawing screen filling textures
+	Mesh*			sphereMesh;			// A sphere mesh for drawing deferred point lights
+	Mesh*			coneMesh;			// A cone mesh for drawing deferred spot lights
+	Mesh*			circleMesh;			// A circle mesh for drawing deferred spot lights
 	
 	Camera*			camera;
 
@@ -138,6 +156,7 @@ protected:
 	GLuint			gbufferColourTex;
 	GLuint			gbufferDepthTex;
 	GLuint			gbufferNormalTex;
+	GLuint			shadowDepthTex; // unfortunately required for omni-directional shadows
 	GLuint			gbufferVelocity;
 
 	GLuint			skyBoxTex;

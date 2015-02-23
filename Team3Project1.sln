@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Team3Project1", "Team3Project1\Team3Project1.vcxproj", "{7B7A6F2D-2E22-4DAF-B536-8CEE122ABEDD}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Main_PS3_PPU", "Main_PS3_PPU\Main_PS3_PPU.vcxproj", "{4D395DA3-E2E4-45F0-8C36-CD2A7641728D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7B7A6F2D-2E22-4DAF-B536-8CEE122ABEDD} = {7B7A6F2D-2E22-4DAF-B536-8CEE122ABEDD}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

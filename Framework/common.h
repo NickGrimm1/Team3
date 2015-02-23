@@ -11,7 +11,7 @@ _-_-_-_-_-_-_-""  ""
 *//////////////////////////////////////////////////////////////////////////////
 
 #pragma once
- #if WINDOWS_BUILD
+
 #define WEEK_2_CODE
 #define WEEK_3_CODE
 
@@ -30,11 +30,11 @@ static inline double RadToDeg(const double deg)	{
 static inline double DegToRad(const double rad)	{
 	return rad * PI / 180.0;
 };
-
+ //#if WINDOWS_BUILD
 //I blame Microsoft...
 #define max(a,b)    (((a) > (b)) ? (a) : (b))
 #define min(a,b)    (((a) < (b)) ? (a) : (b))
-
+//#endif
 #define SHADERDIR	"../Resources/Shaders/"
 #define MESHDIR		"../Resources/Meshes/"
 #define TEXTUREDIR  "../Resources/Textures/"
@@ -48,4 +48,3 @@ class DivideByZeroException
 	}
 };
 
-#endif

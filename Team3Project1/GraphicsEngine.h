@@ -64,7 +64,6 @@ public:
 	*/
 	bool HasInitialised() { return isInitialised; }
 	void Run();
-	void Terminate() { isRunning = false; }
 #pragma endregion
 #pragma region TwoD
 	/**
@@ -119,11 +118,15 @@ public:
 #pragma endregion	
 
 	PointLight* AddPointLight(Vector3 lightPosition, float lightRadius, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
-	DirectionalLight* AddDirectionalLight(Vector3 lightDirection, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
+	DirectionalLight* AddDirectionalLight(Vector3 lightDirection, Vector4 diffuseColour, Vector4 specularColour);
 	SpotLight* AddSpotLight(Vector3 lightPosition, Vector3 lightTarget, Vector3 upVector, float lightRadius, float lightAngle, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
 		
 	// We don't actually need this since the GSM already holds the reference :)
 	//static GraphicsEngine& GetGraphicsEngine() {return *engine;}
+
+
+	// Debugging
+	void DrawDeferredLights(bool on) {renderer->DrawDeferredLights(on);}
 private:
 	static GraphicsEngine* engine;
 

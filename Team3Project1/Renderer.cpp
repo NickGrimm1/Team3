@@ -2,9 +2,23 @@
 #include "GraphicsCommon.h"
 #include "DrawableEntity3D.h"
 #include "GameStateManager.h"
-
-
 #include "TextMesh.h"
+
+// Structures required for point light shadows
+struct CameraDirection {
+	GLenum cubeFace;
+	Vector3 target;
+	Vector3 up;
+};
+
+CameraDirection faces[6] = {
+	{GL_TEXTURE_CUBE_MAP_POSITIVE_X, Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, -1.0f, 0.0f)},
+	{GL_TEXTURE_CUBE_MAP_NEGATIVE_X, Vector3(-1.0f, 0.0f, 0.0f), Vector3(0.0f, -1.0f, 0.0f)},
+	{GL_TEXTURE_CUBE_MAP_POSITIVE_Y, Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f)},
+	{GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, Vector3(0.0f, -1.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f)},
+	{GL_TEXTURE_CUBE_MAP_POSITIVE_Z, Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, -1.0f, 0.0f)},
+	{GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, Vector3(0.0f, 0.0f, -1.0f), Vector3(0.0f, -1.0f, 0.0f)}
+};
 
 Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>& sceneNodesVec, vector<DrawableEntity2D*>& overlayVec) : 
 	OGLRenderer(parent), 
@@ -114,10 +128,17 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE || !lightEmissiveTex || !lightSpecularTex)
 		return;
 
-	// Create shadow textures as requested
 	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
-	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowTex, 0);
-	glDrawBuffer(GL_NONE);
+
+	// Will only bind when required
+	glGenTextures(1, &shadowDepthTex);
+	glBindTexture(GL_TEXTURE_2D, shadowDepthTex);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOWSIZE, SHADOWSIZE, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
 	glGenTextures(3, postProcessingTex);
@@ -131,6 +152,8 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	}
 
 	ambientLightColour = DEFAULT_AMBIENT_LIGHT_COLOUR;
+
+	drawDeferredLights = false;
 
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_STENCIL_TEST);
@@ -186,28 +209,21 @@ bool Renderer::LoadCheck()
 bool Renderer::LoadAssets() {
 	// Load Meshes required for rendering operations
 	
-	Mesh* circle = GameStateManager::Assets()->LoadCircle(this, 20); // Circle for spotlight rendering
-	Mesh* quad = GameStateManager::Assets()->LoadQuad(this); // Quad for rendering textures to screen
-	Mesh* sphere = GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
-	Mesh* cone = GameStateManager::Assets()->LoadCone(this, 20); // Cone for spotlight rendering
+	circleMesh = GameStateManager::Assets()->LoadCircle(this, 20); // Circle for spotlight rendering
+	screenMesh = GameStateManager::Assets()->LoadQuad(this); // Quad for rendering textures to screen
+	sphereMesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
+	coneMesh = GameStateManager::Assets()->LoadCone(this, 20); // Cone for spotlight rendering
 	
-	if (!sphere || !cone || !circle || !quad) {
+	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh) {
 		cout << "Renderer::LoadAssets() - unable to load rendering assets";
 		return false;
 	}
 	
-	PointLight::SetMesh(sphere);
-	SpotLight::SetCircleMesh(circle);
-	SpotLight::SetConeMesh(cone);
-	screenMesh = quad;
-
 	return true;
 }
 
 Renderer::~Renderer(void)
 {
-	delete camera;
-
 	/*
 	delete snow;
 	delete rain;
@@ -217,7 +233,7 @@ Renderer::~Renderer(void)
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl"); //basicShader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl"); //sceneShader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl"); //shadowShader
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl"); //lightingShader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl"); // deferred lighting shader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl"); //skyBoxShader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl"); //combineShader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl"); //particleShader
@@ -234,6 +250,7 @@ Renderer::~Renderer(void)
 	glDeleteTextures(1, &gbufferColourTex);
 	glDeleteTextures(1, &gbufferDepthTex);
 	glDeleteTextures(1, &gbufferNormalTex);
+	glDeleteTextures(1, &shadowDepthTex);
 	glDeleteTextures(1, &gbufferVelocity);
 	glDeleteTextures(1, &lightEmissiveTex);
 	glDeleteTextures(1, &lightSpecularTex);
@@ -253,6 +270,8 @@ void Renderer::RenderScene() {
 	if (!wglMakeCurrent(deviceContext, renderContext)) {
 		cout << "Renderer::RenderScene() - unable to obtain rendering context!!!" << endl;
 	}
+	glClear(GL_COLOR_BUFFER_BIT);
+	cameraMatrix = camera->BuildViewMatrix();
 
 	// Main Render
 	ShadowPass();
@@ -267,19 +286,20 @@ void Renderer::RenderScene() {
 	DrawFrameBufferTex(postProcessingTex[0]);
 
 	// Draw HUD/Menu overlay
-	Draw2DOverlay(); // TODO - Draw HUD first and use stencil to optimise main render pass
-
-	
+	Draw2DOverlay();
 
 	SwapBuffers();
 	wglMakeCurrent(deviceContext, NULL);
 	openglMutex.unlock_mutex();
 }
 
-void Renderer::ToggleDebug(int arg, bool onOff)
+void Renderer::ToggleDebug(int arg, bool on)
 {
 	switch (arg)
 	{
+	case DEBUG_DRAW_DEFERRED_LIGHTS:
+		drawDeferredLights = on;
+		break;
 	case (1):
 		//Toggle wireframe
 		break;
@@ -302,17 +322,6 @@ void Renderer::ToggleDebug(int arg, bool onOff)
 	}
 }
 
-/*----------Rendering pipeline-----------*/
-void Renderer::UpdateScene(float msec)
-{
-	if (camera) 
-	{
-		camera->UpdateCamera();
-	}
-
-	//TODO - update particle systems
-}
-
 //Draws Scene to buffer object
 void Renderer::DrawScene()
 {
@@ -330,10 +339,10 @@ void Renderer::DrawScene()
 //	SetCurrentShader(basicShader);
 
 	// Bind Shader variables
-	viewMatrix = camera->BuildViewMatrix();
+	viewMatrix = cameraMatrix;
 	projMatrix = perspectiveMatrix;
 	UpdateShaderMatrices();
-	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &camera->GetPosition());
+	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &cameraMatrix.GetPositionVector());
 	glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "nodeColour"), 1, (float*) &Vector4(1,1,1,1));
 
 	// Pass any light/shadow data for any lights which generate shadows into the renderer
@@ -342,16 +351,24 @@ void Renderer::DrawScene()
 	for (unsigned int i = 0; i < lights.size(); i++) {
 		if (lights[i]->GetShadowTexture() > 0) { // Shadow depth texture exists for light, so use
 			// Calculate the view projection matrix for the light so can sample shadow map (binding to textureMatrix for the minute
-			Matrix4 shadowMatrix = biasMatrix * lights[i]->GetProjectionMatrix() * lights[i]->GetViewMatrix(Vector3(0,0,0)); // TODO - handle point light shadows properly
+			Matrix4 shadowMatrix = biasMatrix * lights[i]->GetProjectionMatrix() * lights[i]->GetViewMatrix(Vector3(cameraMatrix.GetPositionVector()));
 			
 			sprintf_s(buffer, 20, "shadowProjMatrix[%d]", i);
 			glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), buffer), 1, false, (float*) &shadowMatrix);
 			
 			// Bind shadow texture
+			if (lights[i]->GetType() != POINT_LIGHT_TYPE) {
 			sprintf_s(buffer, 20, "shadowTex[%d]", i);
 			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), buffer), SHADOW_TEXTURE_UNIT + shadowCount);
 			glActiveTexture(GL_TEXTURE0 + SHADOW_TEXTURE_UNIT + shadowCount);
 			glBindTexture(GL_TEXTURE_2D, lights[i]->GetShadowTexture());
+			}
+			else {
+				sprintf_s(buffer, 20, "shadowCube[%d]", i);
+				glUniform1i(glGetUniformLocation(currentShader->GetProgram(), buffer), SHADOW_TEXTURE_UNIT + shadowCount);
+				glActiveTexture(GL_TEXTURE0 + SHADOW_TEXTURE_UNIT + shadowCount);
+				glBindTexture(GL_TEXTURE_CUBE_MAP, lights[i]->GetShadowTexture());
+			}
 			
 			// Bind light data
 			lights[i]->BindLight(shadowCount);
@@ -362,45 +379,26 @@ void Renderer::DrawScene()
 
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "numShadows"), shadowCount);
 			
-	// Draw Scene
-	for (unsigned int i = 0; i < sceneNodes.size(); i++) {
-		DrawableEntity3D& entity = *sceneNodes[i]->GetDrawableEntity();
+	DrawNodes(true);
 
-		// Handle colour and bump textures
-		if (entity.GetTexture() && entity.GetTexture()->GetTextureName() > 0) {
-			glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-			glBindTexture(GL_TEXTURE_2D, entity.GetTexture()->GetTextureName());
-			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);	
-			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 1);	
+	if (drawDeferredLights) {
+		// Draw Deferred lights
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 0);
+		for (unsigned int i = 0; i < lights.size(); i++) {
+			modelMatrix = lights[i]->GetModelMatrix();
+			UpdateShaderMatrices();
+			switch (lights[i]->GetType()) {
+			case POINT_LIGHT_TYPE:
+				sphereMesh->Draw();
+				break;
+			case SPOTLIGHT_LIGHT_TYPE:
+				coneMesh->Draw();
+				break;
 		}
-		else
-			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 0);	
-		
-		if (entity.GetBumpTexture() && entity.GetBumpTexture()->GetTextureName() > 0) {
-			glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_NORMAL_TEXTURE_UNIT);
-			glBindTexture(GL_TEXTURE_2D, entity.GetBumpTexture()->GetTextureName());
-			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "normalTex"), MESH_OBJECT_NORMAL_TEXTURE_UNIT);
-			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 1);	
 		}
-		else
-			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
-			
-		// ignore shader for the minute
-		
-		modelMatrix = sceneNodes[i]->GetWorldTransform() * Matrix4::Scale(entity.GetScale());
-		sceneNodes[i]->SetPrevMVP(modelMatrix);
-		glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"),	1,false, (float*)&modelMatrix);
-		
-		textureMatrix.ToIdentity(); // add to texture/drawableentity class
-
-		entity.GetMesh()->Draw();
 	}
 
-	// Test deferred lights
-//	for (unsigned int i = 0; i < lights.size(); i++) {
-//		lights[i]->DrawLightDeferred(camera->GetPosition());
-//	}
-	
 	glUseProgram(0);
 
 	// TODO - handle particle systems
@@ -416,7 +414,7 @@ void Renderer::ShadowPass()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
 	glViewport(0, 0, SHADOWSIZE, SHADOWSIZE);
-	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+	glClearColor(FLT_MAX, FLT_MAX, FLT_MAX, FLT_MAX);	
 	
 	SetCurrentShader(shadowShader);
 	for (unsigned int i = 0; i < lights.size(); i++) {
@@ -424,32 +422,91 @@ void Renderer::ShadowPass()
 		// Does light cast shadows (does it have a depth texture attached)?
 		if (lights[i]->GetShadowTexture() <= 0) continue; // only process shadow data if light set to cast shadows
 
+		if (lights[i]->GetType() != POINT_LIGHT_TYPE) {
 		// Attach depth texture to FBO
+			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, lights[i]->GetShadowTexture(), 0);
 		glClear(GL_DEPTH_BUFFER_BIT);
 		
-		projMatrix		= lights[i]->GetProjectionMatrix();
-		viewMatrix		= lights[i]->GetViewMatrix(Vector3(0,0,0)); // TODO - handle point light shadows properly
+			projMatrix = lights[i]->GetProjectionMatrix();
+			viewMatrix = lights[i]->GetViewMatrix(cameraMatrix.GetPositionVector());
 		UpdateShaderMatrices();
 
-		// Draw Scene
-		for (unsigned int j = 0; j < sceneNodes.size(); j++) {
-			DrawableEntity3D& entity = *sceneNodes[j]->GetDrawableEntity();
-			modelMatrix = sceneNodes[j]->GetWorldTransform() * Matrix4::Scale(entity.GetScale());
-			glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"),	1,false, (float*)&modelMatrix);
+			DrawNodes(false);
 			
-			entity.GetMesh()->Draw();
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
+			
 		}
+		else {
+			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+			GLenum c = GL_COLOR_ATTACHMENT0;
+			glDrawBuffers(1, &c);
+			for (unsigned int f = 0; f < 6; f++)  {
+				viewMatrix = Matrix4::BuildViewMatrix(lights[i]->GetPosition(), lights[i]->GetPosition() + faces[f].target, faces[f].up);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowDepthTex, 0);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, faces[f].cubeFace, lights[i]->GetShadowTexture(), 0); 
+				glClear(GL_COLOR_BUFFER_BIT);
+				glClear(GL_DEPTH_BUFFER_BIT);
+
+				projMatrix = lights[i]->GetProjectionMatrix();
+				UpdateShaderMatrices();
+
+				DrawNodes(false);
 	
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, faces[f].cubeFace, 0, 0); 
+	}
+		}
 	}
 
 	glUseProgram(0);
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	glClearColor(0.2f,0.2f,0.2f,1.0f);
 	glViewport(0, 0, width, height);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+void Renderer::DrawNodes(bool enableTextures) {
+	// Draw Scene
+	for (unsigned int i = 0; i < sceneNodes.size(); i++) {
+		DrawableEntity3D& entity = *sceneNodes[i]->GetDrawableEntity();
+
+		if (enableTextures) {
+			// Handle colour and bump textures
+			if (entity.GetTexture() && entity.GetTexture()->GetTextureName() > 0) {
+				glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+				glBindTexture(GL_TEXTURE_2D, entity.GetTexture()->GetTextureName());
+				glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);	
+				glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 1);	
+			}
+			else
+				glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 0);	
+		
+			if (entity.GetBumpTexture() && entity.GetBumpTexture()->GetTextureName() > 0) {
+				glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_NORMAL_TEXTURE_UNIT);
+				glBindTexture(GL_TEXTURE_2D, entity.GetBumpTexture()->GetTextureName());
+				glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "normalTex"), MESH_OBJECT_NORMAL_TEXTURE_UNIT);
+				glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 1);	
+			}
+			else
+				glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
+		}
+		else {
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 0);	
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
+		}
+
+		// ignore shader for the minute
+		
+		modelMatrix = sceneNodes[i]->GetWorldTransform() * Matrix4::Scale(entity.GetScale());
+		glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"),	1,false, (float*)&modelMatrix);
+		
+		textureMatrix.ToIdentity(); // add to texture/drawableentity class
+
+		entity.GetMesh()->Draw();
+	}
+}
 void Renderer::DeferredLightPass()
 {
 	SetCurrentShader(lightingShader);
@@ -471,18 +528,25 @@ void Renderer::DeferredLightPass()
 	glActiveTexture(GL_TEXTURE0 + GBUFFER_NORMALS_TEXTURE_UNIT);
 	glBindTexture(GL_TEXTURE_2D, gbufferNormalTex);
 
-	viewMatrix = camera->BuildViewMatrix();
-	glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "viewMatrix"),	1, false, (float*) &viewMatrix);
-	glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "projMatrix"),	1, false, (float*) &perspectiveMatrix);
-
-	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &camera->GetPosition());
+	viewMatrix = cameraMatrix;
+	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &cameraMatrix.GetPositionVector());
 	glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / (float) width, 1.0f / (float) height);
 
-	glEnable(GL_CULL_FACE);
-	
 	// Draw deferred scene lights
 	for (unsigned int i = 0; i < lights.size(); ++i) {
-		lights[i]->DrawLightDeferred(camera->GetPosition());
+		switch (lights[i]->GetType()) {
+		case POINT_LIGHT_TYPE:
+			DrawDeferredPointLight(lights[i]);
+			break;
+		case DIRECTIONAL_LIGHT_TYPE:
+			DrawDeferredDirectionalLight(lights[i]);
+			break;
+		case SPOTLIGHT_LIGHT_TYPE:
+			DrawDeferredSpotLight(lights[i]);
+			break;
+		default:
+			cout << "Renderer::DeferredLightPass() - Unknown Deferred Light type" << endl;
+		}
 	}
 
 	glDisable(GL_BLEND);
@@ -491,6 +555,72 @@ void Renderer::DeferredLightPass()
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glUseProgram(0);
+}
+
+void Renderer::DrawDeferredPointLight(Light* l) {
+	projMatrix = perspectiveMatrix;
+	modelMatrix = l->GetModelMatrix();
+	UpdateShaderMatrices();
+	
+	l->BindLight(); // Set up light details in shader
+
+	glEnable(GL_CULL_FACE);
+	float dist = (l->GetPosition() - cameraMatrix.GetPositionVector()).Length();
+	if (dist < l->GetRadius()) {
+		// camera is inside the light volume!
+		glCullFace(GL_FRONT);
+	}
+	else {
+		glCullFace(GL_BACK);
+	}
+	sphereMesh->Draw();
+
+	glCullFace(GL_BACK);
+}
+
+void Renderer::DrawDeferredSpotLight(Light* l) {
+	projMatrix = perspectiveMatrix;
+	modelMatrix = l->GetModelMatrix();
+	UpdateShaderMatrices();
+
+	l->BindLight();
+
+
+	glEnable(GL_CULL_FACE);
+	//glDisable(GL_CULL_FACE);
+	bool inSpotlight = SpotLight::IsInSpotlight(cameraMatrix.GetPositionVector(), l);
+	if (inSpotlight) {
+		// camera is inside the light volume!
+		glCullFace(GL_FRONT);
+	}
+	else {
+		glCullFace(GL_BACK);
+	}
+	coneMesh->Draw();
+
+	// If inside the cone, looking down the axis, need to draw a circular base to prevent base being discarded
+	glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"), 1, false, (float*) &((SpotLight*) l)->GetBaseModelMatrix());
+
+	if (inSpotlight) { 
+	// camera is inside the light volume!
+		glCullFace(GL_FRONT);
+		circleMesh->Draw();
+	}
+
+	glCullFace(GL_BACK);
+
+}
+
+void Renderer::DrawDeferredDirectionalLight(Light* l) {
+	projMatrix = orthographicMatrix;
+	viewMatrix.ToIdentity();
+	modelMatrix = l->GetModelMatrix();
+	UpdateShaderMatrices();
+
+	l->BindLight();
+	glDisable(GL_CULL_FACE);
+	screenMesh->Draw();
+	glEnable(GL_CULL_FACE);
 }
 
 void Renderer::CombineBuffers() {// merge scene render with lighting pass
@@ -546,7 +676,7 @@ void Renderer::DrawSkybox() { // Draw skybox only where screen has not previousl
 	SetCurrentShader(skyBoxShader);
 	
 	// Bind shader variables
-	viewMatrix = camera->BuildViewMatrix();
+	viewMatrix = cameraMatrix;
 	projMatrix = perspectiveMatrix;
 	UpdateShaderMatrices();
 
@@ -647,7 +777,7 @@ void Renderer::BloomPass()
 
 			screenMesh->Draw();
 			++z;
-		}
+}
 	}
 	glViewport(0, 0, width, height);
 
@@ -752,7 +882,7 @@ void Renderer::MotionBlurPass()
 	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "velocityScale"), 1.0);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "velocityTex"), GBUFFER_VELOCITY_UNIT);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-	
+
 
 	screenMesh->Draw();
 
@@ -827,6 +957,7 @@ void Renderer::Draw2DText(DrawableText2D& text) {
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 	
 	textMesh->Draw();
+	delete textMesh;
 }
 
 void Renderer::Draw2DTexture(DrawableTexture2D& texture) {
@@ -870,6 +1001,7 @@ bool Renderer::ActiveTex()
 
 GLuint Renderer::CreateTexture(const char* filename, bool enableMipMaps, bool enableAnisotropicFiltering) {
 	openglMutex.lock_mutex();
+	wglMakeCurrent(deviceContext, renderContext);
 
 	unsigned int flags = false;
 	if (enableMipMaps) flags |= SOIL_FLAG_MIPMAPS;
@@ -877,6 +1009,7 @@ GLuint Renderer::CreateTexture(const char* filename, bool enableMipMaps, bool en
 	if (!textureObject)
 		textureObject = 0; // make sure GetTexture will return an error
 
+	wglMakeCurrent(deviceContext, NULL);
 	openglMutex.unlock_mutex();
 
 	return textureObject;
@@ -884,6 +1017,7 @@ GLuint Renderer::CreateTexture(const char* filename, bool enableMipMaps, bool en
 
 GLuint Renderer::CreateShadowTexture() {
 	openglMutex.lock_mutex();
+	wglMakeCurrent(deviceContext, renderContext);
 	
 	//Create a shadow texture buffer
 	GLuint shadowTex;
@@ -895,6 +1029,44 @@ GLuint Renderer::CreateShadowTexture() {
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOWSIZE, SHADOWSIZE, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
 	
+	wglMakeCurrent(deviceContext, NULL);
+	openglMutex.unlock_mutex();
+
+	return shadowTex;
+}
+
+unsigned int Renderer::CreateShadowCube() {
+
+	openglMutex.lock_mutex();
+	wglMakeCurrent(deviceContext, renderContext);
+
+	GLuint shadowTex;
+	// Create cube map
+	glGenTextures(1, &shadowTex);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, shadowTex);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	
+	/*
+	for (unsigned int i = 0 ; i < 6 ; i++) {//
+		// Set Tex parameters for each cube face (+x, -x, +y, -y, +z, -z)
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT, SHADOWSIZE, SHADOWSIZE, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    }
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+	*/
+
+	for (unsigned int i = 0 ; i < 6 ; i++) {//
+		// Set Tex parameters for each cube face (+x, -x, +y, -y, +z, -z)
+	    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_R32F, SHADOWSIZE, SHADOWSIZE, 0, GL_RED, GL_FLOAT, NULL);
+   }
+	
+	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
+	wglMakeCurrent(deviceContext, NULL);
 	openglMutex.unlock_mutex();
 
 	return shadowTex;
@@ -902,9 +1074,11 @@ GLuint Renderer::CreateShadowTexture() {
 
 bool Renderer::DestroyTexture(GLuint textureReference) {
 	openglMutex.lock_mutex();
+	wglMakeCurrent(deviceContext, renderContext);
 
 	glDeleteTextures(1, &textureReference);
 	
+	wglMakeCurrent(deviceContext, NULL);
 	openglMutex.unlock_mutex();
 	return true;
 }

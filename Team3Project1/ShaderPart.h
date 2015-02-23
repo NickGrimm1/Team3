@@ -23,7 +23,7 @@ public:
 #endif
 #if PS3_BUILD
 	void* GetUCode() { return ucode; }
-	CGProgram GetProgram() { return program; }
+	CGprogram GetProgram() { return program; }
 	unsigned int GetAttributeIndex(VertexAttributes attribute) { return attributes[attribute]; }
 #endif
 private:

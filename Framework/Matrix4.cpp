@@ -78,7 +78,7 @@ Matrix4 Matrix4::Orthographic(float znear, float zfar,float right, float left, f
 	return m;
 }
 
-Matrix4 Matrix4::BuildViewMatrix(const Vector3 &from, const Vector3 &lookingAt, const Vector3 up /*= Vector3(1,0,0)*/ )	{
+Matrix4 Matrix4::BuildViewMatrix(const Vector3 &from, const Vector3 &lookingAt, const Vector3 up /*= Vector3(0,1,0)*/ )	{
 	Matrix4 r;
 	r.SetPositionVector(Vector3(-from.x,-from.y,-from.z));
 
