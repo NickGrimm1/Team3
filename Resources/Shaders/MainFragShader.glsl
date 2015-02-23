@@ -29,9 +29,12 @@ in Vertex {
 	vec3 binormal;
 	vec3 worldPos;
 	vec4 shadowProj[MAX_SHADOWS];
+	smooth vec4 vPosition;
+	smooth vec4 vPrevPosition;
 } IN;
 
 out vec4 gl_FragColor[2];
+out vec2 vBuffer;
 
 /* Spot lights - emits a cone of light angle of alpha
 A fragment will be lit if
@@ -87,4 +90,9 @@ void main(void)	{
 		gl_FragColor[1] = vec4(normal.xyz * 0.5 + 0.5, shadow / numShadows);  // [-0.5,0.5] -> [0.0, 1] tex coords
 	else
 		gl_FragColor[1] = vec4(normal.xyz * 0.5 + 0.5, 1);  // [-0.5,0.5] -> [0.0, 1] tex coords
+	
+	//Produce vBuffer
+	vec2 a = (IN.vPosition.xy / IN.vPosition.w) * 0.5 + 0.5;
+	vec2 b = (IN.vPrevPosition.xy / IN.vPrevPosition.w) * 0.5 + 0.5;
+	vBuffer = a - b;
 }

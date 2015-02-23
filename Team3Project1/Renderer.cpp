@@ -55,6 +55,32 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, width, height, 0, GL_RG, GL_HALF_FLOAT, 0);
 
+	samples[0] = 1.5f;
+	samples[1] = 2.0f;
+	samples[2] = 3.0f;
+	//samples[3] = 4.0f;
+
+	int z = 0;
+	for (int i = 0; i < SAMPLENUM * 2; i += 2) {
+		glGenTextures(1, &downSampleTex[i]);
+		glBindTexture(GL_TEXTURE_2D, downSampleTex[i]);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, (int)(width / samples[z]), (int)(height / samples[z]), 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+		glGenTextures(1, &downSampleTex[i + 1]);
+		glBindTexture(GL_TEXTURE_2D, downSampleTex[i + 1]);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, (int)(width / samples[z]), (int)(height / samples[z]), 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		
+		++z;
+	}
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glGenFramebuffers(1, &gbufferFBO);			//Render the scene into this.
@@ -120,29 +146,39 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 bool Renderer::LoadShaders()
 {
 	//Shader initialisations go here.
-	basicShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
-	sceneShader	= GameStateManager::Assets()->LoadShader(this, SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl");
-	shadowShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl");
-	lightingShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl");
-	skyBoxShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl");
-	combineShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
-	particleShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
-	blurShader	= GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlurFragment.glsl");
-	hudShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl");
+	basicShader		 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
+	sceneShader		 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl");
+	shadowShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl");
+	lightingShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl");
+	skyBoxShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl");
+	combineShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
+	particleShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
+	brightPassShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlurFragment.glsl");
+	bloomCombShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BloomCombFragment.glsl");
+	gaussianShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"GaussianFragment.glsl");
+	downSampleShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"DownSampleFragment.glsl");
+	bloomFinalShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BloomFinalFragment.glsl");
+	motionBlurShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlurFragment.glsl");
+	hudShader		 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BrightPassFragment.glsl");
 	return LoadCheck();
 }
 
 bool Renderer::LoadCheck()
 {
-	return (basicShader != NULL		&&
-			shadowShader != NULL	&&
-			skyBoxShader != NULL	&&
-			combineShader != NULL	&&
-			particleShader != NULL	&&
-			sceneShader != NULL		&&
-			lightingShader != NULL	&&
-			blurShader != NULL		&&
-			hudShader != NULL);
+	return (basicShader			!= NULL	&&
+			sceneShader			!= NULL	&&
+			shadowShader		!= NULL	&&
+			lightingShader		!= NULL	&&
+			skyBoxShader		!= NULL	&&
+			combineShader		!= NULL	&&
+			particleShader		!= NULL	&&
+			brightPassShader	!= NULL &&
+			bloomCombShader		!= NULL &&
+			gaussianShader		!= NULL &&
+			downSampleShader	!= NULL &&
+			bloomFinalShader	!= NULL &&
+			motionBlurShader	!= NULL &&
+			hudShader			!= NULL);
 }
 
 bool Renderer::LoadAssets() {
@@ -183,7 +219,12 @@ Renderer::~Renderer(void)
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl"); //skyBoxShader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl"); //combineShader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl"); //particleShader
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlurFragment.glsl");
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BrightPassFragment.glsl");//Bright-pass Shader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BloomCombFragment.glsl");//Bloom combine Shader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"GaussianFragment.glsl");//Gaussian Blur Shader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"DownSampleFragment.glsl");//Downsample Shader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BloomFinalShader.glsl");//Final bloom Shader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlurFragment.glsl");//Motion blur Shader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl"); //hudShader
 
 	//Clear buffers
@@ -194,6 +235,7 @@ Renderer::~Renderer(void)
 	glDeleteTextures(1, &lightEmissiveTex);
 	glDeleteTextures(1, &lightSpecularTex);
 	glDeleteTextures(3, postProcessingTex);
+	glDeleteTextures(SAMPLENUM * 2, downSampleTex);
 	glDeleteTextures(1, &skyBoxTex);
 	glDeleteFramebuffers(1, &gbufferFBO);
 	glDeleteFramebuffers(1, &postProcessingFBO);
@@ -513,43 +555,194 @@ void Renderer::DrawSkybox() { // Draw skybox only where screen has not previousl
 	glDepthMask(GL_TRUE); // Enables writes to the depth buffer
 }
 
+/*--------Post-Processing methods--------*/
 //TODO: finish this
 void Renderer::BloomPass()
 {
+/*	
+	- First a bright-pass filter is used to accentuate light and turn everything else black.
+	- Then it is downsampled into three different sizes.
+	- A gaussian blur is then applied to each downsample.
+	- The downsamples are then combined with the original scene image to produce the final output.
+*/
+	/*-----------------------------Bright pass filter-----------------------------*/
 
+	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[ActiveTex()], 0);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+	SetCurrentShader(brightPassShader);
+	projMatrix = Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
+	viewMatrix.ToIdentity();
+	UpdateShaderMatrices();
+
+	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+	glBindTexture(GL_TEXTURE_2D, postProcessingTex[ActiveTex()]);
+
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "luminance"), 0.09f);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "middleGrey"), 0.18f);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "whiteCutOff"), 0.8f);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+
+	screenMesh->Draw();
+
+	/*---------------------------Downsample the images----------------------------*/
+
+	glClear(GL_COLOR_BUFFER_BIT);
+	SetCurrentShader(downSampleShader);
+	UpdateShaderMatrices();
+
+	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+	glBindTexture(GL_TEXTURE_2D, postProcessingTex[ActiveTex()]);
+
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+
+	int z = 0;
+	for (int i = 0; i < SAMPLENUM * 2; i += 2) {
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, downSampleTex[i], 0);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glViewport(0,0, (int)(width/samples[z]), (int)(height/samples[z]));
+
+		glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "sampleLevel"), samples[z]);
+
+		screenMesh->Draw();
+		++z;
+	}
+
+	/*--------------------Gaussian Blur the downsampled images--------------------*/
+
+	SetCurrentShader(gaussianShader);
+	UpdateShaderMatrices();
+	for (int o = 0; o < 4; o++){
+		z = 0;
+		for (int i = 0; i < SAMPLENUM * 2; i += 2) {
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, downSampleTex[i + 1], 0);
+			glClear(GL_COLOR_BUFFER_BIT);
+			glViewport(0,0, (int)(width/samples[z]), (int)(height/samples[z]));
+			
+			glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / (float)(width/samples[z]), 1.0f / (float)(height/samples[z]));
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 0);
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+
+			glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+			glBindTexture(GL_TEXTURE_2D, downSampleTex[i]);
+
+			screenMesh->Draw();
+			
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, downSampleTex[i], 0);
+			glClear(GL_COLOR_BUFFER_BIT);
+
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 1);
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+
+			glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+			glBindTexture(GL_TEXTURE_2D, downSampleTex[i + 1]);
+
+			screenMesh->Draw();
+			++z;
+		}
+	}
+	glViewport(0, 0, width, height);
+
+	/*-------------------Combine the brightpass images together-------------------*/
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, downSampleTex[2], 0);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	
+	SetCurrentShader(bloomCombShader);
+	UpdateShaderMatrices();
+	
+	glActiveTexture(GL_TEXTURE0 + GBUFFER_DSAMPLE_TEXTURE_UNIT_0);
+	glBindTexture(GL_TEXTURE_2D, downSampleTex[0]);
+	glActiveTexture(GL_TEXTURE0 + GBUFFER_DSAMPLE_TEXTURE_UNIT_1);
+	glBindTexture(GL_TEXTURE_2D, downSampleTex[2]);
+	glActiveTexture(GL_TEXTURE0 + GBUFFER_DSAMPLE_TEXTURE_UNIT_2);
+	glBindTexture(GL_TEXTURE_2D, downSampleTex[4]);
+
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(),"downSample0"), GBUFFER_DSAMPLE_TEXTURE_UNIT_0);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(),"downSample1"), GBUFFER_DSAMPLE_TEXTURE_UNIT_1);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(),"downSample2"), GBUFFER_DSAMPLE_TEXTURE_UNIT_2);
+
+	screenMesh->Draw();
+
+	/*------------------One final blurring to reduce artifacting------------------*/
+
+	SetCurrentShader(gaussianShader);
+	UpdateShaderMatrices();
+
+	for (int i = 0; i < 2; ++i) {
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[1], 0);
+		glClear(GL_COLOR_BUFFER_BIT);
+		
+		glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+		glBindTexture(GL_TEXTURE_2D, postProcessingTex[2]);
+
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 0);
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+
+		screenMesh->Draw();
+
+		//now to swap the colour buffers, and do the second blur Pass
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[2], 0);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+		glBindTexture(GL_TEXTURE_2D, postProcessingTex[1]);
+
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 1);
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+
+		screenMesh->Draw();
+	}
+
+	/*----------------Combine the bloom image with the scene image----------------*/
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[1], 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	SetCurrentShader(bloomFinalShader);
+	UpdateShaderMatrices();
+
+	glActiveTexture(GL_TEXTURE5);
+	glBindTexture(GL_TEXTURE_2D, postProcessingTex[2]);
+	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+	glBindTexture(GL_TEXTURE_2D, postProcessingTex[0]);
+	
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "darkTex"), 5);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "mixVal"), 0.5);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+	
+	screenMesh->Draw();
+	
+	glUseProgram(0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
-//TODO: finish this
+//TODO: just need to work out how to write the scene texture to the quad.
 void Renderer::MotionBlurPass()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[ActiveTex()], 0);//1
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[ActiveTex()], 0);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-	SetCurrentShader(blurShader);
+	SetCurrentShader(motionBlurShader);
 	projMatrix = orthographicMatrix;
 	modelMatrix.ToIdentity();
 	UpdateShaderMatrices();
 
 	glDisable(GL_DEPTH_TEST);
 
-	glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / (float)width, 1.0f / (float)height);
+	glActiveTexture(GL_TEXTURE0 + GBUFFER_VELOCITY_UNIT);
+	glBindTexture(GL_TEXTURE_2D, gbufferVelocity);
+	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+	glBindTexture(GL_TEXTURE_2D, postProcessingTex[ActiveTex()]);
 
-	//Depending on how the motion blur works, this can be adjusted for one, two or more passes.
 
-	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[activeTex], 0);//1
-	//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 0);
+	//TODO: Create a method that does the currFPS/TargetFPS calc
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "velocityScale"), 1.0);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "velocityTex"), GBUFFER_VELOCITY_UNIT);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+	
 
-	//quad->SetTexture(bufferColourTex[ActiveTex()]);//0
-	//quad->Draw();
-
-	//
-	////now to swap the colour buffers, and do the second blur Pass
-	//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 1);
-	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[activeTex], 0);//0
-
-	//quad->SetTexture(bufferColourTex[ActiveTex()]);//1
-	//quad->Draw();
-	//
+	screenMesh->Draw();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glUseProgram(0);

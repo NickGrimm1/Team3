@@ -309,13 +309,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Resources\Shaders\BlendedFragment.glsl" />
+    <None Include="..\Resources\Shaders\BloomCombFragment.glsl" />
+    <None Include="..\Resources\Shaders\BloomFinalFragment.glsl" />
     <None Include="..\Resources\Shaders\BlurFragment.glsl" />
+    <None Include="..\Resources\Shaders\BrightPassFragment.glsl" />
     <None Include="..\Resources\Shaders\CombineFragment.glsl" />
     <None Include="..\Resources\Shaders\CombineVertex.glsl" />
     <None Include="..\Resources\Shaders\debugFragment.glsl" />
     <None Include="..\Resources\Shaders\debugVertex.glsl" />
     <None Include="..\Resources\Shaders\DeferredPassFragment.glsl" />
     <None Include="..\Resources\Shaders\DeferredPassVertex.glsl" />
+    <None Include="..\Resources\Shaders\DownSampleFragment.glsl" />
     <None Include="..\Resources\Shaders\MainFragShader.glsl" />
     <None Include="..\Resources\Shaders\MainVertShader.glsl" />
     <None Include="..\Resources\Shaders\PointToCircleGeom.glsl" />

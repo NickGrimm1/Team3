@@ -121,8 +121,12 @@ protected:
 	Shader*			skyBoxShader;
 	Shader*			combineShader;
 	Shader*			particleShader;
-	Shader*			bloomShader;
-	Shader*			blurShader;
+	Shader*			brightPassShader;
+	Shader*			bloomCombShader;
+	Shader*			gaussianShader;
+	Shader*			downSampleShader;
+	Shader*			bloomFinalShader;
+	Shader*			motionBlurShader;
 	Shader*			hudShader;
 	
 	GLuint			gbufferFBO; //Geometry buffer
@@ -144,4 +148,6 @@ protected:
 	Vector4			ambientLightColour; // The scenes ambient light settings
 
 	MutexClass		openglMutex;		// Prevents different threads for using OpenGL at same time	
+
+	float			samples[3];
 };

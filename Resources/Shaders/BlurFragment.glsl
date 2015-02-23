@@ -1,4 +1,5 @@
 /*
+	~ Motion Blur Fragment Shader ~
  Author: Sherif Salem
  Date: 	09/02/2015
  Summary:

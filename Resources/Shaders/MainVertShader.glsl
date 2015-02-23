@@ -5,6 +5,7 @@ uniform mat4 viewMatrix;
 uniform mat4 projMatrix;
 uniform mat4 textureMatrix;
 uniform mat4 shadowProjMatrix[10];
+uniform mat4 prevMVP;
 uniform vec4 nodeColour;
 
 in vec3 position;
@@ -21,6 +22,8 @@ out Vertex {
 	vec3 binormal;
 	vec3 worldPos;
 	vec4 shadowProj[10];
+	smooth vec4 vPosition;
+	smooth vec4 vPrevPosition;
 } OUT;
 
 void main(void)	{
@@ -37,4 +40,7 @@ void main(void)	{
 		OUT.shadowProj[i] = shadowProjMatrix[i] * modelMatrix * vec4(position + (normal * 0.5) , 1);
 	}
 	gl_Position = projMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
+	
+	OUT.vPosition = gl_Position;
+    OUT.vPrevPosition = prevMVP * vec4(position, 1.0);
 }

@@ -604,5 +604,17 @@
     <None Include="..\Resources\Shaders\BlurFragment.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="..\Resources\Shaders\BrightPassFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\BloomFinalFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\BloomCombFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\DownSampleFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
