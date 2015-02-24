@@ -4,6 +4,8 @@
 #include "SpringDemo.h"
 #include "Vehicle.h"
 #include "Debuff.h"
+#include "../Team3Project1/FreeCamera.h"
+#include "../Team3Project1/GameStateManager.h"
 /*
 Creates a really simple scene for our game - A cube robot standing on
 a floor. As the module progresses you'll see how to get the robot moving
@@ -19,9 +21,9 @@ int MyGame::st=1 ;
 int MyGame::g=1;
 MyGame::MyGame()	{
 	//gameCamera = new Camera(-30.0f,0.0f,Vector3(0,450,850));
-	gameCamera = new Camera(-30.0f,0.0f,Vector3(0,350,-800));
+	gameCamera = new FreeCamera(-30.0f,0.0f,0.0f,Vector3(0,350,-800));
 	
-	Renderer::GetRenderer().SetCamera(gameCamera);
+//	Renderer::GetRenderer().SetCamera(gameCamera);
 	Car=new Vehicle();
 	DB = new Debuff();
 	CubeRobot::CreateCube();
@@ -106,11 +108,11 @@ logic will be added to this function.
 void MyGame::UpdateGame(float msec) {
 	if(gameCamera) {
 		bool Inverse=DB->GetLR();
-		if(Inverse==false)
+		/*if(Inverse==false)
 		{
 			Car->UpdatePlayer2(msec);
 		}
-		else
+		else*/
 		{
 			Car->UpdatePlayer1(msec);
 		}
@@ -152,38 +154,38 @@ void MyGame::UpdateGame(float msec) {
 		st = 0;
 	}
 
-	if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_A))                                         
-	  {
-		//  Vehicle->GetPhysicsNode().LookAt (Vector3(0,0,0),Vector3(-1,0,0));
-	  }
-	if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_D))                                         
-	  {
-		 //turn right
-	  }
+	//if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_A))                                         
+	//  {
+	//	//  Vehicle->GetPhysicsNode().LookAt (Vector3(0,0,0),Vector3(-1,0,0));
+	//  }
+	//if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_D))                                         
+	//  {
+	//	 //turn right
+	//  }
 
-	if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_2))                                         
-	{
-	  
-	  GameEntity* b=BuildCubeEntity(50.0f);
-	  
-	  b->GetPhysicsNode().SetPosition(gameCamera->Camera::GetPosition());
-	  b->GetRenderNode().SetColour(Vector4(0.2,0.9,1,1));
-	  b->GetPhysicsNode().SetLinearVelocity(Vector3(1,1,1)*Vector3(
-		  -gameCamera->BuildViewMatrix().values[2],
-		  -gameCamera->BuildViewMatrix().values[6],
-		  -gameCamera->BuildViewMatrix().values[10]));  
-	  b->GetPhysicsNode().SetInverseMass(1/10.0);
-	  allEntities.push_back(b);
-	 
-	
-	}
+	//if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_2))                                         
+	//{
+	//  
+	//  GameEntity* b=BuildCubeEntity(50.0f);
+	//  
+	//  b->GetPhysicsNode().SetPosition(gameCamera->Camera::GetPosition());
+	//  b->GetRenderNode().SetColour(Vector4(0.2,0.9,1,1));
+	//  b->GetPhysicsNode().SetLinearVelocity(Vector3(1,1,1)*Vector3(
+	//	  -gameCamera->BuildViewMatrix().values[2],
+	//	  -gameCamera->BuildViewMatrix().values[6],
+	//	  -gameCamera->BuildViewMatrix().values[10]));  
+	//  b->GetPhysicsNode().SetInverseMass(1/10.0);
+	//  allEntities.push_back(b);
+	// 
+	//
+	//}
 
 	for(vector<GameEntity*>::iterator i = allEntities.begin(); i != allEntities.end(); ++i) {
 		(*i)->Update(msec);
 	}
 
 
-	PhysicsSystem::GetPhysicsSystem().DrawDebug();
+	GameStateManager::Physics()->DrawDebug();
 }
 
 /*

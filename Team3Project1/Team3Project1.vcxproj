@@ -266,6 +266,7 @@
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="PhysicsEngine.h" />
+    <ClInclude Include="RacerGame.h" />
     <ClInclude Include="SelectableEntity2D.h" />
     <ClInclude Include="ShaderPart.h" />
     <ClInclude Include="T3Rectangle.h" />
@@ -285,7 +286,7 @@
     <ClCompile Include="..\Framework\GameTimer.cpp" />
     <ClCompile Include="..\Framework\Keyboard.cpp" />
     <ClCompile Include="..\Framework\Light.cpp" />
-    <ClCompile Include="..\Framework\Main.cpp" />
+    <ClCompile Include="..\Framework\OldMain.cpp" />
     <ClCompile Include="..\Framework\Matrix4.cpp" />
     <ClCompile Include="..\Framework\MD5Anim.cpp" />
     <ClCompile Include="..\Framework\MD5FileData.cpp" />
@@ -329,6 +330,7 @@
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="OffsetCamera.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
+    <ClCompile Include="RacerGame.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ShaderPart.cpp" />
     <ClCompile Include="StorageManager.cpp" />
@@ -354,6 +356,11 @@
     <None Include="..\Resources\Shaders\TexturedVertex.glsl" />
     <None Include="..\Shaders\TechFragment.glsl" />
     <None Include="..\Shaders\TechVertex.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MTDLL\EFX-Util.lib" />
+    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MT\EFX-Util.lib" />
+    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\OpenAL32.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

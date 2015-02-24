@@ -1,6 +1,7 @@
 #include "GameEntity.h"
 #include "../Team3Project1/Renderer.h"
 #include "PhysicsSystem.h"
+#include "../Team3Project1/GameStateManager.h"
 
 GameEntity::GameEntity(void)	{
 	renderNode	= NULL;
@@ -25,11 +26,11 @@ void	GameEntity::Update(float msec) {
 
 void	GameEntity::ConnectToSystems() {
 	if(renderNode) {
-		Renderer::GetRenderer().AddNode(renderNode);
+//		Renderer::GetRenderer().AddNode(renderNode);
 	}
 
 	if(physicsNode) {
-		PhysicsSystem::GetPhysicsSystem().AddNode(physicsNode);
+		GameStateManager::Physics()->AddNode(physicsNode);
 	}
 
 	if(renderNode && physicsNode) {
@@ -39,10 +40,10 @@ void	GameEntity::ConnectToSystems() {
 
 void	GameEntity::DisconnectFromSystems() {
 	if(renderNode) {
-		Renderer::GetRenderer().RemoveNode(renderNode);
+//		Renderer::GetRenderer().RemoveNode(renderNode);
 	}
 
 	if(physicsNode) {
-		PhysicsSystem::GetPhysicsSystem().RemoveNode(physicsNode);
+		GameStateManager::Physics()->RemoveNode(physicsNode);
 	}
 }

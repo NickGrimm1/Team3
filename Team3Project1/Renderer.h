@@ -68,12 +68,11 @@ public:
 
 	bool            LoadShaders();
 	void			RemoveNode(SceneNode* n);
-	static			Renderer&GetRenderer() { return *instance;}
+//	static			Renderer&GetRenderer() { return *instance;}
 
-	static	void	Destroy() {delete instance;}
-	static bool Initialise() {  instance = new Renderer( Window::GetWindow());  return instance->HasInitialised();}
+	//static	void	Destroy() {delete instance;}
+
 	void	AddNode(SceneNode* n);
-	void	RemoveNode(SceneNode* n);
 protected:
 	//Rendering pipeline components.
 	void			DrawScene();
@@ -145,5 +144,5 @@ protected:
 
 	MutexClass		openglMutex;		// Prevents different threads for using OpenGL at same time	
 
-	static Renderer*	instance;
+	//static Renderer*	instance;
 };

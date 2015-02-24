@@ -626,5 +626,5 @@ void	Renderer::AddNode(SceneNode* n) {
 	root->AddChild(n);
 }
 void	Renderer::RemoveNode(SceneNode* n) {
-	root->RemoveChild(n);
+//	root->RemoveChild(n);
 }

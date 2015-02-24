@@ -141,5 +141,9 @@ protected:
 
 	SceneNode*	target;
 	CollisionVolume* vol;
+//	Function* callback;
+//	GameClass* interestedObject;
+
+//	void onCollide(PhysicsNode* collidesWith) {interestedObject->callback(collidesWith);}
 };
 

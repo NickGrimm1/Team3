@@ -450,6 +450,9 @@
     <ClInclude Include="..\Framework\Debuff.h">
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RacerGame.h">
+      <Filter>Game\MainGame\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">
@@ -587,9 +590,6 @@
     <ClCompile Include="..\Framework\GameEntity.cpp">
       <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Framework\Main.cpp">
-      <Filter>Framework\Physics\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Framework\MyGame.cpp">
       <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
@@ -624,6 +624,12 @@
       <Filter>Framework\Audio\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Framework\Debuff.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RacerGame.cpp">
+      <Filter>Game\MainGame\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\OldMain.cpp">
       <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -682,5 +688,16 @@
     <None Include="..\Resources\Shaders\TexturedVertex.glsl">
       <Filter>Shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\OpenAL32.lib">
+      <Filter>Framework\Audio\Header Files</Filter>
+    </Library>
+    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MT\EFX-Util.lib">
+      <Filter>Framework\Audio\Header Files</Filter>
+    </Library>
+    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MTDLL\EFX-Util.lib">
+      <Filter>Framework\Audio\Header Files</Filter>
+    </Library>
   </ItemGroup>
 </Project>

@@ -32,7 +32,7 @@ bool CollisionHelper::PlaneSphereCollision(PhysicsNode& p0, PhysicsNode& p1, Col
 	if (data) {
 		data->m_penetration = sphere.GetRadius() - separation;
 	
-		data->m_normal = -plane.GetNormal();
+		data->m_normal = plane.GetNormal()* -1.0f;
 		data->m_point = p1.GetPosition() - plane.GetNormal()*separation;
 	}
 

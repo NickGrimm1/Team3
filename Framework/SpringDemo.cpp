@@ -45,12 +45,12 @@ void SpringDemo::Update(float msec) {
 }
 
 void SpringDemo::DebugDraw() {
-	Renderer::GetRenderer().DrawDebugCross(DEBUGDRAW_PERSPECTIVE, positions[0], Vector3(10,10,10), Vector3(1,0,0));
-	Renderer::GetRenderer().DrawDebugCross(DEBUGDRAW_PERSPECTIVE, positions[numBalls-1], Vector3(10,10,10), Vector3(1,0,0));
-	for(int i = 1; i < numBalls-1; i++) {
-		Renderer::GetRenderer().DrawDebugCircle(DEBUGDRAW_PERSPECTIVE, positions[i], 10.0f, Vector3(0,0,1));
-	}
-	for(int i = 0; i < numBalls - 1; i++) {
-		Renderer::GetRenderer().DrawDebugLine(DEBUGDRAW_PERSPECTIVE, positions[i], positions[i+1], Vector3(0,0,1), Vector3(1,0,1));
-	}
+//	Renderer::GetRenderer().DrawDebugCross(DEBUGDRAW_PERSPECTIVE, positions[0], Vector3(10,10,10), Vector3(1,0,0));
+//	Renderer::GetRenderer().DrawDebugCross(DEBUGDRAW_PERSPECTIVE, positions[numBalls-1], Vector3(10,10,10), Vector3(1,0,0));
+//	for(int i = 1; i < numBalls-1; i++) {
+//		Renderer::GetRenderer().DrawDebugCircle(DEBUGDRAW_PERSPECTIVE, positions[i], 10.0f, Vector3(0,0,1));
+//	}
+//	for(int i = 0; i < numBalls - 1; i++) {
+//		Renderer::GetRenderer().DrawDebugLine(DEBUGDRAW_PERSPECTIVE, positions[i], positions[i+1], Vector3(0,0,1), Vector3(1,0,1));
+//	}
 }

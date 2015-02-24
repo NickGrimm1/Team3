@@ -1,5 +1,6 @@
 #pragma once
 #include"MyGame.h"
+#include "PhysicsNode.h"
 
 class Vehicle {
 public:
@@ -14,7 +15,7 @@ public:
 	float GetSize(){return size;}
 
 	void UpdatePlayer1(float msec);
-	void UpdatePlayer2(float msec);
+	//void UpdatePlayer2(float msec);
 
 	Vector3 tempPosition;
 protected:

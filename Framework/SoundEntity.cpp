@@ -1,6 +1,7 @@
 #include "SoundEntity.h"
 #include "../Team3Project1/Renderer.h"
-#include "PhysicsSystem.h"
+#include "../Team3Project1/PhysicsEngine.h"
+#include "../Team3Project1/GameStateManager.h"
 
 SoundEntity::SoundEntity(void)	{
 	renderNode	= NULL;
@@ -44,7 +45,8 @@ void	SoundEntity::ConnectToSystems() {
 	//}
 
 	if(physicsNode) {
-		PhysicsSystem::GetPhysicsSystem().AddNode(physicsNode);
+		GameStateManager::Physics()->AddNode(physicsNode);
+		//PhysicsEngine::GetPhysicsEngine().AddNode(physicsNode);
 	}
 
 	if(soundEmitter) {
@@ -58,11 +60,12 @@ void	SoundEntity::ConnectToSystems() {
 
 void	SoundEntity::DisconnectFromSystems() {
 	if(renderNode) {
-		Renderer::GetRenderer().RemoveNode(renderNode);
+//		Renderer::GetRenderer().RemoveNode(renderNode);
 	}
 
 	if(physicsNode) {
-		PhysicsSystem::GetPhysicsSystem().RemoveNode(physicsNode);
+		GameStateManager::Physics()->AddNode(physicsNode);
+		//PhysicsEngine::GetPhysicsEngine().RemoveNode(physicsNode);
 	}
 	//if(soundEmitter) {
 	//	SoundSystem::GetSoundSystem()->RemoveSoundEmitter(soundEmitter);

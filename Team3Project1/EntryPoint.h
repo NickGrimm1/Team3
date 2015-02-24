@@ -8,7 +8,7 @@ Version: 0.0.3 06/02/2015.</summary>
 */
 
 #include "GraphicsTestScreen.h"
-
+#include "RacerGame.h"
 namespace EntryPoint
 {
 	void StartGame()
@@ -17,6 +17,8 @@ namespace EntryPoint
 
 		GraphicsTestScreen* game = new GraphicsTestScreen();
 		GameStateManager::Instance()->AddGameScreen(game);
+		//RacerGame* game = new RacerGame();
+		//GameStateManager::Instance()->AddGameScreen(game);
 		GameStateManager::Instance()->Start();
 	}
 }

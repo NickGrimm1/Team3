@@ -32,12 +32,12 @@ _-_-_-_-_-_-_-""  ""
 #include "SoundSystem.h"
 #include "SoundManager.h"
 
-#pragma comment(lib, "nclgl.lib")
+//#pragma comment(lib, "nclgl.lib")
 
 int Quit(bool pause = false, const string &reason = "") {
-	PhysicsSystem::Destroy();
+	PhysicsEngine::Destroy();
 	Window::Destroy();
-	Renderer::Destroy();
+//	Renderer::Destroy();
 
 	if(pause) {
 		std::cout << reason << std::endl;
@@ -55,18 +55,18 @@ void physicsLoop(GameClass* game, bool& running) {
 	}
 }
 
-int main() {
+int oldmain() {
 	SoundSystem :: Initialise ();
 
 	if(!Window::Initialise("Game Technologies", 1280,800,false)) {
 		return Quit(true, "Window failed to initialise!");
 	}
 
-	if(!Renderer::Initialise()) {
-		return Quit(true, "Renderer failed to initialise!");
-	}
+//	if(!Renderer::Initialise()) {
+//		return Quit(true, "Renderer failed to initialise!");
+//	}
 
-	PhysicsSystem::Initialise();
+//	PhysicsEngine::Initialize();
 
 	MyGame* game = new MyGame();
 
@@ -75,6 +75,7 @@ int main() {
 
 	bool running = true;
 	std::thread physics(physicsLoop, game, std::ref(running));
+/*
 	while(Window::GetWindow().UpdateWindow() && !Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE)){
 		float msec = Window::GetWindow().GetTimer()->GetTimedMS();	//How many milliseconds since last update?
 		//game->UpdateGame(msec);	//Update our game logic
@@ -92,6 +93,7 @@ int main() {
 		    SoundSystem :: GetSoundSystem () -> PlaySoundW (SoundManager :: GetSound ("../../Sounds/vehicle085.wav"),SOUNDPRIORITY_ALWAYS);
 		}
 	}
+	?*/
 	running = false;
 	physics.join();
 
