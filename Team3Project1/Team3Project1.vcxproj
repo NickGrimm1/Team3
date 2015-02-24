@@ -383,6 +383,8 @@
     <None Include="..\Resources\Shaders\SkyBoxVertex.glsl" />
     <None Include="..\Resources\Shaders\TexturedFragment.glsl" />
     <None Include="..\Resources\Shaders\TexturedVertex.glsl" />
+    <None Include="..\Resources\Shaders\VelocityFragment.glsl" />
+    <None Include="..\Resources\Shaders\VelocityVertex.glsl" />
     <None Include="..\Shaders\TechFragment.glsl" />
     <None Include="..\Shaders\TechVertex.glsl" />
   </ItemGroup>

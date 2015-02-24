@@ -297,9 +297,9 @@ void Renderer::RenderScene() {
 
 	// Post-Processing
 	//BloomPass();
-	//MotionBlurPass();
+	MotionBlurPass();
 
-	DrawFrameBufferTex(postProcessingTex[0]);
+	DrawFrameBufferTex(postProcessingTex[1]);
 
 	// Draw HUD/Menu overlay
 	Draw2DOverlay();
@@ -871,13 +871,30 @@ void Renderer::BloomPass()
 //TODO: just need to work out how to write the scene texture to the quad.
 void Renderer::MotionBlurPass()
 {
+	glClearColor(0,0,0,0);
 	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufferVelocity, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	SetCurrentShader(velocityShader);
+	
+	viewMatrix = cameraMatrix;
+	projMatrix = perspectiveMatrix;
 	UpdateShaderMatrices();
 
-	//Some method that mimics the initial draw call, pulling the Previous MVP into the mix.
+	//Modified draw call that will set the previous MVP after drawing.
+	for (unsigned int i = 0; i < sceneNodes.size(); i++) {
+		DrawableEntity3D& entity = *sceneNodes[i]->GetDrawableEntity();
+
+		modelMatrix = sceneNodes[i]->GetWorldTransform() * Matrix4::Scale(entity.GetScale());
+		Matrix4 previousMVP = sceneNodes[i]->GetPrevMVP();
+		glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"), 1, false, (float*)&modelMatrix);
+		glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "prevMVP"), 1, false, (float*)&previousMVP);
+
+		textureMatrix.ToIdentity();
+
+		entity.GetMesh()->Draw();
+		sceneNodes[i]->SetPrevMVP(projMatrix * viewMatrix * modelMatrix);
+	}
 	
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[1], 0);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -885,6 +902,8 @@ void Renderer::MotionBlurPass()
 	SetCurrentShader(motionBlurShader);
 	projMatrix = orthographicMatrix;
 	modelMatrix.ToIdentity();
+	viewMatrix.ToIdentity();
+	textureMatrix.ToIdentity();
 	UpdateShaderMatrices();
 
 	glDisable(GL_DEPTH_TEST);
@@ -898,7 +917,6 @@ void Renderer::MotionBlurPass()
 	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "velocityScale"), 1.0);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "velocityTex"), GBUFFER_VELOCITY_UNIT);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-
 
 	screenMesh->Draw();
 
