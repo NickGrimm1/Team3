@@ -5,6 +5,7 @@
 */
 DWORD thread_ftn(LPVOID T) {
 	Thread* t = static_cast<Thread*>(T);
+	t->isRunning = true;
 	t->Run();
 	return NULL;
 }
@@ -21,4 +22,9 @@ void Thread::Start() {
 
 void Thread::Join() {
 	WaitForSingleObject(thread_handle, INFINITE);
+}
+
+void Thread::Terminate()
+{
+	isRunning = false;
 }

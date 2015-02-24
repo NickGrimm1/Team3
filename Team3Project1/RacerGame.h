@@ -3,6 +3,7 @@
 #include "GameScreen3D.h"
 #include "../Framework/Vehicle.h"
 #include "../Framework/MyGame.h"
+#include "FreeCamera.h"
 
 class RacerGame : public GameScreen3D
 {
@@ -31,7 +32,7 @@ private:
 	Mesh* quad;
 	Mesh* cylinder;
 	SpotLight* light;
-	Camera* camera;
+	FreeCamera* camera;
 	Vehicle* car;
 	
 	DrawableEntity3D* ent;

@@ -47,19 +47,19 @@ Vector3 PhysicsEngine::support(PhysicsNode& shape1,PhysicsNode& shape2, Vector3 
 
 	worldpoints1.clear();
 	worldpoints2.clear();
-	Vector3 * vertex1=shape1.GetTarget()->GetMesh()->GetVertices();
+	Vertex * vertex1=shape1.GetTarget()->GetMesh()->GetVertices();
 	int number1=shape1.GetTarget()->GetMesh()->GetNumVertices();
 	for(int i=0;i<number1;i++)
 	{
-		worldpoints1.push_back( shape1.GetTarget()->GetTransform() * (vertex1[i]*shape1.GetTarget()->GetModelScale()));
+		worldpoints1.push_back( shape1.GetTarget()->GetTransform() * (vertex1[i].GetPosition()*shape1.GetTarget()->GetModelScale()));
 	}
 	shape1.SetWorldPoints(worldpoints1);
 
-	Vector3 * vertex2=shape2.GetTarget()->GetMesh()->GetVertices();
+	Vertex * vertex2=shape2.GetTarget()->GetMesh()->GetVertices();
 	int number2=shape2.GetTarget()->GetMesh()->GetNumVertices();
 	for(int i=0;i<number2;i++)
 	{
-		worldpoints2.push_back( shape2.GetTarget()->GetTransform() * (vertex2[i]*shape2.GetTarget()->GetModelScale()));
+		worldpoints2.push_back( shape2.GetTarget()->GetTransform() * (vertex2[i].GetPosition()*shape2.GetTarget()->GetModelScale()));
 	}
 	shape2.SetWorldPoints(worldpoints2);
 
@@ -561,11 +561,11 @@ void	PhysicsEngine::BroadPhaseCollisions() {
 }
 
 void	PhysicsEngine::NarrowPhaseCollisions() {
-	for (int i = 0; i < allNodes.size(); i++) {
+	for (unsigned int i = 0; i < allNodes.size(); i++) {
 		PhysicsNode& first = *allNodes[i];
 		CollisionVolume* fv = first.GetCollisionVolume();
 		if (!fv) continue;
-		for (int j = i + 1; j < allNodes.size(); j++) {
+		for (unsigned int j = i + 1; j < allNodes.size(); j++) {
 			PhysicsNode& second = *allNodes[j];
 			CollisionVolume* sv = second.GetCollisionVolume();
 			if (!sv) continue;

@@ -21,10 +21,35 @@ Version: 0.0.5 05/02/2015.</summary>
 
 using namespace std;
 
-class GameScreen2D : GameScreen
+class GameScreen2D : public GameScreen
 {
 	// TODO: Implement GameScreen 2D.
 public:
+	GameScreen2D(float x = 0.0f, float y = 0.0f, float width = 1.0f, float height = 1.0f) : GameScreen(x, y, width, height)
+	{ }
+	virtual ~GameScreen2D()
+	{
+		// Clear clickables. RemoveClickable also calls RemoveSelectable, RemoveDrawable & RemoveEntity.
+		while (!clickables.empty())
+		{
+			RemoveClickable(clickables.front());
+		}
+		// Clear remaining selectables.
+		while (!selectables.empty())
+		{
+			RemoveSelectable(selectables.front());
+		}
+		// Clear remaining drawables.
+		while (!drawables.empty())
+		{
+			RemoveDrawable(drawables.front());
+		}
+		// Clear any remaining entities.
+		while (!entities.empty())
+		{
+			RemoveEntity(entities.front());
+		}
+	}
 #pragma region Entity
 	/**
 	<summary>Adds an entity to the screen. Does not add to any other collection. Use addDrawable(...) to draw etc. Idempotent.</summary>
@@ -58,6 +83,11 @@ public:
 			if (*i == entity)
 			{
 				// TODO: Ensure that this is also removed from Graphics & Input.
+				if (*i)
+				{
+					delete *i;
+					*i = NULL;
+				}
 				entities.erase(i);
 				break;
 			}
@@ -100,7 +130,7 @@ public:
 	<param name="removeFromDraw">Remove the entity from draw. Default is true.</param>
     <param name="selectable">The entity.</param>
 	*/
-	void RemoveSelectable(ClickableEntity2D* selectable, bool removeFromDraw = true)
+	void RemoveSelectable(SelectableEntity2D* selectable, bool removeFromDraw = true)
     {
         for (vector<SelectableEntity2D*>::iterator i = selectables.begin(); i != selectables.end(); i++)
 		{

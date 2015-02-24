@@ -76,32 +76,52 @@ public:
 				gameScreens[i]->Update();
 			}
 		}
+		instance->Destroy();
 	}
 
 	void Exit()
 	{
-		graphics->Terminate();
-		physics->Terminate();
-		input->Terminate();
-
-		// Clean up
-		graphics->Join();
-		physics->Join();
-		input->Join();
-
-		// Destroy everything
-		GraphicsEngine::Destroy();
-		AssetManager::Destroy();
-		PhysicsEngine::Destroy();
-		StorageManager::Destroy();
-		InputManager::Destroy();
-		AudioEngine::Destroy();
-		NetworkManager::Destroy();
-		DebugManager::Destroy();
-
 		if (instance != NULL)
+		{
+			instance->isRunning = false;
+		}
+	}
+
+	void Destroy() {
+		if (instance != NULL) {
+			graphics->Terminate();
+			physics->Terminate();
+			input->Terminate();
+
+			// Clean up
+			graphics->Join();
+			physics->Join();
+			input->Join();
+
+			vector<GameScreen*>::iterator i = instance->gameScreens.begin();
+			while (i != instance->gameScreens.end())
+			{
+				(*i)->UnloadContent();
+				delete *i;
+				i = instance->gameScreens.erase(i);
+			}
+
+			// Unload Engine Assets
+			GraphicsEngine::UnloadContent();
+
+			// Destroy everything
+			AssetManager::Destroy(); // Do not destroy before graphics in Windows Build - requires OpenGL context
+			GraphicsEngine::Destroy();
+			PhysicsEngine::Destroy();
+			StorageManager::Destroy();
+			InputManager::Destroy();
+			AudioEngine::Destroy();
+			NetworkManager::Destroy();
+			DebugManager::Destroy();
+
 			delete instance;
-		instance = NULL;
+			instance = NULL;
+		}
 	}
 	~GameStateManager()
 	{
@@ -245,7 +265,14 @@ public:
 	static void ChangeScreen(GameScreen* gameScreen)
 	{
 		gameScreen->LoadContent();
-		Instance()->gameScreens.clear();
+		vector<GameScreen*>::iterator i = instance->gameScreens.begin();
+		while (i != instance->gameScreens.end())
+		{
+			(*i)->UnloadContent();
+			delete *i;
+			i = instance->gameScreens.erase(i);
+		}
+
 		Instance()->gameScreens.push_back(gameScreen);
 	}
 	/**
@@ -267,6 +294,8 @@ public:
 		{
 			if (*i == gameScreen)
 			{
+				(*i)->UnloadContent();
+				delete *i;
 				Instance()->gameScreens.erase(i);
 				break;
 			}
@@ -278,8 +307,6 @@ public:
 	*/
 	static GameStateManager* Instance()
 	{
-		if (instance == NULL)
-			instance = new GameStateManager();
 		return instance;
 	}
 private:

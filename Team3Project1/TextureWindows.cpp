@@ -3,9 +3,9 @@
 #include "Texture.h"
 #include "SOIL.h"
 
-Texture::Texture(string filename)
+Texture::Texture(string filename, unsigned int flags)
 {
-	textureObject = SOIL_load_OGL_texture(filename.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
+	textureObject = SOIL_load_OGL_texture(filename.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, flags);
 	if (!textureObject) {
 		textureObject = 0; // make sure GetTexture will return an error
 		return;

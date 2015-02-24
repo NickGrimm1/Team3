@@ -33,8 +33,8 @@ void RacerGame::LoadContent() {
 	ent = new DrawableEntity3D(
 		quad, 
 		NULL,
-		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"snowflake.png"), 
-		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"snowflake.png"),
+		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"snowflake.png", 0), 
+		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"snowflake.png", 0),
 		50.0f, 
 		Vector3(0,0,0), 
 		Quaternion::FromMatrix(Matrix4::Rotation(90.0f, Vector3(-1,0,0))),
@@ -78,7 +78,7 @@ void RacerGame::LoadContent() {
 	PlayerPosition=Vector3(500,100,-800);
 
 	camera->SetPosition(Vector3(0,10.0f, 80.0f));
-	camera->SetYaw(180.0f);
+	//camera->SetYaw(180.0f);
 	GameStateManager::Graphics()->SetCamera(camera);
 }
 

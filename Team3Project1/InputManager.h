@@ -28,10 +28,8 @@ public:
 	}
 
 	void Run();
-	void Terminate() { isRunning = false; }
 private:
 	InputManager() { }
 	~InputManager() { }
 	static InputManager* instance;
-	bool isRunning;
 };

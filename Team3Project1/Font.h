@@ -16,8 +16,8 @@ public:
 	~Font() { }
 	Texture* GetTexture() { return texture; }
 	void SetTexture(Texture* value) { texture = value; }
-	unsigned int GetXCount() { return xCount; }
-	unsigned int GetYCount() { return yCount; }
+	unsigned int GetXCount() const { return xCount; }
+	unsigned int GetYCount() const { return yCount; }
 private:
 	Texture* texture;
 	unsigned int xCount;

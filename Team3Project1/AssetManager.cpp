@@ -26,25 +26,29 @@ bool AssetManager::Initialize(AssetManager*& out)
 void AssetManager::Destroy()
 {
 	GameStateManager::Graphics()->GetRenderContext();
-	for (map<string, LoadedTexture>::iterator i = instance->loadedTextures.begin(); i != instance->loadedTextures.end(); i++)
+	while (!instance->loadedTextures.empty())
 	{
-		delete i->second.texture;
-		i = instance->loadedTextures.erase(i);
+		map<string, LoadedTexture>::iterator i = instance->loadedTextures.begin();
+		delete (*i).second.texture;
+		instance->loadedTextures.erase(i);
 	}
-	for (map<string, LoadedMesh>::iterator i = instance->loadedMeshes.begin(); i != instance->loadedMeshes.end(); i++)
+	while (!instance->loadedMeshes.empty()) 
 	{
-		delete i->second.mesh;
-		i = instance->loadedMeshes.erase(i);
+		map<string, LoadedMesh>::iterator i = instance->loadedMeshes.begin();
+		delete (*i).second.mesh;
+		instance->loadedMeshes.erase(i);
 	}
-	for (map<string, LoadedShader>::iterator i = instance->loadedShaders.begin(); i != instance->loadedShaders.end(); i++)
+	while (!instance->loadedShaders.empty())
 	{
-		delete i->second.shader;
-		i = instance->loadedShaders.erase(i);
+		map<string, LoadedShader>::iterator i = instance->loadedShaders.begin();
+		delete (*i).second.shader;
+		instance->loadedShaders.erase(i);
 	}
-	for (map<string, LoadedShaderPart>::iterator i = instance->loadedShaderParts.begin(); i != instance->loadedShaderParts.end(); i++)
+	while (!instance->loadedShaderParts.empty())
 	{
-		delete i->second.shaderPart;
-		i = instance->loadedShaderParts.erase(i);
+		map<string, LoadedShaderPart>::iterator i = instance->loadedShaderParts.begin();
+		delete (*i).second.shaderPart;
+		instance->loadedShaderParts.erase(i);
 	}
 	GameStateManager::Graphics()->DropRenderContext();
 
@@ -53,7 +57,7 @@ void AssetManager::Destroy()
 	instance = NULL;
 }
 
-Texture* AssetManager::LoadTexture(void* callerID, string filePath)
+Texture* AssetManager::LoadTexture(void* callerID, string filePath, unsigned int flags)
 {
 	// Check if this texture is already loaded
 	map<string, LoadedTexture>::iterator i = loadedTextures.find(filePath);
@@ -72,7 +76,8 @@ Texture* AssetManager::LoadTexture(void* callerID, string filePath)
 	{
 		// Load this texture in...
 		GameStateManager::Graphics()->GetRenderContext();
-		Texture* newTexture = new Texture(filePath);
+		Texture* newTexture = new Texture(filePath, flags);
+		newTexture->SetRepeating(true);
 		GameStateManager::Graphics()->DropRenderContext();
 		loadedTextures.insert(pair<string, LoadedTexture>(filePath, LoadedTexture(newTexture, callerID)));
 		return newTexture;
@@ -125,13 +130,13 @@ Mesh* AssetManager::LoadMesh(void* callerID, string filePath)
 	{
 		// Load this mesh in...
 		Mesh* newMesh;
-		if (filePath.substr(filePath.length() - 4, 3) == "obj")
+		if (filePath.substr(filePath.length() - 3, 3) == "obj")
 		{
 			GameStateManager::Graphics()->GetRenderContext();
 			newMesh = new OBJMesh(filePath);
 			GameStateManager::Graphics()->DropRenderContext();
 		}
-		else if (filePath.substr(filePath.length() - 4, 3) == "md5")
+		else if (filePath.substr(filePath.length() - 3, 3) == "md5")
 		{
 			GameStateManager::Graphics()->GetRenderContext();
 			newMesh = new MD5Mesh(MD5FileData(filePath));
@@ -355,7 +360,7 @@ Mesh* AssetManager::LoadCylinder(void* callerID, unsigned int subdivs)
 	{
 		// Load this mesh in...
 		GameStateManager::Graphics()->GetRenderContext();
-		cylinderUsers.insert(pair<unsigned int, LoadedMesh>(subdivs, LoadedMesh(Mesh::GenerateCone(subdivs), callerID)));
+		cylinderUsers.insert(pair<unsigned int, LoadedMesh>(subdivs, LoadedMesh(Mesh::GenerateCylinder(subdivs), callerID)));
 		GameStateManager::Graphics()->DropRenderContext();
 		return cylinderUsers[subdivs].mesh;
 	}
@@ -661,16 +666,20 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 #if WINDOWS_BUILD
 		newShader->SetGeometry(geometryShader);
 		GameStateManager::Graphics()->GetRenderContext();
-		newShader->LinkProgram();
+		bool loadOk = newShader->LinkProgram();
 		GameStateManager::Graphics()->DropRenderContext();
+		if (!loadOk) return NULL; // Check link status
 #endif
+		loadedShaders.insert(pair<string, LoadedShader>(shaderName, LoadedShader(newShader, callerID)));
 		return newShader;
 	}
 }
 void AssetManager::UnloadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath)
 {
 	// Check if this shader is actually loaded...
-	string shaderName = vertexShaderFilePath.append(fragmentShaderFilePath).append(geometryShaderFilePath);
+	string shaderName = vertexShaderFilePath;
+	shaderName.append(fragmentShaderFilePath);
+	shaderName.append(geometryShaderFilePath);
 	map<string, LoadedShader>::iterator i = loadedShaders.find(shaderName);
 	if (i == loadedShaders.end())
 		return; // This shader does not exist, ignore.
@@ -778,7 +787,7 @@ Font* AssetManager::LoadFont(void* callerID, string filePath, unsigned int xCoun
 		// Load this font in...
 		GameStateManager::Graphics()->GetRenderContext();
 		Font* newFont = new Font(xCount, yCount);
-		newFont->SetTexture(LoadTexture(newFont, filePath));
+		newFont->SetTexture(LoadTexture(newFont, filePath, SOIL_FLAG_COMPRESS_TO_DXT));
 		GameStateManager::Graphics()->DropRenderContext();
 		loadedFonts.insert(pair<string, LoadedFont>(filePath, LoadedFont(newFont, callerID)));
 		return newFont;

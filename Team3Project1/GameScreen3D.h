@@ -26,6 +26,10 @@ using namespace std;
 class GameScreen3D : public GameScreen
 {
 public:
+	GameScreen3D(float x = 0.0f, float y = 0.0f, float width = 1.0f, float height = 1.0f)
+		: GameScreen(x, y, width, height)
+	{ }
+	virtual ~GameScreen3D();
 	void SetPlayer(DrawableEntity3D* value) { player = value; }
 	void RemovePlayer() 
 	{
@@ -33,7 +37,9 @@ public:
 	}
 	void AddDrawable(DrawableEntity3D* value);
 	void RemoveDrawable(DrawableEntity3D* value);
-	void AddLight(Light* value);
+	Light* AddPointLight(Vector3 lightPosition, float lightRadius, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
+	Light* AddDirectionalLight(Vector3 lightDirection, Vector4 diffuseColour, Vector4 specularColour);
+	Light* AddSpotLight(Vector3 lightPosition, Vector3 lightTarget, Vector3 upVector, float lightRadius, float lightAngle, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
 	void RemoveLight(Light* value);
 	void SetCamera(Camera* value);
 	virtual void Update()

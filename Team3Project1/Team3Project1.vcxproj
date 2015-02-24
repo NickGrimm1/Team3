@@ -1,25 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|PS3">
+      <Configuration>Debug</Configuration>
+      <Platform>PS3</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="PS3_DEBUG|PS3">
+      <Configuration>PS3_DEBUG</Configuration>
+      <Platform>PS3</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="PS3_DEBUG|Win32">
       <Configuration>PS3_DEBUG</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="PS3_RELEASE|PS3">
+      <Configuration>PS3_RELEASE</Configuration>
+      <Platform>PS3</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="PS3_RELEASE|Win32">
       <Configuration>PS3_RELEASE</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|PS3">
+      <Configuration>Release</Configuration>
+      <Platform>PS3</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="WINDOWS_DEBUG|PS3">
+      <Configuration>WINDOWS_DEBUG</Configuration>
+      <Platform>PS3</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="WINDOWS_DEBUG|Win32">
       <Configuration>WINDOWS_DEBUG</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="WINDOWS_RELEASE|PS3">
+      <Configuration>WINDOWS_RELEASE</Configuration>
+      <Platform>PS3</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="WINDOWS_RELEASE|Win32">
       <Configuration>WINDOWS_RELEASE</Configuration>
@@ -69,6 +93,24 @@
     <PlatformToolset>v100</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='WINDOWS_DEBUG|PS3'">
+    <PlatformToolset>SNC</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='WINDOWS_RELEASE|PS3'">
+    <PlatformToolset>SNC</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|PS3'">
+    <PlatformToolset>SNC</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|PS3'">
+    <PlatformToolset>SNC</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">
+    <PlatformToolset>SNC</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='PS3_RELEASE|PS3'">
+    <PlatformToolset>SNC</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -184,6 +226,11 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">
+    <ClCompile>
+      <PreprocessorDefinitions>PS3_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Framework\BumpTexture.h" />
     <ClInclude Include="..\Framework\Camera.h" />
@@ -244,11 +291,13 @@
     <ClInclude Include="DrawableTexture2D.h" />
     <ClInclude Include="EntryPoint.h" />
     <ClInclude Include="GraphicsTestScreen.h" />
+    <ClInclude Include="HudTestScreen.h" />
     <ClInclude Include="LoadedFont.h" />
     <ClInclude Include="LoadedMesh.h" />
     <ClInclude Include="LoadedShader.h" />
     <ClInclude Include="LoadedShaderPart.h" />
     <ClInclude Include="LoadedTexture.h" />
+    <ClInclude Include="LoadingScreen.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MutexClass.h" />
     <ClInclude Include="OffsetCamera.h" />
@@ -269,11 +318,14 @@
     <ClInclude Include="RacerGame.h" />
     <ClInclude Include="SelectableEntity2D.h" />
     <ClInclude Include="ShaderPart.h" />
+    <ClInclude Include="Spline.h" />
     <ClInclude Include="T3Rectangle.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="StorageManager.h" />
+    <ClInclude Include="TextMesh.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Thread.h" />
+    <ClInclude Include="TrackSegment.h" />
     <ClInclude Include="UIButton.h" />
   </ItemGroup>
   <ItemGroup>
@@ -323,7 +375,9 @@
     <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
     <ClCompile Include="GraphicsTestScreen.cpp" />
+    <ClCompile Include="HudTestScreen.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="LoadingScreen.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MutexClass.cpp" />
@@ -333,23 +387,33 @@
     <ClCompile Include="RacerGame.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ShaderPart.cpp" />
+    <ClCompile Include="Spline.cpp" />
     <ClCompile Include="StorageManager.cpp" />
+    <ClCompile Include="TextMesh.cpp" />
+    <ClCompile Include="TexturePS3.cpp" />
     <ClCompile Include="TextureWindows.cpp" />
     <ClCompile Include="Thread.cpp" />
+    <ClCompile Include="TrackSegment.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Resources\Shaders\BlendedFragment.glsl" />
+    <None Include="..\Resources\Shaders\BloomCombFragment.glsl" />
+    <None Include="..\Resources\Shaders\BloomFinalFragment.glsl" />
+    <None Include="..\Resources\Shaders\BlurFragment.glsl" />
+    <None Include="..\Resources\Shaders\BrightPassFragment.glsl" />
     <None Include="..\Resources\Shaders\CombineFragment.glsl" />
     <None Include="..\Resources\Shaders\CombineVertex.glsl" />
     <None Include="..\Resources\Shaders\debugFragment.glsl" />
     <None Include="..\Resources\Shaders\debugVertex.glsl" />
     <None Include="..\Resources\Shaders\DeferredPassFragment.glsl" />
     <None Include="..\Resources\Shaders\DeferredPassVertex.glsl" />
+    <None Include="..\Resources\Shaders\DownSampleFragment.glsl" />
     <None Include="..\Resources\Shaders\MainFragShader.glsl" />
     <None Include="..\Resources\Shaders\MainVertShader.glsl" />
     <None Include="..\Resources\Shaders\PointToCircleGeom.glsl" />
     <None Include="..\Resources\Shaders\PointToQuadGeom.glsl" />
-    <None Include="..\Resources\Shaders\shadowFrag.glsl" />
-    <None Include="..\Resources\Shaders\shadowVert.glsl" />
+    <None Include="..\Resources\Shaders\ShadowFragment.glsl" />
+    <None Include="..\Resources\Shaders\ShadowVertex.glsl" />
     <None Include="..\Resources\Shaders\SkyBoxFragment.glsl" />
     <None Include="..\Resources\Shaders\SkyBoxVertex.glsl" />
     <None Include="..\Resources\Shaders\TexturedFragment.glsl" />

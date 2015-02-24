@@ -176,7 +176,7 @@ public:
 	*/
 	Vector3 Subtract(const Vector3 &in) const 
 	{
-		return Vector3(in.x - x, in.y - y, in.z - z);
+		return Vector3(x - in.x, y - in.y, z - in.z);
 	}
 	/**
 	<summary>Subtracts a vector from this one, modifying this.</summary>
@@ -184,19 +184,19 @@ public:
 	*/
 	void SubtractFrom(const Vector3 &in)
 	{
-		x = in.x - x;
-		y = in.y - y;
-		z = in.z - z;
+		x = x - in.x;
+		y = y - in.y;
+		z = z - in.z;
 	}
 	/**
-	<summary>Subtracts the first vector from the second without altering either.</summary>
+	<summary>Subtracts the second vector from the first without altering either.</summary>
 	<param name='v1'>The first vector.</param>
 	<param name='v2'>The second vector.</param>
 	<returns>The resulting vector.</returns>
 	*/
 	static Vector3 Subtract(const Vector3 &v1, const Vector3 &v2)
 	{
-		return Vector3(v2.x - v1.x, v2.y - v1.y, v2.z - v1.z);
+		return Vector3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
 	}
 	/**
 	<summary>Subtracts a vector from this one, without modifying the vector.</summary>
@@ -276,8 +276,8 @@ public:
 	{
 		if (scalar != 0)
 			return Vector3(x / scalar, y / scalar, z / scalar);
-		else
-			throw DivideByZeroException();
+		else{}
+		//	throw DivideByZeroException();
 	}
 	/**
 	<summary>Divides this vector by a scalar, modifying this.</summary>
@@ -292,8 +292,8 @@ public:
 			y /= scalar;
 			z /= scalar;
 		}
-		else
-			throw DivideByZeroException();
+		else{}
+			//throw DivideByZeroException();
 	}
 	/**
 	<summary>Divides a vector by a scalar without altering the vector.</summary>

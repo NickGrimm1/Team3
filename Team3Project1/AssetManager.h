@@ -30,7 +30,7 @@ public:
 	static bool Initialize(AssetManager*& out);
 	static void Destroy();
 
-	Texture* LoadTexture(void* callerID, string filePath);
+	Texture* LoadTexture(void* callerID, string filePath, unsigned int flags);
 	void UnloadTexture(void* callerID, string filePath);
 
 	Font* LoadFont(void* callerID, string filePath, unsigned int xCount, unsigned int yCount);

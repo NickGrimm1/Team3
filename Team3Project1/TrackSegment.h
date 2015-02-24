@@ -27,11 +27,7 @@ public:
 	virtual void Draw();
 
 protected:
-	Vector3* leftBoundary;
-	Vector3* rightBoundary;
-	Vector3* trackMesh;
-	GLuint leftVBO;
-	GLuint rightVBO;
+	Vertex* trackMesh;
 	GLuint trackVBO;
 };
 
