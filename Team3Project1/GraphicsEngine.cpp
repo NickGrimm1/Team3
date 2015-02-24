@@ -111,9 +111,6 @@ void GraphicsEngine::Run() {
 
 		contentGuard.unlock_mutex();
 			
-		// Update camera
-		camera->UpdateCamera(); // may need to remove
-
 		// Update data in scene nodes
 		sceneRoot->Update(1.0f / RENDER_HZ); // TODO - sort out proper timestep value - or remove timestep if not needed
 		
@@ -121,8 +118,10 @@ void GraphicsEngine::Run() {
 		boundingMax = Vector3(0,0,0);
 		boundingMin = Vector3(0,0,0);		
 
+		// Update camera
 		if (camera != NULL)
 		{
+			camera->UpdateCamera(); // may need to remove
 			Matrix4 viewMatrix = camera->BuildViewMatrix();
 			Matrix4 projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float) width / (float) height, 45.0f);
 			frameFrustum.FromMatrix(projMatrix * viewMatrix);

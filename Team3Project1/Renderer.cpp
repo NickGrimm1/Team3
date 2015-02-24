@@ -162,6 +162,10 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); // cube sampling
 
+	glClearColor(0, 0, 0, 1);
+	SwapBuffers();
+	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+
 	wglMakeCurrent(deviceContext, NULL);
 	init = true;
 }
