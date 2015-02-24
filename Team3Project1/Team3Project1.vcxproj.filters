@@ -402,14 +402,17 @@
     <ClInclude Include="TextMesh.h">
       <Filter>Framework\Graphics\Common\Header</Filter>
     </ClInclude>
-    <ClInclude Include="HudTestScreen.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TrackSegment.h">
       <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Spline.h">
       <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadingScreen.h">
+      <Filter>Game\Menus\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HudTestScreen.h">
+      <Filter>Game\HUD\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -542,9 +545,6 @@
     <ClCompile Include="TextMesh.cpp">
       <Filter>Framework\Graphics\Common\Source</Filter>
     </ClCompile>
-    <ClCompile Include="HudTestScreen.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TexturePS3.cpp">
       <Filter>Framework\Resource Manager\Source Files</Filter>
     </ClCompile>
@@ -553,6 +553,12 @@
     </ClCompile>
     <ClCompile Include="TrackSegment.cpp">
       <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadingScreen.cpp">
+      <Filter>Game\Menus\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HudTestScreen.cpp">
+      <Filter>Game\HUD\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
