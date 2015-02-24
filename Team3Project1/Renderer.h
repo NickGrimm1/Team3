@@ -32,6 +32,8 @@ struct LightData {
 	Vector4*	lightColour;
 	Vector4*	lightSpecColour;
 
+
+
 	Vector3*	lightPos;
 	Vector3*	lightDir;
 	Vector3*	cameraPos;
@@ -124,6 +126,7 @@ protected:
 	Mesh*			coneMesh;			// A cone mesh for drawing deferred spot lights
 	Mesh*			circleMesh;			// A circle mesh for drawing deferred spot lights
 
+	SceneNode*		root;
 	Camera*			camera;
 
 	Frustum			frameFrustum;

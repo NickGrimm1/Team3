@@ -64,13 +64,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='WINDOWS_DEBUG|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -235,10 +235,16 @@
     <ClInclude Include="..\Framework\BumpTexture.h" />
     <ClInclude Include="..\Framework\Camera.h" />
     <ClInclude Include="..\Framework\ChildMeshInterface.h" />
+    <ClInclude Include="..\Framework\CollisionHelper.h" />
     <ClInclude Include="..\Framework\CollisionVolume.h" />
     <ClInclude Include="..\Framework\common.h" />
+    <ClInclude Include="..\Framework\Constraint.h" />
+    <ClInclude Include="..\Framework\Debuff.h" />
+    <ClInclude Include="..\Framework\DebugDrawer.h" />
     <ClInclude Include="..\Framework\EmptyTexture.h" />
     <ClInclude Include="..\Framework\Frustum.h" />
+    <ClInclude Include="..\Framework\GameClass.h" />
+    <ClInclude Include="..\Framework\GameEntity.h" />
     <ClInclude Include="..\Framework\GameTimer.h" />
     <ClInclude Include="..\Framework\InertialMatrixHelper.h" />
     <ClInclude Include="..\Framework\InputDevice.h" />
@@ -250,17 +256,28 @@
     <ClInclude Include="..\Framework\MD5Mesh.h" />
     <ClInclude Include="..\Framework\MD5Node.h" />
     <ClInclude Include="..\Framework\Mouse.h" />
+    <ClInclude Include="..\Framework\MyGame.h" />
     <ClInclude Include="..\Framework\OBJMesh.h" />
+    <ClInclude Include="..\Framework\Octree.h" />
     <ClInclude Include="..\Framework\OGLRenderer.h" />
     <ClInclude Include="..\Framework\ParticleEmitter.h" />
+    <ClInclude Include="..\Framework\PhysicsNode.h" />
+    <ClInclude Include="..\Framework\PhysicsSystem.h" />
     <ClInclude Include="..\Framework\Plane.h" />
     <ClInclude Include="..\Framework\Quaternion.h" />
     <ClInclude Include="..\Framework\SceneNode.h" />
     <ClInclude Include="..\Framework\Shader.h" />
+    <ClInclude Include="..\Framework\Sound.h" />
+    <ClInclude Include="..\Framework\SoundEmitter.h" />
+    <ClInclude Include="..\Framework\SoundEntity.h" />
+    <ClInclude Include="..\Framework\SoundManager.h" />
+    <ClInclude Include="..\Framework\SoundSystem.h" />
     <ClInclude Include="..\Framework\Spring.h" />
+    <ClInclude Include="..\Framework\SpringDemo.h" />
     <ClInclude Include="..\Framework\Vector2.h" />
     <ClInclude Include="..\Framework\Vector3.h" />
     <ClInclude Include="..\Framework\Vector4.h" />
+    <ClInclude Include="..\Framework\Vehicle.h" />
     <ClInclude Include="..\Framework\Weather.h" />
     <ClInclude Include="..\Framework\Window.h" />
     <ClInclude Include="AssetManager.h" />
@@ -298,6 +315,7 @@
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="PhysicsEngine.h" />
+    <ClInclude Include="RacerGame.h" />
     <ClInclude Include="SelectableEntity2D.h" />
     <ClInclude Include="ShaderPart.h" />
     <ClInclude Include="Spline.h" />
@@ -312,24 +330,40 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Camera.cpp" />
+    <ClCompile Include="..\Framework\CollisionHelper.cpp" />
+    <ClCompile Include="..\Framework\Debuff.cpp" />
     <ClCompile Include="..\Framework\Frustum.cpp" />
+    <ClCompile Include="..\Framework\GameClass.cpp" />
+    <ClCompile Include="..\Framework\GameEntity.cpp" />
     <ClCompile Include="..\Framework\GameTimer.cpp" />
     <ClCompile Include="..\Framework\Keyboard.cpp" />
     <ClCompile Include="..\Framework\Light.cpp" />
+    <ClCompile Include="..\Framework\OldMain.cpp" />
     <ClCompile Include="..\Framework\Matrix4.cpp" />
     <ClCompile Include="..\Framework\MD5Anim.cpp" />
     <ClCompile Include="..\Framework\MD5FileData.cpp" />
     <ClCompile Include="..\Framework\MD5Mesh.cpp" />
     <ClCompile Include="..\Framework\MD5Node.cpp" />
     <ClCompile Include="..\Framework\Mouse.cpp" />
+    <ClCompile Include="..\Framework\MyGame.cpp" />
     <ClCompile Include="..\Framework\OBJMesh.cpp" />
+    <ClCompile Include="..\Framework\Octree.cpp" />
     <ClCompile Include="..\Framework\OGLRenderer.cpp" />
     <ClCompile Include="..\Framework\ParticleEmitter.cpp" />
+    <ClCompile Include="..\Framework\PhysicsNode.cpp" />
+    <ClCompile Include="..\Framework\PhysicsSystem.cpp" />
     <ClCompile Include="..\Framework\Plane.cpp" />
     <ClCompile Include="..\Framework\Quaternion.cpp" />
     <ClCompile Include="..\Framework\SceneNode.cpp" />
     <ClCompile Include="..\Framework\Shader.cpp" />
+    <ClCompile Include="..\Framework\Sound.cpp" />
+    <ClCompile Include="..\Framework\SoundEmitter.cpp" />
+    <ClCompile Include="..\Framework\SoundEntity.cpp" />
+    <ClCompile Include="..\Framework\SoundManager.cpp" />
+    <ClCompile Include="..\Framework\SoundSystem.cpp" />
     <ClCompile Include="..\Framework\Spring.cpp" />
+    <ClCompile Include="..\Framework\SpringDemo.cpp" />
+    <ClCompile Include="..\Framework\Vehicle.cpp" />
     <ClCompile Include="..\Framework\Weather.cpp" />
     <ClCompile Include="..\Framework\Window.cpp" />
     <ClCompile Include="AssetManager.cpp" />
@@ -350,6 +384,7 @@
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="OffsetCamera.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
+    <ClCompile Include="RacerGame.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ShaderPart.cpp" />
     <ClCompile Include="Spline.cpp" />
@@ -387,6 +422,11 @@
     <None Include="..\Resources\Shaders\VelocityVertex.glsl" />
     <None Include="..\Shaders\TechFragment.glsl" />
     <None Include="..\Shaders\TechVertex.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MTDLL\EFX-Util.lib" />
+    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MT\EFX-Util.lib" />
+    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\OpenAL32.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

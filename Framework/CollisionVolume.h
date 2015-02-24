@@ -20,7 +20,8 @@ enum CollisionVolumeType {
 	COLLISION_AABB,
 	COLLISION_PLANE,
 	COLLISION_LINE,
-	COLLISION_CAPSULE
+	COLLISION_CAPSULE,
+	COLLISION_VOL_BBAA
 };
 
 class CollisionVolume {
@@ -34,34 +35,50 @@ protected:
 
 class CollisionSphere : public CollisionVolume {
 public:
-	CollisionSphere(const Vector3& p, float r) {
-		m_pos = p;
-		m_radius = r;
-		type = COLLISION_SPHERE;
+
+	CollisionSphere(float radius): radius(radius) {}
+
+	CollisionVolumeType GetType() const {
+		return COLLISION_SPHERE;
 	}
 
-	virtual void SetPosition(const Vector3& pos) {
-		m_pos = pos;
+	float GetRadius() const {
+		return radius;
 	}
 
-	Vector3 m_pos; // the centre of the sphere
-	float m_radius;
+private:
+	float radius;
 };
 
-class CollisionAABB : public CollisionVolume { // Axis Alligned Bounded Box
+class CollisionAABB : public CollisionVolume {
 public:
-	CollisionAABB(const Vector3& pos, const Vector3& dimensions) {
-		m_pos = pos;
-		m_halfdims = dimensions * 0.5f;
-		type = COLLISION_AABB;
-	}
-	Vector3 m_pos;
-	Vector3 m_halfdims;
+	CollisionAABB(Vector3 halfDim): halfDim(halfDim) {}
 
-	virtual void SetPosition(const Vector3& pos) {
-		m_pos = pos;
+	CollisionVolumeType GetType() const {
+		return COLLISION_AABB;
 	}
+
+	Vector3 getHalfDimensions() const { return halfDim; }
+
+private:
+	Vector3 halfDim;
 };
+
+
+class CollisionBBAA : public CollisionVolume {
+public:
+	CollisionBBAA(Vector3 halfDim): halfDim(halfDim) {}
+
+	CollisionVolumeType GetType() const {
+		return COLLISION_VOL_BBAA;
+	}
+
+	Vector3 getHalfDimensions() const { return halfDim; }
+
+private:
+	Vector3 halfDim;
+};
+
 
 class CollisionPlane : public CollisionVolume {
 public:
@@ -69,6 +86,14 @@ public:
 		m_normal = n;
 		m_distance = d;
 		type = COLLISION_PLANE;
+	}
+
+	Vector3 GetNormal() const {
+		return m_normal;
+	}
+
+	float GetDistance() const {
+		return m_distance;
 	}
 	Vector3 m_normal; //Unit-length plane normal
 	float	m_distance; //Distance from origin
