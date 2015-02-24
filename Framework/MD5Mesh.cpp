@@ -90,7 +90,7 @@ void	MD5Mesh::SkinVertices(const MD5Skeleton &skel) {
 			target->vertices[j].SetTexCoord(subMesh.verts[j].texCoords);
 
 			//And we should start off with a Vector of 0,0,0
-			target->vertices[j].SetPosition(Vector3());
+			target->vertices[j].SetPosition(T3Vector3());
 
 			/*
 			Each vertex has a number of weights, determined by weightElements. The first
@@ -145,7 +145,7 @@ void	MD5Mesh::SkinVertices(const MD5Skeleton &skel) {
 //*/
 void MD5Mesh::RebufferData()	{ // TODO: Fix Interleaving on MD5...
 	/*glBindBuffer(GL_ARRAY_BUFFER, bufferObject[VERTEX_BUFFER]);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, numVertices*sizeof(Vector3), (void*)vertices);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, numVertices*sizeof(T3Vector3), (void*)vertices);
 
 	if(textureCoords) {
 		glBindBuffer(GL_ARRAY_BUFFER, bufferObject[TEXTURE_BUFFER]);
@@ -154,20 +154,20 @@ void MD5Mesh::RebufferData()	{ // TODO: Fix Interleaving on MD5...
 
 	if (colours)	{
 		glBindBuffer(GL_ARRAY_BUFFER, bufferObject[COLOUR_BUFFER]);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, numVertices*sizeof(Vector4), (void*)colours);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, numVertices*sizeof(T3Vector4), (void*)colours);
 	}*/
 
 #ifdef MD5_USE_NORMALS
 	if(normals) {
 		glBindBuffer(GL_ARRAY_BUFFER, bufferObject[NORMAL_BUFFER]);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, numVertices*sizeof(Vector3), (void*)normals);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, numVertices*sizeof(T3Vector3), (void*)normals);
 	}
 #endif
 
 #ifdef MD5_USE_TANGENTS_BUMPMAPS
 	if(tangents) {
 		glBindBuffer(GL_ARRAY_BUFFER, bufferObject[TANGENT_BUFFER]);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, numVertices*sizeof(Vector3), (void*)tangents);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, numVertices*sizeof(T3Vector3), (void*)tangents);
 	}
 #endif
 

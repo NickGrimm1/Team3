@@ -1,8 +1,8 @@
 #include "Plane.h"
 
-Plane::Plane(const Vector3 &normal, float distance, bool normalise) {
+Plane::Plane(const T3Vector3 &normal, float distance, bool normalise) {
 	if(normalise) {
-		float length = Vector3::Dot(normal,normal);
+		float length = T3Vector3::Dot(normal,normal);
 
 		this->normal   = normal		/ length;
 		this->distance = distance	/ length;
@@ -13,19 +13,19 @@ Plane::Plane(const Vector3 &normal, float distance, bool normalise) {
 	}
 }
 
-bool Plane::SphereInPlane(const Vector3 &position, float radius) const {
-	if(Vector3::Dot(position,normal)+distance <= -radius) {
+bool Plane::SphereInPlane(const T3Vector3 &position, float radius) const {
+	if(T3Vector3::Dot(position,normal)+distance <= -radius) {
 		return false;
 	}
 
 	return true;	
 }
 
-bool Plane::PointInPlane(const Vector3 &position) const {
-	float test = Vector3::Dot(position,normal);
+bool Plane::PointInPlane(const T3Vector3 &position) const {
+	float test = T3Vector3::Dot(position,normal);
 	float test2 = test + distance;
 
-	if(Vector3::Dot(position,normal)+distance <= 0.0f) {
+	if(T3Vector3::Dot(position,normal)+distance <= 0.0f) {
 		return false;
 	}
 

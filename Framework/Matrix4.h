@@ -17,10 +17,10 @@ _-_-_-_-_-_-_-""  ""
 
 #include <iostream>
 #include "common.h"
-#include "Vector3.h"
-#include "Vector4.h"
+#include "T3Vector3.h"
+#include "T3Vector4.h"
 
-class Vector3;
+class T3Vector3;
 
 class Matrix4	{
 public:
@@ -36,29 +36,29 @@ public:
 	void	ToIdentity();
 
 	//Gets the OpenGL position vector (floats 12,13, and 14)
-	Vector3 GetPositionVector() const;
+	T3Vector3 GetPositionVector() const;
 	//Sets the OpenGL position vector (floats 12,13, and 14)
-	void	SetPositionVector(const Vector3 in);
+	void	SetPositionVector(const T3Vector3 in);
 
 	//Gets the scale vector (floats 1,5, and 10)
-	Vector3 GetScalingVector() const;
+	T3Vector3 GetScalingVector() const;
 	//Sets the scale vector (floats 1,5, and 10)
-	void	SetScalingVector(const Vector3 &in);
+	void	SetScalingVector(const T3Vector3 &in);
 
 	//Creates a rotation matrix that rotates by 'degrees' around the 'axis'
 	//Analogous to glRotatef
-	static Matrix4 Rotation(float degrees, const Vector3 &axis);
+	static Matrix4 Rotation(float degrees, const T3Vector3 &axis);
 
 	// Creates a rotation matrix that rotates into the co-ordinate scheme defined by x,y,z
-	static Matrix4 Rotation(Vector3 &x, Vector3 &y, Vector3 &z);
+	static Matrix4 Rotation(T3Vector3 &x, T3Vector3 &y, T3Vector3 &z);
 
 	//Creates a scaling matrix (puts the 'scale' vector down the diagonal)
 	//Analogous to glScalef
-	static Matrix4 Scale(const Vector3 &scale);
+	static Matrix4 Scale(const T3Vector3 &scale);
 
 	//Creates a translation matrix (identity, with 'translation' vector at
 	//floats 12, 13, and 14. Analogous to glTranslatef
-	static Matrix4 Translation(const Vector3 &translation);
+	static Matrix4 Translation(const T3Vector3 &translation);
 
 	//Creates a perspective matrix, with 'znear' and 'zfar' as the near and 
 	//far planes, using 'aspect' and 'fov' as the aspect ratio and vertical
@@ -72,7 +72,7 @@ public:
 	//Builds a view matrix suitable for sending straight to the vertex shader.
 	//Puts the camera at 'from', with 'lookingAt' centered on the screen, with
 	//'up' as the...up axis (pointing towards the top of the screen)
-	static Matrix4 BuildViewMatrix(const Vector3 &from, const Vector3 &lookingAt, const Vector3 up = Vector3(0,1,0));
+	static Matrix4 BuildViewMatrix(const T3Vector3 &from, const T3Vector3 &lookingAt, const T3Vector3 up = T3Vector3(0,1,0));
 
 	Matrix4 GetTransposedRotation();
 
@@ -91,8 +91,8 @@ public:
 		return out;
 	}
 
-	inline Vector3 operator*(const Vector3 &v) const {
-		Vector3 vec;
+	inline T3Vector3 operator*(const T3Vector3 &v) const {
+		T3Vector3 vec;
 
 		float temp;
 
@@ -109,8 +109,8 @@ public:
 		return vec;
 	};
 
-		inline Vector4 operator*(const Vector4 &v) const {
-		return Vector4(
+		inline T3Vector4 operator*(const T3Vector4 &v) const {
+		return T3Vector4(
 			v.x*values[0] + v.y*values[4] + v.z*values[8]  +v.w * values[12],
 			v.x*values[1] + v.y*values[5] + v.z*values[9]  +v.w * values[13],
 			v.x*values[2] + v.y*values[6] + v.z*values[10] +v.w * values[14],

@@ -269,6 +269,8 @@ public:
 	{
 		if (scalar != 0)
 			return Vector2(x / scalar, y / scalar);
+		else
+			return Vector2(x, y);
 		//else
 			//throw DivideByZeroException();
 	}

@@ -1,6 +1,6 @@
 #include "SceneNode.h"
 
-SceneNode::SceneNode(Mesh*mesh, Vector4 colour)	{
+SceneNode::SceneNode(Mesh*mesh, T3Vector4 colour)	{
 	awake				= true;
 	this->mesh			= mesh;
 	this->colour		= colour;
@@ -9,7 +9,7 @@ SceneNode::SceneNode(Mesh*mesh, Vector4 colour)	{
 	boundingRadius		= 100.0f;
 	distanceFromCamera	= 0.0f;
 	
-	modelScale			= Vector3(1,1,1);
+	modelScale			= T3Vector3(1,1,1);
 }
 
 SceneNode::SceneNode(DrawableEntity3D* entity)	{
@@ -17,7 +17,7 @@ SceneNode::SceneNode(DrawableEntity3D* entity)	{
 	awake				= true;
 	parent				= NULL;
 	distanceFromCamera	= 0.0f;
-	modelScale			= Vector3(1,1,1);
+	modelScale			= T3Vector3(1,1,1);
 }
 
 SceneNode::~SceneNode(void)	{

@@ -26,6 +26,8 @@ _-_-_-_-_-_-_-|   /\_/\   NYANYANYAN
 _-_-_-_-_-_-_-""  ""   
 
 *//////////////////////////////////////////////////////////////////////////////
+#if WINDOWS_BUILD
+
 #include "common.h"
 #ifdef WEEK_2_CODE
 #pragma once
@@ -100,4 +102,6 @@ protected:
 	float				frameTime;
 	unsigned int		currentAnimFrame;	//Current frame of animation
 };
+#endif
+
 #endif

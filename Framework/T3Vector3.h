@@ -15,7 +15,9 @@ Version: 1.0.0 05/02/2015.</summary>
 #include "common.h"
 #include <math.h>
 
-class Vector3
+using namespace std;
+
+class T3Vector3
 {
 public:
 #pragma region Variables
@@ -30,12 +32,12 @@ public:
 	<param name='y'>The y component. Default is 0.</param>
 	<param name='z'>The z component. Default is 0.</param>
 	*/
-	Vector3(const float x = 0, const float y = 0, const float z = 0) : x(x), y(y), z(z)
+	T3Vector3(const float x = 0, const float y = 0, const float z = 0) : x(x), y(y), z(z)
 	{ }
 	/**
 	<summary>Destructor.</summary>
 	*/
-	~Vector3()
+	~T3Vector3()
 	{
 	}
 	/**
@@ -69,7 +71,7 @@ public:
 	<param name='in'>The second vector.</param>
 	<returns>true if this vector is shorter than the other.</returns>
 	*/
-	inline bool operator<(const Vector3 &in) const
+	inline bool operator<(const T3Vector3 &in) const
 	{
 		return LengthSquared() < in.LengthSquared();
 	}
@@ -78,7 +80,7 @@ public:
 	<param name='in'>The second vector.</param>
 	<returns>true if this vector is shorter than or equal in length to the other.</returns>
 	*/
-	inline bool operator<=(const Vector3 &in) const
+	inline bool operator<=(const T3Vector3 &in) const
 	{
 		return LengthSquared() <= in.LengthSquared();
 	}
@@ -87,7 +89,7 @@ public:
 	<param name='in'>The second vector.</param>
 	<returns>true if this vector is longer than the other.</returns>
 	*/
-	inline bool operator>(const Vector3 &in) const
+	inline bool operator>(const T3Vector3 &in) const
 	{
 		return LengthSquared() > in.LengthSquared();
 	}
@@ -96,7 +98,7 @@ public:
 	<param name='in'>The second vector.</param>
 	<returns>true if this vector is longer than or equal in length to the other.</returns>
 	*/
-	inline bool operator>=(const Vector3 &in) const
+	inline bool operator>=(const T3Vector3 &in) const
 	{
 		return LengthSquared() >= in.LengthSquared();
 	}
@@ -105,7 +107,7 @@ public:
 	<param name='in'>The second vector.</param>
 	<returns>true if this vector is equal to the other, within a tolerance of 10^-5.</returns>
 	*/
-	inline bool operator==(const Vector3 &in) const
+	inline bool operator==(const T3Vector3 &in) const
 	{
 		return (abs(x - in.x < 0.00001f) && abs(y - in.y < 0.00001f) && abs(z - in.z < 0.00001f));
 	}
@@ -114,7 +116,7 @@ public:
 	<param name='in'>The second vector.</param>
 	<returns>true if this vector is not equal to the other, within a tolerance of 10^-5.</returns>
 	*/
-	inline bool operator!=(const Vector3 &in) const
+	inline bool operator!=(const T3Vector3 &in) const
 	{
 		return !(abs(x - in.x < 0.00001f) && abs(y - in.y < 0.00001f) && abs(z - in.z < 0.00001f));
 	}
@@ -125,15 +127,15 @@ public:
 	<param name='in'>The vector to add.</param>
 	<returns>The resulting vector.</returns>
 	*/
-	Vector3 Add(const Vector3 &in) const 
+	T3Vector3 Add(const T3Vector3 &in) const 
 	{
-		return Vector3(x + in.x, y + in.y, z + in.z);
+		return T3Vector3(x + in.x, y + in.y, z + in.z);
 	}
 	/**
 	<summary>Adds a vector to this one, modifying this.</summary>
 	<param name='in'>The vector to add.</param>
 	*/
-	void AddTo(const Vector3 &in)
+	void AddTo(const T3Vector3 &in)
 	{
 		x += in.x;
 		y += in.y;
@@ -145,16 +147,16 @@ public:
 	<param name='v2'>The second vector.</param>
 	<returns>The resulting vector.</returns>
 	*/
-	static Vector3 Add(const Vector3 &v1, const Vector3 &v2)
+	static T3Vector3 Add(const T3Vector3 &v1, const T3Vector3 &v2)
 	{
-		return Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+		return T3Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
 	}
 	/**
 	<summary>Adds a vector to this one, without modifying the vector.</summary>
 	<param name='in'>The vector to add.</param>
 	<returns>The resulting vector.</returns>
 	*/
-	Vector3 operator+(const Vector3 &in) const  
+	T3Vector3 operator+(const T3Vector3 &in) const  
 	{ 
 		return Add(in); 
 	}
@@ -162,7 +164,7 @@ public:
 	<summary>Adds a vector to this one, modifying this.</summary>
 	<param name='in'>The vector to add.</param>
 	*/
-	void operator+=(const Vector3 &in) 
+	void operator+=(const T3Vector3 &in) 
 	{ 
 		AddTo(in);
 	}
@@ -173,15 +175,15 @@ public:
 	<param name='in'>The vector to subtract.</param>
 	<returns>The resulting vector.</returns>
 	*/
-	Vector3 Subtract(const Vector3 &in) const 
+	T3Vector3 Subtract(const T3Vector3 &in) const 
 	{
-		return Vector3(in.x - x, in.y - y, in.z - z);
+		return T3Vector3(in.x - x, in.y - y, in.z - z);
 	}
 	/**
 	<summary>Subtracts a vector from this one, modifying this.</summary>
 	<param name='in'>The vector to subtract.</param>
 	*/
-	void SubtractFrom(const Vector3 &in)
+	void SubtractFrom(const T3Vector3 &in)
 	{
 		x = in.x - x;
 		y = in.y - y;
@@ -193,16 +195,16 @@ public:
 	<param name='v2'>The second vector.</param>
 	<returns>The resulting vector.</returns>
 	*/
-	static Vector3 Subtract(const Vector3 &v1, const Vector3 &v2)
+	static T3Vector3 Subtract(const T3Vector3 &v1, const T3Vector3 &v2)
 	{
-		return Vector3(v2.x - v1.x, v2.y - v1.y, v2.z - v1.z);
+		return T3Vector3(v2.x - v1.x, v2.y - v1.y, v2.z - v1.z);
 	}
 	/**
 	<summary>Subtracts a vector from this one, without modifying the vector.</summary>
 	<param name='in'>The vector to subtract.</param>
 	<returns>The resulting vector.</returns>
 	*/
-	Vector3 operator-(const Vector3 &in) const 
+	T3Vector3 operator-(const T3Vector3 &in) const 
 	{
 		return Subtract(in);
 	}
@@ -210,7 +212,7 @@ public:
 	<summary>Subtracts a vector from this one, modifying this.</summary>
 	<param name='in'>The vector to subtract.</param>
 	*/
-	void operator-=(const Vector3 &in)
+	void operator-=(const T3Vector3 &in)
 	{
 		SubtractFrom(in);
 	}
@@ -221,9 +223,9 @@ public:
 	<param name='scalar'>The scalar.</param>
 	<returns>The resulting vector.</returns>
 	*/
-	Vector3 Multiply(const float scalar) const
+	T3Vector3 Multiply(const float scalar) const
 	{
-		return Vector3(x * scalar, y * scalar, z * scalar);
+		return T3Vector3(x * scalar, y * scalar, z * scalar);
 	}
 	/**
 	<summary>Multiplies this vector by a scalar, modifying this.</summary>
@@ -242,16 +244,16 @@ public:
 	<param name='scalar'>The scalar.</param>
 	<returns>The resulting vector.</returns>
 	*/
-	static Vector3 Multiply(const Vector3 &vector, const float scalar)
+	static T3Vector3 Multiply(const T3Vector3 &v, const float scalar)
 	{
-		return Vector3(vector.x * scalar, vector.y * scalar, vector.z * scalar);
+		return T3Vector3(v.x * scalar, v.y * scalar, v.z * scalar);
 	}
 	/**
 	<summary>Multiplies this vector by a scalar, without modifying the vector.</summary>
 	<param name='scalar'>The scalar.</param>
 	<returns>The resulting vector.</returns>
 	*/
-	Vector3 operator*(const float in) const 
+	T3Vector3 operator*(const float in) const 
 	{
 		return Multiply(in);
 	}
@@ -271,11 +273,12 @@ public:
 	<param name='scalar'>The scalar.</param>
 	<returns>The resulting vector.</returns>
 	*/
-	Vector3 Divide(const float scalar) const
+	T3Vector3 Divide(const float scalar) const
 	{
 		if (scalar != 0)
-			return Vector3(x / scalar, y / scalar, z / scalar);
-		//else
+			return T3Vector3(x / scalar, y / scalar, z / scalar);
+		else
+			return T3Vector3(x,y,z);
 			//throw DivideByZeroException();
 	}
 	/**
@@ -291,7 +294,6 @@ public:
 			y /= scalar;
 			z /= scalar;
 		}
-		//else
 			//throw DivideByZeroException();
 	}
 	/**
@@ -300,16 +302,16 @@ public:
 	<param name='scalar'>The scalar.</param>
 	<returns>The resulting vector.</returns>
 	*/
-	static Vector3 Divide(const Vector3 &vector, const float scalar)
+	static T3Vector3 Divide(const T3Vector3 &v, const float scalar)
 	{
-		return Vector3(vector.x / scalar, vector.y / scalar, vector.z / scalar);
+		return T3Vector3(v.x / scalar, v.y / scalar, v.z / scalar);
 	}
 	/**
 	<summary>Divides this vector by a scalar, without altering the vector.</summary>
 	<param name='scalar'>The scalar.</param>
 	<returns>The resulting vector.</returns>
 	*/
-	Vector3 operator/(const float in) const
+	T3Vector3 operator/(const float in) const
 	{
 		return Divide(in);
 	}
@@ -329,9 +331,9 @@ public:
 	<param name='in'>The other vector.</param>
 	<returns>The resulting vector.</returns>
 	*/
-	Vector3 Cross(const Vector3 &in) const
+	T3Vector3 Cross(const T3Vector3 &in) const
 	{
-		return Vector3(y * in.z - z * in.y, z * in.x - x * in.z, x * in.y - y * in.x);
+		return T3Vector3(y * in.z - z * in.y, z * in.x - x * in.z, x * in.y - y * in.x);
 	}
 	/**
 	<summary>Finds the cross product (Vector Product) of the first vector and the second vector.</summary>
@@ -339,16 +341,16 @@ public:
 	<param name='v2'>The second vector.</param>
 	<returns>The resulting vector.</returns>
 	*/
-	static Vector3 Cross(const Vector3 &v1, const Vector3 &v2)
+	static T3Vector3 Cross(const T3Vector3 &v1, const T3Vector3 &v2)
 	{
-		return Vector3(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x);
+		return T3Vector3(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x);
 	}
 	/**
 	<summary>Finds the cross product (Vector Product) of this and another vector.</summary>
 	<param name='in'>The other vector.</param>
 	<returns>The resulting vector.</returns>
 	*/
-	Vector3 operator%(const Vector3 &in)
+	T3Vector3 operator%(const T3Vector3 &in)
 	{
 		return Cross(in);
 	}
@@ -359,7 +361,7 @@ public:
 	<param name='in'>The other vector.</param>
 	<returns>The scalar product.</returns>
 	*/
-	float Dot(const Vector3 &in) const
+	float Dot(const T3Vector3 &in) const
 	{
 		return x * in.x + y * in.y + z * in.z;
 	}
@@ -369,7 +371,7 @@ public:
 	<param name='v2'>The second vector.</param>
 	<returns>The scalar product.</returns>
 	*/
-	static float Dot(const Vector3 &v1, const Vector3 &v2)
+	static float Dot(const T3Vector3 &v1, const T3Vector3 &v2)
 	{
 		return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 	}
@@ -378,7 +380,7 @@ public:
 	<param name='in'>The other vector.</param>
 	<returns>The scalar product.</returns>
 	*/
-	float operator*(const Vector3 &in) const
+	float operator*(const T3Vector3 &in) const
 	{
 		return Dot(in);
 	}
@@ -403,9 +405,9 @@ public:
 	<summary>Finds the normal of the this vector without modifying it.</summary>
 	<returns>The normal (unit) vector.</returns>
 	*/
-	Vector3 Normal() const
+	T3Vector3 Normal() const
 	{
-		Vector3 output = Vector3(x, y, z);
+		T3Vector3 output = T3Vector3(x, y, z);
 		output.Normalise();
 		return output;
 	}
@@ -414,9 +416,9 @@ public:
 	<param name='vector'>The vector.</param>
 	<returns>The normal (unit) vector.</returns>
 	*/
-	static Vector3 Normal(const Vector3 &in)
+	static T3Vector3 Normal(const T3Vector3 &in)
 	{
-		Vector3 output = Vector3(in.x, in.y, in.z);
+		T3Vector3 output = T3Vector3(in.x, in.y, in.z);
 		output.Normalise();
 		return output;
 	}
@@ -425,9 +427,9 @@ public:
 	<param name='in'>The other vector.</param>
 	<returns>The unit cross-product vector.</returns>
 	*/
-	Vector3 UnitOrthogonal(const Vector3 &in) const
+	T3Vector3 UnitOrthogonal(const T3Vector3 &in) const
 	{
-		Vector3 output = Cross(in);
+		T3Vector3 output = Cross(in);
 		output.Normalise();
 		return output;
 	}
@@ -437,9 +439,9 @@ public:
 	<param name='v2'>The second vector.</param>
 	<returns>The unit cross-product vector.</returns>
 	*/
-	static Vector3 UnitOrthogonal(const Vector3 &v1, const Vector3 &v2) 
+	static T3Vector3 UnitOrthogonal(const T3Vector3 &v1, const T3Vector3 &v2) 
 	{
-		Vector3 output = Cross(v1, v2);
+		T3Vector3 output = Cross(v1, v2);
 		output.Normalise();
 		return output;
 	}
@@ -449,9 +451,9 @@ public:
 	<summary>Negates this vector without modifing it.</summary>
 	<returns>A vector with each component of this negated.</returns>
 	*/
-	Vector3 operator-() const
+	T3Vector3 operator-() const
 	{
-		return Vector3(-x, -y, -z);
+		return T3Vector3(-x, -y, -z);
 	}
 	/**
 	<summary>Negates this vector.</summary>
@@ -468,23 +470,23 @@ public:
 	/**
 		<summary>A unit vector in positive X.</summary>
 	*/
-	static Vector3 UnitX()
+	static T3Vector3 UnitX()
 	{
-		return Vector3(1.0f);
+		return T3Vector3(1.0f);
 	}
 	/**
 		<summary>A unit vector in positive Y.</summary>
 	*/
-	static Vector3 UnitY()
+	static T3Vector3 UnitY()
 	{
-		return Vector3(0.0f, 1.0f);
+		return T3Vector3(0.0f, 1.0f);
 	}
 	/**
 		<summary>A unit vector in positive Z.</summary>
 	*/
-	static Vector3 UnitZ()
+	static T3Vector3 UnitZ()
 	{
-		return Vector3(0.0f, 0.0f, 1.0f);
+		return T3Vector3(0.0f, 0.0f, 1.0f);
 	}
 #pragma endregion
 };

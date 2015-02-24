@@ -11,7 +11,6 @@ _-_-_-_-_-_-_-""  ""
 *//////////////////////////////////////////////////////////////////////////////
 
 #pragma once
- #if WINDOWS_BUILD
 #define WEEK_2_CODE
 #define WEEK_3_CODE
 
@@ -39,13 +38,3 @@ static inline double DegToRad(const double rad)	{
 #define MESHDIR		"../Resources/Meshes/"
 #define TEXTUREDIR  "../Resources/Textures/"
 #define SOUNDSDIR	"../Resources/Sounds/"
-
-class DivideByZeroException
-{
-	virtual const char* reason() const throw()
-	{
-		return "Divide By Zero";
-	}
-};
-
-#endif

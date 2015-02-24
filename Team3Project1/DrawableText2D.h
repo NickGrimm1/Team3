@@ -34,7 +34,7 @@ public:
 	<param name='origin'>The origin around which this object will rotate, relative to the object's draw area. Default is the center (0.5, 0.5).</param>
 	<param name='blendColor'>The colour. Default is White (1,1,1,1).</param>	
 	*/
-	DrawableText2D(float x, float y, int depth, float width, float height, const string& text, Font* font, float rotation = 0, Vector2 origin = Vector2(0.5f, 0.5f), Vector4 blendColor = Vector4(1.0f, 1.0f, 1.0f ,1.0f)) : DrawableEntity2D(x, y, depth, width, height, DrawableType::Text, blendColor), font(font), text(text), rotation(rotation), origin(origin)
+	DrawableText2D(float x, float y, int depth, float width, float height, const string& text, Font* font, float rotation = 0, Vector2 origin = Vector2(0.5f, 0.5f), T3Vector4 blendColor = T3Vector4(1.0f, 1.0f, 1.0f ,1.0f)) : DrawableEntity2D(x, y, depth, width, height, DrawableType::Text, blendColor), font(font), text(text), rotation(rotation), origin(origin)
 	{ }
 
 	/**

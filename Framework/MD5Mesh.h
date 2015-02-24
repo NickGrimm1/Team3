@@ -1,3 +1,5 @@
+#if WINDOWS_BUILD
+
 /******************************************************************************
 Class:MD5Mesh
 Implements:Mesh, MD5MeshInstance
@@ -60,7 +62,7 @@ than performing everything on the GPU.
 
 #include "ChildMeshInterface.h"
 #include "Quaternion.h"
-#include "Vector3.h"
+#include "T3Vector3.h"
 #include "Vector2.h"
 
 #include "../Team3Project1/Mesh.h"
@@ -123,9 +125,10 @@ protected:
 	//those inside a new vec2 attribute
 	Vector2*			weights; 
 
-	GLuint				weightObject;
+	unsigned int				weightObject;
 #endif
 
 	const MD5FileData &	type;
 };
+#endif
 #endif

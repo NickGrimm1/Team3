@@ -6,12 +6,12 @@
 class Weather :	public ParticleEmitter
 {
 public:
-	Weather(Vector3 dim) : ParticleEmitter(){ dimensions = dim; }
+	Weather(T3Vector3 dim) : ParticleEmitter(){ dimensions = dim; }
 	virtual ~Weather(void){};
 
 	void Update(float msec);
 protected:
-	Vector3	  dimensions;
+	T3Vector3	  dimensions;
 
 	Particle* GetFreeParticle();
 };

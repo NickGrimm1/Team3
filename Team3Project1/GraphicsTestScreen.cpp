@@ -33,9 +33,9 @@ void GraphicsTestScreen::LoadContent() {
 		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.tga", SOIL_FLAG_MIPMAPS),
 		NULL,
 		50.0f,
-		Vector3(0,0,0),
-		Quaternion::FromMatrix(Matrix4::Rotation(90.0f, Vector3(1,0,0))),
-		Vector3(50,50,50));
+		T3Vector3(0,0,0),
+		Quaternion::FromMatrix(Matrix4::Rotation(90.0f, T3Vector3(1,0,0))),
+		T3Vector3(50,50,50));
 	AddDrawable(ent);
 
 	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
@@ -45,9 +45,9 @@ void GraphicsTestScreen::LoadContent() {
 		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", SOIL_FLAG_INVERT_Y), 
 		NULL,
 		10.0f, 
-		Vector3(5,0,5), 
+		T3Vector3(5,0,5), 
 		Quaternion::EulerAnglesToQuaternion(0,0,0),
-		Vector3(2,10,2));
+		T3Vector3(2,10,2));
 	AddDrawable(ent);
 
 	
@@ -60,12 +60,12 @@ void GraphicsTestScreen::LoadContent() {
 	//PointLight::SetMesh(sphereMesh);
 
 
-	//light = GameStateManager::Graphics()->AddSpotLight(Vector3(0, 0, 0), Vector3(0,1,0), Vector3(1,0,0), 1.0f, 45.0f, Vector4(1,1,1,1), Vector4(1,1,1,1), false);
+	//light = GameStateManager::Graphics()->AddSpotLight(T3Vector3(0, 0, 0), T3Vector3(0,1,0), T3Vector3(1,0,0), 1.0f, 45.0f, T3Vector4(1,1,1,1), T3Vector4(1,1,1,1), false);
 	
-	//PointLight* l = GameStateManager::Graphics()->AddPointLight(Vector3(0,5,0), 10, Vector4(1,1,1,1), Vector4(1,1,1,1), false); 
+	//PointLight* l = GameStateManager::Graphics()->AddPointLight(T3Vector3(0,5,0), 10, T3Vector4(1,1,1,1), T3Vector4(1,1,1,1), false); 
 
 	camera = new FreeCamera();
-	camera->SetPosition(Vector3(0,10.0f, 80.0f));
+	camera->SetPosition(T3Vector3(0,10.0f, 80.0f));
 	//camera->AddYaw(180.0f);
 	GameStateManager::Graphics()->SetCamera(camera);
 
@@ -73,7 +73,7 @@ void GraphicsTestScreen::LoadContent() {
 }
 
 void GraphicsTestScreen::Update() { 
-	//Matrix4 m = Matrix4::Rotation(0.016f, Vector3(0,1,0));
+	//Matrix4 m = Matrix4::Rotation(0.016f, T3Vector3(0,1,0));
 	//ent->AddRotation(Quaternion::FromMatrix(m));
 }
 
@@ -85,22 +85,22 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 		switch (key) {
 
 		case KeyboardEvents::KEYBOARD_W:
-			camera->AddMovement(Vector3(0,0,1));
+			camera->AddMovement(T3Vector3(0,0,1));
 			break;
 		case KeyboardEvents::KEYBOARD_S:
-			camera->AddMovement(Vector3(0,0,-1));
+			camera->AddMovement(T3Vector3(0,0,-1));
 			break;
 		case KeyboardEvents::KEYBOARD_A:
-			camera->AddMovement(Vector3(1,0,0));
+			camera->AddMovement(T3Vector3(1,0,0));
 			break;
 		case KeyboardEvents::KEYBOARD_D:
-			camera->AddMovement(Vector3(-1,0,0));
+			camera->AddMovement(T3Vector3(-1,0,0));
 			break;
 		case KeyboardEvents::KEYBOARD_SHIFT:
-			camera->AddMovement(Vector3(0,1,0));
+			camera->AddMovement(T3Vector3(0,1,0));
 			break;
 		case KeyboardEvents::KEYBOARD_SPACE:
-			camera->AddMovement(Vector3(0,-1,0));
+			camera->AddMovement(T3Vector3(0,-1,0));
 			break;
 		case KeyboardEvents::KEYBOARD_LEFT:
 			camera->AddYaw(1);

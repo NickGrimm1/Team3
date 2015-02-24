@@ -1,8 +1,15 @@
 #pragma once
+#if WINDOWS_BUILD
 #include "Texture.h"
+#endif
+#if PS3_BUILD
+#include "../Main_PS3_PPU/TexturePS3.h"
+#endif
 #include <vector>
 
 using namespace std;
+
+class Texture;
 
 class LoadedTexture
 {

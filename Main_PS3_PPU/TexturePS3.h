@@ -1,6 +1,8 @@
 #pragma once
 #if PS3_BUILD
 #include "../Team3Project1/TextureCommon.h"
+
+#include <cell/gcm.h>
 #include <string>
 
 using namespace std;
@@ -22,7 +24,7 @@ class Texture : public TextureCommon
 {
 public:
 	Texture(string filename, unsigned int flags);
-	CellGCMTexture* GetTexture() { return texture; }
+	CellGcmTexture* GetTexture() { return texture; }
 private:
 	CellGcmTexture* texture;
 	CellGcmTexture* LoadTGA(std::string name);

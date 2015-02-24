@@ -31,8 +31,8 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 	Stores the loaded in vertex attributes
 	*/
 	std::vector<Vector2>inputTexCoords;
-	std::vector<Vector3>inputVertices;
-	std::vector<Vector3>inputNormals;
+	std::vector<T3Vector3>inputVertices;
+	std::vector<T3Vector3>inputNormals;
 
 	/* 
 	Stores the loaded in materials
@@ -86,12 +86,12 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 			getline(f, currentLine); // TODO - maybe save obj name
 		}
 		else if(currentLine == OBJVERT) {	//This line is a vertex
-			Vector3 vertex;
+			T3Vector3 vertex;
 			f >> vertex.x; f >> vertex.y; f >> vertex.z;
 			inputVertices.push_back(vertex);
 		}
 		else if(currentLine == OBJNORM) {	//This line is a Normal!
-			Vector3 normal;
+			T3Vector3 normal;
 			f >> normal.x; f >> normal.y; f >> normal.z;
 			inputNormals.push_back(normal);
 		}
@@ -264,6 +264,7 @@ you've been building up in the Mesh class as the tutorials go on, will
 automatically be used by this overloaded function. Once 'this' has been drawn,
 all of the children of 'this' will be drawn
 */
+#if WINDOWS_BUILD
 void OBJMesh::Draw() {
 	Mesh::Draw();
 
@@ -271,7 +272,7 @@ void OBJMesh::Draw() {
 		children.at(i)->Draw();
 	}
 };
-
+#endif
 void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, MTLInfo>& materials) {
 	if(mtlType.empty() || mtlFile.empty()) {
 		return;
@@ -396,6 +397,6 @@ void	OBJMesh::FixTextures(MTLInfo &info) {
 
 		info.bump = temp;
 
-		info.bumpNum = SOIL_load_OGL_texture(string(TEXTUREDIR + info.bump).c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y |  SOIL_FLAG_TEXTURE_REPEATS);
+		//info.bumpNum = SOIL_load_OGL_texture(string(TEXTUREDIR + info.bump).c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y |  SOIL_FLAG_TEXTURE_REPEATS);
 	}
 }

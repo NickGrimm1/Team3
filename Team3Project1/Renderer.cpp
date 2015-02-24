@@ -252,7 +252,7 @@ void Renderer::DrawScene()
 	projMatrix = perspectiveMatrix;
 	UpdateShaderMatrices();
 	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &camera->GetPosition());
-	glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "nodeColour"), 1, (float*) &Vector4(1,1,1,1));
+	glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "nodeColour"), 1, (float*) &T3Vector4(1,1,1,1));
 
 	// Pass any light/shadow data for any lights which generate shadows into the renderer
 	unsigned int shadowCount = 0;
@@ -260,7 +260,7 @@ void Renderer::DrawScene()
 	for (unsigned int i = 0; i < lights.size(); i++) {
 		if (lights[i]->GetShadowTexture() > 0) { // Shadow depth texture exists for light, so use
 			// Calculate the view projection matrix for the light so can sample shadow map (binding to textureMatrix for the minute
-			Matrix4 shadowMatrix = biasMatrix * lights[i]->GetProjectionMatrix() * lights[i]->GetViewMatrix(Vector3(0,0,0)); // TODO - handle point light shadows properly
+			Matrix4 shadowMatrix = biasMatrix * lights[i]->GetProjectionMatrix() * lights[i]->GetViewMatrix(T3Vector3(0,0,0)); // TODO - handle point light shadows properly
 			
 			sprintf_s(buffer, 20, "shadowProjMatrix[%d]", i);
 			glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), buffer), 1, false, (float*) &shadowMatrix);
@@ -346,7 +346,7 @@ void Renderer::ShadowPass()
 		glClear(GL_DEPTH_BUFFER_BIT);
 		
 		projMatrix		= lights[i]->GetProjectionMatrix();
-		viewMatrix		= lights[i]->GetViewMatrix(Vector3(0,0,0)); // TODO - handle point light shadows properly
+		viewMatrix		= lights[i]->GetViewMatrix(T3Vector3(0,0,0)); // TODO - handle point light shadows properly
 		UpdateShaderMatrices();
 
 		// Draw Scene
@@ -578,9 +578,9 @@ void Renderer::Draw2DOverlay() {
 void Renderer::Draw2DText(DrawableText2D& text) {
 	TextMesh* textMesh = new TextMesh(text.GetText(), *text.GetFont());
 	
-	Vector3 origin = Vector3(text.GetOrigin().x * text.width, text.GetOrigin().y * text.height, 0);
-	Matrix4 rotation = Matrix4::Translation(origin) * Matrix4::Rotation(text.GetRotation(), Vector3(0,0,-1)) * Matrix4::Translation(origin * -1.0f);
-	modelMatrix = Matrix4::Translation(Vector3(text.x, height - text.y, 0)) * rotation * Matrix4::Scale(Vector3(text.width / (float) text.GetText().length(), text.height, 1));
+	T3Vector3 origin = T3Vector3(text.GetOrigin().x * text.width, text.GetOrigin().y * text.height, 0);
+	Matrix4 rotation = Matrix4::Translation(origin) * Matrix4::Rotation(text.GetRotation(), T3Vector3(0,0,-1)) * Matrix4::Translation(origin * -1.0f);
+	modelMatrix = Matrix4::Translation(T3Vector3(text.x, height - text.y, 0)) * rotation * Matrix4::Scale(T3Vector3(text.width / (float) text.GetText().length(), text.height, 1));
 	textureMatrix.ToIdentity();	
 	UpdateShaderMatrices();
 
@@ -592,9 +592,9 @@ void Renderer::Draw2DText(DrawableText2D& text) {
 }
 
 void Renderer::Draw2DTexture(DrawableTexture2D& texture) {
-	Vector3 origin = Vector3(texture.GetOrigin().x * texture.width, texture.GetOrigin().y * texture.height, 0);
-	Matrix4 rotation = Matrix4::Translation(origin) * Matrix4::Rotation(texture.GetRotation(), Vector3(0,0,-1)) * Matrix4::Translation(origin * -1.0f);
-	modelMatrix = Matrix4::Translation(Vector3(texture.x, height - texture.y, 0)) * rotation * Matrix4::Scale(Vector3(texture.width, texture.height, 1));
+	T3Vector3 origin = T3Vector3(texture.GetOrigin().x * texture.width, texture.GetOrigin().y * texture.height, 0);
+	Matrix4 rotation = Matrix4::Translation(origin) * Matrix4::Rotation(texture.GetRotation(), T3Vector3(0,0,-1)) * Matrix4::Translation(origin * -1.0f);
+	modelMatrix = Matrix4::Translation(T3Vector3(texture.x, height - texture.y, 0)) * rotation * Matrix4::Scale(T3Vector3(texture.width, texture.height, 1));
 	textureMatrix.ToIdentity();	
 	UpdateShaderMatrices();
 

@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 /**
 <summary>Renderer pipline class,
 contains all the methods and variables needed to output
@@ -28,12 +29,12 @@ Version: 0.0.1 03/02/2015.</summary>
 
 /*
 struct LightData {
-	Vector4*	lightColour;
-	Vector4*	lightSpecColour;
+	T3Vector4*	lightColour;
+	T3Vector4*	lightSpecColour;
 
-	Vector3*	lightPos;
-	Vector3*	lightDir;
-	Vector3*	cameraPos;
+	T3Vector3*	lightPos;
+	T3Vector3*	lightDir;
+	T3Vector3*	cameraPos;
 
 	float		lightRadius;
 	float		lightAngle;
@@ -60,8 +61,8 @@ public:
 
 	void			SetSkyBoxTexture(GLuint tex) {skyBoxTex = tex;}
 
-	Vector4			GetAmbientColour() const {return ambientLightColour;}
-	void			SetAmbientColour(Vector4& colour) {ambientLightColour = colour;}
+	T3Vector4			GetAmbientColour() const {return ambientLightColour;}
+	void			SetAmbientColour(T3Vector4& colour) {ambientLightColour = colour;}
 
 	bool			GetRenderContextForThread();
 	bool			DropRenderContextForThread();
@@ -134,9 +135,10 @@ protected:
 	GLuint			lightSpecularTex;
 	GLuint			postProcessingTex[2]; // At start of post-processing, postProcessingTex[0] holds the rendered scene
 
-	Vector4			ambientLightColour; // The scenes ambient light settings
+	T3Vector4			ambientLightColour; // The scenes ambient light settings
 
 	Mesh*			screenMesh;			// A quad mesh for drawing screen filling textures
 
 	MutexClass		openglMutex;		// Prevents different threads for using OpenGL at same time	
 };
+#endif

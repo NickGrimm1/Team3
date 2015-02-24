@@ -65,8 +65,8 @@ void GraphicsEngine::Run() {
 		sceneRoot->Update(1.0f / RENDER_HZ); // TODO - sort out proper timestep value - or remove timestep if not needed
 		
 		// Reset scene bounding box volume
-		boundingMax = Vector3(0,0,0);
-		boundingMin = Vector3(0,0,0);		
+		boundingMax = T3Vector3(0,0,0);
+		boundingMin = T3Vector3(0,0,0);		
 
 		if (camera != NULL)
 		{
@@ -84,8 +84,8 @@ void GraphicsEngine::Run() {
 		if (camera != NULL) // Check if we have a camera - the game may not have initialised yet!!!
 		{
 			Matrix4 viewMatrix = camera->BuildViewMatrix();
-			Vector3 camMin = viewMatrix * boundingMin;
-			Vector3 camMax = viewMatrix * boundingMax;
+			T3Vector3 camMin = viewMatrix * boundingMin;
+			T3Vector3 camMax = viewMatrix * boundingMax;
 			DirectionalLight::UpdateLightVolume(camMin.z, camMax.z, camMax.x, camMin.x, camMax.y, camMin.y);
 		}
 
@@ -105,21 +105,21 @@ void GraphicsEngine::Run() {
 }
 
 // TODO - deal with castsShadows
-PointLight* GraphicsEngine::AddPointLight(Vector3 lightPosition, float lightRadius, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow) {
+PointLight* GraphicsEngine::AddPointLight(T3Vector3 lightPosition, float lightRadius, T3Vector4 diffuseColour, T3Vector4 specularColour, bool castsShadow) {
 	unsigned int shadowTex = castsShadow ? renderer->CreateShadowTexture() : 0;
 	PointLight* l = new PointLight(lightPosition, diffuseColour, specularColour, lightRadius, shadowTex);
 	lights.push_back(l);
 	return l;
 }
 
-DirectionalLight* GraphicsEngine::AddDirectionalLight(Vector3 lightDirection, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow) {
+DirectionalLight* GraphicsEngine::AddDirectionalLight(T3Vector3 lightDirection, T3Vector4 diffuseColour, T3Vector4 specularColour, bool castsShadow) {
 	unsigned int shadowTex = castsShadow ? renderer->CreateShadowTexture() : 0;
 	DirectionalLight* l = new DirectionalLight(lightDirection, diffuseColour, specularColour, shadowTex);
 	lights.push_back(l);
 	return l;
 }
 
-SpotLight* GraphicsEngine::AddSpotLight(Vector3 lightPosition, Vector3 lightTarget, Vector3 upVector, float lightRadius, float lightAngle, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow) {
+SpotLight* GraphicsEngine::AddSpotLight(T3Vector3 lightPosition, T3Vector3 lightTarget, T3Vector3 upVector, float lightRadius, float lightAngle, T3Vector4 diffuseColour, T3Vector4 specularColour, bool castsShadow) {
 	unsigned int shadowTex = castsShadow ? renderer->CreateShadowTexture() : 0;
 	SpotLight* l = new SpotLight(lightPosition, lightTarget, upVector, diffuseColour, specularColour, lightRadius, lightAngle, shadowTex);
 	lights.push_back(l);
@@ -131,10 +131,10 @@ void GraphicsEngine::BuildNodeLists(SceneNode* from) {
 	
 		if (frameFrustum.InsideFrustum(*from)) {
 			// Get distance from camera
-			Vector3 dir = from->GetWorldTransform().GetPositionVector() - camera->GetPosition();
-			from->SetCameraDistance(Vector3::Dot(dir, dir)); // gonna save ourselves a sqrt and compare distance^2
+			T3Vector3 dir = from->GetWorldTransform().GetPositionVector() - camera->GetPosition();
+			from->SetCameraDistance(T3Vector3::Dot(dir, dir)); // gonna save ourselves a sqrt and compare distance^2
 
-			Vector3 pos = from->GetWorldTransform().GetPositionVector();
+			T3Vector3 pos = from->GetWorldTransform().GetPositionVector();
 			if (pos.x < boundingMin.x) boundingMin.x = pos.x; 
 			if (pos.y < boundingMin.y) boundingMin.y = pos.y; 
 			if (pos.z < boundingMin.z) boundingMin.z = pos.z;

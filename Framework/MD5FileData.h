@@ -12,6 +12,8 @@ _-_-_-_-_-_-_-|   /\_/\   NYANYANYAN
 _-_-_-_-_-_-_-""  ""   
 
 *//////////////////////////////////////////////////////////////////////////////
+#if WINDOWS_BUILD
+
 #include "common.h"
 #ifdef WEEK_2_CODE
 #pragma once
@@ -69,7 +71,7 @@ hierarchy, forming the skeleton. Each joint is given a name, so it can be
 targeted by scripting ('GetTransformOfJoint("Hand") etc). Joint names are
 stored separately, to avoid an annoying string copying problem with using
 memcpy on an array of MD5Joints. MD5Joints have their transform twice - 
-once as separate Vector3 and Quaternion (loaded from the MD5Mesh file) and
+once as separate T3Vector3 and Quaternion (loaded from the MD5Mesh file) and
 once as a Matrix4, generated at run-time. This is to make it more obvious
 that joints really are just scenenode transforms like you are used to, as
 well as making it slightly more efficient to transform the mesh.
@@ -78,7 +80,7 @@ struct MD5Joint {
 	string*		name;			//Pointer to the name of this joint
 	int			parent;			//Index into the joint array of parent
 	int			forceWorld;
-	Vector3		position;		//Position relative to parent joint
+	T3Vector3		position;		//Position relative to parent joint
 	Quaternion	orientation;	//Orientation relative to parent joint
 	Matrix4		transform;		//World transform of this joint
 
@@ -111,7 +113,7 @@ struct MD5Weight {
 	int		weightIndex;	//Which weight of the MD5SubMesh this is
 	int		jointIndex;		//Which joint of the MD5Skeleton this weight is relative to
 	float	weightValue;	//How much influence this MD5Weight has on the MD5Vert
-	Vector3 position;		//Anchor position of this MD5Weight
+	T3Vector3 position;		//Anchor position of this MD5Weight
 };
 
 /*
@@ -274,17 +276,19 @@ protected:
 //a shader. Finally, we have a couple of arrays, just to store where our VBOs
 //get their data from, for consistency with other VBO data arrays we make
 #ifdef MD5_USE_HARDWARE_SKINNING 
-	GLuint			weightBuffer;		//VBO where we keep weightings of this mesh
-	GLuint			transformBuffer;	//VBO where we keep skeleton transforms
+	unsigned int			weightBuffer;		//VBO where we keep weightings of this mesh
+	unsigned int			transformBuffer;	//VBO where we keep skeleton transforms
 
-	GLuint			weightTexture;		//TBO Texture we use to access the VBO
-	GLuint			transformTexture;	//TBO Texture we use to access the VBO
+	unsigned int			weightTexture;		//TBO Texture we use to access the VBO
+	unsigned int			transformTexture;	//TBO Texture we use to access the VBO
 
 	Matrix4*		transforms;			//Array of skeleton transforms
-	Vector3*		weightings;			//Array of Vertex weightings
+	T3Vector3*		weightings;			//Array of Vertex weightings
 #endif
 
 
 };
+
+#endif
 
 #endif

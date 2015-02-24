@@ -24,7 +24,7 @@ void HudTestScreen::LoadContent() {
 		f,
 		0,
 		Vector2(0.5, 0.5),
-		Vector4(1,0,0,0.7f)));
+		T3Vector4(1,0,0,0.7f)));
 
 	AddDrawable(new DrawableText2D(
 		150, 
@@ -36,7 +36,7 @@ void HudTestScreen::LoadContent() {
 		f,
 		0,
 		Vector2(0.5f, 0.5f),
-		Vector4(1,1,1,0.4f)));
+		T3Vector4(1,1,1,0.4f)));
 
 	AddDrawable(new DrawableText2D(
 		150, 
@@ -48,7 +48,7 @@ void HudTestScreen::LoadContent() {
 		f,
 		15,
 		Vector2(0.5f, 0.5f),
-		Vector4(1,1,1,0.4f)));
+		T3Vector4(1,1,1,0.4f)));
 
 	AddDrawable(new DrawableText2D(
 		150, 
@@ -60,7 +60,7 @@ void HudTestScreen::LoadContent() {
 		f,
 		30,
 		Vector2(0.5f, 0.5f),
-		Vector4(1,1,1,0.4f)));
+		T3Vector4(1,1,1,0.4f)));
 
 		AddDrawable(new DrawableText2D(
 		150, 
@@ -72,7 +72,7 @@ void HudTestScreen::LoadContent() {
 		f,
 		45,
 		Vector2(1.0f, 0.5f),
-		Vector4(1,1,1,0.4f)));
+		T3Vector4(1,1,1,0.4f)));
 
 		AddDrawable(new DrawableText2D(
 		150, 
@@ -84,7 +84,7 @@ void HudTestScreen::LoadContent() {
 		f,
 		90,
 		Vector2(1.0f, 0.5f),
-		Vector4(1,1,1,0.4f)));
+		T3Vector4(1,1,1,0.4f)));
 
 	AddDrawable(
 		new DrawableTexture2D(
@@ -96,7 +96,7 @@ void HudTestScreen::LoadContent() {
 		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.tga", SOIL_FLAG_MIPMAPS),
 		0,
 		Vector2(),
-		Vector4(1,1,1,0.5)));
+		T3Vector4(1,1,1,0.5)));
 
 	AddDrawable(
 		new DrawableTexture2D(
@@ -108,5 +108,5 @@ void HudTestScreen::LoadContent() {
 		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", SOIL_FLAG_MIPMAPS),
 		30.0,
 		Vector2(0.5f, 0.5f),
-		Vector4(0,0,1,1.0f)));
+		T3Vector4(0,0,1,1.0f)));
 }

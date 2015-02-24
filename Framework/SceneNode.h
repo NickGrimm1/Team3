@@ -16,17 +16,17 @@ _-_-_-_-_-_-_-""  ""
 
 *//////////////////////////////////////////////////////////////////////////////
 
-
+#if WINDOWS_BUILD
 #pragma once
 #include "Matrix4.h"
-#include "Vector3.h"
-#include "Vector4.h"
+#include "T3Vector3.h"
+#include "T3Vector4.h"
 #include "../Team3Project1/DrawableEntity3D.h"
 #include <vector>
 
 class SceneNode	{
 public:
-	 SceneNode(Mesh*m = NULL, Vector4 colour = Vector4(1,1,1,1));
+	 SceneNode(Mesh*m = NULL, T3Vector4 colour = T3Vector4(1,1,1,1));
 	 SceneNode(DrawableEntity3D *entity);
 
 	~SceneNode(void);
@@ -36,13 +36,14 @@ public:
 	Matrix4			GetWorldTransform() const			{ return worldTransform;}
 
 	virtual void	Update(float msec);
+
 	virtual void	Draw(const OGLRenderer & r);
 
-	Vector4			GetColour()		const			{return colour;}
-	void			SetColour(const Vector4 &c)		{colour = c;}
+	T3Vector4			GetColour()		const			{return colour;}
+	void			SetColour(const T3Vector4 &c)		{colour = c;}
 
-	Vector3			GetModelScale()		const			{return modelScale;}
-	void			SetModelScale(const Vector3 &s)		{modelScale = s;}
+	T3Vector3			GetModelScale()		const			{return modelScale;}
+	void			SetModelScale(const T3Vector3 &s)		{modelScale = s;}
 
 	void			AddChild(SceneNode* s);
 	void			AddChildToParent(DrawableEntity3D* child, DrawableEntity3D* parent);
@@ -77,10 +78,11 @@ protected:
 	SceneNode*	parent;
 	float		distanceFromCamera;
 	float		boundingRadius;
-	Vector4		colour;
-	Vector3		modelScale;
+	T3Vector4		colour;
+	T3Vector3		modelScale;
 	bool		awake;
 	Mesh*		mesh;
 	std::vector<SceneNode*>		children;
 };
 
+#endif

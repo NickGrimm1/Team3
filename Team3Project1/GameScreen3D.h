@@ -14,8 +14,8 @@ Version: 0.0.5 11/02/2015.</summary>
 */
 #pragma once
 #include "GameScreen.h"
-#include "../Framework/Vector3.h"
-#include "../Framework/Vector4.h"
+#include "../Framework/T3Vector3.h"
+#include "../Framework/T3Vector4.h"
 #include "DrawableEntity3D.h"
 #include <vector>
 #include "../Framework/Light.h"
@@ -42,11 +42,11 @@ public:
 			camera->UpdateCamera();
 	}
 	// Move these to Light.h? Probably...
-	/*bool ChangeLightColour(unsigned int lightReference, Vector4 newDiffuseColour, Vector4 newSpecularColour);
-	bool ChangeLightPosition(unsigned int lightReference, Vector3 newLightPosition);
+	/*bool ChangeLightColour(unsigned int lightReference, T3Vector4 newDiffuseColour, T3Vector4 newSpecularColour);
+	bool ChangeLightPosition(unsigned int lightReference, T3Vector3 newLightPosition);
 	bool ChangeLightRadius(unsigned int lightReference, float newLightRadius);
 	bool ChangeLightAngle(unsigned int lightReference, float newLightAngle);
-	bool ChangeLightTarget(unsigned int lightReference, Vector3 newLightTarget, Vector3 newUpVector);*/
+	bool ChangeLightTarget(unsigned int lightReference, T3Vector3 newLightTarget, T3Vector3 newUpVector);*/
 private:
 	DrawableEntity3D* player;
 	vector<DrawableEntity3D*> drawables;

@@ -6,8 +6,15 @@ Version: 0.0.5 10/02/2015.</summary>
 */
 #pragma once
 #include "Mesh.h"
+#if PS3_BUILD
+#include "../Main_PS3_PPU/TexturePS3.h"
+#endif
+#if WINDOWS_BUILD
 #include "Texture.h"
+#endif
 #include "../Framework/Shader.h"
+#include "../Framework/Quaternion.h"
+class Texture;
 
 class DrawableEntity3D
 {
@@ -23,7 +30,7 @@ public:
 	<param name='rotation'>The rotation of the model in world space relative to its parent. Default is (0, 0, 0).</param>
 	<param name='scale'>The scale of the model in world space relative to its parent. Default is (0, 0, 0).</param>
 	*/
-	DrawableEntity3D(Mesh* mesh, Shader* shader, Texture* texture, Texture* bumpTexture, float boundingRadius, const Vector3& origin = Vector3(), const Quaternion& rotation = Quaternion(), const Vector3& scale = Vector3()) 
+	DrawableEntity3D(Mesh* mesh, Shader* shader, Texture* texture, Texture* bumpTexture, float boundingRadius, const T3Vector3& origin = T3Vector3(), const Quaternion& rotation = Quaternion(), const T3Vector3& scale = T3Vector3()) 
 		: mesh(mesh), shader(shader), texture(texture), origin(origin), rotation(rotation), scale(scale), boundingRadius(boundingRadius), bumpTexture(bumpTexture)
 	{ }
 	
@@ -75,21 +82,21 @@ public:
 	/**
 	<summary>Gets the origin position of this entity relative to its parent.</summary>
 	*/
-	Vector3 GetOriginPosition() const { return origin; }
+	T3Vector3 GetOriginPosition() const { return origin; }
 	/**
 	<summary>Sets the origin position of this entity relative to its parent.</summary>
 	<param name='value'>The position.</param>
 	*/
-	void SetOriginPosition(const Vector3& value) { origin = value; }
+	void SetOriginPosition(const T3Vector3& value) { origin = value; }
 	/**
 	<summary>Gets the scale of this entity relative to its parent.</summary>
 	*/
-	Vector3 GetScale() const { return scale; }
+	T3Vector3 GetScale() const { return scale; }
 	/**
 	<summary>Sets the scale of this entity relative to its parent.</summary>
 	<param name='value'>The scale.</param>
 	*/
-	void SetScale(const Vector3& value) { scale = value; }
+	void SetScale(const T3Vector3& value) { scale = value; }
 	/**
 	<summary>Gets the rotation of this entity relative to its parent.</summary>
 	<param name='value'>The rotation.</param>
@@ -105,7 +112,7 @@ public:
 	<summary>Adds the specified amount of movement to this object's position relative to its parent.</summary>
 	<param name='amount'>The amount to move by.</param>
 	*/
-	void Move(const Vector3& amount) { origin += amount; }
+	void Move(const T3Vector3& amount) { origin += amount; }
 	/**
 	<summary>Adds the specified amount or rotation to this object relative to its parent.</summary>
 	<param name='value'>The amount to rotate by.</param>
@@ -115,13 +122,13 @@ public:
 	<summary>Adds the specified amount of scale to this object relative to its parent.</summary>
 	<param name='value'>The amount to scale by.</param>
 	*/
-	void AddScale(const Vector3& amount) { scale += amount; }
+	void AddScale(const T3Vector3& amount) { scale += amount; }
 protected:
 	Mesh* mesh;
 	Shader* shader;
 	Texture* texture;
-	Vector3 scale;
-	Vector3 origin;
+	T3Vector3 scale;
+	T3Vector3 origin;
 	Quaternion rotation;
 	float boundingRadius;
 	Texture* bumpTexture;

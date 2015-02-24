@@ -25,7 +25,7 @@ _-_-_-_-_-_-_-""  ""
 #include <string>
 
 #include "quaternion.h"
-#include "Vector3.h"
+#include "T3Vector3.h"
 
 #include "MD5Mesh.h"
 #include "MD5FileData.h"
@@ -82,8 +82,8 @@ to max. Useful for collision detection etc.
 TODO: These haven't actually been transformed into the correct axis yet!
 */
 struct MD5Bounds {
-	Vector3 min;
-	Vector3 max;
+	T3Vector3 min;
+	T3Vector3 max;
 };
 
 /*
@@ -92,7 +92,7 @@ of every MD5AnimJoint
 */
 struct MD5BaseFrame {
 	Quaternion* orientations;	//Orientations for every base frame joint
-	Vector3*	positions;		//Positions for every base frame joint
+	T3Vector3*	positions;		//Positions for every base frame joint
 
 	MD5BaseFrame::MD5BaseFrame() {
 		orientations = NULL;

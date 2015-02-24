@@ -344,41 +344,41 @@ void	OGLRenderer::DrawDebugOrtho(Matrix4*matrix) {
 	SetCurrentShader(currentShader);
 }
 
-void	OGLRenderer::DrawDebugLine  (DebugDrawMode mode, const Vector3 &from,const Vector3 &to,const Vector3 &fromColour,const Vector3 &toColour) {
+void	OGLRenderer::DrawDebugLine  (DebugDrawMode mode, const T3Vector3 &from,const T3Vector3 &to,const T3Vector3 &fromColour,const T3Vector3 &toColour) {
 	DebugDrawData*target = (mode == DEBUGDRAW_ORTHO ? target = orthoDebugData : target = perspectiveDebugData);
 
 	target->AddLine(from,to,fromColour,toColour);
 }
 
-void	OGLRenderer::DrawDebugBox   (DebugDrawMode mode, const Vector3 &at,const Vector3 &scale,const Vector3 &colour) {
+void	OGLRenderer::DrawDebugBox   (DebugDrawMode mode, const T3Vector3 &at,const T3Vector3 &scale,const T3Vector3 &colour) {
 	DebugDrawData*target = (mode == DEBUGDRAW_ORTHO ? target = orthoDebugData : target = perspectiveDebugData);
 
-	target->AddLine(at + Vector3(-scale.x * 0.5f, scale.y * 0.5f, 0),
-					at + Vector3(-scale.x * 0.5f, -scale.y * 0.5f, 0),colour,colour);
+	target->AddLine(at + T3Vector3(-scale.x * 0.5f, scale.y * 0.5f, 0),
+					at + T3Vector3(-scale.x * 0.5f, -scale.y * 0.5f, 0),colour,colour);
 
-	target->AddLine(at + Vector3(-scale.x * 0.5f, -scale.y * 0.5f, 0),
-					at + Vector3(scale.x * 0.5f, -scale.y * 0.5f,0 ),colour,colour);
+	target->AddLine(at + T3Vector3(-scale.x * 0.5f, -scale.y * 0.5f, 0),
+					at + T3Vector3(scale.x * 0.5f, -scale.y * 0.5f,0 ),colour,colour);
 
-	target->AddLine(at + Vector3(scale.x * 0.5f, -scale.y * 0.5f,0),
-					at + Vector3(scale.x * 0.5f, scale.y * 0.5f,0),colour,colour);
+	target->AddLine(at + T3Vector3(scale.x * 0.5f, -scale.y * 0.5f,0),
+					at + T3Vector3(scale.x * 0.5f, scale.y * 0.5f,0),colour,colour);
 
-	target->AddLine(at + Vector3(scale.x * 0.5f, scale.y * 0.5f,0),
-					at + Vector3(-scale.x * 0.5f, scale.y * 0.5f,0),colour,colour);
+	target->AddLine(at + T3Vector3(scale.x * 0.5f, scale.y * 0.5f,0),
+					at + T3Vector3(-scale.x * 0.5f, scale.y * 0.5f,0),colour,colour);
 
 }
 
-void	OGLRenderer::DrawDebugCross (DebugDrawMode mode, const Vector3 &at,const Vector3 &scale,const Vector3 &colour) {
+void	OGLRenderer::DrawDebugCross (DebugDrawMode mode, const T3Vector3 &at,const T3Vector3 &scale,const T3Vector3 &colour) {
 	DebugDrawData*target = (mode == DEBUGDRAW_ORTHO ? target = orthoDebugData : target = perspectiveDebugData);
 
-	target->AddLine(at + Vector3(-scale.x * 0.5f,-scale.y * 0.5f, 0),
-		at + Vector3(scale.x * 0.5f, scale.y * 0.5f, 0),colour,colour);
+	target->AddLine(at + T3Vector3(-scale.x * 0.5f,-scale.y * 0.5f, 0),
+		at + T3Vector3(scale.x * 0.5f, scale.y * 0.5f, 0),colour,colour);
 
-	target->AddLine(at + Vector3(scale.x * 0.5f, -scale.y * 0.5f, 0),
-		at + Vector3(-scale.x * 0.5f, scale.y * 0.5f, 0),colour,colour);
+	target->AddLine(at + T3Vector3(scale.x * 0.5f, -scale.y * 0.5f, 0),
+		at + T3Vector3(-scale.x * 0.5f, scale.y * 0.5f, 0),colour,colour);
 
 }
 
-void	OGLRenderer::DrawDebugCircle(DebugDrawMode mode, const Vector3 &at, const float radius,const Vector3 &colour) {
+void	OGLRenderer::DrawDebugCircle(DebugDrawMode mode, const T3Vector3 &at, const float radius,const T3Vector3 &colour) {
 	DebugDrawData*target = (mode == DEBUGDRAW_ORTHO ? target = orthoDebugData : target = perspectiveDebugData);
 
 	const int stepCount = 18;
@@ -394,8 +394,8 @@ void	OGLRenderer::DrawDebugCircle(DebugDrawMode mode, const Vector3 &at, const f
 		float starty = radius * (float)sin(DegToRad(i * divisor))		+ at.y;
 		float endy	 = radius * (float)sin(DegToRad((i+1) * divisor))	+ at.y;
 
-		target->AddLine(Vector3(startx,starty,at.z),
-			Vector3(endx,endy,at.z),colour,colour);
+		target->AddLine(T3Vector3(startx,starty,at.z),
+			T3Vector3(endx,endy,at.z),colour,colour);
 	}
 }
 
@@ -415,12 +415,12 @@ void DebugDrawData::Draw() {
 	glGenBuffers(2, buffers);
 
 	glBindBuffer(GL_ARRAY_BUFFER,buffers[VERTEX_BUFFER]);
-	glBufferData(GL_ARRAY_BUFFER,lines.size()*sizeof(Vector3), &lines[0], GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER,lines.size()*sizeof(T3Vector3), &lines[0], GL_DYNAMIC_DRAW);
 	glVertexAttribPointer(VERTEX_BUFFER, 3, GL_FLOAT, GL_FALSE, 0, 0); 
 	glEnableVertexAttribArray(VERTEX_BUFFER);
 
 	glBindBuffer(GL_ARRAY_BUFFER,buffers[COLOUR_BUFFER]);
-	glBufferData(GL_ARRAY_BUFFER,colours.size()*sizeof(Vector3), &colours[0], GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER,colours.size()*sizeof(T3Vector3), &colours[0], GL_DYNAMIC_DRAW);
 	glVertexAttribPointer(COLOUR_BUFFER, 3, GL_FLOAT, GL_FALSE, 0, 0); 
 	glEnableVertexAttribArray(COLOUR_BUFFER);
 

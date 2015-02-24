@@ -8,8 +8,8 @@ Author: Derek Kelly
 Version: 0.0.1 04/02/2015</summary>
 */
 
-#include "Vector3.h"
-#include "Vector4.h"
+#include "T3Vector3.h"
+#include "T3Vector4.h"
 #include "Matrix4.h"
 
 class Mesh;
@@ -25,20 +25,20 @@ public:
 	Light(void){}
 	~Light(void){}
 
-	Vector3 GetPosition() const;
-	void SetPosition(Vector3 pos);
+	T3Vector3 GetPosition() const;
+	void SetPosition(T3Vector3 pos);
 
-	Vector3 GetDirection() const;
-	void SetDirection(Vector3 dir);
+	T3Vector3 GetDirection() const;
+	void SetDirection(T3Vector3 dir);
 
 	float GetRadius() const;
 	void SetRadius(float rad);
 
-	Vector4 GetDiffuseColour() const;
-	void SetDiffuseColour(Vector4 col);
+	T3Vector4 GetDiffuseColour() const;
+	void SetDiffuseColour(T3Vector4 col);
 
-	Vector4 GetSpecularColour() const;
-	void SetSpecularColour(Vector4 spec);
+	T3Vector4 GetSpecularColour() const;
+	void SetSpecularColour(T3Vector4 spec);
 
 	float GetAngle() const;
 	void SetAngle(float a);
@@ -46,10 +46,10 @@ public:
 	unsigned int GetType() const; // POINT, SPOT or DIRECTIONAL
 	void SetType(unsigned int t);
 
-	virtual Matrix4 GetViewMatrix(Vector3 target) = 0; // returns the view matrix for the camera
+	virtual Matrix4 GetViewMatrix(T3Vector3 target) = 0; // returns the view matrix for the camera
 	virtual Matrix4 GetProjectionMatrix() = 0; // returns the projection matrix for the camera
 	
-	virtual void DrawLightDeferred(Vector3 camera_pos) = 0;
+	virtual void DrawLightDeferred(T3Vector3 camera_pos) = 0;
 	
 	void BindLight() const; // Binds the light source's data into the currently bound shader object
 	void BindLight(unsigned int i) const; // Binds the light source's data into the currently bound shader object at the requested array index
@@ -57,10 +57,10 @@ public:
 	unsigned int GetShadowTexture() const {return shadowTexID;}
 
 protected:
-	Vector3 position;
-	Vector3 direction; // for spot/directional lights
-	Vector4 diffuseColour;
-	Vector4 specularColour; // separate specular colour
+	T3Vector3 position;
+	T3Vector3 direction; // for spot/directional lights
+	T3Vector4 diffuseColour;
+	T3Vector4 specularColour; // separate specular colour
 	float radius;
 	float angle; // spot lights only
 	unsigned int type;
@@ -70,11 +70,11 @@ protected:
 class PointLight : public Light {
 public:
 	PointLight();
-	PointLight(Vector3 pos, Vector4 col, Vector4 spec, float rad, unsigned int shadowTex);
+	PointLight(T3Vector3 pos, T3Vector4 col, T3Vector4 spec, float rad, unsigned int shadowTex);
 
-	virtual Matrix4 GetViewMatrix(Vector3 target);
+	virtual Matrix4 GetViewMatrix(T3Vector3 target);
 	virtual Matrix4 GetProjectionMatrix();
-	virtual void DrawLightDeferred(Vector3 camera_pos);
+	virtual void DrawLightDeferred(T3Vector3 camera_pos);
 	static void SetMesh(Mesh* m) {lightMesh = m;}
 protected:
 	static Mesh* lightMesh;
@@ -82,10 +82,10 @@ protected:
 
 class DirectionalLight : public Light { // Only limited implementation
 public:
-	DirectionalLight(Vector3 dir, Vector4 col, Vector4 spec, unsigned int shadowTex);
-	virtual Matrix4 GetViewMatrix(Vector3 target);
+	DirectionalLight(T3Vector3 dir, T3Vector4 col, T3Vector4 spec, unsigned int shadowTex);
+	virtual Matrix4 GetViewMatrix(T3Vector3 target);
 	virtual Matrix4 GetProjectionMatrix();
-	virtual void DrawLightDeferred(Vector3 camera_pos);
+	virtual void DrawLightDeferred(T3Vector3 camera_pos);
 	static void UpdateLightVolume(float n, float f, float r, float l, float t, float b);
 private:
 	static float znear, zfar, right, left, top, bottom;
@@ -93,17 +93,17 @@ private:
 
 class SpotLight	: public Light {
 public:
-	SpotLight(Vector3 pos, Vector3 target, Vector3 up_vec, Vector4 col, Vector4 spec, float spot_rad, float spot_angle, unsigned int shadowTex);
+	SpotLight(T3Vector3 pos, T3Vector3 target, T3Vector3 up_vec, T3Vector4 col, T3Vector4 spec, float spot_rad, float spot_angle, unsigned int shadowTex);
 
-	virtual Matrix4 GetViewMatrix(Vector3 target); // Ignore target, spot lights have a defined direction + position
+	virtual Matrix4 GetViewMatrix(T3Vector3 target); // Ignore target, spot lights have a defined direction + position
 	virtual Matrix4 GetProjectionMatrix();
-	virtual void DrawLightDeferred(Vector3 camera_pos);
-	static bool IsInSpotlight(Vector3 world_pos, Light* l);
+	virtual void DrawLightDeferred(T3Vector3 camera_pos);
+	static bool IsInSpotlight(T3Vector3 world_pos, Light* l);
 	static void SetConeMesh(Mesh* m) {lightCone = m;}
 	static void SetCircleMesh(Mesh* m) {lightBase = m;} 
-	Vector3 GetUp() {return up;}
+	T3Vector3 GetUp() {return up;}
 protected:
 	static Mesh* lightCone;
 	static Mesh* lightBase;
-	Vector3 up;
+	T3Vector3 up;
 };

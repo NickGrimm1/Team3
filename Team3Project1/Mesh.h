@@ -1,12 +1,14 @@
 #pragma once
 #if WINDOWS_BUILD
 #include "../Framework/OGLRenderer.h"
+//#include "TextureWindows.h"
 #endif
 #if PS3_BUILD
 #include "../Main_PS3_PPU/ShaderPart.h"
+#include "../Main_PS3_PPU/TexturePS3.h"
 #endif
 #include "Vertex.h"
-#include "Texture.h"
+
 
 #if WINDOWS_BUILD
 namespace PrimitiveType
@@ -33,10 +35,10 @@ public:
 	Mesh();
 	virtual ~Mesh();
 
-	void SetColour(Vector4* colour) 
+	void SetColour(T3Vector4* colour) 
 	{
 		for (unsigned int i = 0; i < numVertices; i++)
-			vertices[i].SetColor(colour[i]);
+			vertices[i].SetColor(colour[i]);//.SetColor(colour[i]);
 	} 
 	bool TransformsTexCoords() { return transformCoords;}
 
@@ -54,9 +56,9 @@ public:
 	//Generates a single white quad, going from 0 to 1 on the x and y axis.
 	static Mesh* GenerateQuadAlt();
 	//Generates a single white quad, going from -0.5 to 0.5 on the x and y axis.
-	static Mesh* Mesh::GenerateQuadCentral();
+	static Mesh* GenerateQuadCentral();
 	//Generates a coloured quad, going from -1 to 1 on the x and z axis, with adjustable texture coords.
-	static Mesh* GenerateQuadTexCoordCol(Vector2 scale, Vector2 texCoord, Vector4 colour); //NX 01/11/2012
+	static Mesh* GenerateQuadTexCoordCol(Vector2 scale, Vector2 texCoord, T3Vector4 colour); //NX 01/11/2012
 	// Generates Circle/Cone/Cylinder meshes with subdivs segments to approximate curvature
 	static Mesh* GenerateCircle(unsigned int subdivs);
 	static Mesh* GenerateCone(unsigned int subdivs);
@@ -68,7 +70,7 @@ protected:
 	//Generates tangents for all facets. Assumes geometry type is GL_TRIANGLES...
 	void GenerateTangents();
 	//Helper function for GenerateTangents
-	Vector3 GenerateTangent(const Vector3 &a,const Vector3 &b,const Vector3 &c,const Vector2 &ta,const Vector2 &tb,const Vector2 &tc);
+	T3Vector3 GenerateTangent(const T3Vector3 &a,const T3Vector3 &b,const T3Vector3 &c,const Vector2 &ta,const Vector2 &tb,const Vector2 &tc);
 	
 	// Pointer to vertex data
 	Vertex*	vertices;

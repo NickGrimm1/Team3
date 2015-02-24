@@ -1,3 +1,5 @@
+#if WINDOWS_BUILD
+
 /******************************************************************************
 Class:Frustum
 Implements:
@@ -42,8 +44,10 @@ public:
 	//Is a SceneNode inside this frustum?
 	bool InsideFrustum(SceneNode&n);
 
-	bool	AABBInsideFrustum(Vector3 &position, const Vector3 &size) const;
+	bool	AABBInsideFrustum(T3Vector3 &position, const T3Vector3 &size) const;
 
 protected:
 	Plane planes[6];
 };
+
+#endif

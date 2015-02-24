@@ -14,7 +14,7 @@ Version: 0.0.6 11/02/2015.</summary>
 #pragma once
 #include "Quaternion.h"
 #include "Matrix4.h"
-#include "Vector3.h"
+#include "T3Vector3.h"
 #include "../Team3Project1/DrawableEntity3D.h"
 
 class Camera	
@@ -30,31 +30,31 @@ public:
 	<param name='target'>The initial target position. Default is (0, 0, -1).</param>
 	<param name='up'>The initial up vector. Default is (0, 1, 0).</param>
 	*/
-	Camera(DrawableEntity3D* targetEntity = NULL, float pitch = 0, float yaw = 0, float roll = 0, Vector3 position = Vector3(), Vector3 target = Vector3(0, 0, -1), bool invertY = false)
-		: position(position), originalTarget((target - position).Normal()), originalUp(Vector3::UnitOrthogonal((target - position).Normal(), Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix() * Vector3::UnitX())), invertY(invertY), targetEntity(targetEntity), originalRight(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix() * Vector3::UnitX()), rotation(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix())
+	Camera(DrawableEntity3D* targetEntity = NULL, float pitch = 0, float yaw = 0, float roll = 0, T3Vector3 position = T3Vector3(), T3Vector3 target = T3Vector3(0, 0, -1), bool invertY = false)
+		: position(position), originalTarget((target - position).Normal()), originalUp(T3Vector3::UnitOrthogonal((target - position).Normal(), Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix() * T3Vector3::UnitX())), invertY(invertY), targetEntity(targetEntity), originalRight(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix() * T3Vector3::UnitX()), rotation(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix())
 	{ }
-	~Camera(void){}
+	virtual ~Camera(void){}
 
 	/**
 	<summary>Gets the camera's position in world space.</summary>
 	<param name='value'>The amount of pitch to add.</param>
 	*/
-	Vector3 GetPosition() const { return position;}
+	T3Vector3 GetPosition() const { return position;}
 	/**
 	<summary>Sets the camera's position in world space.</summary>
 	<param name='value'>The position</param>
 	*/
-	void SetPosition(const Vector3& value) { position = value;}
+	void SetPosition(const T3Vector3& value) { position = value;}
 	/**
 	<summary>Adds movement to this camera's position, automatically calculates rotation.</summary>
 	<param name='value'>The amount of movement to add in the original axes provided. (eg if (0,0,-1) was originally 'forward', moving (0,0,-1) will move the camera 1 unit along its current forward vector.</param>
 	*/
-	void AddMovement(const Vector3& value) { position += rotation * value; }
+	void AddMovement(const T3Vector3& value) { position += rotation * value; }
 	/**
 	<summary>Adds movement to this camera's position, using the raw co-ordinates given.</summary>
 	<param name='value'>The amount of movement to add.</param>
 	*/
-	void AddRawMovement(const Vector3& value) { position += value; }
+	void AddRawMovement(const T3Vector3& value) { position += value; }
 	/**
 	<summary>Adds pitch to this camera's rotation.</summary>
 	<param name='value'>The amount of pitch to add.</param>
@@ -99,14 +99,14 @@ public:
 	*/
 	Matrix4 BuildViewMatrix();
 protected:
-	Vector3 position;
+	T3Vector3 position;
 	Matrix4 rotation;
-	Vector3 originalUp;
-	Vector3 originalRight;
-	Vector3 originalTarget;
-	Vector3 rotatedTarget;
-	Vector3 rotatedUp;
-	Vector3 rotatedRight;
+	T3Vector3 originalUp;
+	T3Vector3 originalRight;
+	T3Vector3 originalTarget;
+	T3Vector3 rotatedTarget;
+	T3Vector3 rotatedUp;
+	T3Vector3 rotatedRight;
 	bool invertY;
 	DrawableEntity3D* targetEntity;
 };

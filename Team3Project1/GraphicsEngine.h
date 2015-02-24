@@ -19,14 +19,16 @@ Version: 0.0.3 06/02/2015.</summary>
 */
 
 #pragma once
-#include "../Framework/Vector3.h"
-#include "../Framework/Vector4.h"
+#include "../Framework/T3Vector3.h"
+#include "../Framework/T3Vector4.h"
 #include "../Framework/Light.h"
 #include "Renderer.h"
 #include "DrawableTexture2D.h"
 #include "DrawableText2D.h"
 #include "DrawableEntity3D.h"
 #include "Thread.h"
+#include "../Framework/Camera.h"
+#include "../Framework/SceneNode.h"
 
 #define RENDER_HZ 60
 #define SCREEN_WIDTH 1280
@@ -37,13 +39,16 @@ Version: 0.0.3 06/02/2015.</summary>
 #define MAX_MESHES 20
 #define MAX_TEXTURES 20
 
+class SceneNode;
+class Renderer;
 
 class GraphicsEngine : public Thread
 {
 public:
+#if WINDOWS_BUILD
 	bool GetRenderContext() {return renderer->GetRenderContextForThread();}
 	bool DropRenderContext() {return renderer->DropRenderContextForThread();}
-
+#endif
 #pragma region Entry/Exit
 	/**
 	<summary>Initializes a graphics engine.</summary>
@@ -51,9 +56,15 @@ public:
 	<returns>true if a Graphics Engine is initialized and ready.</returns>
 	*/
 	static bool Initialize(GraphicsEngine*& out);
+
 	static bool LoadContent()
 	{
+		#if WINDOWS_BUILD
 		return engine->renderer->LoadShaders();
+		#endif
+		#if PS3_BUILD
+			return true;
+		#endif
 	}
 	/**
 	<summary>Destroys the graphics engine. Allows the game to exit cleanly.</summary>
@@ -119,9 +130,9 @@ public:
 	void SetCamera(Camera* cam);
 #pragma endregion	
 
-	PointLight* AddPointLight(Vector3 lightPosition, float lightRadius, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
-	DirectionalLight* AddDirectionalLight(Vector3 lightDirection, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
-	SpotLight* AddSpotLight(Vector3 lightPosition, Vector3 lightTarget, Vector3 upVector, float lightRadius, float lightAngle, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
+	PointLight* AddPointLight(T3Vector3 lightPosition, float lightRadius, T3Vector4 diffuseColour, T3Vector4 specularColour, bool castsShadow);
+	DirectionalLight* AddDirectionalLight(T3Vector3 lightDirection, T3Vector4 diffuseColour, T3Vector4 specularColour, bool castsShadow);
+	SpotLight* AddSpotLight(T3Vector3 lightPosition, T3Vector3 lightTarget, T3Vector3 upVector, float lightRadius, float lightAngle, T3Vector4 diffuseColour, T3Vector4 specularColour, bool castsShadow);
 		
 	// We don't actually need this since the GSM already holds the reference :)
 	//static GraphicsEngine& GetGraphicsEngine() {return *engine;}
@@ -139,8 +150,9 @@ private:
 	void DrawNodes();
 
 	Renderer* renderer;
-
+#if WINDOWS_BUILD
 	Frustum frameFrustum;
+#endif 
 	Camera* camera;
 
 	// Scene Elements
@@ -151,7 +163,7 @@ private:
 	vector<SceneNode*> gameEntityList; // list of opaque game elements sorted by distance from camera
 
 
-	Vector3 boundingMin, boundingMax; // Defines a bounding box for the VISIBLE scene, built each frame from the nodes that pass frustum culling.
+	T3Vector3 boundingMin, boundingMax; // Defines a bounding box for the VISIBLE scene, built each frame from the nodes that pass frustum culling.
 
 	bool isRunning;
 

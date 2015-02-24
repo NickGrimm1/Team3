@@ -265,7 +265,7 @@ Mesh* AssetManager::LoadQuadCentral(void* callerID)
 	}
 }
 //Generates a coloured quad, going from -1 to 1 on the x and z axis, with adjustable texture coords.
-Mesh* AssetManager::LoadQuadTexCoordCol(void* callerID, Vector2 scale, Vector2 texCoord, Vector4 colour)
+Mesh* AssetManager::LoadQuadTexCoordCol(void* callerID, Vector2 scale, Vector2 texCoord, T3Vector4 colour)
 {
 	// Check if this mesh is already loaded...
 	if (quadTexCoordCol)
@@ -465,7 +465,7 @@ void AssetManager::UnloadQuadCentral(void* callerID)
 	}
 }
 //Generates a coloured quad, going from -1 to 1 on the x and z axis, with adjustable texture coords.
-void AssetManager::UnloadQuadTexCoordCol(void* callerID, Vector2 scale, Vector2 texCoord, Vector4 colour)
+void AssetManager::UnloadQuadTexCoordCol(void* callerID, Vector2 scale, Vector2 texCoord, T3Vector4 colour)
 {
 	// Check if this mesh is actually loaded...
 	if (!quadTexCoordCol)

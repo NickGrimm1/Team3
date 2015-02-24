@@ -43,9 +43,9 @@ namespace MathHelper
 	<param name='amount'>The amount to interpolate.</param>
 	<returns>The final value of v1 moved amount towards v2.</returns>
 	*/
-	Vector3 Lerp(const Vector3& v1, const Vector3& v2, float amount)
+	T3Vector3 Lerp(const T3Vector3& v1, const T3Vector3& v2, float amount)
 	{
-		return Vector3(Lerp(v1.x, v2.x, amount), Lerp(v1.y, v2.y, amount), Lerp(v1.z, v2.z, amount));
+		return T3Vector3(Lerp(v1.x, v2.x, amount), Lerp(v1.y, v2.y, amount), Lerp(v1.z, v2.z, amount));
 	}
 	/**
 	<summary>Linearly interpolates between 2 floats.</summary>

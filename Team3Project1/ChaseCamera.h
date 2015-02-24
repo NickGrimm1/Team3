@@ -13,7 +13,7 @@ Version: 0.0.5 11/02/2015.</summary>
 class ChaseCamera : public OffsetCamera
 {
 public:
-	ChaseCamera(DrawableEntity3D* targetEntity, const Vector3& positionOffset, float pitchOffset, float yawOffset, float rollOffset) 
+	ChaseCamera(DrawableEntity3D* targetEntity, const T3Vector3& positionOffset, float pitchOffset, float yawOffset, float rollOffset) 
 		: OffsetCamera(targetEntity, positionOffset, pitchOffset, yawOffset, rollOffset)
 	{ }
 	
@@ -27,7 +27,7 @@ public:
 		Camera::UpdateCamera();
 	}
 private:
-	Vector3 expectedPosition;
+	T3Vector3 expectedPosition;
 	float expectedPitch;
 	float expectedYaw;
 	float expectedRoll;
