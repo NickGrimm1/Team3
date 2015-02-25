@@ -34,7 +34,7 @@ public:
 		instance = NULL;
 	}
 	void Run();
-	void Terminate() { isRunning = false; }
+	void Terminimumate() { isRunning = false; }
 
 	void		BroadPhaseCollisions();
 	void        SortandSweep();

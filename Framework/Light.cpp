@@ -5,7 +5,7 @@ Implements a Light class that allows creation of Spot, Point and Directional lig
 Author: Derek Kelly
 Version: 0.0.1 04/02/2015</summary>
 */
-
+#if WINDOWS_BUILD
 #include "Light.h"
 #include "Shader.h"
 
@@ -159,9 +159,9 @@ T3Matrix4 DirectionalLight::GetProjectionMatrix() {
 	return m;
 }
 
-void DirectionalLight::UpdateLightVolume(T3Vector3& min, T3Vector3& max) {
-	boundingMin = min;
-	boundingMax = max;
+void DirectionalLight::UpdateLightVolume(T3Vector3& minimum, T3Vector3& maximum) {
+	boundingMin = minimum;
+	boundingMax = maximum;
 }
 
 T3Matrix4 DirectionalLight::GetModelMatrix() {
@@ -218,7 +218,7 @@ T3Matrix4 SpotLight::GetBaseModelMatrix() {
 
 /* Spot lights - emits a cone of light angle of alpha
 A fragment will be lit if
-1. Within spotlight radius (not beyond max distance)
+1. Within spotlight radius (not beyond maximum distance)
 2. within cone of light
 dot(a,b) = |a| * |b| * cos angle
 calc dot product between cones central axis and vector from cone origin and fragment (normalised)
@@ -231,10 +231,11 @@ bool SpotLight::IsInSpotlight(T3Vector3 world_pos, Light* light) {
 	light_to_world.Normalise();
 	float dotprod = T3Vector3::Dot(light_to_world, light->GetDirection());
 	float coscone = cos(light->GetAngle() / 2.0f * PI / 180.0f); //cause expects radians
-	if (coscone <= dotprod) { // inside angle of cone, determine whether beyond radius
+	if (coscone <= dotprod) { // inside angle of cone, determinimume whether beyond radius
 		//float dist = (world_pos - light->GetPosition()).Length();
 		float dist = light_to_world.Length();
 		return (dist < light->GetRadius());
 	}
 	return false; // not in cone shape
 }
+#endif

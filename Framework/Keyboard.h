@@ -18,6 +18,7 @@ _-_-_-_-_-_-_-|   /\_/\   NYANYANYAN
 _-_-_-_-_-_-_-""  ""   
 
 *//////////////////////////////////////////////////////////////////////////////
+#if WINDOWS_BUILD
 #pragma once
 #include "InputDevice.h"
 
@@ -210,5 +211,4 @@ protected:
 	float pressLimit;
 };
 
-
-
+#endif

@@ -1,7 +1,7 @@
 #include "GraphicsEngine.h"
 #include "GraphicsCommon.h"
 #include <algorithm>
-
+#if WINDOWS_BUILD
 GraphicsEngine* GraphicsEngine::engine = NULL;
 
 bool GraphicsEngine::Initialize(GraphicsEngine*& out) {
@@ -49,8 +49,8 @@ GraphicsEngine::GraphicsEngine() {
 		25,
 		new Texture(loadingTex),
 		0,
-		Vector2(),
-		Vector4(1, 1, 1, 1.0));
+		T3Vector2(),
+		T3Vector4(1, 1, 1, 1.0));
 
 	isInitialised = true; // Graphics Engine has initialised successfully
 }
@@ -308,3 +308,19 @@ void GraphicsEngine::SetCamera(Camera* cam)
 	camera = cam;
 	renderer->SetCamera(cam);
 }
+
+bool GraphicsEngine::LoadContent()
+{
+	return (engine->renderer->LoadShaders() &&
+				engine->renderer->LoadAssets());
+}
+
+void GraphicsEngine::UnloadContent()
+{
+	engine->renderer->UnloadShaders();
+	engine->renderer->UnloadAssets();
+}
+
+void GraphicsEngine::DrawDeferredLights(bool on) {renderer->DrawDeferredLights(on);}
+
+#endif

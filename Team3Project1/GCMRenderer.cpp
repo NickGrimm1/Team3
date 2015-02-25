@@ -185,7 +185,7 @@ Sets up the current viewport
 */
 void GCMRenderer::SetViewport() {
 	uint16_t x,y,w,h;
-	float min, max;
+	float minimum, maximum;
 	float scale[4],offset[4];
 
 	/*
@@ -200,7 +200,7 @@ void GCMRenderer::SetViewport() {
 	to GCM, this will be done with another matrix.
 
 	To map an x axis range of -1 to 1 to screen coordinates, we can multiply
-	the x axis by half the width (assuming a default width of 720, that gives
+	the x axis by half the width (assuminimumg a default width of 720, that gives
 	us a new range of -360 to 360), and then translating / offsetting it also
 	by half of the width (moving us to 0 to 720). The same is done with the Y
 	axis, while the Z axis goes from 0.0 to 1.0 (remember the depth buffer
@@ -215,22 +215,22 @@ void GCMRenderer::SetViewport() {
 	y = 0;  //starting position of the viewport (top of screen)
 	w = screenWidth;
 	h = screenHeight;
-	min = 0.0f;
-	max = 1.0f;
+	minimum = 0.0f;
+	maximum = 1.0f;
 	//Scale our NDC coordinates to the size of the screen
 	scale[0] = w * 0.5f;
 	scale[1] = h * -0.5f;
-	scale[2] = (max - min) * 0.5f;
+	scale[2] = (maximum - minimum) * 0.5f;
 	scale[3] = 0.0f;
 
 	//Translate from a range starting from -1 to a range starting at 0
 	offset[0] = x + scale[0];
 	offset[1] = y + h * 0.5f;
-	offset[2] = (max + min) * 0.5f;
+	offset[2] = (maximum + minimum) * 0.5f;
 	offset[3] = 0.0f;
 
 	//analogous to the glViewport function...but with extra values!
-	cellGcmSetViewport(x, y, w, h, min, max, scale, offset);
+	cellGcmSetViewport(x, y, w, h, minimum, maximum, scale, offset);
 }
 
 void GCMRenderer::SwapBuffers() {
@@ -500,7 +500,7 @@ CellGcmTexture* GCMRenderer::LoadGTF(std::string filename) {
 	GTF textures can technically have multiple textures in it, for now
 	lets just load 1
 	*/
-	for(int i = 0; i < min(1,header.NumTexture); ++i) {
+	for(int i = 0; i < minimum(1,header.NumTexture); ++i) {
 		memcpy((void*)texture,(void*)&(attributes[i].tex), sizeof(CellGcmTexture));
 
 		file.seekg(attributes[i].OffsetToTex);

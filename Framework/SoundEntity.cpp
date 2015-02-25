@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 #include "SoundEntity.h"
 #include "../Team3Project1/Renderer.h"
 #include "../Team3Project1/PhysicsEngine.h"
@@ -72,3 +73,4 @@ void	SoundEntity::DisconnectFromSystems() {
 	//}
 
 }
+#endif

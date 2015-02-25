@@ -46,7 +46,9 @@ MyGame::MyGame()	{
 	A more 'robust' system would check the entities vector for duplicates so as
 	to not cause problems...why not give it a go?
 	*/
+#if WINDOWS_BUILD
 	Background_Music = BuildSoundEntity();
+#endif
 	GameEntity* quadEntity = BuildQuadEntity(1000.0f);
 	quadEntity->GetPhysicsNode().SetPosition(T3Vector3(1000,0,0));
 	allEntities.push_back(quadEntity);
@@ -374,7 +376,7 @@ GameEntity* MyGame::BuildQuadEntity(float size) {
 	return g;
 }
 
-
+#if WINDOWS_BUILD
 SoundEntity * MyGame :: BuildSoundEntity () {
 	 float size = 300 + ( rand ()%300);
 
@@ -400,3 +402,4 @@ SoundEntity * MyGame :: BuildSoundEntity () {
 
 	 return g ;
  }
+#endif

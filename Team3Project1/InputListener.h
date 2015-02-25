@@ -17,6 +17,7 @@ public:
 	<param name='type'>The event type.</param>
 	<param name='position'>The resolution independent co-ordinates of the mouse cursor.</param>
 	*/
+#if WINDOWS_BUILD
 	virtual void MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position) = 0;
 	/**
 	<summary>Notifies all screens in the stack that the mouse has moved.</summary>
@@ -41,6 +42,7 @@ public:
 	<param name='type'>The event type.</param>
 	<param name='button'>The button.</param>
 	*/
+#endif
 	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button) = 0;
 	/**
 	<summary>Notifies all screens in the stack that an analogue control is displaced.</summary>
