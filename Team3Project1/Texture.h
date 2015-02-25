@@ -6,20 +6,20 @@
 
 using namespace std;
 
-#if PS3_BUILD
-typedef struct {
-	uint32_t Version;
-	uint32_t Size;
-	uint32_t NumTexture;
-} CellGtfFileHeader;
-
-typedef struct {
-	uint32_t Id;
-	uint32_t OffsetToTex;
-	uint32_t TextureSize;
-	CellGcmTexture tex;
-} CellGtfTextureAttribute;
-#endif
+//#if PS3_BUILD
+//typedef struct {
+//	uint32_t Version;
+//	uint32_t Size;
+//	uint32_t NumTexture;
+//} CellGtfFileHeader;
+//
+//typedef struct {
+//	uint32_t Id;
+//	uint32_t OffsetToTex;
+//	uint32_t TextureSize;
+//	CellGcmTexture tex;
+//} CellGtfTextureAttribute;
+//#endif
 
 class Texture
 {

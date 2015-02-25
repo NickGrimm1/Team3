@@ -1,11 +1,11 @@
 #include "Spline.h"
 
 
-Spline::Spline(const Vector3& a, const Vector3& b, const Vector3& c, unsigned int subdivisions)
+Spline::Spline(const T3Vector3& a, const T3Vector3& b, const T3Vector3& c, unsigned int subdivisions)
 {
 	type = GL_LINE_STRIP;
 	segments = subdivisions;
-	ctrlPoints = new Vector3[3];
+	ctrlPoints = new T3Vector3[3];
 	ctrlPoints[0] = a;
 	ctrlPoints[1] = b;
 	ctrlPoints[2] = c;
@@ -15,8 +15,8 @@ Spline::Spline(const Vector3& a, const Vector3& b, const Vector3& c, unsigned in
 	// Build spline
 	for (unsigned int i = 0; i <= subdivisions; ++i) { // bezier spline has subdivisions segments
 		float t = (float) i / (float) subdivisions;
-		Vector3 tvec = Vector3(t*t, t, 1);
-		Vector3 bezier;
+		T3Vector3 tvec = T3Vector3(t*t, t, 1);
+		T3Vector3 bezier;
 		bezier.x = 0.5f * tvec.x - tvec.y + 0.5f * tvec.z;
 		bezier.y = -1.0f * tvec.x + tvec.y + 0.5f * tvec.z;
 		bezier.z = 0.5f * tvec.x;
@@ -33,7 +33,7 @@ Spline::Spline(const Vector3& a, const Vector3& b, const Vector3& c, unsigned in
 	
 	glGenBuffers(1, &controlVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, controlVBO);
-	glBufferData(GL_ARRAY_BUFFER, 3*sizeof(Vector3), ctrlPoints, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 3*sizeof(T3Vector3), ctrlPoints, GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
 }

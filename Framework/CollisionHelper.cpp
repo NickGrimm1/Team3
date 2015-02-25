@@ -4,7 +4,7 @@ bool CollisionHelper::SphereSphereCollision(PhysicsNode& p0, PhysicsNode& p1, Co
 	CollisionSphere& s0 = *(CollisionSphere*)p0.GetCollisionVolume();
 	CollisionSphere& s1 = *(CollisionSphere*)p1.GetCollisionVolume();
 
-	Vector3 normal = p0.GetPosition() - p1.GetPosition();
+	T3Vector3 normal = p0.GetPosition() - p1.GetPosition();
 	const float distSq = LengthSq(normal);
 	const float sumRadius = s0.GetRadius() + s1.GetRadius();
 
@@ -24,7 +24,7 @@ bool CollisionHelper::PlaneSphereCollision(PhysicsNode& p0, PhysicsNode& p1, Col
 	CollisionPlane& plane = *(CollisionPlane*)p0.GetCollisionVolume();
 	CollisionSphere& sphere = *(CollisionSphere*)p1.GetCollisionVolume();
 
-	float separation = Vector3::Dot(p1.GetPosition(), plane.GetNormal()) - plane.GetDistance();
+	float separation = T3Vector3::Dot(p1.GetPosition(), plane.GetNormal()) - plane.GetDistance();
 
 	if (separation > sphere.GetRadius()) {
 		return false;
@@ -44,7 +44,7 @@ bool CollisionHelper::AABBCollision(PhysicsNode& p0, PhysicsNode& p1,CollisionDa
 	CollisionAABB& aabb0 = *(CollisionAABB*)p0.GetCollisionVolume();
 	CollisionAABB& aabb1 = *(CollisionAABB*)p1.GetCollisionVolume();
 	
-	Vector3 normal = p0.GetPosition() - p1.GetPosition();
+	T3Vector3 normal = p0.GetPosition() - p1.GetPosition();
 
 	float dist = abs(p0.GetPosition().x - p1.GetPosition().x);
 	float sum = aabb0.getHalfDimensions().x + aabb1.getHalfDimensions().x;
@@ -69,7 +69,7 @@ bool CollisionHelper::BBAACollision(PhysicsNode& p0, PhysicsNode& p1,CollisionDa
 	CollisionBBAA& aabb0 = *(CollisionBBAA*)p0.GetCollisionVolume();
 	CollisionAABB& aabb1 = *(CollisionAABB*)p1.GetCollisionVolume();
 	
-	Vector3 normal = p0.GetPosition() - p1.GetPosition();
+	T3Vector3 normal = p0.GetPosition() - p1.GetPosition();
 
 	float dist = abs(p0.GetPosition().x - p1.GetPosition().x);
 	float sum = aabb0.getHalfDimensions().x + aabb1.getHalfDimensions().x;
@@ -93,7 +93,7 @@ bool CollisionHelper::BBAACollision(PhysicsNode& p0, PhysicsNode& p1,CollisionDa
 //	CollisionAABB& aabb0 = *(CollisionAABB*)p0.GetCollisionVolume();
 //	CollisionAABB& aabb1 = *(CollisionAABB*)p1.GetCollisionVolume();
 //	
-//	Vector3 normal = p0.GetPosition() - p1.GetPosition();
+//	T3Vector3 normal = p0.GetPosition() - p1.GetPosition();
 //
 //	float dist = abs(p0.GetPosition().x - p1.GetPosition().x);
 //	float sum = aabb0.getHalfDimensions().x + aabb1.getHalfDimensions().x;
@@ -122,57 +122,57 @@ void CollisionHelper::AddCollisionImpulse(PhysicsNode& p0, PhysicsNode& p1, Coll
 	
 	if (p0.GetInverseMass() + p1.GetInverseMass() == 0.0f) return;
 	
-	Vector3 r0 = data.m_point - p0.GetPosition();
-	Vector3 r1 = data.m_point - p1.GetPosition();
+	T3Vector3 r0 = data.m_point - p0.GetPosition();
+	T3Vector3 r1 = data.m_point - p1.GetPosition();
 	
-	Vector3 v0 = p0.GetLinearVelocity() + Vector3::Cross(p0.GetAngularVelocity(), r0);
-	Vector3 v1 = p1.GetLinearVelocity() + Vector3::Cross(p1.GetAngularVelocity(), r1);
+	T3Vector3 v0 = p0.GetLinearVelocity() + T3Vector3::Cross(p0.GetAngularVelocity(), r0);
+	T3Vector3 v1 = p1.GetLinearVelocity() + T3Vector3::Cross(p1.GetAngularVelocity(), r1);
 
-	Vector3 dv = v0 - v1;
+	T3Vector3 dv = v0 - v1;
 
-	float relMov = -Vector3::Dot(dv, data.m_normal);
+	float relMov = -T3Vector3::Dot(dv, data.m_normal);
 	if (relMov < -0.01f) return;
 
 	{
 		float e = 0.0f;
 		float normDiv = (p0.GetInverseMass() + p1.GetInverseMass()) +
-			Vector3::Dot(data.m_normal,
-				Vector3::Cross(p0.GetInverseInertia()*Vector3::Cross(r0, data.m_normal), r0) +
-				Vector3::Cross(p1.GetInverseInertia()*Vector3::Cross(r1, data.m_normal), r1));
-		float jn = -1*(1+e)*Vector3::Dot(dv, data.m_normal)/normDiv;
+			T3Vector3::Dot(data.m_normal,
+				T3Vector3::Cross(p0.GetInverseInertia()*T3Vector3::Cross(r0, data.m_normal), r0) +
+				T3Vector3::Cross(p1.GetInverseInertia()*T3Vector3::Cross(r1, data.m_normal), r1));
+		float jn = -1*(1+e)*T3Vector3::Dot(dv, data.m_normal)/normDiv;
 
 		jn = jn + (data.m_penetration*0.01f);
 
-		Vector3 l0 = p0.GetLinearVelocity() + data.m_normal*(jn*p0.GetInverseMass());
+		T3Vector3 l0 = p0.GetLinearVelocity() + data.m_normal*(jn*p0.GetInverseMass());
 		p0.SetLinearVelocity(l0);
-		Vector3 a0 = p0.GetAngularVelocity() + p0.GetInverseInertia()* Vector3::Cross(r0, data.m_normal * jn);
+		T3Vector3 a0 = p0.GetAngularVelocity() + p0.GetInverseInertia()* T3Vector3::Cross(r0, data.m_normal * jn);
 		p0.SetAngularVelocity(a0);
 
-		Vector3 l1 = p1.GetLinearVelocity() - data.m_normal*(jn*p1.GetInverseMass());
+		T3Vector3 l1 = p1.GetLinearVelocity() - data.m_normal*(jn*p1.GetInverseMass());
 		p1.SetLinearVelocity(l1);
-		Vector3 a1 = p1.GetAngularVelocity() - p1.GetInverseInertia()* Vector3::Cross(r1, data.m_normal * jn);
+		T3Vector3 a1 = p1.GetAngularVelocity() - p1.GetInverseInertia()* T3Vector3::Cross(r1, data.m_normal * jn);
 		p1.SetAngularVelocity(a1);
 
 	}
 
 	{
-		Vector3 tangent = dv - data.m_normal*Vector3::Dot(dv, data.m_normal);
+		T3Vector3 tangent = dv - data.m_normal*T3Vector3::Dot(dv, data.m_normal);
 		tangent.Normalise();
 		float tangDiv = (p0.GetInverseMass() + p1.GetInverseMass()) +
-			Vector3::Dot(tangent,
-			Vector3::Cross( p0.GetInverseInertia()* Vector3::Cross(r0, tangent), r0) +
-			Vector3::Cross( p1.GetInverseInertia()* Vector3::Cross(r1, tangent), r1));
+			T3Vector3::Dot(tangent,
+			T3Vector3::Cross( p0.GetInverseInertia()* T3Vector3::Cross(r0, tangent), r0) +
+			T3Vector3::Cross( p1.GetInverseInertia()* T3Vector3::Cross(r1, tangent), r1));
 
-		float jt = -1* Vector3::Dot(dv, tangent) / tangDiv;
+		float jt = -1* T3Vector3::Dot(dv, tangent) / tangDiv;
 
-		Vector3 l0 = p0.GetLinearVelocity() + tangent*(jt*p0.GetInverseMass());
+		T3Vector3 l0 = p0.GetLinearVelocity() + tangent*(jt*p0.GetInverseMass());
 		p0.SetLinearVelocity(l0);
-		Vector3 a0 = p0.GetAngularVelocity() + p0.GetInverseInertia()* Vector3::Cross(r0, tangent * jt);
+		T3Vector3 a0 = p0.GetAngularVelocity() + p0.GetInverseInertia()* T3Vector3::Cross(r0, tangent * jt);
 		p0.SetAngularVelocity(a0);
 
-		Vector3 l1 = p1.GetLinearVelocity() - tangent*(jt*p1.GetInverseMass());
+		T3Vector3 l1 = p1.GetLinearVelocity() - tangent*(jt*p1.GetInverseMass());
 		p1.SetLinearVelocity(l1);
-		Vector3 a1 = p1.GetAngularVelocity() - p1.GetInverseInertia()* Vector3::Cross(r1, tangent * jt);
+		T3Vector3 a1 = p1.GetAngularVelocity() - p1.GetInverseInertia()* T3Vector3::Cross(r1, tangent * jt);
 		p1.SetAngularVelocity(a1);
 	}
 

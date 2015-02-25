@@ -19,8 +19,8 @@ Version: 0.0.3 06/02/2015.</summary>
 */
 
 #pragma once
-#include "../Framework/Vector3.h"
-#include "../Framework/Vector4.h"
+#include "../Framework/T3Vector3.h"
+#include "../Framework/T3Vector4.h"
 #include "../Framework/Light.h"
 #include "Texture.h"
 #include "Mesh.h"
@@ -118,9 +118,9 @@ public:
 	void SetCamera(Camera* cam);
 #pragma endregion	
 
-	PointLight* AddPointLight(Vector3 lightPosition, float lightRadius, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
-	DirectionalLight* AddDirectionalLight(Vector3 lightDirection, Vector4 diffuseColour, Vector4 specularColour);
-	SpotLight* AddSpotLight(Vector3 lightPosition, Vector3 lightTarget, Vector3 upVector, float lightRadius, float lightAngle, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
+	PointLight* AddPointLight(T3Vector3 lightPosition, float lightRadius, T3Vector4 diffuseColour, T3Vector4 specularColour, bool castsShadow);
+	DirectionalLight* AddDirectionalLight(T3Vector3 lightDirection, T3Vector4 diffuseColour, T3Vector4 specularColour);
+	SpotLight* AddSpotLight(T3Vector3 lightPosition, T3Vector3 lightTarget, T3Vector3 upVector, float lightRadius, float lightAngle, T3Vector4 diffuseColour, T3Vector4 specularColour, bool castsShadow);
 		
 	// We don't actually need this since the GSM already holds the reference :)
 	//static GraphicsEngine& GetGraphicsEngine() {return *engine;}
@@ -168,7 +168,7 @@ private:
 	vector<pair<DrawableEntity3D*, DrawableEntity3D*>> addGameList; // Game elements to be added at next update
 	vector<pair<DrawableEntity3D*, bool>> removeGameList; // Game elements to be removed at next update
 
-	Vector3 boundingMin, boundingMax; // Defines a bounding box for the VISIBLE scene, built each frame from the nodes that pass frustum culling.
+	T3Vector3 boundingMin, boundingMax; // Defines a bounding box for the VISIBLE scene, built each frame from the nodes that pass frustum culling.
 
 	int width;
 	int height;

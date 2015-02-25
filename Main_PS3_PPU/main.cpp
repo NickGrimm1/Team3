@@ -9,7 +9,9 @@
 #include "Renderer.h"
 #include "Input.h"
 #include "timer.h"
-#include "camera.h"
+#include "../Team3Project1/FreeCamera.h"
+#include "../Framework/SceneNode.h"
+#include "../Team3Project1/Mesh.h"
 
 SYS_PROCESS_PARAM(1001, 0x10000)
 
@@ -25,9 +27,9 @@ void start_button()		{
 }
 
 void select_button()		{
-	camera->SetPosition(Vector3(0,0,10));
-	camera->SetPitch(0.0f);
-	camera->SetYaw(0.0f);
+	camera->SetPosition(T3Vector3(0,0,10));
+	//camera->SetPitch(0.0f);
+	//camera->SetYaw(0.0f);
 }
 
 
@@ -50,25 +52,25 @@ int main(void)	{
 
 	//Make a new quad mesh, and set its texture to a newcastle logo
 	Mesh* m = Mesh::GenerateQuad();
-	m->SetDefaultTexture(*GCMRenderer::LoadGTF("/ncl.gtf"));
-
+	//m->SetDefaultTexture(*GCMRenderer::LoadGTF("/ncl.gtf"));
+	
 	//Create a new scenenode
 	root = new SceneNode();
 
-	SceneNode*logo = new SceneNode();
+	SceneNode* logo = new SceneNode();
 	logo->SetMesh(m); //tell it to draw our new quad
 
-	logo->SetTransform(/*Matrix4::rotationX(DegToRad(-90)) * */Matrix4::scale(Vector3(100,100,100)));
+	logo->SetTransform(/*Matrix4::rotationX(DegToRad(-90)) * */T3Matrix4::Scale(T3Vector3(100,100,100)));
 
-	root->AddChild(*logo);
+	root->AddChild(logo);
 
 
 	renderer.SetRootNode(root); //Set our new SceneNode as the root for our Renderer
 
 	//We need a new camera!
-	camera = new Camera();	
-	camera->SetControllingPad(JOYPAD_A);	//Controlled via joypad A
-	camera->SetPosition(Vector3(0,0,100)); //And set back slightly so we can see the node at the origin
+	camera = new FreeCamera();	
+	//camera->SetControllingPad(JOYPAD_A);	//Controlled via joypad A
+	camera->SetPosition(T3Vector3(0,0,100)); //And set back slightly so we can see the node at the origin
 
 	renderer.SetCamera(camera);	//Set the current renderer camera
 
@@ -79,7 +81,7 @@ int main(void)	{
 
 		float msec = (float)gameTime.GetTimedMS();
 
-		camera->Update(msec);
+		camera->UpdateCamera();
 
 		root->Update(msec);	//Update our scene hierarchy. This bit is new (previously the renderer handled it)
 
@@ -89,7 +91,7 @@ int main(void)	{
 
 	std::cout << "Quitting..." << std::endl;
 
-	delete m->GetDefaultTexture();
+	//delete m->GetDefaultTexture();
 	delete m;
 	delete root;
 	Input::Destroy();

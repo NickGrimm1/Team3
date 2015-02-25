@@ -1,6 +1,11 @@
 #include "SceneNode.h"
+#if PS3_BUILD
+#include "../Team3Project1/GCMRenderer.h"
+#endif
+#include "../Team3Project1/DrawableEntity3D.h"
+#include "../Team3Project1/Mesh.h"
 
-SceneNode::SceneNode(Mesh*mesh, Vector4 colour)	{
+SceneNode::SceneNode(Mesh*mesh, T3Vector4 colour)	{
 	awake				= true;
 	this->mesh			= mesh;
 	this->colour		= colour;
@@ -9,7 +14,7 @@ SceneNode::SceneNode(Mesh*mesh, Vector4 colour)	{
 	boundingRadius		= 100.0f;
 	distanceFromCamera	= 0.0f;
 	
-	modelScale			= Vector3(1,1,1);
+	modelScale			= T3Vector3(1,1,1);
 }
 
 SceneNode::SceneNode(DrawableEntity3D* entity)	{
@@ -17,7 +22,7 @@ SceneNode::SceneNode(DrawableEntity3D* entity)	{
 	awake				= true;
 	parent				= NULL;
 	distanceFromCamera	= 0.0f;
-	modelScale			= Vector3(1,1,1);
+	modelScale			= T3Vector3(1,1,1);
 }
 
 SceneNode::~SceneNode(void)	{
@@ -25,6 +30,11 @@ SceneNode::~SceneNode(void)	{
 		delete children[i];
 	}
 	children.clear();
+}
+
+float SceneNode::GetBoundingRadius()
+{
+	return sceneElement->GetBoundingRadius();
 }
 
 void SceneNode::AddChild( SceneNode* s )	{
@@ -53,7 +63,7 @@ bool SceneNode::CompareByZ(SceneNode* a,SceneNode* b)  {
 
 void SceneNode::Update(float msec)	 {
 	if (sceneElement) {
-		transform = Matrix4::Translation(sceneElement->GetOriginPosition()) * sceneElement->GetRotation().ToMatrix();
+		transform = T3Matrix4::Translation(sceneElement->GetOriginPosition()) * sceneElement->GetRotation().ToMatrix();
 	}
 	else
 	{
@@ -103,9 +113,21 @@ bool SceneNode::RemoveChild(DrawableEntity3D* toDelete, bool recursive, bool rem
 	}
 	return false;
 }
-
+#if WINDOWS_BUILD
 void SceneNode::Draw(const OGLRenderer & r) {
 	if (mesh) { 
 		mesh->Draw();
-	};
+	}
+
 }
+#endif
+
+#if PS3_BUILD
+void SceneNode::Draw(const GCMRenderer& r)
+{
+	if(mesh)
+	{
+		mesh->Draw(r.GetCurrentShader());
+	}
+}
+#endif

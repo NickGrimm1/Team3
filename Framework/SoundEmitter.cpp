@@ -116,14 +116,14 @@
 	 }
 
 	 if( currentSource ) {
-		 Vector3 pos ;
+		 T3Vector3 pos ;
 		 if( GetIsGlobal ()) {
 			pos = SoundSystem :: GetSoundSystem () ->GetListenerTransform (). GetPositionVector ();
 		 }
 
 		 else{
 			 if( target ) {
-				pos = Vector3(0,0,0);/*target -> GetWorldTransform ().GetPositionVector ();*/// set sound source's current position
+				pos = T3Vector3(0,0,0);/*target -> GetWorldTransform ().GetPositionVector ();*/// set sound source's current position
 						  }
 			 else {
 				pos = this -> position ;

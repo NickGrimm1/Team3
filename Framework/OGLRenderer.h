@@ -24,11 +24,11 @@ _-_-_-_-_-_-_-""  ""
 
 #include "SOIL.h"
 
-#include "Vector4.h"
-#include "Vector3.h"
-#include "Vector2.h"
+#include "T3Vector4.h"
+#include "T3Vector3.h"
+#include "T3Vector2.h"
 #include "Quaternion.h"
-#include "Matrix4.h"
+#include "T3Matrix4.h"
 #include "Window.h"
 #include "light.h"
 
@@ -55,7 +55,7 @@ static const float biasValues[16] = {
 	0.0, 0.0, 0.5, 0.0,
 	0.5, 0.5, 0.5, 1.0
 };
-static const Matrix4 biasMatrix(const_cast<float*>(biasValues));
+static const T3Matrix4 biasMatrix(const_cast<float*>(biasValues));
 
 enum DebugDrawMode {
 	DEBUGDRAW_ORTHO,
@@ -63,8 +63,8 @@ enum DebugDrawMode {
 };
 
 struct DebugDrawData {
-	vector<Vector3> lines;
-	vector<Vector3> colours;
+	vector<T3Vector3> lines;
+	vector<T3Vector3> colours;
 
 	GLuint array;
 	GLuint buffers[2];
@@ -82,7 +82,7 @@ struct DebugDrawData {
 		colours.clear();
 	}
 
-	inline void AddLine(const Vector3 &from,const Vector3 &to,const Vector3 &fromColour,const Vector3 &toColour) {
+	inline void AddLine(const T3Vector3 &from,const T3Vector3 &to,const T3Vector3 &fromColour,const T3Vector3 &toColour) {
 		lines.push_back(from);
 		lines.push_back(to);
 
@@ -106,10 +106,10 @@ public:
 
 	bool			HasInitialised() const;	
 	
-	static void		DrawDebugLine  (DebugDrawMode mode, const Vector3 &from,const Vector3 &to,const Vector3 &fromColour = Vector3(1,1,1),const Vector3 &toColour = Vector3(1,1,1));
-	static void		DrawDebugBox   (DebugDrawMode mode, const Vector3 &at,const Vector3 &scale,const Vector3 &colour = Vector3(1,1,1));
-	static void		DrawDebugCross (DebugDrawMode mode, const Vector3 &at,const Vector3 &scale,const Vector3 &colour = Vector3(1,1,1));
-	static void		DrawDebugCircle(DebugDrawMode mode, const Vector3 &at,const float radius,const Vector3 &colour = Vector3(1,1,1));	
+	static void		DrawDebugLine  (DebugDrawMode mode, const T3Vector3 &from,const T3Vector3 &to,const T3Vector3 &fromColour = T3Vector3(1,1,1),const T3Vector3 &toColour = T3Vector3(1,1,1));
+	static void		DrawDebugBox   (DebugDrawMode mode, const T3Vector3 &at,const T3Vector3 &scale,const T3Vector3 &colour = T3Vector3(1,1,1));
+	static void		DrawDebugCross (DebugDrawMode mode, const T3Vector3 &at,const T3Vector3 &scale,const T3Vector3 &colour = T3Vector3(1,1,1));
+	static void		DrawDebugCircle(DebugDrawMode mode, const T3Vector3 &at,const float radius,const T3Vector3 &colour = T3Vector3(1,1,1));	
 	
 	void			SetAsDebugDrawingRenderer() {
 		debugDrawingRenderer = this;
@@ -129,17 +129,17 @@ protected:
 	//void			SetShaderLight(const Light &l);
 	void			SetShaderLight(const std::vector<Light*>& lights);
 
-	void			DrawDebugPerspective(Matrix4*matrix = 0);
-	void			DrawDebugOrtho(Matrix4*matrix = 0);
+	void			DrawDebugPerspective(T3Matrix4*matrix = 0);
+	void			DrawDebugOrtho(T3Matrix4*matrix = 0);
 
 	Shader* currentShader;
 	
 
-	Matrix4 projMatrix;		//Projection matrix
-	Matrix4 modelMatrix;	//Model matrix. NOT MODELVIEW
-	Matrix4 viewMatrix;		//View matrix
-	Matrix4 textureMatrix;	//Texture matrix
-	Matrix4 shadowMatrix;	//Shadow matrix
+	T3Matrix4 projMatrix;		//Projection matrix
+	T3Matrix4 modelMatrix;	//Model matrix. NOT MODELVIEW
+	T3Matrix4 viewMatrix;		//View matrix
+	T3Matrix4 textureMatrix;	//Texture matrix
+	T3Matrix4 shadowMatrix;	//Shadow matrix
 
 	int		width;			//Render area width (not quite the same as window width)
 	int		height;			//Render area height (not quite the same as window height)

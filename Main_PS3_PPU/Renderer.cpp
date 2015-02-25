@@ -1,14 +1,18 @@
 #include "Renderer.h"
+#include "../Framework/Shader.h"
+#include "../Team3Project1/ShaderPart.h"
 
 Renderer::Renderer(void)	{
 	/*
 	You're provided with a very basic vertex / fragment shader, to get you started
 	with Cg, and drawing textured objects. 
 	*/
-	VertexShader* basicVert		= new VertexShader("/vertex.vpo");
-	FragmentShader* basicFrag	= new FragmentShader("/fragment.fpo");
-
-	this->SetCurrentShader(*basicVert,*basicFrag);
+	ShaderPart* basicVert		= new ShaderPart("/vertex.vpo", ShaderType::VERTEX);
+	ShaderPart* basicFrag		= new ShaderPart("/fragment.fpo", ShaderType::FRAGMENT);
+	Shader* s = new Shader();
+	s->SetVertex(basicVert);
+	s->SetFragment(basicFrag);
+	this->SetCurrentShader(s);
 
 	/*
 	Projection matrix...0.7853982 is 45 degrees in radians.
@@ -30,7 +34,7 @@ void Renderer::RenderScene() {
 	std::cout << "RenderScene!" << std::endl;
 	SetViewport();
 	ClearBuffer();
-	this->SetCurrentShader(*currentVert,*currentFrag);
+	this->SetCurrentShader(shader);
 
 	cellGcmSetDepthTestEnable(CELL_GCM_TRUE);
 	cellGcmSetDepthFunc(CELL_GCM_LESS);
@@ -38,14 +42,18 @@ void Renderer::RenderScene() {
 	modelMatrix = Matrix4::identity(); 
 
 	if(camera) {
-		viewMatrix = camera->BuildViewMatrix();
+		T3Matrix4 m = camera->BuildViewMatrix();
+		viewMatrix = Matrix4::identity();
+		for (int x = 0; x < 4; ++x)
+			for (int y = 0; y < 4; ++y)
+				viewMatrix.setElem(y, x, m.values[y + x * 4]);
 	}
 	else{
 		viewMatrix = Matrix4::identity();
 	}
 
-	currentVert->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
-
+	shader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
+	
 	if(root) {
 		DrawNode(root);
 	}

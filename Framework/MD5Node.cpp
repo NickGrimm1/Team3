@@ -98,7 +98,7 @@ void	MD5Node::Draw(const OGLRenderer &r) {
 }
 
 
-bool	MD5Node::GetJointWorldTransform(const string&name, Matrix4 &t) {
+bool	MD5Node::GetJointWorldTransform(const string&name, T3Matrix4 &t) {
 	int index = sourceData.GetIndexForJointName(name);
 	if (index < 0) {
 		return false;
@@ -109,7 +109,7 @@ bool	MD5Node::GetJointWorldTransform(const string&name, Matrix4 &t) {
 	return true;
 }
 
-bool	MD5Node::GetJointLocalTransform(const string&name, Matrix4 &t) {
+bool	MD5Node::GetJointLocalTransform(const string&name, T3Matrix4 &t) {
 	int index = sourceData.GetIndexForJointName(name);
 	if (index < 0) {
 		return false;
@@ -141,7 +141,7 @@ bool	MD5Node::GetParentWorldOrientation(const string&name, Quaternion &t) {
 }
 
 
-bool	MD5Node::GetParentLocalTransform(const string&name, Matrix4 &t) {
+bool	MD5Node::GetParentLocalTransform(const string&name, T3Matrix4 &t) {
 	int index = sourceData.GetIndexForJointName(name);
 	if (index < 0) {
 		return false;
@@ -155,7 +155,7 @@ bool	MD5Node::GetParentLocalTransform(const string&name, Matrix4 &t) {
 
 	return true;
 }
-bool	MD5Node::GetParentWorldTransform(const string&name, Matrix4 &t) {
+bool	MD5Node::GetParentWorldTransform(const string&name, T3Matrix4 &t) {
 	int index = sourceData.GetIndexForJointName(name);
 	if (index < 0) {
 		return false;
@@ -172,7 +172,7 @@ bool	MD5Node::GetParentWorldTransform(const string&name, Matrix4 &t) {
 
 
 
-bool	MD5Node::SetJointLocalTransform(const string &name, Matrix4 &t) {
+bool	MD5Node::SetJointLocalTransform(const string &name, T3Matrix4 &t) {
 	int index = sourceData.GetIndexForJointName(name);
 	if (index < 0) {
 		return false;
@@ -183,7 +183,7 @@ bool	MD5Node::SetJointLocalTransform(const string &name, Matrix4 &t) {
 	return true;
 }
 
-bool	MD5Node::SetJointWorldTransform(const string &name, Matrix4 &t) {
+bool	MD5Node::SetJointWorldTransform(const string &name, T3Matrix4 &t) {
 	int index = sourceData.GetIndexForJointName(name);
 	if (index < 0) {
 		return false;
@@ -229,7 +229,7 @@ void	MD5Node::DebugDrawSkeleton() {
 		glGenBuffers(1, &skeletonBuffer);
 	
 		//Temporary chunk of memory to keep our joint positions in
-		Vector3*	 skeletonVertices = new Vector3[currentSkeleton.numJoints*2];
+		T3Vector3*	 skeletonVertices = new T3Vector3[currentSkeleton.numJoints*2];
 	
 	
 		/*
@@ -252,7 +252,7 @@ void	MD5Node::DebugDrawSkeleton() {
 		//You should know what this all does by now, except we combine it with the draw operations in a single function
 		glBindVertexArray(skeletonArray);
 		glBindBuffer(GL_ARRAY_BUFFER, skeletonBuffer);
-		glBufferData(GL_ARRAY_BUFFER, currentSkeleton.numJoints*sizeof(Vector3) * 2, skeletonVertices, GL_STREAM_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, currentSkeleton.numJoints*sizeof(T3Vector3) * 2, skeletonVertices, GL_STREAM_DRAW);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0); 
 		glEnableVertexAttribArray(0);
 	
@@ -291,49 +291,49 @@ void	MD5Node::DebugDrawJointTransforms(float size, bool worldSpace) {
 
 	int numVerts = currentSkeleton.numJoints * 6;
 
-	Vector3*	 skeletonVertices = new Vector3[numVerts];
-	Vector4*	 skeletonColours  = new Vector4[numVerts];
+	T3Vector3*	 skeletonVertices = new T3Vector3[numVerts];
+	T3Vector4*	 skeletonColours  = new T3Vector4[numVerts];
 
 
 	for (int i = 0; i < currentSkeleton.numJoints; ++i) {
-		Matrix4 transform = (worldSpace ? currentSkeleton.joints[i].transform : currentSkeleton.joints[i].localTransform);
+		T3Matrix4 transform = (worldSpace ? currentSkeleton.joints[i].transform : currentSkeleton.joints[i].localTransform);
 
-		Vector3 start = transform.GetPositionVector();
-		transform.SetPositionVector(Vector3(0, 0, 0));
+		T3Vector3 start = transform.GetPositionVector();
+		transform.SetPositionVector(T3Vector3(0, 0, 0));
 
-		Vector4 endX = transform * Vector4(1, 0, 0, 1);
-		Vector4 endY = transform * Vector4(0, 1, 0, 1);
-		Vector4 endZ = transform * Vector4(0, 0, 1, 1);
+		T3Vector4 endX = transform * T3Vector4(1, 0, 0, 1);
+		T3Vector4 endY = transform * T3Vector4(0, 1, 0, 1);
+		T3Vector4 endZ = transform * T3Vector4(0, 0, 1, 1);
 
 		skeletonVertices[(i * 6) + 0] = currentSkeleton.joints[i].transform.GetPositionVector();
-		skeletonVertices[(i * 6) + 1] = currentSkeleton.joints[i].transform.GetPositionVector() + (endX.ToVector3() * size);
+		skeletonVertices[(i * 6) + 1] = currentSkeleton.joints[i].transform.GetPositionVector() + (endX.ToT3Vector3() * size);
 
 		skeletonVertices[(i * 6) + 2] = currentSkeleton.joints[i].transform.GetPositionVector();
-		skeletonVertices[(i * 6) + 3] = currentSkeleton.joints[i].transform.GetPositionVector() + (endY.ToVector3() * size);
+		skeletonVertices[(i * 6) + 3] = currentSkeleton.joints[i].transform.GetPositionVector() + (endY.ToT3Vector3() * size);
 					
 		skeletonVertices[(i * 6) + 4] = currentSkeleton.joints[i].transform.GetPositionVector();
-		skeletonVertices[(i * 6) + 5] = currentSkeleton.joints[i].transform.GetPositionVector() + (endZ.ToVector3() * size);
+		skeletonVertices[(i * 6) + 5] = currentSkeleton.joints[i].transform.GetPositionVector() + (endZ.ToT3Vector3() * size);
 
 
-		skeletonColours[(i * 6) + 0] = Vector4(1, 0, 0, 1);
-		skeletonColours[(i * 6) + 1] = Vector4(1, 0, 0, 1);
+		skeletonColours[(i * 6) + 0] = T3Vector4(1, 0, 0, 1);
+		skeletonColours[(i * 6) + 1] = T3Vector4(1, 0, 0, 1);
 
-		skeletonColours[(i * 6) + 2] = Vector4(0, 1, 0, 1);
-		skeletonColours[(i * 6) + 3] = Vector4(0, 1, 0, 1);
+		skeletonColours[(i * 6) + 2] = T3Vector4(0, 1, 0, 1);
+		skeletonColours[(i * 6) + 3] = T3Vector4(0, 1, 0, 1);
 
-		skeletonColours[(i * 6) + 4] = Vector4(0, 0, 1, 1);
-		skeletonColours[(i * 6) + 5] = Vector4(0, 0, 1, 1);
+		skeletonColours[(i * 6) + 4] = T3Vector4(0, 0, 1, 1);
+		skeletonColours[(i * 6) + 5] = T3Vector4(0, 0, 1, 1);
 	}
 
 	//You should know what this all does by now, except we combine it with the draw operations in a single function
 	glBindVertexArray(skeletonArray);
 	glBindBuffer(GL_ARRAY_BUFFER, skeletonBuffer);
-	glBufferData(GL_ARRAY_BUFFER, currentSkeleton.numJoints*sizeof(Vector3) * 6, skeletonVertices, GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, currentSkeleton.numJoints*sizeof(T3Vector3) * 6, skeletonVertices, GL_STREAM_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, skeletonColourBuffer);
-	glBufferData(GL_ARRAY_BUFFER, currentSkeleton.numJoints*sizeof(Vector4) * 6, skeletonColours, GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, currentSkeleton.numJoints*sizeof(T3Vector4) * 6, skeletonColours, GL_STREAM_DRAW);
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(1);
 

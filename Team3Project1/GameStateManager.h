@@ -200,7 +200,7 @@ public:
 	<param name='type'>The event type.</param>
 	<param name='position'>The resolution independent co-ordinates of the mouse cursor.</param>
 	*/
-	void MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, Vector2& position)
+	void MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position)
 	{
 		for (unsigned int i = 0; i < instance->gameScreens.size(); i++)
 			instance->gameScreens[i]->MouseEvent(type, button, position);
@@ -210,7 +210,7 @@ public:
 	<param name='start'>The resolution independent co-ordinates of the mouse cursor at the start of the frame.</param>
 	<param name='finish'>The resolution independent co-ordinates of the mouse cursor at the end of the frame.</param>
 	*/
-	void MouseMoved(Vector2& finish)
+	void MouseMoved(T3Vector2& finish)
 	{
 		for (unsigned int i = 0; i < instance->gameScreens.size(); i++)
 			instance->gameScreens[i]->MouseMoved(finish);
@@ -219,7 +219,7 @@ public:
 	<summary>Notifies all screens in the stack that the mouse scroll wheel has moved.</summary>
 	<param name='amount'>The amount of the movement.</param>
 	*/
-	void MouseScrolled(Vector2& position, int amount)
+	void MouseScrolled(T3Vector2& position, int amount)
 	{
 		for (unsigned int i = 0; i < instance->gameScreens.size(); i++)
 			instance->gameScreens[i]->MouseScrolled(position, amount);
@@ -251,7 +251,7 @@ public:
 	<param name='analogueControl'>The control that is displaced.</param>
 	<param name='amount'>The amount of the displacement. For the triggers, only the x co-ordinate is used.</param>
 	*/
-	void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, Vector2& amount)
+	void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount)
 	{
 		for (unsigned int i = 0; i < gameScreens.size(); i++)
 			gameScreens[i]->GamepadAnalogueDisplacement(playerID, analogueControl, amount);

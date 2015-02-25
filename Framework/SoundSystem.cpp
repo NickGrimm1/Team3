@@ -70,9 +70,9 @@
 
  void SoundSystem :: UpdateListener () {
 	 if( listener ) {
-		 Vector3 worldPos = listenerTransform.GetPositionVector ();
+		 T3Vector3 worldPos = listenerTransform.GetPositionVector ();
 
-		 Vector3 dirup [2];
+		 T3Vector3 dirup [2];
 		 // forward
 		 dirup [0].x = - listenerTransform.values [2];
 		 dirup [0].y = - listenerTransform.values [6];
@@ -126,10 +126,10 @@
  }
 
 
- void SoundSystem :: PlaySoundA ( Sound * s , Vector3 position ) {
+ void SoundSystem :: PlaySoundA ( Sound * s , T3Vector3 position ) {
 	 SoundEmitter * n = new SoundEmitter ();
 	 n -> SetLooping ( false );
-	 //n -> SetTransform ( Matrix4 :: Translation ( position ));
+	 //n -> SetTransform ( T3Matrix4 :: Translation ( position ));
 	 n -> SetSound ( s );
 	 temporaryEmitters.push_back ( n );
  }

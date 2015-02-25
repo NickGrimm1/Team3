@@ -81,8 +81,8 @@ time lighting tutorial, uncomment both OBJ_USE_NORMALS and OBJ_USE_TANGENTS_BUMP
 #include <sstream>
 #include <map>
 #include "../Team3Project1/GameStateManager.h"
-#include "Vector3.h"
-#include "Vector2.h"
+#include "T3Vector3.h"
+#include "T3Vector2.h"
 #include "../Team3Project1/Mesh.h"
 #include "ChildMeshInterface.h"
 

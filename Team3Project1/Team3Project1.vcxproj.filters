@@ -252,22 +252,10 @@
     <ClInclude Include="..\Framework\GameTimer.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Framework\Matrix4.h">
-      <Filter>Framework\Common\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Framework\Plane.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\Quaternion.h">
-      <Filter>Framework\Common\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\Vector2.h">
-      <Filter>Framework\Common\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\Vector3.h">
-      <Filter>Framework\Common\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\Vector4.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\Window.h">
@@ -468,6 +456,21 @@
     <ClInclude Include="HudTestScreen.h">
       <Filter>Game\HUD\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GCMRenderer.h">
+      <Filter>Framework\Graphics\PS3\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\T3Vector3.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\T3Vector4.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\T3Vector2.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\T3Matrix4.h">
+      <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">
@@ -664,6 +667,9 @@
     </ClCompile>
     <ClCompile Include="HudTestScreen.cpp">
       <Filter>Game\HUD\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GCMRenderer.cpp">
+      <Filter>Framework\Graphics\PS3\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -35,8 +35,8 @@
 	 inline void SetLooping ( bool state ) { isLooping = state;}
 	 inline bool GetLooping () { return isLooping;}   //sound loop or not
 
-	 inline void SetTransform (Matrix4 position) {Position=position;}
-	 inline Matrix4 GetTransform() {return Position;}
+	 inline void SetTransform (T3Matrix4 position) {Position=position;}
+	 inline T3Matrix4 GetTransform() {return Position;}
 
 	 inline void SetRadius ( float value ) {radius = max (0.0f , value );} // max radius which it can be heard
 	 inline float GetRadius () { return radius;}
@@ -57,7 +57,7 @@
 
 	 virtual void Update ( float msec );
 
-     Vector3 position;
+     T3Vector3 position;
 
 	 bool GetIsGlobal () { return isGlobal ;}
      void SetIsGlobal ( bool value ) { isGlobal = value ;}
@@ -73,7 +73,7 @@
 	 bool isLooping;
 	 float timeLeft;
 	 bool isGlobal ;
-	 Matrix4 Position;
+	 T3Matrix4 Position;
 	 double streamPos ;
 	 ALuint streamBuffers [ NUM_STREAM_BUFFERS ];
 

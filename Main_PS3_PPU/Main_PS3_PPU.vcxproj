@@ -27,28 +27,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="GCMRenderer.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="OBJMesh.cpp" />
     <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="SceneNode.cpp" />
-    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
     <ClInclude Include="ChildMeshInterface.h" />
     <ClInclude Include="common.h" />
-    <ClInclude Include="GCMRenderer.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="Mesh.h" />
     <ClInclude Include="OBJMesh.h" />
     <ClInclude Include="Renderer.h" />
-    <ClInclude Include="SceneNode.h" />
-    <ClInclude Include="Shader.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -135,7 +125,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">
     <ClCompile>
-      <PreprocessorDefinitions>_DEBUG;__CELL_ASSERT__;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;__CELL_ASSERT__;%(PreprocessorDefinitions);PS3_BUILD</PreprocessorDefinitions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -147,7 +137,7 @@
     <ClCompile>
       <PreprocessorDefinitions>_DEBUG;__CELL_ASSERT__;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|PS3'">

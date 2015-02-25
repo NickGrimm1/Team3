@@ -47,7 +47,7 @@ Quaternion Quaternion::operator *(const Quaternion &b) const{
 	return ans;
 }
 
-Quaternion Quaternion::operator *(const Vector3 &b) const{
+Quaternion Quaternion::operator *(const T3Vector3 &b) const{
 	Quaternion ans;
 
 	ans.w = -(x * b.x) - (y * b.y) - (z * b.z);
@@ -58,8 +58,8 @@ Quaternion Quaternion::operator *(const Vector3 &b) const{
 	return ans;
 }
 
-Matrix4 Quaternion::ToMatrix() const{
-	Matrix4 mat;
+T3Matrix4 Quaternion::ToMatrix() const{
+	T3Matrix4 mat;
 
 	float yy = y*y;
 	float zz = z*z;
@@ -111,7 +111,7 @@ Quaternion Quaternion::EulerAnglesToQuaternion(float pitch, float yaw, float rol
 	return q;
 };
 
-Quaternion Quaternion::AxisAngleToQuaterion(const Vector3& vector, float degrees)	{
+Quaternion Quaternion::AxisAngleToQuaterion(const T3Vector3& vector, float degrees)	{
 	float theta = (float)DegToRad(degrees);
 	float result = (float)sin( theta / 2.0f );
 
@@ -133,7 +133,7 @@ Quaternion Quaternion::Conjugate() const
 	return Quaternion(-x,-y,-z,w);
 }
 
-Quaternion Quaternion::FromMatrix(const Matrix4 &m)	{
+Quaternion Quaternion::FromMatrix(const T3Matrix4 &m)	{
 	Quaternion q;
 
 	q.w = sqrt(max(0.0f, (1.0f + m.values[0] + m.values[5] + m.values[10]))) / 2.0f;
@@ -148,12 +148,12 @@ Quaternion Quaternion::FromMatrix(const Matrix4 &m)	{
 	return q;
 }
 
-Vector3 Quaternion::GetEulerAngles()
+T3Vector3 Quaternion::GetEulerAngles()
 {
 	float gimbalTest = x * y + z  * w;
 	if (abs(gimbalTest - 0.5f) < 0.00001f) // Due North
 	{
-		return Vector3(
+		return T3Vector3(
 			0, // Pitch
 			RadToDeg(2 * atan2(x, w)),// Yaw
 			RadToDeg(PI / 2)// Roll
@@ -161,7 +161,7 @@ Vector3 Quaternion::GetEulerAngles()
 	}
 	if (abs(gimbalTest + 0.5f) < 0.00001f) // Due South
 	{
-		return Vector3(
+		return T3Vector3(
 			0, // Pitch
 			RadToDeg(-2 * atan2(x, w)),// Yaw
 			RadToDeg(-PI / 2)// Roll
@@ -172,7 +172,7 @@ Vector3 Quaternion::GetEulerAngles()
 	float ySq = y * y;
 	float zSq = z * z;
 
-	return Vector3(
+	return T3Vector3(
 		RadToDeg(atan2(2 * x * w - 2 * y * z, 1 - 2 * xSq - 2 * zSq)), // Pitch
 		RadToDeg(atan2(2 * x * y - 2 * x * z, 1 - 2 * ySq - 2 * zSq)), // Yaw
 		RadToDeg(asin(2 * x * y + 2 * z * w)) // Roll

@@ -6,8 +6,8 @@ class Vehicle {
 public:
 	Vehicle();
 	~Vehicle(void);
-	GameEntity* BuildPlayerEntity(float size, Vector3 pos);
-	GameEntity* BuildBuffEntity(float radius, Vector3 pos);
+	GameEntity* BuildPlayerEntity(float size, T3Vector3 pos);
+	GameEntity* BuildBuffEntity(float radius, T3Vector3 pos);
 	//void UpdatePlayer(float msec);
 	GameEntity* GetPlayer(){return Player;}
 	void SetSpeed_Player(int Speed){ Speed_Player=Speed;}
@@ -17,10 +17,10 @@ public:
 	void UpdatePlayer1(float msec);
 	//void UpdatePlayer2(float msec);
 
-	Vector3 tempPosition;
+	T3Vector3 tempPosition;
 protected:
-	Vector3 PlayerPosition;
-	Vector3 temp,temp1,temp2;
+	T3Vector3 PlayerPosition;
+	T3Vector3 temp,temp1,temp2;
 	Mesh* PlayerMesh;
 	Mesh* BuffMesh;
 	GameEntity* Player; 

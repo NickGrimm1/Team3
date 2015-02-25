@@ -19,15 +19,15 @@ Debuff::Debuff()
 	//random the buff position
 	SpeedBuffMesh = new OBJMesh(MESHDIR"gas_tank.obj");
 	InverseleftrightMesh =new OBJMesh(MESHDIR"ico.obj");
-	SpdBf_pos = Vector3(SpdBf_pos_x,100,SpdBf_pos_z);
-	RtBf_pos=Vector3(InvBuff_pos_x,100,InvBuff_pos_z);
+	SpdBf_pos = T3Vector3(SpdBf_pos_x,100,SpdBf_pos_z);
+	RtBf_pos=T3Vector3(InvBuff_pos_x,100,InvBuff_pos_z);
 	size = 20.0f;
 	SpeedUp= BuildSpeedBuffEntity(size,SpdBf_pos);
 	Inverse= BuildInvLeftAndRightEntity(size,RtBf_pos);
 	speeduptime=5000.0f;
 	//Speed_Player=1;
 	//Speed_Rotate = -0.0004;
-	//tempPosition = Vector3(0,350,-800);
+	//tempPosition = T3Vector3(0,350,-800);
 	//Dist2=Car_pos-RtBf_pos;
 	LR=true;
 }
@@ -40,11 +40,11 @@ Debuff::~Debuff(void)
 }
 
 
-GameEntity* Debuff::BuildSpeedBuffEntity(float radius, Vector3 pos) {   
+GameEntity* Debuff::BuildSpeedBuffEntity(float radius, T3Vector3 pos) {   
 	SceneNode* test = new SceneNode(SpeedBuffMesh);
-	test->SetModelScale(Vector3(radius,radius,radius));
+	test->SetModelScale(T3Vector3(radius,radius,radius));
 	test->SetBoundingRadius(radius);
-	test->SetColour(Vector4(1,0,0,1));
+	test->SetColour(T3Vector4(1,0,0,1));
 	PhysicsNode*p = new PhysicsNode();
 
 	p->SetUseGravity(false);
@@ -55,11 +55,11 @@ GameEntity* Debuff::BuildSpeedBuffEntity(float radius, Vector3 pos) {
 	return g;
 }
 
-GameEntity* Debuff::BuildInvLeftAndRightEntity(float radius, Vector3 pos) {   
+GameEntity* Debuff::BuildInvLeftAndRightEntity(float radius, T3Vector3 pos) {   
 	SceneNode* test = new SceneNode(InverseleftrightMesh);
-	test->SetModelScale(Vector3(radius,radius,radius));
+	test->SetModelScale(T3Vector3(radius,radius,radius));
 	test->SetBoundingRadius(radius);
-	test->SetColour(Vector4(1,0,0,1));
+	test->SetColour(T3Vector4(1,0,0,1));
 	PhysicsNode*p = new PhysicsNode();
 
 	p->SetUseGravity(false);
@@ -72,15 +72,15 @@ GameEntity* Debuff::BuildInvLeftAndRightEntity(float radius, Vector3 pos) {
 
 
 void Debuff::UpdateDebuff(Vehicle *car, float msec){
-	Vector3 Car_pos=car->GetPlayer()->GetPhysicsNode().GetPosition();
-	Vector3 SpeedUp_pos=SpeedUp->GetPhysicsNode().GetPosition();
-	Vector3 RtBf_pos=Inverse->GetPhysicsNode().GetPosition();
-	Vector3 Dist= Car_pos-SpeedUp_pos;
-	Vector3 Dist2=Car_pos-RtBf_pos;
+	T3Vector3 Car_pos=car->GetPlayer()->GetPhysicsNode().GetPosition();
+	T3Vector3 SpeedUp_pos=SpeedUp->GetPhysicsNode().GetPosition();
+	T3Vector3 RtBf_pos=Inverse->GetPhysicsNode().GetPosition();
+	T3Vector3 Dist= Car_pos-SpeedUp_pos;
+	T3Vector3 Dist2=Car_pos-RtBf_pos;
 	if(Dist.Length()<=20)
 	{
-		SpeedUp->GetPhysicsNode().SetPosition(Vector3(0,10000,0));//make entity disappeared
-		/*car->GetPlayer()->GetPhysicsNode().SetLinearVelocity(Vector3(0,0,50));*/
+		SpeedUp->GetPhysicsNode().SetPosition(T3Vector3(0,10000,0));//make entity disappeared
+		/*car->GetPlayer()->GetPhysicsNode().SetLinearVelocity(T3Vector3(0,0,50));*/
 		car->SetSpeed_Player(8);
 	}
 	if(car->GetSpeed_Player()==8){
@@ -94,7 +94,7 @@ void Debuff::UpdateDebuff(Vehicle *car, float msec){
 	}
 	if(Dist2.Length()<=20)
 	{
-		Inverse->GetPhysicsNode().SetPosition(Vector3(0,10000,0));//make entity disappeared
+		Inverse->GetPhysicsNode().SetPosition(T3Vector3(0,10000,0));//make entity disappeared
 		car->SetSpeed_Player(2);
 		LR=false;
 	}
@@ -112,10 +112,10 @@ void Debuff::UpdateDebuff(Vehicle *car, float msec){
 
 
 //void Debuff::SwitchleftAndright(Vehicle *Player){
-//	Vector3 PlayerPosition = Player->GetPlayer()->GetPhysicsNode().GetPosition();
+//	T3Vector3 PlayerPosition = Player->GetPlayer()->GetPhysicsNode().GetPosition();
 //
 //	if(Player->GetPlayer()->GetPhysicsNode().GetOrientation().z<-0.1||Player->GetPlayer()->GetPhysicsNode().GetOrientation().z>0.1){
-//		Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,0));
+//		Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,0));
 //	}
 //
 //	if(Player->GetPlayer()->GetPhysicsNode().GetPosition().y<=100){
@@ -127,7 +127,7 @@ void Debuff::UpdateDebuff(Vehicle *car, float msec){
 //
 //	if(Window::GetKeyboard()->KeyDown(KEYBOARD_D)) {
 //		if(Player->GetPlayer()->GetPhysicsNode().GetOrientation().z>=-0.13){
-//			Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,Speed_Rotate));
+//			Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,Speed_Rotate));
 //		}			
 //		temp1 = Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity();
 //		temp1.x=0.1*Speed_Player;
@@ -137,7 +137,7 @@ void Debuff::UpdateDebuff(Vehicle *car, float msec){
 //
 //	if(Window::GetKeyboard()->KeyDown(KEYBOARD_A)) {
 //		if(Player->GetPlayer()->GetPhysicsNode().GetOrientation().z<=0.13){
-//			Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,-Speed_Rotate));
+//			Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,-Speed_Rotate));
 //		}
 //		temp1 = Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity();
 //		temp1.x=-0.1*Speed_Player;
@@ -163,15 +163,15 @@ void Debuff::UpdateDebuff(Vehicle *car, float msec){
 //		temp1 = Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity();
 //		if(Player->GetPlayer()->GetPhysicsNode().GetOrientation().z<-0.002||Player->GetPlayer()->GetPhysicsNode().GetOrientation().z>0.002){
 //			if(Player->GetPlayer()->GetPhysicsNode().GetOrientation().z<0){
-//				Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,-Speed_Rotate));
+//				Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,-Speed_Rotate));
 //				
 //			}
 //			if(Player->GetPlayer()->GetPhysicsNode().GetOrientation().z>0){
-//				Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,Speed_Rotate));
+//				Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,Speed_Rotate));
 //			}
 //		}
 //		else{
-//			Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,0));
+//			Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,0));
 //			temp1.x=0;
 //			Player->GetPlayer()->GetPhysicsNode().SetLinearVelocity(temp1);
 //		}

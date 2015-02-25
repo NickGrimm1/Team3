@@ -1,11 +1,17 @@
+
 #include "ShaderPart.h"
 #include <fstream>
 #include "../Framework/Shader.h"
 #include <stdio.h>
+#include "Vertex.h"
+#if PS3_BUILD
+#include <iostream>
+#include "../Team3Project1/Mesh.h"
+#endif
 
-#if WINDOWS_BUILD
 ShaderPart::ShaderPart(string raw, ShaderType::Type type) 
 {
+#if WINDOWS_BUILD
 	shader = glCreateShader(type);
 	const char *chars = raw.c_str();
 	glShaderSource(shader, 1, &chars, NULL);
@@ -27,47 +33,9 @@ ShaderPart::ShaderPart(string raw, ShaderType::Type type)
 #if DEBUG
 	printf("Compiling success!\n\n");
 #endif
-}
-
-string ShaderPart::LoadShaderFile(string filename)
-{
-
-	ifstream file;
-	string temp;
-	string into;
-#if DEBUG
-	printf("Loading shader text from ");
-	printf(filename.c_str());
-	printf("\n\n");
 #endif
-	file.open(filename.c_str());
-	if(!file.is_open())
-	{
-#if DEBUG
-	printf("File does not exist!\n");
-#endif
-		return NULL;
-	}
-
-	while(!file.eof()){
-		getline(file,temp);
-		into += temp + "\n";
-	}
-	file.close();
-#if DEBUG
-	printf("Loaded shader text!\n");
-
-	printf("Compiling Shader...\n");
-#endif
-
-	return into;
-}
-#endif
-
 #if PS3_BUILD
-ShaderPart::ShaderPart(string raw, ShaderType::Type type) 
-{
-	name = SYS_APP_HOME + name;
+	string name = SYS_APP_HOME + name;
 
 	unsigned int dataSize = 0;
 	char* data = NULL;
@@ -120,15 +88,51 @@ ShaderPart::ShaderPart(string raw, ShaderType::Type type)
 
 	if (type == ShaderType::VERTEX)
 	{
-		for(int i = 0; i < VERTEX_SIZE; ++i)
+		for(int i = 0; i < VertexAttributes::MAX; ++i)
 			attributes[i] = 0;
 		
 		SetDefaultAttributes();
 	}
 	else if (type == ShaderType::FRAGMENT)
 		UpdateShaderVariables();
+#endif
 }
+#if WINDOWS_BUILD
+string ShaderPart::LoadShaderFile(string filename)
+{
 
+	ifstream file;
+	string temp;
+	string into;
+#if DEBUG
+	printf("Loading shader text from ");
+	printf(filename.c_str());
+	printf("\n\n");
+#endif
+	file.open(filename.c_str());
+	if(!file.is_open())
+	{
+#if DEBUG
+	printf("File does not exist!\n");
+#endif
+		return NULL;
+	}
+
+	while(!file.eof()){
+		getline(file,temp);
+		into += temp + "\n";
+	}
+	file.close();
+#if DEBUG
+	printf("Loaded shader text!\n");
+
+	printf("Compiling Shader...\n");
+#endif
+
+	return into;
+}
+#endif
+#if PS3_BUILD
 /*
 Sets a uniform value. In OpenGL we had loads of glUniformx type
 functions, for the different types of data. In GCM we have a single
@@ -136,7 +140,7 @@ function, which takes a CGparameter and a pointer to some float data,
 and the function works out the rest. Simpler, but more likely to go
 wrong when incorrect data is sent to it. 
 */
-void	Shader::SetParameter(std::string name, float*data) {
+void	ShaderPart::SetParameter(std::string name, float*data) {
 	CGparameter p = GetParameter(name);
 
 	//DON'T try to set a non-existent parameter. GCM will instantly
@@ -153,8 +157,8 @@ Sony's own matrix code. So, we wrap matrix uniform setting around a
 transpose function, so it's less likely you'll accidentally set your 
 matrix wrong
 */
-void ShaderPart::SetParameter(std::string name, Matrix4 &totranpose) {
-	Matrix4 tempMatrix = transpose(totranpose);
+void ShaderPart::SetParameter(std::string name, T3Matrix4 &totranpose) {
+	T3Matrix4 tempMatrix = transpose(totranpose);
 	SetParameter(name, (float*)&tempMatrix);
 }
 
@@ -211,4 +215,15 @@ void ShaderPart::UpdateShaderVariables()
 {
 	cellGcmSetUpdateFragmentProgramParameter(offset);
 }
+/*
+Sets the shaders matrices to the passed in values. Handy to call at the start of
+a frame, or when using a shader for the first time. It's more efficient to use
+SetParameter directly for setting just a single matrix, though. 
+*/
+void	ShaderPart::UpdateShaderMatrices(Matrix4 &model,Matrix4 &view, Matrix4 &proj) {
+	SetParameter("modelMat", model);
+	SetParameter("viewMat", view);
+	SetParameter("projMat", proj);
+}
 #endif
+

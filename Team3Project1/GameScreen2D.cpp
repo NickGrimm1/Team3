@@ -47,7 +47,7 @@ void GameScreen2D::RemoveDrawable(DrawableEntity2D* drawable)
 <param name='type'>The event type.</param>
 <param name='position'>The resolution independent co-ordinates of the mouse cursor.</param>
 */
-void GameScreen2D::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, Vector2& position)
+void GameScreen2D::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position)
 {
 	// Check if input is being accepted
 	if (inputEnabled)
@@ -77,7 +77,7 @@ void GameScreen2D::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseBut
 <param name='start'>The resolution independent co-ordinates of the mouse cursor at the start of the frame.</param>
 <param name='finish'>The resolution independent co-ordinates of the mouse cursor at the end of the frame.</param>
 */
-void GameScreen2D::MouseMoved(Vector2& finish)
+void GameScreen2D::MouseMoved(T3Vector2& finish)
 {
 	// Check if input is being accepted
 	if (inputEnabled)
@@ -99,7 +99,7 @@ void GameScreen2D::MouseMoved(Vector2& finish)
 <summary>Notifies all screens in the stack that the mouse scroll wheel has moved.</summary>
 <param name='amount'>The amount of the movement.</param>
 */
-void GameScreen2D::MouseScrolled(Vector2& position, int amount)
+void GameScreen2D::MouseScrolled(T3Vector2& position, int amount)
 {
 	// Check if input is being accepted
 	if (inputEnabled)
@@ -108,7 +108,7 @@ void GameScreen2D::MouseScrolled(Vector2& position, int amount)
 		if (MathHelper::Contains(position, *this))
 		{
 			// If it is, scroll vertically.
-			Scroll(position, Vector2(position.x, position.y + amount));
+			Scroll(position, T3Vector2(position.x, position.y + amount));
 		}
 	}
 }
@@ -156,7 +156,7 @@ void GameScreen2D::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEven
 <param name='analogueControl'>The control that is displaced.</param>
 <param name='amount'>The amount of the displacement. For the triggers, only the x co-ordinate is used.</param>
 */
-void GameScreen2D::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, Vector2& amount)
+void GameScreen2D::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount)
 {
 	// Check if input is being accepted
 	if (inputEnabled)
@@ -164,7 +164,7 @@ void GameScreen2D::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex player
 		// Check for right stick movement
 		if (analogueControl == GamepadEvents::RIGHT_STICK)
 		{
-			Scroll(Vector2(), amount);
+			Scroll(T3Vector2(), amount);
 		}
 	}
 }

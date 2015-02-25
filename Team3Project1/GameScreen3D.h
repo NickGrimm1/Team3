@@ -14,8 +14,8 @@ Version: 0.0.5 11/02/2015.</summary>
 */
 #pragma once
 #include "GameScreen.h"
-#include "../Framework/Vector3.h"
-#include "../Framework/Vector4.h"
+#include "../Framework/T3Vector3.h"
+#include "../Framework/T3Vector4.h"
 #include "DrawableEntity3D.h"
 #include <vector>
 #include "../Framework/Light.h"
@@ -37,9 +37,9 @@ public:
 	}
 	void AddDrawable(DrawableEntity3D* value);
 	void RemoveDrawable(DrawableEntity3D* value);
-	Light* AddPointLight(Vector3 lightPosition, float lightRadius, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
-	Light* AddDirectionalLight(Vector3 lightDirection, Vector4 diffuseColour, Vector4 specularColour);
-	Light* AddSpotLight(Vector3 lightPosition, Vector3 lightTarget, Vector3 upVector, float lightRadius, float lightAngle, Vector4 diffuseColour, Vector4 specularColour, bool castsShadow);
+	Light* AddPointLight(T3Vector3 lightPosition, float lightRadius, T3Vector4 diffuseColour, T3Vector4 specularColour, bool castsShadow);
+	Light* AddDirectionalLight(T3Vector3 lightDirection, T3Vector4 diffuseColour, T3Vector4 specularColour);
+	Light* AddSpotLight(T3Vector3 lightPosition, T3Vector3 lightTarget, T3Vector3 upVector, float lightRadius, float lightAngle, T3Vector4 diffuseColour, T3Vector4 specularColour, bool castsShadow);
 	void RemoveLight(Light* value);
 	void SetCamera(Camera* value);
 	virtual void Update()
@@ -48,11 +48,11 @@ public:
 			camera->UpdateCamera();
 	}
 	// Move these to Light.h? Probably...
-	/*bool ChangeLightColour(unsigned int lightReference, Vector4 newDiffuseColour, Vector4 newSpecularColour);
-	bool ChangeLightPosition(unsigned int lightReference, Vector3 newLightPosition);
+	/*bool ChangeLightColour(unsigned int lightReference, T3Vector4 newDiffuseColour, T3Vector4 newSpecularColour);
+	bool ChangeLightPosition(unsigned int lightReference, T3Vector3 newLightPosition);
 	bool ChangeLightRadius(unsigned int lightReference, float newLightRadius);
 	bool ChangeLightAngle(unsigned int lightReference, float newLightAngle);
-	bool ChangeLightTarget(unsigned int lightReference, Vector3 newLightTarget, Vector3 newUpVector);*/
+	bool ChangeLightTarget(unsigned int lightReference, T3Vector3 newLightTarget, T3Vector3 newUpVector);*/
 private:
 	DrawableEntity3D* player;
 	vector<DrawableEntity3D*> drawables;

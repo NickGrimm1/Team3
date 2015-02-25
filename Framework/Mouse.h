@@ -13,7 +13,7 @@ _-_-_-_-_-_-_-""  ""
 
 #pragma once
 #include "InputDevice.h"
-#include "Vector2.h"
+#include "T3Vector2.h"
 
 class InputListener;
 
@@ -56,7 +56,7 @@ public:
 	friend class Window;
 
 	//Get the window position of the mouse pointer
-	Vector2 GetAbsolutePosition();
+	T3Vector2 GetAbsolutePosition();
 
 	/**
 	<summary>Sets the amount of time between two click events that is short enough to count as a click.</summary>
@@ -95,11 +95,11 @@ protected:
 	void SetAbsolutePositionBounds(unsigned int maxX, unsigned int maxY);
 
 	//Current mouse position
-	Vector2	position;
+	T3Vector2	position;
 	//Current mouse position maximum bounds
-	Vector2	bounds;
+	T3Vector2	bounds;
 	// The position of the mouse last frame.
-	Vector2	lastPosition;
+	T3Vector2	lastPosition;
 	//Current button down state for each button
 	bool buttons[MouseEvents::MOUSE_MAX];
 	//Current doubleClick counter for each button

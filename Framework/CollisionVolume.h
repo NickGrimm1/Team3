@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vector3.h"
+#include "T3Vector3.h"
 
 /*
 Rich: 
@@ -27,7 +27,7 @@ enum CollisionVolumeType {
 class CollisionVolume {
 public:
 	CollisionVolumeType GetType() const { return type;}
-	virtual void SetPosition(const Vector3& pos) {}; // define empty method so static entities like floors and walls can ignore updates
+	virtual void SetPosition(const T3Vector3& pos) {}; // define empty method so static entities like floors and walls can ignore updates
 
 protected:
 	CollisionVolumeType type;
@@ -52,76 +52,76 @@ private:
 
 class CollisionAABB : public CollisionVolume {
 public:
-	CollisionAABB(Vector3 halfDim): halfDim(halfDim) {}
+	CollisionAABB(T3Vector3 halfDim): halfDim(halfDim) {}
 
 	CollisionVolumeType GetType() const {
 		return COLLISION_AABB;
 	}
 
-	Vector3 getHalfDimensions() const { return halfDim; }
+	T3Vector3 getHalfDimensions() const { return halfDim; }
 
 private:
-	Vector3 halfDim;
+	T3Vector3 halfDim;
 };
 
 
 class CollisionBBAA : public CollisionVolume {
 public:
-	CollisionBBAA(Vector3 halfDim): halfDim(halfDim) {}
+	CollisionBBAA(T3Vector3 halfDim): halfDim(halfDim) {}
 
 	CollisionVolumeType GetType() const {
 		return COLLISION_VOL_BBAA;
 	}
 
-	Vector3 getHalfDimensions() const { return halfDim; }
+	T3Vector3 getHalfDimensions() const { return halfDim; }
 
 private:
-	Vector3 halfDim;
+	T3Vector3 halfDim;
 };
 
 
 class CollisionPlane : public CollisionVolume {
 public:
-	CollisionPlane(const Vector3& n, float d) { // surface normal + distance from origin
+	CollisionPlane(const T3Vector3& n, float d) { // surface normal + distance from origin
 		m_normal = n;
 		m_distance = d;
 		type = COLLISION_PLANE;
 	}
 
-	Vector3 GetNormal() const {
+	T3Vector3 GetNormal() const {
 		return m_normal;
 	}
 
 	float GetDistance() const {
 		return m_distance;
 	}
-	Vector3 m_normal; //Unit-length plane normal
+	T3Vector3 m_normal; //Unit-length plane normal
 	float	m_distance; //Distance from origin
 };
 
 class CollisionLine : public CollisionVolume {
 public:
-	CollisionLine(const Vector3& pos0, const Vector3& pos1) {
+	CollisionLine(const T3Vector3& pos0, const T3Vector3& pos1) {
 		m_pos0 = pos0;
 		m_pos1 = pos1;
 		type = COLLISION_LINE;
 	}
-	virtual void UpdateLine(const Vector3& pos0, const Vector3& pos1) {
+	virtual void UpdateLine(const T3Vector3& pos0, const T3Vector3& pos1) {
 		m_pos0 = pos0;
 		m_pos1 = pos1;
 	}
-	Vector3 m_pos0;
-	Vector3 m_pos1;
+	T3Vector3 m_pos0;
+	T3Vector3 m_pos1;
 };
 
 class CollisionCapsule : public CollisionLine { // Sphere Swept Line (approxs a cylinder)
 public:
-	CollisionCapsule(const Vector3& pos0, const Vector3& pos1, float r) : CollisionLine(pos0, pos1) {
+	CollisionCapsule(const T3Vector3& pos0, const T3Vector3& pos1, float r) : CollisionLine(pos0, pos1) {
 		m_radius = r;
 		type = COLLISION_CAPSULE;
 	}
 	
-	virtual void UpdateCapsule(const Vector3& pos0, const Vector3& pos1, float radius) {
+	virtual void UpdateCapsule(const T3Vector3& pos0, const T3Vector3& pos1, float radius) {
 		m_pos0 = pos0;
 		m_pos1 = pos1;
 		m_radius = radius;
@@ -132,7 +132,7 @@ public:
 
 class CollisionData {
 public:
-	Vector3 m_point;
-	Vector3 m_normal;
+	T3Vector3 m_point;
+	T3Vector3 m_normal;
 	float m_penetration;
 };

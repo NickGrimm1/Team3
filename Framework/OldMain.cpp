@@ -83,7 +83,7 @@ int oldmain() {
 		game->UpdateRendering(msec);	//Update our 'sybsystem' logic (renderer and physics!)
 		game->UpdateGame(msec);	//Update our game logic
 		if( Window :: GetKeyboard () -> KeyTriggered ( KEYBOARD_2 )) {
-		    SoundSystem :: GetSoundSystem () -> PlaySoundA (SoundManager :: GetSound ("../../Sounds/36847__ecodtr__laserrocket2.wav"),Vector3(0,0,0));
+		    SoundSystem :: GetSoundSystem () -> PlaySoundA (SoundManager :: GetSound ("../../Sounds/36847__ecodtr__laserrocket2.wav"),T3Vector3(0,0,0));
 		}
 		if( Window :: GetKeyboard () -> KeyTriggered ( KEYBOARD_3 )) {
 		    SoundSystem :: GetSoundSystem () -> PlaySoundW (SoundManager :: GetSound ("../../Sounds/56900__syna-max__war.wav"),SOUNDPRIORTY_LOW);

@@ -27,7 +27,7 @@ void Mouse::Update(RAWINPUT* raw, float msec)
 		position.x += (float)raw->data.mouse.lLastX;
 		position.y += (float)raw->data.mouse.lLastY;
 		// Is this different from lasat frame?
-		Vector2 mouseMove = position - lastPosition;
+		T3Vector2 mouseMove = position - lastPosition;
 		if (mouseMove != 0)
 		{
 			// Convert to resolution-independent
@@ -71,7 +71,7 @@ void Mouse::Update(RAWINPUT* raw, float msec)
 										RI_MOUSE_BUTTON_4_UP,
 										RI_MOUSE_BUTTON_5_UP};
 		
-		Vector2 resIndependentPosition;
+		T3Vector2 resIndependentPosition;
 		resIndependentPosition.x = position.x / Window::GetWindow().GetScreenSize().x;
 		resIndependentPosition.y = position.y / Window::GetWindow().GetScreenSize().y;
 
@@ -151,7 +151,7 @@ void	Mouse::SetAbsolutePosition(unsigned int x, unsigned int y)	{
 /*
 Returns the mouse pointer position in absolute space.
 */
-Vector2 Mouse::GetAbsolutePosition()	{
+T3Vector2 Mouse::GetAbsolutePosition()	{
 	return position;
 }
 

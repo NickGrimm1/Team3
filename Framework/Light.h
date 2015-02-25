@@ -8,9 +8,9 @@ Author: Derek Kelly
 Version: 0.0.1 04/02/2015</summary>
 */
 
-#include "Vector3.h"
-#include "Vector4.h"
-#include "Matrix4.h"
+#include "T3Vector3.h"
+#include "T3Vector4.h"
+#include "T3Matrix4.h"
 
 #define POINT_LIGHT_TYPE 0
 #define DIRECTIONAL_LIGHT_TYPE 1
@@ -23,29 +23,29 @@ public:
 	Light(void){}
 	~Light(void){}
 
-	Vector3 GetPosition() const;
-	void SetPosition(Vector3 pos);
+	T3Vector3 GetPosition() const;
+	void SetPosition(T3Vector3 pos);
 
-	Vector3 GetDirection() const;
-	void SetDirection(Vector3 dir);
+	T3Vector3 GetDirection() const;
+	void SetDirection(T3Vector3 dir);
 
 	float GetRadius() const;
 	void SetRadius(float rad);
 
-	Vector4 GetDiffuseColour() const;
-	void SetDiffuseColour(Vector4 col);
+	T3Vector4 GetDiffuseColour() const;
+	void SetDiffuseColour(T3Vector4 col);
 
-	Vector4 GetSpecularColour() const;
-	void SetSpecularColour(Vector4 spec);
+	T3Vector4 GetSpecularColour() const;
+	void SetSpecularColour(T3Vector4 spec);
 
 	float GetAngle() const;
 	void SetAngle(float a);
 
 	unsigned int GetType() const; // POINT, SPOT or DIRECTIONAL
 
-	virtual Matrix4 GetModelMatrix() = 0; // returns the model matrix for the camera
-	virtual Matrix4 GetViewMatrix(Vector3 target) = 0; // returns the view matrix for the camera
-	virtual Matrix4 GetProjectionMatrix() = 0; // returns the projection matrix for the camera
+	virtual T3Matrix4 GetModelMatrix() = 0; // returns the model matrix for the camera
+	virtual T3Matrix4 GetViewMatrix(T3Vector3 target) = 0; // returns the view matrix for the camera
+	virtual T3Matrix4 GetProjectionMatrix() = 0; // returns the projection matrix for the camera
 	
 	void BindLight() const; // Binds the light source's data into the currently bound shader object
 	void BindLight(unsigned int i) const; // Binds the light source's data into the currently bound shader object at the requested array index
@@ -54,10 +54,10 @@ public:
 	void SetShadowTexture(unsigned int tex) {shadowTexID = tex;}
 	
 protected:
-	Vector3 position;
-	Vector3 direction; // for spot/directional lights
-	Vector4 diffuseColour;
-	Vector4 specularColour; // separate specular colour
+	T3Vector3 position;
+	T3Vector3 direction; // for spot/directional lights
+	T3Vector4 diffuseColour;
+	T3Vector4 specularColour; // separate specular colour
 	float radius;
 	float angle; // spot lights only
 	unsigned int type;
@@ -67,35 +67,35 @@ protected:
 class PointLight : public Light {
 public:
 	PointLight();
-	PointLight(Vector3 pos, Vector4 col, Vector4 spec, float rad, unsigned int shadowTex);
+	PointLight(T3Vector3 pos, T3Vector4 col, T3Vector4 spec, float rad, unsigned int shadowTex);
 
-	virtual Matrix4 GetViewMatrix(Vector3 target);
-	virtual Matrix4 GetProjectionMatrix();
-	virtual Matrix4 GetModelMatrix();
+	virtual T3Matrix4 GetViewMatrix(T3Vector3 target);
+	virtual T3Matrix4 GetProjectionMatrix();
+	virtual T3Matrix4 GetModelMatrix();
 };
 
 class DirectionalLight : public Light {
 public:
-	DirectionalLight(Vector3 dir, Vector4 col, Vector4 spec, unsigned int shadowTex);
-	virtual Matrix4 GetViewMatrix(Vector3 target);
-	virtual Matrix4 GetProjectionMatrix();
-	virtual Matrix4 GetModelMatrix();
-	static void UpdateLightVolume(Vector3& min, Vector3& max);
+	DirectionalLight(T3Vector3 dir, T3Vector4 col, T3Vector4 spec, unsigned int shadowTex);
+	virtual T3Matrix4 GetViewMatrix(T3Vector3 target);
+	virtual T3Matrix4 GetProjectionMatrix();
+	virtual T3Matrix4 GetModelMatrix();
+	static void UpdateLightVolume(T3Vector3& min, T3Vector3& max);
 private:
-	static Vector3 boundingMin;
-	static Vector3 boundingMax;
+	static T3Vector3 boundingMin;
+	static T3Vector3 boundingMax;
 };
 
 class SpotLight	: public Light {
 public:
-	SpotLight(Vector3 pos, Vector3 target, Vector3 up_vec, Vector4 col, Vector4 spec, float spot_rad, float spot_angle, unsigned int shadowTex);
+	SpotLight(T3Vector3 pos, T3Vector3 target, T3Vector3 up_vec, T3Vector4 col, T3Vector4 spec, float spot_rad, float spot_angle, unsigned int shadowTex);
 
-	virtual Matrix4 GetViewMatrix(Vector3 target); // Ignore target, spot lights have a defined direction + position
-	virtual Matrix4 GetProjectionMatrix();
-	virtual Matrix4 GetModelMatrix();
-	Matrix4 GetBaseModelMatrix(); // The model matrix for the cone base
-	static bool IsInSpotlight(Vector3 world_pos, Light* l);
-	Vector3 GetUp() {return up;}
+	virtual T3Matrix4 GetViewMatrix(T3Vector3 target); // Ignore target, spot lights have a defined direction + position
+	virtual T3Matrix4 GetProjectionMatrix();
+	virtual T3Matrix4 GetModelMatrix();
+	T3Matrix4 GetBaseModelMatrix(); // The model matrix for the cone base
+	static bool IsInSpotlight(T3Vector3 world_pos, Light* l);
+	T3Vector3 GetUp() {return up;}
 protected:
-	Vector3 up;
+	T3Vector3 up;
 };

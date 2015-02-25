@@ -51,8 +51,8 @@ Particle* Weather::GetFreeParticle() {
 	//Now we have to reset its values - if it was popped off the
 	//free list, it'll still have the values of its 'previous life'
 	
-	p->colour	= Vector4(1.0,1.0,1.0,1.0);
-	p->direction	= Vector3(0,-1,0);
+	p->colour	= T3Vector4(1.0,1.0,1.0,1.0);
+	p->direction	= T3Vector3(0,-1,0);
 	p->direction.x += 0.0f;
 	p->direction.y += -1.0f;
 	p->direction.z += 0.0f;

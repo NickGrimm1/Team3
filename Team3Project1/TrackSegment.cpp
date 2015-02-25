@@ -1,28 +1,28 @@
 #include "TrackSegment.h"
 
 
-TrackSegment::TrackSegment(const Vector3& a, const Vector3& b, const Vector3& c, unsigned int subdivisions, float trackWidth) :
+TrackSegment::TrackSegment(const T3Vector3& a, const T3Vector3& b, const T3Vector3& c, unsigned int subdivisions, float trackWidth) :
 	Spline(a, b, c, subdivisions)
 {
 	// Now spline is built, generate mesh around it
 	trackMesh = new Vertex[numVertices * 2]; // left boundary then right boundary
-	Vector3 right;
+	T3Vector3 right;
 	for (unsigned int i = 0; i < subdivisions; i++) {
-		Vector3 direction = vertices[i+1].GetPosition() - vertices[i].GetPosition();
+		T3Vector3 direction = vertices[i+1].GetPosition() - vertices[i].GetPosition();
 		direction.Normalise();
-		Vector3 up = Vector3(0,0,1);
-		right = Vector3::Cross(direction, up);
+		T3Vector3 up = T3Vector3(0,0,1);
+		right = T3Vector3::Cross(direction, up);
 		right.Normalise();
 		trackMesh[i].SetPosition(vertices[i].GetPosition() - right * trackWidth);
 		trackMesh[i + subdivisions + 1].SetPosition(vertices[i].GetPosition() + right * trackWidth);
-		trackMesh[i].SetTexCoord(Vector2(0, (float) i));
-		trackMesh[i + subdivisions + 1].SetTexCoord(Vector2(1.0f, (float) i));
+		trackMesh[i].SetTexCoord(T3Vector2(0, (float) i));
+		trackMesh[i + subdivisions + 1].SetTexCoord(T3Vector2(1.0f, (float) i));
 	}
 	// Set last vertices
 	trackMesh[subdivisions].SetPosition(vertices[subdivisions].GetPosition() - right * trackWidth);
 	trackMesh[(2 * numVertices) - 1].SetPosition(vertices[subdivisions].GetPosition() + right * trackWidth);
-	trackMesh[subdivisions].SetTexCoord(Vector2(0, (float) subdivisions));
-	trackMesh[(2 * numVertices) - 1].SetTexCoord(Vector2(1, (float) subdivisions));
+	trackMesh[subdivisions].SetTexCoord(T3Vector2(0, (float) subdivisions));
+	trackMesh[(2 * numVertices) - 1].SetTexCoord(T3Vector2(1, (float) subdivisions));
 
 	// Build index VBO
 	numIndices = subdivisions * 6;
@@ -42,7 +42,7 @@ TrackSegment::TrackSegment(const Vector3& a, const Vector3& b, const Vector3& c,
 	glBindVertexArray(arrayObject); // makes our VAO object associated with the object name in arrayObject, the currently bound/active/operated on VAO
 	glGenBuffers(1, &trackVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, trackVBO);
-	glBufferData(GL_ARRAY_BUFFER, 2 * numVertices * sizeof(Vector3), trackMesh, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 2 * numVertices * sizeof(T3Vector3), trackMesh, GL_STATIC_DRAW);
 
 	glGenBuffers(1, &bufferObject[1]);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferObject[1]);
