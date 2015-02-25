@@ -19,8 +19,8 @@ struct BallPair {
 //Our data structure for making collision detection faster
 class Octree {
 	public:
-        //Constructs a new Octree.  c1 is (minX, minY, minZ), c2 is (maxX, maxY,
-        //maxZ), and d is the depth, which starts at 1.
+        //Constructs a new Octree.  c1 is (minimumX, minimumY, minimumZ), c2 is (maximumX, maximumY,
+        //maximumZ), and d is the depth, which starts at 1.
         Octree(T3Vector3 c1, T3Vector3 c2, int d) {
             corner1 = c1;
             corner2 = c2;
@@ -39,13 +39,13 @@ class Octree {
 		   void ballMoved(GameEntity* ball, T3Vector3 oldPos);
 		    void potentialBallBallCollisions(vector<BallPair> &collisions);
     private:
-        T3Vector3 corner1; //(minX, minY, minZ)
-        T3Vector3 corner2; //(maxX, maxY, maxZ)
-        T3Vector3 center;//((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2)
+        T3Vector3 corner1; //(minimumX, minimumY, minimumZ)
+        T3Vector3 corner2; //(maximumX, maximumY, maximumZ)
+        T3Vector3 center;//((minimumX + maximumX) / 2, (minimumY + maximumY) / 2, (minimumZ + maximumZ) / 2)
 		/* The children of this, if this has any.  children[0][*][*] are the
-         * children with x coordinates ranging from minX to centerX.
+         * children with x coordinates ranging from minimumX to centerX.
          * children[1][*][*] are the children with x coordinates ranging from
-         * centerX to maxX.  Similarly for the other two dimensions of the
+         * centerX to maximumX.  Similarly for the other two dimensions of the
          * children array.
          */
         Octree *children[2][2][2];

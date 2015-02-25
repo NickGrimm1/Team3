@@ -52,7 +52,15 @@ public:
 	<summary>Sets the rotation.</summary>
 	<param name='value'>The rotation in degrees from up. Default is 0.</param>
 	*/
-	void SetRotation(const float value) { rotation = value; }
+	void SetRotation(const float value) {
+		if (rotation > 360.0f) {
+			rotation -= 360.0f;
+		}
+		else if (rotation < -360.0f) {
+			rotation += 360.0f;
+		}
+		else rotation = value;
+	}
 	/**
 	<summary>Gets the origin of rotation.</summary>
 	*/

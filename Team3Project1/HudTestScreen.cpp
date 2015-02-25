@@ -13,6 +13,8 @@ HudTestScreen::~HudTestScreen(void)
 
 void HudTestScreen::LoadContent() {
 	Font* f = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"tahoma.tga", 16, 16);
+	Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.jpg", SOIL_FLAG_MIPMAPS);
+	Texture* calvinTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", 0);
 
 	AddDrawable(new DrawableText2D(
 		10, 
@@ -62,7 +64,7 @@ void HudTestScreen::LoadContent() {
 		T3Vector2(0.5f, 0.5f),
 		T3Vector4(1,1,1,0.4f)));
 
-		AddDrawable(new DrawableText2D(
+	AddDrawable(new DrawableText2D(
 		150, 
 		500, 
 		0, 
@@ -74,7 +76,7 @@ void HudTestScreen::LoadContent() {
 		T3Vector2(1.0f, 0.5f),
 		T3Vector4(1,1,1,0.4f)));
 
-		AddDrawable(new DrawableText2D(
+	AddDrawable(new DrawableText2D(
 		150, 
 		500, 
 		0, 
@@ -93,7 +95,7 @@ void HudTestScreen::LoadContent() {
 		1, 
 		30, 
 		50, 
-		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.tga", SOIL_FLAG_MIPMAPS),
+		grassTex,
 		0,
 		T3Vector2(),
 		T3Vector4(1,1,1,0.5)));
@@ -105,7 +107,7 @@ void HudTestScreen::LoadContent() {
 		-1, 
 		50, 
 		30, 
-		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", SOIL_FLAG_MIPMAPS),
+		calvinTex,
 		30.0,
 		T3Vector2(0.5f, 0.5f),
 		T3Vector4(0,0,1,1.0f)));
@@ -114,6 +116,6 @@ void HudTestScreen::LoadContent() {
 void HudTestScreen::UnloadContent()
 {
 	GameStateManager::Assets()->UnloadFont(this, TEXTUREDIR"tahoma.tga");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Grass_Color.tga");
+	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Grass_Color.jpg");
 	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"calvin.bmp");
 }

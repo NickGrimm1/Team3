@@ -80,7 +80,7 @@ public:
 	virtual T3Matrix4 GetViewMatrix(T3Vector3 target);
 	virtual T3Matrix4 GetProjectionMatrix();
 	virtual T3Matrix4 GetModelMatrix();
-	static void UpdateLightVolume(T3Vector3& min, T3Vector3& max);
+	static void UpdateLightVolume(T3Vector3& minimum, T3Vector3& maximum);
 private:
 	static T3Vector3 boundingMin;
 	static T3Vector3 boundingMax;

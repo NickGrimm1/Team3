@@ -3,7 +3,9 @@
 #include "GL/glew.h"
 #endif
 #include <string>
-
+#if PS3_BUILD
+#include <cell\gcm.h>
+#endif
 using namespace std;
 
 //#if PS3_BUILD
@@ -29,16 +31,17 @@ public:
 	void SetRepeating(bool repeat);
 	void SetAnistropicFiltering(bool enable);
 #if WINDOWS_BUILD
+	Texture(GLuint textureObj);
 	GLuint GetTextureName() const { return textureObject; }
-	void SetMinMagFiltering(GLint min, GLint mag);
+	void SetMinMagFiltering(GLint minimum, GLint mag);
 #endif
 protected:
 	#if WINDOWS_BUILD
 	GLuint textureObject;
-	GLint minFilter; // GL_TEXTURE_MIN_FILTER setting
+	GLint minimumFilter; // GL_TEXTURE_MIN_FILTER setting
 	GLint magFilter; // GL_TEXTURE_MAG_FILTER setting
 #endif
-	bool repeating; // determines whether textures is repeated or clamped
+	bool repeating; // determinimumes whether textures is repeated or clamped
 	bool anisotropic; // enables anisotropic filtering for the texture
 private:
 	Texture(const Texture& in);

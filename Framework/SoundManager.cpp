@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 #include "SoundManager.h"
 
 map < string , Sound * > SoundManager::sounds;
@@ -62,3 +63,4 @@ void SoundManager :: DeleteSounds () {
 		delete i -> second;
 	 }
  }
+#endif

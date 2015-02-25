@@ -27,5 +27,5 @@ static inline double DegToRad(const double deg)	{
 	return deg * PI / 180.0;
 };
 
-#define max(a,b)    (((a) > (b)) ? (a) : (b))
-#define min(a,b)    (((a) < (b)) ? (a) : (b))
+#define maximum(a,b)    (((a) > (b)) ? (a) : (b))
+#define minimum(a,b)    (((a) < (b)) ? (a) : (b))

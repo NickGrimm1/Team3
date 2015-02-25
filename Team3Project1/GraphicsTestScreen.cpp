@@ -29,13 +29,18 @@ void GraphicsTestScreen::LoadContent() {
 	// If you need to remove or change an entity before the game screen is disposed of (A pick-up perhaps) then it will require it's own unique named variable.
 
 	quad = GameStateManager::Assets()->LoadQuad(this);
+	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
+	circle = GameStateManager::Assets()->LoadCircle(this, 20);
+	Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.jpg", 0);
+	Texture* calvinTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", SOIL_FLAG_INVERT_Y);
+
 	DrawableEntity3D* ent;
 	for (unsigned int i = 0; i < 8; i++) {
 		for (unsigned int j = 0; j < 8; j++) {
 			ent = new DrawableEntity3D(
 				quad,
 				NULL,
-				GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.tga", SOIL_FLAG_MIPMAPS),
+				grassTex,
 				NULL,
 				50.0f,
 				T3Vector3(-350.0f + i * 100.0f,0,-350.0f + j * 100.0f),
@@ -45,25 +50,11 @@ void GraphicsTestScreen::LoadContent() {
 			AddDrawable(ent);
 		}
 	}
-/*
-	ent = new DrawableEntity3D(
-		quad,
-		NULL,
-		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.tga", SOIL_FLAG_MIPMAPS),
-		NULL,
-		400.0f,
-		T3Vector3(0,0,0),
-		Quaternion::FromMatrix(T3Matrix4::Rotation(90.0f, T3Vector3(1,0,0))),
-		T3Vector3(400,400,1));
-		gameEntities.push_back(ent);
-		AddDrawable(ent);
-		*/
 
-	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
 	ent = new DrawableEntity3D(
 		cylinder, 
 		NULL,
-		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", SOIL_FLAG_INVERT_Y), 
+		calvinTex,
 		NULL,
 		30.0f, 
 		T3Vector3(35,0,35), 
@@ -72,11 +63,11 @@ void GraphicsTestScreen::LoadContent() {
 	gameEntities.push_back(ent);
 	AddDrawable(ent);
 
-	circle = GameStateManager::Assets()->LoadCircle(this, 20);
+
 	ent = new DrawableEntity3D(
 		circle, 
 		NULL,
-		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", SOIL_FLAG_INVERT_Y), 
+		calvinTex,
 		NULL,
 		30.0f, // needs same bounding radius as cylinder
 		T3Vector3(35,30,35), 
@@ -126,7 +117,9 @@ void GraphicsTestScreen::UnloadContent()
 	// RemoveDrawable() etc will also be called automatically upon destruction so calling it is uneccessary.
 
 	GameStateManager::Assets()->UnloadQuad(this);
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Grass_Color.tga"),
+	GameStateManager::Assets()->UnloadCylinder(this, 20);
+	GameStateManager::Assets()->UnloadCircle(this, 20);
+	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Grass_Color.jpg"),
 	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"calvin.bmp"),
 	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"Nova Car.obj");
 }

@@ -1,7 +1,7 @@
 #include "GraphicsEngine.h"
 #include "GraphicsCommon.h"
 #include <algorithm>
-
+#if WINDOWS_BUILD
 GraphicsEngine* GraphicsEngine::engine = NULL;
 
 bool GraphicsEngine::Initialize(GraphicsEngine*& out) {
@@ -37,6 +37,20 @@ GraphicsEngine::GraphicsEngine() {
 	
 	renderer = new Renderer(Window::GetWindow(), lights, gameEntityList, overlayElementsList);
 	if (!renderer->HasInitialised()) return;
+	
+	GLuint loadingTex = renderer->CreateTexture(TEXTUREDIR"refresh.png", false, false);
+	isLoading = true;
+	isLoadingDrawing = false;
+	loadingIcon = new DrawableTexture2D(
+		width - 45,
+		height - 65,
+		1,
+		25,
+		25,
+		new Texture(loadingTex),
+		0,
+		T3Vector2(),
+		T3Vector4(1, 1, 1, 1.0));
 
 	isInitialised = true; // Graphics Engine has initialised successfully
 }
@@ -146,6 +160,18 @@ void GraphicsEngine::Run() {
 			[] (const void* a, const void* b) {
 				return (((Light*) a)->GetType() < ((Light*) b)->GetType());
 		});
+
+		if (isLoading && !isLoadingDrawing) {
+			overlayElementsList.push_back(loadingIcon);
+			isLoadingDrawing = true;
+		}
+//		else if (!isLoading && isLoadingDrawing) {
+//			overlayElementsList
+//		}
+
+		if (isLoadingDrawing) {
+			loadingIcon->SetRotation(loadingIcon->GetRotation() + 1.0f);
+		}
 
 		// Render data
 		renderer->RenderScene();
@@ -282,3 +308,19 @@ void GraphicsEngine::SetCamera(Camera* cam)
 	camera = cam;
 	renderer->SetCamera(cam);
 }
+
+bool GraphicsEngine::LoadContent()
+{
+	return (engine->renderer->LoadShaders() &&
+				engine->renderer->LoadAssets());
+}
+
+void GraphicsEngine::UnloadContent()
+{
+	engine->renderer->UnloadShaders();
+	engine->renderer->UnloadAssets();
+}
+
+void GraphicsEngine::DrawDeferredLights(bool on) {renderer->DrawDeferredLights(on);}
+
+#endif

@@ -131,7 +131,7 @@
 //
 //			/*
 //			Count the number of slashes, but also convert the slashes to spaces
-//			so that string streaming of ints doesn't fail on the slash
+//			so that string streaminimumg of ints doesn't fail on the slash
 //
 //				"f  0/0/0" becomes "f 0 0 0" etc
 //			*/
