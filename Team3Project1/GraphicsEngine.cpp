@@ -49,8 +49,8 @@ GraphicsEngine::GraphicsEngine() {
 		25,
 		new Texture(loadingTex),
 		0,
-		Vector2(),
-		Vector4(1, 1, 1, 1.0));
+		T3Vector2(),
+		T3Vector4(1, 1, 1, 1.0));
 
 	isInitialised = true; // Graphics Engine has initialised successfully
 }
