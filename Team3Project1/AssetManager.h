@@ -48,7 +48,7 @@ public:
 	//Generates a single white quad, going from -0.5 to 0.5 on the x and y axis.
 	Mesh* LoadQuadCentral(void* callerID);
 	//Generates a coloured quad, going from -1 to 1 on the x and z axis, with adjustable texture coords.
-	Mesh* LoadQuadTexCoordCol(void* callerID, Vector2 scale, Vector2 texCoord, Vector4 colour); //NX 01/11/2012
+	Mesh* LoadQuadTexCoordCol(void* callerID, T3Vector2 scale, T3Vector2 texCoord, T3Vector4 colour); //NX 01/11/2012
 	// Generates Circle/Cone/Cylinder meshes with subdivs segments to approximate curvature
 	Mesh* LoadCircle(void* callerID, unsigned int subdivs);
 	Mesh* LoadCone(void* callerID, unsigned int subdivs);
@@ -62,7 +62,7 @@ public:
 	//Generates a single white quad, going from -0.5 to 0.5 on the x and y axis.
 	void UnloadQuadCentral(void* callerID);
 	//Generates a coloured quad, going from -1 to 1 on the x and z axis, with adjustable texture coords.
-	void UnloadQuadTexCoordCol(void* callerID, Vector2 scale, Vector2 texCoord, Vector4 colour); //NX 01/11/2012
+	void UnloadQuadTexCoordCol(void* callerID, T3Vector2 scale, T3Vector2 texCoord, T3Vector4 colour); //NX 01/11/2012
 	// Generates Circle/Cone/Cylinder meshes with subdivs segments to approximate curvature
 	void UnloadCircle(void* callerID, unsigned int subdivs);
 	void UnloadCone(void* callerID, unsigned int subdivs);

@@ -12,8 +12,8 @@ void LoadingScreen::LoadContent() {
 		25,
 		refreshTex,
 		0,
-		Vector2(),
-		Vector4(1, 1, 1, 1.0));
+		T3Vector2(),
+		T3Vector4(1, 1, 1, 1.0));
 	AddDrawable(refreshIcon);
 }
 

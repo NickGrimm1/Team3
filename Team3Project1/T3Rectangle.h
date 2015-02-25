@@ -12,7 +12,7 @@ Author: Nick Grimm
 Version: 1.0.0 05/02/2015.</summary>
 */
 #pragma once
-#include "../Framework/Vector2.h"
+#include "../Framework/T3Vector2.h"
 #include <vector>
 
 using namespace std;
@@ -53,17 +53,17 @@ public:
 	/**
 	<summary>Gets the position of the center of the rectangle.</summary>
 	*/
-	Vector2 GetCenter() const { return Vector2(x + width * 0.5f, y + height * 0.5f); }
+	T3Vector2 GetCenter() const { return T3Vector2(x + width * 0.5f, y + height * 0.5f); }
 	/**
 	<summary>Gets an array of the corners of the rectangle. Clockwise from bottom left.</summary>
 	*/
-	vector<Vector2> GetCorners() const 
+	vector<T3Vector2> GetCorners() const 
 	{
-		vector<Vector2> output;
-		output.push_back(Vector2(x, y));
-		output.push_back(Vector2(x, GetTop()));
-		output.push_back(Vector2(GetRight(), GetTop()));
-		output.push_back(Vector2(GetRight(), y));
+		vector<T3Vector2> output;
+		output.push_back(T3Vector2(x, y));
+		output.push_back(T3Vector2(x, GetTop()));
+		output.push_back(T3Vector2(GetRight(), GetTop()));
+		output.push_back(T3Vector2(GetRight(), y));
 		return output;
 	}
 #pragma endregion

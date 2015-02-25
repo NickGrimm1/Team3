@@ -1,18 +1,18 @@
-#include "Matrix4.h"
+#include "T3Matrix4.h"
 
-Matrix4::Matrix4(void)	{
+T3Matrix4::T3Matrix4(void)	{
 	ToIdentity();
 }
 
-Matrix4::Matrix4( float elements[16] )	{
+T3Matrix4::T3Matrix4( float elements[16] )	{
 	memcpy(this->values,elements,16*sizeof(float));
 }
 
-Matrix4::~Matrix4(void)	{
+T3Matrix4::~T3Matrix4(void)	{
 	ToIdentity();
 }
 
-void Matrix4::ToIdentity() {
+void T3Matrix4::ToIdentity() {
 	ToZero();
 	values[0]  = 1.0f;
 	values[5]  = 1.0f;
@@ -20,34 +20,34 @@ void Matrix4::ToIdentity() {
 	values[15] = 1.0f;
 }
 
-void Matrix4::ToZero()	{
+void T3Matrix4::ToZero()	{
 	for(int i = 0; i < 16; i++)	{
 		values[i] = 0.0f;
 	}
 }
 
-Vector3 Matrix4::GetPositionVector() const{
-	return Vector3(values[12],values[13],values[14]);
+T3Vector3 T3Matrix4::GetPositionVector() const{
+	return T3Vector3(values[12],values[13],values[14]);
 }
 
-void	Matrix4::SetPositionVector(const Vector3 in) {
+void	T3Matrix4::SetPositionVector(const T3Vector3 in) {
 	values[12] = in.x;
 	values[13] = in.y;
 	values[14] = in.z;		
 }
 
-Vector3 Matrix4::GetScalingVector() const{
-	return Vector3(values[0],values[5],values[10]);
+T3Vector3 T3Matrix4::GetScalingVector() const{
+	return T3Vector3(values[0],values[5],values[10]);
 }
 
-void	Matrix4::SetScalingVector(const Vector3 &in) {
+void	T3Matrix4::SetScalingVector(const T3Vector3 &in) {
 	values[0]  = in.x;
 	values[5]  = in.y;
 	values[10] = in.z;		
 }
 
-Matrix4 Matrix4::Perspective(float znear, float zfar, float aspect, float fov) {
-	Matrix4 m;
+T3Matrix4 T3Matrix4::Perspective(float znear, float zfar, float aspect, float fov) {
+	T3Matrix4 m;
 
 	const float h = 1.0f / tan(fov*PI_OVER_360);
 	float neg_depth = znear-zfar;
@@ -63,8 +63,8 @@ Matrix4 Matrix4::Perspective(float znear, float zfar, float aspect, float fov) {
 }
 
 //http://www.opengl.org/sdk/docs/man/xhtml/glOrtho.xml
-Matrix4 Matrix4::Orthographic(float znear, float zfar,float right, float left, float top, float bottom)	{
-	Matrix4 m;
+T3Matrix4 T3Matrix4::Orthographic(float znear, float zfar,float right, float left, float top, float bottom)	{
+	T3Matrix4 m;
 
 	m.values[0]	= 2.0f / (right-left);
 	m.values[5]	= 2.0f / (top-bottom);
@@ -78,17 +78,17 @@ Matrix4 Matrix4::Orthographic(float znear, float zfar,float right, float left, f
 	return m;
 }
 
-Matrix4 Matrix4::BuildViewMatrix(const Vector3 &from, const Vector3 &lookingAt, const Vector3 up /*= Vector3(0,1,0)*/ )	{
-	Matrix4 r;
-	r.SetPositionVector(Vector3(-from.x,-from.y,-from.z));
+T3Matrix4 T3Matrix4::BuildViewMatrix(const T3Vector3 &from, const T3Vector3 &lookingAt, const T3Vector3 up /*= T3Vector3(0,1,0)*/ )	{
+	T3Matrix4 r;
+	r.SetPositionVector(T3Vector3(-from.x,-from.y,-from.z));
 
-	Matrix4 m;
+	T3Matrix4 m;
 
-	Vector3 f = (lookingAt - from);
+	T3Vector3 f = (lookingAt - from);
 	f.Normalise();
 
-	Vector3 s = Vector3::Cross(f,up);
-	Vector3 u = Vector3::Cross(s,f);
+	T3Vector3 s = T3Vector3::Cross(f,up);
+	T3Vector3 u = T3Vector3::Cross(s,f);
 
 	s.Normalise();
 	u.Normalise();
@@ -108,10 +108,10 @@ Matrix4 Matrix4::BuildViewMatrix(const Vector3 &from, const Vector3 &lookingAt, 
 	return m*r;
 }
 
-Matrix4 Matrix4::Rotation(float degrees, const Vector3 &inaxis)	 {
-	Matrix4 m;
+T3Matrix4 T3Matrix4::Rotation(float degrees, const T3Vector3 &inaxis)	 {
+	T3Matrix4 m;
 
-	Vector3 axis = inaxis;
+	T3Vector3 axis = inaxis;
 
 	axis.Normalise();
 
@@ -133,9 +133,9 @@ Matrix4 Matrix4::Rotation(float degrees, const Vector3 &inaxis)	 {
 	return m;
 }
 
-Matrix4 Matrix4::Rotation(Vector3 &x, Vector3 &y, Vector3 &z) {
+T3Matrix4 T3Matrix4::Rotation(T3Vector3 &x, T3Vector3 &y, T3Vector3 &z) {
 
-	Matrix4 m;
+	T3Matrix4 m;
 	m.ToIdentity();
 
 	x.Normalise();
@@ -157,8 +157,8 @@ Matrix4 Matrix4::Rotation(Vector3 &x, Vector3 &y, Vector3 &z) {
 	return m;
 }
 
-Matrix4 Matrix4::Scale( const Vector3 &scale )	{
-	Matrix4 m;
+T3Matrix4 T3Matrix4::Scale( const T3Vector3 &scale )	{
+	T3Matrix4 m;
 
 	m.values[0]  = scale.x;
 	m.values[5]  = scale.y;
@@ -167,8 +167,8 @@ Matrix4 Matrix4::Scale( const Vector3 &scale )	{
 	return m;
 }
 
-Matrix4 Matrix4::Translation( const Vector3 &translation )	{
-	Matrix4 m;
+T3Matrix4 T3Matrix4::Translation( const T3Vector3 &translation )	{
+	T3Matrix4 m;
 
 	m.values[12] = translation.x;
 	m.values[13] = translation.y;
@@ -177,8 +177,8 @@ Matrix4 Matrix4::Translation( const Vector3 &translation )	{
 	return m;
 }
 
-Matrix4 Matrix4::GetTransposedRotation() {
-	Matrix4 temp;
+T3Matrix4 T3Matrix4::GetTransposedRotation() {
+	T3Matrix4 temp;
 	temp.values[0] = values[0];
 	temp.values[5] = values[5];
 	temp.values[10] = values[10];

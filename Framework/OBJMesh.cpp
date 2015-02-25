@@ -30,9 +30,9 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 	/*
 	Stores the loaded in vertex attributes
 	*/
-	std::vector<Vector2>inputTexCoords;
-	std::vector<Vector3>inputVertices;
-	std::vector<Vector3>inputNormals;
+	std::vector<T3Vector2>inputTexCoords;
+	std::vector<T3Vector3>inputVertices;
+	std::vector<T3Vector3>inputNormals;
 
 	/* 
 	Stores the loaded in materials
@@ -86,17 +86,17 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 			getline(f, currentLine); // TODO - maybe save obj name
 		}
 		else if(currentLine == OBJVERT) {	//This line is a vertex
-			Vector3 vertex;
+			T3Vector3 vertex;
 			f >> vertex.x; f >> vertex.y; f >> vertex.z;
 			inputVertices.push_back(vertex);
 		}
 		else if(currentLine == OBJNORM) {	//This line is a Normal!
-			Vector3 normal;
+			T3Vector3 normal;
 			f >> normal.x; f >> normal.y; f >> normal.z;
 			inputNormals.push_back(normal);
 		}
 		else if(currentLine == OBJTEX) {	//This line is a texture coordinate!
-			Vector2 texCoord;
+			T3Vector2 texCoord;
 			f >> texCoord.x; f >> texCoord.y;
 			/*
 			TODO! Some OBJ files might have 3D tex coords...

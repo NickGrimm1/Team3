@@ -7,9 +7,9 @@
 // # include "SoundEmitter.h"
  # include "../OpenAL 1.1 SDK/include/al.h"
  # include "../OpenAL 1.1 SDK/include/alc.h"
- # include "Vector3.h"
+ # include "T3Vector3.h"
  # include "SceneNode.h"
- # include "Matrix4.h"
+ # include "T3Matrix4.h"
  using std :: vector ;
 
  class SoundEmitter ;
@@ -47,8 +47,8 @@
 
 	 inline static SoundSystem * GetSoundSystem () { return instance ;}
 	 
-	 void SetListenerTransform ( const Matrix4 & transform ) {listenerTransform = transform ;}
-	 Matrix4 GetListenerTransform () {return listenerTransform ;}
+	 void SetListenerTransform ( const T3Matrix4 & transform ) {listenerTransform = transform ;}
+	 T3Matrix4 GetListenerTransform () {return listenerTransform ;}
 
 	 void AddSoundEmitter ( SoundEmitter * s ) { emitters.push_back(s);}
 	 void RemoveSoundEmitter ( SoundEmitter * s );
@@ -57,7 +57,7 @@
 
 	 void SetMasterVolume ( float value );
 
-	 void PlaySoundA ( Sound * s , Vector3 position );
+	 void PlaySoundA ( Sound * s , T3Vector3 position );
 	 void PlaySoundW ( Sound * s , SoundPriority p = SOUNDPRIORTY_LOW );
 
 
@@ -76,7 +76,7 @@
 	 void CullNodes ();
 	 OALSource * GetSource ();
 
-	 Matrix4 listenerTransform ;
+	 T3Matrix4 listenerTransform ;
 	 float masterVolume ;
 	 ALCcontext * context ;
 	 ALCdevice * device ;

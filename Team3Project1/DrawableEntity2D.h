@@ -13,7 +13,7 @@ Version: 0.0.6 06/02/2015.</summary>
 */
 #pragma once
 #include "T3Rectangle.h"
-#include "../Framework/Vector4.h"
+#include "../Framework/T3Vector4.h"
 
 namespace DrawableType
 {
@@ -36,7 +36,7 @@ public:
 	<param name='height'>The height of the entity.</param>
 	<param name='blendColor'>The colour. Default is White (1,1,1,1).</param>
 	*/
-	DrawableEntity2D(float x, float y, int depth, float width, float height, DrawableType::Type type, Vector4 blendColor = Vector4(1.0f, 1.0f, 1.0f ,1.0f)) : T3Rectangle(x, y, width, height), blendColor(blendColor), type(type), depth(depth)
+	DrawableEntity2D(float x, float y, int depth, float width, float height, DrawableType::Type type, T3Vector4 blendColor = T3Vector4(1.0f, 1.0f, 1.0f ,1.0f)) : T3Rectangle(x, y, width, height), blendColor(blendColor), type(type), depth(depth)
 	{ }
 
 	/**
@@ -46,12 +46,12 @@ public:
 	/**
 	<summary>Gets the colour to blend this drawable with.</summary>
 	*/
-	Vector4 GetColor() const { return blendColor; }
+	T3Vector4 GetColor() const { return blendColor; }
 	/**
 	<summary>Sets the colour to blend this drawable with.</summary>
 	<param name='value'>The colour.</param>
 	*/
-	void SetColor(const Vector4& value) { blendColor = value; }
+	void SetColor(const T3Vector4& value) { blendColor = value; }
 	/**
 	<summary>Gets the drawable entitys depth on screen. Allows it to be drawn behind/in front off other entities.</summary>
 	*/
@@ -64,6 +64,6 @@ public:
 	
 protected:
 	int depth;
-	Vector4 blendColor;
+	T3Vector4 blendColor;
 	DrawableType::Type type;
 };

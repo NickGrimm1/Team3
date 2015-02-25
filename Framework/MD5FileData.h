@@ -69,8 +69,8 @@ hierarchy, forming the skeleton. Each joint is given a name, so it can be
 targeted by scripting ('GetTransformOfJoint("Hand") etc). Joint names are
 stored separately, to avoid an annoying string copying problem with using
 memcpy on an array of MD5Joints. MD5Joints have their transform twice - 
-once as separate Vector3 and Quaternion (loaded from the MD5Mesh file) and
-once as a Matrix4, generated at run-time. This is to make it more obvious
+once as separate T3Vector3 and Quaternion (loaded from the MD5Mesh file) and
+once as a T3Matrix4, generated at run-time. This is to make it more obvious
 that joints really are just scenenode transforms like you are used to, as
 well as making it slightly more efficient to transform the mesh.
 */
@@ -78,11 +78,11 @@ struct MD5Joint {
 	string*		name;			//Pointer to the name of this joint
 	int			parent;			//Index into the joint array of parent
 	int			forceWorld;
-	Vector3		position;		//Position relative to parent joint
+	T3Vector3		position;		//Position relative to parent joint
 	Quaternion	orientation;	//Orientation relative to parent joint
-	Matrix4		transform;		//World transform of this joint
+	T3Matrix4		transform;		//World transform of this joint
 
-	Matrix4		localTransform;
+	T3Matrix4		localTransform;
 };
 
 
@@ -96,7 +96,7 @@ will be calculated.
 */
 struct MD5Vert {
 	int		vertIndex;		//Which vertex of the MD5SubMesh this is
-	Vector2 texCoords;		//Texture coordinates of this vertex
+	T3Vector2 texCoords;		//Texture coordinates of this vertex
 	int		weightIndex;	//Array index of first weighting influence
 	int		weightElements; //Number of MD5Weights that influence this vertex
 };
@@ -111,7 +111,7 @@ struct MD5Weight {
 	int		weightIndex;	//Which weight of the MD5SubMesh this is
 	int		jointIndex;		//Which joint of the MD5Skeleton this weight is relative to
 	float	weightValue;	//How much influence this MD5Weight has on the MD5Vert
-	Vector3 position;		//Anchor position of this MD5Weight
+	T3Vector3 position;		//Anchor position of this MD5Weight
 };
 
 /*
@@ -216,9 +216,9 @@ public:
 	using a simple transformation matrix. We only need one such matrix, and it
 	never needs to change once created, so it is declared as static const.
 	*/
-	static const Matrix4 conversionMatrix;
+	static const T3Matrix4 conversionMatrix;
 
-	static const Matrix4 inverseConversionMatrix;
+	static const T3Matrix4 inverseConversionMatrix;
 
 
 protected:	
@@ -280,8 +280,8 @@ protected:
 	GLuint			weightTexture;		//TBO Texture we use to access the VBO
 	GLuint			transformTexture;	//TBO Texture we use to access the VBO
 
-	Matrix4*		transforms;			//Array of skeleton transforms
-	Vector3*		weightings;			//Array of Vertex weightings
+	T3Matrix4*		transforms;			//Array of skeleton transforms
+	T3Vector3*		weightings;			//Array of Vertex weightings
 #endif
 
 

@@ -217,7 +217,7 @@ void MD5Anim::LoadMD5AnimBaseFrame( std::ifstream &from )	{
 	We need to initialise enough space on the heap for every joint transform
 	*/
 	baseFrame.orientations	= new Quaternion[numJoints];
-	baseFrame.positions		= new Vector3[numJoints];
+	baseFrame.positions		= new T3Vector3[numJoints];
 
 	int current = 0;
 
@@ -317,7 +317,7 @@ void	MD5Anim::TransformSkeleton(MD5Skeleton &skel, unsigned int frameNum) {
 	//For each joint in the animation
 	for(unsigned int i = 0; i < numJoints; ++i) {
 		//Grab COPIES of the position and orientation of the baseframe joint
-		Vector3		animPos	 = baseFrame.positions[i];
+		T3Vector3		animPos	 = baseFrame.positions[i];
 		Quaternion  animQuat = baseFrame.orientations[i];
 
 		/*
@@ -387,7 +387,7 @@ void	MD5Anim::TransformSkeleton(MD5Skeleton &skel, unsigned int frameNum) {
 		skelJoint.orientation	= animQuat;	
 
 		//Now to set the local transform of the current joint. We start by turning the orientation
-		//quaternion into a Matrix4, then we set the resulting matrix translation to the
+		//quaternion into a T3Matrix4, then we set the resulting matrix translation to the
 		//transformed baseframe position
 
 		skelJoint.localTransform		= animQuat.ToMatrix();

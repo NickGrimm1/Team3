@@ -22,6 +22,6 @@ public:
 
 };
 
-inline float LengthSq(Vector3 v) {
-	return Vector3::Dot(v, v);
+inline float LengthSq(T3Vector3 v) {
+	return T3Vector3::Dot(v, v);
 }

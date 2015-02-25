@@ -1,6 +1,6 @@
 #include "PhysicsNode.h"
 
-const Vector3 PhysicsNode::gravity = Vector3(0,-0.001,0);
+const T3Vector3 PhysicsNode::gravity = T3Vector3(0,-0.001,0);
 
 PhysicsNode::PhysicsNode(void): vol(NULL) {
 	target = NULL;
@@ -8,7 +8,7 @@ PhysicsNode::PhysicsNode(void): vol(NULL) {
 	
 }
 
-PhysicsNode::PhysicsNode(Quaternion orientation, Vector3 position): vol(NULL) {
+PhysicsNode::PhysicsNode(Quaternion orientation, T3Vector3 position): vol(NULL) {
 	m_orientation	= orientation;
 	m_position		= position;
 	useGravity = true;
@@ -27,14 +27,14 @@ void	PhysicsNode::Update(float msec) {
 
 
 
-	Vector3 acc = (m_force+m_friction)*m_invMass + (useGravity? gravity: Vector3(0,0,0));
+	T3Vector3 acc = (m_force+m_friction)*m_invMass + (useGravity? gravity: T3Vector3(0,0,0));
 	
 	
 	m_linearVelocity = m_linearVelocity + acc*msec;
 
 	m_linearVelocity = m_linearVelocity*LINEAR_VELOCITY_DAMP;
-	//if (Vector3::Dot(m_linearVelocity, m_linearVelocity) < LINEAR_VELOCITY_MIN) {
-	//	m_linearVelocity = Vector3(0,0,0);
+	//if (T3Vector3::Dot(m_linearVelocity, m_linearVelocity) < LINEAR_VELOCITY_MIN) {
+	//	m_linearVelocity = T3Vector3(0,0,0);
 	//}
 
 	m_position = m_position + m_linearVelocity*msec;
@@ -70,14 +70,14 @@ void	PhysicsNode::Update(float msec) {
 
 	//F=u*T_engine*xg*xd*n/Rw;
 
-	Vector3 angAcc = m_invInertia*m_torque;
+	T3Vector3 angAcc = m_invInertia*m_torque;
 	m_angularVelocity = m_angularVelocity + angAcc*msec;
 	m_angularVelocity = m_angularVelocity*ANGULAR_VELOCITY_DAMP;
 	m_orientation = m_orientation + m_orientation*(m_angularVelocity*(msec/2.0f));
 	m_orientation.Normalise();
 
-	m_force = Vector3(0,0,0);
-	m_torque = Vector3(0,0,0);
+	m_force = T3Vector3(0,0,0);
+	m_torque = T3Vector3(0,0,0);
 
 	if(target) {
 		target->SetTransform(BuildTransform());
@@ -87,9 +87,9 @@ void	PhysicsNode::Update(float msec) {
 
 }
 
-void PhysicsNode::AddForce(Vector3 point, Vector3 force) {
+void PhysicsNode::AddForce(T3Vector3 point, T3Vector3 force) {
 	m_force = m_force + force;
-	m_torque = m_torque + Vector3::Cross(point - m_position, force);
+	m_torque = m_torque + T3Vector3::Cross(point - m_position, force);
 }
 
 /*
@@ -104,15 +104,15 @@ physics processing and 'game-side' logic, it is much neater to
 have seperate orientations and positions.
 
 */
-Matrix4		PhysicsNode::BuildTransform() {
-	Matrix4 m = m_orientation.ToMatrix();
+T3Matrix4		PhysicsNode::BuildTransform() {
+	T3Matrix4 m = m_orientation.ToMatrix();
 
 	m.SetPositionVector(m_position);
 
 	return m;
 }
 
-Vector3 PhysicsNode::GetFathestPointInDirection(PhysicsNode& shape1,Vector3 d){
+T3Vector3 PhysicsNode::GetFathestPointInDirection(PhysicsNode& shape1,T3Vector3 d){
 	
 	int index=0;
 
@@ -120,11 +120,11 @@ Vector3 PhysicsNode::GetFathestPointInDirection(PhysicsNode& shape1,Vector3 d){
 
 
 
-	float maxDot= Vector3::Dot(Points[0],d);
+	float maxDot= T3Vector3::Dot(Points[0],d);
 
 		for(int i=1;i<Points.size();i++)
 		{
-			float dot=Vector3::Dot(Points[i],d);
+			float dot=T3Vector3::Dot(Points[i],d);
 
 			if(dot>maxDot)
 			{
@@ -136,20 +136,20 @@ Vector3 PhysicsNode::GetFathestPointInDirection(PhysicsNode& shape1,Vector3 d){
 		}
 		return Points[index];
 
-	//Vector3 returnVector;
+	//T3Vector3 returnVector;
 	//
 	//
-	//	//Vector3 points = newWorldPoints[0]; 
+	//	//T3Vector3 points = newWorldPoints[0]; 
 
  //     Points=GetWorldPoints();
 	//
-	//	float maxDot=Vector3::Dot(Points[0],d);
+	//	float maxDot=T3Vector3::Dot(Points[0],d);
 	//	for(int i=1;i<Points.size();i++)
 	//	{
 
 
-	//		Vector3 m = Points[i] ; 
-	//		float dot=Vector3::Dot(m,d);
+	//		T3Vector3 m = Points[i] ; 
+	//		float dot=T3Vector3::Dot(m,d);
 	//		if(dot>maxDot)
 	//		{
 	//			maxDot=dot;

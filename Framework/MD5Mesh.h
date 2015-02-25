@@ -60,8 +60,8 @@ than performing everything on the GPU.
 
 #include "ChildMeshInterface.h"
 #include "Quaternion.h"
-#include "Vector3.h"
-#include "Vector2.h"
+#include "T3Vector3.h"
+#include "T3Vector2.h"
 
 #include "../Team3Project1/Mesh.h"
 #include "MD5Anim.h"
@@ -121,7 +121,7 @@ protected:
 	//Every vertex needs two bits of data, how many weights it has, and
 	//how much influence each of those weights has. We're going to store
 	//those inside a new vec2 attribute
-	Vector2*			weights; 
+	T3Vector2*			weights; 
 
 	GLuint				weightObject;
 #endif

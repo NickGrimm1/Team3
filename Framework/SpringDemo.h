@@ -5,7 +5,7 @@
 #include <vector>
 #include "Constraint.h"
 #include "DebugDrawer.h"
-#include "Vector3.h"
+#include "T3Vector3.h"
 
 
 class SpringDemo : public Constraint, public DebugDrawer {
@@ -18,9 +18,9 @@ public:
 	void DebugDraw();
 
 private:
-	std::vector<Vector3> positions;
-	std::vector<Vector3> velocities;
-	std::vector<Vector3> forces;
+	std::vector<T3Vector3> positions;
+	std::vector<T3Vector3> velocities;
+	std::vector<T3Vector3> forces;
 
 	int numBalls;
 	float mass;

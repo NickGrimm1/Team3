@@ -81,17 +81,17 @@ _-_-_-_-_-_-_-""  ""
 //
 //
 //	
-//	Vector3 a, b, c, d;
-//	Vector3 support(PhysicsNode& shape1,PhysicsNode& shape2, Vector3 dir);
-//	bool triangle(Vector3& dir);
-//	bool tetrahedron(Vector3& dir);
-//	bool checkTetrahedron(const Vector3& ao,const Vector3& ab,const Vector3& ac,const Vector3& abc,Vector3& dir);
+//	T3Vector3 a, b, c, d;
+//	T3Vector3 support(PhysicsNode& shape1,PhysicsNode& shape2, T3Vector3 dir);
+//	bool triangle(T3Vector3& dir);
+//	bool tetrahedron(T3Vector3& dir);
+//	bool checkTetrahedron(const T3Vector3& ao,const T3Vector3& ab,const T3Vector3& ac,const T3Vector3& abc,T3Vector3& dir);
 //	bool GJK(PhysicsNode& shape1,PhysicsNode& shape2);
-//	bool containsOrigin( Vector3& dir);
+//	bool containsOrigin( T3Vector3& dir);
 //    bool CollisionDetection(PhysicsNode& shape1,PhysicsNode& shape2);
 //	
-//    vector<Vector3> worldpoints1;
-//    vector<Vector3> worldpoints2;
+//    vector<T3Vector3> worldpoints1;
+//    vector<T3Vector3> worldpoints2;
 //
 //	void	AddNode(PhysicsNode* n);
 //

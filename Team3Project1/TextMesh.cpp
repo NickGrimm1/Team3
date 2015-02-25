@@ -55,32 +55,32 @@ TextMesh::TextMesh(const std::string &text, const Font &font) :  font(font)	{
 		//to generate the correct texture coordinates for each glyph...
 
 		vertices[(i*4)  ] = Vertex(
-			Vector3((float) i, 0, 0),
-			Vector3(0,0,0),
-			Vector4(1,1,1,1),
-			Vector2(x*texelWidth, (y)*texelHeight),
-			Vector3(0,0,0));
+			T3Vector3((float) i, 0, 0),
+			T3Vector3(0,0,0),
+			T3Vector4(1,1,1,1),
+			T3Vector2(x*texelWidth, (y)*texelHeight),
+			T3Vector3(0,0,0));
 
 		vertices[(i*4)+1] = Vertex(
-			Vector3((float) i, -1, 0),
-			Vector3(0,0,0),
-			Vector4(1,1,1,1),
-			Vector2(x*texelWidth, (y+1) * texelHeight),
-			Vector3(0,0,0));
+			T3Vector3((float) i, -1, 0),
+			T3Vector3(0,0,0),
+			T3Vector4(1,1,1,1),
+			T3Vector2(x*texelWidth, (y+1) * texelHeight),
+			T3Vector3(0,0,0));
 	
 		vertices[(i*4)+2] = Vertex(
-			Vector3((float) i+1, 0,0),
-			Vector3(0,0,0),
-			Vector4(1,1,1,1),
-			Vector2((x+1)*texelWidth , (y)*texelHeight),
-			Vector3(0,0,0));
+			T3Vector3((float) i+1, 0,0),
+			T3Vector3(0,0,0),
+			T3Vector4(1,1,1,1),
+			T3Vector2((x+1)*texelWidth , (y)*texelHeight),
+			T3Vector3(0,0,0));
 		
 		vertices[(i*4)+3] = Vertex(
-			Vector3((float) i+1, -1, 0), 
-			Vector3(0,0,0),
-			Vector4(1,1,1,1),
-			Vector2((x+1)*texelWidth , (y+1) * texelHeight),
-			Vector3(0,0,0));
+			T3Vector3((float) i+1, -1, 0), 
+			T3Vector3(0,0,0),
+			T3Vector4(1,1,1,1),
+			T3Vector2((x+1)*texelWidth , (y+1) * texelHeight),
+			T3Vector3(0,0,0));
 	}
 
 	//Lastly, we buffer the data, just like a 'normal' mesh!

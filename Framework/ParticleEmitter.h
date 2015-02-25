@@ -40,17 +40,17 @@ _-_-_-_-_-_-_-""  ""
 
 
 #pragma once
-#include "../Framework/Vector3.h"
-#include "../Framework/Vector4.h"
+#include "../Framework/T3Vector3.h"
+#include "../Framework/T3Vector4.h"
 #include "../Framework/OGLRenderer.h"
 #include "../Team3Project1/Mesh.h"
 #include <vector>
 #include "../Team3Project1/Texture.h"
 
 struct Particle {
-	Vector3 position;
-	Vector4 colour;
-	Vector3 direction;
+	T3Vector3 position;
+	T3Vector4 colour;
+	T3Vector3 direction;
 };
 
 class ParticleEmitter : public Mesh	{
@@ -82,8 +82,8 @@ public:
 	int		GetLaunchParticles()			{return numLaunchParticles;}
 	void	SetLaunchParticles(int num)		{numLaunchParticles = num;}
 
-	void	SetDirection(const Vector3 dir) {initialDirection = dir;}
-	Vector3 GetDirection()					{return initialDirection;}
+	void	SetDirection(const T3Vector3 dir) {initialDirection = dir;}
+	T3Vector3 GetDirection()					{return initialDirection;}
 
 protected:
 	Particle* GetFreeParticle();
@@ -97,7 +97,7 @@ protected:
 	float particleSpeed;
 	int	  numLaunchParticles;
 
-	Vector3 initialDirection;
+	T3Vector3 initialDirection;
 
 	float nextParticleTime;		//How long until we next spit out some particles?
 

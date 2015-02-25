@@ -10,12 +10,12 @@ Version: 0.0.5 11/02/2015.</summary>
 class OffsetCamera : public Camera
 {
 public:
-	OffsetCamera(DrawableEntity3D* targetEntity, const Vector3& positionOffset, float pitchOffset, float yawOffset, float rollOffset) 
+	OffsetCamera(DrawableEntity3D* targetEntity, const T3Vector3& positionOffset, float pitchOffset, float yawOffset, float rollOffset) 
 		: Camera(targetEntity, pitchOffset, yawOffset, rollOffset, positionOffset, targetEntity->GetOriginPosition()), offset(positionOffset), pitchOffset(pitchOffset), yawOffset(yawOffset), rollOffset(rollOffset)
 	{ }
 	
-	Vector3 GetPositionOffset() const { return offset; }
-	void SetPositionOffset(const Vector3& value) { offset = value; }
+	T3Vector3 GetPositionOffset() const { return offset; }
+	void SetPositionOffset(const T3Vector3& value) { offset = value; }
 	float GetPitchOffset() const { return pitchOffset; }
 	void SetPitchOffset(float value) { pitchOffset = value; }
 	float GetYawOffset() const { return yawOffset; }
@@ -25,7 +25,7 @@ public:
 
 	void UpdateCamera();
 protected:
-	Vector3 offset;
+	T3Vector3 offset;
 	float pitchOffset;
 	float yawOffset;
 	float rollOffset;

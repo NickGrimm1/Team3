@@ -92,7 +92,7 @@ Particle* ParticleEmitter::GetFreeParticle()	{
 	//Now we have to reset its values - if it was popped off the
 	//free list, it'll still have the values of its 'previous life'
 
-	p->colour		= Vector4(RAND(),RAND(),RAND(),1.0);
+	p->colour		= T3Vector4(RAND(),RAND(),RAND(),1.0);
 	p->direction	= initialDirection;
 	p->direction.x += ((RAND()-RAND()) * particleVariance);
 	p->direction.y += ((RAND()-RAND()) * particleVariance);
@@ -142,7 +142,7 @@ and quicker than faffing with mapping and unmapping buffers!
 void ParticleEmitter::Draw()	{
 	//Get 2 contiguous sections of memory full of our particle info
 	for(unsigned int i = 0; i < particles.size(); ++i) {
-		vertices[i] = Vertex(particles.at(i)->position, Vector3(), particles.at(i)->colour);
+		vertices[i] = Vertex(particles.at(i)->position, T3Vector3(), particles.at(i)->colour);
 	}
 
 	glBindVertexArray(arrayObject);
@@ -151,10 +151,10 @@ void ParticleEmitter::Draw()	{
 	glBindBuffer(GL_ARRAY_BUFFER, bufferObject[0]);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(Vertex), (void*)vertices);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0); // Position
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Vector3))); // Normal
-	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Vector3) + sizeof(Vector3))); // Color
-	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Vector3) + sizeof(Vector3) + sizeof(Vector4))); // TexCoord
-	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Vector3) + sizeof(Vector3) + sizeof(Vector4) + sizeof(Vector2))); // Tangent	//Tell the VAO we have positions...
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(T3Vector3))); // Normal
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(T3Vector3) + sizeof(T3Vector3))); // Color
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(T3Vector3) + sizeof(T3Vector3) + sizeof(T3Vector4))); // TexCoord
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(T3Vector3) + sizeof(T3Vector3) + sizeof(T3Vector4) + sizeof(T3Vector2))); // Tangent	//Tell the VAO we have positions...
 	glEnableVertexAttribArray(0);	//Binds this buffer to the VAO
 
 	//We're going to use a type of alpha blending known as additive blending here. Overlapping 

@@ -223,18 +223,18 @@ protected:
 	<param name='type'>The event type.</param>
 	<param name='position'>The resolution independent co-ordinates of the mouse cursor.</param>
 	*/
-	virtual void MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, Vector2& position);
+	virtual void MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position);
 	/**
 	<summary>Notifies all screens in the stack that the mouse has moved.</summary>
 	<param name='start'>The resolution independent co-ordinates of the mouse cursor at the start of the frame.</param>
 	<param name='finish'>The resolution independent co-ordinates of the mouse cursor at the end of the frame.</param>
 	*/
-	virtual void MouseMoved(Vector2& finish);
+	virtual void MouseMoved(T3Vector2& finish);
 	/**
 	<summary>Notifies all screens in the stack that the mouse scroll wheel has moved.</summary>
 	<param name='amount'>The amount of the movement.</param>
 	*/
-	virtual void MouseScrolled(Vector2& position, int amount);
+	virtual void MouseScrolled(T3Vector2& position, int amount);
 	/**
 	<summary>Notifies all screens in the stack of a keyboard event.</summary>
 	<param name='type'>The event type.</param>
@@ -254,7 +254,7 @@ protected:
 	<param name='analogueControl'>The control that is displaced.</param>
 	<param name='amount'>The amount of the displacement. For the triggers, only the x co-ordinate is used.</param>
 	*/
-	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, Vector2& amount);
+	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount);
 private:
 	vector<T3Rectangle*> entities;
 	vector<DrawableEntity2D*> drawables;

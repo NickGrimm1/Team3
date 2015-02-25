@@ -20,7 +20,7 @@ void Octree::add(GameEntity* ball) {
             remove(ball, ball->GetPhysicsNode().GetPosition());
         }
  //Changes the position of a ball in this from oldPos to ball->pos
-        void Octree::ballMoved(GameEntity* ball, Vector3 oldPos) {
+        void Octree::ballMoved(GameEntity* ball, T3Vector3 oldPos) {
             remove(ball, oldPos);
             add(ball);
         }
@@ -58,7 +58,7 @@ void Octree::potentialBallBallCollisions(vector<BallPair> &collisions) {
 
 
 
-void Octree::fileBall(GameEntity* ball, Vector3 pos, bool addBall) {
+void Octree::fileBall(GameEntity* ball, T3Vector3 pos, bool addBall) {
             //Figure out in which child(ren) the ball belongs
 
             for(int x = 0; x < 2; x++) {
@@ -139,8 +139,8 @@ void Octree::haveChildren() {
                             maxZ = corner2.z;
                         }
                         
-                        children[x][y][z] = new Octree(Vector3(minX, minY, minZ),
-                                                       Vector3(maxX, maxY, maxZ),
+                        children[x][y][z] = new Octree(T3Vector3(minX, minY, minZ),
+                                                       T3Vector3(maxX, maxY, maxZ),
                                                        depth + 1);
                     }
                 }
@@ -188,7 +188,7 @@ void Octree::destroyChildren() {
             
             hasChildren = false;
         }
-void Octree::remove(GameEntity* ball, Vector3 pos) {
+void Octree::remove(GameEntity* ball, T3Vector3 pos) {
             numBalls--;
             
             if (hasChildren && numBalls < MIN_BALLS_PER_OCTREE) {

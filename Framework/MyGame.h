@@ -70,7 +70,7 @@ protected:
 
 	GameEntity* BuildQuadEntity(float size);
 
-	GameEntity* BuildVehicleEntity(float size,Vector3 pos, Vector3 vel);
+	GameEntity* BuildVehicleEntity(float size,T3Vector3 pos, T3Vector3 vel);
 
 	SoundEntity* Background_Music;
 

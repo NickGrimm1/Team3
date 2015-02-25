@@ -34,13 +34,13 @@
 //
 //
 //
-//Vector3 PhysicsSystem::support(PhysicsNode& shape1,PhysicsNode& shape2, Vector3 dir)
+//T3Vector3 PhysicsSystem::support(PhysicsNode& shape1,PhysicsNode& shape2, T3Vector3 dir)
 //{
 //	
-//	Vector3 p1=shape1.GetFathestPointInDirection(shape1,dir);
-//	Vector3 p2=shape2.GetFathestPointInDirection(shape2,Vector3(-dir.x,-dir.y,-dir.z));
+//	T3Vector3 p1=shape1.GetFathestPointInDirection(shape1,dir);
+//	T3Vector3 p2=shape2.GetFathestPointInDirection(shape2,T3Vector3(-dir.x,-dir.y,-dir.z));
 //
-//	Vector3 p3=p1-p2;
+//	T3Vector3 p3=p1-p2;
 //
 //	return p3;
 //
@@ -52,7 +52,7 @@
 //
 //	worldpoints1.clear();
 //	worldpoints2.clear();
-//	Vector3 * vertex1=shape1.GetTarget()->GetMesh()->GetVertices();
+//	T3Vector3 * vertex1=shape1.GetTarget()->GetMesh()->GetVertices();
 //	int number1=shape1.GetTarget()->GetMesh()->GetNumVertices();
 //	for(int i=0;i<number1;i++)
 //	{
@@ -60,7 +60,7 @@
 //	}
 //	shape1.SetWorldPoints(worldpoints1);
 //
-//	Vector3 * vertex2=shape2.GetTarget()->GetMesh()->GetVertices();
+//	T3Vector3 * vertex2=shape2.GetTarget()->GetMesh()->GetVertices();
 //	int number2=shape2.GetTarget()->GetMesh()->GetNumVertices();
 //	for(int i=0;i<number2;i++)
 //	{
@@ -75,7 +75,7 @@
 //
 //	 
 //
-//	 Vector3 dir = Vector3(1, 1, 1);
+//	 T3Vector3 dir = T3Vector3(1, 1, 1);
 //		
 //	 c = support(shape1, shape2, dir);
 //		 	
@@ -83,11 +83,11 @@
 //
 //	 b = support(shape1, shape2, dir);
 //
-//	 if (Vector3::Dot(dir,b) < 0)
+//	 if (T3Vector3::Dot(dir,b) < 0)
 //	 {
 //		 return false;
 //	 }
-//	 dir = Vector3::doubleCross(c - b, b* -1.0f);
+//	 dir = T3Vector3::doubleCross(c - b, b* -1.0f);
 //	 
 //	 numPointsSimplex = 2; //begin with 2 points in simplex
 //	
@@ -95,7 +95,7 @@
 //	 while (steps<50)
 //	 {
 //		 a = support(shape1, shape2, dir);
-//		 if (Vector3::Dot(dir,a) < 0)
+//		 if (T3Vector3::Dot(dir,a) < 0)
 //		 {
 //			 return false;
 //		 }
@@ -118,7 +118,7 @@
 //
 ////bool PhysicsSystem::GJK(PhysicsNode& shape1,PhysicsNode& shape2)
 ////{
-////	Vector3 d= Vector3(1,-1,0);
+////	T3Vector3 d= T3Vector3(1,-1,0);
 ////	Simplex.push_back(support(shape1,shape2,  d));
 ////
 ////	d.Inverse();
@@ -127,7 +127,7 @@
 ////	{
 ////		Simplex.push_back(support(shape1,shape2,  d));
 ////
-////		if(Vector3::Dot(d,Simplex[Simplex.size()-1])<=0)
+////		if(T3Vector3::Dot(d,Simplex[Simplex.size()-1])<=0)
 ////	  {
 ////	    return false;
 ////	  }
@@ -154,7 +154,7 @@
 //
 //
 //
-//bool PhysicsSystem::containsOrigin(Vector3& dir)
+//bool PhysicsSystem::containsOrigin(T3Vector3& dir)
 //{
 //
 //	 if (numPointsSimplex == 2)
@@ -171,51 +171,51 @@
 //	}
 //
 //
-//bool PhysicsSystem::triangle(Vector3& dir)
+//bool PhysicsSystem::triangle(T3Vector3& dir)
 // {
-//	 Vector3 ao = Vector3(-a.x, -a.y, -a.z);
-//	 Vector3 ab = b - a;
-//	 Vector3 ac = c - a;
-//	 Vector3 abc = Vector3::Cross(ab, ac);
+//	 T3Vector3 ao = T3Vector3(-a.x, -a.y, -a.z);
+//	 T3Vector3 ab = b - a;
+//	 T3Vector3 ac = c - a;
+//	 T3Vector3 abc = T3Vector3::Cross(ab, ac);
 //
 //	 //point is can't be behind/in the direction of B,C or BC
 //
 //	
-//	 Vector3 ab_abc = Vector3::Cross(ab, abc);
+//	 T3Vector3 ab_abc = T3Vector3::Cross(ab, abc);
 //	 // is the origin away from ab edge? in the same plane
 //	 //if a0 is in that direction than
-//	 if (Vector3::Dot(ao,ab_abc) > 0)
+//	 if (T3Vector3::Dot(ao,ab_abc) > 0)
 //	 {
 //		//change points
 //		c = b;
 //		b = a;
 //
 //		//dir is not ab_abc because it's not point towards the origin hjfe
-//		dir = Vector3::doubleCross(ab,ao);
+//		dir = T3Vector3::doubleCross(ab,ao);
 //
 //		//direction change; can't build tetrahedron
 //		return false;
 //	 }
 //
 //	
-//	 Vector3 abc_ac = Vector3::Cross(abc, ac); 
+//	 T3Vector3 abc_ac = T3Vector3::Cross(abc, ac); 
 //
 //	 // is the origin away from ac edge? or it is in abc?
 //	 //if a0 is in that direction than
-//	 if (Vector3::Dot(ao,abc_ac) > 0)
+//	 if (T3Vector3::Dot(ao,abc_ac) > 0)
 //	 {
 //		//keep c the same
 //		b = a;
 //
 //		//dir is not abc_ac because it's not point towards the origin
-//		dir = Vector3::doubleCross(ac, ao);
+//		dir = T3Vector3::doubleCross(ac, ao);
 //				
 //		//direction change; can't build tetrahedron
 //		return false;
 //	 }
 //
 //	 //now can build tetrahedron; check if it's above or below
-//	 if (Vector3::Dot(ao,abc) > 0)
+//	 if (T3Vector3::Dot(ao,abc) > 0)
 //	 {
 //		 //base of tetrahedron
 //		 d = c;
@@ -238,17 +238,17 @@
 //	 return false;
 // }
 //
-// bool PhysicsSystem::tetrahedron(Vector3& dir)
+// bool PhysicsSystem::tetrahedron(T3Vector3& dir)
 // {
-//	 Vector3 ao = a* -1.0f;//0-a
-//	 Vector3 ab = b - a;
-//	 Vector3 ac = c - a;
+//	 T3Vector3 ao = a* -1.0f;//0-a
+//	 T3Vector3 ab = b - a;
+//	 T3Vector3 ac = c - a;
 //	 
 //	 //build abc triangle
-//	 Vector3 abc = Vector3::Cross(ab, ac);
+//	 T3Vector3 abc = T3Vector3::Cross(ab, ac);
 //
 //	 //CASE 1
-//	 if (Vector3::Dot(ao,abc) > 0)
+//	 if (T3Vector3::Dot(ao,abc) > 0)
 //	 {
 //		 //in front of triangle ABC
 //		 //we don't have to change the ao,ab,ac,abc meanings
@@ -258,13 +258,13 @@
 //
 //	 //CASE 2:
 //	 
-//	 Vector3 ad = d - a;
+//	 T3Vector3 ad = d - a;
 //
 //	 //build acd triangle
-//	  Vector3 acd = Vector3::Cross(ac, ad);
+//	  T3Vector3 acd = T3Vector3::Cross(ac, ad);
 //
 //	 //same direaction with ao
-//	  if (Vector3::Dot(ao,acd) > 0)
+//	  if (T3Vector3::Dot(ao,acd) > 0)
 //	 {
 //
 //		 //in front of triangle ACD
@@ -278,10 +278,10 @@
 //	 }
 //
 //	 //build adb triangle
-//	 Vector3 adb = Vector3::Cross(ad, ab);
+//	 T3Vector3 adb = T3Vector3::Cross(ad, ab);
 //
 //	 //same direaction with ao
-//	 if (Vector3::Dot(ao,adb) > 0)
+//	 if (T3Vector3::Dot(ao,adb) > 0)
 //	 {
 //
 //		 //in front of triangle ADB
@@ -296,36 +296,36 @@
 //		 return checkTetrahedron(ao, ab, ac, abc, dir);
 //	 }
 //
-//					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, a, b, Vector3(1, 0, 1), Vector3(1, 0, 1));
-//					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, c, b, Vector3(1, 0, 1), Vector3(1, 0, 1));
-//					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, a, c, Vector3(1, 0, 1), Vector3(1, 0, 1));
-//					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, a, d, Vector3(1, 1, 1), Vector3(1, 1, 1));
-//					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, b, d, Vector3(1, 1, 1), Vector3(1, 1, 1));
-//					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, c, d, Vector3(1, 1, 1), Vector3(1, 1, 1));
+//					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, a, b, T3Vector3(1, 0, 1), T3Vector3(1, 0, 1));
+//					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, c, b, T3Vector3(1, 0, 1), T3Vector3(1, 0, 1));
+//					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, a, c, T3Vector3(1, 0, 1), T3Vector3(1, 0, 1));
+//					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, a, d, T3Vector3(1, 1, 1), T3Vector3(1, 1, 1));
+//					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, b, d, T3Vector3(1, 1, 1), T3Vector3(1, 1, 1));
+//					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, c, d, T3Vector3(1, 1, 1), T3Vector3(1, 1, 1));
 //
 //	 //origin in tetrahedron
 //	 return true;
 //
 // }
 //
-// bool PhysicsSystem::checkTetrahedron(const Vector3& ao,
-//									  const Vector3& ab,
-//									  const Vector3& ac,
-//									  const Vector3& abc,
-//									  Vector3& dir)
+// bool PhysicsSystem::checkTetrahedron(const T3Vector3& ao,
+//									  const T3Vector3& ab,
+//									  const T3Vector3& ac,
+//									  const T3Vector3& abc,
+//									  T3Vector3& dir)
 // {
 //	 
 //	//almost the same like triangle checks
-//	Vector3 ab_abc = Vector3::Cross(ab, abc);
+//	T3Vector3 ab_abc = T3Vector3::Cross(ab, abc);
 //
-//	if (Vector3::Dot(ao,ab_abc) > 0)
+//	if (T3Vector3::Dot(ao,ab_abc) > 0)
 //	 {
 //		 c = b;
 //		 b = a;
 //
 //		 //dir is not ab_abc because it's not point towards the origin;
 //		 //ABxA0xAB direction we are looking for
-//		 dir = Vector3::doubleCross(ab, ao);
+//		 dir = T3Vector3::doubleCross(ab, ao);
 //		 
 //		 //build new triangle
 //		 // d will be lost
@@ -334,15 +334,15 @@
 //		 return false;
 //	 }
 //
-//	 Vector3 acp = Vector3::Cross(abc, ac);
+//	 T3Vector3 acp = T3Vector3::Cross(abc, ac);
 //
-//	 if (Vector3::Dot(ao,acp) > 0)
+//	 if (T3Vector3::Dot(ao,acp) > 0)
 //	 {
 //		 b = a;
 //
 //		 //dir is not abc_ac because it's not point towards the origin;
 //		 //ACxA0xAC direction we are looking for
-//		 dir = Vector3::doubleCross(ac, ao);
+//		 dir = T3Vector3::doubleCross(ac, ao);
 //		 
 //		 //build new triangle
 //		 // d will be lost
@@ -442,10 +442,10 @@
 ////				    					
 ////									  if (CollisionHelper::AABBCollision(first, second )) 
 ////									  {
-////									   first.SetLinearVelocity(Vector3(0,0,0));      
-////									   first.SetForce(Vector3(0,0,0));
-////									    second.SetLinearVelocity(Vector3(0,0,0));
-////								       second.SetForce(Vector3(0,0,0));
+////									   first.SetLinearVelocity(T3Vector3(0,0,0));      
+////									   first.SetForce(T3Vector3(0,0,0));
+////									    second.SetLinearVelocity(T3Vector3(0,0,0));
+////								       second.SetForce(T3Vector3(0,0,0));
 ////									  }
 ////									 
 ////										continue;
@@ -537,10 +537,10 @@
 //				    					
 //									  if (CollisionHelper::AABBCollision(first, second )) 
 //									  {
-//									   first.SetLinearVelocity(Vector3(0,0,0));      
-//									   first.SetForce(Vector3(0,0,0));
-//									    second.SetLinearVelocity(Vector3(0,0,0));
-//								       second.SetForce(Vector3(0,0,0));
+//									   first.SetLinearVelocity(T3Vector3(0,0,0));      
+//									   first.SetForce(T3Vector3(0,0,0));
+//									    second.SetLinearVelocity(T3Vector3(0,0,0));
+//								       second.SetForce(T3Vector3(0,0,0));
 //									  }
 //									 
 //										continue;

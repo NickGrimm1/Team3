@@ -250,7 +250,7 @@
     <ClInclude Include="..\Framework\InputDevice.h" />
     <ClInclude Include="..\Framework\Keyboard.h" />
     <ClInclude Include="..\Framework\Light.h" />
-    <ClInclude Include="..\Framework\Matrix4.h" />
+    <ClInclude Include="..\Framework\T3Matrix4.h" />
     <ClInclude Include="..\Framework\MD5Anim.h" />
     <ClInclude Include="..\Framework\MD5FileData.h" />
     <ClInclude Include="..\Framework\MD5Mesh.h" />
@@ -274,9 +274,9 @@
     <ClInclude Include="..\Framework\SoundSystem.h" />
     <ClInclude Include="..\Framework\Spring.h" />
     <ClInclude Include="..\Framework\SpringDemo.h" />
-    <ClInclude Include="..\Framework\Vector2.h" />
-    <ClInclude Include="..\Framework\Vector3.h" />
-    <ClInclude Include="..\Framework\Vector4.h" />
+    <ClInclude Include="..\Framework\T3Vector2.h" />
+    <ClInclude Include="..\Framework\T3Vector3.h" />
+    <ClInclude Include="..\Framework\T3Vector4.h" />
     <ClInclude Include="..\Framework\Vehicle.h" />
     <ClInclude Include="..\Framework\Weather.h" />
     <ClInclude Include="..\Framework\Window.h" />
@@ -290,6 +290,7 @@
     <ClInclude Include="DrawableText2D.h" />
     <ClInclude Include="DrawableTexture2D.h" />
     <ClInclude Include="EntryPoint.h" />
+    <ClInclude Include="GCMRenderer.h" />
     <ClInclude Include="GraphicsTestScreen.h" />
     <ClInclude Include="HudTestScreen.h" />
     <ClInclude Include="LoadedFont.h" />
@@ -373,6 +374,7 @@
     <ClCompile Include="GameScreen2D.cpp" />
     <ClCompile Include="GameScreen3D.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
+    <ClCompile Include="GCMRenderer.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
     <ClCompile Include="GraphicsTestScreen.cpp" />
     <ClCompile Include="HudTestScreen.cpp" />

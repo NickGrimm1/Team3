@@ -19,7 +19,7 @@ static float	matrixElements[16] = {
 /*
 static class variables must still be instantiated somewhere!!!
 */
-const Matrix4 MD5FileData::conversionMatrix			= Matrix4(matrixElements);
+const T3Matrix4 MD5FileData::conversionMatrix			= T3Matrix4(matrixElements);
 
 MD5FileData::MD5FileData(const std::string &filename)	{
 	std::ifstream f(filename,std::ios::in);	//MD5 files are text based, so don't make it an ios::binary ifstream...
@@ -179,8 +179,8 @@ void	MD5FileData::CreateTBOs() {
 	}
 
 	//Now we know how much space to allocate!
-	transforms = new Matrix4[transformCount];
-	weightings = new Vector3[weightCount*2];
+	transforms = new T3Matrix4[transformCount];
+	weightings = new T3Vector3[weightCount*2];
 
 	unsigned int currentWeight=0;
 
@@ -190,7 +190,7 @@ void	MD5FileData::CreateTBOs() {
 
 	for(unsigned int i = 0; i < numSubMeshes; ++i) {
 		for(int j = 0; j < subMeshes[i].numweights; ++j) {
-			weightings[(currentWeight*2)+0] = Vector3(
+			weightings[(currentWeight*2)+0] = T3Vector3(
 				(float)subMeshes[i].weights[j].weightIndex,	
 				(float)subMeshes[i].weights[j].jointIndex,
 				(float)subMeshes[i].weights[j].weightValue);
@@ -205,13 +205,13 @@ void	MD5FileData::CreateTBOs() {
 	//data, all we need to do is bind the appropriate buffer, then call glBufferData...
 
 	glBindBuffer(GL_TEXTURE_BUFFER, weightBuffer);
-	glBufferData(GL_TEXTURE_BUFFER, weightCount*sizeof(Vector3)*2, &weightings[0], GL_STATIC_DRAW);
+	glBufferData(GL_TEXTURE_BUFFER, weightCount*sizeof(T3Vector3)*2, &weightings[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_TEXTURE_BUFFER, 0);
 
 	//Although we're going to allocate the memory for our skeleton, we aren't going to send any
 	//skeleton data to it just yet - this will be done on a per-node basis as necessary.
 	glBindBuffer(GL_TEXTURE_BUFFER, transformBuffer);
-	glBufferData(GL_TEXTURE_BUFFER, transformCount*sizeof(Matrix4), &transforms[0], GL_DYNAMIC_DRAW);
+	glBufferData(GL_TEXTURE_BUFFER, transformCount*sizeof(T3Matrix4), &transforms[0], GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_TEXTURE_BUFFER, 0);
 
 	//By the end of this function, we don't really need subMeshes anymore!
@@ -494,21 +494,21 @@ void MD5FileData::CreateMeshes()	{
 
 		// TODO: Fix Interleaving on MD5...
 		//target->texture		  = subMesh.texIndex;				//Assign the diffuse map
-		//target->vertices	  = new Vector3[subMesh.numverts];	//Make vertex	mem
-		//target->textureCoords = new Vector2[subMesh.numverts];	//Make texCoord mem
+		//target->vertices	  = new T3Vector3[subMesh.numverts];	//Make vertex	mem
+		//target->textureCoords = new T3Vector2[subMesh.numverts];	//Make texCoord mem
 #ifdef MD5_USE_HARDWARE_SKINNING
-		target->weights		  = new Vector2[subMesh.numverts];	//Make weight mem
+		target->weights		  = new T3Vector2[subMesh.numverts];	//Make weight mem
 #endif
 
 #ifdef MD5_USE_NORMALS
 		//Create space for normals!
-		target->normals		  = new Vector3[subMesh.numverts];
+		target->normals		  = new T3Vector3[subMesh.numverts];
 #endif 
 
 #ifdef MD5_USE_TANGENTS_BUMPMAPS
 		//Create space for tangents, and assign the bump texture
 //		target->bumpTexture	  = subMesh.bumpIndex;	
-//		target->tangents	  = new Vector3[subMesh.numverts];
+//		target->tangents	  = new T3Vector3[subMesh.numverts];
 #endif
 
 		target->numIndices    = subMesh.numtris*3; //Each tri has 3 points....
@@ -606,7 +606,7 @@ void	MD5FileData::UpdateTransformTBO(const MD5Skeleton &skel) const {
 	}
 
 	glBindBuffer(GL_TEXTURE_BUFFER, transformBuffer);
-	glBufferSubData(GL_TEXTURE_BUFFER, 0, bindPose.numJoints*2*sizeof(Matrix4), (void*)&transforms[0]);
+	glBufferSubData(GL_TEXTURE_BUFFER, 0, bindPose.numJoints*2*sizeof(T3Matrix4), (void*)&transforms[0]);
 	glBindBuffer(GL_TEXTURE_BUFFER, 0);
 
 	GL_BREAKPOINT;

@@ -55,14 +55,14 @@ public:
 	bool	GetParentLocalOrientation(const string&name, Quaternion &t);
 	bool	GetParentWorldOrientation(const string&name, Quaternion &t);
 
-	bool	GetParentLocalTransform(const string&name, Matrix4 &t);
-	bool	GetParentWorldTransform(const string&name, Matrix4 &t);
+	bool	GetParentLocalTransform(const string&name, T3Matrix4 &t);
+	bool	GetParentWorldTransform(const string&name, T3Matrix4 &t);
 
-	bool	GetJointLocalTransform(const string&name, Matrix4 &t);
-	bool	SetJointLocalTransform(const string &name, Matrix4 &t);
+	bool	GetJointLocalTransform(const string&name, T3Matrix4 &t);
+	bool	SetJointLocalTransform(const string &name, T3Matrix4 &t);
 
-	bool	GetJointWorldTransform(const string&name, Matrix4 &t);
-	bool	SetJointWorldTransform(const string &name, Matrix4 &t);
+	bool	GetJointWorldTransform(const string&name, T3Matrix4 &t);
+	bool	SetJointWorldTransform(const string &name, T3Matrix4 &t);
 
 	MD5Skeleton* GetSkeleton() {
 		return &currentSkeleton;

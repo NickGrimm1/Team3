@@ -22,9 +22,9 @@ _-_-_-_-_-_-_-""  ""
 
 #include <iostream>
 #include "common.h"
-#include "Matrix4.h"
+#include "T3Matrix4.h"
 
-class Matrix4;
+class T3Matrix4;
 
 class Quaternion	{
 public:
@@ -39,29 +39,29 @@ public:
 	float w;
 
 	void	Normalise();
-	Matrix4 ToMatrix() const;
+	T3Matrix4 ToMatrix() const;
 
 
 	Quaternion	Conjugate() const;
 	void		GenerateW();	//builds 4th component when loading in shortened, 3 component quaternions
 
 	static Quaternion EulerAnglesToQuaternion(float pitch, float yaw, float roll);
-	static Quaternion AxisAngleToQuaterion(const Vector3& vector, float degrees);
+	static Quaternion AxisAngleToQuaterion(const T3Vector3& vector, float degrees);
 
 	/**
 	<summary>Gets the Euler angles represented by this Quarternion.</summary>
-	<returns>Vector3(Pitch, Yaw, Roll).</returns>
+	<returns>T3Vector3(Pitch, Yaw, Roll).</returns>
 	*/
-	Vector3 GetEulerAngles();
+	T3Vector3 GetEulerAngles();
 
-	static void RotatePointByQuaternion(const Quaternion &q, Vector3 &point);
+	static void RotatePointByQuaternion(const Quaternion &q, T3Vector3 &point);
 
-	static Quaternion FromMatrix(const Matrix4 &m);
+	static Quaternion FromMatrix(const T3Matrix4 &m);
 
 	static float Dot(const Quaternion &a, const Quaternion &b);
 
 	Quaternion operator *(const Quaternion &a) const;
-	Quaternion operator *(const Vector3 &a) const;
+	Quaternion operator *(const T3Vector3 &a) const;
 
 	Quaternion operator+(const Quaternion &a) const {
 		return Quaternion(x + a.x, y + a.y, z + a.z, w + a.w);

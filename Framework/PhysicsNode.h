@@ -34,8 +34,8 @@ _-_-_-_-_-_-_-""  ""
 #pragma once
 
 #include "Quaternion.h"
-#include "Vector3.h"
-#include "Matrix4.h"
+#include "T3Vector3.h"
+#include "T3Matrix4.h"
 #include "SceneNode.h"
 
 #include "CollisionVolume.h"
@@ -47,93 +47,93 @@ _-_-_-_-_-_-_-""  ""
 class PhysicsNode	{
 public:
 	PhysicsNode(void);
-	PhysicsNode(Quaternion orientation, Vector3 position);
+	PhysicsNode(Quaternion orientation, T3Vector3 position);
 	~PhysicsNode(void);
 
-	Vector3		GetPosition() const			{ return m_position;}
-	Vector3		GetLinearVelocity() const	{ return m_linearVelocity;}
+	T3Vector3		GetPosition() const			{ return m_position;}
+	T3Vector3		GetLinearVelocity() const	{ return m_linearVelocity;}
 	
 	float		GetInverseMass() const		{return m_invMass;}
 	float		GetMass() const				{return 1.0f/m_invMass;}
 
-	Matrix4		GetInverseInertia() const	{ return m_invInertia; }
+	T3Matrix4		GetInverseInertia() const	{ return m_invInertia; }
 
 	Quaternion	GetOrientation() const		{ return m_orientation;}
-	Vector3		GetAngularVelocity() const	{ return m_angularVelocity;}
+	T3Vector3		GetAngularVelocity() const	{ return m_angularVelocity;}
 
 	CollisionVolume* GetCollisionVolume() const { return vol; }
 
-	Matrix4		BuildTransform();
+	T3Matrix4		BuildTransform();
 
 	virtual void		Update(float msec);
 
-	void	SetPosition(Vector3 vec) { m_position = vec; }
-	void	SetLinearVelocity(Vector3 vec)		{ m_linearVelocity = vec;}
+	void	SetPosition(T3Vector3 vec) { m_position = vec; }
+	void	SetLinearVelocity(T3Vector3 vec)		{ m_linearVelocity = vec;}
 	
 	void	SetMass(float mass) {m_invMass = 1.0f/mass;}
 	void	SetInverseMass(float invMass) {m_invMass = invMass;}
 
-	void	SetInverseInertia(Matrix4 invInertia) {m_invInertia = invInertia;}
+	void	SetInverseInertia(T3Matrix4 invInertia) {m_invInertia = invInertia;}
 	
 	void	SetOrientation(Quaternion q) { m_orientation = q; }
-	void	SetAngularVelocity(Vector3 vec) { m_angularVelocity = vec; }
+	void	SetAngularVelocity(T3Vector3 vec) { m_angularVelocity = vec; }
 
 	void	SetTarget(SceneNode *s) { target = s;}
 	SceneNode* GetTarget() {return target;}
 	void	SetUseGravity(bool value) { useGravity = value; }
 	void	SetCollisionVolume(CollisionVolume* vol) { this->vol = vol; }
 
-	Vector3 GetFriction() {return m_friction;}
-	void    SetFriction(Vector3 friction)  {m_friction=friction;}
+	T3Vector3 GetFriction() {return m_friction;}
+	void    SetFriction(T3Vector3 friction)  {m_friction=friction;}
 
-	Vector3	GetForce()	{ return m_force;}
-	Vector3	GetTorque() { return m_torque;}
+	T3Vector3	GetForce()	{ return m_force;}
+	T3Vector3	GetTorque() { return m_torque;}
 
-	void AddForce(Vector3 point, Vector3 force);
+	void AddForce(T3Vector3 point, T3Vector3 force);
 
-	void SetWorldPoints(vector<Vector3> newWorldPoint ) { this->newWorldPoints=newWorldPoint; };
-	vector<Vector3> GetWorldPoints() {return newWorldPoints;};
+	void SetWorldPoints(vector<T3Vector3> newWorldPoint ) { this->newWorldPoints=newWorldPoint; };
+	vector<T3Vector3> GetWorldPoints() {return newWorldPoints;};
 
-	vector<Vector3> newWorldPoints;
-
-
-	vector<Vector3> Points;
+	vector<T3Vector3> newWorldPoints;
 
 
-	static const Vector3 gravity;
+	vector<T3Vector3> Points;
+
+
+	static const T3Vector3 gravity;
 	float Xstart;
 	float Xend;
 	float GetXstart(){return Xstart;};
 	float GetXend(){return Xend;};
 	void  SetXstart(float xstart) {Xstart=xstart;};
 	void  SetXend(float xend) {Xend=xend;};
-	void        SetForce(Vector3 x)    {m_force=x;}
+	void        SetForce(T3Vector3 x)    {m_force=x;}
 	float Ystart;
 	float Yend;
 	float GetYstart(){return Ystart;};
 	float GetYend(){return Yend;};
 	void  SetYstart(float Ystart) {Ystart=Ystart;};
 	void  SetYend(float Yend) {Yend=Yend;};
-	Vector3 GetFathestPointInDirection(PhysicsNode& shape1,Vector3 d);
+	T3Vector3 GetFathestPointInDirection(PhysicsNode& shape1,T3Vector3 d);
 protected:
 	bool useGravity;
 
 	//<---------LINEAR-------------->
-	Vector3		m_position;
-	Vector3		m_linearVelocity;
-	Vector3		m_force;
+	T3Vector3		m_position;
+	T3Vector3		m_linearVelocity;
+	T3Vector3		m_force;
 	float		m_invMass;
-	Vector3     m_friction;
+	T3Vector3     m_friction;
 
 	//<----------ANGULAR--------------->
 	Quaternion  m_orientation;
-	Vector3		m_angularVelocity;
-	Vector3		m_torque;
-	Matrix4     m_invInertia;
+	T3Vector3		m_angularVelocity;
+	T3Vector3		m_torque;
+	T3Matrix4     m_invInertia;
 
-	Vector3  u;    // unit vector reflects the car's orientation
-	Vector3  T_engine;  // torque of the engine at a given rpm
-	Vector3  F;  //drive force
+	T3Vector3  u;    // unit vector reflects the car's orientation
+	T3Vector3  T_engine;  // torque of the engine at a given rpm
+	T3Vector3  F;  //drive force
 	float xg;  //gear ratio
 	float xd;  //differential ratio
 	float Rw;  //wheel radius

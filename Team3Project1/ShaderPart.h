@@ -2,41 +2,61 @@
 #if WINDOWS_BUILD
 #include "../Framework/OGLRenderer.h"
 #endif
-#include <string>
 #if PS3_BUILD
+#include <cell\gcm.h>
+#include <Cg\cg.h>
+#include <Cg\cgBinary.h>
+#include <cell\cgb.h>
+#include <Cg\cgc.h>
+#include <cell\sysmodule.h>
+#include <sys\paths.h>
+#include <vectormath\cpp\vectormath_aos.h>
+#include <cell\cell_fs.h>
 #include <map>
 #endif
+#include "../Framework/Shader.h"
+#include "Vertex.h"
+#include <string>
 
 using namespace std;
+#if PS3_BUILD
+using namespace Vectormath::Aos;
+#endif
 
 class ShaderPart
 {
 public:
 	ShaderPart(string raw, ShaderType::Type type);
-#if WINDOWS_BUILD
 	~ShaderPart()
 	{
+#if WINDOWS_BUILD
 		glDeleteShader(shader);
+#endif
 	}
+#if PS3_BUILD
+	void* GetuCode();
+	CGprogram GetProgram();
+	unsigned int GetOffset();
+	unsigned int GetAttributeIndex(VertexAttributes::Attributes attribute);
+	CGparameter GetParameter(string target);
+	void SetParameter(string name, T3Matrix4 &totranpose);
+	void UpdateShaderMatrices(Matrix4 &model,Matrix4 &view, Matrix4 &proj);
+#endif
+#if WINDOWS_BUILD
 	GLuint shader;
 	static string LoadShaderFile(string filename);
 #endif
 #if PS3_BUILD
-	void* GetUCode() { return ucode; }
-	CGprogram GetProgram() { return program; }
-	unsigned int GetAttributeIndex(VertexAttributes attribute) { return attributes[attribute]; }
+	void SetDefaultAttributes();
+	unsigned int attributes[VertexAttributes::MAX];
+	CGprogram program;
+	void* ucode;
+	unsigned int offset;
+	map<string, CGparameter> uniforms;
+	virtual void SetParameter(string name, float* data);
+	void UpdateShaderVariables();
 #endif
 private:
 	ShaderPart(const ShaderPart& in);
 	ShaderPart operator=(const ShaderPart& in);
-#if PS3_BUILD
-	void SetDefaultAttributes();
-	unsigned int attributes[VertexAttributes::MAX];
-	CGprogram program;
-	void * ucode;
-	unsigned int offset;
-	map<string, CGparameter> uniforms;
-	virtual void SetParameter(std::string name, float*data);
-	void UpdateShaderVariables();
-#endif
 };

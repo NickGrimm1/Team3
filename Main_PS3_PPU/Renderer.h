@@ -14,8 +14,8 @@ _-_-_-_-_-_-_-""  ""
 *//////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "GCMRenderer.h"
-#include "Mesh.h"
+#include "../Team3Project1/GCMRenderer.h"
+#include "../Team3Project1/Mesh.h"
 
 class Renderer : public GCMRenderer	{
 public:
