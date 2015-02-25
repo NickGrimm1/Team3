@@ -3,7 +3,7 @@
 #include "GraphicsCommon.h"
 
 void LoadingScreen::LoadContent() {
-	refreshTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"refresh.png", 0);
+	refreshTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"refresh2.png", 0);
 	refreshIcon = new DrawableTexture2D(
 		SCREEN_WIDTH - 45,
 		SCREEN_HEIGHT - 65,
@@ -22,5 +22,5 @@ void LoadingScreen::Update() {
 }
 
 void LoadingScreen::UnloadContent() {
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"refresh.tga");
+	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"refresh2.png");
 }
