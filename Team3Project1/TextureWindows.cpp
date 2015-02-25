@@ -12,6 +12,15 @@ Texture::Texture(string filename, unsigned int flags)
 	}
 }
 
+Texture::Texture(GLuint textureObj)
+{
+	textureObject = textureObj;
+	if (!textureObject) {
+		textureObject = 0; // make sure GetTexture will return an error
+		return;
+	}
+}
+
 Texture::~Texture()
 {
 	glDeleteTextures(1, &textureObject);

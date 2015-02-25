@@ -26,4 +26,5 @@ public:
 protected:
 	Texture* refreshTex;
 	DrawableTexture2D* refreshIcon;
+	bool isLoading;
 };

@@ -125,6 +125,7 @@ public:
 	// We don't actually need this since the GSM already holds the reference :)
 	//static GraphicsEngine& GetGraphicsEngine() {return *engine;}
 
+	void EnableLoadingIcon(bool value) {isLoading = value;}
 
 	// Debugging
 	void DrawDeferredLights(bool on) {renderer->DrawDeferredLights(on);}
@@ -171,4 +172,9 @@ private:
 
 	int width;
 	int height;
+
+	bool isLoading;
+	bool isLoadingDrawing;
+	DrawableTexture2D* loadingIcon;
+
 };

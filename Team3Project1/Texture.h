@@ -29,6 +29,7 @@ public:
 	void SetRepeating(bool repeat);
 	void SetAnistropicFiltering(bool enable);
 #if WINDOWS_BUILD
+	Texture(GLuint textureObj);
 	GLuint GetTextureName() const { return textureObject; }
 	void SetMinMagFiltering(GLint min, GLint mag);
 #endif
