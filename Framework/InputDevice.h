@@ -5,7 +5,7 @@ Author:Rich Davison
 Description:Abstract base class for Windows RAW keyboard / mouse input
 
 Input devices can be temporarily sent to sleep (so keyboard input doesn't work
-when the game is minimised etc), and obviously woken up again.
+when the game is minimumimised etc), and obviously woken up again.
 
 Input devices may also keep track of 'holds' - i.e keys or buttons pressed for
 more than one frame. This allows you to have both things that trigger once,

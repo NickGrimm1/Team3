@@ -4,7 +4,7 @@ uniform float particleSize;
 uniform float circleSegments;
 
 layout(points) in; // There is only one point
-layout(triangle_strip, max_vertices = 100) out;
+layout(triangle_strip, maximum_vertices = 100) out;
 
 
 in Vertex {

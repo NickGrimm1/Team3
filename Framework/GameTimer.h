@@ -11,7 +11,7 @@ _-_-_-_-_-_-_-|   /\_/\   NYANYANYAN
 _-_-_-_-_-_-_-""  ""   
 
 *//////////////////////////////////////////////////////////////////////////////
-
+#if WINDOWS_BUILD
 #pragma once
 
 #include "Windows.h"
@@ -33,4 +33,4 @@ protected:
 
 	float lastTime;					//Last time GetTimedMS was called
 };
-
+#endif

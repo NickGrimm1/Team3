@@ -6,7 +6,7 @@ grapical elements to screen.
 Author: Sherif Salem
 Version: 0.0.1 03/02/2015.</summary>
 */
-
+#if WINDOWS_BUILD
 #pragma once
 
 #include "../Framework/Frustum.h"
@@ -105,6 +105,8 @@ protected:
 	bool			LoadCheck();
 	bool			ActiveTex();
 
+	void			CreateStaticMap(const int resolution); // Generate a static noise map that can be turned into Perlin noise.
+
 	//Member variables.
 	bool			activeTex;
 	unsigned int	nextTextureUnit;
@@ -125,6 +127,7 @@ protected:
 	Mesh*			sphereMesh;			// A sphere mesh for drawing deferred point lights
 	Mesh*			coneMesh;			// A cone mesh for drawing deferred spot lights
 	Mesh*			circleMesh;			// A circle mesh for drawing deferred spot lights
+	Mesh*			skyDome;			// The top of a sphere - used as a 'hat' to wear a skybox :)
 
 	SceneNode*		root;
 	Camera*			camera;
@@ -141,7 +144,8 @@ protected:
 	Shader*			shadowShader;
 	Shader*			sceneShader;
 	Shader*			lightingShader;
-	Shader*			skyBoxShader;
+	Shader*			cloudShader; // Generates clouds
+	Shader*			skyBoxShader; // Draws the cloud texture on the skydome.
 	Shader*			combineShader;
 	Shader*			particleShader;
 	Shader*			brightPassShader;
@@ -157,6 +161,9 @@ protected:
 	GLuint			postProcessingFBO;
 	GLuint			deferredLightingFBO;
 	GLuint			shadowFBO;
+	GLuint			skyColourBuffer; //The buffer for holding the clous texture.
+	GLuint			skyBufferFBO;
+	GLuint			cloudMap;	// The texture for holding the static map the clouds are generated from.
 
 	GLuint			gbufferColourTex;
 	GLuint			gbufferDepthTex;
@@ -176,3 +183,4 @@ protected:
 
 	float			samples[3];
 };
+#endif

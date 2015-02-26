@@ -24,11 +24,14 @@ Version: 0.0.3 06/02/2015.</summary>
 #include "../Framework/Light.h"
 #include "Texture.h"
 #include "Mesh.h"
+#if WINDOWS_BUILD
 #include "Renderer.h"
+#endif
 #include "DrawableTexture2D.h"
 #include "DrawableText2D.h"
 #include "DrawableEntity3D.h"
 #include "Thread.h"
+#include "MutexClass.h"
 
 
 
@@ -38,8 +41,24 @@ Version: 0.0.3 06/02/2015.</summary>
 class GraphicsEngine : public Thread
 {
 public:
-	bool GetRenderContext() {return renderer->GetRenderContextForThread();}
-	bool DropRenderContext() {return renderer->DropRenderContextForThread();}
+	bool GetRenderContext() 
+	{
+#if WINDOWS_BUILD
+		return renderer->GetRenderContextForThread();
+#endif
+#if PS3_BUILD
+		return true;
+#endif
+	}
+	bool DropRenderContext() 
+	{
+#if WINDOWS_BUILD
+		return renderer->DropRenderContextForThread();
+#endif
+#if PS3_BUILD
+		return true;
+#endif
+	}
 
 #pragma region Entry/Exit
 	/**
@@ -49,17 +68,10 @@ public:
 	*/
 	static bool Initialize(GraphicsEngine*& out);
 	
-	static bool LoadContent()
-	{
-		return (engine->renderer->LoadShaders() &&
-				engine->renderer->LoadAssets());
-	}
+	static bool LoadContent();
 	
-	static void UnloadContent()
-	{
-		engine->renderer->UnloadShaders();
-		engine->renderer->UnloadAssets();
-	}
+	static void UnloadContent();
+	
 	/**
 	<summary>Destroys the graphics engine. Allows the game to exit cleanly.</summary>
 	<returns>true if the graphics engine has exited.</returns>
@@ -128,7 +140,7 @@ public:
 	void EnableLoadingIcon(bool value) {isLoading = value;}
 
 	// Debugging
-	void DrawDeferredLights(bool on) {renderer->DrawDeferredLights(on);}
+	void DrawDeferredLights(bool on);
 private:
 	static GraphicsEngine* engine;
 
@@ -147,10 +159,11 @@ private:
     <param name="light">The light.</param>
 	*/
 	void AddLight(Light* light);
-
+#if WINDOWS_BUILD
 	Renderer* renderer;
 
 	Frustum frameFrustum;
+#endif
 	Camera* camera;
 
 	// Scene Elements
@@ -165,8 +178,8 @@ private:
 	vector<Light*> removeLightsList; // lights to be removed during next update
 	vector<DrawableEntity2D*> addHudList; // HUD elements to be added at next update
 	vector<DrawableEntity2D*> removeHudList; // HUD elements to be removed at next update
-	vector<pair<DrawableEntity3D*, DrawableEntity3D*>> addGameList; // Game elements to be added at next update
-	vector<pair<DrawableEntity3D*, bool>> removeGameList; // Game elements to be removed at next update
+	vector<pair<DrawableEntity3D*, DrawableEntity3D*> > addGameList; // Game elements to be added at next update
+	vector<pair<DrawableEntity3D*, bool> > removeGameList; // Game elements to be removed at next update
 
 	T3Vector3 boundingMin, boundingMax; // Defines a bounding box for the VISIBLE scene, built each frame from the nodes that pass frustum culling.
 
@@ -177,4 +190,6 @@ private:
 	bool isLoadingDrawing;
 	DrawableTexture2D* loadingIcon;
 
+	const float RENDER_TIME;
+	float lastFrameTimeStamp;
 };

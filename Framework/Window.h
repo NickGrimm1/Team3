@@ -3,6 +3,7 @@ Class:Window
 Author:Rich Davison
 Description:Creates and handles the Window, including the initialisation of the mouse and keyboard.
 */
+#if WINDOWS_BUILD
 #pragma once
 #pragma warning( disable : 4099 )
 
@@ -82,3 +83,5 @@ private:
 	Window(std::string title = "OpenGL Framework", int sizeX = 800, int sizeY = 600, bool fullScreen = false);
 	~Window(void);
 };
+
+#endif

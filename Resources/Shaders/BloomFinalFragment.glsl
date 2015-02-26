@@ -10,7 +10,7 @@
 
 uniform sampler2D diffuseTex;
 uniform sampler2D darkTex;
-uniform float mixval;
+uniform float mixVal;
 
 in Vertex {
 	vec2 texCoord;
@@ -20,5 +20,6 @@ in Vertex {
 out vec4 gl_FragColor;
 
 void main(void) {
-	gl_FragColor = mix(texture2D(darkTex, IN.texCoord), texture2D(diffuseTex, IN.texCoord), mixval);
+	//gl_FragColor = mix(texture2D(darkTex, IN.texCoord), texture2D(diffuseTex, IN.texCoord), mixVal);
+	gl_FragColor = texture2D(diffuseTex, IN.texCoord) + texture2D(darkTex, IN.texCoord);
 }

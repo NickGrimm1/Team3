@@ -3,7 +3,7 @@
 #include "../Framework/T3Vector2.h"
 #include "../Framework/T3Vector4.h"
 #include <algorithm>
-
+#if WINDOWS_BUILD
 GraphicsEngine* GraphicsEngine::engine = NULL;
 
 bool GraphicsEngine::Initialize(GraphicsEngine*& out) {
@@ -30,17 +30,22 @@ bool GraphicsEngine::Destroy() {
 	return true;
 }
 
-GraphicsEngine::GraphicsEngine() {
+GraphicsEngine::GraphicsEngine() 
+	: RENDER_TIME(1.0f / 60)
+{
 	isInitialised = false;
 	width = SCREEN_WIDTH;
 	height = SCREEN_HEIGHT;
 
 	if (!Window::Initialise(GAME_TITLE, width, height, false)) return;
 	
+	Window::GetWindow().LockMouseToWindow(true);
+	Window::GetWindow().ShowOSPointer(false);
+
 	renderer = new Renderer(Window::GetWindow(), lights, gameEntityList, overlayElementsList);
 	if (!renderer->HasInitialised()) return;
 	
-	GLuint loadingTex = renderer->CreateTexture(TEXTUREDIR"refresh.png", false, false);
+	GLuint loadingTex = renderer->CreateTexture(TEXTUREDIR"refresh2.png", false, false);
 	isLoading = true;
 	isLoadingDrawing = false;
 	loadingIcon = new DrawableTexture2D(
@@ -70,6 +75,10 @@ void GraphicsEngine::Run() {
 	isRunning = true;
 	
 	while (isRunning) {
+
+		while (Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp < RENDER_TIME) { ; } // Fix the timestep
+		float msec = Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp;
+		lastFrameTimeStamp = Window::GetWindow().GetTimer()->GetMS();
 
 		// add/remove requested items from scene lists
 		contentGuard.lock_mutex();
@@ -128,7 +137,7 @@ void GraphicsEngine::Run() {
 		contentGuard.unlock_mutex();
 			
 		// Update data in scene nodes
-		sceneRoot->Update(1.0f / RENDER_HZ); // TODO - sort out proper timestep value - or remove timestep if not needed
+		sceneRoot->Update(msec); // TODO - sort out proper timestep value - or remove timestep if not needed
 		
 		// Reset scene bounding box volume
 		boundingMax = T3Vector3(0,0,0);
@@ -310,3 +319,19 @@ void GraphicsEngine::SetCamera(Camera* cam)
 	camera = cam;
 	renderer->SetCamera(cam);
 }
+
+bool GraphicsEngine::LoadContent()
+{
+	return (engine->renderer->LoadShaders() &&
+				engine->renderer->LoadAssets());
+}
+
+void GraphicsEngine::UnloadContent()
+{
+	engine->renderer->UnloadShaders();
+	engine->renderer->UnloadAssets();
+}
+
+void GraphicsEngine::DrawDeferredLights(bool on) {renderer->DrawDeferredLights(on);}
+
+#endif

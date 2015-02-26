@@ -39,7 +39,7 @@ void Vehicle::UpdatePlayer1(float msec){
 		temp1 = Player->GetPhysicsNode().GetLinearVelocity();
 		temp1.y = 0;
 		Player->GetPhysicsNode().SetLinearVelocity(temp1);
-		Player->GetPhysicsNode().SetUseGravity(FALSE);
+		Player->GetPhysicsNode().SetUseGravity(false);
 	}
 
 	/*if(Window::GetKeyboard()->KeyDown(KEYBOARD_A)) {

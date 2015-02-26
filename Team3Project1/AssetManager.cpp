@@ -139,7 +139,9 @@ Mesh* AssetManager::LoadMesh(void* callerID, string filePath)
 		else if (filePath.substr(filePath.length() - 3, 3) == "md5")
 		{
 			GameStateManager::Graphics()->GetRenderContext();
+#if WINDOWS_BUILD
 			newMesh = new MD5Mesh(MD5FileData(filePath));
+#endif
 			GameStateManager::Graphics()->DropRenderContext();
 		}
 		else

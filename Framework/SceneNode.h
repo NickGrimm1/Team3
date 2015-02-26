@@ -4,7 +4,7 @@ Implements:
 Author:Rich Davison	<richard.davison4@newcastle.ac.uk>
 Description:A basic, but functional SceneNode class. SceneNodes have a
 transformation matrix, and any number of children. They also have a parent, 
-forming a tree structure, with their parent above them, and children below.
+forminimumg a tree structure, with their parent above them, and children below.
 
 They also have a seperate scale for their Mesh, for no other reason than
 it made the CubeRobot class easier ;) You might find it useful, though...

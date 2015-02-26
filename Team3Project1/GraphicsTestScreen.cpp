@@ -84,7 +84,7 @@ void GraphicsTestScreen::LoadContent() {
 		T3Vector3(15,1,15));
 	gameEntities.push_back(ent);
 	AddDrawable(ent);
-	
+
 	ent = new DrawableEntity3D(
 		car,
 		NULL,
