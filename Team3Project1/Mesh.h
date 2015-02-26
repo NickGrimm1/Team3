@@ -52,6 +52,20 @@ public:
 	} 
 	bool TransformsTexCoords() { return transformCoords;}
 
+	float GetMemoryUsage()
+	{
+		float output = 0;
+
+		output += numVertices * sizeof(Vertex);
+		if (indices)
+			output += numIndices * 4;
+
+		output /= 1024.0f;
+		output /= 1024.0f;
+
+		return output;
+	}
+
 #if WINDOWS_BUILD
 	virtual void Draw();
 #elif PS3_BUILD

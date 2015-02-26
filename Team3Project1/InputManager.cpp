@@ -15,5 +15,6 @@ void InputManager::Run()
 		float msec = Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp;
 		lastFrameTimeStamp = Window::GetWindow().GetTimer()->GetMS();
 #endif
+		frameRate = (int)(1000.0f / msec);
 	}
 }

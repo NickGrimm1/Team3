@@ -252,6 +252,7 @@ bool Renderer::LoadAssets() {
 	sphereMesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
 	coneMesh = GameStateManager::Assets()->LoadCone(this, 20); // Cone for spotlight rendering
 	skyDome = GameStateManager::Assets()->LoadMesh(this, MESHDIR"dome.obj"); // Skydome
+	quadMesh = GameStateManager::Assets()->LoadQuadAlt(this);
 	
 	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh) {
 		cout << "Renderer::LoadAssets() - unable to load rendering assets";
@@ -267,6 +268,7 @@ void Renderer::UnloadAssets() {
 	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
 	GameStateManager::Assets()->UnloadCone(this, 20); // Cone for spotlight rendering
 	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"dome.obj"); // Skydome
+	GameStateManager::Assets()->UnloadQuadAlt(this);
 }
 
 Renderer::~Renderer(void)
@@ -1033,10 +1035,11 @@ void Renderer::Draw2DText(DrawableText2D& text) {
 	delete textMesh;
 }
 
-void Renderer::Draw2DTexture(DrawableTexture2D& texture) {
-	T3Vector3 origin = T3Vector3(texture.GetOrigin().x * texture.width, texture.GetOrigin().y * texture.height, 0);
-	T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(texture.GetRotation(), T3Vector3(0,0,-1)) * T3Matrix4::Translation(origin * -1.0f);
-	modelMatrix = T3Matrix4::Translation(T3Vector3(texture.x, height - texture.y, 0)) * rotation * T3Matrix4::Scale(T3Vector3(texture.width, texture.height, 1));
+void Renderer::Draw2DTexture(DrawableTexture2D& texture) 
+{
+	T3Vector3 origin = T3Vector3(texture.GetOrigin().x * texture.width * SCREEN_WIDTH, texture.GetOrigin().y * texture.height * SCREEN_HEIGHT, 0);
+	T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(texture.GetRotation(), T3Vector3(0,0,-1)) * T3Matrix4::Translation(-origin);
+	modelMatrix = T3Matrix4::Translation(T3Vector3(texture.x, texture.height - texture.y, 0))/* * rotation */* T3Matrix4::Scale(T3Vector3(texture.width * SCREEN_WIDTH, texture.height * SCREEN_HEIGHT, 1));
 	textureMatrix.ToIdentity();	
 	UpdateShaderMatrices();
 
@@ -1044,7 +1047,7 @@ void Renderer::Draw2DTexture(DrawableTexture2D& texture) {
 	glBindTexture(GL_TEXTURE_2D, texture.GetTexture()->GetTextureName());
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 
-	screenMesh->Draw();
+	quadMesh->Draw();
 }
 
 void Renderer::GenerateScreenTexture(GLuint &into, bool depth)

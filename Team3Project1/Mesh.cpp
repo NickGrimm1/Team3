@@ -345,21 +345,21 @@ Mesh* Mesh::GenerateQuadAlt()
 
 	m->vertices[0] = Vertex(
 		T3Vector3(0.0f, 0.0f, 0.0f),
-		T3Vector3(0.0f, 0.0f,-1.0f),
+		T3Vector3(0.0f, 0.0f, 1.0f),
 		T3Vector4(1.0f, 1.0f,1.0f,1.0f),
 		T3Vector2(0.0f, 0.0f),
 		T3Vector3(1.0f, 0.0f,0.0f));
 	m->vertices[1] = Vertex(
+		T3Vector3(1.0f, 0.0f, 0.0f),
+		T3Vector3(0.0f, 0.0f, 1.0f),
+		T3Vector4(1.0f, 1.0f,1.0f,1.0f),
+		T3Vector2(1.0f, 0.0f),
+		T3Vector3(1.0f, 0.0f,0.0f));
+	m->vertices[2] = Vertex(
 		T3Vector3(0.0f, 1.0f, 0.0f),
 		T3Vector3(0.0f, 0.0f,-1.0f),
 		T3Vector4(1.0f, 1.0f,1.0f,1.0f),
 		T3Vector2(0.0f, 1.0f),
-		T3Vector3(1.0f, 0.0f,0.0f));
-	m->vertices[2] = Vertex(
-		T3Vector3(1.0f, 0.0f, 0.0f),
-		T3Vector3(0.0f, 0.0f,-1.0f),
-		T3Vector4(1.0f, 1.0f,1.0f,1.0f),
-		T3Vector2(1.0f, 0.0f),
 		T3Vector3(1.0f, 0.0f,0.0f));
 	m->vertices[3] = Vertex(
 		T3Vector3(1.0f,  1.0f, 0.0f),

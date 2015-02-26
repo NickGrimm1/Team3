@@ -59,7 +59,7 @@ public:
 		return true;
 #endif
 	}
-
+	int GetFrameRate() { return frameRate; }
 #pragma region Entry/Exit
 	/**
 	<summary>Initializes a graphics engine.</summary>
@@ -194,4 +194,5 @@ private:
 
 	const float RENDER_TIME;
 	float lastFrameTimeStamp;
+	int frameRate;
 };

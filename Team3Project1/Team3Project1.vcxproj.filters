@@ -471,6 +471,9 @@
     <ClInclude Include="..\Framework\T3Matrix4.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DebugOverlay.h">
+      <Filter>Framework\Debug\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">
@@ -670,6 +673,9 @@
     </ClCompile>
     <ClCompile Include="GCMRenderer.cpp">
       <Filter>Framework\Graphics\PS3\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugOverlay.cpp">
+      <Filter>Framework\Debug\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
