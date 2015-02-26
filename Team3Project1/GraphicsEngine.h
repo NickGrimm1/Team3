@@ -190,4 +190,6 @@ private:
 	bool isLoadingDrawing;
 	DrawableTexture2D* loadingIcon;
 
+	const float RENDER_TIME;
+	float lastFrameTimeStamp;
 };

@@ -28,7 +28,9 @@ bool GraphicsEngine::Destroy() {
 	return true;
 }
 
-GraphicsEngine::GraphicsEngine() {
+GraphicsEngine::GraphicsEngine() 
+	: RENDER_TIME(1.0f / 60)
+{
 	isInitialised = false;
 	width = SCREEN_WIDTH;
 	height = SCREEN_HEIGHT;
@@ -68,6 +70,10 @@ void GraphicsEngine::Run() {
 	isRunning = true;
 	
 	while (isRunning) {
+
+		while (Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp < RENDER_TIME) { ; } // Fix the timestep
+		float msec = Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp;
+		lastFrameTimeStamp = Window::GetWindow().GetTimer()->GetMS();
 
 		// add/remove requested items from scene lists
 		contentGuard.lock_mutex();
@@ -126,7 +132,7 @@ void GraphicsEngine::Run() {
 		contentGuard.unlock_mutex();
 			
 		// Update data in scene nodes
-		sceneRoot->Update(1.0f / RENDER_HZ); // TODO - sort out proper timestep value - or remove timestep if not needed
+		sceneRoot->Update(msec); // TODO - sort out proper timestep value - or remove timestep if not needed
 		
 		// Reset scene bounding box volume
 		boundingMax = T3Vector3(0,0,0);

@@ -24,7 +24,7 @@ public:
 #endif
 	virtual void Start();
 	virtual void Join();
-	virtual void Terminimumate();
+	virtual void Terminate();
 #if WINDOWS_BUILD
 	virtual DWORD get_id() const {return tid;}
 #endif

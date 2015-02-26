@@ -29,7 +29,12 @@ public:
 
 	void Run();
 private:
-	InputManager() { }
+	InputManager() 
+		: INPUT_TIME(1.0f / 60)
+	{ }
 	~InputManager() { }
 	static InputManager* instance;
+
+	const float INPUT_TIME;
+	float lastFrameTimeStamp;
 };

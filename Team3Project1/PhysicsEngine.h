@@ -71,7 +71,9 @@ public:
 
 	void    DrawDebug();
 private:
-	PhysicsEngine() { }
+	PhysicsEngine()
+		: PHYSICS_TIME(1.0f / 120)
+	{ }
 	~PhysicsEngine() { }
 	static PhysicsEngine* instance;
 	bool isRunning;
@@ -83,4 +85,7 @@ private:
 	vector<Constraint*> allSprings;
 	vector<DebugDrawer*> allDebug;
 	vector<PhysicsNode*> narrowlist;
+
+	const float PHYSICS_TIME;
+	float lastFrameTimeStamp;
 };
