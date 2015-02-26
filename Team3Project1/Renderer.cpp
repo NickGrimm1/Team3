@@ -69,6 +69,18 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, width, height, 0, GL_RG, GL_HALF_FLOAT, 0);
 
+	// Generate Sky Buffer & initial static map.
+	//glGenTextures(1, &skyColourBuffer);
+	//glBindTexture(GL_TEXTURE_2D, skyColourBuffer);
+	//glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_NEAREST );
+	//glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST );
+	//glTexImage2D ( GL_TEXTURE_2D , 0, GL_RGBA8 , width , height , 0, GL_RGBA , GL_UNSIGNED_BYTE , NULL );
+	//glGenFramebuffers(1, &skyBufferFBO);
+	//glBindFramebuffer(GL_FRAMEBUFFER, skyBufferFBO);
+	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer, 0);
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//CreateStaticMap(128);
+
 	samples[0] = 1.5f;
 	samples[1] = 2.0f;
 	samples[2] = 3.0f;
@@ -177,7 +189,8 @@ bool Renderer::LoadShaders()
 	sceneShader		 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl");
 	shadowShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl");
 	lightingShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl");
-	skyBoxShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl");
+	skyBoxShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"SkyDomeVertex.glsl", SHADERDIR"SkyDomeFragment.glsl");
+	cloudShader		 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"PassThroughVertex.glsl", SHADERDIR"PerlinFragment.glsl");
 	combineShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
 	particleShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
 	brightPassShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BrightPassFragment.glsl");
@@ -198,6 +211,7 @@ bool Renderer::LoadCheck()
 			shadowShader		!= NULL	&&
 			lightingShader		!= NULL	&&
 			skyBoxShader		!= NULL	&&
+			cloudShader			!= NULL &&
 			combineShader		!= NULL	&&
 			particleShader		!= NULL	&&
 			brightPassShader	!= NULL &&
@@ -216,7 +230,8 @@ void Renderer::UnloadShaders()
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl");
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl");
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl");
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl");
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"SkyDomeVertex.glsl", SHADERDIR"SkyDomeFragment.glsl");
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"PassThroughVertex.glsl", SHADERDIR"PerlinFragment.glsl");
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BrightPassFragment.glsl");//Bright-pass Shader
@@ -236,6 +251,7 @@ bool Renderer::LoadAssets() {
 	screenMesh = GameStateManager::Assets()->LoadQuad(this); // Quad for rendering textures to screen
 	sphereMesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
 	coneMesh = GameStateManager::Assets()->LoadCone(this, 20); // Cone for spotlight rendering
+	skyDome = GameStateManager::Assets()->LoadMesh(this, MESHDIR"dome.obj"); // Skydome
 	
 	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh) {
 		cout << "Renderer::LoadAssets() - unable to load rendering assets";
@@ -246,10 +262,11 @@ bool Renderer::LoadAssets() {
 }
 
 void Renderer::UnloadAssets() {
-	GameStateManager::Assets()->LoadCircle(this, 20); // Circle for spotlight rendering
-	GameStateManager::Assets()->LoadQuad(this); // Quad for rendering textures to screen
-	GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
-	GameStateManager::Assets()->LoadCone(this, 20); // Cone for spotlight rendering
+	GameStateManager::Assets()->UnloadCircle(this, 20); // Circle for spotlight rendering
+	GameStateManager::Assets()->UnloadQuad(this); // Quad for rendering textures to screen
+	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
+	GameStateManager::Assets()->UnloadCone(this, 20); // Cone for spotlight rendering
+	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"dome.obj"); // Skydome
 }
 
 Renderer::~Renderer(void)
@@ -686,16 +703,37 @@ void Renderer::CombineBuffers() {// merge scene render with lighting pass
 	glUseProgram(0);
 }
 
-void Renderer::DrawSkybox() { // Draw skybox only where screen has not previously been written to
+void Renderer::DrawSkybox() { 
+	// Generate clouds - captures perlin noise to texture.
+	glBindFramebuffer(GL_FRAMEBUFFER, skyBufferFBO);
+	glClear(GL_COLOR_BUFFER_BIT);
+	SetCurrentShader(cloudShader);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex0"), GL_TEXTURE0);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), Window::GetWindow().GetTimer()->GetMS() * 000001.0f);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, cloudMap);
+	screenMesh->Draw();
+	glUseProgram(GL_NONE);
+	glBindFramebuffer(GL_FRAMEBUFFER, GL_NONE);
+	
+	// Draw skybox only where screen has not previously been written to
 	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_NOTEQUAL, 1, 1); // Stencil test should only pass if stencil buffer not already set to 1 (from scene render)
 	glDepthMask(GL_FALSE); // Disable writes to the depth buffer
 	
+
+	glDisable(GL_CULL_FACE);
 	SetCurrentShader(skyBoxShader);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex0"), GL_TEXTURE0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, skyColourBuffer);
+	skyDome->Draw();
+	glEnable(GL_CULL_FACE);
 	
 	// Bind shader variables
 	viewMatrix = cameraMatrix;
 	projMatrix = perspectiveMatrix;
+	modelMatrix = T3Matrix4::Translation(T3Vector3(camera->GetPosition().x, camera->GetPosition().y - 25, camera->GetPosition().z)) * T3Matrix4::Scale(T3Vector3(100, 100, 100));
 	UpdateShaderMatrices();
 
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "cubeTex"), SKYBOX_TEXTURE_UNIT);
@@ -747,27 +785,27 @@ void Renderer::BloomPass()
 
 	SetCurrentShader(downSampleShader);
 	UpdateShaderMatrices();
-	
+
 	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 	glBindTexture(GL_TEXTURE_2D, postProcessingTex[1]);
-	
+
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-	
+
 	int z = 0;
 	for (int i = 0; i < SAMPLENUM * 2; i += 2) {
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, downSampleTex[i], 0);
 		glClear(GL_COLOR_BUFFER_BIT);
-	
+
 		glViewport(0,0, (int)(width/samples[z]), (int)(height/samples[z]));
-	
+
 		glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "sampleLevel"), samples[z]);
-	
+
 		screenMesh->Draw();
 		++z;
-	}	
-	
+}
+
 	/*--------------------Gaussian Blur the downsampled images--------------------*/
-	
+
 	SetCurrentShader(gaussianShader);
 	UpdateShaderMatrices();
 	for (int o = 0; o < 4; o++){
@@ -780,27 +818,27 @@ void Renderer::BloomPass()
 			glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / (float)(width/samples[z]), 1.0f / (float)(height/samples[z]));
 			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 0);
 			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-	
+
 			glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 			glBindTexture(GL_TEXTURE_2D, downSampleTex[i]);
-	
+
 			screenMesh->Draw();
 			
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, downSampleTex[i], 0);
 			glClear(GL_COLOR_BUFFER_BIT);
-	
+
 			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 1);
 			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-	
+
 			glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 			glBindTexture(GL_TEXTURE_2D, downSampleTex[i + 1]);
-	
+
 			screenMesh->Draw();
 			++z;
-		}	
+}
 	}
 	glViewport(0, 0, width, height);
-	
+
 	/*-------------------Combine the brightpass images together-------------------*/
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[2], 0);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -814,50 +852,50 @@ void Renderer::BloomPass()
 	glBindTexture(GL_TEXTURE_2D, downSampleTex[2]);
 	glActiveTexture(GL_TEXTURE0 + GBUFFER_DSAMPLE_TEXTURE_UNIT_2);
 	glBindTexture(GL_TEXTURE_2D, downSampleTex[4]);
-	
+
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(),"downSample0"), GBUFFER_DSAMPLE_TEXTURE_UNIT_0);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(),"downSample1"), GBUFFER_DSAMPLE_TEXTURE_UNIT_1);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(),"downSample2"), GBUFFER_DSAMPLE_TEXTURE_UNIT_2);
-	
+
 	screenMesh->Draw();
-	
+
 	/*------------------One final blurring to reduce artifacting------------------*/
-	
+
 	SetCurrentShader(gaussianShader);
 	UpdateShaderMatrices();
-	
+
 	for (int i = 0; i < 2; ++i) {
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[1], 0);
 		glClear(GL_COLOR_BUFFER_BIT);
 		
 		glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 		glBindTexture(GL_TEXTURE_2D, postProcessingTex[2]);
-	
+
 		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 0);
 		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-	
+
 		screenMesh->Draw();
-	
+
 		//now to swap the colour buffers, and do the second blur Pass
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[2], 0);
 		glClear(GL_COLOR_BUFFER_BIT);
-	
+
 		glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 		glBindTexture(GL_TEXTURE_2D, postProcessingTex[1]);
-	
+
 		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 1);
 		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-	
+
 		screenMesh->Draw();
 	}
-	
+
 	/*----------------Combine the bloom image with the scene image----------------*/
-	
+
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[1], 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	SetCurrentShader(bloomFinalShader);
 	UpdateShaderMatrices();
-	
+
 	glActiveTexture(GL_TEXTURE0 + GBUFFER_COLOUR_TEXTURE_UNIT);
 	glBindTexture(GL_TEXTURE_2D, postProcessingTex[2]);
 	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
@@ -1129,4 +1167,24 @@ bool Renderer::DropRenderContextForThread() {
 	bool result = (0 != wglMakeCurrent(deviceContext, NULL));
 	openglMutex.unlock_mutex(); 
 	return result;
+}
+
+void Renderer::CreateStaticMap(const int resolution)
+{
+	float* colors = new float[resolution * resolution];
+	for (int x = 0; x < resolution; x++)
+		for (int y = 0; y < resolution; y++)
+			colors[x + y * resolution] = rand() % 1000 / 1000.0f;
+
+	glGenTextures(1, &cloudMap);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, cloudMap);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, resolution, resolution, 0, GL_RED, GL_FLOAT, colors);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
