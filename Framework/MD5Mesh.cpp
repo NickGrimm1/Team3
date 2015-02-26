@@ -48,7 +48,7 @@ we can use when making each weight an attribute.
 
 Note how I use the MAX_BUFFER macro to always make sure that the 
 extra vertex attribute is always one more than whatever vertex attributes
-we've made during the module are! Examinimume the vertex shader to see how
+we've made during the module are! Examine the vertex shader to see how
 the shader can access this vertex attribute without us having to modify the
 shader class "SetDefaultAttributes" function...
 
@@ -93,11 +93,11 @@ void	MD5Mesh::SkinVertices(const MD5Skeleton &skel) {
 			target->vertices[j].SetPosition(T3Vector3());
 
 			/*
-			Each vertex has a number of weights, determinimumed by weightElements. The first
+			Each vertex has a number of weights, determined by weightElements. The first
 			of these weights will be in the submesh weights array, at position weightIndex.
 
 			Each of these weights has a joint it is in relation to, and a weighting value,
-			which determinimumes how much influence the weight has on the final vertex position
+			which determines how much influence the weight has on the final vertex position
 			*/
 
 			for(int k = 0; k < subMesh.verts[j].weightElements; ++k) {

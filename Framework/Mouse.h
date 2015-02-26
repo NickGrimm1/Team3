@@ -96,7 +96,7 @@ protected:
 
 	//Current mouse position
 	T3Vector2	position;
-	//Current mouse position maximumimum bounds
+	//Current mouse position maximum bounds
 	T3Vector2	bounds;
 	// The position of the mouse last frame.
 	T3Vector2	lastPosition;

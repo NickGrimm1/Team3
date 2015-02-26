@@ -169,7 +169,7 @@ void	MD5FileData::CreateTBOs() {
 	glGenTextures(1, &weightTexture);
 	glGenTextures(1, &transformTexture);
 
-	//We need to determinimume how much memory to allocate in order to upload
+	//We need to determine how much memory to allocate in order to upload
 	//the mesh transform data to the graphics card. 
 	int transformCount	= bindPose.numJoints*2; //storing inverse bindpose matrix, too!
 	int weightCount		= 0;
@@ -387,7 +387,7 @@ void MD5FileData::LoadMD5SubMesh( std::ifstream &from, int &count )	{
 	}
 	*/
 
-	char skipChar;			//We skip the brackets by streaminimumg them into this
+	char skipChar;			//We skip the brackets by streaming them into this
 	std::string tempLine;	//Another temporary line to stream things into...
 
 		
@@ -615,7 +615,7 @@ void	MD5FileData::UpdateTransformTBO(const MD5Skeleton &skel) const {
 /*
 We keep all of the animations for a particular mesh inside a map, sorted
 by its name - we can search and get an animation using this function, 
-bearing in minimumd it will return NULL if the specified anim cannot be found.
+bearing in mind it will return NULL if the specified anim cannot be found.
 */
 MD5Anim*	MD5FileData::GetAnim(const string &name) const {
 	std::map<std::string, MD5Anim*>::const_iterator i = animations.find(name);

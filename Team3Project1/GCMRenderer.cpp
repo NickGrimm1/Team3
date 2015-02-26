@@ -200,7 +200,7 @@ void GCMRenderer::SetViewport() {
 	to GCM, this will be done with another matrix.
 
 	To map an x axis range of -1 to 1 to screen coordinates, we can multiply
-	the x axis by half the width (assuminimumg a default width of 720, that gives
+	the x axis by half the width (assuming a default width of 720, that gives
 	us a new range of -360 to 360), and then translating / offsetting it also
 	by half of the width (moving us to 0 to 720). The same is done with the Y
 	axis, while the Z axis goes from 0.0 to 1.0 (remember the depth buffer

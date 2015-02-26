@@ -13,7 +13,7 @@ In addition to the tutorial code, this class contains a pointer to a SceneNode.
 This pointer is to the 'graphical' representation of your game object, just 
 like the SceneNode's used in the graphics module. However, instead of 
 calculating positions etc as part of the SceneNode, it should instead be up
-to your 'physics' representation to determinimume - so we calculate a transform
+to your 'physics' representation to determine - so we calculate a transform
 matrix for your SceneNode here, and apply it to the pointer. 
 
 Your SceneNode should still have an Update function, though, in order to

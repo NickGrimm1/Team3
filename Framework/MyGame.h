@@ -15,7 +15,7 @@ functions are a good start. Don't be afraid to modify/delete/add more of these!
 Finally, there's some calls to the OGLRenderer debug draw functions that have
 been added to the course this year. These are really useful for debugging the
 state of your game in a graphical way - i.e drawing a line from a character
-to the item it is aiminimumg at, or pointing in the direction it is moving, or
+to the item it is aiming at, or pointing in the direction it is moving, or
 for drawing debug bounding volumes to see when objects collide. Feel free
 to add more of these debug functions - how they are implemented is covered
 in the code definitions for them, and also in the extra introduction 

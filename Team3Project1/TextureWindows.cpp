@@ -36,12 +36,12 @@ void Texture::SetRepeating(bool repeat) {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::SetMinMagFiltering(GLint minimum, GLint mag) {
-	minimumFilter = minimum;
+void Texture::SetMinMagFiltering(GLint min, GLint mag) {
+	minFilter = min;
 	magFilter = mag;
 
 	glBindTexture(GL_TEXTURE_2D, textureObject);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minimumFilter);// minimumifying function - pixel being textured maps to greater than one texture element
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);// minifying function - pixel being textured maps to greater than one texture element
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);// magnification function - pixel being textured maps to area less than or equal to one texture element (texel)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

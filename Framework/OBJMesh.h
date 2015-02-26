@@ -5,7 +5,7 @@ Author:Rich Davison	<richard.davison4@newcastle.ac.uk>
 Description: Implementation of the Wavefront OBJ mesh format. 
 
 This was going to be a full tutorial, and then I implemented it and was
-reminimumded of how horrific OBJ files can be, so just dumped the code in the 
+reminded of how horrific OBJ files can be, so just dumped the code in the 
 framework, instead. 
 
 You'll very quickly find OBJ meshes that can't be loaded by this loader.
