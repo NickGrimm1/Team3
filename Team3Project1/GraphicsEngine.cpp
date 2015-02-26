@@ -35,6 +35,9 @@ GraphicsEngine::GraphicsEngine() {
 
 	if (!Window::Initialise(GAME_TITLE, width, height, false)) return;
 	
+	Window::GetWindow().LockMouseToWindow(true);
+	Window::GetWindow().ShowOSPointer(false);
+
 	renderer = new Renderer(Window::GetWindow(), lights, gameEntityList, overlayElementsList);
 	if (!renderer->HasInitialised()) return;
 	
