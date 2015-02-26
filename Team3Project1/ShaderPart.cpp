@@ -229,4 +229,22 @@ void	ShaderPart::UpdateShaderMatrices(Matrix4 &model,Matrix4 &view, Matrix4 &pro
 	SetParameter("projMat", proj);
 }
 #endif
+#if PS3_BUILD
+CGprogram ShaderPart::GetProgram(){return program;}
 
+unsigned int ShaderPart::GetOffset(){return offset;}
+
+unsigned int ShaderPart::GetAttributeIndex(VertexAttributes::Attributes attribute){return attributes[attribute];}
+
+CGparameter ShaderPart::GetParameter(string target)
+{
+	std::map<std::string, CGparameter>::iterator i = uniforms.find(target);
+	if( i != uniforms.end()) 
+	{ 		// if its in the map , return it!		return i->second ;		}
+}
+
+void* ShaderPart::GetuCode()
+{
+	return ucode;
+}
+#endif

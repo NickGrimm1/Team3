@@ -1,7 +1,6 @@
 #pragma comment(lib, "Team3Project1.a")
 #include <stdio.h>
 #include <stdlib.h>	
-
 #include <string>
 #include <iostream>
 

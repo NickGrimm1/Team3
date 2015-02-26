@@ -59,4 +59,5 @@ void Renderer::RenderScene() {
 	}
 
 	SwapBuffers();
+	//cout << "Frame Drawn"
 }
