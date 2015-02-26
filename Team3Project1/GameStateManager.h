@@ -16,7 +16,9 @@ Version: 1.0.0 03/02/2015.</summary>
 #include "AssetManager.h"
 #include "InputManager.h"
 #include "DebugManager.h"
+#if WINDOWS_BUILD
 #include "AudioEngine.h"
+#endif
 #include "StorageManager.h"
 #include "NetworkManager.h"
 #include "../Framework/Keyboard.h"
@@ -53,8 +55,10 @@ public:
 				return false;
 			if (!InputManager::Initialize(instance->input))
 				return false;
+#if WINDOWS_BUILD
 			if (!AudioEngine::Initialize(instance->audio))
 				return false;
+#endif
 			if (!NetworkManager::Initialize(instance->network))
 				return false;
 			if (!DebugManager::Initialize(instance->debug))
@@ -117,7 +121,9 @@ public:
 			PhysicsEngine::Destroy();
 			StorageManager::Destroy();
 			InputManager::Destroy();
+#if WINDOWS_BUILD
 			AudioEngine::Destroy();
+#endif
 			NetworkManager::Destroy();
 			DebugManager::Destroy();
 
@@ -137,7 +143,9 @@ public:
 	/**
 	<summary>Gets the game's Audio Engine.</summary>
 	*/
+#if WINDOWS_BUILD
 	static AudioEngine* Audio() { return Instance()->audio; }
+#endif
 	/**
 	<summary>Gets the game's Asset Manager.</summary>
 	*/
@@ -334,7 +342,9 @@ private:
 #pragma region Framework Components
 	bool isLoaded;
 	GraphicsEngine* graphics;
+#if WINDOWS_BUILD
 	AudioEngine* audio;
+#endif
 	AssetManager* assets;
 	DebugManager* debug;
 	InputManager* input;
