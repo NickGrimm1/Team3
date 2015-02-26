@@ -76,7 +76,7 @@ private:
 	{ }
 	~PhysicsEngine() { }
 	static PhysicsEngine* instance;
-	bool isRunning;
+	//bool isRunning;
 
 
 
