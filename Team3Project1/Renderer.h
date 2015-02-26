@@ -6,7 +6,7 @@ grapical elements to screen.
 Author: Sherif Salem
 Version: 0.0.1 03/02/2015.</summary>
 */
-
+#if WINDOWS_BUILD
 #pragma once
 
 #include "../Framework/Frustum.h"
@@ -183,3 +183,4 @@ protected:
 
 	float			samples[3];
 };
+#endif

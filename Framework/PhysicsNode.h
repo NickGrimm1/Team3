@@ -13,7 +13,7 @@ In addition to the tutorial code, this class contains a pointer to a SceneNode.
 This pointer is to the 'graphical' representation of your game object, just 
 like the SceneNode's used in the graphics module. However, instead of 
 calculating positions etc as part of the SceneNode, it should instead be up
-to your 'physics' representation to determine - so we calculate a transform
+to your 'physics' representation to determinimume - so we calculate a transform
 matrix for your SceneNode here, and apply it to the pointer. 
 
 Your SceneNode should still have an Update function, though, in order to
@@ -37,9 +37,9 @@ _-_-_-_-_-_-_-""  ""
 #include "T3Vector3.h"
 #include "T3Matrix4.h"
 #include "SceneNode.h"
-
+#include <vector>
 #include "CollisionVolume.h"
-
+using namespace std;
 #define LINEAR_VELOCITY_DAMP 0.98
 #define ANGULAR_VELOCITY_DAMP 0.998
 #define LINEAR_VELOCITY_MIN 0.00001
@@ -91,7 +91,7 @@ public:
 
 	void AddForce(T3Vector3 point, T3Vector3 force);
 
-	void SetWorldPoints(vector<T3Vector3> newWorldPoint ) { this->newWorldPoints=newWorldPoint; };
+	void SetWorldPoints(vector<T3Vector3>& newWorldPoint ) { this->newWorldPoints=newWorldPoint; };
 	vector<T3Vector3> GetWorldPoints() {return newWorldPoints;};
 
 	vector<T3Vector3> newWorldPoints;

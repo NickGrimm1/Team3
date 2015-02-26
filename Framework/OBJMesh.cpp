@@ -130,7 +130,7 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 
 			/*
 			Count the number of slashes, but also convert the slashes to spaces
-			so that string streaming of ints doesn't fail on the slash
+			so that string streaminimumg of ints doesn't fail on the slash
 
 				"f  0/0/0" becomes "f 0 0 0" etc
 			*/
@@ -241,9 +241,9 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 			}
 
 			m->GenerateTangents();
-
+#if WINDOWS_BUILD
 			m->BufferData();
-
+#endif //TODO fix for ps3
 			m->SetTexturesFromMTL(sm->mtlSrc, sm->mtlType, materials);
 
 			if(i != 0) {
@@ -280,11 +280,13 @@ void OBJMesh::Draw() {
 		glUniform1i(glGetUniformLocation(prog, "useDiffuseTex"), 1);
 	}
 #endif
-
+#if WINDOWS_BUILD
 	Mesh::Draw();
-
+#endif//TODO fix for ps3
 	for(unsigned int i = 0; i < children.size(); ++i) {
+#if WINDOWS_BUILD
 		children.at(i)->Draw();
+#endif
 	}
 };
 
@@ -357,7 +359,9 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 			*/
 
 			if (!currentMTL.diffuse.empty()) {
+#if WINDOWS_BUILD
 				currentMTL.diffuseNum = GameStateManager::Assets()->LoadTexture(this, string(TEXTUREDIR + currentMTL.diffuse), SOIL_FLAG_INVERT_Y);
+#endif
 			}
 		}
 		else if(currentLine == MTLBUMPMAP || currentLine == MTLBUMPMAPALT) {

@@ -1,4 +1,5 @@
- # pragma once
+#if WINDOWS_BUILD
+# pragma once
 
  # include <vector>
  # include <algorithm>
@@ -91,3 +92,4 @@
 	 static SoundSystem * instance ;
  };
 
+#endif

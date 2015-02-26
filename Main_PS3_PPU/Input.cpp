@@ -4,7 +4,7 @@
 Input::JoyPad Input::joypads[JOYPAD_SIZE];
 
 /*
-Even if we're only assuming a single joypad is to be connected,
+Even if we're only assuminimumg a single joypad is to be connected,
 we may as well initialise enough for a multiplayer game
 */
 void Input::Initialise() {

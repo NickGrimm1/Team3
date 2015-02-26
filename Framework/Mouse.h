@@ -10,7 +10,7 @@ _-_-_-_-_-_-_-|   /\_/\   NYANYANYAN
 _-_-_-_-_-_-_-""  ""   
 
 *//////////////////////////////////////////////////////////////////////////////
-
+#if WINDOWS_BUILD
 #pragma once
 #include "InputDevice.h"
 #include "T3Vector2.h"
@@ -92,11 +92,11 @@ protected:
 	void SetAbsolutePosition(unsigned int x,unsigned int y);
 	//Set the absolute screen bounds (<0 is always assumed dissallowed). Used
 	//by the window resize routine...
-	void SetAbsolutePositionBounds(unsigned int maxX, unsigned int maxY);
+	void SetAbsolutePositionBounds(unsigned int maximumX, unsigned int maximumY);
 
 	//Current mouse position
 	T3Vector2	position;
-	//Current mouse position maximum bounds
+	//Current mouse position maximumimum bounds
 	T3Vector2	bounds;
 	// The position of the mouse last frame.
 	T3Vector2	lastPosition;
@@ -123,3 +123,4 @@ protected:
 	float sensitivity;
 };
 
+#endif

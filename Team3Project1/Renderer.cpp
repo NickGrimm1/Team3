@@ -383,7 +383,7 @@ void Renderer::DrawScene()
 	char buffer[20];
 	for (unsigned int i = 0; i < lights.size(); i++) {
 		if (lights[i]->GetShadowTexture() > 0) { // Shadow depth texture exists for light, so use
-			// Calculate the view projection matrix for the light so can sample shadow map (binding to textureMatrix for the minute
+			// Calculate the view projection matrix for the light so can sample shadow map (binding to textureMatrix for the minimumute
 			T3Matrix4 shadowMatrix = biasMatrix * lights[i]->GetProjectionMatrix() * lights[i]->GetViewMatrix(T3Vector3(cameraMatrix.GetPositionVector()));
 			
 			sprintf_s(buffer, 20, "shadowProjMatrix[%d]", i);
@@ -530,7 +530,7 @@ void Renderer::DrawNodes(bool enableTextures) {
 			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
 		}
 
-		// ignore shader for the minute
+		// ignore shader for the minimumute
 		
 		modelMatrix = sceneNodes[i]->GetWorldTransform() * T3Matrix4::Scale(entity.GetScale());
 		glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"),	1,false, (float*)&modelMatrix);
@@ -769,7 +769,7 @@ void Renderer::BloomPass()
 	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 	glBindTexture(GL_TEXTURE_2D, postProcessingTex[0]);
 
-	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "luminance"), 0.09f);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "luminimumance"), 0.09f);
 	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "middleGrey"), 0.18f);
 	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "whiteCutOff"), 0.8f);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
