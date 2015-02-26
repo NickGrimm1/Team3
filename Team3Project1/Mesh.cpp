@@ -201,9 +201,9 @@ void Mesh::GenerateTangents()
 
 			T3Vector3 tangent = GenerateTangent(vertices[a].GetPosition(), vertices[b].GetPosition(), vertices[c].GetPosition(), vertices[a].GetTexCoord(), vertices[b].GetTexCoord(), vertices[c].GetTexCoord());
 
-			vertices[a].SetTangent(tangent);
-			vertices[b].SetTangent(tangent);
-			vertices[c].SetTangent(tangent);
+			vertices[a].SetTangent(tangent + vertices[a].GetTangent());
+			vertices[b].SetTangent(tangent + vertices[b].GetTangent());
+			vertices[c].SetTangent(tangent + vertices[c].GetTangent());
 		}
 	}
 	else
@@ -212,9 +212,9 @@ void Mesh::GenerateTangents()
 		{
 			T3Vector3 tangent = GenerateTangent(vertices[i].GetPosition(), vertices[i + 1].GetPosition(), vertices[i + 2].GetPosition(), vertices[i].GetTexCoord(), vertices[i + 1].GetTexCoord(), vertices[i + 2].GetTexCoord());
 
-			vertices[i].SetTangent(tangent);
-			vertices[i + 1].SetTangent(tangent);
-			vertices[i + 2].SetTangent(tangent);
+			vertices[i].SetTangent(tangent + vertices[i].GetTangent());
+			vertices[i + 1].SetTangent(tangent + vertices[i+1].GetTangent());
+			vertices[i + 2].SetTangent(tangent + vertices[i+2].GetTangent());
 		}
 	}
 	for(unsigned int i = 0; i < numVertices; ++i)

@@ -75,6 +75,10 @@ public:
 
 	Vertex* GetVertices() const {return vertices;}
 	unsigned int GetNumVertices() const {return numVertices;}
+#if WINDOWS_BUILD
+	unsigned int GetArrayObject() {return arrayObject;}
+	unsigned int GetBufferObject() {return bufferObject[0];}
+#endif
 
 protected:
 	//Generates normals for all facets. Assumes geometry type is GL_TRIANGLES...
