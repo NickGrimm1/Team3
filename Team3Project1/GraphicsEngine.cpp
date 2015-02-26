@@ -38,7 +38,7 @@ GraphicsEngine::GraphicsEngine() {
 	renderer = new Renderer(Window::GetWindow(), lights, gameEntityList, overlayElementsList);
 	if (!renderer->HasInitialised()) return;
 	
-	GLuint loadingTex = renderer->CreateTexture(TEXTUREDIR"refresh.png", false, false);
+	GLuint loadingTex = renderer->CreateTexture(TEXTUREDIR"refresh2.png", false, false);
 	isLoading = true;
 	isLoadingDrawing = false;
 	loadingIcon = new DrawableTexture2D(

@@ -37,7 +37,7 @@ void main(void) {
 	//Removes non-bright areas.
 	gl_FragColor -= 5.0f;
 	
-	gl_FragColor = maximum(gl_FragColor, 0.0);
+	gl_FragColor = max(gl_FragColor, 0.0);
 	
 	gl_FragColor /= (10.0 + gl_FragColor);
     gl_FragColor.a = 1.0;
