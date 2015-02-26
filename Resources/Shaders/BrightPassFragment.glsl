@@ -3,13 +3,13 @@
  Author: Sherif Salem
  Date: 	09/02/2015
  Summary:
-	Produces an image with only the 'bright' areas shown, with non-bright areas made black.
+	Produces an image with the 'bright' areas accentuated, and non-bright areas made black.
 */
 
 #version 430 core
 
 uniform sampler2D diffuseTex;
-uniform float luminimumance;
+uniform float luminance;
 uniform float middleGrey;
 uniform float whiteCutOff;
 
@@ -31,7 +31,7 @@ void main(void) {
 	gl_FragColor = texture2D(diffuseTex, IN.texCoord);
 	
 	//Increases scene brightness.
-	gl_FragColor *= middleGrey / ( luminimumance + 0.001);
+	gl_FragColor *= middleGrey / ( luminance + 0.001);
 	gl_FragColor *= (1.0 + ( gl_FragColor / (whiteCutOff * whiteCutOff)));
 	
 	//Removes non-bright areas.
