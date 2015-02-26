@@ -290,14 +290,14 @@ bool PhysicsEngine::triangle(T3Vector3& dir)
 		 abc = adb;
 		 return checkTetrahedron(ao, ab, ac, abc, dir);
 	 }
-
+#if WINDOWS_BUILD
 					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, a, b, T3Vector3(1, 0, 1), T3Vector3(1, 0, 1));
 					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, c, b, T3Vector3(1, 0, 1), T3Vector3(1, 0, 1));
 					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, a, c, T3Vector3(1, 0, 1), T3Vector3(1, 0, 1));
 					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, a, d, T3Vector3(1, 1, 1), T3Vector3(1, 1, 1));
 					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, b, d, T3Vector3(1, 1, 1), T3Vector3(1, 1, 1));
 					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, c, d, T3Vector3(1, 1, 1), T3Vector3(1, 1, 1));
-
+#endif
 	 //origin in tetrahedron
 	 return true;
 
@@ -460,7 +460,7 @@ void  PhysicsEngine::SortandSweep()
 {
 
 	
-
+#if WINDOWS_BUILD
 	sort(narrowlist.begin(),narrowlist.end(), [](PhysicsNode* xleft, PhysicsNode* xright){return xleft->GetPosition().x < xright->GetPosition().x;});
 
 	for( vector<PhysicsNode*>::iterator i=narrowlist.begin(); i <narrowlist.end(); ++i) 
@@ -545,7 +545,8 @@ void  PhysicsEngine::SortandSweep()
 				}
 	
 		}
-	}
+#endif
+}
 	
 
 

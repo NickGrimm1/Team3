@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 #include "Renderer.h"
 #include "GraphicsCommon.h"
 #include "DrawableEntity3D.h"
@@ -1126,3 +1127,4 @@ bool Renderer::DropRenderContextForThread() {
 	openglMutex.unlock_mutex(); 
 	return result;
 }
+#endif

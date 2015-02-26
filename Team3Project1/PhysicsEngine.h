@@ -10,6 +10,8 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "../Framework/PhysicsNode.h"
 #include "../Framework/Constraint.h"
 #include "../Framework/DebugDrawer.h"
+#include "Vertex.h"
+#include "Mesh.h"
 #include <vector>
 #include <algorithm> 
 

@@ -13,7 +13,7 @@ TextMesh::TextMesh(const std::string &text, const Font &font) :  font(font)	{
 
 	//Each quad will be 4 points, drawn using a triangle strip
 	//just like the GenerateQuad function from early on!
-	type = GL_TRIANGLE_STRIP;
+	type = PrimitiveType::TRIANGLE_STRIP;
 
 	//Each character has 4 vertices...
 	numVertices = text.length()*4;
@@ -84,5 +84,7 @@ TextMesh::TextMesh(const std::string &text, const Font &font) :  font(font)	{
 	}
 
 	//Lastly, we buffer the data, just like a 'normal' mesh!
+#if WINDOWS_BUILD
 	BufferData();
+#endif
 }

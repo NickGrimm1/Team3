@@ -26,9 +26,9 @@ TrackSegment::TrackSegment(const T3Vector3& a, const T3Vector3& b, const T3Vecto
 
 	// Build index VBO
 	numIndices = subdivisions * 6;
-	indices = new unsigned int[numIndices];
+	indices = new short[numIndices];
 	unsigned int index = 0;
-	for (unsigned int i = 0; i < subdivisions; i++) {
+	for (short i = 0; i < subdivisions; i++) {
 		indices[index++] = i;
 		indices[index++] = i + numVertices;
 		indices[index++] = i + 1;
@@ -37,7 +37,7 @@ TrackSegment::TrackSegment(const T3Vector3& a, const T3Vector3& b, const T3Vecto
 		indices[index++] = i + numVertices + 1;
 		indices[index++] = i + 1;
 	}
-
+#if WINDOWS_BUILD
 	// Set up VBOs for the track mesh
 	glBindVertexArray(arrayObject); // makes our VAO object associated with the object name in arrayObject, the currently bound/active/operated on VAO
 	glGenBuffers(1, &trackVBO);
@@ -49,19 +49,22 @@ TrackSegment::TrackSegment(const T3Vector3& a, const T3Vector3& b, const T3Vecto
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(GLuint), indices, GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
+#endif
 }
 
 
 TrackSegment::~TrackSegment(void)
 {	
 	// Mesh destructor should handle deletion of indices/texture coords
+#if WINDOWS_BUILD
 	glDeleteBuffers(1, &trackVBO);
+#endif
 	delete[] trackMesh;
 }
 
 void TrackSegment::Draw() {
-	type = GL_TRIANGLES;
-
+	type = PrimitiveType::TRIANGLES;
+#if WINDOWS_BUILD
 	glBindVertexArray(arrayObject); // Make mesh VAO currently bound object
 	glBindBuffer(GL_ARRAY_BUFFER, trackVBO);
 	glVertexAttribPointer(VertexAttributes::POSITION, 3, GL_FLOAT, GL_FALSE, 0, 0); //Specifies that in the currently bound array index VERTEX_BUFFER points to 3 Floats. 
@@ -72,6 +75,7 @@ void TrackSegment::Draw() {
 	glDrawElements(type, numIndices, GL_UNSIGNED_INT, 0); 
 	
 	glBindVertexArray(0); // unbind current VAO
+#endif
 }
 
 void TrackSegment::DrawSpline() {

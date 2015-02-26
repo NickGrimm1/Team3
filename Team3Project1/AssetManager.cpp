@@ -637,7 +637,7 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 			loadedShaderParts.insert(pair<string, LoadedShaderPart>(fragmentShaderFilePath, LoadedShaderPart(fragmentShader, newShader)));
 			
 		}
-
+#if WINDOWS_BUILD
 		if (geometryShaderFilePath != "")
 		{
 			j = loadedShaderParts.find(geometryShaderFilePath);
@@ -660,7 +660,7 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 		}
 		else
 			geometryShader = NULL;
-
+#endif
 		// Load this Shader
 		newShader->SetVertex(vertexShader);
 		newShader->SetFragment(fragmentShader);
@@ -789,7 +789,9 @@ Font* AssetManager::LoadFont(void* callerID, string filePath, unsigned int xCoun
 		// Load this font in...
 		GameStateManager::Graphics()->GetRenderContext();
 		Font* newFont = new Font(xCount, yCount);
+#if WINDOWS_BUILD
 		newFont->SetTexture(LoadTexture(newFont, filePath, SOIL_FLAG_COMPRESS_TO_DXT));
+#endif	
 		GameStateManager::Graphics()->DropRenderContext();
 		loadedFonts.insert(pair<string, LoadedFont>(filePath, LoadedFont(newFont, callerID)));
 		return newFont;

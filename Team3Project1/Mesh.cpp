@@ -171,9 +171,9 @@ void	Mesh::GenerateNormals()
 		//It's just a list of triangles, so generate face normals
 		for(unsigned int i = 0; i < numVertices; i += 3)
 		{
-			T3Vector3 &a = vertices[i].GetPosition();
-			T3Vector3 &b = vertices[i + 1].GetPosition();
-			T3Vector3 &c = vertices[i + 2].GetPosition();
+			T3Vector3 a = vertices[i].GetPosition();
+			T3Vector3 b = vertices[i + 1].GetPosition();
+			T3Vector3 c = vertices[i + 2].GetPosition();
 
 			T3Vector3 normal = T3Vector3::Cross(b - a, c - a);
 

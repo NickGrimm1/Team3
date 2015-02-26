@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 #include "GraphicsTestScreen.h"
 #include "Mesh.h"
 #include "../Framework/Light.h"
@@ -192,3 +193,5 @@ void GraphicsTestScreen::MouseMoved(T3Vector2& finish) {
 	camera->AddPitch(-finish.y);
 	camera->AddYaw(finish.x);
 }
+
+#endif

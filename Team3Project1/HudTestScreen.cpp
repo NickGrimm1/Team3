@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 #include "HudTestScreen.h"
 #include "DrawableText2D.h"
 #include "GameStateManager.h"
@@ -119,3 +120,5 @@ void HudTestScreen::UnloadContent()
 	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Grass_Color.jpg");
 	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"calvin.bmp");
 }
+
+#endif

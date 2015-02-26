@@ -6,8 +6,8 @@
 
  # include "Sound.h"
 // # include "SoundEmitter.h"
- # include "../OpenAL 1.1 SDK/include/al.h"
- # include "../OpenAL 1.1 SDK/include/alc.h"
+ /*# include "../OpenAL 1.1 SDK/include/al.h"
+ # include "../OpenAL 1.1 SDK/include/alc.h"*/
  # include "T3Vector3.h"
  # include "SceneNode.h"
  # include "T3Matrix4.h"

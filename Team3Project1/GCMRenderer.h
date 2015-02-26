@@ -23,6 +23,7 @@ _-_-_-_-_-_-_-""  ""
 #include <vectormath/cpp/vectormath_aos.h>
 #include <cell/gcm.h>
 #include <Cg/cg.h>
+#include <fstream>
 
 #include "../Framework/Camera.h"
 #include "../Framework/Shader.h"

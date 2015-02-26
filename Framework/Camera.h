@@ -16,7 +16,7 @@ Version: 0.0.6 11/02/2015.</summary>
 #include "T3Matrix4.h"
 #include "T3Vector3.h"
 #include "../Team3Project1/DrawableEntity3D.h"
-
+class DrawableEntity3D;
 class Camera	
 {
 public:

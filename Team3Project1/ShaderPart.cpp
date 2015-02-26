@@ -9,7 +9,7 @@
 #include "../Team3Project1/Mesh.h"
 #endif
 
-ShaderPart::ShaderPart(string raw, ShaderType::Type type) 
+ShaderPart::ShaderPart(string raw, ShaderType::Type type) : type(type)
 {
 #if WINDOWS_BUILD
 	shader = glCreateShader(type);
@@ -146,7 +146,10 @@ void	ShaderPart::SetParameter(std::string name, float*data) {
 	//DON'T try to set a non-existent parameter. GCM will instantly
 	//fall over.
 	if(p) {	
+		if(type == ShaderType::VERTEX)
 		cellGcmSetVertexProgramParameter(p, data);
+
+		cellGcmSetFragmentProgramParameter(program, p, data, offset);
 	}
 }
 
@@ -157,8 +160,8 @@ Sony's own matrix code. So, we wrap matrix uniform setting around a
 transpose function, so it's less likely you'll accidentally set your 
 matrix wrong
 */
-void ShaderPart::SetParameter(std::string name, T3Matrix4 &totranpose) {
-	T3Matrix4 tempMatrix = transpose(totranpose);
+void ShaderPart::SetParameter(std::string name, Matrix4 &totranpose) {
+	Matrix4 tempMatrix = transpose(totranpose);
 	SetParameter(name, (float*)&tempMatrix);
 }
 
@@ -193,16 +196,16 @@ void ShaderPart::SetDefaultAttributes() {
 		attributes[VertexAttributes::TANGENT] = cellGcmCgGetParameterResource(program, tangent_param) - CG_ATTR0;
 }
 
-void ShaderPart::SetParameter(std::string name, float*data) 
-{
-	CGparameter p = GetParameter(name);
-
-	//DON'T try to set a non-existent parameter. GCM will instantly
-	//fall over.
-	if(p) {	
-		cellGcmSetFragmentProgramParameter(program, p, data, offset);
-	}
-}
+//void ShaderPart::SetParameter(std::string name, float*data) 
+//{
+//	CGparameter p = GetParameter(name);
+//
+//	//DON'T try to set a non-existent parameter. GCM will instantly
+//	//fall over.
+//	if(p) {	
+//		cellGcmSetFragmentProgramParameter(program, p, data, offset);
+//	}
+//}
 
 /*
 When uniforms are changed in a fragment shader, we must tell GCM to reload

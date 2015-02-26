@@ -4,7 +4,7 @@
  # include <string>
  # include <iostream>
  # include <fstream>
- # include "../../OpenAL 1.1 SDK/include/al.h"
+ //# include "../../OpenAL 1.1 SDK/include/al.h"
  //# include "OggSound.h" // So that 11 works !
 
  using namespace std;

@@ -1,6 +1,8 @@
 #if PS3_BUILD
+#pragma once
+
 #include "Texture.h"
-Texture(string filename, unsigned int flags);
+Texture::Texture(string filename, unsigned int flags)
 {
 	// TODO: Sort if this is TGA or GTF and load accordingly.
 }
@@ -57,7 +59,7 @@ CellGcmTexture* Texture::LoadTGA(std::string filename)	{
 
 	std::cout << filename << " has size "	 << (unsigned int)size		<< std::endl;
 
-	char*rsxdata = (char*)localMemoryAlign(128, size);	//A texture in graphics memory needs aligning...
+	char*rsxdata = (char*)GCMRenderer::localMemoryAlign(128, size);	//A texture in graphics memory needs aligning...
 
 	//Read in the texture straight into graphics memory. Challenge! How fast will this data
 	//transfer be? Why? How could it be sped up?
@@ -146,7 +148,7 @@ CellGcmTexture* Texture::LoadGTF(std::string filename) {
 
 		file.seekg(attributes[i].OffsetToTex);
 
-		char*rsxdata = (char*)localMemoryAlign(128, attributes[i].TextureSize);
+		char*rsxdata = (char*)GCMRenderer::localMemoryAlign(128, attributes[i].TextureSize);
 		file.read(rsxdata,attributes[i].TextureSize);
 
 		cellGcmAddressToOffset( rsxdata, &texture->offset );

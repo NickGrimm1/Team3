@@ -12,7 +12,7 @@
 #include "../Team3Project1/FreeCamera.h"
 #include "../Framework/SceneNode.h"
 #include "../Team3Project1/Mesh.h"
-
+//#pragma comment(lib, "Team3Project1.a")
 SYS_PROCESS_PARAM(1001, 0x10000)
 
 bool done = false;

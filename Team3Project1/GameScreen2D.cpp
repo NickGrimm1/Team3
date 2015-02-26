@@ -47,6 +47,7 @@ void GameScreen2D::RemoveDrawable(DrawableEntity2D* drawable)
 <param name='type'>The event type.</param>
 <param name='position'>The resolution independent co-ordinates of the mouse cursor.</param>
 */
+#if WINDOWS_BUILD
 void GameScreen2D::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position)
 {
 	// Check if input is being accepted
@@ -121,6 +122,7 @@ void GameScreen2D::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents:
 {
 	// Not implemented in 2D. Can be overridden for specific screens if neccessary.
 }
+#endif
 /**
 <summary>Notifies all screens in the stack of a gamepad event.</summary>
 <param name='playerID'>The ID for the controller.</param>
@@ -164,7 +166,8 @@ void GameScreen2D::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex player
 		// Check for right stick movement
 		if (analogueControl == GamepadEvents::RIGHT_STICK)
 		{
-			Scroll(T3Vector2(), amount);
+			T3Vector2 test;
+			Scroll(test, amount);
 		}
 	}
 }

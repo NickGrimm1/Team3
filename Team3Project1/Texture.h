@@ -3,8 +3,14 @@
 #include "GL/glew.h"
 #endif
 #include <string>
+#include <fstream>
+#include <iostream>
+#include <stdio.h>
+#include "../Framework/common.h"
 #if PS3_BUILD
 #include <cell\gcm.h>
+#include "GCMRenderer.h"
+#include <sys\paths.h> 
 #endif
 using namespace std;
 

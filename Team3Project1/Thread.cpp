@@ -1,5 +1,5 @@
 #include "Thread.h"
-
+#if WINDOWS_BUILD
 /**
 * standard thread function
 */
@@ -9,8 +9,9 @@ DWORD thread_ftn(LPVOID T) {
 	t->Run();
 	return NULL;
 }
-
+#endif
 void Thread::Start() {
+#if WINDOWS_BUILD
 	thread_handle = CreateThread(
 		NULL, // default security
 		0, // default stack size
@@ -18,10 +19,13 @@ void Thread::Start() {
 		(LPVOID)this, // argument to thread function
 		0, // use default creation flags
 		&tid);
+#endif
 }
 
 void Thread::Join() {
+#if WINDOWS_BUILD
 	WaitForSingleObject(thread_handle, INFINITE);
+#endif
 }
 
 void Thread::Terminimumate()
