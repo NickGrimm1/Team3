@@ -45,16 +45,17 @@ GraphicsEngine::GraphicsEngine()
 	renderer = new Renderer(Window::GetWindow(), lights, gameEntityList, overlayElementsList);
 	if (!renderer->HasInitialised()) return;
 	
-	GLuint loadingTex = renderer->CreateTexture(TEXTUREDIR"refresh2.png", false, false);
+	GLuint loadingTex = renderer->CreateTexture(TEXTUREDIR"refresh.png", false, false);
 	isLoading = true;
 	isLoadingDrawing = false;
+	loadingTexture = new Texture(loadingTex);
 	loadingIcon = new DrawableTexture2D(
 		width - 45,
 		height - 65,
 		1,
 		25,
 		25,
-		new Texture(loadingTex),
+		loadingTexture,
 		0,
 		T3Vector2(),
 		T3Vector4(1, 1, 1, 1.0));
@@ -67,6 +68,9 @@ GraphicsEngine::~GraphicsEngine() {
 	// Delete local array data - if not handled elsewhere
 
 	// Fin
+	renderer->DestroyTexture(loadingTexture->GetTextureName());
+	delete loadingTexture;
+	delete loadingIcon;
 	delete renderer;
 	Window::Destroy();
 }
