@@ -31,11 +31,12 @@ bool GraphicsEngine::Destroy() {
 }
 
 GraphicsEngine::GraphicsEngine() 
-	: RENDER_TIME(1.0f / 60)
+	: RENDER_TIME(1000.0f / 60)
 {
 	isInitialised = false;
 	width = SCREEN_WIDTH;
 	height = SCREEN_HEIGHT;
+	frameRate = 0;
 
 	if (!Window::Initialise(GAME_TITLE, width, height, false)) return;
 	
@@ -79,6 +80,7 @@ void GraphicsEngine::Run() {
 		while (Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp < RENDER_TIME) { ; } // Fix the timestep
 		float msec = Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp;
 		lastFrameTimeStamp = Window::GetWindow().GetTimer()->GetMS();
+		frameRate = (int)(1000.0f / msec);
 
 		// add/remove requested items from scene lists
 		contentGuard.lock_mutex();

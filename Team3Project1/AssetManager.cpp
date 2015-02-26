@@ -77,9 +77,17 @@ Texture* AssetManager::LoadTexture(void* callerID, string filePath, unsigned int
 		// Load this texture in...
 		GameStateManager::Graphics()->GetRenderContext();
 		Texture* newTexture = new Texture(filePath, flags);
+		if (newTexture->GetTextureName() == 0)
+		{
+			delete newTexture;
+			return NULL;
+		}
 		newTexture->SetRepeating(true);
 		GameStateManager::Graphics()->DropRenderContext();
 		loadedTextures.insert(pair<string, LoadedTexture>(filePath, LoadedTexture(newTexture, callerID)));
+
+		textureMemory += newTexture->GetMemoryUsage();
+
 		return newTexture;
 	}
 }
@@ -104,6 +112,8 @@ void AssetManager::UnloadTexture(void* callerID, string filePath)
 	// No owners left? delete
 	if (loadedTextures[filePath].callerIDs.size() == 0)
 	{
+		textureMemory -= loadedTextures[filePath].texture->GetMemoryUsage();
+
 		GameStateManager::Graphics()->GetRenderContext();
 		delete loadedTextures[filePath].texture;
 		GameStateManager::Graphics()->DropRenderContext();
@@ -148,6 +158,8 @@ Mesh* AssetManager::LoadMesh(void* callerID, string filePath)
 			return NULL; // Unrecognised fileType. OOOPS!!
 
 		loadedMeshes.insert(pair<string, LoadedMesh>(filePath, LoadedMesh(newMesh, callerID)));
+
+		meshMemory += newMesh->GetMemoryUsage();
 		return newMesh;
 	}
 }
@@ -172,6 +184,7 @@ void AssetManager::UnloadMesh(void* callerID, string filePath)
 	// No owners left? delete
 	if (loadedMeshes[filePath].callerIDs.size() == 0)
 	{
+		meshMemory -= loadedMeshes[filePath].mesh->GetMemoryUsage();
 		GameStateManager::Graphics()->GetRenderContext();
 		delete loadedMeshes[filePath].mesh;
 		GameStateManager::Graphics()->DropRenderContext();

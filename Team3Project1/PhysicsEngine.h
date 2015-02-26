@@ -43,6 +43,7 @@ public:
 	bool   count;
 	int numPointsSimplex;
 
+	int GetFrameRate() { return frameRate; }
 
 	
 	T3Vector3 a, b, c, d;
@@ -72,14 +73,12 @@ public:
 	void    DrawDebug();
 private:
 	PhysicsEngine()
-		: PHYSICS_TIME(1.0f / 120)
-	{ }
+		: PHYSICS_TIME(1000.0f / 120)
+	{
+		frameRate = 0;
+	}
 	~PhysicsEngine() { }
 	static PhysicsEngine* instance;
-	bool isRunning;
-
-
-
 
 	vector<PhysicsNode*> allNodes;
 	vector<Constraint*> allSprings;
@@ -88,4 +87,5 @@ private:
 
 	const float PHYSICS_TIME;
 	float lastFrameTimeStamp;
+	int frameRate;
 };

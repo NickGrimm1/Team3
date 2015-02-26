@@ -128,6 +128,7 @@ protected:
 	Mesh*			coneMesh;			// A cone mesh for drawing deferred spot lights
 	Mesh*			circleMesh;			// A circle mesh for drawing deferred spot lights
 	Mesh*			skyDome;			// The top of a sphere - used as a 'hat' to wear a skybox :)
+	Mesh*			quadMesh;			// A quad mesh (0-1) for drawing 2D textures.
 
 	SceneNode*		root;
 	Camera*			camera;

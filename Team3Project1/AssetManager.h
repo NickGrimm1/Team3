@@ -74,9 +74,15 @@ public:
 	// Generate Heightmap
 	// Load audio
 
+	int GetTotalMemory() { return (int)(textureMemory + meshMemory); }
+	int GetTextureMemory() { return (int)textureMemory; }
+	int GetMeshMemory() { return (int)meshMemory; }
 private:
 	AssetManager()
-	{ }
+	{
+		meshMemory = 0;
+		textureMemory = 0;
+	}
 	~AssetManager()
 	{ }
 
@@ -107,4 +113,7 @@ private:
 	map<unsigned int, LoadedMesh> circleUsers;
 	map<unsigned int, LoadedMesh> coneUsers;
 	map<unsigned int, LoadedMesh> cylinderUsers;
+
+	float meshMemory;
+	float textureMemory;
 };

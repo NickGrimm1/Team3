@@ -286,6 +286,7 @@
     <ClInclude Include="ChaseCamera.h" />
     <ClInclude Include="ClickableEntity2D.h" />
     <ClInclude Include="DebugManager.h" />
+    <ClInclude Include="DebugOverlay.h" />
     <ClInclude Include="DrawableEntity2D.h" />
     <ClInclude Include="DrawableEntity3D.h" />
     <ClInclude Include="DrawableText2D.h" />
@@ -371,6 +372,7 @@
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="AudioEngine.cpp" />
     <ClCompile Include="DebugManager.cpp" />
+    <ClCompile Include="DebugOverlay.cpp" />
     <ClCompile Include="GamePad.cpp" />
     <ClCompile Include="GameScreen2D.cpp" />
     <ClCompile Include="GameScreen3D.cpp" />
