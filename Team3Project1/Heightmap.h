@@ -3,7 +3,6 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-
 #include "mesh.h"
 
 #define RAW_WIDTH 257
@@ -25,4 +24,5 @@ public:
 	T3Vector3 GetVertexPosition(int x, int z);
 private:
 	unsigned char* data;
+	float Clamp(float f, float min = 0.0f, float max = 1.0f);
 };

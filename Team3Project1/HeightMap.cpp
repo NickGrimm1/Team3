@@ -1,5 +1,4 @@
 #include "HeightMap.h"
-#include "MathHelper.h"
 #include "GameStateManager.h"
 
 HeightMap::HeightMap(string name, bool useTextureWeights, unsigned char minHeight, unsigned char maxHeight) 
@@ -37,10 +36,11 @@ HeightMap::HeightMap(string name, bool useTextureWeights, unsigned char minHeigh
 			vertices[offset].SetTexCoord(T3Vector2(x * HEIGHTMAP_TEX_X, z * HEIGHTMAP_TEX_Z));
 			if (useTextureWeights)
 			{
-				vertices[offset].SetColor(T3Vector4(MathHelper::Clamp(1.0f - abs(data[offset] - 0.0f) / 72.0f),
-					MathHelper::Clamp(1.0f - abs(data[offset] - 64.0f) / 72.0f),
-					MathHelper::Clamp(1.0f - abs(data[offset] - 192.0f) / 72.0f),
-					MathHelper::Clamp(1.0f - abs(data[offset] - 256.0f) / 72.0f)));
+
+				vertices[offset].SetColor(T3Vector4(Clamp(1.0f - abs(data[offset] - 0.0f) / 72.0f),
+					Clamp(1.0f - abs(data[offset] - 64.0f) / 72.0f),
+					Clamp(1.0f - abs(data[offset] - 192.0f) / 72.0f),
+					Clamp(1.0f - abs(data[offset] - 256.0f) / 72.0f)));
 			}
 			else
 			{
@@ -77,4 +77,14 @@ HeightMap::HeightMap(string name, bool useTextureWeights, unsigned char minHeigh
 T3Vector3 HeightMap::GetVertexPosition(int x, int z)
 {
 	return T3Vector3(x * HEIGHTMAP_X, data[x * RAW_WIDTH + z] * HEIGHTMAP_Y, z * HEIGHTMAP_Z);
+}
+float HeightMap::Clamp(float f, float min, float max)
+{
+	if (f < min)
+		return min;
+
+	if (f > max)
+		return max;
+
+	return f;
 }

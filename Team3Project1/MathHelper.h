@@ -61,12 +61,6 @@ namespace MathHelper
 			out.values[i] = m1.values[i] + (m2.values[i] - m1.values[i]) * amount;
 		return out;
 	}
-	float Clamp(float f, float min = 0.0f, float max = 1.0f)
-	{
-		if (f < min)
-			return min;
-		if (f > max)
-			return max;
-		return f;
-	}
+
+	
 };

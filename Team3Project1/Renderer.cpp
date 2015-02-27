@@ -79,7 +79,7 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glBindFramebuffer(GL_FRAMEBUFFER, skyBufferFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	CreateStaticMap(128);
+	CreateStaticMap(&cloudMap, 128, 0, 255);
 
 	samples[0] = 1.5f;
 	samples[1] = 2.0f;
@@ -712,7 +712,7 @@ void Renderer::DrawSkybox() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	SetCurrentShader(cloudShader);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex0"), GL_TEXTURE0);
-	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), Window::GetWindow().GetTimer()->GetMS() * 000001.0f);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), Window::GetWindow().GetTimer()->GetMS() / 100000.0f);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, cloudMap);
 	screenMesh->Draw();
@@ -1175,7 +1175,7 @@ void Renderer::CreateStaticMap(GLuint* target, const int resolution, unsigned ch
 	float* colors = new float[resolution * resolution];
 	for (int x = 0; x < resolution; x++)
 		for (int y = 0; y < resolution; y++)
-			colors[x + y * resolution] = rand() % 1000 / 1000.0f;
+			colors[x + y * resolution] = (rand() % (maxValue - minValue) + minValue) / (float)maxValue;
 
 	glGenTextures(1, target);
 	glActiveTexture(GL_TEXTURE0);
@@ -1197,4 +1197,5 @@ unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char
 
 	// Draw for perlin noise.
 	// Extract the data from the texture.
+	return NULL;
 }
