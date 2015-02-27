@@ -69,12 +69,12 @@ public:
 	bool			GetRenderContextForThread();
 	bool			DropRenderContextForThread();
 
-	bool LoadShaders();
-	bool LoadAssets();
-	void UnloadShaders();
-	void UnloadAssets();
+	bool			LoadShaders();
+	bool			LoadAssets();
+	void			UnloadShaders();
+	void			UnloadAssets();
 
-	void DrawDeferredLights(bool on) {drawDeferredLights = on;}
+	void			DrawDeferredLights(bool on) {drawDeferredLights = on;}
 
 	unsigned char* GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue);
 
@@ -164,9 +164,10 @@ protected:
 	GLuint			postProcessingFBO;
 	GLuint			deferredLightingFBO;
 	GLuint			shadowFBO;
-	GLuint			skyColourBuffer[2]; //The buffer for holding the clous texture.
+	GLuint			skyColourBuffer[2]; //The buffer for holding the cloud texture.
 	GLuint			skyBufferFBO;
 	
+	GLuint			daySkyTex;
 	GLuint			nightSkyTex;
 	GLuint			cloudMap;	// The texture for holding the static map the clouds are generated from.
 	GLuint			gbufferColourTex;
@@ -186,5 +187,8 @@ protected:
 	MutexClass		openglMutex;		// Prevents different threads for using OpenGL at same time	
 
 	float			samples[3];
+
+	bool			inc;
+	int				time;
 };
 #endif

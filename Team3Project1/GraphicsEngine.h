@@ -193,6 +193,8 @@ private:
 	bool isLoadingDrawing;
 	DrawableTexture2D* loadingIcon;
 	Texture* loadingTexture;
+	Texture* skyboxDay;
+	Texture* skyboxNight;
 
 	const float RENDER_TIME;
 	float lastFrameTimeStamp;
