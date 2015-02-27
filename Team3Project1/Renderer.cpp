@@ -70,16 +70,16 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, width, height, 0, GL_RG, GL_HALF_FLOAT, 0);
 
 	// Generate Sky Buffer & initial static map.
-	//glGenTextures(1, &skyColourBuffer);
-	//glBindTexture(GL_TEXTURE_2D, skyColourBuffer);
-	//glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_NEAREST );
-	//glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST );
-	//glTexImage2D ( GL_TEXTURE_2D , 0, GL_RGBA8 , width , height , 0, GL_RGBA , GL_UNSIGNED_BYTE , NULL );
-	//glGenFramebuffers(1, &skyBufferFBO);
-	//glBindFramebuffer(GL_FRAMEBUFFER, skyBufferFBO);
-	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer, 0);
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	//CreateStaticMap(128);
+	glGenTextures(1, &skyColourBuffer);
+	glBindTexture(GL_TEXTURE_2D, skyColourBuffer);
+	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_NEAREST );
+	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST );
+	glTexImage2D ( GL_TEXTURE_2D , 0, GL_RGBA8 , width , height , 0, GL_RGBA , GL_UNSIGNED_BYTE , NULL );
+	glGenFramebuffers(1, &skyBufferFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, skyBufferFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	CreateStaticMap(128);
 
 	samples[0] = 1.5f;
 	samples[1] = 2.0f;
@@ -698,7 +698,7 @@ void Renderer::CombineBuffers() {// merge scene render with lighting pass
 	screenMesh->Draw(); // Render scene
 	glStencilMask(GL_TRUE);
 
-//	DrawSkybox(); // Finally, draw the skybox
+	DrawSkybox(); // Finally, draw the skybox
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, 0, 0); // Stencil buffer from the first pass render
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glEnable(GL_DEPTH_TEST);
@@ -708,6 +708,7 @@ void Renderer::CombineBuffers() {// merge scene render with lighting pass
 void Renderer::DrawSkybox() { 
 	// Generate clouds - captures perlin noise to texture.
 	glBindFramebuffer(GL_FRAMEBUFFER, skyBufferFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	SetCurrentShader(cloudShader);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex0"), GL_TEXTURE0);
@@ -716,6 +717,7 @@ void Renderer::DrawSkybox() {
 	glBindTexture(GL_TEXTURE_2D, cloudMap);
 	screenMesh->Draw();
 	glUseProgram(GL_NONE);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, GL_NONE);
 	
 	// Draw skybox only where screen has not previously been written to
@@ -725,6 +727,7 @@ void Renderer::DrawSkybox() {
 	
 
 	glDisable(GL_CULL_FACE);
+	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
 	SetCurrentShader(skyBoxShader);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex0"), GL_TEXTURE0);
 	glActiveTexture(GL_TEXTURE0);
@@ -738,11 +741,6 @@ void Renderer::DrawSkybox() {
 	modelMatrix = T3Matrix4::Translation(T3Vector3(camera->GetPosition().x, camera->GetPosition().y - 25, camera->GetPosition().z)) * T3Matrix4::Scale(T3Vector3(100, 100, 100));
 	UpdateShaderMatrices();
 
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "cubeTex"), SKYBOX_TEXTURE_UNIT);
-	glActiveTexture(GL_TEXTURE0 + SKYBOX_TEXTURE_UNIT);
-	glBindTexture(GL_TEXTURE_2D , skyBoxTex);
-
-	screenMesh->Draw();
 
 	glUseProgram(0);
 	glDisable(GL_STENCIL_TEST); // finished with the stencil for now

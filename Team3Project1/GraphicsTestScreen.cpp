@@ -71,7 +71,7 @@ void GraphicsTestScreen::LoadContent() {
 		T3Vector3(15,30,15));
 	gameEntities.push_back(ent);
 	AddDrawable(ent);
-
+	
 
 	ent = new DrawableEntity3D(
 		circle, 
@@ -97,10 +97,11 @@ void GraphicsTestScreen::LoadContent() {
 	gameEntities.push_back(ent);
 	AddDrawable(ent);
 	
-	AddSpotLight(T3Vector3(-10, 40, -10), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 45.0f, T3Vector4(1,0,0,1), T3Vector4(0,0,1,1), true);
-	AddSpotLight(T3Vector3(50, 40, 50), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 90.0f, T3Vector4(0.5,0.5,0.5,1), T3Vector4(0,0,1,1), true);
-	AddPointLight(T3Vector3(-50,60,-50), 500, T3Vector4(1,0,1,1), T3Vector4(0,0.5,0,1), true); 
-	AddPointLight(T3Vector3(50,60,50), 500, T3Vector4(0,1,0,1), T3Vector4(0,0.5,0,1), true); 
+	bool enableShadows = false;
+	AddSpotLight(T3Vector3(-10, 40, -10), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 45.0f, T3Vector4(1,0,0,1), T3Vector4(0,0,1,1), enableShadows);
+	AddSpotLight(T3Vector3(50, 40, 50), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 90.0f, T3Vector4(0.5,0.5,0.5,1), T3Vector4(0,0,1,1), enableShadows);
+	AddPointLight(T3Vector3(-50,60,-50), 500, T3Vector4(1,0,1,1), T3Vector4(0,0.5,0,1), enableShadows); 
+	AddPointLight(T3Vector3(50,60,50), 500, T3Vector4(0,1,0,1), T3Vector4(0,0.5,0,1), enableShadows); 
 	
 //	directionalLight = GameStateManager::Graphics()->AddDirectionalLight(T3Vector3(-1, -1, -1), T3Vector4(1,1,1,1), T3Vector4(0,0,0,1));
 
@@ -196,5 +197,5 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 	
 void GraphicsTestScreen::MouseMoved(T3Vector2& finish) {
 	camera->AddPitch(-finish.y);
-	camera->AddYaw(finish.x);
+	camera->AddYaw(-finish.x);
 }

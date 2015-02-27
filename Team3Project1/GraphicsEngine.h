@@ -138,6 +138,7 @@ public:
 	//static GraphicsEngine& GetGraphicsEngine() {return *engine;}
 
 	void EnableLoadingIcon(bool value) {isLoading = value;}
+	void EnableMousePointer(bool value);
 
 	// Debugging
 	void DrawDeferredLights(bool on);
@@ -191,6 +192,7 @@ private:
 	bool isLoading;
 	bool isLoadingDrawing;
 	DrawableTexture2D* loadingIcon;
+	Texture* loadingTexture;
 
 	const float RENDER_TIME;
 	float lastFrameTimeStamp;
