@@ -14,7 +14,8 @@ Renderer::Renderer(void)	{
 	std::cout <<"basic vert did something" << std::endl;
 	ShaderPart* basicFrag		= new ShaderPart("/fragment.fpo", ShaderType::FRAGMENT);
 	std::cout <<"basic frag did something" << std::endl;
-	Shader* s = new Shader();
+	//Shader* s = new Shader();
+	s = new Shader();
 	std::cout <<"shader did something" << std::endl;
 	s->SetVertex(basicVert);
 	s->SetFragment(basicFrag);
@@ -40,8 +41,8 @@ void Renderer::RenderScene() {
 	std::cout << "RenderScene!" << std::endl;
 	SetViewport();
 	ClearBuffer();
-	this->SetCurrentShader(shader);
-
+	//this->SetCurrentShader(shader);
+	this->SetCurrentShader(s);
 	cellGcmSetDepthTestEnable(CELL_GCM_TRUE);
 	cellGcmSetDepthFunc(CELL_GCM_LESS);
 
@@ -58,8 +59,8 @@ void Renderer::RenderScene() {
 		viewMatrix = Matrix4::identity();
 	}
 
-	shader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
-	
+	//shader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
+	s->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
 	if(root) {
 		DrawNode(root);
 	}

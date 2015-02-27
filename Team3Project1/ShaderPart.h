@@ -52,7 +52,8 @@ public:
 	unsigned int attributes[VertexAttributes::MAX];
 	CGprogram program;
 	void* ucode;
-	unsigned int offset;
+	//unsigned int offset;
+	uint32_t offset;
 	map<string, CGparameter> uniforms;
 	virtual void SetParameter(string name, float* data);
 	void UpdateShaderVariables();

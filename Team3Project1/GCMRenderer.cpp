@@ -296,10 +296,10 @@ while fragment shaders MUST be ran in graphics memory, and so its address
 must be 'offsettable'. 
 */
 void	GCMRenderer::SetCurrentShader(Shader* shader) {
-	
-
+	std::cout<<"GCMRenderer: setCurrentShader"<<std::endl;
 	cellGcmSetFragmentProgram(shader->GetFragment()->GetProgram(), shader->GetFragment()->GetOffset());
 	cellGcmSetVertexProgram(shader->GetVertex()->GetProgram(), shader->GetVertex()->GetuCode());
+	std::cout<<"GCMRenderer: got to the end of setCurrentShader"<<std::endl;
 }
 
 //Sets the camera. Can be NULL

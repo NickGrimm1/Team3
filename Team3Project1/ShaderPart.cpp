@@ -37,8 +37,8 @@ ShaderPart::ShaderPart(string raw, ShaderType::Type type) : type(type)
 #endif
 #if PS3_BUILD
 	std::cout <<"ShaderPart: got to first ps3 block" << std::endl;
-	string x = "/vertex.vpo";
-	string name = SYS_APP_HOME + x;
+	
+	string name = SYS_APP_HOME + raw;
 	std::cout <<"ShaderPart:made a string" << std::endl;
 	unsigned int dataSize = 0;
 	std::cout <<"ShaderPart: made an int" << std::endl; 
@@ -235,7 +235,7 @@ void	ShaderPart::UpdateShaderMatrices(Matrix4 &model,Matrix4 &view, Matrix4 &pro
 }
 #endif
 #if PS3_BUILD
-CGprogram ShaderPart::GetProgram(){return program;}
+CGprogram ShaderPart::GetProgram(){std::cout<<"ShaderPart: hello from getProgram"<<std::endl; return program;}
 
 unsigned int ShaderPart::GetOffset(){return offset;}
 

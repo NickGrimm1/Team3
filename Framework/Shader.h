@@ -18,7 +18,7 @@ _-_-_-_-_-_-_-""  ""
 #if WINDOWS_BUILD
 #include "OGLRenderer.h"
 #endif
-
+#include <iostream>
 namespace ShaderType
 {
 	enum Type
@@ -51,7 +51,7 @@ public:
 	void SetVertex(ShaderPart* value) { vertexShader = value; }
 	ShaderPart* GetVertex() { return vertexShader; }
 	void SetFragment(ShaderPart* value) { fragmentShader = value; }
-	ShaderPart* GetFragment() { return fragmentShader; }
+	ShaderPart* GetFragment() { std::cout<<"ShaderPart:Hello from getFragment"<<std::endl; return fragmentShader; }
 protected:
 #if WINDOWS_BUILD
 	GLuint program;
