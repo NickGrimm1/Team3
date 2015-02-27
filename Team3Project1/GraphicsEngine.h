@@ -152,6 +152,8 @@ private:
 
 	bool isInitialised;
 
+	float DayNightCycle();
+
 	void BuildNodeLists(SceneNode* from);
 	void SortNodeLists();
 	void ClearNodeLists();
@@ -199,4 +201,6 @@ private:
 	const float RENDER_TIME;
 	float lastFrameTimeStamp;
 	int frameRate;
+	int time;
+	bool inc;
 };
