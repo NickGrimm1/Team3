@@ -76,6 +76,8 @@ public:
 
 	void DrawDeferredLights(bool on) {drawDeferredLights = on;}
 
+	unsigned char* GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue);
+
 protected:
 
 	T3Matrix4			cameraMatrix; // Get camera matrix once at start of scene
@@ -105,7 +107,7 @@ protected:
 	bool			LoadCheck();
 	bool			ActiveTex();
 
-	void			CreateStaticMap(const int resolution); // Generate a static noise map that can be turned into Perlin noise.
+	void			CreateStaticMap(GLuint* target, const int resolution, unsigned char minValue, unsigned char maxValue); // Generate a static noise map that can be turned into Perlin noise.
 
 	//Member variables.
 	bool			activeTex;
@@ -128,6 +130,7 @@ protected:
 	Mesh*			coneMesh;			// A cone mesh for drawing deferred spot lights
 	Mesh*			circleMesh;			// A circle mesh for drawing deferred spot lights
 	Mesh*			skyDome;			// The top of a sphere - used as a 'hat' to wear a skybox :)
+	Mesh*			quadMesh;			// A quad mesh (0-1) for drawing 2D textures.
 
 	SceneNode*		root;
 	Camera*			camera;

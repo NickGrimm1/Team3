@@ -3,16 +3,17 @@
 
 PhysicsEngine* PhysicsEngine::instance = NULL;
 
-#define PHYSICS_HZ 1.0f / 120.0f
-
 void PhysicsEngine::Run()
 {
-
-
-	isRunning = true;
-	float msec = PHYSICS_HZ;
 	while (isRunning)
 	{
+#if WINDOWS_BUILD
+		while (Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp < PHYSICS_TIME) { ; } // Fix the timestep
+		float msec = Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp;
+		lastFrameTimeStamp = Window::GetWindow().GetTimer()->GetMS();
+#endif
+		frameRate = (int)(1000.0f / msec);
+
 		NarrowPhaseCollisions();
 
 		//narrowlist.clear();

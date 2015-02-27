@@ -91,9 +91,9 @@ public:
 
 	void Destroy() {
 		if (instance != NULL) {
-			graphics->Terminimumate();
-			physics->Terminimumate();
-			input->Terminimumate();
+			graphics->Terminate();
+			physics->Terminate();
+			input->Terminate();
 
 			// Clean up
 			graphics->Join();

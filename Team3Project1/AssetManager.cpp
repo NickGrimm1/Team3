@@ -2,6 +2,7 @@
 #include "../Framework/OBJMesh.h"
 #include "../Framework/MD5Mesh.h"
 #include "GameStateManager.h"
+#include "Heightmap.h"
 
 AssetManager* AssetManager::instance = NULL;
 
@@ -77,9 +78,17 @@ Texture* AssetManager::LoadTexture(void* callerID, string filePath, unsigned int
 		// Load this texture in...
 		GameStateManager::Graphics()->GetRenderContext();
 		Texture* newTexture = new Texture(filePath, flags);
+		if (newTexture->GetTextureName() == 0)
+		{
+			delete newTexture;
+			return NULL;
+		}
 		newTexture->SetRepeating(true);
 		GameStateManager::Graphics()->DropRenderContext();
 		loadedTextures.insert(pair<string, LoadedTexture>(filePath, LoadedTexture(newTexture, callerID)));
+
+		textureMemory += newTexture->GetMemoryUsage();
+
 		return newTexture;
 	}
 }
@@ -104,6 +113,8 @@ void AssetManager::UnloadTexture(void* callerID, string filePath)
 	// No owners left? delete
 	if (loadedTextures[filePath].callerIDs.size() == 0)
 	{
+		textureMemory -= loadedTextures[filePath].texture->GetMemoryUsage();
+
 		GameStateManager::Graphics()->GetRenderContext();
 		delete loadedTextures[filePath].texture;
 		GameStateManager::Graphics()->DropRenderContext();
@@ -148,6 +159,8 @@ Mesh* AssetManager::LoadMesh(void* callerID, string filePath)
 			return NULL; // Unrecognised fileType. OOOPS!!
 
 		loadedMeshes.insert(pair<string, LoadedMesh>(filePath, LoadedMesh(newMesh, callerID)));
+
+		meshMemory += newMesh->GetMemoryUsage();
 		return newMesh;
 	}
 }
@@ -172,6 +185,7 @@ void AssetManager::UnloadMesh(void* callerID, string filePath)
 	// No owners left? delete
 	if (loadedMeshes[filePath].callerIDs.size() == 0)
 	{
+		meshMemory -= loadedMeshes[filePath].mesh->GetMemoryUsage();
 		GameStateManager::Graphics()->GetRenderContext();
 		delete loadedMeshes[filePath].mesh;
 		GameStateManager::Graphics()->DropRenderContext();
@@ -820,5 +834,82 @@ void AssetManager::UnloadFont(void* callerID, string filePath)
 		UnloadTexture(loadedFonts[filePath].font, filePath);
 		GameStateManager::Graphics()->DropRenderContext();
 		i = loadedFonts.erase(i);
+	}
+}
+
+Mesh* AssetManager::LoadHeightmap(void* callerID, string filename, bool useTextureWeights)
+{
+	// Check if this mesh is already loaded
+	map<string, LoadedMesh>::iterator i = loadedMeshes.find(filename);
+	if (i != loadedMeshes.end())
+	{
+		// Check if this caller already has this mesh loaded
+		for (unsigned int j = 0; j < loadedMeshes[filename].callerIDs.size(); j++)
+		{
+			if (loadedMeshes[filename].callerIDs[j] == callerID)
+				return loadedMeshes[filename].mesh; // It has, simply return
+		}
+		loadedMeshes[filename].callerIDs.push_back(callerID); // It hasn't, add this caller, then return.
+		return loadedMeshes[filename].mesh;
+	}
+	else
+	{
+		// Load this mesh in...
+		GameStateManager::Graphics()->GetRenderContext();
+		loadedMeshes.insert(pair<string, LoadedMesh>(filename, LoadedMesh(new HeightMap(filename, useTextureWeights), callerID)));
+		GameStateManager::Graphics()->DropRenderContext();
+		meshMemory += loadedMeshes[filename].mesh->GetMemoryUsage();
+		return loadedMeshes[filename].mesh;
+	}
+}
+Mesh* AssetManager::LoadHeightmap(unsigned char minHeight, unsigned char maxHeight, bool useTextureWeights)
+{
+	GameStateManager::Graphics()->GetRenderContext();
+	Mesh* mesh = new HeightMap("", minHeight, maxHeight, useTextureWeights);
+	GameStateManager::Graphics()->DropRenderContext();
+	generatedHeightmaps.push_back(mesh);
+	meshMemory += mesh->GetMemoryUsage();
+	return mesh;
+}
+void AssetManager::UnloadHeightmap(void* callerID, string filename)
+{
+	// Check if this mesh is actually loaded...
+	map<string, LoadedMesh>::iterator i = loadedMeshes.find(filename);
+	if (i == loadedMeshes.end())
+		return; // This texture does not exist, ignore.
+
+	// This mesh does exist. Remove the caller from the list of owners.
+	for (vector<void*>::iterator i = loadedMeshes[filename].callerIDs.begin(); i != loadedMeshes[filename].callerIDs.end(); i++)
+	{
+		if (*i == callerID)
+		{
+			i = loadedMeshes[filename].callerIDs.erase(i);
+			break;
+		}
+	}
+
+	// No owners left? delete
+	if (loadedMeshes[filename].callerIDs.size() == 0)
+	{
+		meshMemory -= loadedMeshes[filename].mesh->GetMemoryUsage();
+		GameStateManager::Graphics()->GetRenderContext();
+		delete loadedMeshes[filename].mesh;
+		GameStateManager::Graphics()->DropRenderContext();
+		i = loadedMeshes.erase(i);
+	}
+}
+void AssetManager::UnloadHeightmap(Mesh* heightmap)
+{
+	// This font does exist. Remove the caller from the list of owners.
+	for (vector<Mesh*>::iterator i = generatedHeightmaps.begin(); i != generatedHeightmaps.end(); i++)
+	{
+		if (*i == heightmap)
+		{
+			GameStateManager::Graphics()->GetRenderContext();
+			delete *i;
+			GameStateManager::Graphics()->DropRenderContext();
+			i = generatedHeightmaps.erase(i);
+			break;
+		}
 	}
 }

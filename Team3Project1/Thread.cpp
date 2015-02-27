@@ -24,7 +24,7 @@ void Thread::Join() {
 	WaitForSingleObject(thread_handle, INFINITE);
 }
 
-void Thread::Terminimumate()
+void Thread::Terminate()
 {
 	isRunning = false;
 }

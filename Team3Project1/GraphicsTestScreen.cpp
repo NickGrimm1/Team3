@@ -33,7 +33,16 @@ void GraphicsTestScreen::LoadContent() {
 	circle = GameStateManager::Assets()->LoadCircle(this, 20);
 	Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.jpg", 0);
 	Texture* calvinTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", SOIL_FLAG_INVERT_Y);
+	Mesh* car = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
 
+#ifdef WINDOWS_BUILD
+	cout << "GraphicsTestScreen-Quad: " << quad->GetArrayObject() << ", " << quad->GetBufferObject() << endl;
+	cout << "GraphicsTestScreen-Cylinder: " << cylinder->GetArrayObject() << ", " << cylinder->GetBufferObject() << endl;
+	cout << "GraphicsTestScreen-circle: " << circle->GetArrayObject() << ", " << circle->GetBufferObject() << endl;
+	cout << "GraphicsTestScreen-grass: " << grassTex->GetTextureName() << endl;
+	cout << "GraphicsTestScreen-calvin: " << calvinTex->GetTextureName() << endl;
+#endif
+	
 	DrawableEntity3D* ent;
 	for (unsigned int i = 0; i < 8; i++) {
 		for (unsigned int j = 0; j < 8; j++) {
@@ -62,7 +71,7 @@ void GraphicsTestScreen::LoadContent() {
 		T3Vector3(15,30,15));
 	gameEntities.push_back(ent);
 	AddDrawable(ent);
-
+	
 
 	ent = new DrawableEntity3D(
 		circle, 
@@ -76,9 +85,8 @@ void GraphicsTestScreen::LoadContent() {
 	gameEntities.push_back(ent);
 	AddDrawable(ent);
 
-	Mesh* car = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
 	ent = new DrawableEntity3D(
-		GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj"),
+		car,
 		NULL,
 		NULL,
 		NULL,
@@ -89,11 +97,11 @@ void GraphicsTestScreen::LoadContent() {
 	gameEntities.push_back(ent);
 	AddDrawable(ent);
 	
-	
-	AddSpotLight(T3Vector3(-10, 40, -10), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 45.0f, T3Vector4(1,0,0,1), T3Vector4(0,0,1,1), false);
-	AddSpotLight(T3Vector3(50, 40, 50), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 90.0f, T3Vector4(0.5,0.5,0.5,1), T3Vector4(0,0,1,1), false);
-	AddPointLight(T3Vector3(-50,60,-50), 500, T3Vector4(1,0,1,1), T3Vector4(0,0.5,0,1), false); 
-	AddPointLight(T3Vector3(50,60,50), 500, T3Vector4(0,1,0,1), T3Vector4(0,0.5,0,1), false); 
+	bool enableShadows = false;
+	//AddSpotLight(T3Vector3(-10, 40, -10), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 45.0f, T3Vector4(1,0,0,1), T3Vector4(0,0,1,1), enableShadows);
+	//AddSpotLight(T3Vector3(50, 40, 50), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 90.0f, T3Vector4(0.5,0.5,0.5,1), T3Vector4(0,0,1,1), enableShadows);
+	//AddPointLight(T3Vector3(-50,60,-50), 500, T3Vector4(1,0,1,1), T3Vector4(0,0.5,0,1), enableShadows); 
+	//AddPointLight(T3Vector3(50,60,50), 500, T3Vector4(0,1,0,1), T3Vector4(0,0.5,0,1), enableShadows); 
 	
 //	directionalLight = GameStateManager::Graphics()->AddDirectionalLight(T3Vector3(-1, -1, -1), T3Vector4(1,1,1,1), T3Vector4(0,0,0,1));
 
@@ -128,6 +136,8 @@ void GraphicsTestScreen::UnloadContent()
 void GraphicsTestScreen::Update() { 
 	//T3Matrix4 m = T3Matrix4::Rotation(0.016f, T3Vector3(0,1,0));
 	//ent->AddRotation(Quaternion::FromMatrix(m));
+
+	//GameStateManager::Assets()->LoadHeightmap(true);
 }
 
 void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
@@ -173,14 +183,13 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 		case KeyboardEvents::KEYBOARD_E:
 			camera->AddRoll(1);
 			break;
-		case KeyboardEvents::KEYBOARD_1:
-		GameStateManager::Graphics()->DrawDeferredLights(drawDeferredLights = !drawDeferredLights);
-		break;
 		}
 		break;
 	case KeyboardEvents::KEY_PRESS:
 		switch (key) {
-
+		case KeyboardEvents::KEYBOARD_1:
+			GameStateManager::Graphics()->DrawDeferredLights(drawDeferredLights = !drawDeferredLights);
+			break;
 		case KeyboardEvents::KEYBOARD_ESCAPE:
 			GameStateManager::Instance()->Exit();
 			break;

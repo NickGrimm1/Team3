@@ -70,16 +70,16 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, width, height, 0, GL_RG, GL_HALF_FLOAT, 0);
 
 	// Generate Sky Buffer & initial static map.
-	//glGenTextures(1, &skyColourBuffer);
-	//glBindTexture(GL_TEXTURE_2D, skyColourBuffer);
-	//glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_NEAREST );
-	//glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST );
-	//glTexImage2D ( GL_TEXTURE_2D , 0, GL_RGBA8 , width , height , 0, GL_RGBA , GL_UNSIGNED_BYTE , NULL );
-	//glGenFramebuffers(1, &skyBufferFBO);
-	//glBindFramebuffer(GL_FRAMEBUFFER, skyBufferFBO);
-	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer, 0);
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	//CreateStaticMap(128);
+	glGenTextures(1, &skyColourBuffer);
+	glBindTexture(GL_TEXTURE_2D, skyColourBuffer);
+	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_NEAREST );
+	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST );
+	glTexImage2D ( GL_TEXTURE_2D , 0, GL_RGBA8 , width , height , 0, GL_RGBA , GL_UNSIGNED_BYTE , NULL );
+	glGenFramebuffers(1, &skyBufferFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, skyBufferFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	CreateStaticMap(&cloudMap, 128, 0, 255);
 
 	samples[0] = 1.5f;
 	samples[1] = 2.0f;
@@ -252,6 +252,7 @@ bool Renderer::LoadAssets() {
 	sphereMesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
 	coneMesh = GameStateManager::Assets()->LoadCone(this, 20); // Cone for spotlight rendering
 	skyDome = GameStateManager::Assets()->LoadMesh(this, MESHDIR"dome.obj"); // Skydome
+	quadMesh = GameStateManager::Assets()->LoadQuadAlt(this);
 	
 	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh) {
 		cout << "Renderer::LoadAssets() - unable to load rendering assets";
@@ -267,6 +268,7 @@ void Renderer::UnloadAssets() {
 	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
 	GameStateManager::Assets()->UnloadCone(this, 20); // Cone for spotlight rendering
 	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"dome.obj"); // Skydome
+	GameStateManager::Assets()->UnloadQuadAlt(this);
 }
 
 Renderer::~Renderer(void)
@@ -696,7 +698,7 @@ void Renderer::CombineBuffers() {// merge scene render with lighting pass
 	screenMesh->Draw(); // Render scene
 	glStencilMask(GL_TRUE);
 
-//	DrawSkybox(); // Finally, draw the skybox
+	DrawSkybox(); // Finally, draw the skybox
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, 0, 0); // Stencil buffer from the first pass render
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glEnable(GL_DEPTH_TEST);
@@ -706,14 +708,16 @@ void Renderer::CombineBuffers() {// merge scene render with lighting pass
 void Renderer::DrawSkybox() { 
 	// Generate clouds - captures perlin noise to texture.
 	glBindFramebuffer(GL_FRAMEBUFFER, skyBufferFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	SetCurrentShader(cloudShader);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex0"), GL_TEXTURE0);
-	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), Window::GetWindow().GetTimer()->GetMS() * 000001.0f);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), Window::GetWindow().GetTimer()->GetMS() / 100000.0f);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, cloudMap);
 	screenMesh->Draw();
 	glUseProgram(GL_NONE);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, GL_NONE);
 	
 	// Draw skybox only where screen has not previously been written to
@@ -723,6 +727,7 @@ void Renderer::DrawSkybox() {
 	
 
 	glDisable(GL_CULL_FACE);
+	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
 	SetCurrentShader(skyBoxShader);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex0"), GL_TEXTURE0);
 	glActiveTexture(GL_TEXTURE0);
@@ -736,11 +741,6 @@ void Renderer::DrawSkybox() {
 	modelMatrix = T3Matrix4::Translation(T3Vector3(camera->GetPosition().x, camera->GetPosition().y - 25, camera->GetPosition().z)) * T3Matrix4::Scale(T3Vector3(100, 100, 100));
 	UpdateShaderMatrices();
 
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "cubeTex"), SKYBOX_TEXTURE_UNIT);
-	glActiveTexture(GL_TEXTURE0 + SKYBOX_TEXTURE_UNIT);
-	glBindTexture(GL_TEXTURE_2D , skyBoxTex);
-
-	screenMesh->Draw();
 
 	glUseProgram(0);
 	glDisable(GL_STENCIL_TEST); // finished with the stencil for now
@@ -1035,10 +1035,11 @@ void Renderer::Draw2DText(DrawableText2D& text) {
 	delete textMesh;
 }
 
-void Renderer::Draw2DTexture(DrawableTexture2D& texture) {
-	T3Vector3 origin = T3Vector3(texture.GetOrigin().x * texture.width, texture.GetOrigin().y * texture.height, 0);
-	T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(texture.GetRotation(), T3Vector3(0,0,-1)) * T3Matrix4::Translation(origin * -1.0f);
-	modelMatrix = T3Matrix4::Translation(T3Vector3(texture.x, height - texture.y, 0)) * rotation * T3Matrix4::Scale(T3Vector3(texture.width, texture.height, 1));
+void Renderer::Draw2DTexture(DrawableTexture2D& texture) 
+{
+	T3Vector3 origin = T3Vector3(texture.GetOrigin().x * texture.width * SCREEN_WIDTH, texture.GetOrigin().y * texture.height * SCREEN_HEIGHT, 0);
+	T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(texture.GetRotation(), T3Vector3(0,0,-1)) * T3Matrix4::Translation(-origin);
+	modelMatrix = T3Matrix4::Translation(T3Vector3(texture.x, texture.height - texture.y, 0))/* * rotation */* T3Matrix4::Scale(T3Vector3(texture.width * SCREEN_WIDTH, texture.height * SCREEN_HEIGHT, 1));
 	textureMatrix.ToIdentity();	
 	UpdateShaderMatrices();
 
@@ -1046,7 +1047,7 @@ void Renderer::Draw2DTexture(DrawableTexture2D& texture) {
 	glBindTexture(GL_TEXTURE_2D, texture.GetTexture()->GetTextureName());
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 
-	screenMesh->Draw();
+	quadMesh->Draw();
 }
 
 void Renderer::GenerateScreenTexture(GLuint &into, bool depth)
@@ -1169,16 +1170,16 @@ bool Renderer::DropRenderContextForThread() {
 	return result;
 }
 
-void Renderer::CreateStaticMap(const int resolution)
+void Renderer::CreateStaticMap(GLuint* target, const int resolution, unsigned char minValue, unsigned char maxValue)
 {
 	float* colors = new float[resolution * resolution];
 	for (int x = 0; x < resolution; x++)
 		for (int y = 0; y < resolution; y++)
-			colors[x + y * resolution] = rand() % 1000 / 1000.0f;
+			colors[x + y * resolution] = (rand() % (maxValue - minValue) + minValue) / (float)maxValue;
 
-	glGenTextures(1, &cloudMap);
+	glGenTextures(1, target);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, cloudMap);
+	glBindTexture(GL_TEXTURE_2D, *target);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
@@ -1187,4 +1188,71 @@ void Renderer::CreateStaticMap(const int resolution)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, resolution, resolution, 0, GL_RED, GL_FLOAT, colors);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue)
+{
+	GLuint staticMap;
+	GLuint texture;
+	GLuint FBO;
+
+	CreateStaticMap(&staticMap, resolution, minValue, maxValue);
+
+	GLenum x = glGetError();
+	// Draw for perlin noise.
+	glGenTextures(1, &texture);
+	x = glGetError();
+	glBindTexture(GL_TEXTURE_2D, texture);
+	x = glGetError();
+	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_NEAREST );
+	x = glGetError();
+	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST );
+	x = glGetError();
+	glTexImage2D ( GL_TEXTURE_2D , 0, GL_RGBA8 , resolution , resolution , 0, GL_RGBA , GL_UNSIGNED_BYTE , NULL );
+	x = glGetError();
+	glGenFramebuffers(1, &FBO);
+	x = glGetError();
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+	x = glGetError();
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+	x = glGetError();
+	glClear(GL_COLOR_BUFFER_BIT);
+	x = glGetError();
+	SetCurrentShader(cloudShader);
+	x = glGetError();
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex0"), GL_TEXTURE0);
+	x = glGetError();
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), 0.0f);
+	x = glGetError();
+	glActiveTexture(GL_TEXTURE0);
+	x = glGetError();
+	glBindTexture(GL_TEXTURE_2D, staticMap);
+	x = glGetError();
+	screenMesh->Draw();
+	glUseProgram(GL_NONE);
+	x = glGetError();
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
+	x = glGetError();
+	glBindFramebuffer(GL_FRAMEBUFFER, GL_NONE);
+	x = glGetError();
+
+	
+	// Extract the data from the texture.
+	float* data = new float[resolution * resolution * 4];
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, FBO);
+	glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+	GLenum y = glCheckFramebufferStatus(GL_READ_FRAMEBUFFER);
+	x = glGetError();
+	glReadBuffer(GL_COLOR_ATTACHMENT0);
+	x = glGetError();
+	glReadPixels(0, 0, resolution, resolution, GL_RGBA, GL_FLOAT, data);
+	x = glGetError();
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, GL_NONE);
+	x = glGetError();
+
+	unsigned char* output = new unsigned char[resolution * resolution];
+	for (int i = 0; i < resolution * resolution; ++i)
+		output[i] = data[i * 4];
+
+	return output;
 }

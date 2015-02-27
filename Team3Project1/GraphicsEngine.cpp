@@ -1,5 +1,7 @@
 #include "GraphicsEngine.h"
 #include "GraphicsCommon.h"
+#include "../Framework/T3Vector2.h"
+#include "../Framework/T3Vector4.h"
 #include <algorithm>
 #if WINDOWS_BUILD
 GraphicsEngine* GraphicsEngine::engine = NULL;
@@ -28,10 +30,13 @@ bool GraphicsEngine::Destroy() {
 	return true;
 }
 
-GraphicsEngine::GraphicsEngine() {
+GraphicsEngine::GraphicsEngine() 
+	: RENDER_TIME(1000.0f / 60)
+{
 	isInitialised = false;
 	width = SCREEN_WIDTH;
 	height = SCREEN_HEIGHT;
+	frameRate = 0;
 
 	if (!Window::Initialise(GAME_TITLE, width, height, false)) return;
 	
@@ -41,16 +46,17 @@ GraphicsEngine::GraphicsEngine() {
 	renderer = new Renderer(Window::GetWindow(), lights, gameEntityList, overlayElementsList);
 	if (!renderer->HasInitialised()) return;
 	
-	GLuint loadingTex = renderer->CreateTexture(TEXTUREDIR"refresh2.png", false, false);
+	GLuint loadingTex = renderer->CreateTexture(TEXTUREDIR"refresh.png", false, false);
 	isLoading = true;
 	isLoadingDrawing = false;
+	loadingTexture = new Texture(loadingTex);
 	loadingIcon = new DrawableTexture2D(
 		width - 45,
 		height - 65,
 		1,
 		25,
 		25,
-		new Texture(loadingTex),
+		loadingTexture,
 		0,
 		T3Vector2(),
 		T3Vector4(1, 1, 1, 1.0));
@@ -63,6 +69,9 @@ GraphicsEngine::~GraphicsEngine() {
 	// Delete local array data - if not handled elsewhere
 
 	// Fin
+	renderer->DestroyTexture(loadingTexture->GetTextureName());
+	delete loadingTexture;
+	delete loadingIcon;
 	delete renderer;
 	Window::Destroy();
 }
@@ -71,6 +80,11 @@ void GraphicsEngine::Run() {
 	isRunning = true;
 	
 	while (isRunning) {
+
+		while (Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp < RENDER_TIME) { ; } // Fix the timestep
+		float msec = Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp;
+		lastFrameTimeStamp = Window::GetWindow().GetTimer()->GetMS();
+		frameRate = (int)(1000.0f / msec);
 
 		// add/remove requested items from scene lists
 		contentGuard.lock_mutex();
@@ -129,7 +143,7 @@ void GraphicsEngine::Run() {
 		contentGuard.unlock_mutex();
 			
 		// Update data in scene nodes
-		sceneRoot->Update(1.0f / RENDER_HZ); // TODO - sort out proper timestep value - or remove timestep if not needed
+		sceneRoot->Update(msec); // TODO - sort out proper timestep value - or remove timestep if not needed
 		
 		// Reset scene bounding box volume
 		boundingMax = T3Vector3(0,0,0);
@@ -326,4 +340,8 @@ void GraphicsEngine::UnloadContent()
 
 void GraphicsEngine::DrawDeferredLights(bool on) {renderer->DrawDeferredLights(on);}
 
+unsigned char* GraphicsEngine::GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue)
+{
+	return renderer->GeneratePerlinNoise(resolution, minValue, maxValue);
+}
 #endif
