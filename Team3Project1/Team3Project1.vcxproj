@@ -417,12 +417,16 @@
     <None Include="..\Resources\Shaders\DownSampleFragment.glsl" />
     <None Include="..\Resources\Shaders\MainFragShader.glsl" />
     <None Include="..\Resources\Shaders\MainVertShader.glsl" />
+    <None Include="..\Resources\Shaders\PassThroughVertex.glsl" />
+    <None Include="..\Resources\Shaders\PerlinFragment.glsl" />
     <None Include="..\Resources\Shaders\PointToCircleGeom.glsl" />
     <None Include="..\Resources\Shaders\PointToQuadGeom.glsl" />
     <None Include="..\Resources\Shaders\ShadowFragment.glsl" />
     <None Include="..\Resources\Shaders\ShadowVertex.glsl" />
     <None Include="..\Resources\Shaders\SkyBoxFragment.glsl" />
     <None Include="..\Resources\Shaders\SkyBoxVertex.glsl" />
+    <None Include="..\Resources\Shaders\SkyDomeFragment.glsl" />
+    <None Include="..\Resources\Shaders\SkyDomeVertex.glsl" />
     <None Include="..\Resources\Shaders\TexturedFragment.glsl" />
     <None Include="..\Resources\Shaders\TexturedVertex.glsl" />
     <None Include="..\Resources\Shaders\VelocityFragment.glsl" />

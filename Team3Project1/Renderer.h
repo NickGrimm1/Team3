@@ -164,9 +164,10 @@ protected:
 	GLuint			postProcessingFBO;
 	GLuint			deferredLightingFBO;
 	GLuint			shadowFBO;
-	GLuint			skyColourBuffer; //The buffer for holding the clous texture.
+	GLuint			skyColourBuffer[2]; //The buffer for holding the clous texture.
 	GLuint			skyBufferFBO;
 	
+	GLuint			nightSkyTex;
 	GLuint			cloudMap;	// The texture for holding the static map the clouds are generated from.
 	GLuint			gbufferColourTex;
 	GLuint			gbufferDepthTex;
