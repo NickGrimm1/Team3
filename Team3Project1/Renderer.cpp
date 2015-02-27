@@ -306,19 +306,19 @@ void Renderer::RenderScene() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	cameraMatrix = camera->BuildViewMatrix();
 
-	// Main Render
+	//Main Render
 	ShadowPass();
 	DrawScene();
 	DeferredLightPass();
 	CombineBuffers();
 
-	// Post-Processing
+	//Post-Processing
 	BloomPass();
 	MotionBlurPass();
 
 	DrawFrameBufferTex(postProcessingTex[0]);
 
-	// Draw HUD/Menu overlay
+	//Draw HUD/Menu overlay
 	Draw2DOverlay();
 
 	SwapBuffers();
