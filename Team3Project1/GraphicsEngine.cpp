@@ -50,15 +50,16 @@ GraphicsEngine::GraphicsEngine()
 	isLoading = true;
 	isLoadingDrawing = false;
 	loadingTexture = new Texture(loadingTex);
+	float aspect = (float) width / (float) height;
 	loadingIcon = new DrawableTexture2D(
-		width - 45,
-		height - 65,
+		0.95f,
+		1.0f - 0.05f * aspect,
 		1,
-		25,
-		25,
+		0.05f,
+		0.05f * aspect,
 		loadingTexture,
 		0,
-		T3Vector2(),
+		T3Vector2(0.5f, 0.5f),
 		T3Vector4(1, 1, 1, 1.0));
 
 	isInitialised = true; // Graphics Engine has initialised successfully

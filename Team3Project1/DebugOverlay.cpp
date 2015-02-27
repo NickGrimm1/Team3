@@ -12,9 +12,9 @@ DebugOverlay::~DebugOverlay()
 void DebugOverlay::LoadContent()
 {
 	Font* font = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"tahoma.tga", 16, 16);
-
+	
 	AddDrawable(new DrawableTexture2D(0, 0, -1, 1, 1, GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"TitleSafeArea.png", SOIL_FLAG_INVERT_Y), 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1.0f, 0.0f, 0.0f, 0.25f)));
-
+	
 	AddDrawable(new DrawableText2D(120, 72, 1, 200, 20, "Frame Rates: ", font)); 
 	AddDrawable(new DrawableText2D(140, 92, 1, 180, 20, "  Render: ", font)); 
 	AddDrawable(new DrawableText2D(140, 112, 1, 180, 20, "  Physics: ", font)); 
@@ -54,4 +54,5 @@ void DebugOverlay::Update()
 void DebugOverlay::UnloadContent()
 {
 	GameStateManager::Assets()->UnloadFont(this, TEXTUREDIR"tahoma.tga");
+	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"TitleSafeArea.png");
 }

@@ -35,7 +35,8 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	// Setup projection matrices - gonna just keep copies of the matrices rather than keep recreating them
 	perspectiveMatrix = T3Matrix4::Perspective(1.0f, 10000.0f, (float) width / (float) height, 45.0f);
 	orthographicMatrix = T3Matrix4::Orthographic(-1,1,1,-1,1,-1); // for drawing full screen quads
-	hudMatrix = T3Matrix4::Orthographic(-1.0f,1.0f,(float)width, 0.0f,(float)height, 0.0f); // For HUD Elements only
+	hudMatrix = T3Matrix4::Orthographic(-1.0f,1.0f,(float)width, 0.0f, 0.0f, (float)height); // For HUD Elements only
+	//hudMatrix = T3Matrix4::Orthographic(-1.0f,1.0f,(float)width, 0.0f, (float)height, 0.0f); // For HUD Elements only
 	
 	//Creation of buffers.
 	GenerateScreenTexture(gbufferNormalTex);
@@ -992,7 +993,8 @@ void Renderer::DrawFrameBufferTex(GLuint fboTex) {
 void Renderer::Draw2DOverlay() {
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
-	
+
+	glCullFace(GL_FRONT);
 	SetCurrentShader(hudShader);
 	projMatrix = hudMatrix;
 	viewMatrix.ToIdentity();
@@ -1016,14 +1018,15 @@ void Renderer::Draw2DOverlay() {
 	glUseProgram(0);
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
+	glCullFace(GL_BACK);
 }
 
 void Renderer::Draw2DText(DrawableText2D& text) {
 	TextMesh* textMesh = new TextMesh(text.GetText(), *text.GetFont());
 	
-	T3Vector3 origin = T3Vector3(text.GetOrigin().x * text.width, text.GetOrigin().y * text.height, 0);
-	T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(text.GetRotation(), T3Vector3(0,0,-1)) * T3Matrix4::Translation(origin * -1.0f);
-	modelMatrix = T3Matrix4::Translation(T3Vector3(text.x, height - text.y, 0)) * rotation * T3Matrix4::Scale(T3Vector3(text.width / (float) text.GetText().length(), text.height, 1));
+	T3Vector3 origin = T3Vector3(text.GetOrigin().x * text.width * width, text.GetOrigin().y * text.height * height, 0);
+	T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(text.GetRotation(), T3Vector3(0,0,1)) * T3Matrix4::Translation(origin * -1.0f);
+	modelMatrix = T3Matrix4::Translation(T3Vector3(text.x * width, text.y * height, 0)) * rotation * T3Matrix4::Scale(T3Vector3(width * text.width / (float) text.GetText().length(), height * text.height, 1));
 	textureMatrix.ToIdentity();	
 	UpdateShaderMatrices();
 
@@ -1037,9 +1040,10 @@ void Renderer::Draw2DText(DrawableText2D& text) {
 
 void Renderer::Draw2DTexture(DrawableTexture2D& texture) 
 {
-	T3Vector3 origin = T3Vector3(texture.GetOrigin().x * texture.width * SCREEN_WIDTH, texture.GetOrigin().y * texture.height * SCREEN_HEIGHT, 0);
-	T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(texture.GetRotation(), T3Vector3(0,0,-1)) * T3Matrix4::Translation(-origin);
-	modelMatrix = T3Matrix4::Translation(T3Vector3(texture.x, texture.height - texture.y, 0))/* * rotation */* T3Matrix4::Scale(T3Vector3(texture.width * SCREEN_WIDTH, texture.height * SCREEN_HEIGHT, 1));
+	T3Vector3 origin = T3Vector3(texture.GetOrigin().x * texture.width * width, texture.GetOrigin().y * texture.height * height, 0);
+	T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(texture.GetRotation(), T3Vector3(0,0,1)) * T3Matrix4::Translation(-origin);
+	
+	modelMatrix = T3Matrix4::Translation(T3Vector3(texture.x * width, texture.y * height, 0)) * rotation * T3Matrix4::Scale(T3Vector3(texture.width * width, texture.height * height, 1));
 	textureMatrix.ToIdentity();	
 	UpdateShaderMatrices();
 
