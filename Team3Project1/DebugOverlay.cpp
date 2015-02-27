@@ -18,31 +18,31 @@ void DebugOverlay::LoadContent()
 	float charWidth = 0.0125f;
 	float charHeight = 0.03f;
 	AddDrawable(new DrawableText2D(0, 0, 1,		13 * charWidth, charHeight, "Frame Rates: ", font)); 
-	AddDrawable(new DrawableText2D(0, 0.03, 1,	11 * charWidth, charHeight, "  Render: ", font)); 
-	AddDrawable(new DrawableText2D(0, 0.06, 1,	12 * charWidth, charHeight, "  Physics: ", font)); 
-	AddDrawable(new DrawableText2D(0, 0.09, 1,	10 * charWidth, charHeight, "  Input: ", font));
-	AddDrawable(new DrawableText2D(0, 0.12, 1,	18 * charWidth, charHeight, "Asset Management: ", font));
-	AddDrawable(new DrawableText2D(0, 0.15, 1,	23 * charWidth, charHeight, "  Total Memory Usage: ", font));
-	AddDrawable(new DrawableText2D(0, 0.18, 1,  12 * charWidth, charHeight, "  Textures: ", font));
-	AddDrawable(new DrawableText2D(0, 0.21, 1,  10 * charWidth, charHeight, "  Meshes: ", font));
+	AddDrawable(new DrawableText2D(0, 0.03f, 1,	11 * charWidth, charHeight, "  Render: ", font)); 
+	AddDrawable(new DrawableText2D(0, 0.06f, 1,	12 * charWidth, charHeight, "  Physics: ", font)); 
+	AddDrawable(new DrawableText2D(0, 0.09f, 1,	10 * charWidth, charHeight, "  Input: ", font));
+	AddDrawable(new DrawableText2D(0, 0.12f, 1,	18 * charWidth, charHeight, "Asset Management: ", font));
+	AddDrawable(new DrawableText2D(0, 0.15f, 1,	23 * charWidth, charHeight, "  Total Memory Usage: ", font));
+	AddDrawable(new DrawableText2D(0, 0.18f, 1,  12 * charWidth, charHeight, "  Textures: ", font));
+	AddDrawable(new DrawableText2D(0, 0.21f, 1,  10 * charWidth, charHeight, "  Meshes: ", font));
 
-	renderFrameRate = new DrawableText2D(11 * charWidth, 0.03, 1, 2 * charWidth, charHeight, "0", font);
-	physicsFrameRate = new DrawableText2D(12 * charWidth, 0.06, 1, 3 * charWidth, charHeight, "0", font);
-	inputFrameRate = new DrawableText2D(10 * charWidth, 0.09, 1, 2 * charWidth, charHeight, "0", font);
+	renderFrameRate = new DrawableText2D(11 * charWidth, 0.03f, 1, 2 * charWidth, charHeight, "0", font);
+	physicsFrameRate = new DrawableText2D(12 * charWidth, 0.06f, 1, 3 * charWidth, charHeight, "0", font);
+	inputFrameRate = new DrawableText2D(10 * charWidth, 0.09f, 1, 2 * charWidth, charHeight, "0", font);
 	AddDrawable(renderFrameRate);
 	AddDrawable(physicsFrameRate);
 	AddDrawable(inputFrameRate);
 
-	totalMemory = new DrawableText2D(23 * charWidth, 0.15, 1, 3 * charWidth, charHeight, "0", font);
-	textureMemory = new DrawableText2D(12 * charWidth, 0.18, 1, 3 * charWidth, charHeight, "0", font);
-	meshMemory = new DrawableText2D(10 * charWidth, 0.21, 1, 3 * charWidth, charHeight, "0", font);
+	totalMemory = new DrawableText2D(23 * charWidth, 0.15f, 1, 3 * charWidth, charHeight, "0", font);
+	textureMemory = new DrawableText2D(12 * charWidth, 0.18f, 1, 3 * charWidth, charHeight, "0", font);
+	meshMemory = new DrawableText2D(10 * charWidth, 0.21f, 1, 3 * charWidth, charHeight, "0", font);
 	AddDrawable(totalMemory);
 	AddDrawable(textureMemory);
 	AddDrawable(meshMemory);
 
-	AddDrawable(new DrawableText2D(26 * charWidth, 0.16, 1, 2 * charWidth, 0.02, "MB", font));
-	AddDrawable(new DrawableText2D(15 * charWidth, 0.19, 1, 2 * charWidth, 0.02, "MB", font));
-	AddDrawable(new DrawableText2D(13 * charWidth, 0.22, 1, 2 * charWidth, 0.02, "MB", font));
+	AddDrawable(new DrawableText2D(26 * charWidth, 0.16f, 1, 2 * charWidth, 0.02f, "MB", font));
+	AddDrawable(new DrawableText2D(15 * charWidth, 0.19f, 1, 2 * charWidth, 0.02f, "MB", font));
+	AddDrawable(new DrawableText2D(13 * charWidth, 0.22f, 1, 2 * charWidth, 0.02f, "MB", font));
 }
 void DebugOverlay::Update()
 {

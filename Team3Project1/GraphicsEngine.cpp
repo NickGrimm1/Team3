@@ -115,7 +115,7 @@ void GraphicsEngine::Run() {
 		addHudList.clear();
 
 		for (unsigned int i = 0; i < removeHudList.size(); i++) {
-			for (auto j = overlayElementsList.begin(); j != overlayElementsList.end(); ++j) {
+			for (vector<DrawableEntity2D*>::iterator j = overlayElementsList.begin(); j != overlayElementsList.end(); ++j) {
 				if ((*j) == removeHudList[i]) {
 					overlayElementsList.erase(j);
 				}
@@ -130,7 +130,7 @@ void GraphicsEngine::Run() {
 
 		// Add/Remove lights
 		for (unsigned int l = 0; l < removeLightsList.size(); l++) {
-			for (auto i = lights.begin(); i != lights.end(); ++i) {
+			for (vector<Light*>::iterator i = lights.begin(); i != lights.end(); ++i) {
 				if ((*i) == removeLightsList[l]) {
 					unsigned int shadowTex = (*i)->GetShadowTexture();
 					if (shadowTex > 0) 
