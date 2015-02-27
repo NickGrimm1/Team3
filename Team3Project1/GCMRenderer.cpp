@@ -12,7 +12,7 @@ GCMRenderer::GCMRenderer(void)	{
 
 	camera	= NULL;
 	root	= NULL;
-
+	shader = new Shader;
 	InitDisplay();
 	InitSurfaces();
 	texture = (GCMRenderer::LoadGTF("/ncl.gtf"));

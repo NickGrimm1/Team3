@@ -17,9 +17,9 @@ Renderer::Renderer(void)	{
 	//Shader* s = new Shader();
 	s = new Shader();
 	std::cout <<"shader did something" << std::endl;
-	s->SetVertex(basicVert);
-	s->SetFragment(basicFrag);
-	this->SetCurrentShader(s);
+	shader->SetVertex(basicVert);
+	shader->SetFragment(basicFrag);
+	this->SetCurrentShader(shader);
 
 	/*
 	Projection matrix...0.7853982 is 45 degrees in radians.
@@ -42,7 +42,7 @@ void Renderer::RenderScene() {
 	SetViewport();
 	ClearBuffer();
 	//this->SetCurrentShader(shader);
-	this->SetCurrentShader(s);
+	this->SetCurrentShader(shader);
 	cellGcmSetDepthTestEnable(CELL_GCM_TRUE);
 	cellGcmSetDepthFunc(CELL_GCM_LESS);
 
@@ -60,7 +60,7 @@ void Renderer::RenderScene() {
 	}
 
 	//shader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
-	s->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
+	shader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
 	if(root) {
 		DrawNode(root);
 	}
