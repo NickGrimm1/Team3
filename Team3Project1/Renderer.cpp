@@ -71,16 +71,13 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, width, height, 0, GL_RG, GL_HALF_FLOAT, 0);
 
 	// Generate Sky Buffer & initial static map.
-	glGenTextures(1, &skyColourBuffer);
-	glBindTexture(GL_TEXTURE_2D, skyColourBuffer);
-	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_NEAREST );
-	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST );
-	glTexImage2D ( GL_TEXTURE_2D , 0, GL_RGBA8 , width , height , 0, GL_RGBA , GL_UNSIGNED_BYTE , NULL );
-	glGenFramebuffers(1, &skyBufferFBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, skyBufferFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer, 0);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	CreateStaticMap(&cloudMap, 128, 0, 255);
+	for (int i = 0; i < 2; ++i) {
+		glGenTextures(1, &skyColourBuffer[i]);
+		glBindTexture(GL_TEXTURE_2D, skyColourBuffer[i]);
+		glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_NEAREST );
+		glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST );
+		glTexImage2D ( GL_TEXTURE_2D , 0, GL_RGBA8 , width , height , 0, GL_RGBA , GL_UNSIGNED_BYTE , NULL );
+	}
 
 	samples[0] = 1.5f;
 	samples[1] = 2.0f;
@@ -114,11 +111,17 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glGenFramebuffers(1, &postProcessingFBO);	//PP in this.
 	glGenFramebuffers(1, &shadowFBO);			//Shadow pre-render in this one.
 	glGenFramebuffers(1, &deferredLightingFBO);	//Deferred lighting in this FBO.
+	glGenFramebuffers(1, &skyBufferFBO);
 
 	GLenum buffers[3];
 	buffers[0] = GL_COLOR_ATTACHMENT0;
 	buffers[1] = GL_COLOR_ATTACHMENT1;
 	buffers[2] = GL_COLOR_ATTACHMENT2;
+
+	glBindFramebuffer(GL_FRAMEBUFFER, skyBufferFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer[0], 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	
 
 	glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufferColourTex, 0);
@@ -174,6 +177,11 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); // cube sampling
+
+	CreateStaticMap(&cloudMap, 128, 0, 255);
+	//CreateStaticMap(&cloudMap, 128, 1, 1000);
+
+
 
 	glClearColor(0, 0, 0, 1);
 	SwapBuffers();
@@ -254,7 +262,9 @@ bool Renderer::LoadAssets() {
 	coneMesh = GameStateManager::Assets()->LoadCone(this, 20); // Cone for spotlight rendering
 	skyDome = GameStateManager::Assets()->LoadMesh(this, MESHDIR"dome.obj"); // Skydome
 	quadMesh = GameStateManager::Assets()->LoadQuadAlt(this);
-	
+	//nightSkyTex = (GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"night_sky4.jpg", 0))->GetTextureName();
+	//SetTextureRepeating(nightSkyTex, true);
+
 	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh) {
 		cout << "Renderer::LoadAssets() - unable to load rendering assets";
 		return false;
@@ -270,6 +280,7 @@ void Renderer::UnloadAssets() {
 	GameStateManager::Assets()->UnloadCone(this, 20); // Cone for spotlight rendering
 	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"dome.obj"); // Skydome
 	GameStateManager::Assets()->UnloadQuadAlt(this);
+	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"night_sky.jpg");
 }
 
 Renderer::~Renderer(void)
@@ -309,19 +320,19 @@ void Renderer::RenderScene() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	cameraMatrix = camera->BuildViewMatrix();
 
-	// Main Render
+	//Main Render
 	ShadowPass();
 	DrawScene();
 	DeferredLightPass();
 	CombineBuffers();
 
-	// Post-Processing
+	//Post-Processing
 	BloomPass();
 	MotionBlurPass();
 
 	DrawFrameBufferTex(postProcessingTex[0]);
 
-	// Draw HUD/Menu overlay
+	//Draw HUD/Menu overlay
 	Draw2DOverlay();
 
 	SwapBuffers();
@@ -709,14 +720,46 @@ void Renderer::CombineBuffers() {// merge scene render with lighting pass
 void Renderer::DrawSkybox() { 
 	// Generate clouds - captures perlin noise to texture.
 	glBindFramebuffer(GL_FRAMEBUFFER, skyBufferFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer[0], 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	SetCurrentShader(cloudShader);
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex0"), GL_TEXTURE0);
+
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), GL_TEXTURE0);
 	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), Window::GetWindow().GetTimer()->GetMS() / 100000.0f);
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, cloudMap);
+
 	screenMesh->Draw();
+	
+	SetCurrentShader(gaussianShader);
+	glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / (float)width, 1.0f / (float)height);
+	//A quick blur on the clouds to make them less pixellated.
+	for (int i = 0; i < 2; ++i) {
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer[1], 0);
+		glClear(GL_COLOR_BUFFER_BIT);
+		
+		glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+		glBindTexture(GL_TEXTURE_2D, skyColourBuffer[0]);
+
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 0);
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+
+		screenMesh->Draw();
+
+		//now to swap the colour buffers, and do the second blur Pass
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer[0], 0);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+		glBindTexture(GL_TEXTURE_2D, skyColourBuffer[1]);
+
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 1);
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+
+		screenMesh->Draw();
+	}
+
 	glUseProgram(GL_NONE);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, GL_NONE);
@@ -725,15 +768,22 @@ void Renderer::DrawSkybox() {
 	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_NOTEQUAL, 1, 1); // Stencil test should only pass if stencil buffer not already set to 1 (from scene render)
 	glDepthMask(GL_FALSE); // Disable writes to the depth buffer
-	
-
 	glDisable(GL_CULL_FACE);
+	
 	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
 	SetCurrentShader(skyBoxShader);
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex0"), GL_TEXTURE0);
+	
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), GL_TEXTURE0);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "skyTex"), SKYBOX_TEXTURE_UNIT);
+	
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, skyColourBuffer);
+	glBindTexture(GL_TEXTURE_2D, skyColourBuffer[0]);
+
+	glActiveTexture(GL_TEXTURE0 + SKYBOX_TEXTURE_UNIT);
+	glBindTexture(GL_TEXTURE_2D, nightSkyTex);
+	
 	skyDome->Draw();
+	
 	glEnable(GL_CULL_FACE);
 	
 	// Bind shader variables
@@ -749,7 +799,7 @@ void Renderer::DrawSkybox() {
 }
 
 /*--------Post-Processing methods--------*/
-//TODO: finish this
+
 void Renderer::BloomPass()
 {
 /*	
@@ -783,7 +833,6 @@ void Renderer::BloomPass()
 
 	/*---------------------------Downsample the images----------------------------*/
 
-
 	SetCurrentShader(downSampleShader);
 	UpdateShaderMatrices();
 
@@ -803,7 +852,7 @@ void Renderer::BloomPass()
 
 		screenMesh->Draw();
 		++z;
-}
+	}
 
 	/*--------------------Gaussian Blur the downsampled images--------------------*/
 
@@ -865,6 +914,8 @@ void Renderer::BloomPass()
 	SetCurrentShader(gaussianShader);
 	UpdateShaderMatrices();
 
+	glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / (float)width, 1.0f / (float)height);
+
 	for (int i = 0; i < 2; ++i) {
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[1], 0);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -911,7 +962,7 @@ void Renderer::BloomPass()
 	glUseProgram(0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
-//TODO: just need to work out how to write the scene texture to the quad.
+
 void Renderer::MotionBlurPass()
 {
 	glClearColor(0,0,0,0);
@@ -1224,7 +1275,7 @@ unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char
 	x = glGetError();
 	SetCurrentShader(cloudShader);
 	x = glGetError();
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex0"), GL_TEXTURE0);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), GL_TEXTURE0);
 	x = glGetError();
 	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), 0.0f);
 	x = glGetError();
@@ -1240,7 +1291,6 @@ unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char
 	glBindFramebuffer(GL_FRAMEBUFFER, GL_NONE);
 	x = glGetError();
 
-	
 	// Extract the data from the texture.
 	float* data = new float[resolution * resolution * 4];
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, FBO);
