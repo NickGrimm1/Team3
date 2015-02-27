@@ -166,8 +166,8 @@ protected:
 	GLuint			shadowFBO;
 	GLuint			skyColourBuffer; //The buffer for holding the clous texture.
 	GLuint			skyBufferFBO;
+	
 	GLuint			cloudMap;	// The texture for holding the static map the clouds are generated from.
-
 	GLuint			gbufferColourTex;
 	GLuint			gbufferDepthTex;
 	GLuint			gbufferNormalTex;
@@ -180,7 +180,7 @@ protected:
 	GLuint			postProcessingTex[3]; // At start of post-processing, postProcessingTex[0] holds the rendered scene
 	GLuint			downSampleTex[SAMPLENUM * 2];
 
-	T3Vector4			ambientLightColour; // The scenes ambient light settings
+	T3Vector4		ambientLightColour; // The scenes ambient light settings
 
 	MutexClass		openglMutex;		// Prevents different threads for using OpenGL at same time	
 

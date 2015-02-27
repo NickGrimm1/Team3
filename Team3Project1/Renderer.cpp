@@ -75,11 +75,6 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_NEAREST );
 	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST );
 	glTexImage2D ( GL_TEXTURE_2D , 0, GL_RGBA8 , width , height , 0, GL_RGBA , GL_UNSIGNED_BYTE , NULL );
-	glGenFramebuffers(1, &skyBufferFBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, skyBufferFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer, 0);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	CreateStaticMap(&cloudMap, 128, 0, 255);
 
 	samples[0] = 1.5f;
 	samples[1] = 2.0f;
@@ -113,11 +108,17 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glGenFramebuffers(1, &postProcessingFBO);	//PP in this.
 	glGenFramebuffers(1, &shadowFBO);			//Shadow pre-render in this one.
 	glGenFramebuffers(1, &deferredLightingFBO);	//Deferred lighting in this FBO.
+	glGenFramebuffers(1, &skyBufferFBO);
 
 	GLenum buffers[3];
 	buffers[0] = GL_COLOR_ATTACHMENT0;
 	buffers[1] = GL_COLOR_ATTACHMENT1;
 	buffers[2] = GL_COLOR_ATTACHMENT2;
+
+	glBindFramebuffer(GL_FRAMEBUFFER, skyBufferFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	
 
 	glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufferColourTex, 0);
@@ -165,7 +166,7 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 
 	ambientLightColour = DEFAULT_AMBIENT_LIGHT_COLOUR;
 
-	drawDeferredLights = false;
+	drawDeferredLights = true;
 
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_STENCIL_TEST);
@@ -173,6 +174,8 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); // cube sampling
+
+	CreateStaticMap(&cloudMap, 128, 0, 255);
 
 	glClearColor(0, 0, 0, 1);
 	SwapBuffers();
