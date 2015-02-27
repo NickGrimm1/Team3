@@ -1172,16 +1172,16 @@ bool Renderer::DropRenderContextForThread() {
 	return result;
 }
 
-void Renderer::CreateStaticMap(const int resolution)
+void Renderer::CreateStaticMap(GLuint* target, const int resolution, unsigned char minValue, unsigned char maxValue)
 {
 	float* colors = new float[resolution * resolution];
 	for (int x = 0; x < resolution; x++)
 		for (int y = 0; y < resolution; y++)
 			colors[x + y * resolution] = rand() % 1000 / 1000.0f;
 
-	glGenTextures(1, &cloudMap);
+	glGenTextures(1, target);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, cloudMap);
+	glBindTexture(GL_TEXTURE_2D, *target);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
@@ -1190,4 +1190,13 @@ void Renderer::CreateStaticMap(const int resolution)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, resolution, resolution, 0, GL_RED, GL_FLOAT, colors);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue)
+{
+	GLuint staticMap;
+	CreateStaticMap(&staticMap, resolution, minValue, maxValue);
+
+	// Draw for perlin noise.
+	// Extract the data from the texture.
 }

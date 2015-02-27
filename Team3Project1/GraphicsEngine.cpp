@@ -336,4 +336,8 @@ void GraphicsEngine::UnloadContent()
 
 void GraphicsEngine::DrawDeferredLights(bool on) {renderer->DrawDeferredLights(on);}
 
+unsigned char* GraphicsEngine::GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue)
+{
+	return renderer->GeneratePerlinNoise(resolution, minValue, maxValue);
+}
 #endif

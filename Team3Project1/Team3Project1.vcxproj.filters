@@ -474,6 +474,9 @@
     <ClInclude Include="DebugOverlay.h">
       <Filter>Framework\Debug\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Heightmap.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">
@@ -676,6 +679,9 @@
     </ClCompile>
     <ClCompile Include="DebugOverlay.cpp">
       <Filter>Framework\Debug\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightMap.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

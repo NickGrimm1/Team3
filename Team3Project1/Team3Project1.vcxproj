@@ -294,6 +294,7 @@
     <ClInclude Include="EntryPoint.h" />
     <ClInclude Include="GCMRenderer.h" />
     <ClInclude Include="GraphicsTestScreen.h" />
+    <ClInclude Include="Heightmap.h" />
     <ClInclude Include="HudTestScreen.h" />
     <ClInclude Include="LoadedFont.h" />
     <ClInclude Include="LoadedMesh.h" />
@@ -380,6 +381,7 @@
     <ClCompile Include="GCMRenderer.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
     <ClCompile Include="GraphicsTestScreen.cpp" />
+    <ClCompile Include="HeightMap.cpp" />
     <ClCompile Include="HudTestScreen.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LoadingScreen.cpp" />

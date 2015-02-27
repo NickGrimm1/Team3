@@ -76,6 +76,8 @@ public:
 
 	void DrawDeferredLights(bool on) {drawDeferredLights = on;}
 
+	unsigned char* GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue);
+
 protected:
 
 	T3Matrix4			cameraMatrix; // Get camera matrix once at start of scene
@@ -105,7 +107,7 @@ protected:
 	bool			LoadCheck();
 	bool			ActiveTex();
 
-	void			CreateStaticMap(const int resolution); // Generate a static noise map that can be turned into Perlin noise.
+	void			CreateStaticMap(GLuint* target, const int resolution, unsigned char minValue, unsigned char maxValue); // Generate a static noise map that can be turned into Perlin noise.
 
 	//Member variables.
 	bool			activeTex;

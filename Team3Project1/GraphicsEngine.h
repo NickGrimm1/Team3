@@ -141,6 +141,8 @@ public:
 
 	// Debugging
 	void DrawDeferredLights(bool on);
+
+	unsigned char* GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue);
 private:
 	static GraphicsEngine* engine;
 
