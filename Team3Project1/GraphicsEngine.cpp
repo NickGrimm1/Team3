@@ -80,6 +80,9 @@ GraphicsEngine::~GraphicsEngine() {
 void GraphicsEngine::Run() {
 	isRunning = true;
 	
+	time = 0;
+	inc = true;
+
 	while (isRunning) {
 
 		while (Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp < RENDER_TIME) { ; } // Fix the timestep
@@ -190,6 +193,8 @@ void GraphicsEngine::Run() {
 		if (isLoadingDrawing) {
 			loadingIcon->SetRotation(loadingIcon->GetRotation() + 1.0f);
 		}
+
+		renderer->SetDayNight(DayNightCycle());
 
 		// Render data
 		renderer->RenderScene();
@@ -345,4 +350,38 @@ unsigned char* GraphicsEngine::GeneratePerlinNoise(const int resolution, unsigne
 {
 	return renderer->GeneratePerlinNoise(resolution, minValue, maxValue);
 }
+
+float GraphicsEngine::DayNightCycle() {
+	float out;
+
+	if (time > 4500 && time < 5500) {
+		out = time - 4500;
+		out /= 1000.0f;
+	}
+	else if (time < 4500)
+		out = 0.0f;
+	else
+		out = 1.0f;
+
+	if (inc) {
+		if (time >= 10000) {
+			inc = false;
+			time--;
+		}
+		else
+			time++;
+	}
+	else {
+		if (time <= 0) {
+			inc = true;
+			time++;
+		}
+		else
+			time--;
+	}
+
+	cout << time << ", "  << out << endl;
+	return out;	
+}
+
 #endif

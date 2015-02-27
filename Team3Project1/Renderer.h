@@ -66,6 +66,8 @@ public:
 	T3Vector4			GetAmbientColour() const {return ambientLightColour;}
 	void			SetAmbientColour(T3Vector4& colour) {ambientLightColour = colour;}
 
+	void			SetDayNight(float arg) { dayNight = arg; }
+
 	bool			GetRenderContextForThread();
 	bool			DropRenderContextForThread();
 
@@ -188,7 +190,6 @@ protected:
 
 	float			samples[3];
 
-	bool			inc;
-	int				time;
+	float			dayNight;
 };
 #endif

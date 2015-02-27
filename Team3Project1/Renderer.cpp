@@ -185,9 +185,6 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	SwapBuffers();
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
-	time = 0;
-	inc = true;
-
 	wglMakeCurrent(deviceContext, NULL);
 	init = true;
 }
@@ -264,7 +261,7 @@ bool Renderer::LoadAssets() {
 	skyDome = GameStateManager::Assets()->LoadMesh(this, MESHDIR"dome.obj"); // Skydome
 	quadMesh = GameStateManager::Assets()->LoadQuadAlt(this);
 	nightSkyTex = (GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"night_sky4.jpg", 0))->GetTextureName();
-	SetTextureRepeating(nightSkyTex, true);
+	//SetTextureRepeating(nightSkyTex, true);
 	daySkyTex = (GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"day_sky3.jpg", 0))->GetTextureName();
 
 	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh) {
@@ -775,41 +772,11 @@ void Renderer::DrawSkybox() {
 	
 	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
 	SetCurrentShader(skyBoxShader);
-	
-	float out;
-
-	if (time > 4500 && time < 5500) {
-		out = time - 4500;
-		out /= 1000.0f;
-	}
-	else if (time < 4500)
-		out = 0.0f;
-	else
-		out = 1.0f;
-
-	if (inc) {
-		if (time >= 10000) {
-			inc = false;
-			time--;
-		}
-		else
-			time++;
-	}
-	else {
-		if (time <= 0) {
-			inc = true;
-			time++;
-		}
-		else
-			time--;
-	}
-
-	cout << time << ", " << out << endl;
 
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), GL_TEXTURE0);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "nightSkyTex"), SKYBOX_TEXTURE_UNIT0);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "daySkyTex"), SKYBOX_TEXTURE_UNIT1);
-	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "dayNightMix"), out); 
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "dayNightMix"), dayNight); 
 	
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, skyColourBuffer[0]);
