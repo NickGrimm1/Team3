@@ -380,7 +380,7 @@ float GraphicsEngine::DayNightCycle() {
 			time--;
 	}
 
-	cout << time << ", "  << out << endl;
+//	cout << time << ", "  << out << endl;
 	return out;	
 }
 

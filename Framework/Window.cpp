@@ -170,11 +170,11 @@ bool	Window::UpdateWindow() {
 	float diff = timer->GetMS()-elapsedMS;
 
 
-	Window::GetKeyboard()->UpdateHolds();
-
 	while(PeekMessage(&msg,windowHandle,0,0,PM_REMOVE)) {
 		CheckMessages(msg); 
 	}
+
+	Window::GetKeyboard()->UpdateHolds();
 
 	elapsedMS = timer->GetMS();
 
