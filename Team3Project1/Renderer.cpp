@@ -2,7 +2,6 @@
 #include "GraphicsCommon.h"
 #include "DrawableEntity3D.h"
 #include "GameStateManager.h"
-#include "TextMesh.h"
 
 // Structures required for point light shadows
 struct CameraDirection {
@@ -290,6 +289,11 @@ Renderer::~Renderer(void)
 	delete rain;
 	delete sandstorm;
 	*/
+
+	for (map<string, TextMesh*>::iterator i = loadedTextMeshes.begin(); i != loadedTextMeshes.end(); i++) {
+		delete (*i).second;
+	}
+	loadedTextMeshes.clear();
 
 	currentShader = NULL;
 
@@ -1078,8 +1082,22 @@ void Renderer::Draw2DOverlay() {
 }
 
 void Renderer::Draw2DText(DrawableText2D& text) {
-	TextMesh* textMesh = new TextMesh(text.GetText(), *text.GetFont());
-	
+	TextMesh* textMesh = NULL;
+	map<string, TextMesh*>::iterator i = loadedTextMeshes.find(text.GetText());
+	if (i == loadedTextMeshes.end()) {
+		// Create a text mesh of appropriate length to display text and store
+		textMesh = new TextMesh(text.GetText(), *text.GetFont());
+		if (textMesh == NULL)
+		{
+			cout << "Renderer::Draw2DText() - Unable to create textmesh - " << text.GetText() << endl;
+			return;
+		}
+		loadedTextMeshes.insert(pair<string, TextMesh*>(text.GetText(), textMesh));
+	}
+	else {
+		textMesh = (*i).second;
+	}
+
 	T3Vector3 origin = T3Vector3(text.GetOrigin().x * text.width * width, text.GetOrigin().y * text.height * height, 0);
 	T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(text.GetRotation(), T3Vector3(0,0,1)) * T3Matrix4::Translation(origin * -1.0f);
 	modelMatrix = T3Matrix4::Translation(T3Vector3(text.x * width, text.y * height, 0)) * rotation * T3Matrix4::Scale(T3Vector3(width * text.width / (float) text.GetText().length(), height * text.height, 1));
@@ -1091,7 +1109,6 @@ void Renderer::Draw2DText(DrawableText2D& text) {
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 	
 	textMesh->Draw();
-	delete textMesh;
 }
 
 void Renderer::Draw2DTexture(DrawableTexture2D& texture) 

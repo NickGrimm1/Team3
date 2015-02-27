@@ -21,8 +21,10 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "DrawableText2D.h"
 #include "DrawableTexture2D.h"
 #include "MutexClass.h"
+#include "TextMesh.h"
 
 #include <vector>
+#include <map>
 
 #define SAMPLENUM 3
 #define SHADOWSIZE 2048 //* 8 ?
@@ -191,5 +193,7 @@ protected:
 	float			samples[3];
 
 	float			dayNight;
+
+	map<string, TextMesh*> loadedTextMeshes;
 };
 #endif
