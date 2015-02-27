@@ -1193,9 +1193,66 @@ void Renderer::CreateStaticMap(GLuint* target, const int resolution, unsigned ch
 unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue)
 {
 	GLuint staticMap;
+	GLuint texture;
+	GLuint FBO;
+
 	CreateStaticMap(&staticMap, resolution, minValue, maxValue);
 
+	GLenum x = glGetError();
 	// Draw for perlin noise.
+	glGenTextures(1, &texture);
+	x = glGetError();
+	glBindTexture(GL_TEXTURE_2D, texture);
+	x = glGetError();
+	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_NEAREST );
+	x = glGetError();
+	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST );
+	x = glGetError();
+	glTexImage2D ( GL_TEXTURE_2D , 0, GL_RGBA8 , resolution , resolution , 0, GL_RGBA , GL_UNSIGNED_BYTE , NULL );
+	x = glGetError();
+	glGenFramebuffers(1, &FBO);
+	x = glGetError();
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+	x = glGetError();
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+	x = glGetError();
+	glClear(GL_COLOR_BUFFER_BIT);
+	x = glGetError();
+	SetCurrentShader(cloudShader);
+	x = glGetError();
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex0"), GL_TEXTURE0);
+	x = glGetError();
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), 0.0f);
+	x = glGetError();
+	glActiveTexture(GL_TEXTURE0);
+	x = glGetError();
+	glBindTexture(GL_TEXTURE_2D, staticMap);
+	x = glGetError();
+	screenMesh->Draw();
+	glUseProgram(GL_NONE);
+	x = glGetError();
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
+	x = glGetError();
+	glBindFramebuffer(GL_FRAMEBUFFER, GL_NONE);
+	x = glGetError();
+
+	
 	// Extract the data from the texture.
-	return NULL;
+	float* data = new float[resolution * resolution * 4];
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, FBO);
+	glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+	GLenum y = glCheckFramebufferStatus(GL_READ_FRAMEBUFFER);
+	x = glGetError();
+	glReadBuffer(GL_COLOR_ATTACHMENT0);
+	x = glGetError();
+	glReadPixels(0, 0, resolution, resolution, GL_RGBA, GL_FLOAT, data);
+	x = glGetError();
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, GL_NONE);
+	x = glGetError();
+
+	unsigned char* output = new unsigned char[resolution * resolution];
+	for (int i = 0; i < resolution * resolution; ++i)
+		output[i] = data[i * 4];
+
+	return output;
 }

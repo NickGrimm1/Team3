@@ -855,14 +855,18 @@ Mesh* AssetManager::LoadHeightmap(void* callerID, string filename, bool useTextu
 	else
 	{
 		// Load this mesh in...
+		GameStateManager::Graphics()->GetRenderContext();
 		loadedMeshes.insert(pair<string, LoadedMesh>(filename, LoadedMesh(new HeightMap(filename, useTextureWeights), callerID)));
+		GameStateManager::Graphics()->DropRenderContext();
 		meshMemory += loadedMeshes[filename].mesh->GetMemoryUsage();
 		return loadedMeshes[filename].mesh;
 	}
 }
 Mesh* AssetManager::LoadHeightmap(unsigned char minHeight, unsigned char maxHeight, bool useTextureWeights)
 {
+	GameStateManager::Graphics()->GetRenderContext();
 	Mesh* mesh = new HeightMap("", minHeight, maxHeight, useTextureWeights);
+	GameStateManager::Graphics()->DropRenderContext();
 	generatedHeightmaps.push_back(mesh);
 	meshMemory += mesh->GetMemoryUsage();
 	return mesh;
@@ -901,7 +905,9 @@ void AssetManager::UnloadHeightmap(Mesh* heightmap)
 	{
 		if (*i == heightmap)
 		{
+			GameStateManager::Graphics()->GetRenderContext();
 			delete *i;
+			GameStateManager::Graphics()->DropRenderContext();
 			i = generatedHeightmaps.erase(i);
 			break;
 		}

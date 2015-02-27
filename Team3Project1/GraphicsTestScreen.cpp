@@ -98,10 +98,10 @@ void GraphicsTestScreen::LoadContent() {
 	AddDrawable(ent);
 	
 	bool enableShadows = false;
-	AddSpotLight(T3Vector3(-10, 40, -10), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 45.0f, T3Vector4(1,0,0,1), T3Vector4(0,0,1,1), enableShadows);
-	AddSpotLight(T3Vector3(50, 40, 50), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 90.0f, T3Vector4(0.5,0.5,0.5,1), T3Vector4(0,0,1,1), enableShadows);
-	AddPointLight(T3Vector3(-50,60,-50), 500, T3Vector4(1,0,1,1), T3Vector4(0,0.5,0,1), enableShadows); 
-	AddPointLight(T3Vector3(50,60,50), 500, T3Vector4(0,1,0,1), T3Vector4(0,0.5,0,1), enableShadows); 
+	//AddSpotLight(T3Vector3(-10, 40, -10), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 45.0f, T3Vector4(1,0,0,1), T3Vector4(0,0,1,1), enableShadows);
+	//AddSpotLight(T3Vector3(50, 40, 50), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 90.0f, T3Vector4(0.5,0.5,0.5,1), T3Vector4(0,0,1,1), enableShadows);
+	//AddPointLight(T3Vector3(-50,60,-50), 500, T3Vector4(1,0,1,1), T3Vector4(0,0.5,0,1), enableShadows); 
+	//AddPointLight(T3Vector3(50,60,50), 500, T3Vector4(0,1,0,1), T3Vector4(0,0.5,0,1), enableShadows); 
 	
 //	directionalLight = GameStateManager::Graphics()->AddDirectionalLight(T3Vector3(-1, -1, -1), T3Vector4(1,1,1,1), T3Vector4(0,0,0,1));
 
@@ -136,6 +136,8 @@ void GraphicsTestScreen::UnloadContent()
 void GraphicsTestScreen::Update() { 
 	//T3Matrix4 m = T3Matrix4::Rotation(0.016f, T3Vector3(0,1,0));
 	//ent->AddRotation(Quaternion::FromMatrix(m));
+
+	//GameStateManager::Assets()->LoadHeightmap(true);
 }
 
 void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
