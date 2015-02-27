@@ -55,7 +55,7 @@ public:
 	void			RenderScene();
 	void			ToggleDebug(int arg, bool onOff);
 
-	GLuint			CreateTexture(const char* filename, bool enableMipMaps = false, bool enableAnisotropicFiltering = false);
+	GLuint			CreateTexture(const char* filename, bool enableMipMaps = false, bool enableAnisotropicFiltering = false, unsigned int flags = 0);
 	GLuint			CreateCubeTexture(const char* filename);
 	GLuint			CreateShadowTexture();
 	GLuint			CreateShadowCube();

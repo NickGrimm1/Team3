@@ -1081,7 +1081,7 @@ void Renderer::DrawFrameBufferTex(GLuint fboTex) {
 void Renderer::Draw2DOverlay() {
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
-	
+
 	glCullFace(GL_FRONT);
 	SetCurrentShader(hudShader);
 	projMatrix = hudMatrix;
@@ -1167,13 +1167,13 @@ bool Renderer::ActiveTex()
 	return activeTex;
 }
 
-GLuint Renderer::CreateTexture(const char* filename, bool enableMipMaps, bool enableAnisotropicFiltering) {
+GLuint Renderer::CreateTexture(const char* filename, bool enableMipMaps, bool enableAnisotropicFiltering, unsigned int flags) {
 	openglMutex.lock_mutex();
 	wglMakeCurrent(deviceContext, renderContext);
 
-	unsigned int flags = false;
+	unsigned int texFlags = flags;
 	if (enableMipMaps) flags |= SOIL_FLAG_MIPMAPS;
-	GLuint textureObject = SOIL_load_OGL_texture(filename, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, flags);
+	GLuint textureObject = SOIL_load_OGL_texture(filename, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, texFlags);
 	if (!textureObject)
 		textureObject = 0; // make sure GetTexture will return an error
 
