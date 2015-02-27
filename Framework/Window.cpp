@@ -145,6 +145,7 @@ Window::~Window(void)
 {
 	delete keyboard;keyboard = NULL;
 	delete mouse;	mouse = NULL;
+	delete timer; timer = NULL;
 
 	FreeConsole();		//Destroy the console window
 }

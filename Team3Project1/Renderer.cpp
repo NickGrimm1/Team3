@@ -29,7 +29,7 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	if (!init) return;
 	init = false;
 
-	camera	= new Camera();
+	camera	= NULL;
 
 	// Setup projection matrices - gonna just keep copies of the matrices rather than keep recreating them
 	perspectiveMatrix = T3Matrix4::Perspective(1.0f, 10000.0f, (float) width / (float) height, 45.0f);
@@ -322,19 +322,22 @@ void Renderer::RenderScene() {
 		cout << "Renderer::RenderScene() - unable to obtain rendering context!!!" << endl;
 	}
 	glClear(GL_COLOR_BUFFER_BIT);
-	cameraMatrix = camera->BuildViewMatrix();
 
-	//Main Render
-	ShadowPass();
-	DrawScene();
-	DeferredLightPass();
-	CombineBuffers();
+	if (camera) {
+		cameraMatrix = camera->BuildViewMatrix();
 
-	//Post-Processing
-	BloomPass();
-	MotionBlurPass();
+		//Main Render
+		ShadowPass();
+		DrawScene();
+		DeferredLightPass();
+		CombineBuffers();
 
-	DrawFrameBufferTex(postProcessingTex[0]);
+		//Post-Processing
+		BloomPass();
+		MotionBlurPass();
+
+		DrawFrameBufferTex(postProcessingTex[0]);
+	}
 
 	//Draw HUD/Menu overlay
 	Draw2DOverlay();
@@ -1265,6 +1268,7 @@ void Renderer::CreateStaticMap(GLuint* target, const int resolution, unsigned ch
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, resolution, resolution, 0, GL_RED, GL_FLOAT, colors);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	delete colors;
 }
 
 unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue)

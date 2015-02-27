@@ -74,6 +74,7 @@ GraphicsEngine::~GraphicsEngine() {
 	delete loadingTexture;
 	delete loadingIcon;
 	delete renderer;
+	delete sceneRoot;
 	Window::Destroy();
 }
 
