@@ -19,6 +19,7 @@ bool done = false;
 Renderer renderer;
 SceneNode *root;
 
+
 Camera* camera;
 
 void start_button()		{
@@ -46,32 +47,36 @@ int main(void)	{
 
 	//Start off by initialising the Input system
 	Input::Initialise();
+	std::cout << "Input initialised"<<std::endl;
 	//If the start button is pressed, call this function!
 	Input::SetPadFunction(INPUT_START,	start_button);
 	Input::SetPadFunction(INPUT_START,	select_button);
-
+	std::cout  << "pad functions set"<<std::endl;
 	//Make a new quad mesh, and set its texture to a newcastle logo
 	Mesh* m = Mesh::GenerateQuad();
+	std::cout << "quad generated" << std::endl;
 	//m->SetDefaultTexture(*GCMRenderer::LoadGTF("/ncl.gtf"));
 	
 	//Create a new scenenode
 	root = new SceneNode();
-
+	std::cout <<"Root scenenode declared" << std::endl;
 	SceneNode* logo = new SceneNode();
+	std::cout << "logo scenenode declared" <<std::endl;
 	logo->SetMesh(m); //tell it to draw our new quad
-
+	std::cout << "logo mesh set" << std::endl;
 	logo->SetTransform(/*Matrix4::rotationX(DegToRad(-90)) * */T3Matrix4::Scale(T3Vector3(100,100,100)));
-
+	std::cout << "logo transform set" << std::endl;
 	root->AddChild(logo);
-
+	std::cout << "root addChild logo" <<std::endl;
 
 	renderer.SetRootNode(root); //Set our new SceneNode as the root for our Renderer
-
+	cout << "Set root as renderer root node" << endl;
 	//We need a new camera!
 	camera = new FreeCamera();	
+	cout << "new camera set" << endl;
 	//camera->SetControllingPad(JOYPAD_A);	//Controlled via joypad A
 	camera->SetPosition(T3Vector3(0,0,100)); //And set back slightly so we can see the node at the origin
-
+	cout << "camera position set" << endl;
 	renderer.SetCamera(camera);	//Set the current renderer camera
 
 	Timer gameTime;

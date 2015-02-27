@@ -11,6 +11,7 @@
 
 ShaderPart::ShaderPart(string raw, ShaderType::Type type) : type(type)
 {
+	std::cout <<"shader part started" << std::endl;
 #if WINDOWS_BUILD
 	shader = glCreateShader(type);
 	const char *chars = raw.c_str();
@@ -35,20 +36,24 @@ ShaderPart::ShaderPart(string raw, ShaderType::Type type) : type(type)
 #endif
 #endif
 #if PS3_BUILD
-	string name = SYS_APP_HOME + name;
-
+	std::cout <<"ShaderPart: got to first ps3 block" << std::endl;
+	string x = "/vertex.vpo";
+	string name = SYS_APP_HOME + x;
+	std::cout <<"ShaderPart:made a string" << std::endl;
 	unsigned int dataSize = 0;
+	std::cout <<"ShaderPart: made an int" << std::endl; 
 	char* data = NULL;
-
+	std::cout <<"ShaderPart: initialised some variables" << std::endl;
 	//Open the file
 	std::ifstream	file(name.c_str(),std::ios::in|std::ios::binary);
+	std::cout <<"ShaderPart: opened the shader file" << std::endl;
 	//Oh no!
 	if(!file) 
 	{
-#if DEBUG
+//#if DEBUG
 		std::cout << "LoadBinaryShader: Can't find file: " << name << std::endl;
 		return;
-#endif
+//#endif
 	}
 	//This is the slightly messy default way to determinimume the size
 	//of a file (seek to the end of it, grab the read position, seek

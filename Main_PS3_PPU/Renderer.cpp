@@ -7,9 +7,15 @@ Renderer::Renderer(void)	{
 	You're provided with a very basic vertex / fragment shader, to get you started
 	with Cg, and drawing textured objects. 
 	*/
+	std::cout << "begin renderer constructor"<<std::endl;
+	//get to shader part and fall over, gg, next map pls ps3.
 	ShaderPart* basicVert		= new ShaderPart("/vertex.vpo", ShaderType::VERTEX);
+	
+	std::cout <<"basic vert did something" << std::endl;
 	ShaderPart* basicFrag		= new ShaderPart("/fragment.fpo", ShaderType::FRAGMENT);
+	std::cout <<"basic frag did something" << std::endl;
 	Shader* s = new Shader();
+	std::cout <<"shader did something" << std::endl;
 	s->SetVertex(basicVert);
 	s->SetFragment(basicFrag);
 	this->SetCurrentShader(s);

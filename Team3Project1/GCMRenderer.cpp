@@ -16,6 +16,7 @@ GCMRenderer::GCMRenderer(void)	{
 	InitDisplay();
 	InitSurfaces();
 	texture = (GCMRenderer::LoadGTF("/ncl.gtf"));
+	std::cout <<"Got to end of GCMrenderer constructor" << std::endl;
 }
 
 /*
