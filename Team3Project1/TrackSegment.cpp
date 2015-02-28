@@ -10,7 +10,7 @@ TrackSegment::TrackSegment(const T3Vector3& a, const T3Vector3& b, const T3Vecto
 	for (unsigned int i = 0; i < subdivisions; i++) {
 		T3Vector3 direction = vertices[i+1].GetPosition() - vertices[i].GetPosition();
 		direction.Normalise();
-		T3Vector3 up = T3Vector3(0,0,1);
+		T3Vector3 up = T3Vector3(0,1,0);
 		right = T3Vector3::Cross(direction, up);
 		right.Normalise();
 		trackMesh[i].SetPosition(vertices[i].GetPosition() - right * trackWidth);

@@ -44,7 +44,7 @@ _-_-_-_-_-_-_-""  ""
 #include "SoundEmitter.h"
 #include "SoundManager.h"
 class Vehicle;
-class Debuff;
+//class Debuff;
 class MyGame : public GameClass	{
 public:
 	MyGame();
@@ -77,7 +77,7 @@ protected:
 	SoundEntity* BuildSoundEntity ();
 #endif
 	Vehicle* Car;
-	Debuff*  DB;
+	//Debuff*  DB;
 	Mesh* cube;
 	Mesh* quad;
 	Mesh* sphere;

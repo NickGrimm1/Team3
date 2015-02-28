@@ -831,9 +831,10 @@ void AssetManager::UnloadFont(void* callerID, string filePath)
 	// No owners left? delete
 	if (loadedFonts[filePath].callerIDs.size() == 0)
 	{
-		GameStateManager::Graphics()->GetRenderContext();
+		//GameStateManager::Graphics()->GetRenderContext(); // Load Texture will secure its own render context
 		UnloadTexture(loadedFonts[filePath].font, filePath);
-		GameStateManager::Graphics()->DropRenderContext();
+		//GameStateManager::Graphics()->DropRenderContext();
+		delete loadedFonts[filePath].font;
 		i = loadedFonts.erase(i);
 	}
 }

@@ -21,8 +21,10 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "DrawableText2D.h"
 #include "DrawableTexture2D.h"
 #include "MutexClass.h"
+#include "TextMesh.h"
 
 #include <vector>
+#include <map>
 
 #define SAMPLENUM 3
 #define SHADOWSIZE 2048 //* 8 ?
@@ -55,7 +57,7 @@ public:
 	void			RenderScene();
 	void			ToggleDebug(int arg, bool onOff);
 
-	GLuint			CreateTexture(const char* filename, bool enableMipMaps = false, bool enableAnisotropicFiltering = false);
+	GLuint			CreateTexture(const char* filename, bool enableMipMaps = false, bool enableAnisotropicFiltering = false, unsigned int flags = 0);
 	GLuint			CreateCubeTexture(const char* filename);
 	GLuint			CreateShadowTexture();
 	GLuint			CreateShadowCube();
@@ -191,5 +193,7 @@ protected:
 	float			samples[3];
 	int				currentFPS;
 	float			dayNight;
+
+	map<string, TextMesh*> loadedTextMeshes;
 };
 #endif

@@ -24,8 +24,8 @@ MyGame::MyGame()	{
 	gameCamera = new FreeCamera(-30.0f,0.0f,0.0f,T3Vector3(0,350,-800));
 	
 //	Renderer::GetRenderer().SetCamera(gameCamera);
-	Car=new Vehicle();
-	DB = new Debuff();
+	Car=new Vehicle(20);
+	//DB = new Debuff();
 	CubeRobot::CreateCube();
 
 	/*
@@ -96,7 +96,7 @@ MyGame::~MyGame(void)	{
 	delete quad;
 	delete sphere;
 	delete Car;
-	delete DB;
+	//delete DB;
 	CubeRobot::DeleteCube();
 
 	//GameClass destructor will destroy your entities for you...
@@ -108,86 +108,86 @@ want your games to have some sort of internal logic to them, and this
 logic will be added to this function.
 */
 void MyGame::UpdateGame(float msec) {
-	if(gameCamera) {
-		bool Inverse=DB->GetLR();
-		/*if(Inverse==false)
-		{
-			Car->UpdatePlayer2(msec);
-		}
-		else*/
-		{
-			Car->UpdatePlayer1(msec);
-		}
-		DB->UpdateDebuff(Car,msec);
-		
-		//gameCamera->UpdateCamera(msec);
-		gameCamera->SetPosition(Car->tempPosition);
-	}
-
-	if (newt==1)
-	{
-		GT(g*2000.f);
-		GT3(g*2000.f);
-		GT2(g*2000.f);
-		g=g+1;
-		newt = 0;
-	}
-
-	if (dt==1)
-	{
-		allEntities[0]->DisconnectFromSystems();
-		allEntities[1]->DisconnectFromSystems();
-		allEntities[2]->DisconnectFromSystems();
-		allEntities.erase(allEntities.begin());
-		allEntities.erase(allEntities.begin());
-		allEntities.erase(allEntities.begin());
-		//cout<<"\n a2aaaa="<<allEntities.size()<<"a2aaaa \n";
-		/*GT3(g*2000.f);
-		GT2(g*2000.f);
-		g=g+1;*/
-		dt = 0;
-	}
-
-
-	if (st==1)
-	{
-		
-		//cout<<"\n a3aaaa="<<allEntities.size()<<"a3aaaa \n";
-		st = 0;
-	}
-
-	//if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_A))                                         
-	//  {
-	//	//  Vehicle->GetPhysicsNode().LookAt (T3Vector3(0,0,0),T3Vector3(-1,0,0));
-	//  }
-	//if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_D))                                         
-	//  {
-	//	 //turn right
-	//  }
-
-	//if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_2))                                         
-	//{
-	//  
-	//  GameEntity* b=BuildCubeEntity(50.0f);
-	//  
-	//  b->GetPhysicsNode().SetPosition(gameCamera->Camera::GetPosition());
-	//  b->GetRenderNode().SetColour(T3Vector4(0.2,0.9,1,1));
-	//  b->GetPhysicsNode().SetLinearVelocity(T3Vector3(1,1,1)*T3Vector3(
-	//	  -gameCamera->BuildViewMatrix().values[2],
-	//	  -gameCamera->BuildViewMatrix().values[6],
-	//	  -gameCamera->BuildViewMatrix().values[10]));  
-	//  b->GetPhysicsNode().SetInverseMass(1/10.0);
-	//  allEntities.push_back(b);
-	// 
-	//
+	//if(gameCamera) {
+	//	bool Inverse=DB->GetLR();
+	//	/*if(Inverse==false)
+	//	{
+	//		Car->UpdatePlayer2(msec);
+	//	}
+	//	else*/
+	//	{
+	//		Car->UpdatePlayer1(msec);
+	//	}
+	//	DB->UpdateDebuff(Car,msec);
+	//	
+	//	//gameCamera->UpdateCamera(msec);
+	//	gameCamera->SetPosition(Car->tempPosition);
 	//}
 
-	for(vector<GameEntity*>::iterator i = allEntities.begin(); i != allEntities.end(); ++i) {
-		(*i)->Update(msec);
-	}
+	//if (newt==1)
+	//{
+	//	GT(g*2000.f);
+	//	GT3(g*2000.f);
+	//	GT2(g*2000.f);
+	//	g=g+1;
+	//	newt = 0;
+	//}
+
+	//if (dt==1)
+	//{
+	//	allEntities[0]->DisconnectFromSystems();
+	//	allEntities[1]->DisconnectFromSystems();
+	//	allEntities[2]->DisconnectFromSystems();
+	//	allEntities.erase(allEntities.begin());
+	//	allEntities.erase(allEntities.begin());
+	//	allEntities.erase(allEntities.begin());
+	//	//cout<<"\n a2aaaa="<<allEntities.size()<<"a2aaaa \n";
+	//	/*GT3(g*2000.f);
+	//	GT2(g*2000.f);
+	//	g=g+1;*/
+	//	dt = 0;
+	//}
 
 
-	GameStateManager::Physics()->DrawDebug();
+	//if (st==1)
+	//{
+	//	
+	//	//cout<<"\n a3aaaa="<<allEntities.size()<<"a3aaaa \n";
+	//	st = 0;
+	//}
+
+	////if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_A))                                         
+	////  {
+	////	//  Vehicle->GetPhysicsNode().LookAt (T3Vector3(0,0,0),T3Vector3(-1,0,0));
+	////  }
+	////if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_D))                                         
+	////  {
+	////	 //turn right
+	////  }
+
+	////if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_2))                                         
+	////{
+	////  
+	////  GameEntity* b=BuildCubeEntity(50.0f);
+	////  
+	////  b->GetPhysicsNode().SetPosition(gameCamera->Camera::GetPosition());
+	////  b->GetRenderNode().SetColour(T3Vector4(0.2,0.9,1,1));
+	////  b->GetPhysicsNode().SetLinearVelocity(T3Vector3(1,1,1)*T3Vector3(
+	////	  -gameCamera->BuildViewMatrix().values[2],
+	////	  -gameCamera->BuildViewMatrix().values[6],
+	////	  -gameCamera->BuildViewMatrix().values[10]));  
+	////  b->GetPhysicsNode().SetInverseMass(1/10.0);
+	////  allEntities.push_back(b);
+	//// 
+	////
+	////}
+
+	//for(vector<GameEntity*>::iterator i = allEntities.begin(); i != allEntities.end(); ++i) {
+	//	(*i)->Update(msec);
+	//}
+
+
+	//GameStateManager::Physics()->DrawDebug();
 }
 
 /*
@@ -195,13 +195,13 @@ Makes an entity that looks like a CubeRobot! You'll probably want to modify
 this so that you can have different sized robots, with different masses and
 so on!
 */
-GameEntity* MyGame::BuildRobotEntity() {
-	GameEntity*g = new GameEntity(new CubeRobot(), new PhysicsNode());
-
-	g->GetPhysicsNode().SetUseGravity(false);
-	g->ConnectToSystems();
-	return g;
-}
+//GameEntity* MyGame::BuildRobotEntity() {
+//	GameEntity*g = new GameEntity(new CubeRobot(), new PhysicsNode());
+//
+//	g->GetPhysicsNode().SetUseGravity(false);
+//	g->ConnectToSystems();
+//	return g;
+//}
 
 
 //t
@@ -248,18 +248,17 @@ void MyGame::GT2(float y){
 Makes a cube. Every game has a crate in it somewhere!
 */
 GameEntity* MyGame::BuildCubeEntity(float size) {
-	/*GameEntity*g = new GameEntity(new SceneNode(cube), new PhysicsNode());
-	g->ConnectToSystems();
+	
+	DrawableEntity3D* s = new DrawableEntity3D(GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj"),
+		NULL,
+		NULL,
+		NULL,
+		size,
+		T3Vector3(-25, 20, 0),
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(size,size,size));
 
-	SceneNode &test = g->GetRenderNode();
-
-	test.SetModelScale(T3Vector3(size,size,size));
-	test.SetBoundingRadius(size);*/
-	SceneNode* s = new SceneNode(cube);
-
-	s->SetModelScale(T3Vector3(20*size,size,size));
-	s->SetBoundingRadius(size);
-	s->SetColour(T3Vector4(0.2,0.2,0.5,1));                                                                                                
+	                                                                                              
 	PhysicsNode*p = new PhysicsNode();
 	
 	//p->SetAngularVelocity(T3Vector3(0,0,0.01f));
@@ -268,26 +267,24 @@ GameEntity* MyGame::BuildCubeEntity(float size) {
 	p->SetCollisionVolume(new CollisionAABB(T3Vector3(20*size,size,size)));
 	//T3Vector3(size*0.5f,size*0.5f,size*0.5f)
 	
-	GameEntity*g = new GameEntity(s, p);
-	g->ConnectToSystems();
+	GameEntity*g;// = new GameEntity(s, p);
+//	g->ConnectToSystems();
 	
 	return g;
 	
 }
 
 GameEntity* MyGame::BuildCubeEntityout(float size) {
-	/*GameEntity*g = new GameEntity(new SceneNode(cube), new PhysicsNode());
-	g->ConnectToSystems();
-
-	SceneNode &test = g->GetRenderNode();
-
-	test.SetModelScale(T3Vector3(size,size,size));
-	test.SetBoundingRadius(size);*/
-	SceneNode* s = new SceneNode(cube);
-
-	s->SetModelScale(T3Vector3(20*size,size,size));
-	s->SetBoundingRadius(size);
-	s->SetColour(T3Vector4(1,0.2,0.5,1));                                                                                                
+	
+	DrawableEntity3D* s = new DrawableEntity3D(GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj"),
+		NULL,
+		NULL,
+		NULL,
+		size,
+		T3Vector3(-25, 20, 0),
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(size,size,size));
+                                                                                              
 	PhysicsNode*p = new PhysicsNode();
 	
 	//p->SetAngularVelocity(T3Vector3(0,0,0.01f));
@@ -296,8 +293,8 @@ GameEntity* MyGame::BuildCubeEntityout(float size) {
 	p->SetCollisionVolume(new CollisionBBAA(T3Vector3(20*size,size,size)));
 	//T3Vector3(size*0.5f,size*0.5f,size*0.5f)
 	
-	GameEntity*g = new GameEntity(s, p);
-	g->ConnectToSystems();
+	GameEntity*g;// = new GameEntity(s, p);
+//	g->ConnectToSystems();
 	
 	return g;
 	
@@ -306,35 +303,19 @@ GameEntity* MyGame::BuildCubeEntityout(float size) {
 Makes a sphere.
 */
 
- GameEntity* MyGame::BuildVehicleEntity(float size,T3Vector3 pos, T3Vector3 vel)
-	  {
-SceneNode* s = new SceneNode(sphere);
-
-	s->SetColour(T3Vector4(0.2,0.2,0.5,1));
-	PhysicsNode*p = new PhysicsNode();
-	p->SetPosition(pos);
-	p->SetLinearVelocity(vel);
-	p->SetAngularVelocity(T3Vector3(0,0,0.01f));
-	p->SetInverseInertia(InertialMatrixHelper::createSphereInvInertial(1.0f, size));
-	p->SetInverseMass(1.0f);
-	p->SetCollisionVolume(new CollisionSphere(size));
-	GameEntity*g = new GameEntity(s, p);
-	g->ConnectToSystems();
-
-	SceneNode &test = g->GetRenderNode();
-
-	test.SetModelScale(T3Vector3(size,size,size));
-	test.SetBoundingRadius(size);
-
-	return g;
-}
+ 
 
 GameEntity* MyGame::BuildSphereEntity(float radius) {
-	SceneNode* s = new SceneNode(sphere);
+	DrawableEntity3D* s = new DrawableEntity3D(GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"),
+		NULL,
+		NULL,
+		NULL,
+		radius,
+		T3Vector3(-25, 20, 0),
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(radius,radius,radius));
 
-	s->SetModelScale(T3Vector3(radius,radius,radius));
-	s->SetBoundingRadius(radius);
-	s->SetColour(T3Vector4(0.2,0.2,0.5,1));
+	
 	PhysicsNode*p = new PhysicsNode();
 	
 	p->SetAngularVelocity(T3Vector3(0,0,0.01f));
@@ -348,8 +329,8 @@ GameEntity* MyGame::BuildSphereEntity(float radius) {
 	p->SetXstart(Xstart);
 	p->SetXend(Xend);*/
 	
-	GameEntity*g = new GameEntity(s, p);
-	g->ConnectToSystems();
+	GameEntity*g ;//= new GameEntity(s, p);
+//	g->ConnectToSystems();
 	
 	return g;
 }
@@ -359,11 +340,23 @@ Makes a flat quad, initially oriented such that we can use it as a simple
 floor. 
 */
 GameEntity* MyGame::BuildQuadEntity(float size) {
-	SceneNode* s = new SceneNode(quad);
+	DrawableEntity3D* ent;
+	for (unsigned int i = 0; i < 8; i++) {
+		for (unsigned int j = 0; j < 8; j++) {
+			ent = new DrawableEntity3D(
+				quad,
+				NULL,
+				GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.tga", SOIL_FLAG_MIPMAPS),
+				NULL,
+				size,
+				T3Vector3(-350.0f + i * 100.0f,0,-350.0f + j * 100.0f),
+				Quaternion::FromMatrix(T3Matrix4::Rotation(90.0f, T3Vector3(1,0,0))),
+				T3Vector3(size,size,size));
+		}
+	}
 
-	s->SetModelScale(T3Vector3(size,size,size));
 	//Oh if only we had a set texture function...we could make our brick floor again WINK WINK
-	s->SetBoundingRadius(size);
+
 
 	PhysicsNode*p = new PhysicsNode(Quaternion::AxisAngleToQuaterion(T3Vector3(1,0,0), 90.0f), T3Vector3());
 	p->SetUseGravity(false);
@@ -371,8 +364,8 @@ GameEntity* MyGame::BuildQuadEntity(float size) {
 	//p->SetPosition(T3Vector3(0,0,0));
 	p->SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
 	p->SetCollisionVolume(new CollisionPlane(T3Vector3(0,1,0), 0));
-	GameEntity*g = new GameEntity(s, p);
-	g->ConnectToSystems();
+	GameEntity*g;// = new GameEntity(ent, p);
+//	g->ConnectToSystems();
 	return g;
 }
 
@@ -398,7 +391,7 @@ SoundEntity * MyGame :: BuildSoundEntity () {
 
 	 s -> SetTransform ( T3Matrix4 :: Translation ( randpos ));
 	 // Connect it to all of our core systems
-	 g -> ConnectToSystems ();
+//	 g -> ConnectToSystems ();
 
 	 return g ;
  }

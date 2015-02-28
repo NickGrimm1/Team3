@@ -27,6 +27,8 @@ Version: 1.0.0 03/02/2015.</summary>
 
 using namespace std;
 
+#define GAME_FRAME_TIME 1000.0f / 60.0f
+
 class GameStateManager : public InputListener
 {
 public:
@@ -70,8 +72,14 @@ public:
 		Instance()->physics->Start();
 		Instance()->input->Start();
 
+#ifdef WINDOWS_BUILD
+		GameTimer timer;
+		float lastUpdate = timer.GetMS();
+#endif
 		while (instance->isRunning) {
-#if WINDOWS_BUILD
+#ifdef WINDOWS_BUILD
+			while (timer.GetMS() - lastUpdate < GAME_FRAME_TIME) {;}
+			lastUpdate = timer.GetMS();
 			Window::GetWindow().UpdateWindow();
 #endif
 			for (unsigned int i = 0; i < gameScreens.size(); i++) {

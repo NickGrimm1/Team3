@@ -259,7 +259,6 @@
     <ClInclude Include="..\Framework\Mouse.h" />
     <ClInclude Include="..\Framework\MyGame.h" />
     <ClInclude Include="..\Framework\OBJMesh.h" />
-    <ClInclude Include="..\Framework\Octree.h" />
     <ClInclude Include="..\Framework\OGLRenderer.h" />
     <ClInclude Include="..\Framework\ParticleEmitter.h" />
     <ClInclude Include="..\Framework\PhysicsNode.h" />
@@ -284,6 +283,7 @@
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="AudioEngine.h" />
     <ClInclude Include="ChaseCamera.h" />
+    <ClInclude Include="CheckPoint.h" />
     <ClInclude Include="ClickableEntity2D.h" />
     <ClInclude Include="DebugManager.h" />
     <ClInclude Include="DebugOverlay.h" />
@@ -331,6 +331,8 @@
     <ClInclude Include="Thread.h" />
     <ClInclude Include="TrackSegment.h" />
     <ClInclude Include="UIButton.h" />
+    <ClInclude Include="VehiclePhysicsNode.h" />
+    <ClInclude Include="Vehicle_Wheel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Camera.cpp" />
@@ -351,7 +353,6 @@
     <ClCompile Include="..\Framework\Mouse.cpp" />
     <ClCompile Include="..\Framework\MyGame.cpp" />
     <ClCompile Include="..\Framework\OBJMesh.cpp" />
-    <ClCompile Include="..\Framework\Octree.cpp" />
     <ClCompile Include="..\Framework\OGLRenderer.cpp" />
     <ClCompile Include="..\Framework\ParticleEmitter.cpp" />
     <ClCompile Include="..\Framework\PhysicsNode.cpp" />
@@ -372,6 +373,7 @@
     <ClCompile Include="..\Framework\Window.cpp" />
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="AudioEngine.cpp" />
+    <ClCompile Include="CheckPoint.cpp" />
     <ClCompile Include="DebugManager.cpp" />
     <ClCompile Include="DebugOverlay.cpp" />
     <ClCompile Include="GamePad.cpp" />
@@ -401,6 +403,8 @@
     <ClCompile Include="TextureWindows.cpp" />
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="TrackSegment.cpp" />
+    <ClCompile Include="VehiclePhysicsNode.cpp" />
+    <ClCompile Include="Vehicle_Wheel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Resources\Shaders\BlendedFragment.glsl" />

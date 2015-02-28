@@ -10,6 +10,8 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "../Framework/PhysicsNode.h"
 #include "../Framework/Constraint.h"
 #include "../Framework/DebugDrawer.h"
+#include "../Team3Project1/DrawableEntity3D.h"
+
 #include <vector>
 #include <algorithm> 
 

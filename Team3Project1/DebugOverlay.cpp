@@ -13,7 +13,7 @@ void DebugOverlay::LoadContent()
 {
 	Font* font = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"tahoma.tga", 16, 16);
 	
-//	AddDrawable(new DrawableTexture2D(0, 0, -1, 1, 1, GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"TitleSafeArea.png", SOIL_FLAG_INVERT_Y), 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1.0f, 0.0f, 0.0f, 0.25f)));
+	AddDrawable(new DrawableTexture2D(0, 0, -1, 1, 1, GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"TitleSafeArea.png", 0), 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1.0f, 0.0f, 0.0f, 0.25f)));
 	
 	float charWidth = 0.0125f;
 	float charHeight = 0.03f;

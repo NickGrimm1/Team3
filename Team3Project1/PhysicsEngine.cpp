@@ -3,6 +3,8 @@
 
 PhysicsEngine* PhysicsEngine::instance = NULL;
 
+#define PHYSICS_HZ 1.0f / 120.0f
+
 void PhysicsEngine::Run()
 {
 	while (isRunning)
@@ -13,6 +15,8 @@ void PhysicsEngine::Run()
 		lastFrameTimeStamp = Window::GetWindow().GetTimer()->GetMS();
 #endif
 		frameRate = (int)(1000.0f / msec);
+
+		msec = PHYSICS_HZ;
 
 		NarrowPhaseCollisions();
 
@@ -52,7 +56,7 @@ T3Vector3 PhysicsEngine::support(PhysicsNode& shape1,PhysicsNode& shape2, T3Vect
 	int number1=shape1.GetTarget()->GetMesh()->GetNumVertices();
 	for(int i=0;i<number1;i++)
 	{
-		worldpoints1.push_back( shape1.GetTarget()->GetTransform() * (vertex1[i].GetPosition()*shape1.GetTarget()->GetModelScale()));
+		worldpoints1.push_back(T3Matrix4::Translation(shape1.GetTarget()->GetOriginPosition()) * shape1.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape1.GetTarget()->GetScale()) * vertex1[i].GetPosition());
 	}
 	shape1.SetWorldPoints(worldpoints1);
 
@@ -60,16 +64,10 @@ T3Vector3 PhysicsEngine::support(PhysicsNode& shape1,PhysicsNode& shape2, T3Vect
 	int number2=shape2.GetTarget()->GetMesh()->GetNumVertices();
 	for(int i=0;i<number2;i++)
 	{
-		worldpoints2.push_back( shape2.GetTarget()->GetTransform() * (vertex2[i].GetPosition()*shape2.GetTarget()->GetModelScale()));
+		worldpoints2.push_back(T3Matrix4::Translation(shape2.GetTarget()->GetOriginPosition()) * shape2.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape2.GetTarget()->GetScale()) * vertex2[i].GetPosition());
+	
 	}
 	shape2.SetWorldPoints(worldpoints2);
-
-
-
-	
-
-
-	 
 
 	 T3Vector3 dir = T3Vector3(1, 1, 1);
 		
@@ -112,38 +110,6 @@ T3Vector3 PhysicsEngine::support(PhysicsNode& shape1,PhysicsNode& shape2, T3Vect
 	 return false;
 }
 
-//bool PhysicsEngine::GJK(PhysicsNode& shape1,PhysicsNode& shape2)
-//{
-//	T3Vector3 d= T3Vector3(1,-1,0);
-//	Simplex.push_back(support(shape1,shape2,  d));
-//
-//	d.Inverse();
-//
-//	while(true)
-//	{
-//		Simplex.push_back(support(shape1,shape2,  d));
-//
-//		if(T3Vector3::Dot(d,Simplex[Simplex.size()-1])<=0)
-//	  {
-//	    return false;
-//	  }
-//	  else
-//	  {
-//	    if(containsOrigin(d))
-//		{
-//		 return true;
-//		
-//		}
-//       	  
-//	  }
-//	
-//	
-//	
-//	
-//	}
-//
-//
-//}
 
 
  
@@ -292,12 +258,12 @@ bool PhysicsEngine::triangle(T3Vector3& dir)
 		 return checkTetrahedron(ao, ab, ac, abc, dir);
 	 }
 
-					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, a, b, T3Vector3(1, 0, 1), T3Vector3(1, 0, 1));
+				/*	OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, a, b, T3Vector3(1, 0, 1), T3Vector3(1, 0, 1));
 					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, c, b, T3Vector3(1, 0, 1), T3Vector3(1, 0, 1));
 					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, a, c, T3Vector3(1, 0, 1), T3Vector3(1, 0, 1));
 					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, a, d, T3Vector3(1, 1, 1), T3Vector3(1, 1, 1));
 					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, b, d, T3Vector3(1, 1, 1), T3Vector3(1, 1, 1));
-					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, c, d, T3Vector3(1, 1, 1), T3Vector3(1, 1, 1));
+					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, c, d, T3Vector3(1, 1, 1), T3Vector3(1, 1, 1));*/
 
 	 //origin in tetrahedron
 	 return true;
@@ -473,7 +439,7 @@ void  PhysicsEngine::SortandSweep()
 				    PhysicsNode& first =*(*i);
 				    PhysicsNode& second =*(*j);
 
-
+					
 
 
 
@@ -550,10 +516,6 @@ void  PhysicsEngine::SortandSweep()
 	
 
 
-		
-
-	
-
 
 
 void	PhysicsEngine::BroadPhaseCollisions() {
@@ -562,6 +524,8 @@ void	PhysicsEngine::BroadPhaseCollisions() {
 }
 
 void	PhysicsEngine::NarrowPhaseCollisions() {
+
+	
 	for (unsigned int i = 0; i < allNodes.size(); i++) {
 		PhysicsNode& first = *allNodes[i];
 		CollisionVolume* fv = first.GetCollisionVolume();
@@ -571,81 +535,100 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 			CollisionVolume* sv = second.GetCollisionVolume();
 			if (!sv) continue;
 
-			switch(fv->GetType()) {
-			/*case COLLISION_VOL_SPHERE:
-				switch(sv->GetType()) {
-				case COLLISION_VOL_SPHERE:
-					CollisionData data;
-					if (CollisionHelper::SphereSphereCollision(first, second, &data)) {
-						CollisionHelper::AddCollisionImpulse(first, second, data);
-					}
-					continue;
+			
+			if(CollisionDetection(first, second))
+			{
+				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
+				{
+					cout << "Collision" << endl;
+					first.SetLinearVelocity(T3Vector3(0,0,0));
+					first.SetForce(T3Vector3(0,0,0));
+                    second.SetLinearVelocity(T3Vector3(0,0,0));
+					second.SetForce(T3Vector3(0,0,0));
 				}
-			case COLLISION_VOL_PLANE:
-				switch(sv->GetType()) {
-				case COLLISION_VOL_SPHERE:
-					CollisionData data;
-					if (CollisionHelper::PlaneSphereCollision(first, second, &data)) {
-						CollisionHelper::AddCollisionImpulse(first, second, data);
-					}
-					continue;
-				}*/
-		   	case COLLISION_AABB:
-								switch(sv->GetType()) 
-								{
-									 case COLLISION_AABB:
-				    					
-									  if (CollisionHelper::AABBCollision(first, second )) 
-									  {
-										 // if(count==false){
-											//  MyGame::newt=1 ;
-											//	  count=true;}
-
-
-									  //count=count+1;
-									  // cout<<count<<endl;
-									  }
-									  continue;
-
-									  case COLLISION_VOL_BBAA:
-				    					
-									  if (CollisionHelper::BBAACollision(second,first )) 
-									  {
-										 
-
-
-										 // if(count==true){
-											//  MyGame::dt=1 ;
-									//	  count=false;}
-									 // count=count+1;
-									 //  cout<<count<<endl;
-									  }
-									 
-										continue;
-								  }
-
-
-		case COLLISION_VOL_BBAA:
-								switch(sv->GetType()) 
-								{
-									 case COLLISION_AABB:
-				    					
-									  if (CollisionHelper::BBAACollision(first, second )) 
-									  {
-										 
-
-
-										//  if(count==true){
-											//  MyGame::dt=1 ;
-										//  count=false;}
-									 // count=count+1;
-									  // cout<<count<<endl;
-									  }
-									 
-										continue;
-								  }
+			
+			
 			}
-		
+				
+
+
+
+
+		//	switch(fv->GetType()) {
+		//	/*case COLLISION_VOL_SPHERE:
+		//		switch(sv->GetType()) {
+		//		case COLLISION_VOL_SPHERE:
+		//			CollisionData data;
+		//			if (CollisionHelper::SphereSphereCollision(first, second, &data)) {
+		//				CollisionHelper::AddCollisionImpulse(first, second, data);
+		//			}
+		//			continue;
+		//		}
+		//	case COLLISION_VOL_PLANE:
+		//		switch(sv->GetType()) {
+		//		case COLLISION_VOL_SPHERE:
+		//			CollisionData data;
+		//			if (CollisionHelper::PlaneSphereCollision(first, second, &data)) {
+		//				CollisionHelper::AddCollisionImpulse(first, second, data);
+		//			}
+		//			continue;
+		//		}*/
+		//   	case COLLISION_AABB:
+		//						switch(sv->GetType()) 
+		//						{
+		//							 case COLLISION_AABB:
+		//		    					
+		//							  if (CollisionHelper::AABBCollision(first, second )) 
+		//							  {
+		//								 // if(count==false){
+		//									//  MyGame::newt=1 ;
+		//									//	  count=true;}
+
+
+		//							  //count=count+1;
+		//							  // cout<<count<<endl;
+		//							  }
+		//							  continue;
+
+		//							  case COLLISION_VOL_BBAA:
+		//		    					
+		//							  if (CollisionHelper::BBAACollision(second,first )) 
+		//							  {
+		//								 
+
+
+		//								 // if(count==true){
+		//									//  MyGame::dt=1 ;
+		//							//	  count=false;}
+		//							 // count=count+1;
+		//							 //  cout<<count<<endl;
+		//							  }
+		//							 
+		//								continue;
+		//						  }
+
+
+		//case COLLISION_VOL_BBAA:
+		//						switch(sv->GetType()) 
+		//						{
+		//							 case COLLISION_AABB:
+		//		    					
+		//							  if (CollisionHelper::BBAACollision(first, second )) 
+		//							  {
+		//								 
+
+
+		//								//  if(count==true){
+		//									//  MyGame::dt=1 ;
+		//								//  count=false;}
+		//							 // count=count+1;
+		//							  // cout<<count<<endl;
+		//							  }
+		//							 
+		//								continue;
+		//						  }
+		//	}
+		//
 		}
 	}
 }

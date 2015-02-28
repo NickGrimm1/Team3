@@ -2,7 +2,6 @@
 #include "GraphicsCommon.h"
 #include "DrawableEntity3D.h"
 #include "GameStateManager.h"
-#include "TextMesh.h"
 
 // Structures required for point light shadows
 struct CameraDirection {
@@ -30,7 +29,7 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	if (!init) return;
 	init = false;
 
-	camera	= new Camera();
+	camera	= NULL;
 
 	// Setup projection matrices - gonna just keep copies of the matrices rather than keep recreating them
 	perspectiveMatrix = T3Matrix4::Perspective(1.0f, 10000.0f, (float) width / (float) height, 45.0f);
@@ -291,6 +290,11 @@ Renderer::~Renderer(void)
 	delete sandstorm;
 	*/
 
+	for (map<string, TextMesh*>::iterator i = loadedTextMeshes.begin(); i != loadedTextMeshes.end(); i++) {
+		delete (*i).second;
+	}
+	loadedTextMeshes.clear();
+
 	currentShader = NULL;
 
 	//Clear buffers
@@ -318,19 +322,22 @@ void Renderer::RenderScene() {
 		cout << "Renderer::RenderScene() - unable to obtain rendering context!!!" << endl;
 	}
 	glClear(GL_COLOR_BUFFER_BIT);
-	cameraMatrix = camera->BuildViewMatrix();
 
-	//Main Render
-	ShadowPass();
-	DrawScene();
-	DeferredLightPass();
-	CombineBuffers();
+	if (camera) {
+		cameraMatrix = camera->BuildViewMatrix();
 
-	//Post-Processing
-	BloomPass();
-	MotionBlurPass();
+		//Main Render
+		ShadowPass();
+		DrawScene();
+		DeferredLightPass();
+		CombineBuffers();
 
-	DrawFrameBufferTex(postProcessingTex[0]);
+		//Post-Processing
+		BloomPass();
+		MotionBlurPass();
+
+		DrawFrameBufferTex(postProcessingTex[0]);
+	}
 
 	//Draw HUD/Menu overlay
 	Draw2DOverlay();
@@ -1050,7 +1057,7 @@ void Renderer::DrawFrameBufferTex(GLuint fboTex) {
 void Renderer::Draw2DOverlay() {
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
-	
+
 	glCullFace(GL_FRONT);
 	SetCurrentShader(hudShader);
 	projMatrix = hudMatrix;
@@ -1079,8 +1086,22 @@ void Renderer::Draw2DOverlay() {
 }
 
 void Renderer::Draw2DText(DrawableText2D& text) {
-	TextMesh* textMesh = new TextMesh(text.GetText(), *text.GetFont());
-	
+	TextMesh* textMesh = NULL;
+	map<string, TextMesh*>::iterator i = loadedTextMeshes.find(text.GetText());
+	if (i == loadedTextMeshes.end()) {
+		// Create a text mesh of appropriate length to display text and store
+		textMesh = new TextMesh(text.GetText(), *text.GetFont());
+		if (textMesh == NULL)
+		{
+			cout << "Renderer::Draw2DText() - Unable to create textmesh - " << text.GetText() << endl;
+			return;
+		}
+		loadedTextMeshes.insert(pair<string, TextMesh*>(text.GetText(), textMesh));
+	}
+	else {
+		textMesh = (*i).second;
+	}
+
 	T3Vector3 origin = T3Vector3(text.GetOrigin().x * text.width * width, text.GetOrigin().y * text.height * height, 0);
 	T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(text.GetRotation(), T3Vector3(0,0,1)) * T3Matrix4::Translation(origin * -1.0f);
 	modelMatrix = T3Matrix4::Translation(T3Vector3(text.x * width, text.y * height, 0)) * rotation * T3Matrix4::Scale(T3Vector3(width * text.width / (float) text.GetText().length(), height * text.height, 1));
@@ -1092,7 +1113,6 @@ void Renderer::Draw2DText(DrawableText2D& text) {
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 	
 	textMesh->Draw();
-	delete textMesh;
 }
 
 void Renderer::Draw2DTexture(DrawableTexture2D& texture) 
@@ -1136,13 +1156,13 @@ bool Renderer::ActiveTex()
 	return activeTex;
 }
 
-GLuint Renderer::CreateTexture(const char* filename, bool enableMipMaps, bool enableAnisotropicFiltering) {
+GLuint Renderer::CreateTexture(const char* filename, bool enableMipMaps, bool enableAnisotropicFiltering, unsigned int flags) {
 	openglMutex.lock_mutex();
 	wglMakeCurrent(deviceContext, renderContext);
 
-	unsigned int flags = false;
+	unsigned int texFlags = flags;
 	if (enableMipMaps) flags |= SOIL_FLAG_MIPMAPS;
-	GLuint textureObject = SOIL_load_OGL_texture(filename, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, flags);
+	GLuint textureObject = SOIL_load_OGL_texture(filename, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, texFlags);
 	if (!textureObject)
 		textureObject = 0; // make sure GetTexture will return an error
 
@@ -1249,6 +1269,7 @@ void Renderer::CreateStaticMap(GLuint* target, const int resolution, unsigned ch
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, resolution, resolution, 0, GL_RED, GL_FLOAT, colors);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	delete colors;
 }
 
 unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue)

@@ -46,7 +46,7 @@ GraphicsEngine::GraphicsEngine()
 	renderer = new Renderer(Window::GetWindow(), lights, gameEntityList, overlayElementsList);
 	if (!renderer->HasInitialised()) return;
 	
-	GLuint loadingTex = renderer->CreateTexture(TEXTUREDIR"refresh.png", false, false);
+	GLuint loadingTex = renderer->CreateTexture(TEXTUREDIR"refresh.png", false, false, SOIL_FLAG_INVERT_Y);
 	isLoading = true;
 	isLoadingDrawing = false;
 	loadingTexture = new Texture(loadingTex);
@@ -60,7 +60,7 @@ GraphicsEngine::GraphicsEngine()
 		loadingTexture,
 		0,
 		T3Vector2(0.5f, 0.5f),
-		T3Vector4(1, 1, 1, 1.0));
+		T3Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	isInitialised = true; // Graphics Engine has initialised successfully
 }
@@ -74,6 +74,7 @@ GraphicsEngine::~GraphicsEngine() {
 	delete loadingTexture;
 	delete loadingIcon;
 	delete renderer;
+	delete sceneRoot;
 	Window::Destroy();
 }
 
@@ -381,8 +382,8 @@ float GraphicsEngine::DayNightCycle() {
 		else
 			time--;
 	}
-	//check that its inc/dec correctly
-	//cout << time << ", "  << out << endl;
+
+//	cout << time << ", "  << out << endl;
 	return out;	
 }
 
