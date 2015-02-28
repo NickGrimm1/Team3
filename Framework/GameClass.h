@@ -23,7 +23,7 @@ _-_-_-_-_-_-_-""  ""
 #include "../Team3Project1/Renderer.h"
 #include "PhysicsSystem.h"
 #include "GameEntity.h"
-
+#include "Camera.h"
 #include <vector>
 
 #define RENDER_HZ	60

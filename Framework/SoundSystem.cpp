@@ -1,4 +1,5 @@
- # include "SoundSystem.h"
+#if WINDOWS_BUILD 
+# include "SoundSystem.h"
  # include"SoundManager.h"
  # include "SoundEmitter.h"
 
@@ -46,7 +47,7 @@
 		  << " channels available !" << endl ;
 	 SoundManager::AddSound("../../Sounds/14615__man__canon.wav");
 	 SoundManager::AddSound("../../Sounds/36847__ecodtr__laserrocket2.wav");
-	 SoundManager::AddSound("../../Sounds/56900__syna-max__war.wav");
+	 SoundManager::AddSound("../../Sounds/56900__syna-maximum__war.wav");
 	 SoundManager::AddSound("../../Sounds/vehicle085.wav");
  }
 
@@ -62,8 +63,8 @@
  }
 
  void SoundSystem :: SetMasterVolume ( float value ) {
-	 value = max (0.0f , value );
-	 value = min (1.0f , value );
+	 value = maximum (0.0f , value );
+	 value = minimum (1.0f , value );
 	 masterVolume = value ;
 	 alListenerf ( AL_GAIN , masterVolume );
  }
@@ -190,3 +191,4 @@
 	 }
 	 return NULL ;
  }
+#endif

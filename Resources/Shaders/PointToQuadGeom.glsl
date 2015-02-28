@@ -27,13 +27,13 @@ uniform float particleSize;
 
 //This is how we tell the geometry shader what type
 //of primitive we're taking in, and spitting out.
-//points, triangle_strip, and max_Vertices are 
+//points, triangle_strip, and maximum_Vertices are 
 //all GLSL keywords. Points and triangle strips 
 //you should know about. Max_Vertices tells GLSL
 //how many vertices to expect. As we're turning
 //points into quads, this value should be 4.
 layout(points) in;
-layout(triangle_strip, max_vertices = 4) out;
+layout(triangle_strip, maximum_vertices = 4) out;
 
 //our vertex shader actually outputs texcoords in 
 //its output struct, but we're going to ignore them

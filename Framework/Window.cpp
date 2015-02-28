@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 #include "Window.h"
 #include "Mouse.h"
 #include "Keyboard.h"
@@ -144,6 +145,7 @@ Window::~Window(void)
 {
 	delete keyboard;keyboard = NULL;
 	delete mouse;	mouse = NULL;
+	delete timer; timer = NULL;
 
 	FreeConsole();		//Destroy the console window
 }
@@ -169,11 +171,11 @@ bool	Window::UpdateWindow() {
 	float diff = timer->GetMS()-elapsedMS;
 
 
-	Window::GetKeyboard()->UpdateHolds();
-
 	while(PeekMessage(&msg,windowHandle,0,0,PM_REMOVE)) {
 		CheckMessages(msg); 
 	}
+
+	Window::GetKeyboard()->UpdateHolds();
 
 	elapsedMS = timer->GetMS();
 
@@ -336,3 +338,4 @@ void	Window::ShowOSPointer(bool show)	{
 		ShowCursor(0);
 	}
 }
+#endif

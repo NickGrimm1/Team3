@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 #include "GameTimer.h"
 
 GameTimer::GameTimer(void)	{
@@ -22,3 +23,4 @@ float	 GameTimer::GetTimedMS() {
 	lastTime	= a;
 	return b;
 }
+#endif

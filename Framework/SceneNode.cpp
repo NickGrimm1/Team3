@@ -84,14 +84,14 @@ void SceneNode::Update(float msec)	 {
 
 bool SceneNode::RemoveChild(DrawableEntity3D* toDelete, bool recursive, bool removeChildren) {
 
-	for(auto i = children.begin(); i != children.end(); ++i) {
+	for(vector<SceneNode*>::iterator i = children.begin(); i != children.end(); ++i) {
 		//if((*i) == s) {
 		if ((*i)->GetDrawableEntity() == toDelete) {
 			SceneNode* childToDelete = *i;
 			i = children.erase(i);
 			
 			if (!removeChildren) {
-				for(auto j = childToDelete->children.begin(); j != childToDelete->children.end(); ++j) {
+				for(vector<SceneNode*>::iterator j = childToDelete->children.begin(); j != childToDelete->children.end(); ++j) {
 					// Add deleted nodes children to this node
 					children.push_back(*j);
 				}
@@ -105,7 +105,7 @@ bool SceneNode::RemoveChild(DrawableEntity3D* toDelete, bool recursive, bool rem
 	}
 
 	if(recursive) {
-		for(auto i = children.begin(); i != children.end(); ++i) {
+		for(vector<SceneNode*>::iterator i = children.begin(); i != children.end(); ++i) {
 			if((*i)->RemoveChild(toDelete,recursive,removeChildren)) {
 				return true;
 			}

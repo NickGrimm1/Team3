@@ -12,7 +12,7 @@ _-_-_-_-_-_-_-|   /\_/\   NYANYANYAN
 _-_-_-_-_-_-_-""  ""   
 
 */
-
+#if WINDOWS_BUILD
 
 #include "OGLRenderer.h"
 
@@ -28,7 +28,7 @@ bool		   OGLRenderer::drawnDebugPerspective	= false;
 /*
 Creates an OpenGL 3.2 CORE PROFILE rendering context. Sets itself
 as the current renderer of the passed 'parent' Window. Not the best
-way to do it - but it kept the Tutorial code down to a minimum!
+way to do it - but it kept the Tutorial code down to a minimumimum!
 */
 OGLRenderer::OGLRenderer(Window &window)	{
 	init					= false;
@@ -83,7 +83,7 @@ OGLRenderer::OGLRenderer(Window &window)	{
 	//Now we have a temporary context, we can find out if we support OGL 3.x
 	char* ver = (char*)glGetString(GL_VERSION); // ver must equal "3.2.0" (or greater!)
 	int major = ver[0] - '0';		//casts the 'correct' major version integer from our version string
-	int minor = ver[2] - '0';		//casts the 'correct' minor version integer from our version string
+	int minimumor = ver[2] - '0';		//casts the 'correct' minimumor version integer from our version string
 
 	if(major < 3) {					//Graphics hardware does not support OGL 3! Erk...
 		std::cout << "OGLRenderer::OGLRenderer(): Device does not support OpenGL 3.x!" << std::endl;
@@ -91,7 +91,7 @@ OGLRenderer::OGLRenderer(Window &window)	{
 		return;
 	}
 
-	if(major == 3 && minor < 2) {	//Graphics hardware does not support ENOUGH of OGL 3! Erk...
+	if(major == 3 && minimumor < 2) {	//Graphics hardware does not support ENOUGH of OGL 3! Erk...
 		std::cout << "OGLRenderer::OGLRenderer(): Device does not support OpenGL 3.2!" << std::endl;
 		wglDeleteContext(tempContext);
 		return;
@@ -100,7 +100,7 @@ OGLRenderer::OGLRenderer(Window &window)	{
 
 	int attribs[] = {
         WGL_CONTEXT_MAJOR_VERSION_ARB, major,	//TODO: Maybe lock this to 3? We might actually get an OpenGL 4.x context...
-        WGL_CONTEXT_MINOR_VERSION_ARB, minor, 
+        WGL_CONTEXT_MINOR_VERSION_ARB, minimumor, 
 		WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB 
 #ifdef OPENGL_DEBUGGING 
 		| WGL_CONTEXT_DEBUG_BIT_ARB
@@ -125,7 +125,7 @@ OGLRenderer::OGLRenderer(Window &window)	{
 	wglDeleteContext(tempContext);	//We don't need the temporary context any more!
 
 	glewExperimental = GL_TRUE;	//This forces GLEW to give us function pointers for everything (gets around GLEW using 'old fashioned' methods
-								//for determining whether a OGL context supports a particular function or not
+								//for determinimuming whether a OGL context supports a particular function or not
 	
 	if (glewInit() != GLEW_OK) {	//Try to initialise GLEW
 		std::cout << "OGLRenderer::OGLRenderer(): Cannot initialise GLEW!" << std::endl;	//It's all gone wrong!
@@ -183,8 +183,8 @@ Does lower bounds checking on input values, so should be reasonably safe
 to call.
 */
 void OGLRenderer::Resize(int x, int y)	{
-	width	= max(x,1);	
-	height	= max(y,1);
+	width	= maximum(x,1);	
+	height	= maximum(y,1);
 	glViewport(0,0,width,height);
 }
 
@@ -429,3 +429,4 @@ void DebugDrawData::Draw() {
 
 	Clear();*/
 }
+#endif

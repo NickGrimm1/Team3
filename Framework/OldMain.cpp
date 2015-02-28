@@ -26,6 +26,7 @@ _-_-_-_-_-_-_-|   /\_/\   NYANYANYAN
 _-_-_-_-_-_-_-""  ""   
 
 *//////////////////////////////////////////////////////////////////////////////
+#if WINDOWS_BUILD
 #include <thread>
 #include "Window.h"
 #include "MyGame.h"
@@ -86,7 +87,7 @@ int oldmain() {
 		    SoundSystem :: GetSoundSystem () -> PlaySoundA (SoundManager :: GetSound ("../../Sounds/36847__ecodtr__laserrocket2.wav"),T3Vector3(0,0,0));
 		}
 		if( Window :: GetKeyboard () -> KeyTriggered ( KEYBOARD_3 )) {
-		    SoundSystem :: GetSoundSystem () -> PlaySoundW (SoundManager :: GetSound ("../../Sounds/56900__syna-max__war.wav"),SOUNDPRIORTY_LOW);
+		    SoundSystem :: GetSoundSystem () -> PlaySoundW (SoundManager :: GetSound ("../../Sounds/56900__syna-maximum__war.wav"),SOUNDPRIORTY_LOW);
 		}
 		
 		if( Window :: GetKeyboard () -> KeyTriggered ( KEYBOARD_4 )) {
@@ -103,3 +104,4 @@ int oldmain() {
 	return Quit();
 }
 
+#endif

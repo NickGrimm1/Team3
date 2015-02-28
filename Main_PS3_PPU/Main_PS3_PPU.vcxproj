@@ -130,7 +130,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libsn.a;libm.a;libio_stub.a;libfs_stub.a;libsn.a;libm.a;libio_stub.a;libfs_stub.a;libcgc.a;-lgcm_cmd;-lgcm_sys_stub;-lio_stub;-lsysutil_stub;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Team3Project1.a;libsn.a;libm.a;libio_stub.a;libfs_stub.a;libsn.a;libm.a;libio_stub.a;libfs_stub.a;libcgc.a;-lgcm_cmd;-lgcm_sys_stub;-lio_stub;-lsysutil_stub;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='WINDOWS_DEBUG|PS3'">

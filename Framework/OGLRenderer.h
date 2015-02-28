@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 #pragma once
 /*
 Class:OGLRenderer
@@ -163,3 +164,5 @@ protected:
 	static bool	drawnDebugPerspective;
 
 };
+
+#endif

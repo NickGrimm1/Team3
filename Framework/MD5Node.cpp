@@ -16,7 +16,7 @@ MD5Node::~MD5Node(void)	{
 
 /*
 This Overridden Update function will update the current animation frame used
-by this particular mesh instance, by subtracting the incoming time value
+by this particular mesh instance, by subtracting the incominimumg time value
 by a float /frameTime/, which when less than 0, triggers a frame update. This
 float is then reset to the framerate defined within the current animation. A
 while is used instead of an if for the unusual occurance of a time value being
@@ -61,7 +61,7 @@ void	MD5Node::Draw(const OGLRenderer &r) {
 	MD5Mesh*m = (MD5Mesh*)mesh;
 
 	/*
-	I have added experimental support for performing skinning inside the vertex
+	I have added experimental support for performinimumg skinning inside the vertex
 	shader, in order for everyone to see one way of getting lots of data into
 	'shader space'. To do so, I use an OpenGL feature called a Texture Buffer
 	Object, which allows a VBO to be 'seen' as texture data inside a shader.

@@ -32,8 +32,8 @@ static inline double DegToRad(const double rad)	{
 };
  //#if WINDOWS_BUILD
 //I blame Microsoft...
-#define max(a,b)    (((a) > (b)) ? (a) : (b))
-#define min(a,b)    (((a) < (b)) ? (a) : (b))
+#define maximum(a,b)    (((a) > (b)) ? (a) : (b))
+#define minimum(a,b)    (((a) < (b)) ? (a) : (b))
 //#endif
 #define SHADERDIR	"../Resources/Shaders/"
 #define MESHDIR		"../Resources/Meshes/"

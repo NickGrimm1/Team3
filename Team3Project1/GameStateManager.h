@@ -27,6 +27,8 @@ Version: 1.0.0 03/02/2015.</summary>
 
 using namespace std;
 
+#define GAME_FRAME_TIME 1000.0f / 60.0f
+
 class GameStateManager : public InputListener
 {
 public:
@@ -70,8 +72,16 @@ public:
 		Instance()->physics->Start();
 		Instance()->input->Start();
 
+#ifdef WINDOWS_BUILD
+		GameTimer timer;
+		float lastUpdate = timer.GetMS();
+#endif
 		while (instance->isRunning) {
+#ifdef WINDOWS_BUILD
+			while (timer.GetMS() - lastUpdate < GAME_FRAME_TIME) {;}
+			lastUpdate = timer.GetMS();
 			Window::GetWindow().UpdateWindow();
+#endif
 			for (unsigned int i = 0; i < gameScreens.size(); i++) {
 				gameScreens[i]->Update();
 			}
@@ -200,6 +210,7 @@ public:
 	<param name='type'>The event type.</param>
 	<param name='position'>The resolution independent co-ordinates of the mouse cursor.</param>
 	*/
+#if WINDOWS_BUILD
 	void MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position)
 	{
 		for (unsigned int i = 0; i < instance->gameScreens.size(); i++)
@@ -240,6 +251,7 @@ public:
 	<param name='type'>The event type.</param>
 	<param name='button'>The button.</param>
 	*/
+#endif
 	void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button)
 	{
 		for (unsigned int i = 0; i < gameScreens.size(); i++)

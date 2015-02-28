@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 # include "Sound.h"
 //# include <map>
 //map<string, Sound*> Sound::sound;
@@ -8,7 +9,7 @@
 	 freqRate = 0;
 	 length = 0;
 	 data = NULL ;
-	 streaming = false ;
+	 streaminimumg = false ;
  }
 
  Sound ::~ Sound ( void ) {
@@ -76,3 +77,4 @@
 
 	 name = string ( chunk ,4);
  }
+#endif
