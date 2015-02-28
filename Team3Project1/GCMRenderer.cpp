@@ -12,7 +12,7 @@ GCMRenderer::GCMRenderer(void)	{
 
 	camera	= NULL;
 	root	= NULL;
-	shader = new Shader;
+	shader = new Shader();
 	InitDisplay();
 	InitSurfaces();
 	texture = (GCMRenderer::LoadGTF("/ncl.gtf"));
@@ -338,9 +338,9 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		//GCC complains about function returns being used as parameters passed
 		//around, or we'd just use GetWorldTransform as the function param
 		T3Matrix4 transform = //n->GetTransform();
-			T3Matrix4::Rotation((float)DegToRad(90), T3Vector3::UnitX()) * T3Matrix4::Scale(T3Vector3(100,100,100));
+			T3Matrix4::Rotation((float)DegToRad(90), T3Vector3::UnitX()) * T3Matrix4::Scale(T3Vector3(1000,1000,1));
 
-		std::cout << "ViewMatrix: " << std::endl;
+		std::cout << "GCMRenderer: ViewMatrix (SCE): " << std::endl;
 		for (int x = 0; x < 4; ++x)
 		{
 			for (int y = 0; y < 4; ++y)
@@ -370,6 +370,7 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		}
 		
 		shader->GetVertex()->SetParameter("modelMat", m);
+		//shader->GetVertex()->UpdateShaderMatrices(m, viewMatrix, projMatrix);
 
 		/*
 		If your SceneNodes can have their own texture, handle the setting of it
@@ -378,7 +379,7 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		make it more intuitive to place it here, instead.
 		*/
 	
-		SetTextureSampler(shader->GetFragment()->GetParameter("texture"),texture);
+		//SetTextureSampler(shader->GetFragment()->GetParameter("texture"),texture);
 
 		/*
 		The GCM Mesh class needs the current vertex shader, fragment

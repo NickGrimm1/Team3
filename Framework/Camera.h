@@ -64,9 +64,9 @@ public:
 		rotatedRight = rotation * originalRight;
 		rotatedRight.Normalise();
 		if (!invertY)
-			rotation = rotation * T3Matrix4::Rotation(value, rotatedRight);
+			rotation = T3Matrix4::Rotation(value, rotatedRight) * rotation;
 		else
-			rotation = rotation * T3Matrix4::Rotation(-value, rotatedRight);
+			rotation = T3Matrix4::Rotation(-value, rotatedRight) * rotation;
 	}
 	/**
 	<summary>Adds yaw to this camera's rotation.</summary>
@@ -76,7 +76,7 @@ public:
 	{ 
 		rotatedUp = rotation * originalUp;
 		rotatedUp.Normalise();
-		rotation =  rotation * T3Matrix4::Rotation(value, rotatedUp);
+		rotation =  T3Matrix4::Rotation(value, rotatedUp) * rotation;
 	}
 	/**
 	<summary>Adds roll to this camera's rotation.</summary>
@@ -86,7 +86,7 @@ public:
 	{
 		rotatedTarget = rotation * originalTarget;
 		rotatedTarget.Normalise();
-		rotation =  rotation * T3Matrix4::Rotation(value, rotatedTarget);
+		rotation =  T3Matrix4::Rotation(value, rotatedTarget) * rotation;
 	}
 
 	/**

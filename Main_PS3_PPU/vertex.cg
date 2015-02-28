@@ -28,11 +28,12 @@ output main
 {	
 	output OUT;
 
-	float4x4 mvp = mul(projMat, mul(viewMat, modelMat));
-	
+	float4x4 vp = mul(viewMat, projMat);
+	float4x4 mvp = mul(modelMat, vp);
+
 	//mvp = projMat * viewMat * modelMat;
 	
-	OUT.position 	 = mul(mvp, position);
+	OUT.position 	 = mul(position, mvp);
 	OUT.color 		 = color;
 	OUT.texCoord	 = texCoord;
 	

@@ -99,7 +99,7 @@ void GraphicsTestScreen::LoadContent() {
 //	directionalLight = GameStateManager::Graphics()->AddDirectionalLight(T3Vector3(-1, -1, -1), T3Vector4(1,1,1,1), T3Vector4(0,0,0,1));
 
 	camera = new FreeCamera();
-	camera->SetPosition(T3Vector3(0,10,80));
+	camera->SetPosition(T3Vector3(0,5,0));
 	
 	SetCamera(camera);
 }

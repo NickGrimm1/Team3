@@ -53,7 +53,11 @@
     <None Include="gpad_config.txt" />
     <None Include="ncl.gtf" />
     <None Include="ncl.tga" />
-    <None Include="vertex.cg" />
+    <CustomBuild Include="vertex.cg">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">D:/host-win32/Cg/bin/sce_cgc -profile sce_vp_rsx -o "$(ProjectDir)vertex.vpo" "$(ProjectDir)vertex.cg"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">$(projectDir)vertex.vpo;$(ProjectDir)vertex_asm.txt</Outputs>
+    </CustomBuild>
     <None Include="vertex.vpo" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

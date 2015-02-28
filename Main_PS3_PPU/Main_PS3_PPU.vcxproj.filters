@@ -56,17 +56,17 @@
     <None Include="gpad_config.txt" />
     <None Include="ncl.gtf" />
     <None Include="ncl.tga" />
-    <None Include="fragment.cg">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="fragment.fpo">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="vertex.cg">
       <Filter>Shaders</Filter>
     </None>
     <None Include="vertex.vpo">
       <Filter>Shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="fragment.cg" />
+    <CustomBuild Include="vertex.cg">
+      <Filter>Shaders</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

@@ -152,9 +152,15 @@ void	ShaderPart::SetParameter(std::string name, float*data) {
 	//fall over.
 	if(p) {	
 		if(type == ShaderType::VERTEX)
+		{
 			cellGcmSetVertexProgramParameter(p, data);
+			std::cout << "ShaderPart(Vertex): Set Parameter: " <<  name << std::endl;
+		}
 		else
+		{
 			cellGcmSetFragmentProgramParameter(program, p, data, offset);
+			std::cout << "ShaderPart(Fragment): Set Parameter: " <<  name << std::endl;
+		}
 	}
 }
 
@@ -166,7 +172,17 @@ transpose function, so it's less likely you'll accidentally set your
 matrix wrong
 */
 void ShaderPart::SetParameter(std::string name, Matrix4 &totranpose) {
+	std::cout << "Transposing: " << name << std::endl;
 	Matrix4 tempMatrix = transpose(totranpose);
+	std::cout << "Shader Part: Transposed Matrix (SCE): " << std::endl;
+		for (int x = 0; x < 4; ++x)
+		{
+			for (int y = 0; y < 4; ++y)
+			{
+				std::cout << tempMatrix.getElem(x,y) << ",";
+			}
+			std::cout << std::endl;
+		}
 	SetParameter(name, (float*)&tempMatrix);
 }
 
@@ -247,16 +263,18 @@ CGparameter ShaderPart::GetParameter(string target)
 	if(i != uniforms.end()) 
 	{ 
 		// if its in the map , return it!
-		return i->second ;	
+		std::cout << "ShaderPart::GetParameterL: Returning " << target << " from map." << std::endl;
+		return i->second;
 	}
 
 	CGparameter p = cellGcmCgGetNamedParameter(program, target.c_str());
 	if(!p) 
 	{
-	std::cout << "Can 't find named parameter:" << target << std::endl;
+		std::cout << "Can't find named parameter:" << target << std::endl;
 	}
 
 	uniforms.insert (std::make_pair(target, p));
+	std::cout << "ShaderPart::GetParameterL: Returning " << target << " from named." << std::endl;
 	return p;
 }
 

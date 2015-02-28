@@ -109,5 +109,6 @@ protected:
 	unsigned int vertexOffsets[VertexAttributes::MAX];
 	// Pointer to vertex indices attribute data
 	short* indices;
+	int32_t a,b,c,d,e;
 #endif
 };

@@ -75,7 +75,7 @@ int main(void)	{
 	camera = new FreeCamera();	
 	cout << "new camera set" << endl;
 	//camera->SetControllingPad(JOYPAD_A);	//Controlled via joypad A
-	camera->SetPosition(T3Vector3(0,1,0)); //And set back slightly so we can see the node at the origin
+	camera->SetPosition(T3Vector3(0,5,0)); //And set back slightly so we can see the node at the origin
 	cout << "camera position set" << endl;
 	renderer.SetCamera(camera);	//Set the current renderer camera
 
