@@ -3,6 +3,8 @@
 
 PhysicsEngine* PhysicsEngine::instance = NULL;
 
+#define PHYSICS_HZ 1.0f / 120.0f
+
 void PhysicsEngine::Run()
 {
 	while (isRunning)
@@ -13,6 +15,8 @@ void PhysicsEngine::Run()
 		lastFrameTimeStamp = Window::GetWindow().GetTimer()->GetMS();
 #endif
 		frameRate = (int)(1000.0f / msec);
+
+		msec = PHYSICS_HZ;
 
 		NarrowPhaseCollisions();
 
@@ -64,13 +68,6 @@ T3Vector3 PhysicsEngine::support(PhysicsNode& shape1,PhysicsNode& shape2, T3Vect
 	
 	}
 	shape2.SetWorldPoints(worldpoints2);
-
-
-
-	
-
-
-	 
 
 	 T3Vector3 dir = T3Vector3(1, 1, 1);
 		
@@ -539,10 +536,11 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 			if (!sv) continue;
 
 			
-			/*if(CollisionDetection(first, second))
+			if(CollisionDetection(first, second))
 			{
 				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
 				{
+					cout << "Collision" << endl;
 					first.SetLinearVelocity(T3Vector3(0,0,0));
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
@@ -550,7 +548,7 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 				}
 			
 			
-			}*/
+			}
 				
 
 
