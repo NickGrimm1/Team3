@@ -42,7 +42,7 @@ TrackSegment::TrackSegment(const T3Vector3& a, const T3Vector3& b, const T3Vecto
 	glBindVertexArray(arrayObject); // makes our VAO object associated with the object name in arrayObject, the currently bound/active/operated on VAO
 	glGenBuffers(1, &trackVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, trackVBO);
-	glBufferData(GL_ARRAY_BUFFER, 2 * numVertices * sizeof(T3Vector3), trackMesh, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 2 * numVertices * sizeof(Vertex), trackMesh, GL_STATIC_DRAW);
 
 	glGenBuffers(1, &bufferObject[1]);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferObject[1]);
@@ -64,10 +64,19 @@ void TrackSegment::Draw() {
 
 	glBindVertexArray(arrayObject); // Make mesh VAO currently bound object
 	glBindBuffer(GL_ARRAY_BUFFER, trackVBO);
-	glVertexAttribPointer(VertexAttributes::POSITION, 3, GL_FLOAT, GL_FALSE, 0, 0); //Specifies that in the currently bound array index VERTEX_BUFFER points to 3 Floats. 
-	glEnableVertexAttribArray(VertexAttributes::POSITION); // Enables VERTEX BUFFER to be an index in the VAO?
-	//glVertexAttribPointer(TEXTURE_BUFFER, 2, GL_FLOAT, GL_FALSE, 0, 0);
-	//glEnableVertexAttribArray(TEXTURE_BUFFER);
+
+	// Set Vertex attributes
+	glVertexAttribPointer(VertexAttributes::POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0); // Position
+	glVertexAttribPointer(VertexAttributes::NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(float) * 3)); // Normal
+	glVertexAttribPointer(VertexAttributes::COLOUR, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(float) * 6)); // Color
+	glVertexAttribPointer(VertexAttributes::TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(float) * 10)); // TexCoord
+	glVertexAttribPointer(VertexAttributes::TANGENT, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(float) * 12)); // Tangent
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
+	glEnableVertexAttribArray(4);
 
 	glDrawElements(type, numIndices, GL_UNSIGNED_INT, 0); 
 	

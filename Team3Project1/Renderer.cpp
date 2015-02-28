@@ -259,9 +259,9 @@ bool Renderer::LoadAssets() {
 	coneMesh = GameStateManager::Assets()->LoadCone(this, 20); // Cone for spotlight rendering
 	skyDome = GameStateManager::Assets()->LoadMesh(this, MESHDIR"dome.obj"); // Skydome
 	quadMesh = GameStateManager::Assets()->LoadQuadAlt(this);
-	nightSkyTex = (GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"night_sky4.jpg", 0))->GetTextureName();
+	nightSkyTex = (GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"night_sky.jpg", 0))->GetTextureName();
 	//SetTextureRepeating(nightSkyTex, true);
-	daySkyTex = (GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"day_sky3.jpg", 0))->GetTextureName();
+	daySkyTex = (GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"day_sky.jpg", 0))->GetTextureName();
 
 	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh) {
 		cout << "Renderer::LoadAssets() - unable to load rendering assets";
@@ -278,8 +278,8 @@ void Renderer::UnloadAssets() {
 	GameStateManager::Assets()->UnloadCone(this, 20); // Cone for spotlight rendering
 	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"dome.obj"); // Skydome
 	GameStateManager::Assets()->UnloadQuadAlt(this);
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"night_sky4.jpg");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"day_sky3.jpg");
+	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"night_sky.jpg");
+	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"day_sky.jpg");
 }
 
 Renderer::~Renderer(void)
@@ -1020,7 +1020,8 @@ void Renderer::MotionBlurPass()
 	glBindTexture(GL_TEXTURE_2D, postProcessingTex[1]);
 
 	//TODO: Create a method that does the currFPS/TargetFPS calc
-	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "velocityScale"), 1.0);
+	currentFPS = GameStateManager::Graphics()->GetFrameRate();
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "velocityScale"), (float)currentFPS / 60.0f); //currfps/target
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "velocityTex"), GBUFFER_VELOCITY_UNIT);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 
