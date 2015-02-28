@@ -3,7 +3,7 @@
 
 
 Vehicle::Vehicle(float size) {
-	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
+	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"CarPhysics.obj");
 	//mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
 //	BuffMesh = new OBJMesh(MESHDIR"ico.obj");
 	
