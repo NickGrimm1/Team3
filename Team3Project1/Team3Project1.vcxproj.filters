@@ -405,9 +405,6 @@
     <ClInclude Include="..\Framework\MyGame.h">
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Framework\Octree.h">
-      <Filter>Framework\Physics\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Framework\PhysicsNode.h">
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
@@ -470,6 +467,15 @@
     </ClInclude>
     <ClInclude Include="..\Framework\T3Matrix4.h">
       <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vehicle_Wheel.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VehiclePhysicsNode.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckPoint.h">
+      <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -611,9 +617,6 @@
     <ClCompile Include="..\Framework\MyGame.cpp">
       <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Framework\Octree.cpp">
-      <Filter>Framework\Physics\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Framework\PhysicsNode.cpp">
       <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
@@ -670,6 +673,15 @@
     </ClCompile>
     <ClCompile Include="GCMRenderer.cpp">
       <Filter>Framework\Graphics\PS3\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vehicle_Wheel.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VehiclePhysicsNode.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckPoint.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

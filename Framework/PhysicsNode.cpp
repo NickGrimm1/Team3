@@ -80,7 +80,8 @@ void	PhysicsNode::Update(float msec) {
 	m_torque = T3Vector3(0,0,0);
 
 	if(target) {
-		target->SetTransform(BuildTransform());
+		target->SetRotation(m_orientation);
+		target->SetOriginPosition(m_position);
 	}
 
 
