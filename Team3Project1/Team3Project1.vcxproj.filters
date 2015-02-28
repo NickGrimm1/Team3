@@ -483,6 +483,9 @@
     <ClInclude Include="CheckPoint.h">
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="VehicleTestingScreen.h">
+      <Filter>Game\MainGame\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">
@@ -694,6 +697,9 @@
     </ClCompile>
     <ClCompile Include="HeightMap.cpp">
       <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VehicleTestingScreen.cpp">
+      <Filter>Game\MainGame\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
