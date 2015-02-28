@@ -139,54 +139,56 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 		switch (key) {
 
 		case KeyboardEvents::KEYBOARD_W:
-			{//camera->AddMovement(T3Vector3(0,0,-1));
+			{
+				//camera->AddMovement(T3Vector3(1,0,0));
 			 f=f+100;
-			 car->GetPhysicsNode().SetForce(T3Vector3(10+f,0,0));
+			// car->GetPhysicsNode().SetForce(T3Vector3(10+f,0,0));
 
 
 
-		//		if(FrontRightTire->GetPhysicsNode().GetOrientation().z==0)
-		//{
-		//  
-		//car->GetPhysicsNode().SetForce(T3Vector3(0,0,f+1));   
+				if(FrontRightTire->GetPhysicsNode().GetOrientation().y==0)
+		{
+		  
+		car->GetPhysicsNode().SetForce(T3Vector3(f+100,0,0));   
 	
 
-		//    f=f+100;
-		//}
-		//if(FrontRightTire->GetPhysicsNode().GetOrientation().z<0)
-		//{
-		//float angle=-0.5/90*FrontRightTire->GetPhysicsNode().GetOrientation().z;
+		    f=f+100;
+		}
+		if(FrontRightTire->GetPhysicsNode().GetOrientation().y<0)
+		{
+		float angle=-0.5/90*FrontRightTire->GetPhysicsNode().GetOrientation().y;
 
-		//float l= FrontRightTire->GetPhysicsNode().GetLinearVelocity().Length();
+		float l= FrontRightTire->GetPhysicsNode().GetLinearVelocity().Length();
 
-		//float x=l*sin(angle/2/3.14);
-		//float z=l*cos(angle/2/3.14);
-	 //   f=f+100;
-		////Player->GetPhysicsNode().SetForce(Vector3(0,0,0.3+f));  
-		//car->GetPhysicsNode().SetForce(T3Vector3(x+f,0,z+f));
+		float x=l*sin(angle/2/3.14);
+		float z=l*cos(angle/2/3.14);
+	    f=f+100;
+		//Player->GetPhysicsNode().SetForce(Vector3(0,0,0.3+f));  
+		car->GetPhysicsNode().SetForce(T3Vector3(x+f,0,z+f));
+		
 	
-		//tempPosition.x = PlayerPosition.x;
-		//tempPosition.z = PlayerPosition.z-1000;
-		//tempPosition.y = PlayerPosition.y+800;
+	/*	tempPosition.x = PlayerPosition.x;*/
+		/*tempPosition.z = PlayerPosition.z-1000;
+		tempPosition.y = PlayerPosition.y+800;
+*/
+		
+		}
 
-		//
-		//}
+		if(FrontRightTire->GetPhysicsNode().GetOrientation().y>0)
+		{
+		float angle=0.5/90*FrontRightTire->GetPhysicsNode().GetOrientation().y;
 
-		//if(FrontRightTire->GetPhysicsNode().GetOrientation().z>0)
-		//{
-		//float angle=0.5/90*FrontRightTire->GetPhysicsNode().GetOrientation().z;
+		float l= car->GetPhysicsNode().GetLinearVelocity().Length();
 
-		//float l= car->GetPhysicsNode().GetLinearVelocity().Length();
+		float x=-l*sin(angle/2/3.14);
+		float z=l*cos(angle/2/3.14);
+	    f=f+100;
 
-		//float x=-l*sin(angle/2/3.14);
-		//float z=l*cos(angle/2/3.14);
-	 //   f=f+100;
-
-		//car->GetPhysicsNode().SetForce(T3Vector3(x-f,0,z+f));
+		car->GetPhysicsNode().SetForce(T3Vector3(z+f,0,x-f));
 	
 
-		//		
-		//}
+				
+		}
 			
 		/*	tempPosition.z = PlayerPosition.z-1000;
 		     tempPosition.y = PlayerPosition.y+800;*/
@@ -231,7 +233,7 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 		     BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
 			 car->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
 			 cout<<car->GetPhysicsNode().GetOrientation().y<<endl;
-		    
+		 
 		//	 	
 		//
 		//float angle=-0.5/90*FrontRightTire->GetPhysicsNode().GetOrientation().z;
