@@ -72,10 +72,12 @@ public:
 		Instance()->physics->Start();
 		Instance()->input->Start();
 
+#ifdef WINDOWS_BUILD
 		GameTimer timer;
 		float lastUpdate = timer.GetMS();
+#endif
 		while (instance->isRunning) {
-#if WINDOWS_BUILD
+#ifdef WINDOWS_BUILD
 			while (timer.GetMS() - lastUpdate < GAME_FRAME_TIME) {;}
 			lastUpdate = timer.GetMS();
 			Window::GetWindow().UpdateWindow();
