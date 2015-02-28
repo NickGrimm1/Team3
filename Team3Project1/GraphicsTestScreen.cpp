@@ -27,7 +27,7 @@ void GraphicsTestScreen::LoadContent() {
 	// Note the use below of a single pointer to the object ent, which is then used many times over to add new objects to the scene.
 	// This is perfectly fine practice - internally the GameScreen holds all the pointers and will clean up on exit.
 	// If you need to remove or change an entity before the game screen is disposed of (A pick-up perhaps) then it will require it's own unique named variable.
-
+	//
 	quad = GameStateManager::Assets()->LoadQuad(this);
 	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
 	circle = GameStateManager::Assets()->LoadCircle(this, 20);

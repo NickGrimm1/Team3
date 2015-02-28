@@ -37,7 +37,8 @@ _-_-_-_-_-_-_-""  ""
 #include "T3Vector3.h"
 #include "T3Matrix4.h"
 #include "SceneNode.h"
-#include <vector>
+#include "../Team3Project1/DrawableEntity3D.h"
+
 #include "CollisionVolume.h"
 using namespace std;
 #define LINEAR_VELOCITY_DAMP 0.98
@@ -78,8 +79,8 @@ public:
 	void	SetOrientation(Quaternion q) { m_orientation = q; }
 	void	SetAngularVelocity(T3Vector3 vec) { m_angularVelocity = vec; }
 
-	void	SetTarget(SceneNode *s) { target = s;}
-	SceneNode* GetTarget() {return target;}
+	void	SetTarget(DrawableEntity3D *s) { target = s;}
+	DrawableEntity3D* GetTarget() {return target;}
 	void	SetUseGravity(bool value) { useGravity = value; }
 	void	SetCollisionVolume(CollisionVolume* vol) { this->vol = vol; }
 
@@ -107,7 +108,7 @@ public:
 	float GetXend(){return Xend;};
 	void  SetXstart(float xstart) {Xstart=xstart;};
 	void  SetXend(float xend) {Xend=xend;};
-	void        SetForce(T3Vector3 x)    {m_force=x;}
+	void  SetForce(T3Vector3 x)    {m_force=x;};
 	float Ystart;
 	float Yend;
 	float GetYstart(){return Ystart;};
@@ -115,8 +116,15 @@ public:
 	void  SetYstart(float Ystart) {Ystart=Ystart;};
 	void  SetYend(float Yend) {Yend=Yend;};
 	T3Vector3 GetFathestPointInDirection(PhysicsNode& shape1,T3Vector3 d);
+
+	bool GetIsCollide(){ return isCollide;};
+	void SetIsCollide(bool iscollide){ isCollide=iscollide;}
+
+
+
 protected:
 	bool useGravity;
+	bool isCollide;
 
 	//<---------LINEAR-------------->
 	T3Vector3		m_position;
@@ -139,7 +147,7 @@ protected:
 	float Rw;  //wheel radius
 	float n;   //transmission efficiency
 
-	SceneNode*	target;
+	DrawableEntity3D*	target;
 	CollisionVolume* vol;
 //	Function* callback;
 //	GameClass* interestedObject;
