@@ -331,15 +331,44 @@ specific #ifdefs to encapsulate API code). You'll have to think up some way
 of safely setting shaders and textures on a renderer...
 */
 void	GCMRenderer::DrawNode(SceneNode*n)	{
+	std::cout << "Drawing Node" << std::endl;
 	if(n->GetMesh()) {
+		std::cout << "Drawing a mesh: " << std::endl;
+		std::cout << n->GetMesh()->GetNumVertices() << std::endl;
 		//GCC complains about function returns being used as parameters passed
 		//around, or we'd just use GetWorldTransform as the function param
-		T3Matrix4 transform = n->GetWorldTransform();
-		
+		T3Matrix4 transform = //n->GetTransform();
+			T3Matrix4::Rotation((float)DegToRad(90), T3Vector3::UnitX()) * T3Matrix4::Scale(T3Vector3(100,100,100));
+
+		std::cout << "ViewMatrix: " << std::endl;
+		for (int x = 0; x < 4; ++x)
+		{
+			for (int y = 0; y < 4; ++y)
+			{
+				std::cout << viewMatrix.getElem(x,y) << ",";
+			}
+			std::cout << std::endl;
+		}
+
+		std::cout << "Transform (T3): " << std::endl;
+		std::cout << n->GetTransform() << std::endl;
+		std::cout << transform << std::endl;
+
 		Matrix4 m;
 		for (int x = 0; x < 4; ++x)
 			for (int y = 0; y < 4; ++y)
-				m.setElem(y, x, transform.values[y + x * 4]);
+				m.setElem(x, y, transform.values[y + x * 4]);
+		
+		std::cout << "Transform (SCE): " << std::endl;
+		for (int x = 0; x < 4; ++x)
+		{
+			for (int y = 0; y < 4; ++y)
+			{
+				std::cout << m.getElem(x,y) << ",";
+			}
+			std::cout << std::endl;
+		}
+		
 		shader->GetVertex()->SetParameter("modelMat", m);
 
 		/*

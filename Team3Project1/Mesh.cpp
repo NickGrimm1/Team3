@@ -45,6 +45,12 @@ void Mesh::Draw()
 #if PS3_BUILD
 void Mesh::Draw(Shader* shader)
 {
+	std::cout << "Position: " << vertexOffsets[VertexAttributes::POSITION] << std::endl;
+	std::cout << "Normal: " << vertexOffsets[VertexAttributes::NORMAL] << std::endl;
+	std::cout << "Colour: " << vertexOffsets[VertexAttributes::COLOUR] << std::endl;
+	std::cout << "Texcoord: " << vertexOffsets[VertexAttributes::TEXCOORD] << std::endl;
+	std::cout << "Tangent: " << vertexOffsets[VertexAttributes::TANGENT] << std::endl;
+
 	cellGcmSetVertexDataArray(shader->GetVertex()->GetAttributeIndex(VertexAttributes::POSITION),
 		0, 
 		sizeof(Vertex), 
@@ -53,9 +59,11 @@ void Mesh::Draw(Shader* shader)
 		CELL_GCM_LOCATION_LOCAL, 
 		(uint32_t)vertexOffsets[VertexAttributes::POSITION]
 	);
+	std::cout << "Drawing position" << std::endl;
 
 	if(vertexOffsets[VertexAttributes::NORMAL])
 	{
+		std::cout << "Drawing normal" << std::endl;
 		cellGcmSetVertexDataArray(shader->GetVertex()->GetAttributeIndex(VertexAttributes::NORMAL),
 			0, 
 			sizeof(Vertex), 
@@ -68,6 +76,7 @@ void Mesh::Draw(Shader* shader)
 
 	if(vertexOffsets[VertexAttributes::COLOUR])	
 	{
+		std::cout << "Drawing colour" << std::endl;
 		cellGcmSetVertexDataArray(shader->GetVertex()->GetAttributeIndex(VertexAttributes::COLOUR),
 			0, 
 			sizeof(Vertex), 
@@ -80,6 +89,7 @@ void Mesh::Draw(Shader* shader)
 
 	if(vertexOffsets[VertexAttributes::TEXCOORD])
 	{
+		std::cout << "Drawing texcoord" << std::endl;
 		cellGcmSetVertexDataArray(shader->GetVertex()->GetAttributeIndex(VertexAttributes::TEXCOORD),
 			0, 
 			sizeof(Vertex), 
@@ -92,6 +102,7 @@ void Mesh::Draw(Shader* shader)
 
 	if(vertexOffsets[VertexAttributes::TANGENT])
 	{
+		std::cout << "Drawing tangent" << std::endl;
 		cellGcmSetVertexDataArray(shader->GetVertex()->GetAttributeIndex(VertexAttributes::TANGENT),
 			0, 
 			sizeof(Vertex), 
@@ -372,7 +383,7 @@ Mesh* Mesh::GenerateQuadAlt()
 	m->BufferData();
 #endif
 #if PS3_BUILD
-	cellGcmAddressToOffset(&m->vertices->x, &m->vertexOffsets[VertexAttributes::POSITION]);
+	cellGcmAddressToOffset(&m->vertices->x, &m->vertexOffsets[VertexAttributes::POSITION]);	
 	cellGcmAddressToOffset(&m->vertices->nX, &m->vertexOffsets[VertexAttributes::NORMAL]);
 	cellGcmAddressToOffset(&m->vertices->rgba, &m->vertexOffsets[VertexAttributes::COLOUR]);
 	cellGcmAddressToOffset(&m->vertices->tX, &m->vertexOffsets[VertexAttributes::TEXCOORD]);

@@ -24,7 +24,7 @@ Renderer::Renderer(void)	{
 	/*
 	Projection matrix...0.7853982 is 45 degrees in radians.
 	*/
-	projMatrix	= Matrix4::perspective(0.7853982, screenRatio, 1.0f, 20000.0f);	//CHANGED TO THIS!!
+	projMatrix	= Matrix4::perspective(0.7853982, screenRatio, 1.0f, 10000.0f);	//CHANGED TO THIS!!
 }
 
 Renderer::~Renderer(void)	{
@@ -53,7 +53,7 @@ void Renderer::RenderScene() {
 		viewMatrix = Matrix4::identity();
 		for (int x = 0; x < 4; ++x)
 			for (int y = 0; y < 4; ++y)
-				viewMatrix.setElem(y, x, m.values[y + x * 4]);
+				viewMatrix.setElem(x, y, m.values[y + x * 4]);
 	}
 	else{
 		viewMatrix = Matrix4::identity();

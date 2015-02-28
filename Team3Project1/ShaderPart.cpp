@@ -9,7 +9,7 @@
 #include "../Team3Project1/Mesh.h"
 #endif
 
-ShaderPart::ShaderPart(string raw, ShaderType::Type type) : type(type)
+ShaderPart::ShaderPart(std::string raw, ShaderType::Type type) : type(type)
 {
 	std::cout <<"shader part started" << std::endl;
 #if WINDOWS_BUILD
@@ -152,9 +152,9 @@ void	ShaderPart::SetParameter(std::string name, float*data) {
 	//fall over.
 	if(p) {	
 		if(type == ShaderType::VERTEX)
-		cellGcmSetVertexProgramParameter(p, data);
-
-		cellGcmSetFragmentProgramParameter(program, p, data, offset);
+			cellGcmSetVertexProgramParameter(p, data);
+		else
+			cellGcmSetFragmentProgramParameter(program, p, data, offset);
 	}
 }
 
@@ -235,7 +235,7 @@ void	ShaderPart::UpdateShaderMatrices(Matrix4 &model,Matrix4 &view, Matrix4 &pro
 }
 #endif
 #if PS3_BUILD
-CGprogram ShaderPart::GetProgram(){std::cout<<"ShaderPart: hello from getProgram"<<std::endl; return program;}
+CGprogram ShaderPart::GetProgram(){std::cout<<"ShaderPart: Program: " << &program << program << std::endl; return program;}
 
 unsigned int ShaderPart::GetOffset(){return offset;}
 
@@ -244,8 +244,20 @@ unsigned int ShaderPart::GetAttributeIndex(VertexAttributes::Attributes attribut
 CGparameter ShaderPart::GetParameter(string target)
 {
 	std::map<std::string, CGparameter>::iterator i = uniforms.find(target);
-	if( i != uniforms.end()) 
-	{ 		// if its in the map , return it!		return i->second ;		}
+	if(i != uniforms.end()) 
+	{ 
+		// if its in the map , return it!
+		return i->second ;	
+	}
+
+	CGparameter p = cellGcmCgGetNamedParameter(program, target.c_str());
+	if(!p) 
+	{
+	std::cout << "Can 't find named parameter:" << target << std::endl;
+	}
+
+	uniforms.insert (std::make_pair(target, p));
+	return p;
 }
 
 void* ShaderPart::GetuCode()

@@ -55,7 +55,7 @@ public:
 	//unsigned int offset;
 	uint32_t offset;
 	map<string, CGparameter> uniforms;
-	virtual void SetParameter(string name, float* data);
+	virtual void SetParameter(std::string name, float* data);
 	void UpdateShaderVariables();
 	
 #endif

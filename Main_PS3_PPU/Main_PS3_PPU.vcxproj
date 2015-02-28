@@ -43,7 +43,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="duck256.gtf" />
-    <None Include="fragment.cg" />
+    <CustomBuild Include="fragment.cg">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">D:/host-win32/Cg/bin/sce_cgc -profile sce_fp_rsx -o "$(ProjectDir)fragment.fpo" "$(ProjectDir)fragment.cg"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">$(projectDir)fragment.fpo;$(ProjectDir)fragment_asm.txt</Outputs>
+    </CustomBuild>
     <None Include="fragment.fpo" />
     <None Include="fragment_asm.txt" />
     <None Include="gpad_config.txt" />
@@ -116,7 +120,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">
-    <LibraryPath>D:\Semester2\TeamProject\Team3\PS3_PS3_DEBUG</LibraryPath>
+    <LibraryPath>..\PS3_PS3_DEBUG</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|PS3'">
     <ClCompile>

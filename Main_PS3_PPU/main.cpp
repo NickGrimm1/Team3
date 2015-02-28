@@ -64,7 +64,7 @@ int main(void)	{
 	std::cout << "logo scenenode declared" <<std::endl;
 	logo->SetMesh(m); //tell it to draw our new quad
 	std::cout << "logo mesh set" << std::endl;
-	logo->SetTransform(/*Matrix4::rotationX(DegToRad(-90)) * */T3Matrix4::Scale(T3Vector3(100,100,100)));
+	logo->SetTransform(/*T3Matrix4::Rotation((float)DegToRad(0), T3Vector3::UnitX()) **/ T3Matrix4::Scale(T3Vector3(100,100,100)));
 	std::cout << "logo transform set" << std::endl;
 	root->AddChild(logo);
 	std::cout << "root addChild logo" <<std::endl;
@@ -75,7 +75,7 @@ int main(void)	{
 	camera = new FreeCamera();	
 	cout << "new camera set" << endl;
 	//camera->SetControllingPad(JOYPAD_A);	//Controlled via joypad A
-	camera->SetPosition(T3Vector3(0,0,100)); //And set back slightly so we can see the node at the origin
+	camera->SetPosition(T3Vector3(0,1,0)); //And set back slightly so we can see the node at the origin
 	cout << "camera position set" << endl;
 	renderer.SetCamera(camera);	//Set the current renderer camera
 
