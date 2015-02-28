@@ -4,6 +4,7 @@
 #include "GameStateManager.h"
 #include "FreeCamera.h"
 #include "../Framework/ObjMesh.h"
+#include "TrackSegment.h"
 
 //TODO - remove
 #include <iostream>
@@ -44,6 +45,7 @@ void GraphicsTestScreen::LoadContent() {
 #endif
 	
 	DrawableEntity3D* ent;
+	/*
 	for (unsigned int i = 0; i < 8; i++) {
 		for (unsigned int j = 0; j < 8; j++) {
 			ent = new DrawableEntity3D(
@@ -59,6 +61,24 @@ void GraphicsTestScreen::LoadContent() {
 			AddDrawable(ent);
 		}
 	}
+	*/
+
+	GameStateManager::Graphics()->GetRenderContext();
+	TrackSegment* track = new TrackSegment(T3Vector3(-100, 0, -100), T3Vector3(-100,0,0), T3Vector3(0,0,100), 10, 50.0);
+	GameStateManager::Graphics()->DropRenderContext();
+
+	ent = new DrawableEntity3D(
+		track,
+		NULL,
+		grassTex,
+		NULL,
+		800.0f,
+		T3Vector3(0,0,0),
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(1,1,1));
+	gameEntities.push_back(ent);
+	AddDrawable(ent);
+
 
 	ent = new DrawableEntity3D(
 		cylinder, 
