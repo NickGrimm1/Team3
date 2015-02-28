@@ -763,6 +763,18 @@
     <None Include="..\Resources\Shaders\VelocityFragment.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="..\Resources\Shaders\PassThroughVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\PerlinFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\SkyDomeFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\SkyDomeVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\OpenAL 1.1 SDK\libs\Win32\OpenAL32.lib">

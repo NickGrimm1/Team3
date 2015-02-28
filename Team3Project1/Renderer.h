@@ -21,8 +21,10 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "DrawableText2D.h"
 #include "DrawableTexture2D.h"
 #include "MutexClass.h"
+#include "TextMesh.h"
 
 #include <vector>
+#include <map>
 
 #define SAMPLENUM 3
 #define SHADOWSIZE 2048 //* 8 ?
@@ -55,7 +57,7 @@ public:
 	void			RenderScene();
 	void			ToggleDebug(int arg, bool onOff);
 
-	GLuint			CreateTexture(const char* filename, bool enableMipMaps = false, bool enableAnisotropicFiltering = false);
+	GLuint			CreateTexture(const char* filename, bool enableMipMaps = false, bool enableAnisotropicFiltering = false, unsigned int flags = 0);
 	GLuint			CreateCubeTexture(const char* filename);
 	GLuint			CreateShadowTexture();
 	GLuint			CreateShadowCube();
@@ -66,15 +68,17 @@ public:
 	T3Vector4			GetAmbientColour() const {return ambientLightColour;}
 	void			SetAmbientColour(T3Vector4& colour) {ambientLightColour = colour;}
 
+	void			SetDayNight(float arg) { dayNight = arg; }
+
 	bool			GetRenderContextForThread();
 	bool			DropRenderContextForThread();
 
-	bool LoadShaders();
-	bool LoadAssets();
-	void UnloadShaders();
-	void UnloadAssets();
+	bool			LoadShaders();
+	bool			LoadAssets();
+	void			UnloadShaders();
+	void			UnloadAssets();
 
-	void DrawDeferredLights(bool on) {drawDeferredLights = on;}
+	void			DrawDeferredLights(bool on) {drawDeferredLights = on;}
 
 	unsigned char* GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue);
 
@@ -164,10 +168,12 @@ protected:
 	GLuint			postProcessingFBO;
 	GLuint			deferredLightingFBO;
 	GLuint			shadowFBO;
-	GLuint			skyColourBuffer; //The buffer for holding the clous texture.
+	GLuint			skyColourBuffer[2]; //The buffer for holding the cloud texture.
 	GLuint			skyBufferFBO;
+	
+	GLuint			daySkyTex;
+	GLuint			nightSkyTex;
 	GLuint			cloudMap;	// The texture for holding the static map the clouds are generated from.
-
 	GLuint			gbufferColourTex;
 	GLuint			gbufferDepthTex;
 	GLuint			gbufferNormalTex;
@@ -180,10 +186,14 @@ protected:
 	GLuint			postProcessingTex[3]; // At start of post-processing, postProcessingTex[0] holds the rendered scene
 	GLuint			downSampleTex[SAMPLENUM * 2];
 
-	T3Vector4			ambientLightColour; // The scenes ambient light settings
+	T3Vector4		ambientLightColour; // The scenes ambient light settings
 
 	MutexClass		openglMutex;		// Prevents different threads for using OpenGL at same time	
 
 	float			samples[3];
+
+	float			dayNight;
+
+	map<string, TextMesh*> loadedTextMeshes;
 };
 #endif

@@ -81,6 +81,7 @@ Texture* AssetManager::LoadTexture(void* callerID, string filePath, unsigned int
 		if (newTexture->GetTextureName() == 0)
 		{
 			delete newTexture;
+			GameStateManager::Graphics()->DropRenderContext();
 			return NULL;
 		}
 		newTexture->SetRepeating(true);
@@ -801,10 +802,10 @@ Font* AssetManager::LoadFont(void* callerID, string filePath, unsigned int xCoun
 	else
 	{
 		// Load this font in...
-		GameStateManager::Graphics()->GetRenderContext();
+		//GameStateManager::Graphics()->GetRenderContext();
 		Font* newFont = new Font(xCount, yCount);
 		newFont->SetTexture(LoadTexture(newFont, filePath, SOIL_FLAG_COMPRESS_TO_DXT));
-		GameStateManager::Graphics()->DropRenderContext();
+		//GameStateManager::Graphics()->DropRenderContext();
 		loadedFonts.insert(pair<string, LoadedFont>(filePath, LoadedFont(newFont, callerID)));
 		return newFont;
 	}
@@ -830,9 +831,10 @@ void AssetManager::UnloadFont(void* callerID, string filePath)
 	// No owners left? delete
 	if (loadedFonts[filePath].callerIDs.size() == 0)
 	{
-		GameStateManager::Graphics()->GetRenderContext();
+		//GameStateManager::Graphics()->GetRenderContext(); // Load Texture will secure its own render context
 		UnloadTexture(loadedFonts[filePath].font, filePath);
-		GameStateManager::Graphics()->DropRenderContext();
+		//GameStateManager::Graphics()->DropRenderContext();
+		delete loadedFonts[filePath].font;
 		i = loadedFonts.erase(i);
 	}
 }

@@ -152,6 +152,8 @@ private:
 
 	bool isInitialised;
 
+	float DayNightCycle();
+
 	void BuildNodeLists(SceneNode* from);
 	void SortNodeLists();
 	void ClearNodeLists();
@@ -193,8 +195,12 @@ private:
 	bool isLoadingDrawing;
 	DrawableTexture2D* loadingIcon;
 	Texture* loadingTexture;
+	Texture* skyboxDay;
+	Texture* skyboxNight;
 
 	const float RENDER_TIME;
 	float lastFrameTimeStamp;
 	int frameRate;
+	int time;
+	bool inc;
 };

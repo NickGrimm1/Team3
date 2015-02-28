@@ -46,20 +46,21 @@ GraphicsEngine::GraphicsEngine()
 	renderer = new Renderer(Window::GetWindow(), lights, gameEntityList, overlayElementsList);
 	if (!renderer->HasInitialised()) return;
 	
-	GLuint loadingTex = renderer->CreateTexture(TEXTUREDIR"refresh.png", false, false);
+	GLuint loadingTex = renderer->CreateTexture(TEXTUREDIR"refresh.png", false, false, SOIL_FLAG_INVERT_Y);
 	isLoading = true;
 	isLoadingDrawing = false;
 	loadingTexture = new Texture(loadingTex);
+	float aspect = (float) width / (float) height;
 	loadingIcon = new DrawableTexture2D(
-		width - 45,
-		height - 65,
+		0.95f,
+		1.0f - 0.05f * aspect,
 		1,
-		25,
-		25,
+		0.05f,
+		0.05f * aspect,
 		loadingTexture,
 		0,
-		T3Vector2(),
-		T3Vector4(1, 1, 1, 1.0));
+		T3Vector2(0.5f, 0.5f),
+		T3Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	isInitialised = true; // Graphics Engine has initialised successfully
 }
@@ -73,12 +74,16 @@ GraphicsEngine::~GraphicsEngine() {
 	delete loadingTexture;
 	delete loadingIcon;
 	delete renderer;
+	delete sceneRoot;
 	Window::Destroy();
 }
 
 void GraphicsEngine::Run() {
 	isRunning = true;
 	
+	time = 0;
+	inc = true;
+
 	while (isRunning) {
 
 		while (Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp < RENDER_TIME) { ; } // Fix the timestep
@@ -114,7 +119,7 @@ void GraphicsEngine::Run() {
 		addHudList.clear();
 
 		for (unsigned int i = 0; i < removeHudList.size(); i++) {
-			for (auto j = overlayElementsList.begin(); j != overlayElementsList.end(); ++j) {
+			for (vector<DrawableEntity2D*>::iterator j = overlayElementsList.begin(); j != overlayElementsList.end(); ++j) {
 				if ((*j) == removeHudList[i]) {
 					overlayElementsList.erase(j);
 				}
@@ -129,7 +134,7 @@ void GraphicsEngine::Run() {
 
 		// Add/Remove lights
 		for (unsigned int l = 0; l < removeLightsList.size(); l++) {
-			for (auto i = lights.begin(); i != lights.end(); ++i) {
+			for (vector<Light*>::iterator i = lights.begin(); i != lights.end(); ++i) {
 				if ((*i) == removeLightsList[l]) {
 					unsigned int shadowTex = (*i)->GetShadowTexture();
 					if (shadowTex > 0) 
@@ -189,6 +194,8 @@ void GraphicsEngine::Run() {
 		if (isLoadingDrawing) {
 			loadingIcon->SetRotation(loadingIcon->GetRotation() + 1.0f);
 		}
+
+		renderer->SetDayNight(DayNightCycle());
 
 		// Render data
 		renderer->RenderScene();
@@ -344,4 +351,38 @@ unsigned char* GraphicsEngine::GeneratePerlinNoise(const int resolution, unsigne
 {
 	return renderer->GeneratePerlinNoise(resolution, minValue, maxValue);
 }
+
+float GraphicsEngine::DayNightCycle() {
+	float out;
+
+	if (time > 4500 && time < 5500) {
+		out = time - 4500;
+		out /= 1000.0f;
+	}
+	else if (time < 4500)
+		out = 0.0f;
+	else
+		out = 1.0f;
+
+	if (inc) {
+		if (time >= 10000) {
+			inc = false;
+			time--;
+		}
+		else
+			time++;
+	}
+	else {
+		if (time <= 0) {
+			inc = true;
+			time++;
+		}
+		else
+			time--;
+	}
+
+//	cout << time << ", "  << out << endl;
+	return out;	
+}
+
 #endif
