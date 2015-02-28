@@ -194,6 +194,7 @@ void GraphicsEngine::Run() {
 			loadingIcon->SetRotation(loadingIcon->GetRotation() + 1.0f);
 		}
 
+		//Update the day/night float
 		renderer->SetDayNight(DayNightCycle());
 
 		// Render data
@@ -354,13 +355,14 @@ unsigned char* GraphicsEngine::GeneratePerlinNoise(const int resolution, unsigne
 float GraphicsEngine::DayNightCycle() {
 	float out;
 
-	if (time > 4500 && time < 5500) {
+	//Decide if day/night is transitioning
+	if (time > 4500 && time < 5500) {//Halfway through the cycle, it is changing.
 		out = time - 4500;
 		out /= 1000.0f;
 	}
-	else if (time < 4500)
+	else if (time < 4500)	//day
 		out = 0.0f;
-	else
+	else					//Night
 		out = 1.0f;
 
 	if (inc) {
@@ -379,8 +381,8 @@ float GraphicsEngine::DayNightCycle() {
 		else
 			time--;
 	}
-
-	cout << time << ", "  << out << endl;
+	//check that its inc/dec correctly
+	//cout << time << ", "  << out << endl;
 	return out;	
 }
 

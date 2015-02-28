@@ -1013,7 +1013,8 @@ void Renderer::MotionBlurPass()
 	glBindTexture(GL_TEXTURE_2D, postProcessingTex[1]);
 
 	//TODO: Create a method that does the currFPS/TargetFPS calc
-	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "velocityScale"), 1.0);
+	currentFPS = GameStateManager::Graphics()->GetFrameRate();
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "velocityScale"), (float)currentFPS / 60.0f); //currfps/target
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "velocityTex"), GBUFFER_VELOCITY_UNIT);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 

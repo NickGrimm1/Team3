@@ -189,7 +189,7 @@ protected:
 	MutexClass		openglMutex;		// Prevents different threads for using OpenGL at same time	
 
 	float			samples[3];
-
+	int				currentFPS;
 	float			dayNight;
 };
 #endif
