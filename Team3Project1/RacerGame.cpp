@@ -141,7 +141,7 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 		case KeyboardEvents::KEYBOARD_W:
 			{
 				//camera->AddMovement(T3Vector3(1,0,0));
-			 f=f+100;
+			 f=f+1;
 			// car->GetPhysicsNode().SetForce(T3Vector3(10+f,0,0));
 
 
@@ -149,10 +149,10 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 				if(FrontRightTire->GetPhysicsNode().GetOrientation().y==0)
 		{
 		  
-		car->GetPhysicsNode().SetForce(T3Vector3(f+100,0,0));   
+		car->GetPhysicsNode().SetForce(T3Vector3(f /*+ 100.0f*/,0,0));   
 	
 
-		    f=f+100;
+//		    f=f+100;
 		}
 		if(FrontRightTire->GetPhysicsNode().GetOrientation().y<0)
 		{

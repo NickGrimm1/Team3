@@ -3,8 +3,6 @@
 
 PhysicsEngine* PhysicsEngine::instance = NULL;
 
-#define PHYSICS_HZ 1.0f / 120.0f
-
 void PhysicsEngine::Run()
 {
 	while (isRunning)
@@ -15,8 +13,6 @@ void PhysicsEngine::Run()
 		lastFrameTimeStamp = Window::GetWindow().GetTimer()->GetMS();
 #endif
 		frameRate = (int)(1000.0f / msec);
-
-		msec = PHYSICS_HZ;
 
 		NarrowPhaseCollisions();
 
