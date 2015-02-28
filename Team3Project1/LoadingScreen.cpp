@@ -1,26 +1,28 @@
 #include "LoadingScreen.h"
 #include "GameStateManager.h"
 #include "GraphicsCommon.h"
+#include "GraphicsTestScreen.h"
+#include "HudTestScreen.h"
 
 void LoadingScreen::LoadContent() {
-	refreshTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"refresh.png", 0);
-	refreshIcon = new DrawableTexture2D(
-		SCREEN_WIDTH - 45,
-		SCREEN_HEIGHT - 65,
-		1,
-		25,
-		25,
-		refreshTex,
-		0,
-		T3Vector2(),
-		T3Vector4(1, 1, 1, 1.0));
-	AddDrawable(refreshIcon);
+	isLoading = true;
 }
 
 void LoadingScreen::Update() {
-	refreshIcon->SetRotation(refreshIcon->GetRotation() + 0.0001f);
+	if (isLoading) {
+		GraphicsTestScreen* game = new GraphicsTestScreen();
+		GameStateManager::Instance()->AddGameScreen(game);
+
+		HudTestScreen* hud = new HudTestScreen();
+		GameStateManager::Instance()->AddGameScreen(hud);
+		
+		GameStateManager::Graphics()->EnableLoadingIcon(false);
+		isLoading = false;
+		
+		GameStateManager::Instance()->RemoveGameScreen(this);
+	}
 }
 
 void LoadingScreen::UnloadContent() {
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"refresh.tga");
+
 }

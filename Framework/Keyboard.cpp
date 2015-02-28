@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 #include "Keyboard.h"
 #include "../Team3Project1/GameStateManager.h"
 
@@ -41,7 +42,7 @@ void Keyboard::Update(RAWINPUT* raw, float msec)	{
 			return;
 		}
 
-		//First bit of the flags tag determines whether the key is down or up
+		//First bit of the flags tag determinimumes whether the key is down or up
 		keyStates[key] = !(raw->data.keyboard.Flags & RI_KEY_BREAK);
 		for (int i = 0; i < KeyboardEvents::KEYBOARD_MAX; i++)
 			lastKeyDown[i] += msec;
@@ -55,7 +56,7 @@ void Keyboard::Update(RAWINPUT* raw, float msec)	{
 			}
 			else
 			{
-				GameStateManager::Instance()->KeyboardEvent(KeyboardEvents::KEY_HELD, (KeyboardEvents::Key)key);
+				//GameStateManager::Instance()->KeyboardEvent(KeyboardEvents::KEY_HELD, (KeyboardEvents::Key)key);
 			}
 		}
 		else
@@ -70,7 +71,17 @@ void Keyboard::Update(RAWINPUT* raw, float msec)	{
 				}
 			}
 		}
-
-		memcpy(prevStates, keyStates, KeyboardEvents::KEYBOARD_MAX * sizeof(bool));
 	}
 }
+
+void Keyboard::UpdateHolds() {
+	for (int i = 0; i < KeyboardEvents::KEYBOARD_MAX; i++) {
+		if (prevStates[i]) { // key is down, and has not recieved an up
+			GameStateManager::Instance()->KeyboardEvent(KeyboardEvents::KEY_HELD, (KeyboardEvents::Key) i);
+		}
+	}
+
+	memcpy(prevStates, keyStates, KeyboardEvents::KEYBOARD_MAX * sizeof(bool));
+}
+
+#endif

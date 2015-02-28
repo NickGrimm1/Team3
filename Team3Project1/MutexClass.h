@@ -1,7 +1,7 @@
 #pragma once
-
+#if WINDOWS_BUILD
 #include <windows.h>
-
+#endif
 class MutexClass {
 public:
 	MutexClass();
@@ -10,5 +10,7 @@ public:
 	virtual void unlock_mutex();
 
 protected:
+#if WINDOWS_BUILD
 	HANDLE mutex;
+#endif
 };

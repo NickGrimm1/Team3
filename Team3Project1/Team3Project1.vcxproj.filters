@@ -468,6 +468,12 @@
     <ClInclude Include="..\Framework\T3Matrix4.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DebugOverlay.h">
+      <Filter>Framework\Debug\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Heightmap.h">
+      <Filter>Framework\Resource Manager\Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Vehicle_Wheel.h">
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
@@ -683,6 +689,12 @@
     <ClCompile Include="CheckPoint.cpp">
       <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DebugOverlay.cpp">
+      <Filter>Framework\Debug\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightMap.cpp">
+      <Filter>Framework\Resource Manager\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\TechFragment.glsl">
@@ -761,6 +773,18 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\VelocityFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\PassThroughVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\PerlinFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\SkyDomeFragment.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\SkyDomeVertex.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

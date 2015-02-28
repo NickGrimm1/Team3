@@ -37,7 +37,7 @@ out vec4 gl_FragColor[2];
 
 /* Spot lights - emits a cone of light angle of alpha
 A fragment will be lit if
-1. Within spotlight radius (not beyond max distance)
+1. Within spotlight radius (not beyond maximum distance)
 2. within cone of light
 dot(a,b) = |a| * |b| * cos angle
 calc dot product between cones central axis and vector from cone origin and fragment (normalised)

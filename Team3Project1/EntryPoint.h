@@ -13,6 +13,7 @@ Version: 0.0.3 06/02/2015.</summary>
 // FOR TESTING PURPOSES - REMOVE IN FINAL BUILD
 #include "GraphicsTestScreen.h"
 #include "HudTestScreen.h"
+#include "DebugOverlay.h"
 
 #include "RacerGame.h"
 namespace EntryPoint
@@ -23,14 +24,17 @@ namespace EntryPoint
 		//LoadingScreen* loadingScreen = new LoadingScreen();
 		//GameStateManager::Instance()->AddGameScreen(loadingScreen);
 
-		//GraphicsTestScreen* game = new GraphicsTestScreen();
-		//GameStateManager::Instance()->AddGameScreen(game);
+		GraphicsTestScreen* game = new GraphicsTestScreen();
+		GameStateManager::Instance()->AddGameScreen(game);
 
 		//HudTestScreen* hud = new HudTestScreen();
 		//GameStateManager::Instance()->AddGameScreen(hud);
 
-		RacerGame* game = new RacerGame();
-		GameStateManager::Instance()->AddGameScreen(game);
+		DebugOverlay* debug = new DebugOverlay();
+		GameStateManager::Instance()->AddGameScreen(debug);
+
+		//RacerGame* game = new RacerGame();
+		//GameStateManager::Instance()->AddGameScreen(game);
 		GameStateManager::Instance()->Start();
 	}
 }

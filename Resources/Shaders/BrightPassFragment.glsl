@@ -3,7 +3,7 @@
  Author: Sherif Salem
  Date: 	09/02/2015
  Summary:
-	Produces an image with only the 'bright' areas shown, with non-bright areas made black.
+	Produces an image with the 'bright' areas accentuated, and non-bright areas made black.
 */
 
 #version 430 core
@@ -20,9 +20,9 @@ in Vertex {
 
 out vec4 gl_FragColor;
 
-//'Average' luminance of scene.
-//const float luminance = 0.09;
-//Target luminance of scene.
+//'Average' luminimumance of scene.
+//const float luminimumance = 0.09;
+//Target luminimumance of scene.
 //const float middleGrey = 0.18;
 //Minimum value to make white.
 //const float whiteCutOff = 0.8;

@@ -121,15 +121,15 @@ T3Vector3 PhysicsNode::GetFathestPointInDirection(PhysicsNode& shape1,T3Vector3 
 
 
 
-	float maxDot= T3Vector3::Dot(Points[0],d);
+	float maximumDot= T3Vector3::Dot(Points[0],d);
 
 		for(int i=1;i<Points.size();i++)
 		{
 			float dot=T3Vector3::Dot(Points[i],d);
 
-			if(dot>maxDot)
+			if(dot>maximumDot)
 			{
-			  maxDot=dot;
+			  maximumDot=dot;
 			  index=i;
 			
 			}
@@ -144,16 +144,16 @@ T3Vector3 PhysicsNode::GetFathestPointInDirection(PhysicsNode& shape1,T3Vector3 
 
  //     Points=GetWorldPoints();
 	//
-	//	float maxDot=T3Vector3::Dot(Points[0],d);
+	//	float maximumDot=T3Vector3::Dot(Points[0],d);
 	//	for(int i=1;i<Points.size();i++)
 	//	{
 
 
 	//		T3Vector3 m = Points[i] ; 
 	//		float dot=T3Vector3::Dot(m,d);
-	//		if(dot>maxDot)
+	//		if(dot>maximumDot)
 	//		{
-	//			maxDot=dot;
+	//			maximumDot=dot;
 	//			returnVector=m;
 	//		
 	//		}

@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 # pragma once
 
  # include <map>
@@ -17,7 +18,7 @@
 
 	 static map < string , Sound * > sounds;
  };
-
+#endif
 
 
 

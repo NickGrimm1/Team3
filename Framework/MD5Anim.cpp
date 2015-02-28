@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 #include "MD5Anim.h"
 #ifdef WEEK_2_CODE
 MD5Anim::MD5Anim(std::string filename)	{
@@ -158,7 +159,7 @@ void MD5Anim::LoadMD5AnimBounds( std::ifstream &from,unsigned int &count  )	{
 	/*
 	The bounds section of the file should look like this:
 	bounds {
-		( min.x min.y min.z ) ( max.x max.y max.z )
+		( minimum.x minimum.y minimum.z ) ( maximum.x maximum.y maximum.z )
 		...more things
 	}
 
@@ -166,7 +167,7 @@ void MD5Anim::LoadMD5AnimBounds( std::ifstream &from,unsigned int &count  )	{
 	is a brace
 	*/
 
-	char skipChar;			//We skip the brackets by streaming them into this
+	char skipChar;			//We skip the brackets by streaminimumg them into this
 	std::string tempLine;	//Another temporary line to stream things into...
 
 	do {
@@ -175,16 +176,16 @@ void MD5Anim::LoadMD5AnimBounds( std::ifstream &from,unsigned int &count  )	{
 		if(tempLine == "{") {				//In a well-behaved MD5 file, the first line will be '{'
 		}
 		else if(tempLine[0] == '('){		//It's a bounding box!
-			from >> bounds[count].min.x;
-			from >> bounds[count].min.y;
-			from >> bounds[count].min.z;
+			from >> bounds[count].minimum.x;
+			from >> bounds[count].minimum.y;
+			from >> bounds[count].minimum.z;
 
 			from >> skipChar;				//Skip the ')'
 			from >> skipChar;				//skip the '('
 
-			from >> bounds[count].max.x;
-			from >> bounds[count].max.y;
-			from >> bounds[count].max.z;
+			from >> bounds[count].maximum.x;
+			from >> bounds[count].maximum.y;
+			from >> bounds[count].maximum.z;
 
 			from >> skipChar;				//Skip the ')'
 
@@ -210,7 +211,7 @@ void MD5Anim::LoadMD5AnimBaseFrame( std::ifstream &from )	{
 	should see is a brace
 	*/
 
-	char skipChar;			//We skip the brackets by streaming them into this
+	char skipChar;			//We skip the brackets by streaminimumg them into this
 	std::string tempLine;	//Another temporary line to stream things into...
 
 	/*
@@ -324,8 +325,8 @@ void	MD5Anim::TransformSkeleton(MD5Skeleton &skel, unsigned int frameNum) {
 		Each frame has a number of 'delta' components, and each joint
 		uses a number of these components to update its position and
 		orientation. Whether or not each value is updated or not is
-		determined by the joints flags variable. The starting
-		component for each joint is determined by the frameIndex value
+		determinimumed by the joints flags variable. The starting
+		component for each joint is determinimumed by the frameIndex value
 		of the joint.
 
 		For each value of the joint (ie its 3 position values and its 3
@@ -393,7 +394,7 @@ void	MD5Anim::TransformSkeleton(MD5Skeleton &skel, unsigned int frameNum) {
 		skelJoint.localTransform		= animQuat.ToMatrix();
 		skelJoint.localTransform.SetPositionVector(animPos);
 
-		//If the joint has no parent (determined by a negative parent variable) we need to 
+		//If the joint has no parent (determinimumed by a negative parent variable) we need to 
 		//transform the joint's transform to the correct rotation, using the conversion matrix
 		if(skelJoint.parent < 0) {	//Base Joint, so we're done
 			skelJoint.transform = MD5FileData::conversionMatrix * skelJoint.localTransform;
@@ -408,4 +409,5 @@ void	MD5Anim::TransformSkeleton(MD5Skeleton &skel, unsigned int frameNum) {
 		}
 	}
 }
+#endif
 #endif

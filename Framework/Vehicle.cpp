@@ -6,7 +6,7 @@ Vehicle::Vehicle(float size) {
 	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
 	//mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
 //	BuffMesh = new OBJMesh(MESHDIR"ico.obj");
-
+	
 	//TT =  SOIL_load_OGL_texture ("../../Texture/footballpitch.jpg", SOIL_LOAD_AUTO , SOIL_CREATE_NEW_ID , SOIL_FLAG_MIPMAPS);
 //	PlayerPosition=T3Vector3(500,100,-800);
 
@@ -18,10 +18,10 @@ Vehicle::Vehicle(float size) {
 	texture = NULL;
 	bumpTexture = NULL;
 	shader = NULL;
-
+	
 	//	PlayerPosition=T3Vector3(-25, 20, 0);
 	//Player = BuildPlayerEntity(20.0f,PlayerPosition);
-	
+
 
 //	Buff = BuildBuffEntity(10,T3Vector3(200,100,-200));
 
@@ -98,8 +98,8 @@ Vehicle::~Vehicle(void){
 //	
 //	}*/
 //
-//	tempPosition.z = PlayerPosition.z-1000;
-//	tempPosition.y = PlayerPosition.y+800;
+	//	tempPosition.z = PlayerPosition.z-1000;
+	//	tempPosition.y = PlayerPosition.y+800;
 //	
 //
 //	//if(Window::GetKeyboard()->KeyHeld(KEYBOARD_S)) {
@@ -141,7 +141,7 @@ Vehicle::~Vehicle(void){
 //
 //	
 //
-//}
+	//}
 
 //void Vehicle::UpdatePlayer2(float msec){
 //	PlayerPosition = Player->GetPhysicsNode().GetPosition();
@@ -287,7 +287,7 @@ Makes a Player. Every game has a crate in it somewhere!
 	//return 0;
 //}
 
-
+									 
 void Vehicle::SetPhysics(float size,PhysicsNode * a)
 {
     physicsNode=a;
@@ -295,7 +295,7 @@ void Vehicle::SetPhysics(float size,PhysicsNode * a)
 	physicsNode->SetPosition(origin);
 	physicsNode->SetMass(5);
 	physicsNode->SetCollisionVolume(new CollisionAABB(T3Vector3(size,size,size)));
-
+	
 	physicsNode->SetIsCollide(true);
 
 

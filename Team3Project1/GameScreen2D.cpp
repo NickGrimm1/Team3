@@ -18,6 +18,8 @@ void GameScreen2D::AddDrawable(DrawableEntity2D* drawable, bool autoScreenDeviat
 	else if (drawable->GetType() == DrawableType::Text)
 		GameStateManager::Graphics()->AddDrawableTextToScene((DrawableText2D*)drawable);
 
+	drawables.push_back(drawable);
+
     AddEntity(drawable, autoScreenDeviation);
 }
 /**

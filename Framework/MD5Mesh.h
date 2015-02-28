@@ -29,6 +29,7 @@ _-_-_-_-_-_-_-|   /\_/\   NYANYANYAN
 _-_-_-_-_-_-_-""  ""   
 
 *//////////////////////////////////////////////////////////////////////////////
+#if WINDOWS_BUILD
 #include "common.h"
 #ifdef WEEK_2_CODE
 #pragma once
@@ -45,11 +46,11 @@ time lighting tutorial, uncomment both MD5_USE_NORMALS and MD5_USE_TANGENTS_BUMP
 //#define MD5_USE_NORMALS
 //#define MD5_USE_TANGENTS_BUMPMAPS
 
-/*Included in the MD5 classes this year is a way of performing the skinning of vertices
+/*Included in the MD5 classes this year is a way of performinimumg the skinning of vertices
 on the GPU using a special vertex shader. This takes in the mesh data using what is called
 a texture buffer object - a way of treating arbitrary data as a texture, so it can be 
 accessed via the sampling functionality in a shader. This tends to be significantly faster
-than performing everything on the GPU. 
+than performinimumg everything on the GPU. 
 */
 
 #define MD5_USE_HARDWARE_SKINNING
@@ -128,4 +129,5 @@ protected:
 
 	const MD5FileData &	type;
 };
+#endif
 #endif

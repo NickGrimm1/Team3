@@ -8,6 +8,7 @@ Version: 0.0.5 10/02/2015.</summary>
 #include "Mesh.h"
 #include "Texture.h"
 #include "ShaderPart.h"
+class Mesh;
 class DrawableEntity3D
 {
 public:
@@ -17,7 +18,7 @@ public:
 	<param name='shader'>The shader to use.</param>
 	<param name='texture'>The texture to use.</param>
 	<param name='bumpTexture'>The bump map to use.</param>
-	<param name='boundingRadius'>The bounding radius of the object. Denotes the object's maximum size for view frustrum culling.</param>
+	<param name='boundingRadius'>The bounding radius of the object. Denotes the object's maximumimum size for view frustrum culling.</param>
 	<param name='origin'>The origin position of the model in world space relative to its parent. Default is (0, 0, 0).</param>
 	<param name='rotation'>The rotation of the model in world space relative to its parent. Default is (0, 0, 0).</param>
 	<param name='scale'>The scale of the model in world space relative to its parent. Default is (0, 0, 0).</param>

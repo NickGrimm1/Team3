@@ -40,5 +40,5 @@ protected:
 	float size;
 	int Speed_Player;
 	float Speed_Rotate;
-	GLuint TT;
+	unsigned int TT;
 };

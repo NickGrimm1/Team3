@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 #pragma once
 
 #include "SceneNode.h"
@@ -28,3 +29,4 @@ protected:
 	PhysicsNode*	physicsNode;
 	SoundEmitter*	soundEmitter;
 };
+#endif

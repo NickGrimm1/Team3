@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 #include "ParticleEmitter.h"
 #include <string>
 #include <io.h>
@@ -173,3 +174,5 @@ void ParticleEmitter::Draw()	{
 	glDisable(GL_BLEND);
 	glBindVertexArray(0); //Remember to turn off our VAO ;)
 };
+
+#endif

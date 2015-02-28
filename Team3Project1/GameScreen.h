@@ -66,12 +66,12 @@ protected:
 	*/
 	T3Vector2 offset;
 	/**
-	<summary>The maximum scroll of the screen in the x direction. (x is left, y is right).</summary>
+	<summary>The maximumimum scroll of the screen in the x direction. (x is left, y is right).</summary>
 	*/
-	T3Vector2 maxHorizontalScroll;
+	T3Vector2 maximumHorizontalScroll;
 	/**
-	<summary>The maximum scroll of the screen in the y direction. (x is up, y is down).</summary>
+	<summary>The maximumimum scroll of the screen in the y direction. (x is up, y is down).</summary>
 	*/
-	T3Vector2 maxVerticalScroll;
+	T3Vector2 maximumVerticalScroll;
 	bool inputEnabled;
 };

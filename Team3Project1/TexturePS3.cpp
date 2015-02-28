@@ -141,7 +141,7 @@ CellGcmTexture* Texture::LoadGTF(std::string filename) {
 	GTF textures can technically have multiple textures in it, for now
 	lets just load 1
 	*/
-	for(int i = 0; i < min(1,header.NumTexture); ++i) {
+	for(int i = 0; i < minimum(1,header.NumTexture); ++i) {
 		memcpy((void*)texture,(void*)&(attributes[i].tex), sizeof(CellGcmTexture));
 
 		file.seekg(attributes[i].OffsetToTex);
