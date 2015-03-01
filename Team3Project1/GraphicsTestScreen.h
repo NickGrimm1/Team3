@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameScreen3D.h"
+#include "TrackSegment.h"
 
 class GraphicsTestScreen : public GameScreen3D
 {
@@ -31,6 +32,7 @@ private:
 	DirectionalLight* directionalLight;
 	PointLight* pointLight;
 	Camera* camera;
+	TrackSegment* track;
 	vector<DrawableEntity3D*> gameEntities;
 	bool drawDeferredLights;
 };

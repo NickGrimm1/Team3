@@ -7,22 +7,34 @@ TrackSegment::TrackSegment(const T3Vector3& a, const T3Vector3& b, const T3Vecto
 	// Now spline is built, generate mesh around it
 	trackMesh = new Vertex[numVertices * 2]; // left boundary then right boundary
 	T3Vector3 right;
+	T3Vector3 up = T3Vector3(0,1,0);
 	for (unsigned int i = 0; i < subdivisions; i++) {
 		T3Vector3 direction = vertices[i+1].GetPosition() - vertices[i].GetPosition();
 		direction.Normalise();
-		T3Vector3 up = T3Vector3(0,1,0);
 		right = T3Vector3::Cross(direction, up);
 		right.Normalise();
 		trackMesh[i].SetPosition(vertices[i].GetPosition() - right * trackWidth);
 		trackMesh[i + subdivisions + 1].SetPosition(vertices[i].GetPosition() + right * trackWidth);
 		trackMesh[i].SetTexCoord(T3Vector2(0, (float) i));
 		trackMesh[i + subdivisions + 1].SetTexCoord(T3Vector2(1.0f, (float) i));
+		trackMesh[i].SetNormal(up);
+		trackMesh[i + subdivisions + 1].SetNormal(up);
 	}
 	// Set last vertices
 	trackMesh[subdivisions].SetPosition(vertices[subdivisions].GetPosition() - right * trackWidth);
 	trackMesh[(2 * numVertices) - 1].SetPosition(vertices[subdivisions].GetPosition() + right * trackWidth);
 	trackMesh[subdivisions].SetTexCoord(T3Vector2(0, (float) subdivisions));
 	trackMesh[(2 * numVertices) - 1].SetTexCoord(T3Vector2(1, (float) subdivisions));
+	trackMesh[subdivisions].SetNormal(up);
+	trackMesh[(2 * numVertices) - 1].SetNormal(up);
+
+	// Calc midpoints
+
+
+
+
+
+
 
 	// Build index VBO
 	numIndices = subdivisions * 6;
@@ -85,4 +97,26 @@ void TrackSegment::Draw() {
 
 void TrackSegment::DrawSpline() {
 	Spline::Draw();
+}
+
+T3Vector3 TrackSegment::GetTrackCentreLeft() const {
+	if (segments % 2 == 0) {
+		return trackMesh[segments / 2].GetPosition();
+	}
+	else {
+		// Get midway point between central segment
+		unsigned int pos = segments / 2;
+		return (trackMesh[pos].GetPosition() + trackMesh[pos + 1].GetPosition()) / 2.0f;
+	}
+}
+
+T3Vector3 TrackSegment::GetTrackCentreRight() const {
+	if (segments % 2 == 0) {
+		return trackMesh[segments + (segments / 2) + 1].GetPosition();
+	}
+	else {
+		// Get midway point between central segment
+		unsigned int pos = segments + 1 + (segments / 2);
+		return (trackMesh[pos].GetPosition() + trackMesh[pos + 1].GetPosition()) / 2.0f;
+	}
 }

@@ -4,7 +4,6 @@
 #include "GameStateManager.h"
 #include "FreeCamera.h"
 #include "../Framework/ObjMesh.h"
-#include "TrackSegment.h"
 
 //TODO - remove
 #include <iostream>
@@ -64,7 +63,7 @@ void GraphicsTestScreen::LoadContent() {
 	*/
 
 	GameStateManager::Graphics()->GetRenderContext();
-	TrackSegment* track = new TrackSegment(T3Vector3(-100, 0, -100), T3Vector3(-100,0,0), T3Vector3(0,0,100), 10, 50.0);
+	track = new TrackSegment(T3Vector3(-400, 0, 400), T3Vector3(-400,0,0), T3Vector3(0,0,-400), 10, 50.0);
 	GameStateManager::Graphics()->DropRenderContext();
 
 	ent = new DrawableEntity3D(
@@ -106,6 +105,30 @@ void GraphicsTestScreen::LoadContent() {
 	AddDrawable(ent);
 
 	ent = new DrawableEntity3D(
+		cylinder, 
+		NULL,
+		calvinTex,
+		NULL,
+		30.0f, // needs same bounding radius as cylinder
+		track->GetTrackCentreLeft(),
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(5,15,5));
+	gameEntities.push_back(ent);
+	AddDrawable(ent);
+
+	ent = new DrawableEntity3D(
+		cylinder, 
+		NULL,
+		calvinTex,
+		NULL,
+		30.0f, // needs same bounding radius as cylinder
+		track->GetTrackCentreRight(),
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(5,15,5));
+	gameEntities.push_back(ent);
+	AddDrawable(ent);
+
+	ent = new DrawableEntity3D(
 		car,
 		NULL,
 		NULL,
@@ -143,6 +166,8 @@ void GraphicsTestScreen::UnloadContent()
 	// Entity pointer(s) will be handled automatically by the parent destructor.
 	//
 	// RemoveDrawable() etc will also be called automatically upon destruction so calling it is uneccessary.
+
+	delete track;
 
 	GameStateManager::Assets()->UnloadQuad(this);
 	GameStateManager::Assets()->UnloadCylinder(this, 20);
