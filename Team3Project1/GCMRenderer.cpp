@@ -5,6 +5,13 @@
 //Static member variables need initialising!
 uint32_t		GCMRenderer::localHeapStart	= 0;
 
+void my_check_callback(uint32_t* cmd)
+{
+  printf( "### Bad command 0x%X at memory location 0x%x ###\n", *cmd, cmd);
+}
+
+
+
 GCMRenderer::GCMRenderer(void)	{
 	if(cellGcmInit(COMMAND_SIZE, BUFFER_SIZE, memalign(1024*1024, BUFFER_SIZE))!= CELL_OK) {
 		std::cout << "cellGcmInit failed!" << std::endl;	
@@ -72,6 +79,9 @@ void GCMRenderer::InitDisplay() {
 	CellGcmConfig config;
 	cellGcmGetConfiguration(&config);
 	setLocalMem((uint32_t)config.localAddress);
+
+	gCellGcmDebugCheckCallback = my_check_callback;
+	cellGcmDebugCheckEnable(CELL_GCM_TRUE);
 }
 
 /*
@@ -295,10 +305,10 @@ ridiculous, but it is because vertex shaders can be ran from system memory,
 while fragment shaders MUST be ran in graphics memory, and so its address
 must be 'offsettable'. 
 */
-void	GCMRenderer::SetCurrentShader(Shader* shader) {
+void	GCMRenderer::SetCurrentShader(Shader* s) {
 	std::cout<<"GCMRenderer: setCurrentShader"<<std::endl;
-	cellGcmSetFragmentProgram(shader->GetFragment()->GetProgram(), shader->GetFragment()->GetOffset());
-	cellGcmSetVertexProgram(shader->GetVertex()->GetProgram(), shader->GetVertex()->GetuCode());
+	cellGcmSetFragmentProgram(s->GetFragment()->GetProgram(), s->GetFragment()->GetOffset());
+	cellGcmSetVertexProgram(s->GetVertex()->GetProgram(), s->GetVertex()->GetuCode());
 	std::cout<<"GCMRenderer: got to the end of setCurrentShader"<<std::endl;
 }
 
@@ -337,10 +347,9 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		std::cout << n->GetMesh()->GetNumVertices() << std::endl;
 		//GCC complains about function returns being used as parameters passed
 		//around, or we'd just use GetWorldTransform as the function param
-		T3Matrix4 transform = //n->GetTransform();
-			T3Matrix4::Rotation((float)DegToRad(90), T3Vector3::UnitX()) * T3Matrix4::Scale(T3Vector3(1000,1000,1));
+		T3Matrix4 transform = n->GetTransform();
 
-		std::cout << "GCMRenderer: ViewMatrix (SCE): " << std::endl;
+		/*std::cout << "GCMRenderer: ViewMatrix (SCE): " << std::endl;
 		for (int x = 0; x < 4; ++x)
 		{
 			for (int y = 0; y < 4; ++y)
@@ -352,14 +361,15 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 
 		std::cout << "Transform (T3): " << std::endl;
 		std::cout << n->GetTransform() << std::endl;
-		std::cout << transform << std::endl;
+		std::cout << transform << std::endl;*/
 
 		Matrix4 m;
 		for (int x = 0; x < 4; ++x)
 			for (int y = 0; y < 4; ++y)
 				m.setElem(x, y, transform.values[y + x * 4]);
+
 		
-		std::cout << "Transform (SCE): " << std::endl;
+		/*std::cout << "Transform (SCE): " << std::endl;
 		for (int x = 0; x < 4; ++x)
 		{
 			for (int y = 0; y < 4; ++y)
@@ -367,7 +377,7 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 				std::cout << m.getElem(x,y) << ",";
 			}
 			std::cout << std::endl;
-		}
+		}*/
 		
 		shader->GetVertex()->SetParameter("modelMat", m);
 		//shader->GetVertex()->UpdateShaderMatrices(m, viewMatrix, projMatrix);

@@ -24,5 +24,5 @@ public:
 
 	virtual void RenderScene();
 protected:
-	Shader* s ;//= new Shader();
+	//Shader* s ;//= new Shader();
 };

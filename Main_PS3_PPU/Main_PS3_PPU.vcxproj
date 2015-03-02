@@ -45,7 +45,7 @@
     <None Include="duck256.gtf" />
     <CustomBuild Include="fragment.cg">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">D:/host-win32/Cg/bin/sce_cgc -profile sce_fp_rsx -o "$(ProjectDir)fragment.fpo" "$(ProjectDir)fragment.cg"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">D:/SCE/host-win32/Cg/bin/sce-cgc -profile sce_fp_rsx -o "$(ProjectDir)fragment.fpo" "$(ProjectDir)fragment.cg"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">$(projectDir)fragment.fpo;$(ProjectDir)fragment_asm.txt</Outputs>
     </CustomBuild>
     <None Include="fragment.fpo" />
@@ -55,7 +55,7 @@
     <None Include="ncl.tga" />
     <CustomBuild Include="vertex.cg">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">D:/host-win32/Cg/bin/sce_cgc -profile sce_vp_rsx -o "$(ProjectDir)vertex.vpo" "$(ProjectDir)vertex.cg"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">D:/SCE/host-win32/Cg/bin/sce-cgc -profile sce_vp_rsx -o "$(ProjectDir)vertex.vpo" "$(ProjectDir)vertex.cg"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">$(projectDir)vertex.vpo;$(ProjectDir)vertex_asm.txt</Outputs>
     </CustomBuild>
     <None Include="vertex.vpo" />
@@ -135,12 +135,12 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">
     <ClCompile>
-      <PreprocessorDefinitions>_DEBUG;__CELL_ASSERT__;%(PreprocessorDefinitions);PS3_BUILD</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CELL_GCM_DEBUG;__CELL_ASSERT__;%(PreprocessorDefinitions);PS3_BUILD</PreprocessorDefinitions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Team3Project1.a;libsn.a;libm.a;libio_stub.a;libfs_stub.a;libsn.a;libm.a;libio_stub.a;libfs_stub.a;libcgc.a;-lgcm_cmd;-lgcm_sys_stub;-lio_stub;-lsysutil_stub;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Team3Project1.a;libgcm_cmddbg.a;libsn.a;libm.a;libio_stub.a;libfs_stub.a;libcgc.a;-lgcm_sys_stub;-lio_stub;-lsysutil_stub;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='WINDOWS_DEBUG|PS3'">

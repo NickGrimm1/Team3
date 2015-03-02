@@ -64,8 +64,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="fragment.cg" />
     <CustomBuild Include="vertex.cg">
+      <Filter>Shaders</Filter>
+    </CustomBuild>
+    <CustomBuild Include="fragment.cg">
       <Filter>Shaders</Filter>
     </CustomBuild>
   </ItemGroup>

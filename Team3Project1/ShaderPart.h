@@ -37,7 +37,7 @@ public:
 	void* GetuCode();
 	CGprogram GetProgram();
 	unsigned int GetOffset();
-	unsigned int GetAttributeIndex(VertexAttributes::Attributes attribute);
+	int GetAttributeIndex(VertexAttributes::Attributes attribute);
 	CGparameter GetParameter(string target);
 	void SetParameter(string name, Matrix4 &totranpose);
 	void UpdateShaderMatrices(Matrix4 &model,Matrix4 &view, Matrix4 &proj);
@@ -49,7 +49,7 @@ public:
 #if PS3_BUILD
 	static string LoadShaderFile(string filename){return filename;};
 	void SetDefaultAttributes();
-	unsigned int attributes[VertexAttributes::MAX];
+	int attributes[VertexAttributes::MAX];
 	CGprogram program;
 	void* ucode;
 	//unsigned int offset;

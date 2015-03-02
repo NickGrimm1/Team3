@@ -15,7 +15,7 @@ Renderer::Renderer(void)	{
 	ShaderPart* basicFrag		= new ShaderPart("/fragment.fpo", ShaderType::FRAGMENT);
 	std::cout <<"basic frag did something" << std::endl;
 	//Shader* s = new Shader();
-	s = new Shader();
+	//s = new Shader();
 	std::cout <<"shader did something" << std::endl;
 	shader->SetVertex(basicVert);
 	shader->SetFragment(basicFrag);
@@ -59,7 +59,8 @@ void Renderer::RenderScene() {
 			for (int y = 0; y < 4; ++y)
 				viewMatrix.setElem(x, y, m.values[y + x * 4]);
 
-		std::cout << "Renderer: View Matrix (SCE): " << std::endl;
+
+		/*std::cout << "Renderer: View Matrix (SCE): " << std::endl;
 		for (int x = 0; x < 4; ++x)
 		{
 			for (int y = 0; y < 4; ++y)
@@ -67,13 +68,12 @@ void Renderer::RenderScene() {
 				std::cout << viewMatrix.getElem(x,y) << ",";
 			}
 			std::cout << std::endl;
-		}
+		}*/
 	}
 	else{
 		viewMatrix = Matrix4::identity();
 	}
 
-	//shader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
 	shader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
 	if(root) {
 		DrawNode(root);

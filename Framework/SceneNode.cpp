@@ -65,10 +65,10 @@ void SceneNode::Update(float msec)	 {
 	if (sceneElement) {
 		transform = T3Matrix4::Translation(sceneElement->GetOriginPosition()) * sceneElement->GetRotation().ToMatrix();
 	}
-	else
+	/*else
 	{
 		transform.ToIdentity();
-	}
+	}*/
 
 	if(parent) {
 		worldTransform = parent->worldTransform * transform;

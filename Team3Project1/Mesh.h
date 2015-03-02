@@ -40,7 +40,9 @@ namespace PrimitiveType
 class Mesh
 {
 public:
+#if WINDOWS_BUILD
 	friend class MD5Mesh;
+#endif
 	Mesh();
 	virtual ~Mesh();
 

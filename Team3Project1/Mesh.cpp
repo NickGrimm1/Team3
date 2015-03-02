@@ -67,69 +67,90 @@ void Mesh::Draw(Shader* shader)
 
 	std::cout << "CELL_OK: " << CELL_OK << std::endl;
 	std::cout << "CELL_GCM_ERROR_FAILURE: " << CELL_GCM_ERROR_FAILURE << std::endl;
+	int shader_idx;
 
-	cellGcmSetVertexDataArray(shader->GetVertex()->GetAttributeIndex(VertexAttributes::POSITION),
-		0, 
-		sizeof(Vertex), 
-		3, 
-		CELL_GCM_VERTEX_F, 
-		CELL_GCM_LOCATION_LOCAL, 
-		(uint32_t)vertexOffsets[VertexAttributes::POSITION]
-	);
-	std::cout << "Drawing position" << std::endl;
-	for (int i = 0; i < numVertices; ++i)
-		std::cout << "X: " << vertices[i].x << " Y: " << vertices[i].y << " Z: " << vertices[i].z << std::endl;
+	shader_idx = shader->GetVertex()->GetAttributeIndex(VertexAttributes::POSITION);
+	if (shader_idx > -1)
+	{
+		cellGcmSetVertexDataArray(shader_idx,
+			0, 
+			sizeof(Vertex), 
+			3, 
+			CELL_GCM_VERTEX_F, 
+			CELL_GCM_LOCATION_LOCAL, 
+			(uint32_t)vertexOffsets[VertexAttributes::POSITION]
+		);
+		/*std::cout << "Drawing position" << std::endl;
+		for (int i = 0; i < numVertices; ++i)
+			std::cout << "X: " << vertices[i].x << " Y: " << vertices[i].y << " Z: " << vertices[i].z << std::endl;*/
+	}
 
 	if(vertexOffsets[VertexAttributes::NORMAL])
 	{
-		std::cout << "Drawing normal" << std::endl;
-		cellGcmSetVertexDataArray(shader->GetVertex()->GetAttributeIndex(VertexAttributes::NORMAL),
-			0, 
-			sizeof(Vertex), 
-			2, 
-			CELL_GCM_VERTEX_F, 
-			CELL_GCM_LOCATION_LOCAL, 
-			(uint32_t)vertexOffsets[VertexAttributes::NORMAL]
-		);
+		shader_idx = shader->GetVertex()->GetAttributeIndex(VertexAttributes::NORMAL);
+		if (shader_idx > -1)
+		{
+			std::cout << "Drawing normal" << std::endl;
+			cellGcmSetVertexDataArray(shader_idx,
+				0, 
+				sizeof(Vertex), 
+				2, 
+				CELL_GCM_VERTEX_F, 
+				CELL_GCM_LOCATION_LOCAL, 
+				(uint32_t)vertexOffsets[VertexAttributes::NORMAL]
+			);
+		}
 	}
 
 	if(vertexOffsets[VertexAttributes::COLOUR])	
 	{
-		std::cout << "Drawing colour" << std::endl;
-		cellGcmSetVertexDataArray(shader->GetVertex()->GetAttributeIndex(VertexAttributes::COLOUR),
-			0, 
-			sizeof(Vertex), 
-			4, 
-			CELL_GCM_VERTEX_UB, 
-			CELL_GCM_LOCATION_LOCAL, 
-			(uint32_t)vertexOffsets[VertexAttributes::COLOUR]
-		);
+		shader_idx = shader->GetVertex()->GetAttributeIndex(VertexAttributes::COLOUR);
+		if (shader_idx > -1)
+		{
+			std::cout << "Drawing colour" << std::endl;
+			cellGcmSetVertexDataArray(shader_idx,
+				0, 
+				sizeof(Vertex), 
+				4, 
+				CELL_GCM_VERTEX_UB, 
+				CELL_GCM_LOCATION_LOCAL, 
+				(uint32_t)vertexOffsets[VertexAttributes::COLOUR]
+			);
+		}
 	}
 
 	if(vertexOffsets[VertexAttributes::TEXCOORD])
 	{
-		std::cout << "Drawing texcoord" << std::endl;
-		cellGcmSetVertexDataArray(shader->GetVertex()->GetAttributeIndex(VertexAttributes::TEXCOORD),
-			0, 
-			sizeof(Vertex), 
-			2, 
-			CELL_GCM_VERTEX_F, 
-			CELL_GCM_LOCATION_LOCAL, 
-			(uint32_t)vertexOffsets[VertexAttributes::TEXCOORD]
-		);
+		shader_idx = shader->GetVertex()->GetAttributeIndex(VertexAttributes::TEXCOORD);
+		if (shader_idx > -1)
+		{
+			std::cout << "Drawing texcoord" << std::endl;
+			cellGcmSetVertexDataArray(shader_idx,
+				0, 
+				sizeof(Vertex), 
+				2, 
+				CELL_GCM_VERTEX_F, 
+				CELL_GCM_LOCATION_LOCAL, 
+				(uint32_t)vertexOffsets[VertexAttributes::TEXCOORD]
+			);
+		}
 	}
 
 	if(vertexOffsets[VertexAttributes::TANGENT])
 	{
-		std::cout << "Drawing tangent" << std::endl;
-		cellGcmSetVertexDataArray(shader->GetVertex()->GetAttributeIndex(VertexAttributes::TANGENT),
-			0, 
-			sizeof(Vertex), 
-			2, 
-			CELL_GCM_VERTEX_F, 
-			CELL_GCM_LOCATION_LOCAL, 
-			(uint32_t)vertexOffsets[VertexAttributes::TANGENT]
-		);
+		shader_idx = shader->GetVertex()->GetAttributeIndex(VertexAttributes::TANGENT);
+		if (shader_idx > -1)
+		{
+			std::cout << "Drawing tangent" << std::endl;
+			cellGcmSetVertexDataArray(shader_idx,
+				0, 
+				sizeof(Vertex), 
+				2, 
+				CELL_GCM_VERTEX_F, 
+				CELL_GCM_LOCATION_LOCAL, 
+				(uint32_t)vertexOffsets[VertexAttributes::TANGENT]
+			);
+		}
 	}
 
 	if(vertexOffsets[VertexAttributes::MAX]) 
@@ -141,6 +162,8 @@ void Mesh::Draw(Shader* shader)
 	}
 	else{
 		//else just draw an ordered list of vertices
+		//type = CELL_GCM_PRIMITIVE_TRIANGLES;
+		//numVertices = 3;
 		cellGcmSetDrawArrays(type, 0, numVertices);
 		std::cout << "Drawing vertices: " << numVertices << " of type: " << type << std::endl;
 	}

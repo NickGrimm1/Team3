@@ -40,6 +40,7 @@ static inline double DegToRad(const double rad)	{
 #define TEXTUREDIR  "../Resources/Textures/"
 #define SOUNDSDIR	"../Resources/Sounds/"
 
+#if WINDOWS_BUILD
 class DivideByZeroException
 {
 	virtual const char* reason() const throw()
@@ -47,4 +48,5 @@ class DivideByZeroException
 		return "Divide By Zero";
 	}
 };
+#endif
 
