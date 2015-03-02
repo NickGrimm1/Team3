@@ -18,6 +18,7 @@ _-_-_-_-_-_-_-|   /\_/\   NYANYANYAN
 _-_-_-_-_-_-_-""  ""   
 
 *//////////////////////////////////////////////////////////////////////////////
+#if WINDOWS_BUILD
 #pragma once
 #include "InputDevice.h"
 
@@ -203,6 +204,8 @@ protected:
 	//Sends the keyboard to sleep
 	virtual void Sleep();
 
+	virtual void UpdateHolds();
+
 	bool keyStates[KeyboardEvents::KEYBOARD_MAX];		//Is the key down?
 	bool prevStates[KeyboardEvents::KEYBOARD_MAX];		//Has the key been down for multiple updates?
 	float lastKeyDown[KeyboardEvents::KEYBOARD_MAX];
@@ -210,5 +213,4 @@ protected:
 	float pressLimit;
 };
 
-
-
+#endif

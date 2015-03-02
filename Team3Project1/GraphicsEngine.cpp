@@ -1,7 +1,9 @@
 #include "GraphicsEngine.h"
 #include "GraphicsCommon.h"
+#include "../Framework/T3Vector2.h"
+#include "../Framework/T3Vector4.h"
 #include <algorithm>
-
+#if WINDOWS_BUILD
 GraphicsEngine* GraphicsEngine::engine = NULL;
 
 bool GraphicsEngine::Initialize(GraphicsEngine*& out) {
@@ -28,15 +30,37 @@ bool GraphicsEngine::Destroy() {
 	return true;
 }
 
-GraphicsEngine::GraphicsEngine() {
+GraphicsEngine::GraphicsEngine() 
+	: RENDER_TIME(1000.0f / 60)
+{
 	isInitialised = false;
 	width = SCREEN_WIDTH;
 	height = SCREEN_HEIGHT;
+	frameRate = 0;
 
 	if (!Window::Initialise(GAME_TITLE, width, height, false)) return;
 	
+	Window::GetWindow().LockMouseToWindow(true);
+	Window::GetWindow().ShowOSPointer(false);
+
 	renderer = new Renderer(Window::GetWindow(), lights, gameEntityList, overlayElementsList);
 	if (!renderer->HasInitialised()) return;
+	
+	GLuint loadingTex = renderer->CreateTexture(TEXTUREDIR"refresh.png", false, false, SOIL_FLAG_INVERT_Y);
+	isLoading = true;
+	isLoadingDrawing = false;
+	loadingTexture = new Texture(loadingTex);
+	float aspect = (float) width / (float) height;
+	loadingIcon = new DrawableTexture2D(
+		0.95f,
+		1.0f - 0.05f * aspect,
+		1,
+		0.05f,
+		0.05f * aspect,
+		loadingTexture,
+		0,
+		T3Vector2(0.5f, 0.5f),
+		T3Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	isInitialised = true; // Graphics Engine has initialised successfully
 }
@@ -46,14 +70,26 @@ GraphicsEngine::~GraphicsEngine() {
 	// Delete local array data - if not handled elsewhere
 
 	// Fin
+	renderer->DestroyTexture(loadingTexture->GetTextureName());
+	delete loadingTexture;
+	delete loadingIcon;
 	delete renderer;
+	delete sceneRoot;
 	Window::Destroy();
 }
 
 void GraphicsEngine::Run() {
 	isRunning = true;
 	
+	time = 0;
+	inc = true;
+
 	while (isRunning) {
+
+		while (Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp < RENDER_TIME) { ; } // Fix the timestep
+		float msec = Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp;
+		lastFrameTimeStamp = Window::GetWindow().GetTimer()->GetMS();
+		frameRate = (int)(1000.0f / msec);
 
 		// add/remove requested items from scene lists
 		contentGuard.lock_mutex();
@@ -83,7 +119,7 @@ void GraphicsEngine::Run() {
 		addHudList.clear();
 
 		for (unsigned int i = 0; i < removeHudList.size(); i++) {
-			for (auto j = overlayElementsList.begin(); j != overlayElementsList.end(); ++j) {
+			for (vector<DrawableEntity2D*>::iterator j = overlayElementsList.begin(); j != overlayElementsList.end(); ++j) {
 				if ((*j) == removeHudList[i]) {
 					overlayElementsList.erase(j);
 				}
@@ -98,7 +134,7 @@ void GraphicsEngine::Run() {
 
 		// Add/Remove lights
 		for (unsigned int l = 0; l < removeLightsList.size(); l++) {
-			for (auto i = lights.begin(); i != lights.end(); ++i) {
+			for (vector<Light*>::iterator i = lights.begin(); i != lights.end(); ++i) {
 				if ((*i) == removeLightsList[l]) {
 					unsigned int shadowTex = (*i)->GetShadowTexture();
 					if (shadowTex > 0) 
@@ -112,7 +148,7 @@ void GraphicsEngine::Run() {
 		contentGuard.unlock_mutex();
 			
 		// Update data in scene nodes
-		sceneRoot->Update(1.0f / RENDER_HZ); // TODO - sort out proper timestep value - or remove timestep if not needed
+		sceneRoot->Update(msec); // TODO - sort out proper timestep value - or remove timestep if not needed
 		
 		// Reset scene bounding box volume
 		boundingMax = T3Vector3(0,0,0);
@@ -146,6 +182,21 @@ void GraphicsEngine::Run() {
 			[] (const void* a, const void* b) {
 				return (((Light*) a)->GetType() < ((Light*) b)->GetType());
 		});
+
+		if (isLoading && !isLoadingDrawing) {
+			overlayElementsList.push_back(loadingIcon);
+			isLoadingDrawing = true;
+		}
+//		else if (!isLoading && isLoadingDrawing) {
+//			overlayElementsList
+//		}
+
+		if (isLoadingDrawing) {
+			loadingIcon->SetRotation(loadingIcon->GetRotation() + 1.0f);
+		}
+
+		//Update the day/night float
+		renderer->SetDayNight(DayNightCycle());
 
 		// Render data
 		renderer->RenderScene();
@@ -282,3 +333,58 @@ void GraphicsEngine::SetCamera(Camera* cam)
 	camera = cam;
 	renderer->SetCamera(cam);
 }
+
+bool GraphicsEngine::LoadContent()
+{
+	return (engine->renderer->LoadShaders() &&
+				engine->renderer->LoadAssets());
+}
+
+void GraphicsEngine::UnloadContent()
+{
+	engine->renderer->UnloadShaders();
+	engine->renderer->UnloadAssets();
+}
+
+void GraphicsEngine::DrawDeferredLights(bool on) {renderer->DrawDeferredLights(on);}
+
+unsigned char* GraphicsEngine::GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue)
+{
+	return renderer->GeneratePerlinNoise(resolution, minValue, maxValue);
+}
+
+float GraphicsEngine::DayNightCycle() {
+	float out;
+
+	//Decide if day/night is transitioning
+	if (time > 4500 && time < 5500) {//Halfway through the cycle, it is changing.
+		out = time - 4500;
+		out /= 1000.0f;
+	}
+	else if (time < 4500)	//day
+		out = 0.0f;
+	else					//Night
+		out = 1.0f;
+
+	if (inc) {
+		if (time >= 10000) {
+			inc = false;
+			time--;
+		}
+		else
+			time++;
+	}
+	else {
+		if (time <= 0) {
+			inc = true;
+			time++;
+		}
+		else
+			time--;
+	}
+
+//	cout << time << ", "  << out << endl;
+	return out;	
+}
+
+#endif

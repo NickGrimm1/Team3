@@ -104,43 +104,43 @@ void Octree::fileBall(GameEntity* ball, T3Vector3 pos, bool addBall) {
         }
 void Octree::haveChildren() {
             for(int x = 0; x < 2; x++) {
-                float minX;
-                float maxX;
+                float minimumX;
+                float maximumX;
                 if (x == 0) {
-                    minX = corner1.x;
-                    maxX = center.x;
+                    minimumX = corner1.x;
+                    maximumX = center.x;
                 }
                 else {
-                    minX = center.x;
-                    maxX = corner2.x;
+                    minimumX = center.x;
+                    maximumX = corner2.x;
                 }
                 
                 for(int y = 0; y < 2; y++) {
-                    float minY;
-                    float maxY;
+                    float minimumY;
+                    float maximumY;
                     if (y == 0) {
-                        minY = corner1.y;
-                        maxY = center.y;
+                        minimumY = corner1.y;
+                        maximumY = center.y;
                     }
                     else {
-                        minY = center.y;
-                        maxY = corner2.y;
+                        minimumY = center.y;
+                        maximumY = corner2.y;
                     }
                     
                     for(int z = 0; z < 2; z++) {
-                        float minZ;
-                        float maxZ;
+                        float minimumZ;
+                        float maximumZ;
                         if (z == 0) {
-                            minZ = corner1.z;
-                            maxZ = center.z;
+                            minimumZ = corner1.z;
+                            maximumZ = center.z;
                         }
                         else {
-                            minZ = center.z;
-                            maxZ = corner2.z;
+                            minimumZ = center.z;
+                            maximumZ = corner2.z;
                         }
                         
-                        children[x][y][z] = new Octree(T3Vector3(minX, minY, minZ),
-                                                       T3Vector3(maxX, maxY, maxZ),
+                        children[x][y][z] = new Octree(T3Vector3(minimumX, minimumY, minimumZ),
+                                                       T3Vector3(maximumX, maximumY, maximumZ),
                                                        depth + 1);
                     }
                 }

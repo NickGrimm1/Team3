@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 # pragma once
 
  # include <string>
@@ -30,7 +31,7 @@
 
 		 ALenum GetOALFormat ();
 		 float GetLength ();
-		 bool IsStreaming () { return streaming ;}
+		 bool IsStreaminimumg () { return streaminimumg ;}
 		 virtual double StreamData ( ALuint buffer , double timeLeft ){return 0.0f ;}
 
 
@@ -51,6 +52,7 @@
 		 int channels;
 
 		 ALuint buffer;
-		 bool streaming ;
+		 bool streaminimumg ;
 
  };
+#endif

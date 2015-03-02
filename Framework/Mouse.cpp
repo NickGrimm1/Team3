@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 #include "Mouse.h"
 #include "../Team3Project1/GameStateManager.h"
 
@@ -36,11 +37,11 @@ void Mouse::Update(RAWINPUT* raw, float msec)
 			GameStateManager::Instance()->MouseMoved(mouseMove.Normal());
 		}
 		// Clamp the current position to bounds
-		position.x = max(position.x, 0.0f);
-		position.x = min(position.x, bounds.x);
+		position.x = maximum(position.x, 0.0f);
+		position.x = minimum(position.x, bounds.x);
 
-		position.y = max(position.y, 0.0f);
-		position.y = min(position.y, bounds.y);
+		position.y = maximum(position.y, 0.0f);
+		position.y = minimum(position.y, bounds.y);
 	
 		/*
 		TODO: How framerate independent is this?
@@ -158,9 +159,9 @@ T3Vector2 Mouse::GetAbsolutePosition()	{
 /*
 Returns how much the mouse has moved by since the last frame.
 */
-void Mouse::SetAbsolutePositionBounds(unsigned int maxX, unsigned int maxY)	{
-	bounds.x = (float)maxX;
-	bounds.y = (float)maxY;	
+void Mouse::SetAbsolutePositionBounds(unsigned int maximumX, unsigned int maximumY)	{
+	bounds.x = (float)maximumX;
+	bounds.y = (float)maximumY;	
 }
 
 /*
@@ -177,3 +178,4 @@ has moved up, negative down. Can be 0 (no movement)
 int		Mouse::GetWheelMovement()	{
 	return (int)frameWheel;
 }
+#endif

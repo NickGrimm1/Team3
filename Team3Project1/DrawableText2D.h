@@ -37,6 +37,9 @@ public:
 	DrawableText2D(float x, float y, int depth, float width, float height, const string& text, Font* font, float rotation = 0, T3Vector2 origin = T3Vector2(0.5f, 0.5f), T3Vector4 blendColor = T3Vector4(1.0f, 1.0f, 1.0f ,1.0f)) : DrawableEntity2D(x, y, depth, width, height, DrawableType::Text, blendColor), font(font), text(text), rotation(rotation), origin(origin)
 	{ }
 
+	virtual ~DrawableText2D() {
+		text.clear();
+	}
 	/**
 	<summary>Gets the font.</summary>
 	*/

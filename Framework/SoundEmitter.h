@@ -1,4 +1,5 @@
- # pragma once
+#if WINDOWS_BUILD 
+# pragma once
  # include "SceneNode.h"
  # include "Sound.h"
  # include "../Team3Project1/AudioEngine.h"
@@ -29,7 +30,7 @@
 	 inline void SetPriority ( SoundPriority p ){ priority = p;}
 	 inline SoundPriority GetPriority () { return priority;}		// priority
 
-	 inline void SetVolume ( float volume ) {volume = min (1.0f , max (0.0f , volume ));}
+	 inline void SetVolume ( float volume ) {volume = minimum (1.0f , maximum (0.0f , volume ));}
 	 inline float GetVolume () { return volume;}		//volume
 
 	 inline void SetLooping ( bool state ) { isLooping = state;}
@@ -38,7 +39,7 @@
 	 inline void SetTransform (T3Matrix4 position) {Position=position;}
 	 inline T3Matrix4 GetTransform() {return Position;}
 
-	 inline void SetRadius ( float value ) {radius = max (0.0f , value );} // max radius which it can be heard
+	 inline void SetRadius ( float value ) {radius = maximum (0.0f , value );} // maximum radius which it can be heard
 	 inline float GetRadius () { return radius;}
 	 
 	 inline void			SetPitch(float value)		 {pitch = value;}
@@ -78,3 +79,4 @@
 	 ALuint streamBuffers [ NUM_STREAM_BUFFERS ];
 
  };
+#endif

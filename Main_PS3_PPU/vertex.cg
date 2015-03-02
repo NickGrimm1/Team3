@@ -4,7 +4,7 @@
 //we have three vertex attributes (position,color, texCoord),
 //three uniforms (to form our mvp matrix), and three outputs
 //(oPosition,oColor,oTexCoord). We're simply multiplying the
-//matrices together, and then transforming the vertex by the
+//matrices together, and then transforminimumg the vertex by the
 //resulting mvp matrix. Note that in Cg, positions automatically
 //get upcasted to a 4-component vector, so you don't have to 
 //do it yourself!

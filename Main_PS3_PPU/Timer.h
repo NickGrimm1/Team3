@@ -4,7 +4,7 @@ Implements:
 Author:Rich Davison
 Description: It's the timer class from Graphics for Games...but for the PS3!
 
-Uses the internal PS3 system functions to determine time, rather than going
+Uses the internal PS3 system functions to determinimume time, rather than going
 through the performance counter.
 
 -_-_-_-_-_-_-_,------,   

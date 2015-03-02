@@ -181,43 +181,43 @@ public:
 #pragma endregion
 protected:
 	/**
-	<summary>Gets the maximum screen deviations for scroll.</summary>
+	<summary>Gets the maximumimum screen deviations for scroll.</summary>
 	*/
 	void GetMaxScreenDeviation()
 	{
-		maxDeviationUp = 0;
-		maxDeviationDown = 0;
-		maxDeviationLeft = 0;
-		maxDeviationRight = 0;
+		maximumDeviationUp = 0;
+		maximumDeviationDown = 0;
+		maximumDeviationLeft = 0;
+		maximumDeviationRight = 0;
 
 		for (unsigned int i = 0; i < entities.size(); i++)
 		{
 			float excessUp = GetTop() + entities[i]->GetTop();
 			float excessRight = GetRight() - entities[i]->GetRight();
 
-			if (entities[i]->y < maxDeviationDown)
+			if (entities[i]->y < maximumDeviationDown)
 			{
-				maxDeviationDown = entities[i]->y;
+				maximumDeviationDown = entities[i]->y;
 			}
-			if (entities[i]->x < maxDeviationLeft)
+			if (entities[i]->x < maximumDeviationLeft)
 			{
-				maxDeviationLeft = entities[i]->x;
+				maximumDeviationLeft = entities[i]->x;
 			}
 
-			if (excessUp > maxDeviationUp)
+			if (excessUp > maximumDeviationUp)
 			{
-				maxDeviationUp = excessUp;
+				maximumDeviationUp = excessUp;
 			}
-			if (excessRight < maxDeviationRight)
+			if (excessRight < maximumDeviationRight)
 			{
-				maxDeviationRight = excessRight;
+				maximumDeviationRight = excessRight;
 			}
 		}
 	}
-	float maxDeviationUp;
-	float maxDeviationDown;
-	float maxDeviationLeft;
-	float maxDeviationRight;
+	float maximumDeviationUp;
+	float maximumDeviationDown;
+	float maximumDeviationLeft;
+	float maximumDeviationRight;
 	/**
 	<summary>Notifies all screens in the stack of a mouse event.</summary>
 	<param name='type'>The event type.</param>

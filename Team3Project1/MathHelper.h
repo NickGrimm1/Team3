@@ -61,4 +61,6 @@ namespace MathHelper
 			out.values[i] = m1.values[i] + (m2.values[i] - m1.values[i]) * amount;
 		return out;
 	}
+
+	
 };

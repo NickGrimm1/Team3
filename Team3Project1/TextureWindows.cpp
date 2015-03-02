@@ -10,6 +10,23 @@ Texture::Texture(string filename, unsigned int flags)
 		textureObject = 0; // make sure GetTexture will return an error
 		return;
 	}
+
+	GLint width = 0;
+	GLint height = 0;
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textureObject);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
+	memory = (width * height * 4) / 1024.0f / 1024.0f; // Assume all textures are 32 bit for the moment.
+}
+
+Texture::Texture(GLuint textureObj)
+{
+	textureObject = textureObj;
+	if (!textureObject) {
+		textureObject = 0; // make sure GetTexture will return an error
+		return;
+	}
 }
 
 Texture::~Texture()
@@ -27,12 +44,12 @@ void Texture::SetRepeating(bool repeat) {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::SetMinMagFiltering(GLint min, GLint mag) {
-	minFilter = min;
+void Texture::SetMinMagFiltering(GLint minimum, GLint mag) {
+	minimumFilter = minimum;
 	magFilter = mag;
 
 	glBindTexture(GL_TEXTURE_2D, textureObject);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);// minifying function - pixel being textured maps to greater than one texture element
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minimumFilter);// minimumifying function - pixel being textured maps to greater than one texture element
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);// magnification function - pixel being textured maps to area less than or equal to one texture element (texel)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -42,9 +59,9 @@ void Texture::SetAnistropicFiltering(bool enable) {
 	
 	glBindTexture(GL_TEXTURE_2D, textureObject);
 	if (anisotropic) {
-		GLfloat maxAnisotropy = 0.0f;
-		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
+		GLfloat maximumAnisotropy = 0.0f;
+		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maximumAnisotropy);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maximumAnisotropy);
 	}
 	else glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 0.0f);
 
