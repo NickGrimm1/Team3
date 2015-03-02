@@ -56,11 +56,7 @@
 	 }
 	 cout << " AudioEngine has " << sources.size ()
 		  << " channels available !" << endl ;
-	 SoundManager::AddSound("../Sounds/14615__man__canon.wav");
-	 SoundManager::AddSound("../Sounds/36847__ecodtr__laserrocket2.wav");
-	 SoundManager::AddSound("../Sounds/56900__syna-max__war.wav");
-	 SoundManager::AddSound("../Sounds/vehicle085.wav");
-	 SoundManager::AddSound("../Sounds/Tokyo Drift2.wav");
+
 	 camera = NULL;
 	// alcMakeContextCurrent(NULL);
  }

@@ -24,9 +24,13 @@ void AudioTestClass::LoadContent() {
 	/*laser2= SoundManager :: GetSound("../Sounds/36847__ecodtr__laserrocket2.wav");
 	laser1= SoundManager :: GetSound("../Sounds/56900__syna-max__war.wav");
 	laser= SoundManager :: GetSound("../Sounds/vehicle085.wav");*/
-	laser = GameStateManager::Audio()->GetSound("../Sounds/Tokyo Drift2.wav");
-	laser1 = GameStateManager::Audio()->GetSound ("../Sounds/56900__syna-max__war.wav");
-	laser2 = GameStateManager::Audio()->GetSound ("../Sounds/vehicle085.wav");
+	SoundManager::AddSound(SOUNDSDIR"56900__syna-max__war.wav");
+	SoundManager::AddSound(SOUNDSDIR"vehicle085.wav");
+	SoundManager::AddSound(SOUNDSDIR"Tokyo Drift2.wav");
+
+	laser = GameStateManager::Audio()->GetSound(SOUNDSDIR"Tokyo Drift2.wav");
+	laser1 = GameStateManager::Audio()->GetSound (SOUNDSDIR"56900__syna-max__war.wav");
+	laser2 = GameStateManager::Audio()->GetSound (SOUNDSDIR"vehicle085.wav");
 
 	GameStateManager::Audio()->PlaySoundW(laser, SOUNDPRIORITY_ALWAYS);
 }
