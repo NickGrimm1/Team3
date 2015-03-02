@@ -69,7 +69,8 @@ public:
 		Instance()->graphics->Start();
 		Instance()->physics->Start();
 		Instance()->input->Start();
-
+		//Instance()->audio->Start();
+		
 		while (instance->isRunning) {
 			Window::GetWindow().UpdateWindow();
 			for (unsigned int i = 0; i < gameScreens.size(); i++) {
@@ -92,11 +93,13 @@ public:
 			graphics->Terminate();
 			physics->Terminate();
 			input->Terminate();
+			//audio->Terminate();
 
 			// Clean up
 			graphics->Join();
 			physics->Join();
 			input->Join();
+			//audio->Join();
 
 			vector<GameScreen*>::iterator i = instance->gameScreens.begin();
 			while (i != instance->gameScreens.end())

@@ -269,9 +269,7 @@
     <ClInclude Include="..\Framework\Shader.h" />
     <ClInclude Include="..\Framework\Sound.h" />
     <ClInclude Include="..\Framework\SoundEmitter.h" />
-    <ClInclude Include="..\Framework\SoundEntity.h" />
     <ClInclude Include="..\Framework\SoundManager.h" />
-    <ClInclude Include="..\Framework\SoundSystem.h" />
     <ClInclude Include="..\Framework\Spring.h" />
     <ClInclude Include="..\Framework\SpringDemo.h" />
     <ClInclude Include="..\Framework\T3Vector2.h" />
@@ -282,6 +280,7 @@
     <ClInclude Include="..\Framework\Window.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="AudioEngine.h" />
+    <ClInclude Include="AudioTestClass.h" />
     <ClInclude Include="ChaseCamera.h" />
     <ClInclude Include="ClickableEntity2D.h" />
     <ClInclude Include="DebugManager.h" />
@@ -359,9 +358,7 @@
     <ClCompile Include="..\Framework\Shader.cpp" />
     <ClCompile Include="..\Framework\Sound.cpp" />
     <ClCompile Include="..\Framework\SoundEmitter.cpp" />
-    <ClCompile Include="..\Framework\SoundEntity.cpp" />
     <ClCompile Include="..\Framework\SoundManager.cpp" />
-    <ClCompile Include="..\Framework\SoundSystem.cpp" />
     <ClCompile Include="..\Framework\Spring.cpp" />
     <ClCompile Include="..\Framework\SpringDemo.cpp" />
     <ClCompile Include="..\Framework\Vehicle.cpp" />
@@ -369,6 +366,7 @@
     <ClCompile Include="..\Framework\Window.cpp" />
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="AudioEngine.cpp" />
+    <ClCompile Include="AudioTestClass.cpp" />
     <ClCompile Include="DebugManager.cpp" />
     <ClCompile Include="GamePad.cpp" />
     <ClCompile Include="GameScreen2D.cpp" />

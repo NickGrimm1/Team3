@@ -46,7 +46,7 @@ MyGame::MyGame()	{
 	A more 'robust' system would check the entities vector for duplicates so as
 	to not cause problems...why not give it a go?
 	*/
-	Background_Music = BuildSoundEntity();
+	//Background_Music = BuildSoundEntity();
 	GameEntity* quadEntity = BuildQuadEntity(1000.0f);
 	quadEntity->GetPhysicsNode().SetPosition(T3Vector3(1000,0,0));
 	allEntities.push_back(quadEntity);
@@ -375,28 +375,28 @@ GameEntity* MyGame::BuildQuadEntity(float size) {
 }
 
 
-SoundEntity * MyGame :: BuildSoundEntity () {
-	 float size = 300 + ( rand ()%300);
-
-	 SceneNode * s = new SceneNode ( sphere );
-
-	 s-> SetModelScale ( T3Vector3 ( size , size , size ));
-	 s-> SetBoundingRadius ( size );
-	 s-> SetColour ( T3Vector4 (1 ,1 ,1 ,0.6)); // Make node transparent , too
-	 // Pick a sound from a list of filenames
-	 //Sound * snd = SoundManager :: GetSound ( soundNames [ rand ()% NUM_SOUNDS ]);
-	 Sound * snd = SoundManager :: GetSound ("../../Sounds/14615__man__canon.wav");
-	 // and set it on a new SoundEntity
-	 SoundEntity * g=new SoundEntity(snd,s,NULL);
-	 g->GetSoundEmitter().SetLooping(FALSE);
-	 //GameEntity * g = new GameEntity ( snd , s , NULL );
-	 // Randomly place it in the world somewhere
-	 T3Vector3 randpos = T3Vector3 (( rand ()%10)*256 , 0.0f ,( rand ()%10)*256);
-	 randpos -= T3Vector3 (( rand ()%10)*256 , 0.0f ,( rand ()%10)*256);
-
-	 s -> SetTransform ( T3Matrix4 :: Translation ( randpos ));
-	 // Connect it to all of our core systems
-	 g -> ConnectToSystems ();
-
-	 return g ;
- }
+//SoundEntity * MyGame :: BuildSoundEntity () {
+//	 float size = 300 + ( rand ()%300);
+//
+//	 SceneNode * s = new SceneNode ( sphere );
+//
+//	 s-> SetModelScale ( T3Vector3 ( size , size , size ));
+//	 s-> SetBoundingRadius ( size );
+//	 s-> SetColour ( T3Vector4 (1 ,1 ,1 ,0.6)); // Make node transparent , too
+//	 // Pick a sound from a list of filenames
+//	 //Sound * snd = SoundManager :: GetSound ( soundNames [ rand ()% NUM_SOUNDS ]);
+//	 Sound * snd = SoundManager :: GetSound ("../../Sounds/14615__man__canon.wav");
+//	 // and set it on a new SoundEntity
+//	 SoundEntity * g=new SoundEntity(snd,s,NULL);
+//	 g->GetSoundEmitter().SetLooping(FALSE);
+//	 //GameEntity * g = new GameEntity ( snd , s , NULL );
+//	 // Randomly place it in the world somewhere
+//	 T3Vector3 randpos = T3Vector3 (( rand ()%10)*256 , 0.0f ,( rand ()%10)*256);
+//	 randpos -= T3Vector3 (( rand ()%10)*256 , 0.0f ,( rand ()%10)*256);
+//
+//	 s -> SetTransform ( T3Matrix4 :: Translation ( randpos ));
+//	 // Connect it to all of our core systems
+//	 g -> ConnectToSystems ();
+//
+//	 return g ;
+// }

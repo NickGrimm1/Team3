@@ -1,7 +1,7 @@
  # pragma once
  # include "SceneNode.h"
  # include "Sound.h"
- # include "SoundSystem.h"
+ # include "../Team3Project1/AudioEngine.h"
  # define NUM_STREAM_BUFFERS 3 // Part 2
 
  //enum SoundPriority {

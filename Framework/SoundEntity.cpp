@@ -50,7 +50,7 @@ void	SoundEntity::ConnectToSystems() {
 	}
 
 	if(soundEmitter) {
-		SoundSystem::GetSoundSystem()->AddSoundEmitter(soundEmitter);
+		AudioEngine::GetSoundSystem()->AddSoundEmitter(soundEmitter);
 	}
 
 	if(soundEmitter) {

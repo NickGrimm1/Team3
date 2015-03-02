@@ -9,6 +9,7 @@ Version: 0.0.3 06/02/2015.</summary>
 
 #include "GraphicsCommon.h"
 #include "LoadingScreen.h"
+#include "AudioTestClass.h"
 
 // FOR TESTING PURPOSES - REMOVE IN FINAL BUILD
 #include "GraphicsTestScreen.h"
@@ -28,6 +29,10 @@ namespace EntryPoint
 
 		HudTestScreen* hud = new HudTestScreen();
 		GameStateManager::Instance()->AddGameScreen(hud);
+
+//		AudioTestClass* audio = new AudioTestClass();
+//		GameStateManager::Instance()->AddGameScreen(audio);
+
 
 		//RacerGame* game = new RacerGame();
 		//GameStateManager::Instance()->AddGameScreen(game);

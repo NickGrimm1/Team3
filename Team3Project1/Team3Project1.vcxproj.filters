@@ -420,9 +420,6 @@
     <ClInclude Include="..\Framework\SpringDemo.h">
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Framework\SoundEntity.h">
-      <Filter>Framework\Audio\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Framework\Sound.h">
       <Filter>Framework\Audio\Header Files</Filter>
     </ClInclude>
@@ -430,9 +427,6 @@
       <Filter>Framework\Audio\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\SoundManager.h">
-      <Filter>Framework\Audio\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\SoundSystem.h">
       <Filter>Framework\Audio\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\Debuff.h">
@@ -470,6 +464,9 @@
     </ClInclude>
     <ClInclude Include="..\Framework\T3Matrix4.h">
       <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioTestClass.h">
+      <Filter>Game\MainGame\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -626,9 +623,6 @@
     <ClCompile Include="..\Framework\Vehicle.cpp">
       <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Framework\SoundEntity.cpp">
-      <Filter>Framework\Audio\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Framework\Sound.cpp">
       <Filter>Framework\Audio\Source Files</Filter>
     </ClCompile>
@@ -636,9 +630,6 @@
       <Filter>Framework\Audio\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Framework\SoundManager.cpp">
-      <Filter>Framework\Audio\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\SoundSystem.cpp">
       <Filter>Framework\Audio\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Framework\Debuff.cpp">
@@ -670,6 +661,9 @@
     </ClCompile>
     <ClCompile Include="GCMRenderer.cpp">
       <Filter>Framework\Graphics\PS3\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioTestClass.cpp">
+      <Filter>Game\MainGame\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
