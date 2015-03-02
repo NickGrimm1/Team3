@@ -34,8 +34,8 @@ namespace EntryPoint
 		DebugOverlay* debug = new DebugOverlay();
 		GameStateManager::Instance()->AddGameScreen(debug);
 
-//		AudioTestClass* audio = new AudioTestClass();
-//		GameStateManager::Instance()->AddGameScreen(audio);
+		AudioTestClass* audio = new AudioTestClass();
+		GameStateManager::Instance()->AddGameScreen(audio);
 
 
 		//RacerGame* game = new RacerGame();
