@@ -16,7 +16,7 @@
  //}
 
  AudioEngine :: AudioEngine ( unsigned int channels ) {
-	 listener = NULL ;
+	 listener = new DrawableEntity3D() ;
 
 	 masterVolume = 1.0f ;
 
@@ -38,8 +38,9 @@
 	 context = alcCreateContext ( device , NULL );
 	 alcMakeContextCurrent ( context );
 
-	 alDistanceModel (AL_NONE);// AL_LINEAR_DISTANCE_CLAMPED );
-
+//	 alDistanceModel (AL_NONE);// AL_LINEAR_DISTANCE_CLAMPED );
+	 alDistanceModel (AL_LINEAR_DISTANCE_CLAMPED );
+	 
 	 for ( unsigned int i = 0; i < channels ; ++ i ) {
 		 ALuint source ;
 
@@ -57,7 +58,7 @@
 	 cout << " AudioEngine has " << sources.size ()
 		  << " channels available !" << endl ;
 
-	 camera = NULL;
+	 //camera = NULL;
 	// alcMakeContextCurrent(NULL);
  }
 
@@ -81,11 +82,12 @@
 
  void AudioEngine :: UpdateListener () {
 	 if( listener ) {
-		 T3Vector3 worldPos = T3Vector3(0,0,0);//listenerTransform.GetPositionVector ();
-
+		 //T3Vector3 worldPos = listener->GetOriginPosition();
+		 T3Vector3 worldPos = listenerTransform.GetPositionVector ();//T3Vector3(0,0,10);
+		 listener->SetOriginPosition(worldPos);
 		 T3Vector3 dirup [2];
 		 // forward
-		 dirup [0].x = 0; //- listenerTransform.values [2];
+		 dirup [0].x = 0;//- listenerTransform.values [2];
 		 dirup [0].y = 0;//- listenerTransform.values [6];
 		 dirup [0].z = 1;//- listenerTransform.values [10];
 		 // Up
@@ -101,7 +103,17 @@
  
  void AudioEngine :: Update(float msec) {
 	 alcMakeContextCurrent(context);
+	 //Vehicle *car = new Vehicle(5);
+	 T3Matrix4 tempMatrix = T3Matrix4();
+	 tempMatrix.ToIdentity();
+	 //T3Vector3 Carpostion=car->GetPlayer()->GetOriginPosition();
+	 //listener->SetOriginPosition(Carpostion);
+	 listener->SetOriginPosition(T3Vector3(10,0,0));
+	 tempMatrix.SetPositionVector(listener->GetOriginPosition());
+	 listenerTransform = tempMatrix;
 	 UpdateListener ();
+	 
+	 CullNodes ();
 	 if (temporaryEmitters.size() > 0) {
 		UpdateTemporaryEmitters ( msec ); 
 	 }
@@ -110,7 +122,7 @@
 		 (* i ) -> Update ( msec );
 	 }
 
-//	 CullNodes ();
+	
 	 if( frameEmitters.size () > sources.size ()) {
 		 std :: sort ( frameEmitters.begin () , frameEmitters.end () ,SoundEmitter :: CompareNodesByPriority );//Sort the remaining nodes by their priority
 
@@ -144,28 +156,36 @@
  void AudioEngine :: PlaySoundA ( Sound * s , T3Vector3 position ) {
 	// alcMakeContextCurrent(context);
 	 SoundEmitter * n = new SoundEmitter ();
+	 T3Matrix4 tempmatrix = T3Matrix4();
+	 tempmatrix.ToIdentity();
+	 tempmatrix.SetPositionVector(position);
+	 n -> SetTransform(tempmatrix);
 	 n -> SetLooping ( false );
-	 n -> SetIsGlobal(false);
-	 //n -> SetTransform ( T3Matrix4 :: Translation ( position ));
-	 n -> SetSound ( s );
+	 n -> SetIsGlobal( false );
+	 n -> SetSound ( s ); 
+	 n -> SetRadius(10.0f);
 	 temporaryEmitters.push_back ( n );
 	// alcMakeContextCurrent(NULL);
  }
 
  void AudioEngine :: PlaySoundW ( Sound * s , SoundPriority p) {
-	 alcMakeContextCurrent(context);
+	 //alcMakeContextCurrent(context);
 	 SoundEmitter * n = new SoundEmitter ();
 	 n -> SetLooping ( true );
 	 n -> SetSound ( s );
 	 n -> SetIsGlobal ( true );
 	 n -> SetPriority ( p );
+	 n -> SetVolume(1.0f);
+	 n -> SetRadius(0.0f);
 	 temporaryEmitters.push_back ( n );
 	// alcMakeContextCurrent(NULL);
  }
 
 
  void	AudioEngine::CullNodes() {
-	for(vector<SoundEmitter*>::iterator i = emitters.begin(); i != emitters.end();) {
+	//for(vector<SoundEmitter*>::iterator i = emitters.begin(); i != emitters.end();) {
+
+	  for(vector<SoundEmitter*>::iterator i = temporaryEmitters.begin(); i != temporaryEmitters.end();) {
 
 		float length;
 
@@ -174,17 +194,19 @@
 		}
 		else{
 			//length = (listener->GetWorldTransform().GetPositionVector() - (*i)->GetWorldTransform().GetPositionVector()).Length();
-			length = ( listenerTransform.GetPositionVector () - (*i) -> position ).Length ();
+			length= (listenerTransform.GetPositionVector ()- (*i) -> GetTransform().GetPositionVector()).Length();
 		}
 		
 		if(length > (*i)->GetRadius() || !(*i)->GetSound() || (*i)->GetTimeLeft() < 0) {
 			(*i)->DetachSource();	//Important!
-			i = emitters.erase(i);
+			//= emitters.erase(i);
+			i = temporaryEmitters.erase(i);
 		}
 		else{
 			++i;
 		}
-	}
+	 }
+	//}
 }
 
  void AudioEngine :: DetachSources ( vector < SoundEmitter * >:: iterator from , vector < SoundEmitter * >:: iterator to ) {

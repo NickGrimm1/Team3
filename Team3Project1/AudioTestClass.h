@@ -2,7 +2,7 @@
 #include "../Framework/SoundManager.h"
 #include "GameScreen3D.h"
 #include "GameScreen2D.h"
-class AudioTestClass: public GameScreen
+class AudioTestClass: public GameScreen3D
 {
 public:
 	AudioTestClass(void);

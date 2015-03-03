@@ -17,8 +17,10 @@ Version: 0.0.1 03/02/2015.</summary>
  # include "../FrameWork/SceneNode.h"
  # include "../FrameWork/T3Matrix4.h"
  # include "../FrameWork/camera.h"
+ //# include   "../FrameWork/Vehicle.h"
  using std :: vector ;
 
+ class Vehicle;
  class SoundEmitter ;
 
  enum SoundPriority {
@@ -98,7 +100,7 @@ private:
 	float masterVolume ;
 	ALCcontext * context ;
 	ALCdevice * device ;
-	SceneNode * listener ;
+	DrawableEntity3D *listener;
 
 	vector < OALSource * > sources ;
 	vector < SoundEmitter * > emitters ;
@@ -106,6 +108,5 @@ private:
 	vector < SoundEmitter * > temporaryEmitters ;
 
 	static AudioEngine* instance;
-	Camera* camera;
 	//bool isRunning;
 };

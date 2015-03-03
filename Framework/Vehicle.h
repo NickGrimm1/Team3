@@ -23,13 +23,28 @@ public:
 	int GetSpeed_Player(){return Speed_Player;}
 	float GetSize(){return size;}
 
-	//void UpdatePlayer1(float msec);
+      void	Update(float msec);
 	//void UpdatePlayer2(float msec);
 
 	T3Vector3 tempPosition;
-protected:
+	T3Vector3 GetMaxSpeed() {return maxSpeed; }
+	PhysicsNode&	GetCarNode()	{ return *car;}
+	virtual void			ConnectToSystems(){
+		if(car) {
+		GameStateManager::Physics()->AddNode(car);
+		car->SetTarget(this);
+	}
 
-	
+	}
+
+protected:
+	float maxSpeed;
+
+
+
+	PhysicsNode* car;
+
+
 	T3Vector3 PlayerPosition;
 	T3Vector3 temp,temp1,temp2;
 	Mesh* PlayerMesh;
