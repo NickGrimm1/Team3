@@ -8,7 +8,7 @@
 
 #include "Renderer.h"
 #include "Input.h"
-#include "timer.h"
+#include "../Framework/GameTimer.h"
 #include "../Team3Project1/FreeCamera.h"
 #include "../Framework/SceneNode.h"
 #include "../Team3Project1/Mesh.h"
@@ -79,7 +79,7 @@ int main(void)	{
 	cout << "camera position set" << endl;
 	renderer.SetCamera(camera);	//Set the current renderer camera
 
-	Timer gameTime;
+	GameTimer gameTime;
 	
 	while(!done) {
 		Input::UpdateJoypad();	//Receive latest joypad input for all joypads
