@@ -145,7 +145,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='WINDOWS_DEBUG|Win32'">
     <IncludePath>..\GLEW\include;..\SOIL;..\;$(IncludePath)</IncludePath>
-    <LibraryPath>..\GLEW\lib;..\SOIL\$(Configuration);..\$(Configuration)\;.\Framework\$(Configuration)\;..\GLEW\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\GLEW\lib;..\SOIL\$(Configuration);..\$(Configuration)\;.\Framework\$(Configuration)\;..\GLEW\lib\$(Configuration);$(LibraryPath);</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -176,7 +176,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions); WINDOWS_BUILD; DEBUG</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);WINDOWS_BUILD;DEBUG;_WINSOCKAPI_</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -219,7 +219,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions); WINDOWS_BUILD</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions); WINDOWS_BUILD;_WINSOCKAPI_</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -281,6 +281,7 @@
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="AudioEngine.h" />
     <ClInclude Include="AudioTestClass.h" />
+    <ClInclude Include="BaseSocket.h" />
     <ClInclude Include="ChaseCamera.h" />
     <ClInclude Include="CheckPoint.h" />
     <ClInclude Include="ClickableEntity2D.h" />
@@ -303,6 +304,8 @@
     <ClInclude Include="LoadingScreen.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MutexClass.h" />
+    <ClInclude Include="NetworkCommon.h" />
+    <ClInclude Include="NetworkTest.h" />
     <ClInclude Include="OffsetCamera.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FreeCamera.h" />
@@ -320,11 +323,13 @@
     <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="RacerGame.h" />
     <ClInclude Include="SelectableEntity2D.h" />
+    <ClInclude Include="ServerSocket.h" />
     <ClInclude Include="ShaderPart.h" />
     <ClInclude Include="Spline.h" />
     <ClInclude Include="T3Rectangle.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="StorageManager.h" />
+    <ClInclude Include="TcpSocket.h" />
     <ClInclude Include="TextMesh.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Thread.h" />
@@ -389,13 +394,16 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MutexClass.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
+    <ClCompile Include="NetworkTest.cpp" />
     <ClCompile Include="OffsetCamera.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="RacerGame.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="ServerSocket.cpp" />
     <ClCompile Include="ShaderPart.cpp" />
     <ClCompile Include="Spline.cpp" />
     <ClCompile Include="StorageManager.cpp" />
+    <ClCompile Include="TcpSocket.cpp" />
     <ClCompile Include="TextMesh.cpp" />
     <ClCompile Include="TexturePS3.cpp" />
     <ClCompile Include="TextureWindows.cpp" />

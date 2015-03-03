@@ -10,6 +10,7 @@ Version: 0.0.3 06/02/2015.</summary>
 #include "GraphicsCommon.h"
 #include "LoadingScreen.h"
 #include "AudioTestClass.h"
+#include "NetworkTest.h"
 
 // FOR TESTING PURPOSES - REMOVE IN FINAL BUILD
 #include "GraphicsTestScreen.h"
@@ -43,6 +44,9 @@ namespace EntryPoint
 		AudioTestClass* audio = new AudioTestClass();
 		GameStateManager::Instance()->AddGameScreen(audio);
 
+
+		//NetworkTest* network = new NetworkTest();
+		//GameStateManager::Instance()->AddGameScreen(network);
 
 		//RacerGame* game = new RacerGame();
 		//GameStateManager::Instance()->AddGameScreen(game);
