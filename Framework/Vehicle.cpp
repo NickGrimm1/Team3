@@ -3,8 +3,7 @@
 
 
 Vehicle::Vehicle(float size) {
-	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"CarPhysics.obj");
-	//mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
+	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
 //	BuffMesh = new OBJMesh(MESHDIR"ico.obj");
 	
 	//TT =  SOIL_load_OGL_texture ("../../Texture/footballpitch.jpg", SOIL_LOAD_AUTO , SOIL_CREATE_NEW_ID , SOIL_FLAG_MIPMAPS);
@@ -39,6 +38,10 @@ Vehicle::Vehicle(float size) {
 
 	//ConnectToSystems();
 
+	maxSpeed=15;
+
+
+
 	Speed_Player = 2;
 	f=0;
 	temp2=T3Vector3(0,0,0);
@@ -51,6 +54,16 @@ Vehicle::~Vehicle(void){
 	delete PlayerMesh;
 	delete Player;
 }
+
+void	Vehicle::Update(float msec)
+{
+
+	
+
+
+
+}
+
 
 //void Vehicle::UpdatePlayer1(float msec){
 ////void Vehicle::UpdatePlayer1(float msec,float forward, float sideways) {
@@ -290,13 +303,15 @@ Makes a Player. Every game has a crate in it somewhere!
 									 
 void Vehicle::SetPhysics(float size,PhysicsNode * a)
 {
-    physicsNode=a;
-	physicsNode->SetUseGravity(false);
-	physicsNode->SetPosition(origin);
-	physicsNode->SetMass(5);
-	physicsNode->SetCollisionVolume(new CollisionAABB(T3Vector3(size,size,size)));
-	
-	physicsNode->SetIsCollide(true);
+    car=a;
+	car->SetUseGravity(false);
+	car->SetPosition(origin);
+	car->SetMass(5);
+	car->SetCollisionVolume(new CollisionAABB(T3Vector3(size,size,size)));
+	car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"CarPhysics.obj"));
+	car->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,0,0));
+
+	car->SetIsCollide(true);
 
 
 

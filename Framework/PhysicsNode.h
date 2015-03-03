@@ -42,7 +42,7 @@ _-_-_-_-_-_-_-""  ""
 #include "CollisionVolume.h"
 using namespace std;
 #define LINEAR_VELOCITY_DAMP 0.98
-#define ANGULAR_VELOCITY_DAMP 0.998
+#define ANGULAR_VELOCITY_DAMP 0.7
 #define LINEAR_VELOCITY_MIN 0.00001
 
 class PhysicsNode	{
@@ -89,6 +89,7 @@ public:
 
 	T3Vector3	GetForce()	{ return m_force;}
 	T3Vector3	GetTorque() { return m_torque;}
+	void        SetTorque(T3Vector3 torque) { m_torque=torque;}
 
 	void AddForce(T3Vector3 point, T3Vector3 force);
 
@@ -120,9 +121,12 @@ public:
 	bool GetIsCollide(){ return isCollide;};
 	void SetIsCollide(bool iscollide){ isCollide=iscollide;}
 
-
+	Mesh* GetPhysicsMesh() {return physicsMesh;}
+	void SetMesh(Mesh* mesh) {physicsMesh = mesh;}
 
 protected:
+	Mesh* physicsMesh;
+
 	bool useGravity;
 	bool isCollide;
 
