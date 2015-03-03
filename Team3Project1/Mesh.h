@@ -97,11 +97,13 @@ protected:
 	// Primitive type for this mesh (GL_TRIANGLES...etc)
 	unsigned int type;
 	
+	//Buffers all VBO data into graphics memory. Required before drawing!
+	void BufferData();
+	void AssignVertexMemory();
+	void AssignIndexMemory(unsigned int indexCount);
 #if WINDOWS_BUILD
 	// Pointer to vertex indices attribute data
 	unsigned int* indices;
-	//Buffers all VBO data into graphics memory. Required before drawing!
-	void BufferData();
 	//VAO for this mesh
 	GLuint arrayObject;
 	//VBOs for this mesh
