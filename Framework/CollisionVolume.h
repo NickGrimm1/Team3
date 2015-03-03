@@ -26,7 +26,7 @@ enum CollisionVolumeType {
 
 class CollisionVolume {
 public:
-	CollisionVolumeType GetType() const { return type;}
+	virtual CollisionVolumeType GetType() const { return type;}
 	virtual void SetPosition(const T3Vector3& pos) {}; // define empty method so static entities like floors and walls can ignore updates
 
 protected:

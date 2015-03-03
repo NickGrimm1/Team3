@@ -25,24 +25,24 @@ PhysicsNode::~PhysicsNode(void)	{
 void	PhysicsNode::Update(float msec) {
 	//FUN GOES HERE
 
-
+	float sec = msec / 1000.f;
 
 	T3Vector3 acc = (m_force+m_friction)*m_invMass + (useGravity? gravity: T3Vector3(0,0,0));
 	
 	
-	m_linearVelocity = m_linearVelocity + acc*msec;
+	m_linearVelocity = m_linearVelocity + acc*sec;
 
 	m_linearVelocity = m_linearVelocity*LINEAR_VELOCITY_DAMP;
 	//if (T3Vector3::Dot(m_linearVelocity, m_linearVelocity) < LINEAR_VELOCITY_MIN) {
 	//	m_linearVelocity = T3Vector3(0,0,0);
 	//}
 
-	m_position = m_position + m_linearVelocity*msec;
+	m_position = m_position + m_linearVelocity*sec;
 
 	
-	/*switch(vol->GetType())
+	switch(vol->GetType())
 	{
-	 case COLLISION_VOL_SPHERE:
+	 case COLLISION_SPHERE:
 		{ CollisionSphere& cSphere = *(CollisionSphere*)vol;  
 			float r = cSphere.GetRadius();
 			Xstart=m_position.x -r;
@@ -50,7 +50,7 @@ void	PhysicsNode::Update(float msec) {
 		}
 			break;
 	 
-		case COLLISION_VOL_PLANE:
+		case COLLISION_PLANE:
 		{
 			CollisionPlane& cPlane =  *(CollisionPlane*)vol;
 			Xstart=m_position.x -1000;
@@ -58,33 +58,33 @@ void	PhysicsNode::Update(float msec) {
 		}
 			break;
 
-			case COLLISION_VOL_AABB:
+			case COLLISION_AABB:
 		{
-			CollisionPlane& cPlane =  *(CollisionPlane*)vol;
-			Xstart=m_position.x -5;
-			Xend=m_position.x +5;
+			
+			CollisionAABB& cAABB =  *(CollisionAABB*)vol;
+			float l= cAABB.getHalfDimensions().x;
+			Xstart=m_position.x -l;
+			Xend=m_position.x +l;
 		}
 			break;
 	
-	}*/
+	}
 
 	//F=u*T_engine*xg*xd*n/Rw;
 
 	T3Vector3 angAcc = m_invInertia*m_torque;
-	m_angularVelocity = m_angularVelocity + angAcc*msec;
+	m_angularVelocity = m_angularVelocity + angAcc*sec;
 	m_angularVelocity = m_angularVelocity*ANGULAR_VELOCITY_DAMP;
-	m_orientation = m_orientation + m_orientation*(m_angularVelocity*(msec/2.0f));
+	m_orientation = m_orientation + m_orientation*(m_angularVelocity*(sec /2.0f));
 	m_orientation.Normalise();
 
 	m_force = T3Vector3(0,0,0);
 	m_torque = T3Vector3(0,0,0);
 
 	if(target) {
-		target->SetTransform(BuildTransform());
+		target->SetRotation(m_orientation);
+		target->SetOriginPosition(m_position);
 	}
-
-
-
 }
 
 void PhysicsNode::AddForce(T3Vector3 point, T3Vector3 force) {

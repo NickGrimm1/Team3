@@ -30,6 +30,7 @@ public:
 	~Texture();
 	void SetRepeating(bool repeat);
 	void SetAnistropicFiltering(bool enable);
+	float GetMemoryUsage() { return memory; }
 #if WINDOWS_BUILD
 	Texture(GLuint textureObj);
 	GLuint GetTextureName() const { return textureObject; }
@@ -46,6 +47,7 @@ protected:
 private:
 	Texture(const Texture& in);
 	Texture& operator=(const Texture& in);
+	float memory;
 #if PS3_BUILD
 	CellGcmTexture* LoadTGA(std::string name);
 	CellGcmTexture* LoadGTF(std::string name);

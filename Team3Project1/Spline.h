@@ -21,6 +21,8 @@ public:
 	Spline(const T3Vector3& a, const T3Vector3& b, const T3Vector3& c, unsigned int subdivisions);
 	virtual ~Spline();
 
+	T3Vector3 GetAvgPosition() {return (ctrlPoints[0] + ctrlPoints[1] + ctrlPoints[2]) / 3.0f;}
+
 	void DrawControlPoints();
 	virtual void Draw();
 

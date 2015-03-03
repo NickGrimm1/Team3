@@ -4,13 +4,16 @@
 #include "../Framework/Vehicle.h"
 #include "../Framework/MyGame.h"
 #include "FreeCamera.h"
-
+#include "Vehicle_Wheel.h"
+#include "VehiclePhysicsNode.h"
+#include "CheckPoint.h"
 class RacerGame : public GameScreen3D
 {
 public:
 	RacerGame(void);
 	virtual ~RacerGame(void);
 	virtual void LoadContent();
+	virtual void UnloadContent() {}
 	virtual void Update();
 
 
@@ -28,12 +31,19 @@ public:
 	T3Vector3 tempPosition;
 	T3Vector3 temp,temp1,temp2;
 	T3Vector3 PlayerPosition;
+
 private:
 	Mesh* quad;
 	Mesh* cylinder;
 	SpotLight* light;
 	FreeCamera* camera;
 	Vehicle* car;
+
+	CheckPoint * checkpoint;
+	Vehicle_Wheel * FrontRightTire;
+	Vehicle_Wheel * FrontLeftTire;
+	Vehicle_Wheel * BackRightTire;
+	Vehicle_Wheel * BackLeftTire;
 	
 	DrawableEntity3D* ent;
 };

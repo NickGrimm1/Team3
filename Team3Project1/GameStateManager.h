@@ -16,16 +16,22 @@ Version: 1.0.0 03/02/2015.</summary>
 #include "AssetManager.h"
 #include "InputManager.h"
 #include "DebugManager.h"
-#include "AudioEngine.h"
 #include "StorageManager.h"
+#include "InputListener.h"
+#include "GamePad.h"
+
+#ifdef WINDOWS_BUILD
+#include "AudioEngine.h"
 #include "NetworkManager.h"
 #include "../Framework/Keyboard.h"
 #include "../Framework/Mouse.h"
-#include "InputListener.h"
-#include "GamePad.h"
+#endif
+
 #include <iostream>
 
 using namespace std;
+
+#define GAME_FRAME_TIME 1000.0f / 60.0f
 
 class GameStateManager : public InputListener
 {
@@ -53,10 +59,12 @@ public:
 				return false;
 			if (!InputManager::Initialize(instance->input))
 				return false;
+#ifdef WINDOWS_BUILD
 			if (!AudioEngine::Initialize(instance->audio))
 				return false;
 			if (!NetworkManager::Initialize(instance->network))
 				return false;
+#endif
 			if (!DebugManager::Initialize(instance->debug))
 				return false;
 			instance->isLoaded = true;
@@ -69,9 +77,16 @@ public:
 		Instance()->graphics->Start();
 		Instance()->physics->Start();
 		Instance()->input->Start();
+		//Instance()->audio->Start();
 
+#ifdef WINDOWS_BUILD
+		GameTimer timer;
+		float lastUpdate = timer.GetMS();
+#endif
 		while (instance->isRunning) {
-#if WINDOWS_BUILD
+#ifdef WINDOWS_BUILD
+			while (timer.GetMS() - lastUpdate < GAME_FRAME_TIME) {;}
+			lastUpdate = timer.GetMS();
 			Window::GetWindow().UpdateWindow();
 #endif
 			for (unsigned int i = 0; i < gameScreens.size(); i++) {
@@ -94,11 +109,13 @@ public:
 			graphics->Terminate();
 			physics->Terminate();
 			input->Terminate();
+			//audio->Terminate();
 
 			// Clean up
 			graphics->Join();
 			physics->Join();
 			input->Join();
+			//audio->Join();
 
 			vector<GameScreen*>::iterator i = instance->gameScreens.begin();
 			while (i != instance->gameScreens.end())
@@ -117,8 +134,10 @@ public:
 			PhysicsEngine::Destroy();
 			StorageManager::Destroy();
 			InputManager::Destroy();
+#ifdef WINDOWS_BUILD		
 			AudioEngine::Destroy();
 			NetworkManager::Destroy();
+#endif			
 			DebugManager::Destroy();
 
 			delete instance;
@@ -134,10 +153,12 @@ public:
 	<summary>Gets the game's Graphics Engine.</summary>
 	*/
 	static GraphicsEngine* Graphics() { return Instance()->graphics; }
+#ifdef WINDOWS_BUILD
 	/**
 	<summary>Gets the game's Audio Engine.</summary>
 	*/
 	static AudioEngine* Audio() { return Instance()->audio; }
+#endif
 	/**
 	<summary>Gets the game's Asset Manager.</summary>
 	*/
@@ -158,10 +179,12 @@ public:
 	<summary>Gets the game's Storage Manager.</summary>
 	*/
 	static StorageManager* Storage() { return Instance()->storage; }
+#ifdef WINDOWS_BUILD
 	/**
 	<summary>Gets the game's Network Manager.</summary>
 	*/
 	static NetworkManager* Network() { return Instance()->network; }
+#endif
 #pragma endregion
 #pragma region State Methods
 	/**
@@ -334,13 +357,17 @@ private:
 #pragma region Framework Components
 	bool isLoaded;
 	GraphicsEngine* graphics;
-	AudioEngine* audio;
 	AssetManager* assets;
 	DebugManager* debug;
 	InputManager* input;
 	PhysicsEngine* physics;
 	StorageManager* storage;
+
+#ifdef WINDOWS_BUILD
+	AudioEngine* audio;
 	NetworkManager* network;
+#endif
+
 #pragma endregion
 	vector<GameScreen*> gameScreens;
 	bool isRunning;

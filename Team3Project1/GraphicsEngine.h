@@ -59,7 +59,7 @@ public:
 		return true;
 #endif
 	}
-
+	int GetFrameRate() { return frameRate; }
 #pragma region Entry/Exit
 	/**
 	<summary>Initializes a graphics engine.</summary>
@@ -138,9 +138,13 @@ public:
 	//static GraphicsEngine& GetGraphicsEngine() {return *engine;}
 
 	void EnableLoadingIcon(bool value) {isLoading = value;}
+	void EnableMousePointer(bool value);
 
 	// Debugging
 	void DrawDeferredLights(bool on);
+
+	unsigned char* GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue);
+
 private:
 	static GraphicsEngine* engine;
 
@@ -148,6 +152,8 @@ private:
 	~GraphicsEngine();
 
 	bool isInitialised;
+
+	float DayNightCycle();
 
 	void BuildNodeLists(SceneNode* from);
 	void SortNodeLists();
@@ -189,5 +195,13 @@ private:
 	bool isLoading;
 	bool isLoadingDrawing;
 	DrawableTexture2D* loadingIcon;
+	Texture* loadingTexture;
+	Texture* skyboxDay;
+	Texture* skyboxNight;
 
+	const float RENDER_TIME;
+	float lastFrameTimeStamp;
+	int frameRate;
+	int time;
+	bool inc;
 };

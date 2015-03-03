@@ -9,12 +9,16 @@ Version: 0.0.3 06/02/2015.</summary>
 
 #include "GraphicsCommon.h"
 #include "LoadingScreen.h"
+#include "AudioTestClass.h"
+#include "NetworkTest.h"
 
 // FOR TESTING PURPOSES - REMOVE IN FINAL BUILD
 #include "GraphicsTestScreen.h"
 #include "HudTestScreen.h"
+#include "DebugOverlay.h"
 
 #include "RacerGame.h"
+#include "VehicleTestingScreen.h"
 namespace EntryPoint
 {
 	void StartGame()
@@ -29,8 +33,25 @@ namespace EntryPoint
 		HudTestScreen* hud = new HudTestScreen();
 		GameStateManager::Instance()->AddGameScreen(hud);
 
+		DebugOverlay* debug = new DebugOverlay();
+		GameStateManager::Instance()->AddGameScreen(debug);
+
+		/*RacerGame* game = new RacerGame();
+		GameStateManager::Instance()->AddGameScreen(game);
+		GameStateManager::Instance()->Start();*/
+
+
+		AudioTestClass* audio = new AudioTestClass();
+		GameStateManager::Instance()->AddGameScreen(audio);
+
+
+		//NetworkTest* network = new NetworkTest();
+		//GameStateManager::Instance()->AddGameScreen(network);
+
 		//RacerGame* game = new RacerGame();
 		//GameStateManager::Instance()->AddGameScreen(game);
+		//VehicleTestingScreen* physicsgame = new VehicleTestingScreen();
+		//GameStateManager::Instance()->AddGameScreen(physicsgame);
 		GameStateManager::Instance()->Start();
 	}
 }

@@ -14,7 +14,7 @@
 
  void SoundEmitter :: Reset () {
 	 priority = SOUNDPRIORTY_LOW ;
-	 volume = 1.0f ;
+	 volume1 = 1.0f ;
 	 radius = 500.0f ;
 	 timeLeft = 0.0f ;
 	 isLooping = true ;
@@ -84,9 +84,15 @@
 	 }
 	 else {
 		 alSourcei ( currentSource -> source , AL_BUFFER , sound -> GetBuffer ());
+		 ALuint error = alGetError();
 		 alSourcef ( currentSource -> source , AL_SEC_OFFSET ,( sound -> GetLength ()/ 1000.0) - ( timeLeft / 1000.0));
+		 error = alGetError();
+		 if (error != 0) return;
 	 }
+	 ALuint error = alGetError();
 	 alSourcePlay ( currentSource -> source );
+	 error = alGetError();
+	 if (error != 0) return;
 
  }
 
@@ -119,12 +125,12 @@
 	 if( currentSource ) {
 		 T3Vector3 pos ;
 		 if( GetIsGlobal ()) {
-			pos = SoundSystem :: GetSoundSystem () ->GetListenerTransform (). GetPositionVector ();
+			pos = AudioEngine :: GetSoundSystem () ->GetListenerTransform (). GetPositionVector ();
 		 }
 
 		 else{
 			 if( target ) {
-				pos = T3Vector3(0,0,0);/*target -> GetWorldTransform ().GetPositionVector ();*/// set sound source's current position
+				pos = T3Vector3(0,0,0);//target -> GetWorldTransform ().GetPositionVector ();// set sound source's current position
 						  }
 			 else {
 				pos = this -> position ;
@@ -154,7 +160,7 @@
 			 alSourcei ( currentSource -> source , AL_LOOPING , isLooping ? 1 : 0);
 		 }
 
-		 alSourcef ( currentSource -> source , AL_GAIN , volume );
+		 alSourcef ( currentSource -> source , AL_GAIN , volume1 );
 		 alSourcei ( currentSource -> source , AL_LOOPING , isLooping ? 1 : 0);
 		 alSourcef (currentSource->source	,AL_PITCH	,pitch);
 		 alSourcef ( currentSource -> source , AL_MAX_DISTANCE , radius );

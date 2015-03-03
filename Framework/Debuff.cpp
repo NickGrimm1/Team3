@@ -41,33 +41,35 @@ Debuff::~Debuff(void)
 
 
 GameEntity* Debuff::BuildSpeedBuffEntity(float radius, T3Vector3 pos) {   
-	SceneNode* test = new SceneNode(SpeedBuffMesh);
-	test->SetModelScale(T3Vector3(radius,radius,radius));
-	test->SetBoundingRadius(radius);
-	test->SetColour(T3Vector4(1,0,0,1));
-	PhysicsNode*p = new PhysicsNode();
+	//SceneNode* test = new SceneNode(SpeedBuffMesh);
+	//test->SetModelScale(T3Vector3(radius,radius,radius));
+	//test->SetBoundingRadius(radius);
+	//test->SetColour(T3Vector4(1,0,0,1));
+	//PhysicsNode*p = new PhysicsNode();
 
-	p->SetUseGravity(false);
-	p->SetPosition(pos);
-	//p->SetCollisionVolume(new CollisionSphere(radius));
-	GameEntity*g = new GameEntity(test, p);
-	g->ConnectToSystems();
-	return g;
+	//p->SetUseGravity(false);
+	//p->SetPosition(pos);
+	////p->SetCollisionVolume(new CollisionSphere(radius));
+	//GameEntity*g = new GameEntity(test, p);
+	//g->ConnectToSystems();
+	//return g;
+	return 0;
 }
 
 GameEntity* Debuff::BuildInvLeftAndRightEntity(float radius, T3Vector3 pos) {   
-	SceneNode* test = new SceneNode(InverseleftrightMesh);
-	test->SetModelScale(T3Vector3(radius,radius,radius));
-	test->SetBoundingRadius(radius);
-	test->SetColour(T3Vector4(1,0,0,1));
-	PhysicsNode*p = new PhysicsNode();
+	//SceneNode* test = new SceneNode(InverseleftrightMesh);
+	//test->SetModelScale(T3Vector3(radius,radius,radius));
+	//test->SetBoundingRadius(radius);
+	//test->SetColour(T3Vector4(1,0,0,1));
+	//PhysicsNode*p = new PhysicsNode();
 
-	p->SetUseGravity(false);
-	p->SetPosition(pos);
-	//p->SetCollisionVolume(new CollisionSphere(radius));
-	GameEntity*g = new GameEntity(test, p);
-	g->ConnectToSystems();
-	return g;
+	//p->SetUseGravity(false);
+	//p->SetPosition(pos);
+	////p->SetCollisionVolume(new CollisionSphere(radius));
+	//GameEntity*g = new GameEntity(test, p);
+	//g->ConnectToSystems();
+	//return g;
+	return 0;
 }
 
 
@@ -111,83 +113,83 @@ void Debuff::UpdateDebuff(Vehicle *car, float msec){
 }
 
 
-//void Debuff::SwitchleftAndright(Vehicle *Player){
-//	T3Vector3 PlayerPosition = Player->GetPlayer()->GetPhysicsNode().GetPosition();
-//
-//	if(Player->GetPlayer()->GetPhysicsNode().GetOrientation().z<-0.1||Player->GetPlayer()->GetPhysicsNode().GetOrientation().z>0.1){
-//		Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,0));
-//	}
-//
-//	if(Player->GetPlayer()->GetPhysicsNode().GetPosition().y<=100){
-//		temp1 = Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity();
-//		temp1.y = 0;
-//		Player->GetPlayer()->GetPhysicsNode().SetLinearVelocity(temp1);
-//		Player->GetPlayer()->GetPhysicsNode().SetUseGravity(FALSE);
-//	}
-//
-//	if(Window::GetKeyboard()->KeyDown(KEYBOARD_D)) {
-//		if(Player->GetPlayer()->GetPhysicsNode().GetOrientation().z>=-0.13){
-//			Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,Speed_Rotate));
-//		}			
-//		temp1 = Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity();
-//		temp1.x=0.1*Speed_Player;
-//		Player->GetPlayer()->GetPhysicsNode().SetLinearVelocity(temp1);
-//		tempPosition.x = PlayerPosition.x;
-//	}
-//
-//	if(Window::GetKeyboard()->KeyDown(KEYBOARD_A)) {
-//		if(Player->GetPlayer()->GetPhysicsNode().GetOrientation().z<=0.13){
-//			Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,-Speed_Rotate));
-//		}
-//		temp1 = Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity();
-//		temp1.x=-0.1*Speed_Player;
-//		Player->GetPlayer()->GetPhysicsNode().SetLinearVelocity(temp1);
-//		tempPosition.x = PlayerPosition.x;
-//	}
-//
-//	if(Window::GetKeyboard()->KeyDown(KEYBOARD_W)) {
-//		temp1 = Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity();
-//		temp1.z=0.1*Speed_Player;
-//		Player->GetPlayer()->GetPhysicsNode().SetLinearVelocity(temp1);             
-//		tempPosition.z = PlayerPosition.z-400;
-//	}
-//
-//	if(Window::GetKeyboard()->KeyDown(KEYBOARD_S)) {
-//		temp1 = Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity();
-//		temp1.z=-0.1*Speed_Player;
-//		Player->GetPlayer()->GetPhysicsNode().SetLinearVelocity(temp1);             
-//		tempPosition.z = PlayerPosition.z-400;
-//	}
-//
-//	if(!Window::GetKeyboard()->KeyDown(KEYBOARD_D)&&!Window::GetKeyboard()->KeyDown(KEYBOARD_A)) {		
-//		temp1 = Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity();
-//		if(Player->GetPlayer()->GetPhysicsNode().GetOrientation().z<-0.002||Player->GetPlayer()->GetPhysicsNode().GetOrientation().z>0.002){
-//			if(Player->GetPlayer()->GetPhysicsNode().GetOrientation().z<0){
-//				Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,-Speed_Rotate));
-//				
-//			}
-//			if(Player->GetPlayer()->GetPhysicsNode().GetOrientation().z>0){
-//				Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,Speed_Rotate));
-//			}
-//		}
-//		else{
-//			Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,0));
-//			temp1.x=0;
-//			Player->GetPlayer()->GetPhysicsNode().SetLinearVelocity(temp1);
-//		}
-//		tempPosition.x = PlayerPosition.x;
-//	}
-//	if(!Window::GetKeyboard()->KeyDown(KEYBOARD_W)&&!Window::GetKeyboard()->KeyDown(KEYBOARD_S)) {		
-//		temp1 = Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity();
-//		temp1.z=0;
-//		Player->GetPlayer()->GetPhysicsNode().SetLinearVelocity(temp1);
-//	}
-//	if(Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity().y==0){
-//		if(Window::GetKeyboard()->KeyDown(KEYBOARD_SPACE)){
-//			temp1 = Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity();
-//			Player->GetPlayer()->GetPhysicsNode().SetUseGravity(TRUE);
-//			temp1.y = 0.4;
-//			Player->GetPlayer()->GetPhysicsNode().SetLinearVelocity(temp1);	
-//		}
-//	}
-//}
+void Debuff::SwitchleftAndright(Vehicle *Player){
+	/*T3Vector3 PlayerPosition = Player->GetPlayer()->GetPhysicsNode().GetPosition();
+
+	if(Player->GetPlayer()->GetPhysicsNode().GetOrientation().z<-0.1||Player->GetPlayer()->GetPhysicsNode().GetOrientation().z>0.1){
+		Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,0));
+	}
+
+	if(Player->GetPlayer()->GetPhysicsNode().GetPosition().y<=100){
+		temp1 = Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity();
+		temp1.y = 0;
+		Player->GetPlayer()->GetPhysicsNode().SetLinearVelocity(temp1);
+		Player->GetPlayer()->GetPhysicsNode().SetUseGravity(FALSE);
+	}
+
+	if(Window::GetKeyboard()->KeyDown(KEYBOARD_D)) {
+		if(Player->GetPlayer()->GetPhysicsNode().GetOrientation().z>=-0.13){
+			Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,Speed_Rotate));
+		}			
+		temp1 = Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity();
+		temp1.x=0.1*Speed_Player;
+		Player->GetPlayer()->GetPhysicsNode().SetLinearVelocity(temp1);
+		tempPosition.x = PlayerPosition.x;
+	}
+
+	if(Window::GetKeyboard()->KeyDown(KEYBOARD_A)) {
+		if(Player->GetPlayer()->GetPhysicsNode().GetOrientation().z<=0.13){
+			Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,-Speed_Rotate));
+		}
+		temp1 = Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity();
+		temp1.x=-0.1*Speed_Player;
+		Player->GetPlayer()->GetPhysicsNode().SetLinearVelocity(temp1);
+		tempPosition.x = PlayerPosition.x;
+	}
+
+	if(Window::GetKeyboard()->KeyDown(KEYBOARD_W)) {
+		temp1 = Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity();
+		temp1.z=0.1*Speed_Player;
+		Player->GetPlayer()->GetPhysicsNode().SetLinearVelocity(temp1);             
+		tempPosition.z = PlayerPosition.z-400;
+	}
+
+	if(Window::GetKeyboard()->KeyDown(KEYBOARD_S)) {
+		temp1 = Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity();
+		temp1.z=-0.1*Speed_Player;
+		Player->GetPlayer()->GetPhysicsNode().SetLinearVelocity(temp1);             
+		tempPosition.z = PlayerPosition.z-400;
+	}
+
+	if(!Window::GetKeyboard()->KeyDown(KEYBOARD_D)&&!Window::GetKeyboard()->KeyDown(KEYBOARD_A)) {		
+		temp1 = Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity();
+		if(Player->GetPlayer()->GetPhysicsNode().GetOrientation().z<-0.002||Player->GetPlayer()->GetPhysicsNode().GetOrientation().z>0.002){
+			if(Player->GetPlayer()->GetPhysicsNode().GetOrientation().z<0){
+				Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,-Speed_Rotate));
+				
+			}
+			if(Player->GetPlayer()->GetPhysicsNode().GetOrientation().z>0){
+				Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,Speed_Rotate));
+			}
+		}
+		else{
+			Player->GetPlayer()->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,0));
+			temp1.x=0;
+			Player->GetPlayer()->GetPhysicsNode().SetLinearVelocity(temp1);
+		}
+		tempPosition.x = PlayerPosition.x;
+	}
+	if(!Window::GetKeyboard()->KeyDown(KEYBOARD_W)&&!Window::GetKeyboard()->KeyDown(KEYBOARD_S)) {		
+		temp1 = Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity();
+		temp1.z=0;
+		Player->GetPlayer()->GetPhysicsNode().SetLinearVelocity(temp1);
+	}
+	if(Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity().y==0){
+		if(Window::GetKeyboard()->KeyDown(KEYBOARD_SPACE)){
+			temp1 = Player->GetPlayer()->GetPhysicsNode().GetLinearVelocity();
+			Player->GetPlayer()->GetPhysicsNode().SetUseGravity(TRUE);
+			temp1.y = 0.4;
+			Player->GetPlayer()->GetPhysicsNode().SetLinearVelocity(temp1);	
+		}
+	}*/
+}

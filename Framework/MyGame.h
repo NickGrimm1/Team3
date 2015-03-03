@@ -35,7 +35,7 @@ _-_-_-_-_-_-_-""  ""
 
 #pragma once
 #include "GameEntity.h"
-#include "SoundEntity.h"
+//#include "SoundEntity.h"
 #include "GameClass.h"
 #include "Camera.h"
 #include "CubeRobot.h"
@@ -44,7 +44,7 @@ _-_-_-_-_-_-_-""  ""
 #include "SoundEmitter.h"
 #include "SoundManager.h"
 class Vehicle;
-class Debuff;
+//class Debuff;
 class MyGame : public GameClass	{
 public:
 	MyGame();
@@ -72,12 +72,12 @@ protected:
 
 	GameEntity* BuildVehicleEntity(float size,T3Vector3 pos, T3Vector3 vel);
 #if WINDOWS_BUILD
-	SoundEntity* Background_Music;
+//	SoundEntity* Background_Music;
 
-	SoundEntity* BuildSoundEntity ();
+//	SoundEntity* BuildSoundEntity ();
 #endif
 	Vehicle* Car;
-	Debuff*  DB;
+	//Debuff*  DB;
 	Mesh* cube;
 	Mesh* quad;
 	Mesh* sphere;

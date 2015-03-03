@@ -145,7 +145,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='WINDOWS_DEBUG|Win32'">
     <IncludePath>..\GLEW\include;..\SOIL;..\;$(IncludePath)</IncludePath>
-    <LibraryPath>..\GLEW\lib;..\SOIL\$(Configuration);..\$(Configuration)\;.\Framework\$(Configuration)\;..\GLEW\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\GLEW\lib;..\SOIL\$(Configuration);..\$(Configuration)\;.\Framework\$(Configuration)\;..\GLEW\lib\$(Configuration);$(LibraryPath);</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -176,7 +176,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions); WINDOWS_BUILD; DEBUG</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);WINDOWS_BUILD;DEBUG;_WINSOCKAPI_</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -219,7 +219,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions); WINDOWS_BUILD</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions); WINDOWS_BUILD;_WINSOCKAPI_</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -259,7 +259,6 @@
     <ClInclude Include="..\Framework\Mouse.h" />
     <ClInclude Include="..\Framework\MyGame.h" />
     <ClInclude Include="..\Framework\OBJMesh.h" />
-    <ClInclude Include="..\Framework\Octree.h" />
     <ClInclude Include="..\Framework\OGLRenderer.h" />
     <ClInclude Include="..\Framework\ParticleEmitter.h" />
     <ClInclude Include="..\Framework\PhysicsNode.h" />
@@ -270,9 +269,7 @@
     <ClInclude Include="..\Framework\Shader.h" />
     <ClInclude Include="..\Framework\Sound.h" />
     <ClInclude Include="..\Framework\SoundEmitter.h" />
-    <ClInclude Include="..\Framework\SoundEntity.h" />
     <ClInclude Include="..\Framework\SoundManager.h" />
-    <ClInclude Include="..\Framework\SoundSystem.h" />
     <ClInclude Include="..\Framework\Spring.h" />
     <ClInclude Include="..\Framework\SpringDemo.h" />
     <ClInclude Include="..\Framework\T3Vector2.h" />
@@ -283,9 +280,13 @@
     <ClInclude Include="..\Framework\Window.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="AudioEngine.h" />
+    <ClInclude Include="AudioTestClass.h" />
+    <ClInclude Include="BaseSocket.h" />
     <ClInclude Include="ChaseCamera.h" />
+    <ClInclude Include="CheckPoint.h" />
     <ClInclude Include="ClickableEntity2D.h" />
     <ClInclude Include="DebugManager.h" />
+    <ClInclude Include="DebugOverlay.h" />
     <ClInclude Include="DrawableEntity2D.h" />
     <ClInclude Include="DrawableEntity3D.h" />
     <ClInclude Include="DrawableText2D.h" />
@@ -293,6 +294,7 @@
     <ClInclude Include="EntryPoint.h" />
     <ClInclude Include="GCMRenderer.h" />
     <ClInclude Include="GraphicsTestScreen.h" />
+    <ClInclude Include="Heightmap.h" />
     <ClInclude Include="HudTestScreen.h" />
     <ClInclude Include="LoadedFont.h" />
     <ClInclude Include="LoadedMesh.h" />
@@ -302,6 +304,8 @@
     <ClInclude Include="LoadingScreen.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MutexClass.h" />
+    <ClInclude Include="NetworkCommon.h" />
+    <ClInclude Include="NetworkTest.h" />
     <ClInclude Include="OffsetCamera.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FreeCamera.h" />
@@ -319,16 +323,21 @@
     <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="RacerGame.h" />
     <ClInclude Include="SelectableEntity2D.h" />
+    <ClInclude Include="ServerSocket.h" />
     <ClInclude Include="ShaderPart.h" />
     <ClInclude Include="Spline.h" />
     <ClInclude Include="T3Rectangle.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="StorageManager.h" />
+    <ClInclude Include="TcpSocket.h" />
     <ClInclude Include="TextMesh.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Thread.h" />
     <ClInclude Include="TrackSegment.h" />
     <ClInclude Include="UIButton.h" />
+    <ClInclude Include="VehiclePhysicsNode.h" />
+    <ClInclude Include="VehicleTestingScreen.h" />
+    <ClInclude Include="Vehicle_Wheel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Camera.cpp" />
@@ -349,7 +358,6 @@
     <ClCompile Include="..\Framework\Mouse.cpp" />
     <ClCompile Include="..\Framework\MyGame.cpp" />
     <ClCompile Include="..\Framework\OBJMesh.cpp" />
-    <ClCompile Include="..\Framework\Octree.cpp" />
     <ClCompile Include="..\Framework\OGLRenderer.cpp" />
     <ClCompile Include="..\Framework\ParticleEmitter.cpp" />
     <ClCompile Include="..\Framework\PhysicsNode.cpp" />
@@ -360,9 +368,7 @@
     <ClCompile Include="..\Framework\Shader.cpp" />
     <ClCompile Include="..\Framework\Sound.cpp" />
     <ClCompile Include="..\Framework\SoundEmitter.cpp" />
-    <ClCompile Include="..\Framework\SoundEntity.cpp" />
     <ClCompile Include="..\Framework\SoundManager.cpp" />
-    <ClCompile Include="..\Framework\SoundSystem.cpp" />
     <ClCompile Include="..\Framework\Spring.cpp" />
     <ClCompile Include="..\Framework\SpringDemo.cpp" />
     <ClCompile Include="..\Framework\Vehicle.cpp" />
@@ -370,7 +376,9 @@
     <ClCompile Include="..\Framework\Window.cpp" />
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="AudioEngine.cpp" />
+    <ClCompile Include="AudioTestClass.cpp" />
     <ClCompile Include="DebugManager.cpp" />
+    <ClCompile Include="DebugOverlay.cpp" />
     <ClCompile Include="GamePad.cpp" />
     <ClCompile Include="GameScreen2D.cpp" />
     <ClCompile Include="GameScreen3D.cpp" />
@@ -378,6 +386,7 @@
     <ClCompile Include="GCMRenderer.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
     <ClCompile Include="GraphicsTestScreen.cpp" />
+    <ClCompile Include="HeightMap.cpp" />
     <ClCompile Include="HudTestScreen.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LoadingScreen.cpp" />
@@ -385,18 +394,24 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MutexClass.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
+    <ClCompile Include="NetworkTest.cpp" />
     <ClCompile Include="OffsetCamera.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="RacerGame.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="ServerSocket.cpp" />
     <ClCompile Include="ShaderPart.cpp" />
     <ClCompile Include="Spline.cpp" />
     <ClCompile Include="StorageManager.cpp" />
+    <ClCompile Include="TcpSocket.cpp" />
     <ClCompile Include="TextMesh.cpp" />
     <ClCompile Include="TexturePS3.cpp" />
     <ClCompile Include="TextureWindows.cpp" />
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="TrackSegment.cpp" />
+    <ClCompile Include="VehiclePhysicsNode.cpp" />
+    <ClCompile Include="VehicleTestingScreen.cpp" />
+    <ClCompile Include="Vehicle_Wheel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Resources\Shaders\BlendedFragment.glsl" />
@@ -413,12 +428,16 @@
     <None Include="..\Resources\Shaders\DownSampleFragment.glsl" />
     <None Include="..\Resources\Shaders\MainFragShader.glsl" />
     <None Include="..\Resources\Shaders\MainVertShader.glsl" />
+    <None Include="..\Resources\Shaders\PassThroughVertex.glsl" />
+    <None Include="..\Resources\Shaders\PerlinFragment.glsl" />
     <None Include="..\Resources\Shaders\PointToCircleGeom.glsl" />
     <None Include="..\Resources\Shaders\PointToQuadGeom.glsl" />
     <None Include="..\Resources\Shaders\ShadowFragment.glsl" />
     <None Include="..\Resources\Shaders\ShadowVertex.glsl" />
     <None Include="..\Resources\Shaders\SkyBoxFragment.glsl" />
     <None Include="..\Resources\Shaders\SkyBoxVertex.glsl" />
+    <None Include="..\Resources\Shaders\SkyDomeFragment.glsl" />
+    <None Include="..\Resources\Shaders\SkyDomeVertex.glsl" />
     <None Include="..\Resources\Shaders\TexturedFragment.glsl" />
     <None Include="..\Resources\Shaders\TexturedVertex.glsl" />
     <None Include="..\Resources\Shaders\VelocityFragment.glsl" />

@@ -26,6 +26,9 @@ public:
 	void DrawTrackBoundaries();
 	virtual void Draw();
 
+	T3Vector3 GetTrackCentreLeft() const;
+	T3Vector3 GetTrackCentreRight() const;
+
 protected:
 	Vertex* trackMesh;
 	GLuint trackVBO;

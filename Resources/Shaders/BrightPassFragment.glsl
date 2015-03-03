@@ -3,7 +3,7 @@
  Author: Sherif Salem
  Date: 	09/02/2015
  Summary:
-	Produces an image with only the 'bright' areas shown, with non-bright areas made black.
+	Produces an image with the 'bright' areas accentuated, and non-bright areas made black.
 */
 
 #version 430 core

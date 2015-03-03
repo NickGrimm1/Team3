@@ -37,11 +37,12 @@ _-_-_-_-_-_-_-""  ""
 #include "T3Vector3.h"
 #include "T3Matrix4.h"
 #include "SceneNode.h"
-#include <vector>
+#include "../Team3Project1/DrawableEntity3D.h"
+
 #include "CollisionVolume.h"
 using namespace std;
 #define LINEAR_VELOCITY_DAMP 0.98
-#define ANGULAR_VELOCITY_DAMP 0.998
+#define ANGULAR_VELOCITY_DAMP 0.7
 #define LINEAR_VELOCITY_MIN 0.00001
 
 class PhysicsNode	{
@@ -78,8 +79,8 @@ public:
 	void	SetOrientation(Quaternion q) { m_orientation = q; }
 	void	SetAngularVelocity(T3Vector3 vec) { m_angularVelocity = vec; }
 
-	void	SetTarget(SceneNode *s) { target = s;}
-	SceneNode* GetTarget() {return target;}
+	void	SetTarget(DrawableEntity3D *s) { target = s;}
+	DrawableEntity3D* GetTarget() {return target;}
 	void	SetUseGravity(bool value) { useGravity = value; }
 	void	SetCollisionVolume(CollisionVolume* vol) { this->vol = vol; }
 
@@ -88,6 +89,7 @@ public:
 
 	T3Vector3	GetForce()	{ return m_force;}
 	T3Vector3	GetTorque() { return m_torque;}
+	void        SetTorque(T3Vector3 torque) { m_torque=torque;}
 
 	void AddForce(T3Vector3 point, T3Vector3 force);
 
@@ -107,7 +109,7 @@ public:
 	float GetXend(){return Xend;};
 	void  SetXstart(float xstart) {Xstart=xstart;};
 	void  SetXend(float xend) {Xend=xend;};
-	void        SetForce(T3Vector3 x)    {m_force=x;}
+	void  SetForce(T3Vector3 x)    {m_force=x;};
 	float Ystart;
 	float Yend;
 	float GetYstart(){return Ystart;};
@@ -115,8 +117,18 @@ public:
 	void  SetYstart(float Ystart) {Ystart=Ystart;};
 	void  SetYend(float Yend) {Yend=Yend;};
 	T3Vector3 GetFathestPointInDirection(PhysicsNode& shape1,T3Vector3 d);
+
+	bool GetIsCollide(){ return isCollide;};
+	void SetIsCollide(bool iscollide){ isCollide=iscollide;}
+
+	Mesh* GetPhysicsMesh() {return physicsMesh;}
+	void SetMesh(Mesh* mesh) {physicsMesh = mesh;}
+
 protected:
+	Mesh* physicsMesh;
+
 	bool useGravity;
+	bool isCollide;
 
 	//<---------LINEAR-------------->
 	T3Vector3		m_position;
@@ -139,7 +151,7 @@ protected:
 	float Rw;  //wheel radius
 	float n;   //transmission efficiency
 
-	SceneNode*	target;
+	DrawableEntity3D*	target;
 	CollisionVolume* vol;
 //	Function* callback;
 //	GameClass* interestedObject;

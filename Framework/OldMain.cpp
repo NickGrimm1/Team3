@@ -57,7 +57,7 @@ void physicsLoop(GameClass* game, bool& running) {
 }
 
 int oldmain() {
-	SoundSystem :: Initialise ();
+//	SoundSystem :: Initialise ();
 
 	if(!Window::Initialise("Game Technologies", 1280,800,false)) {
 		return Quit(true, "Window failed to initialise!");
@@ -98,8 +98,8 @@ int oldmain() {
 	running = false;
 	physics.join();
 
-	SoundManager :: DeleteSounds ();
-	SoundSystem :: Destroy ();
+//	SoundManager :: DeleteSounds ();
+//	SoundSystem :: Destroy ();
 	delete game;	//Done with our game now...bye bye!
 	return Quit();
 }
