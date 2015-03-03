@@ -51,4 +51,5 @@ public:
 	<param name='amount'>The amount of the displacement. For the triggers, only the x co-ordinate is used.</param>
 	*/
 	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) = 0;
+	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID) = 0;
 };
