@@ -169,13 +169,13 @@
     <Filter Include="Framework\Graphics\Common\3D\Source Files">
       <UniqueIdentifier>{d95af220-a299-45e3-a458-26d2df988fec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\Audio\Artificial Intelligence">
+    <Filter Include="Framework\Artificial Intelligence">
       <UniqueIdentifier>{2dcc95e2-a2cc-4712-b6f2-da28e0fff502}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\Audio\Artificial Intelligence\Header Files">
+    <Filter Include="Framework\Artificial Intelligence\Header Files">
       <UniqueIdentifier>{8f5d6abe-8484-4d98-a766-9752a098c146}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\Audio\Artificial Intelligence\Source Files">
+    <Filter Include="Framework\Artificial Intelligence\Source Files">
       <UniqueIdentifier>{e41fb13d-e937-41de-a3ef-f1cb43bf71f9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -260,9 +260,6 @@
     </ClInclude>
     <ClInclude Include="..\Framework\Window.h">
       <Filter>Framework\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Engine\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\CollisionVolume.h">
       <Filter>Framework\Physics\Header Files</Filter>
@@ -483,6 +480,24 @@
     <ClInclude Include="AudioTestClass.h">
       <Filter>Game\MainGame\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="NetworkCommon.h">
+      <Filter>Framework\Network\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerSocket.h">
+      <Filter>Framework\Network\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseSocket.h">
+      <Filter>Framework\Network\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TcpSocket.h">
+      <Filter>Framework\Network\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Framework\Graphics\Windows\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkTest.h">
+      <Filter>Framework\Network\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">
@@ -523,9 +538,6 @@
     </ClCompile>
     <ClCompile Include="..\Framework\Window.cpp">
       <Filter>Framework\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Engine\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Framework\Spring.cpp">
       <Filter>Framework\Physics\Source Files</Filter>
@@ -680,9 +692,6 @@
     <ClCompile Include="VehiclePhysicsNode.cpp">
       <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CheckPoint.cpp">
-      <Filter>Framework\Physics\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DebugOverlay.cpp">
       <Filter>Framework\Debug\Source Files</Filter>
     </ClCompile>
@@ -694,6 +703,18 @@
     </ClCompile>
     <ClCompile Include="AudioTestClass.cpp">
       <Filter>Game\MainGame\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerSocket.cpp">
+      <Filter>Framework\Network\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TcpSocket.cpp">
+      <Filter>Framework\Network\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Framework\Graphics\Windows\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkTest.cpp">
+      <Filter>Framework\Network\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
