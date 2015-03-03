@@ -22,6 +22,8 @@ GameEntity::~GameEntity(void)	{
 
 void	GameEntity::Update(float msec) {
 
+
+
 }
 
 void	GameEntity::ConnectToSystems() {

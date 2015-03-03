@@ -17,6 +17,7 @@ Version: 0.0.3 06/02/2015.</summary>
 #include "DebugOverlay.h"
 
 #include "RacerGame.h"
+#include "VehicleTestingScreen.h"
 namespace EntryPoint
 {
 	void StartGame()
@@ -25,21 +26,28 @@ namespace EntryPoint
 		LoadingScreen* loadingScreen = new LoadingScreen();
 		GameStateManager::Instance()->AddGameScreen(loadingScreen);
 
-		GraphicsTestScreen* game = new GraphicsTestScreen();
-		GameStateManager::Instance()->AddGameScreen(game);
+		//GraphicsTestScreen* game = new GraphicsTestScreen();
+		//GameStateManager::Instance()->AddGameScreen(game);
 
 		HudTestScreen* hud = new HudTestScreen();
 		GameStateManager::Instance()->AddGameScreen(hud);
 
-		DebugOverlay* debug = new DebugOverlay();
-		GameStateManager::Instance()->AddGameScreen(debug);
+		//DebugOverlay* debug = new DebugOverlay();
+		//GameStateManager::Instance()->AddGameScreen(debug);
+
+		/*RacerGame* game = new RacerGame();
+		GameStateManager::Instance()->AddGameScreen(game);
+		GameStateManager::Instance()->Start();*/
+
 
 		AudioTestClass* audio = new AudioTestClass();
 		GameStateManager::Instance()->AddGameScreen(audio);
 
 
-//		RacerGame* game = new RacerGame();
-//		GameStateManager::Instance()->AddGameScreen(game);
+		//RacerGame* game = new RacerGame();
+		//GameStateManager::Instance()->AddGameScreen(game);
+		VehicleTestingScreen* physicsgame = new VehicleTestingScreen();
+		GameStateManager::Instance()->AddGameScreen(physicsgame);
 		GameStateManager::Instance()->Start();
 	}
 }
