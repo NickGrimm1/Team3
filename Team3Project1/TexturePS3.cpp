@@ -5,6 +5,21 @@
 Texture::Texture(string filename, unsigned int flags)
 {
 	// TODO: Sort if this is TGA or GTF and load accordingly.
+	if (filename.substr(filename.length() - 3, 3) == "tga")
+	{
+		std::cout << "Loading TGA File: " << filename << std::endl;
+		textureObject = LoadTGA(filename);
+	}
+	else if (filename.substr(filename.length() - 3, 3) == "gtf")
+	{
+		std::cout << "Loading GTF File: " << filename << std::endl;
+		textureObject = LoadGTF(filename);
+	}
+	else
+	{
+		std::cout << "Filetype not recognised: " << filename << std::endl;
+		textureObject = NULL;
+	}
 }
 
 /*

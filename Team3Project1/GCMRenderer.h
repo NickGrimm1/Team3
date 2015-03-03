@@ -29,6 +29,7 @@ _-_-_-_-_-_-_-""  ""
 #include "../Framework/Shader.h"
 #include "../Framework/SceneNode.h"
 #include "Mesh.h"
+#include "Texture.h"
 
 //#include "../Framework/OBJMesh.h"
 using namespace Vectormath::Aos;
@@ -53,18 +54,18 @@ enum GCMResolution {
 };
 
 
-typedef struct {
-	uint32_t Version;
-	uint32_t Size;
-	uint32_t NumTexture;
-} CellGtfFileHeader;
-
-typedef struct {
-	uint32_t Id;
-	uint32_t OffsetToTex;
-	uint32_t TextureSize;
-	CellGcmTexture tex;
-} CellGtfTextureAttribute;
+//typedef struct {
+//	uint32_t Version;
+//	uint32_t Size;
+//	uint32_t NumTexture;
+//} CellGtfFileHeader;
+//
+//typedef struct {
+//	uint32_t Id;
+//	uint32_t OffsetToTex;
+//	uint32_t TextureSize;
+//	CellGcmTexture tex;
+//} CellGtfTextureAttribute;
 
 class GCMRenderer	{
 public:
@@ -136,6 +137,6 @@ protected:
 	unsigned int depthOffset;			//Pointer to our depth buffer
 	unsigned int depthPitch;			//Pitch of our depth buffer
 
-	CellGcmTexture* texture;
+	Texture* texture;
 };
 #endif

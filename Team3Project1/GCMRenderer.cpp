@@ -22,7 +22,7 @@ GCMRenderer::GCMRenderer(void)	{
 	shader = new Shader();
 	InitDisplay();
 	InitSurfaces();
-	texture = (GCMRenderer::LoadGTF("/ncl.gtf"));
+	texture = new Texture("/ncl.gtf", 0);
 	std::cout <<"Got to end of GCMrenderer constructor" << std::endl;
 }
 
@@ -347,7 +347,8 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		std::cout << n->GetMesh()->GetNumVertices() << std::endl;
 		//GCC complains about function returns being used as parameters passed
 		//around, or we'd just use GetWorldTransform as the function param
-		T3Matrix4 transform = n->GetTransform();
+		T3Matrix4 transform = //n->GetTransform();
+			Quaternion::EulerAnglesToQuaternion(90, 0, 0).ToMatrix() * T3Matrix4::Scale(T3Vector3(1000,1000,1));
 
 		/*std::cout << "GCMRenderer: ViewMatrix (SCE): " << std::endl;
 		for (int x = 0; x < 4; ++x)
@@ -389,7 +390,14 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		make it more intuitive to place it here, instead.
 		*/
 	
-		//SetTextureSampler(shader->GetFragment()->GetParameter("texture"),texture);
+		CellGcmTexture* t = texture->GetTexture();
+		
+		if (t)
+			std::cout << "Has Texture" << std::endl;
+		else
+			std::cout << "No Has Texture :(" << std::endl;
+
+		SetTextureSampler(shader->GetFragment()->GetParameter("texture"), t);
 
 		/*
 		The GCM Mesh class needs the current vertex shader, fragment
