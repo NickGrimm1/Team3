@@ -84,9 +84,15 @@
 	 }
 	 else {
 		 alSourcei ( currentSource -> source , AL_BUFFER , sound -> GetBuffer ());
+		 ALuint error = alGetError();
 		 alSourcef ( currentSource -> source , AL_SEC_OFFSET ,( sound -> GetLength ()/ 1000.0) - ( timeLeft / 1000.0));
+		 error = alGetError();
+		 if (error != 0) return;
 	 }
+	 ALuint error = alGetError();
 	 alSourcePlay ( currentSource -> source );
+	 error = alGetError();
+	 if (error != 0) return;
 
  }
 
@@ -119,7 +125,7 @@
 	 if( currentSource ) {
 		 T3Vector3 pos ;
 		 if( GetIsGlobal ()) {
-			pos = SoundSystem :: GetSoundSystem () ->GetListenerTransform (). GetPositionVector ();
+			pos = AudioEngine :: GetSoundSystem () ->GetListenerTransform (). GetPositionVector ();
 		 }
 
 		 else{
