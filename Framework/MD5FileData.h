@@ -66,7 +66,7 @@ struct MD5Tri {
 
 /*
 Each MD5Skeleton has an array of joints, which are arranged in a parent/child
-hierarchy, forminimumg the skeleton. Each joint is given a name, so it can be
+hierarchy, forming the skeleton. Each joint is given a name, so it can be
 targeted by scripting ('GetTransformOfJoint("Hand") etc). Joint names are
 stored separately, to avoid an annoying string copying problem with using
 memcpy on an array of MD5Joints. MD5Joints have their transform twice - 
@@ -105,7 +105,7 @@ struct MD5Vert {
 /*
 Each MD5SubMesh also has an array of MD5Weights. These store an 'anchor'
 position, and a weighting value (between 0.0 and 1.0). They also have an
-index into the MD5Skeleton joint array, to determinimume which MD5Joint this
+index into the MD5Skeleton joint array, to determine which MD5Joint this
 MD5Weight is relative to.
 */
 struct MD5Weight {

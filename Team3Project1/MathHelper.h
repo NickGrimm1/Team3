@@ -9,15 +9,16 @@ Version: 0.0.5 10/02/2015.</summary>
 #include "../Framework/T3Vector2.h"
 #include "T3Rectangle.h"
 
-namespace MathHelper
+class MathHelper
 {
+public:
 	/**
 	<summary>Checks if a point is within a rectangle.</summary>
 	<param name='point'>The point.</param>
 	<param name='container'>The rectangle.</param>
 	<returns>True if the point is inside the rectangle.</returns>
 	*/
-	bool Contains(T3Vector2 point, T3Rectangle container)
+	static bool Contains(T3Vector2 point, T3Rectangle container)
 	{
 		if (point.x >= container.x && point.x <= container.GetRight()
 			&& point.y >= container.y && point.y <= container.GetTop())
@@ -32,7 +33,7 @@ namespace MathHelper
 	<param name='amount'>The amount to interpolate.</param>
 	<returns>The final value of f1 moved amount towards f2.</returns>
 	*/
-	float Lerp(float f1, float f2, float amount)
+	static float Lerp(float f1, float f2, float amount)
 	{
 		return f1 + (f2 - f1) * amount;
 	}
@@ -43,7 +44,7 @@ namespace MathHelper
 	<param name='amount'>The amount to interpolate.</param>
 	<returns>The final value of v1 moved amount towards v2.</returns>
 	*/
-	T3Vector3 Lerp(const T3Vector3& v1, const T3Vector3& v2, float amount)
+	static T3Vector3 Lerp(const T3Vector3& v1, const T3Vector3& v2, float amount)
 	{
 		return T3Vector3(Lerp(v1.x, v2.x, amount), Lerp(v1.y, v2.y, amount), Lerp(v1.z, v2.z, amount));
 	}
@@ -54,13 +55,11 @@ namespace MathHelper
 	<param name='amount'>The amount to interpolate.</param>
 	<returns>The final value of f1 moved amount towards f2.</returns>
 	*/
-	T3Matrix4& Lerp(T3Matrix4 m1, T3Matrix4 m2, float amount)
+	static T3Matrix4& Lerp(T3Matrix4 m1, T3Matrix4 m2, float amount)
 	{
 		T3Matrix4 out;
 		for (int i = 0; i < 16; i++)
 			out.values[i] = m1.values[i] + (m2.values[i] - m1.values[i]) * amount;
 		return out;
 	}
-
-	
 };

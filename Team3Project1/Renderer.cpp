@@ -134,6 +134,7 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE || !gbufferDepthTex || !gbufferColourTex || !gbufferNormalTex || !gbufferVelocity) {
 		return;
 	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, deferredLightingFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, lightEmissiveTex, 0);
@@ -142,6 +143,7 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE || !lightEmissiveTex || !lightSpecularTex)
 		return;
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
 	
@@ -154,6 +156,7 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOWSIZE, SHADOWSIZE, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
 	glGenTextures(3, postProcessingTex);
@@ -165,6 +168,7 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	ambientLightColour = DEFAULT_AMBIENT_LIGHT_COLOUR;
 
@@ -404,7 +408,7 @@ void Renderer::DrawScene()
 	char buffer[20];
 	for (unsigned int i = 0; i < lights.size(); i++) {
 		if (lights[i]->GetShadowTexture() > 0) { // Shadow depth texture exists for light, so use
-			// Calculate the view projection matrix for the light so can sample shadow map (binding to textureMatrix for the minimumute
+			// Calculate the view projection matrix for the light so can sample shadow map
 			T3Matrix4 shadowMatrix = biasMatrix * lights[i]->GetProjectionMatrix() * lights[i]->GetViewMatrix(T3Vector3(cameraMatrix.GetPositionVector()));
 			
 			sprintf_s(buffer, 20, "shadowProjMatrix[%d]", i);
@@ -551,7 +555,7 @@ void Renderer::DrawNodes(bool enableTextures) {
 			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
 		}
 
-		// ignore shader for the minimumute
+		// ignore shader for the minute
 		
 		modelMatrix = sceneNodes[i]->GetWorldTransform() * T3Matrix4::Scale(entity.GetScale());
 		glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"),	1,false, (float*)&modelMatrix);
@@ -1056,7 +1060,7 @@ void Renderer::DrawFrameBufferTex(GLuint fboTex) {
 
 void Renderer::Draw2DOverlay() {
 	glDisable(GL_DEPTH_TEST);
-	
+
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glCullFace(GL_FRONT);
 	SetCurrentShader(hudShader);

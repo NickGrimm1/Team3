@@ -167,7 +167,7 @@ void MD5Anim::LoadMD5AnimBounds( std::ifstream &from,unsigned int &count  )	{
 	is a brace
 	*/
 
-	char skipChar;			//We skip the brackets by streaminimumg them into this
+	char skipChar;			//We skip the brackets by streaming them into this
 	std::string tempLine;	//Another temporary line to stream things into...
 
 	do {
@@ -211,7 +211,7 @@ void MD5Anim::LoadMD5AnimBaseFrame( std::ifstream &from )	{
 	should see is a brace
 	*/
 
-	char skipChar;			//We skip the brackets by streaminimumg them into this
+	char skipChar;			//We skip the brackets by streaming them into this
 	std::string tempLine;	//Another temporary line to stream things into...
 
 	/*
@@ -325,8 +325,8 @@ void	MD5Anim::TransformSkeleton(MD5Skeleton &skel, unsigned int frameNum) {
 		Each frame has a number of 'delta' components, and each joint
 		uses a number of these components to update its position and
 		orientation. Whether or not each value is updated or not is
-		determinimumed by the joints flags variable. The starting
-		component for each joint is determinimumed by the frameIndex value
+		determined by the joints flags variable. The starting
+		component for each joint is determined by the frameIndex value
 		of the joint.
 
 		For each value of the joint (ie its 3 position values and its 3
@@ -394,7 +394,7 @@ void	MD5Anim::TransformSkeleton(MD5Skeleton &skel, unsigned int frameNum) {
 		skelJoint.localTransform		= animQuat.ToMatrix();
 		skelJoint.localTransform.SetPositionVector(animPos);
 
-		//If the joint has no parent (determinimumed by a negative parent variable) we need to 
+		//If the joint has no parent (determined by a negative parent variable) we need to 
 		//transform the joint's transform to the correct rotation, using the conversion matrix
 		if(skelJoint.parent < 0) {	//Base Joint, so we're done
 			skelJoint.transform = MD5FileData::conversionMatrix * skelJoint.localTransform;

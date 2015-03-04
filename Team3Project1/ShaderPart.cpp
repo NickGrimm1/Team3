@@ -50,7 +50,7 @@ ShaderPart::ShaderPart(string raw, ShaderType::Type type)
 		return;
 #endif
 	}
-	//This is the slightly messy default way to determinimume the size
+	//This is the slightly messy default way to determining the size
 	//of a file (seek to the end of it, grab the read position, seek
 	//back to the start)
 	file.seekg(0, std::ios::end);

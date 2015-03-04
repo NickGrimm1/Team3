@@ -10,7 +10,7 @@ You could keep pointers to all types inside a physics node,
 and check to see which ones are NULL. Or you could make all
 collision volumes inherit from a base class, so we only need
 a single pointer inside each Physics Node. We can then either
-use a process of dynamic casting to determinimume which exact type
+use a process of dynamic casting to determine which exact type
 of volume the pointer is, or just cheat and use an enum member
 variable (I do this in my own work, you can do whichever you
 feel comfortable with!).
@@ -26,7 +26,7 @@ enum CollisionVolumeType {
 
 class CollisionVolume {
 public:
-	CollisionVolumeType GetType() const { return type;}
+	virtual CollisionVolumeType GetType() const { return type;}
 	virtual void SetPosition(const T3Vector3& pos) {}; // define empty method so static entities like floors and walls can ignore updates
 
 protected:

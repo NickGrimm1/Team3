@@ -57,7 +57,7 @@ void physicsLoop(GameClass* game, bool& running) {
 }
 
 int oldmain() {
-	SoundSystem :: Initialise ();
+//	SoundSystem :: Initialise ();
 
 	if(!Window::Initialise("Game Technologies", 1280,800,false)) {
 		return Quit(true, "Window failed to initialise!");
@@ -87,7 +87,7 @@ int oldmain() {
 		    SoundSystem :: GetSoundSystem () -> PlaySoundA (SoundManager :: GetSound ("../../Sounds/36847__ecodtr__laserrocket2.wav"),T3Vector3(0,0,0));
 		}
 		if( Window :: GetKeyboard () -> KeyTriggered ( KEYBOARD_3 )) {
-		    SoundSystem :: GetSoundSystem () -> PlaySoundW (SoundManager :: GetSound ("../../Sounds/56900__syna-maximum__war.wav"),SOUNDPRIORTY_LOW);
+		    SoundSystem :: GetSoundSystem () -> PlaySoundW (SoundManager :: GetSound ("../../Sounds/56900__syna-max__war.wav"),SOUNDPRIORTY_LOW);
 		}
 		
 		if( Window :: GetKeyboard () -> KeyTriggered ( KEYBOARD_4 )) {
@@ -98,8 +98,8 @@ int oldmain() {
 	running = false;
 	physics.join();
 
-	SoundManager :: DeleteSounds ();
-	SoundSystem :: Destroy ();
+//	SoundManager :: DeleteSounds ();
+//	SoundSystem :: Destroy ();
 	delete game;	//Done with our game now...bye bye!
 	return Quit();
 }

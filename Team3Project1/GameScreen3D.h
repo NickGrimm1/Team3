@@ -31,6 +31,7 @@ public:
 	{ }
 	virtual ~GameScreen3D();
 	void SetPlayer(DrawableEntity3D* value) { player = value; }
+	DrawableEntity3D* GetPlayer(){return player;}
 	void RemovePlayer() 
 	{
 		player = NULL; 

@@ -181,7 +181,7 @@ public:
 #pragma endregion
 protected:
 	/**
-	<summary>Gets the maximumimum screen deviations for scroll.</summary>
+	<summary>Gets the maximum screen deviations for scroll.</summary>
 	*/
 	void GetMaxScreenDeviation()
 	{

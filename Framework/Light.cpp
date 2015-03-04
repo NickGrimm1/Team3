@@ -231,7 +231,7 @@ bool SpotLight::IsInSpotlight(T3Vector3 world_pos, Light* light) {
 	light_to_world.Normalise();
 	float dotprod = T3Vector3::Dot(light_to_world, light->GetDirection());
 	float coscone = cos(light->GetAngle() / 2.0f * PI / 180.0f); //cause expects radians
-	if (coscone <= dotprod) { // inside angle of cone, determinimume whether beyond radius
+	if (coscone <= dotprod) { // inside angle of cone, determine whether beyond radius
 		//float dist = (world_pos - light->GetPosition()).Length();
 		float dist = light_to_world.Length();
 		return (dist < light->GetRadius());

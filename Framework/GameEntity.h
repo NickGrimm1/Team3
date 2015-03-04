@@ -54,7 +54,7 @@ public:
 
 	PhysicsNode&	GetPhysicsNode()	{ return *physicsNode;}
 
-	void			ConnectToSystems();
+	virtual void			ConnectToSystems();
 	void			DisconnectFromSystems();
 
 protected:

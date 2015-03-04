@@ -20,7 +20,7 @@ public:
 	void UpdateCamera() 
 	{
 		// Get new target position
-		expectedPosition = targetEntity->GetOriginPosition() + offset;
+		expectedPosition = targetEntity->GetOriginPosition();// + offset;
 		T3Matrix4 expectedRotation = targetEntity->GetRotation().ToMatrix() * Quaternion::EulerAnglesToQuaternion(pitchOffset, yawOffset, rollOffset).ToMatrix();
 		rotation = MathHelper::Lerp(rotation, expectedRotation, 0.05f);
 

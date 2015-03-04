@@ -40,9 +40,9 @@ void	PhysicsNode::Update(float msec) {
 	m_position = m_position + m_linearVelocity*sec;
 
 	
-	/*switch(vol->GetType())
+	switch(vol->GetType())
 	{
-	 case COLLISION_VOL_SPHERE:
+	 case COLLISION_SPHERE:
 		{ CollisionSphere& cSphere = *(CollisionSphere*)vol;  
 			float r = cSphere.GetRadius();
 			Xstart=m_position.x -r;
@@ -50,7 +50,7 @@ void	PhysicsNode::Update(float msec) {
 		}
 			break;
 	 
-		case COLLISION_VOL_PLANE:
+		case COLLISION_PLANE:
 		{
 			CollisionPlane& cPlane =  *(CollisionPlane*)vol;
 			Xstart=m_position.x -1000;
@@ -58,15 +58,17 @@ void	PhysicsNode::Update(float msec) {
 		}
 			break;
 
-			case COLLISION_VOL_AABB:
+			case COLLISION_AABB:
 		{
-			CollisionPlane& cPlane =  *(CollisionPlane*)vol;
-			Xstart=m_position.x -5;
-			Xend=m_position.x +5;
+			
+			CollisionAABB& cAABB =  *(CollisionAABB*)vol;
+			float l= cAABB.getHalfDimensions().x;
+			Xstart=m_position.x -l;
+			Xend=m_position.x +l;
 		}
 			break;
 	
-	}*/
+	}
 
 	//F=u*T_engine*xg*xd*n/Rw;
 

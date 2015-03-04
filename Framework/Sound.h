@@ -31,7 +31,7 @@
 
 		 ALenum GetOALFormat ();
 		 float GetLength ();
-		 bool IsStreaminimumg () { return streaminimumg ;}
+		 bool IsStreaming () { return streaming ;}
 		 virtual double StreamData ( ALuint buffer , double timeLeft ){return 0.0f ;}
 
 
@@ -52,7 +52,7 @@
 		 int channels;
 
 		 ALuint buffer;
-		 bool streaminimumg ;
+		 bool streaming ;
 
  };
 #endif
