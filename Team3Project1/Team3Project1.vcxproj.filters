@@ -405,9 +405,6 @@
     <ClInclude Include="..\Framework\MyGame.h">
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Framework\Octree.h">
-      <Filter>Framework\Physics\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Framework\PhysicsNode.h">
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
@@ -420,9 +417,6 @@
     <ClInclude Include="..\Framework\SpringDemo.h">
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Framework\SoundEntity.h">
-      <Filter>Framework\Audio\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Framework\Sound.h">
       <Filter>Framework\Audio\Header Files</Filter>
     </ClInclude>
@@ -430,9 +424,6 @@
       <Filter>Framework\Audio\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\SoundManager.h">
-      <Filter>Framework\Audio\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\SoundSystem.h">
       <Filter>Framework\Audio\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\Debuff.h">
@@ -470,6 +461,42 @@
     </ClInclude>
     <ClInclude Include="..\Framework\T3Matrix4.h">
       <Filter>Framework\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioTestClass.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseSocket.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckPoint.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugOverlay.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Heightmap.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkCommon.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkTest.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerSocket.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TcpSocket.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VehiclePhysicsNode.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VehicleTestingScreen.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vehicle_Wheel.h">
+      <Filter>Engine\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -611,9 +638,6 @@
     <ClCompile Include="..\Framework\MyGame.cpp">
       <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Framework\Octree.cpp">
-      <Filter>Framework\Physics\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Framework\PhysicsNode.cpp">
       <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
@@ -626,9 +650,6 @@
     <ClCompile Include="..\Framework\Vehicle.cpp">
       <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Framework\SoundEntity.cpp">
-      <Filter>Framework\Audio\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Framework\Sound.cpp">
       <Filter>Framework\Audio\Source Files</Filter>
     </ClCompile>
@@ -636,9 +657,6 @@
       <Filter>Framework\Audio\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Framework\SoundManager.cpp">
-      <Filter>Framework\Audio\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\SoundSystem.cpp">
       <Filter>Framework\Audio\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Framework\Debuff.cpp">
@@ -670,6 +688,33 @@
     </ClCompile>
     <ClCompile Include="GCMRenderer.cpp">
       <Filter>Framework\Graphics\PS3\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioTestClass.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugOverlay.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightMap.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkTest.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerSocket.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TcpSocket.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VehiclePhysicsNode.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VehicleTestingScreen.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vehicle_Wheel.cpp">
+      <Filter>Engine\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -751,6 +796,10 @@
     <None Include="..\Resources\Shaders\VelocityFragment.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="..\Resources\Shaders\PassThroughVertex.glsl" />
+    <None Include="..\Resources\Shaders\PerlinFragment.glsl" />
+    <None Include="..\Resources\Shaders\SkyDomeFragment.glsl" />
+    <None Include="..\Resources\Shaders\SkyDomeVertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\OpenAL 1.1 SDK\libs\Win32\OpenAL32.lib">
