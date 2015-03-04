@@ -45,10 +45,16 @@ void Mouse::Update(RAWINPUT* raw, float msec)
 		}
 		
 		// If the mouse cursor isn't visible, lock to the center of the screen...
-		if (!isCursorVisible) {
+		if (!isCursorVisible)
+		{
 			position.x = Window::GetWindow().GetScreenSize().x / 2;
 			position.y = Window::GetWindow().GetScreenSize().y / 2;
+			cursorPos.x = position.x;
+			cursorPos.y = position.y;
+			ClientToScreen(Window::GetWindow().GetHandle(), &cursorPos);
+			SetCursorPos(cursorPos.x, cursorPos.y);
 		}
+
 		/*
 		TODO: How framerate independent is this?
 		*/
