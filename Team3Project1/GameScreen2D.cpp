@@ -79,7 +79,7 @@ void GameScreen2D::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseBut
 <param name='start'>The resolution independent co-ordinates of the mouse cursor at the start of the frame.</param>
 <param name='finish'>The resolution independent co-ordinates of the mouse cursor at the end of the frame.</param>
 */
-void GameScreen2D::MouseMoved(T3Vector2& finish)
+void GameScreen2D::MouseMoved(T3Vector2& start, T3Vector2& finish)
 {
 	bool selected = false;
 	// Check if input is being accepted
@@ -88,17 +88,18 @@ void GameScreen2D::MouseMoved(T3Vector2& finish)
 		// Check if input is within screen bounds
 		if (MathHelper::Contains(finish, *this))
 		{
+			// Unselect everything
+			for (unsigned int i = 0; i < selectables.size(); ++i)
+			{
+				selectables[i]->UnSelect();
+			}
+
 			// Check if the finish location is within bounds of a selectable
-			for (unsigned int i = 0; i < selectables.size(); i++)
+			for (unsigned int i = 0; i < selectables.size(); ++i)
 			{
 				// If it is, call Select()
-				if (MathHelper::Contains(finish, *selectables[i])) {
-					if (currentSelected != i) {
-						if (i > 0)
-							selectables[currentSelected]->UnSelect();
-						
-						currentSelected = i;
-					}
+				if (MathHelper::Contains(finish, *selectables[i])) 
+				{
 					selectables[i]->Select();
 				}
 			}

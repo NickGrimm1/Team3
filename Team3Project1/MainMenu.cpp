@@ -21,9 +21,6 @@ MainMenu::~MainMenu(void)
 	//delete buttonTexClicked;
 }
 
-void MainMenu::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position) {
-	
-}
 
 void MainMenu::LoadContent() {
 	Font* font = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"quadrats.tga", 16, 16);

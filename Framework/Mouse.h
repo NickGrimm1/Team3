@@ -78,6 +78,8 @@ public:
 	//implement a 'MenuSensitivity' for absolute movement?
 	void SetMouseSensitivity(float amount);
 
+	bool GetIsCursorVisible() { return isCursorVisible; }
+	void SetIsCursorVisible(bool value) { isCursorVisible = value; }
 protected:
 	Mouse(HWND &hwnd);
 	~Mouse(void){}
@@ -121,6 +123,8 @@ protected:
 
 	//Mouse pointer sensitivity. Set this negative to get a headache!
 	float sensitivity;
+
+	bool isCursorVisible;
 };
 
 #endif

@@ -236,10 +236,10 @@ public:
 	<param name='start'>The resolution independent co-ordinates of the mouse cursor at the start of the frame.</param>
 	<param name='finish'>The resolution independent co-ordinates of the mouse cursor at the end of the frame.</param>
 	*/
-	void MouseMoved(T3Vector2& finish)
+	void MouseMoved(T3Vector2& start, T3Vector2& finish)
 	{
 		for (unsigned int i = 0; i < instance->gameScreens.size(); i++)
-			instance->gameScreens[i]->MouseMoved(finish);
+			instance->gameScreens[i]->MouseMoved(start, finish);
 	}
 	/**
 	<summary>Notifies all screens in the stack that the mouse scroll wheel has moved.</summary>

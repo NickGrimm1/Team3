@@ -229,7 +229,7 @@ protected:
 	<param name='start'>The resolution independent co-ordinates of the mouse cursor at the start of the frame.</param>
 	<param name='finish'>The resolution independent co-ordinates of the mouse cursor at the end of the frame.</param>
 	*/
-	virtual void MouseMoved(T3Vector2& finish);
+	virtual void MouseMoved(T3Vector2& start, T3Vector2& finish);
 	/**
 	<summary>Notifies all screens in the stack that the mouse scroll wheel has moved.</summary>
 	<param name='amount'>The amount of the movement.</param>

@@ -242,7 +242,7 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 	}
 }
 	
-void GraphicsTestScreen::MouseMoved(T3Vector2& finish) {
+void GraphicsTestScreen::MouseMoved(T3Vector2& start, T3Vector2& finish) {
 	camera->AddPitch(-finish.y);
 	camera->AddYaw(-finish.x);
 }
