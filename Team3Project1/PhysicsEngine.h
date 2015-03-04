@@ -57,6 +57,10 @@ public:
 	bool containsOrigin( T3Vector3& dir);
     bool CollisionDetection(PhysicsNode& shape1,PhysicsNode& shape2);
 	
+	//sam
+	bool   check;
+	//sam
+
     vector<T3Vector3> worldpoints1;
     vector<T3Vector3> worldpoints2;
 
@@ -78,7 +82,8 @@ private:
 		: PHYSICS_TIME(1000.0f / 120)
 	{
 		frameRate = 0;
-	}
+		check=true;
+			}
 	~PhysicsEngine() { }
 	static PhysicsEngine* instance;
 

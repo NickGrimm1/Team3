@@ -1,4 +1,5 @@
 #include "PhysicsEngine.h"
+#include "RacerGame.h"
 #include "../Framework/CollisionHelper.h"
 
 PhysicsEngine* PhysicsEngine::instance = NULL;
@@ -536,14 +537,35 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 			{
 				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
 				{
-					cout << "Collision" << endl;
+					if(check==true)
+					{
+                    cout << "Collision" << endl;
+
+					   if(first.GetType()=='c'||second.GetType()=='c')
+					   {
+						cout<<"c is call";
+						if(first.GetGameEntity()){
+							cout<<"call if"<<endl;
+						RacerGame::update=1;}
+					   }
+
+					   else{
+						if(second.GetGameEntity())
+					      {
+						cout<<"call else"<<endl;
+					RacerGame::update=1;
+						  }
+					    }
+					
+						check=false;
+					}
 					first.SetLinearVelocity(T3Vector3(0,0,0));
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
 					second.SetForce(T3Vector3(0,0,0));
 				}
-			
-			
+
+
 			}
 				
 

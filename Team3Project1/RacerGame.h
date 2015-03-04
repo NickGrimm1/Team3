@@ -7,6 +7,7 @@
 #include "Vehicle_Wheel.h"
 #include "VehiclePhysicsNode.h"
 #include "CheckPoint.h"
+#include "TrackSegment.h"
 class RacerGame : public GameScreen3D
 {
 public:
@@ -15,6 +16,7 @@ public:
 	virtual void LoadContent();
 	virtual void UnloadContent() {}
 	virtual void Update();
+	static int update;
 
 
 	// Input Listener methods - not implemented
@@ -32,6 +34,16 @@ public:
 	T3Vector3 temp,temp1,temp2;
 	T3Vector3 PlayerPosition;
 
+	//sam
+	static float g;
+	static float gx;
+	TrackSegment* Strack;
+	
+	vector<T3Vector3> SplinePoint;
+	vector<TrackSegment*> TrackSegmentVector;
+	//sam
+
+
 private:
 	Mesh* quad;
 	Mesh* cylinder;
@@ -40,11 +52,13 @@ private:
 	Vehicle* car;
 
 	CheckPoint * checkpoint;
+	CheckPoint * checkpoint2;
 	Vehicle_Wheel * FrontRightTire;
 	Vehicle_Wheel * FrontLeftTire;
 	Vehicle_Wheel * BackRightTire;
 	Vehicle_Wheel * BackLeftTire;
 	
 	DrawableEntity3D* ent;
+	DrawableEntity3D* ent2;
 };
 

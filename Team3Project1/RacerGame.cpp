@@ -7,15 +7,30 @@
 #include "GameStateManager.h"
 #include "FreeCamera.h"
 #include "../Framework/ObjMesh.h"
+#include "TrackSegment.h"
 //#include "../Framework/Vehicle.h"
+#include <math.h>
 
-
+#include <time.h>
 //TODO - remove
 #include <iostream>
 #include "../Framework/BumpTexture.h"
 
+int RacerGame::update =0;
+float RacerGame::g=0.0f;
+float RacerGame::gx =300.0f;
+
 RacerGame::RacerGame(void)
 {
+	srand(time(NULL));
+	T3Vector3 sp1= T3Vector3(100,0,0);
+	T3Vector3 sp2= T3Vector3(200,0,0);
+	T3Vector3 sp3= T3Vector3(300,0,0);
+	SplinePoint.push_back(sp1);
+	SplinePoint.push_back(sp2);
+	SplinePoint.push_back(sp3);
+	//Strack = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2],5,50.f);
+	//TrackSegmentVector.push_back(Strack);
 }
 
 RacerGame::~RacerGame(void)
@@ -58,10 +73,15 @@ void RacerGame::LoadContent() {
 	//PointLight* l = GameStateManager::Graphics()->AddPointLight(T3Vector3(0,5,0), 10, T3Vector4(1,1,1,1), T3Vector4(1,1,1,1), false); 
 
 	camera = new FreeCamera();
+
 	checkpoint= new CheckPoint(10);
-	checkpoint->SetPhysics(10);
+	checkpoint->SetPhysics(10,'c');
+	checkpoint->GetPhysicsNode().SetPGE(checkpoint);
 	AddDrawable(checkpoint);
+
 	
+
+
 	VehiclePhysicsNode* vpn = new VehiclePhysicsNode();
 	
 	GameStateManager::Physics()->AddNode((PhysicsNode*)vpn);
@@ -125,6 +145,126 @@ void RacerGame::LoadContent() {
 void RacerGame::Update() { 
 	//T3Matrix4 m = T3Matrix4::Rotation(0.016f, T3Vector3(0,1,0));
 	//ent->AddRotation(Quaternion::FromMatrix(m));
+	if(update==1)
+	{
+		//create a new control point
+		//float angle = (rand() % 150) - 75;
+		float angle = -65;
+//		g += 100*(sin(RadToDeg(angle)));
+//		gx += 100*(2 * abs(cos(RadToDeg(angle))));
+		g += 100*(sin(DegToRad(angle)));
+		gx += 100*( 3*abs(cos(DegToRad(angle))));
+
+		T3Vector3 spn= T3Vector3(gx,0,g);
+		SplinePoint.push_back(spn);
+		//2
+//		g += 100*(sin(RadToDeg(angle)));
+//		gx += 100*(2 * abs(cos(RadToDeg(angle))));
+		//float angle2 = 15;
+		 //angle = (rand() % 150) - 75;
+		g += 100*(sin(DegToRad(angle)));
+		gx += 100*(3* abs(cos(DegToRad(angle))));
+
+		T3Vector3 spn2= T3Vector3(gx,0,g);
+		SplinePoint.push_back(spn2);
+		//create new track
+		T3Vector3 avg = (SplinePoint[1] + SplinePoint[2] + SplinePoint[3]) / 3.0f;
+		T3Vector3 avg2 = (SplinePoint[2] + SplinePoint[3] + SplinePoint[4]) / 3.0f;
+		GameStateManager::Graphics()->GetRenderContext();
+		TrackSegment* Strackn = new TrackSegment(SplinePoint[1] - avg,SplinePoint[2] - avg,SplinePoint[3] - avg,5,50.f);
+		TrackSegmentVector.push_back(Strackn);
+		
+		/*TrackSegment* Strackn = new TrackSegment(SplinePoint[1],SplinePoint[2],T3Vector3(400,0,0),5,50.f);
+		TrackSegmentVector.push_back(Strackn);*/
+		GameStateManager::Graphics()->DropRenderContext();
+
+		GameStateManager::Graphics()->GetRenderContext();
+		TrackSegment* Strackn2 = new TrackSegment(SplinePoint[2] - avg2,SplinePoint[3] - avg2,SplinePoint[4] - avg2,5,50.f);
+		TrackSegmentVector.push_back(Strackn2);
+		
+		/*TrackSegment* Strackn = new TrackSegment(SplinePoint[1],SplinePoint[2],T3Vector3(400,0,0),5,50.f);
+		TrackSegmentVector.push_back(Strackn);*/
+		GameStateManager::Graphics()->DropRenderContext();
+		//create end
+
+			Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"water.jpg", 0);
+		GameStateManager::Graphics()->GetRenderContext();
+	TrackSegment* track = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5, 50.0);
+	//push back track
+	TrackSegmentVector.push_back(track);
+	GameStateManager::Graphics()->DropRenderContext();
+
+	DrawableEntity3D* ent = new DrawableEntity3D(
+		track,
+		NULL,
+		grassTex,
+		NULL,
+		800.0f,
+		T3Vector3(0,0,0),
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(1,1,1));
+	//gameEntities.push_back(ent);
+	AddDrawable(ent);
+
+	//add new track to draw
+	DrawableEntity3D* ent2 = new DrawableEntity3D(
+		Strackn,
+		NULL,
+		grassTex,
+		NULL,
+		800.0f,
+		//T3Vector3(0,0,0),
+		avg,
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(1,1,1));
+	//gameEntities.push_back(ent);
+	AddDrawable(ent2);
+	//add end
+
+
+	//add3
+	DrawableEntity3D* ent3 = new DrawableEntity3D(
+		Strackn2,
+		NULL,
+		grassTex,
+		NULL,
+		800.0f,
+		/*T3Vector3(0,0,0),*/
+		avg2,
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(1,1,1));
+	//gameEntities.push_back(ent);
+	AddDrawable(ent3);
+	//add 3 end
+
+
+	T3Vector3 L =  Strackn2->GetTrackCentreLeft();
+	T3Vector3 R = Strackn2->GetTrackCentreRight();
+	T3Vector3 rl = R-L;
+	T3Vector3 lr = L-R;
+	T3Vector3 F = T3Vector3(0,0,1); 
+	F.Normalise();
+	rl.Normalise();
+	float cosc= T3Vector3::Dot(rl,F); 
+	//float Degc= 
+	double degc=acos(cosc);
+	float anglec=RadToDeg(degc);
+	cout<<anglec<<endl;
+	if(L.x<R.x)
+	{
+	anglec=-anglec;
+	}
+	cout<<"updated"<<endl;
+
+	CheckPoint* checkpoint2= new CheckPoint(10);
+	//checkpoint2->SetPhysics(10,'c');
+	checkpoint2->SetOriginPosition(SplinePoint[3]);
+	checkpoint2->SetRotation(Quaternion::EulerAnglesToQuaternion(0,-(anglec),0));
+	//checkpoint2->GetPhysicsNode().SetPGE(checkpoint2);
+	AddDrawable(checkpoint2);
+
+	update=0;
+	}
 }
 
 void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
@@ -132,7 +272,7 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 
 	PlayerPosition = car->GetPhysicsNode().GetPosition();
 
-
+	
 	switch (type) {
 	case KeyboardEvents::KEY_DOWN:
 	case KeyboardEvents::KEY_HELD:
@@ -286,11 +426,48 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 			
 			}
 			break;
+		case KeyboardEvents::KEYBOARD_I:
+			camera->AddMovement(T3Vector3(0,0,-1));
+			break;
+		case KeyboardEvents::KEYBOARD_K:
+			camera->AddMovement(T3Vector3(0,0,1));
+			break;
+		case KeyboardEvents::KEYBOARD_J:
+			camera->AddMovement(T3Vector3(-1,0,0));
+			break;
+		case KeyboardEvents::KEYBOARD_L:
+			camera->AddMovement(T3Vector3(1,0,0));
+			break;
+		case KeyboardEvents::KEYBOARD_U:
+			camera->AddMovement(T3Vector3(0,1,0));
+			break;
+		case KeyboardEvents::KEYBOARD_O:
+			camera->AddMovement(T3Vector3(0,-1,0));
+			break;
+		case KeyboardEvents::KEYBOARD_LEFT:
+			camera->AddYaw(1);
+			break;
+		case KeyboardEvents::KEYBOARD_RIGHT:
+			camera->AddYaw(-1);
+			break;
+		case KeyboardEvents::KEYBOARD_UP:
+			camera->AddPitch(1);
+			break;
+		case KeyboardEvents::KEYBOARD_DOWN:
+			camera->AddPitch(-1);
+			break;
+		case KeyboardEvents::KEYBOARD_Q:
+			camera->AddRoll(-1);
+			break;
+		case KeyboardEvents::KEYBOARD_E:
+			camera->AddRoll(1);
+			break;
+		
 		}
 		
 	}
 }
-	
+
 void RacerGame::MouseMoved(T3Vector2& finish) {
 	camera->AddPitch(-finish.y);
 	camera->AddYaw(finish.x);
