@@ -33,6 +33,9 @@ void NetworkTest::Update() {
 	if (bytes > 0) {
 		cout << "data received" << endl;
 		cout << buffer << endl;
+		
+		string text = "Message Received\n";
+		connection->Send(text.c_str(), text.length());
 	}
 }
 

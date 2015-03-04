@@ -17,12 +17,13 @@ TcpSocket::~TcpSocket(void)
 bool TcpSocket::Send(const char* data, unsigned int length) {
 	unsigned int bytesToSend = length;
 	while (bytesToSend > 0) {
-		int bytesSent = send(socket, data + length - bytesToSend, length - bytesToSend, 0);
+		int bytesSent = send(socket, data + length - bytesToSend, bytesToSend, 0);
 		if (bytesSent == SOCKET_ERROR) {
 			cout << "TcpSocket::Send() - Failed to send data, " << data << endl;
 			cout << "Failed with error: " << WSAGetLastError() << " - " << gai_strerror(WSAGetLastError()) << endl;
 			return false;
 		}
+		bytesToSend -= bytesSent;
 	}
 	return (bytesToSend == length);
 }

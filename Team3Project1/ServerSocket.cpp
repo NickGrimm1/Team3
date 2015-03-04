@@ -21,7 +21,7 @@ ServerSocket::ServerSocket(string portNum, unsigned int maxConnections) : portNu
 	hints.ai_socktype = TCP;
 	hints.ai_flags = AI_PASSIVE; // use localhost for address
 	
-	unsigned int addrResult = getaddrinfo(NULL, portNum.c_str(), &hints, &addressData);
+	unsigned int addrResult = getaddrinfo("127.0.0.1", portNum.c_str(), &hints, &addressData);
 	if (addrResult != 0) {
 		cout << "getaddrinfo() failed with error:" << endl;
 		cout << addrResult << ": " << gai_strerror(WSAGetLastError()) << endl;
@@ -36,8 +36,8 @@ ServerSocket::ServerSocket(string portNum, unsigned int maxConnections) : portNu
 	}
 
 	// Make socket non-blocking
-//	unsigned long nonblocking = NON_BLOCKING;
-//	ioctlsocket(serverSocket, FIONBIO, &nonblocking);
+	unsigned long nonblocking = NON_BLOCKING;
+	ioctlsocket(serverSocket, FIONBIO, &nonblocking);
 
 	if (bind(serverSocket, addressData->ai_addr, addressData->ai_addrlen) != 0) {
 		cout << "Could not bind server socket on port " << portNum << endl;
@@ -76,7 +76,7 @@ unsigned int ServerSocket::GetNewConnections() {
 				cout << "Failed to accept new connection" << endl;
 				cout << "Failed with error: " << WSAGetLastError() << " - " << gai_strerror(WSAGetLastError()) << endl;
 			}
-			return 0;
+			return connectionsCount;
 		}
 
 		// new connection accepted
