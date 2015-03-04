@@ -334,6 +334,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Thread.h" />
     <ClInclude Include="TrackSegment.h" />
+    <ClInclude Include="UdpSocket.h" />
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="VehiclePhysicsNode.h" />
     <ClInclude Include="VehicleTestingScreen.h" />
@@ -409,6 +410,7 @@
     <ClCompile Include="TextureWindows.cpp" />
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="TrackSegment.cpp" />
+    <ClCompile Include="UdpSocket.cpp" />
     <ClCompile Include="VehiclePhysicsNode.cpp" />
     <ClCompile Include="VehicleTestingScreen.cpp" />
     <ClCompile Include="Vehicle_Wheel.cpp" />
