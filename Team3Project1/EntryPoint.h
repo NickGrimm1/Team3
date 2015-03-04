@@ -28,8 +28,8 @@ namespace EntryPoint
 		//LoadingScreen* loadingScreen = new LoadingScreen();
 		//GameStateManager::Instance()->AddGameScreen(loadingScreen);
 
-		//GraphicsTestScreen* game = new GraphicsTestScreen();
-		//GameStateManager::Instance()->AddGameScreen(game);
+		GraphicsTestScreen* game = new GraphicsTestScreen();
+		GameStateManager::Instance()->AddGameScreen(game);
 
 		MainMenu* main = new MainMenu();
 		GameStateManager::Instance()->AddGameScreen(main);
@@ -37,17 +37,15 @@ namespace EntryPoint
 		//HudTestScreen* hud = new HudTestScreen();
 		//GameStateManager::Instance()->AddGameScreen(hud);
 
-		DebugOverlay* debug = new DebugOverlay();
-		GameStateManager::Instance()->AddGameScreen(debug);
+		//DebugOverlay* debug = new DebugOverlay();
+		//GameStateManager::Instance()->AddGameScreen(debug);
 
 		/*RacerGame* game = new RacerGame();
 		GameStateManager::Instance()->AddGameScreen(game);
 		GameStateManager::Instance()->Start();*/
 
-
-		//AudioTestClass* audio = new AudioTestClass();
-		//GameStateManager::Instance()->AddGameScreen(audio);
-
+		AudioTestClass* audio = new AudioTestClass();
+		GameStateManager::Instance()->AddGameScreen(audio);
 
 		//NetworkTest* network = new NetworkTest();
 		//GameStateManager::Instance()->AddGameScreen(network);
