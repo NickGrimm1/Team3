@@ -47,7 +47,7 @@ MyGame::MyGame()	{
 	to not cause problems...why not give it a go?
 	*/
 #if WINDOWS_BUILD
-	Background_Music = BuildSoundEntity();
+//	Background_Music = BuildSoundEntity();
 #endif
 	GameEntity* quadEntity = BuildQuadEntity(1000.0f);
 	quadEntity->GetPhysicsNode().SetPosition(T3Vector3(1000,0,0));
@@ -123,7 +123,7 @@ void MyGame::UpdateGame(float msec) {
 	//	//gameCamera->UpdateCamera(msec);
 	//	gameCamera->SetPosition(Car->tempPosition);
 	//}
-
+		
 	//if (newt==1)
 	//{
 	//	GT(g*2000.f);
@@ -164,7 +164,7 @@ void MyGame::UpdateGame(float msec) {
 	////  {
 	////	 //turn right
 	////  }
-
+		
 	////if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_2))                                         
 	////{
 	////  
@@ -248,7 +248,7 @@ void MyGame::GT2(float y){
 Makes a cube. Every game has a crate in it somewhere!
 */
 GameEntity* MyGame::BuildCubeEntity(float size) {
-	
+
 	DrawableEntity3D* s = new DrawableEntity3D(GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj"),
 		NULL,
 		NULL,
@@ -258,7 +258,7 @@ GameEntity* MyGame::BuildCubeEntity(float size) {
 		Quaternion::EulerAnglesToQuaternion(0,0,0),
 		T3Vector3(size,size,size));
 
-	                                                                                              
+
 	PhysicsNode*p = new PhysicsNode();
 	
 	//p->SetAngularVelocity(T3Vector3(0,0,0.01f));
@@ -275,7 +275,7 @@ GameEntity* MyGame::BuildCubeEntity(float size) {
 }
 
 GameEntity* MyGame::BuildCubeEntityout(float size) {
-	
+
 	DrawableEntity3D* s = new DrawableEntity3D(GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj"),
 		NULL,
 		NULL,
@@ -284,7 +284,7 @@ GameEntity* MyGame::BuildCubeEntityout(float size) {
 		T3Vector3(-25, 20, 0),
 		Quaternion::EulerAnglesToQuaternion(0,0,0),
 		T3Vector3(size,size,size));
-                                                                                              
+
 	PhysicsNode*p = new PhysicsNode();
 	
 	//p->SetAngularVelocity(T3Vector3(0,0,0.01f));
@@ -303,7 +303,7 @@ GameEntity* MyGame::BuildCubeEntityout(float size) {
 Makes a sphere.
 */
 
- 
+
 
 GameEntity* MyGame::BuildSphereEntity(float radius) {
 	DrawableEntity3D* s = new DrawableEntity3D(GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"),
@@ -315,7 +315,7 @@ GameEntity* MyGame::BuildSphereEntity(float radius) {
 		Quaternion::EulerAnglesToQuaternion(0,0,0),
 		T3Vector3(radius,radius,radius));
 
-	
+
 	PhysicsNode*p = new PhysicsNode();
 	
 	p->SetAngularVelocity(T3Vector3(0,0,0.01f));
@@ -370,29 +370,29 @@ GameEntity* MyGame::BuildQuadEntity(float size) {
 }
 
 #if WINDOWS_BUILD
-SoundEntity * MyGame :: BuildSoundEntity () {
-	 float size = 300 + ( rand ()%300);
-
-	 SceneNode * s = new SceneNode ( sphere );
-
-	 s-> SetModelScale ( T3Vector3 ( size , size , size ));
-	 s-> SetBoundingRadius ( size );
-	 s-> SetColour ( T3Vector4 (1 ,1 ,1 ,0.6)); // Make node transparent , too
-	 // Pick a sound from a list of filenames
-	 //Sound * snd = SoundManager :: GetSound ( soundNames [ rand ()% NUM_SOUNDS ]);
-	 Sound * snd = SoundManager :: GetSound ("../../Sounds/14615__man__canon.wav");
-	 // and set it on a new SoundEntity
-	 SoundEntity * g=new SoundEntity(snd,s,NULL);
-	 g->GetSoundEmitter().SetLooping(FALSE);
-	 //GameEntity * g = new GameEntity ( snd , s , NULL );
-	 // Randomly place it in the world somewhere
-	 T3Vector3 randpos = T3Vector3 (( rand ()%10)*256 , 0.0f ,( rand ()%10)*256);
-	 randpos -= T3Vector3 (( rand ()%10)*256 , 0.0f ,( rand ()%10)*256);
-
-	 s -> SetTransform ( T3Matrix4 :: Translation ( randpos ));
-	 // Connect it to all of our core systems
-//	 g -> ConnectToSystems ();
-
-	 return g ;
- }
+//SoundEntity * MyGame :: BuildSoundEntity () {
+//	 float size = 300 + ( rand ()%300);
+//
+//	 SceneNode * s = new SceneNode ( sphere );
+//
+//	 s-> SetModelScale ( T3Vector3 ( size , size , size ));
+//	 s-> SetBoundingRadius ( size );
+//	 s-> SetColour ( T3Vector4 (1 ,1 ,1 ,0.6)); // Make node transparent , too
+//	 // Pick a sound from a list of filenames
+//	 //Sound * snd = SoundManager :: GetSound ( soundNames [ rand ()% NUM_SOUNDS ]);
+//	 Sound * snd = SoundManager :: GetSound ("../../Sounds/14615__man__canon.wav");
+//	 // and set it on a new SoundEntity
+//	 SoundEntity * g=new SoundEntity(snd,s,NULL);
+//	 g->GetSoundEmitter().SetLooping(FALSE);
+//	 //GameEntity * g = new GameEntity ( snd , s , NULL );
+//	 // Randomly place it in the world somewhere
+//	 T3Vector3 randpos = T3Vector3 (( rand ()%10)*256 , 0.0f ,( rand ()%10)*256);
+//	 randpos -= T3Vector3 (( rand ()%10)*256 , 0.0f ,( rand ()%10)*256);
+//
+//	 s -> SetTransform ( T3Matrix4 :: Translation ( randpos ));
+//	 // Connect it to all of our core systems
+////	 g -> ConnectToSystems ();
+//
+//	 return g ;
+// }
 #endif

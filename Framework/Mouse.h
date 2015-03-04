@@ -78,6 +78,8 @@ public:
 	//implement a 'MenuSensitivity' for absolute movement?
 	void SetMouseSensitivity(float amount);
 
+	bool GetIsCursorVisible() { return isCursorVisible; }
+	void SetIsCursorVisible(bool value) { isCursorVisible = value; }
 protected:
 	Mouse(HWND &hwnd);
 	~Mouse(void){}
@@ -96,7 +98,7 @@ protected:
 
 	//Current mouse position
 	T3Vector2	position;
-	//Current mouse position maximumimum bounds
+	//Current mouse position maximum bounds
 	T3Vector2	bounds;
 	// The position of the mouse last frame.
 	T3Vector2	lastPosition;
@@ -121,6 +123,8 @@ protected:
 
 	//Mouse pointer sensitivity. Set this negative to get a headache!
 	float sensitivity;
+
+	bool isCursorVisible;
 };
 
 #endif

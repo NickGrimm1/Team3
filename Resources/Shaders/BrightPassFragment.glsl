@@ -20,9 +20,9 @@ in Vertex {
 
 out vec4 gl_FragColor;
 
-//'Average' luminimumance of scene.
-//const float luminimumance = 0.09;
-//Target luminimumance of scene.
+//'Average' luminance of scene.
+//const float luminance = 0.09;
+//Target luminance of scene.
 //const float middleGrey = 0.18;
 //Minimum value to make white.
 //const float whiteCutOff = 0.8;

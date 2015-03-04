@@ -2,7 +2,7 @@
 #include "Mesh.h"
 #include "../Framework/Light.h"
 #include "GameStateManager.h"
-#include "FreeCamera.h"
+#include "ChaseCamera.h"
 #include "../Framework/ObjMesh.h"
 
 //TODO - remove
@@ -148,8 +148,8 @@ void GraphicsTestScreen::LoadContent() {
 	
 //	directionalLight = GameStateManager::Graphics()->AddDirectionalLight(T3Vector3(-1, -1, -1), T3Vector4(1,1,1,1), T3Vector4(0,0,0,1));
 
-	camera = new FreeCamera();
-	camera->SetPosition(T3Vector3(0,10,80));
+	camera = new ChaseCamera(ent, T3Vector3(0, 2, 20), 0, 0, 0);
+	//camera->SetPosition(T3Vector3(0,10,80));
 	
 	SetCamera(camera);
 }
@@ -242,7 +242,7 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 	}
 }
 	
-void GraphicsTestScreen::MouseMoved(T3Vector2& finish) {
+void GraphicsTestScreen::MouseMoved(T3Vector2& start, T3Vector2& finish) {
 	camera->AddPitch(-finish.y);
 	camera->AddYaw(-finish.x);
 }

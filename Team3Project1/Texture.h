@@ -34,15 +34,15 @@ public:
 #if WINDOWS_BUILD
 	Texture(GLuint textureObj);
 	GLuint GetTextureName() const { return textureObject; }
-	void SetMinMagFiltering(GLint minimum, GLint mag);
+	void SetMinMagFiltering(GLint min, GLint mag);
 #endif
 protected:
 	#if WINDOWS_BUILD
 	GLuint textureObject;
-	GLint minimumFilter; // GL_TEXTURE_MIN_FILTER setting
+	GLint minFilter; // GL_TEXTURE_MIN_FILTER setting
 	GLint magFilter; // GL_TEXTURE_MAG_FILTER setting
 #endif
-	bool repeating; // determinimumes whether textures is repeated or clamped
+	bool repeating; // determines whether textures is repeated or clamped
 	bool anisotropic; // enables anisotropic filtering for the texture
 private:
 	Texture(const Texture& in);

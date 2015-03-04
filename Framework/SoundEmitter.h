@@ -2,7 +2,7 @@
 # pragma once
  # include "SceneNode.h"
  # include "Sound.h"
- # include "SoundSystem.h"
+ # include "../Team3Project1/AudioEngine.h"
  # define NUM_STREAM_BUFFERS 3 // Part 2
 
  //enum SoundPriority {
@@ -30,8 +30,8 @@
 	 inline void SetPriority ( SoundPriority p ){ priority = p;}
 	 inline SoundPriority GetPriority () { return priority;}		// priority
 
-	 inline void SetVolume ( float volume ) {volume = minimum (1.0f , maximum (0.0f , volume ));}
-	 inline float GetVolume () { return volume;}		//volume
+	 inline void SetVolume ( float volume ) {volume1 = minimum (1.0f , maximum (0.0f , volume ));}
+	 inline float GetVolume () { return volume1;}		//volume
 
 	 inline void SetLooping ( bool state ) { isLooping = state;}
 	 inline bool GetLooping () { return isLooping;}   //sound loop or not
@@ -68,7 +68,7 @@
 	 //OALSource * oalSource;
 	 SoundPriority priority;
 	 
-	 float volume;
+	 float volume1;
 	 float radius;
 	 float pitch;
 	 bool isLooping;

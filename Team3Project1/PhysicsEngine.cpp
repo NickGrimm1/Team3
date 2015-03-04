@@ -17,7 +17,7 @@ void PhysicsEngine::Run()
 
 		NarrowPhaseCollisions();
 
-		//narrowlist.clear();
+		narrowlist.clear();
 
 		for(vector<Constraint*>::iterator i = allSprings.begin(); i != allSprings.end(); ++i) {
 			(*i)->Update(msec);
@@ -25,7 +25,7 @@ void PhysicsEngine::Run()
 
 		for(vector<PhysicsNode*>::iterator i = allNodes.begin(); i != allNodes.end(); ++i) {
 			(*i)->Update(msec);
-		/*	narrowlist.push_back((*i));*/
+			narrowlist.push_back((*i));
 		}
 		//BroadPhaseCollisions();
 	}
@@ -49,16 +49,17 @@ T3Vector3 PhysicsEngine::support(PhysicsNode& shape1,PhysicsNode& shape2, T3Vect
 
 	worldpoints1.clear();
 	worldpoints2.clear();
-	Vertex * vertex1=shape1.GetTarget()->GetMesh()->GetVertices();
-	int number1=shape1.GetTarget()->GetMesh()->GetNumVertices();
+	Vertex * vertex1=shape1.GetPhysicsMesh()->GetVertices();
+	int number1=shape1.GetPhysicsMesh()->GetNumVertices();
 	for(int i=0;i<number1;i++)
 	{
 		worldpoints1.push_back(T3Matrix4::Translation(shape1.GetTarget()->GetOriginPosition()) * shape1.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape1.GetTarget()->GetScale()) * vertex1[i].GetPosition());
 	}
 	shape1.SetWorldPoints(worldpoints1);
 
-	Vertex * vertex2=shape2.GetTarget()->GetMesh()->GetVertices();
-	int number2=shape2.GetTarget()->GetMesh()->GetNumVertices();
+	//Vertex * vertex2=shape2.GetTarget()->GetMesh()->GetVertices();
+	Vertex * vertex2=shape2.GetPhysicsMesh()->GetVertices();
+	int number2=shape2.GetPhysicsMesh()->GetNumVertices();
 	for(int i=0;i<number2;i++)
 	{
 		worldpoints2.push_back(T3Matrix4::Translation(shape2.GetTarget()->GetOriginPosition()) * shape2.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape2.GetTarget()->GetScale()) * vertex2[i].GetPosition());
@@ -431,79 +432,33 @@ void  PhysicsEngine::SortandSweep()
 	{
 		for( vector<PhysicsNode*>::iterator j= i +1; j !=narrowlist.end(); ++j) 
 		{
+			
 			if((*i)->GetXend() > (*j)->GetXstart())
 			{
 				    PhysicsNode& first =*(*i);
 				    PhysicsNode& second =*(*j);
 
 					
-
-
-
-
-
-
-
-				
-				  /*  switch((*i)->GetCollisionVolume()->GetType()) 
-					{*/
-								/* case COLLISION_VOL_SPHERE:
-				
+					if(CollisionDetection(first, second))
 								 {
+				//cout << "GJK passed" << endl;
+				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
 									  {
-											   switch((*j)->GetCollisionVolume()->GetType()) 
-											 {
-												case COLLISION_VOL_PLANE:
-												CollisionData data;
-												if (CollisionHelper::PlaneSphereCollision(second, first, &data)) 
-											   {
-													CollisionHelper::AddCollisionImpulse(second, first, data);
+					//cout << "Collision" << endl;
+					first.SetLinearVelocity(T3Vector3(0,0,0));
+					first.SetForce(T3Vector3(0,0,0));
+                    second.SetLinearVelocity(T3Vector3(0,0,0));
+					second.SetForce(T3Vector3(0,0,0));
 											   }
-				        						continue;
 											 }
-										   }
 
-											 switch((*j)->GetCollisionVolume()->GetType())  
-										   {
-												case COLLISION_VOL_SPHERE:
-												CollisionData data;
-												if (CollisionHelper::SphereSphereCollision(first, second, &data))
-												{
-					     						  CollisionHelper::AddCollisionImpulse(first, second, data);
-												}
-												continue;
-										   }
+
 						 
 										 
-								 }
 				
-								case COLLISION_VOL_PLANE:
-								switch((*j)->GetCollisionVolume()->GetType()) 
-								{
-									 case COLLISION_VOL_SPHERE:
-				    					CollisionData data;
-									  if (CollisionHelper::PlaneSphereCollision(first, second, &data)) 
-									  {
-										CollisionHelper::AddCollisionImpulse(first, second, data);
-									  }
-										continue;
-								  }*/
 
-								/*case COLLISION_VOL_AABB:
-								switch((*j)->GetCollisionVolume()->GetType()) 
-								{
-									 case COLLISION_VOL_AABB:
 				    					
-									  if (CollisionHelper::AABBCollision(first, second )) 
-									  {
-									   first.SetLinearVelocity(T3Vector3(0,0,0));      
-									   first.SetForce(T3Vector3(0,0,0));
-									    second.SetLinearVelocity(T3Vector3(0,0,0));
-								       second.SetForce(T3Vector3(0,0,0));
-									  }
 									 
-										continue;
-								  }*/
 						}
 		
 				}
@@ -524,10 +479,14 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 
 	
 	for (unsigned int i = 0; i < allNodes.size(); i++) {
+
+		if (allNodes[i]->GetPhysicsMesh() == NULL) continue;
 		PhysicsNode& first = *allNodes[i];
 		CollisionVolume* fv = first.GetCollisionVolume();
 		if (!fv) continue;
 		for (unsigned int j = i + 1; j < allNodes.size(); j++) {
+			if (allNodes[j]->GetPhysicsMesh() == NULL) continue;
+
 			PhysicsNode& second = *allNodes[j];
 			CollisionVolume* sv = second.GetCollisionVolume();
 			if (!sv) continue;
@@ -535,6 +494,7 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 			
 			if(CollisionDetection(first, second))
 			{
+				//cout << "GJK passed" << endl;
 				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
 				{
 					if(check==true)
@@ -564,8 +524,8 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
                     second.SetLinearVelocity(T3Vector3(0,0,0));
 					second.SetForce(T3Vector3(0,0,0));
 				}
-
-
+			
+			
 			}
 				
 
