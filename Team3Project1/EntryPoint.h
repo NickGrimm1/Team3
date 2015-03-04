@@ -26,8 +26,8 @@ namespace EntryPoint
 		GraphicsTestScreen* game = new GraphicsTestScreen();
 		GameStateManager::Instance()->AddGameScreen(game);
 
-		HudTestScreen* hud = new HudTestScreen();
-		GameStateManager::Instance()->AddGameScreen(hud);
+		//HudTestScreen* hud = new HudTestScreen();
+		//GameStateManager::Instance()->AddGameScreen(hud);
 
 		//RacerGame* game = new RacerGame();
 		//GameStateManager::Instance()->AddGameScreen(game);

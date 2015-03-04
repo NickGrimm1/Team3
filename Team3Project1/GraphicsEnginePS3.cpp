@@ -8,7 +8,7 @@
 *
 *
 */
-
+GraphicsEngine* GraphicsEngine::engine = NULL;
 bool GraphicsEngine::Initialize(GraphicsEngine*& out)
 {
 	if(engine != NULL)
@@ -97,25 +97,25 @@ void GraphicsEngine::SetCamera(Camera* cam)
 PointLight* GraphicsEngine::AddPointLight(T3Vector3 lightPosition, float lightRadius, T3Vector4 diffuseColour, T3Vector4 specularColour, bool castsShadow)
 {
 	//if cast shadow, create shadow cube
-	unsigned int shadowTex = castsShadow ? renderer->CreateShadowCube() : 0;
+	/*unsigned int shadowTex = castsShadow ? renderer->CreateShadowCube() : 0;
 	PointLight* l = new PointLight(lightPosition, diffuseColour, specularColour, lightRadius, shadowTex);
 	lights.push_back(l);
-	return l;
+	return l;*/
 }
 
 DirectionalLight* GraphicsEngine::AddDirectionalLight(T3Vector3 lightDirection, T3Vector4 diffuseColour, T3Vector4 specularColour)
 {
-	DirectionalLight* l = new DirectionalLight(lightDirection, diffuseColour, specularColour, 0);
+	/*DirectionalLight* l = new DirectionalLight(lightDirection, diffuseColour, specularColour, 0);
 	lights.push_back(l);
-	return l;
+	return l;*/
 }
 
 SpotLight* GraphicsEngine::AddSpotLight(T3Vector3 lightPosition, T3Vector3 lightTarget, T3Vector3 upVector, float lightRadius, float lightAngle, T3Vector4 diffuseColour, T3Vector4 specularColour, bool castsShadow)
 {
-	unsigned int shadowTex = castsShadow ? renderer->CreateShadowTexture() : 0;
-	SpotLight* l = new SpotLight(lightPosition, lightTarget, upVector, diffuseColour, specularColour, lightRadius, lightAngle, shadowTex);
-	lights.push_back(l);
-	return l;
+	//unsigned int shadowTex = castsShadow ? renderer->CreateShadowTexture() : 0;
+	//SpotLight* l = new SpotLight(lightPosition, lightTarget, upVector, diffuseColour, specularColour, lightRadius, lightAngle, shadowTex);
+	//lights.push_back(l);
+	//return l;
 }
 
 void GraphicsEngine::DrawDeferredLights(bool on)

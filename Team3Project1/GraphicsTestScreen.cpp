@@ -1,4 +1,4 @@
-#if WINDOWS_BUILD
+
 #include "GraphicsTestScreen.h"
 #include "Mesh.h"
 #include "../Framework/Light.h"
@@ -32,8 +32,9 @@ void GraphicsTestScreen::LoadContent() {
 	quad = GameStateManager::Assets()->LoadQuad(this);
 	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
 	circle = GameStateManager::Assets()->LoadCircle(this, 20);
-	Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.jpg", 0);
-	Texture* calvinTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", SOIL_FLAG_INVERT_Y);
+	std::cout << "GraphicsTestScreen: Load ncl.tga" << std::endl;
+	Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, "/ncl.tga", 0);
+//	Texture* calvinTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", SOIL_FLAG_INVERT_Y);
 
 	DrawableEntity3D* ent;
 	for (unsigned int i = 0; i < 8; i++) {
@@ -55,7 +56,7 @@ void GraphicsTestScreen::LoadContent() {
 	ent = new DrawableEntity3D(
 		cylinder, 
 		NULL,
-		calvinTex,
+		grassTex,
 		NULL,
 		30.0f, 
 		T3Vector3(35,0,35), 
@@ -68,7 +69,7 @@ void GraphicsTestScreen::LoadContent() {
 	ent = new DrawableEntity3D(
 		circle, 
 		NULL,
-		calvinTex,
+		grassTex,
 		NULL,
 		30.0f, // needs same bounding radius as cylinder
 		T3Vector3(35,30,35), 
@@ -130,7 +131,7 @@ void GraphicsTestScreen::Update() {
 	//T3Matrix4 m = T3Matrix4::Rotation(0.016f, T3Vector3(0,1,0));
 	//ent->AddRotation(Quaternion::FromMatrix(m));
 }
-
+#if WINDOWS_BUILD
 void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
 
 	switch (type) {

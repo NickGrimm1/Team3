@@ -22,7 +22,7 @@ GCMRenderer::GCMRenderer(void)	{
 	shader = new Shader();
 	InitDisplay();
 	InitSurfaces();
-	texture = new Texture("/ncl.gtf", 0);
+	//texture = new Texture("/ncl.gtf", 0);
 	std::cout <<"Got to end of GCMrenderer constructor" << std::endl;
 }
 

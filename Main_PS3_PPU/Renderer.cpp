@@ -9,22 +9,23 @@ Renderer::Renderer(void)	{
 	*/
 	std::cout << "begin renderer constructor"<<std::endl;
 	//get to shader part and fall over, gg, next map pls ps3.
-	ShaderPart* basicVert		= new ShaderPart("/vertex.vpo", ShaderType::VERTEX);
+	//ShaderPart* basicVert		= new ShaderPart("/vertex.vpo", ShaderType::VERTEX);
 	
 	std::cout <<"basic vert did something" << std::endl;
-	ShaderPart* basicFrag		= new ShaderPart("/fragment.fpo", ShaderType::FRAGMENT);
+	//ShaderPart* basicFrag		= new ShaderPart("/fragment.fpo", ShaderType::FRAGMENT);
 	std::cout <<"basic frag did something" << std::endl;
 	//Shader* s = new Shader();
 	//s = new Shader();
 	std::cout <<"shader did something" << std::endl;
-	shader->SetVertex(basicVert);
-	shader->SetFragment(basicFrag);
-	this->SetCurrentShader(shader);
+	//shader->SetVertex(basicVert);
+	//shader->SetFragment(basicFrag);
+	//this->SetCurrentShader(shader);
 
 	/*
 	Projection matrix...0.7853982 is 45 degrees in radians.
 	*/
 	projMatrix	= Matrix4::perspective(0.7853982, screenRatio, 1.0f, 10000.0f);	//CHANGED TO THIS!!
+	
 }
 
 Renderer::~Renderer(void)	{
@@ -42,7 +43,7 @@ void Renderer::RenderScene() {
 	SetViewport();
 	ClearBuffer();
 	//this->SetCurrentShader(shader);
-	this->SetCurrentShader(shader);
+	this->SetCurrentShader(basicShader);
 	cellGcmSetDepthTestEnable(CELL_GCM_FALSE);
 	cellGcmSetDepthFunc(CELL_GCM_LESS);
 	cellGcmSetCullFaceEnable(CELL_GCM_FALSE);
@@ -85,12 +86,12 @@ void Renderer::RenderScene() {
 
 bool Renderer::LoadShaders()
 {
-	basicShader = GameStateManager::Assets()->LoadShader(this, "../Shaders/vertex.vpo","../Shaders/fragment.fpo");
+	basicShader = GameStateManager::Assets()->LoadShader(this, "/vertex.vpo","/fragment.fpo");
 	return true;
 }
 void Renderer::UnloadShaders()
 {
-	GameStateManager::Assets()->UnloadShader(this,  "../Shaders/vertex.vpo","../Shaders/fragment.fpo");
+	GameStateManager::Assets()->UnloadShader(this,  "/vertex.vpo","/fragment.fpo");
 }
 bool Renderer::LoadAssets()
 {
