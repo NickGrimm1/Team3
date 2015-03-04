@@ -13,21 +13,22 @@ void MainMenu::Update(void) {
 
 MainMenu::~MainMenu(void)
 {
-	delete newGame;
-	delete controls;
-	delete quitGame;
-	delete buttonTex;
-	delete buttonTexHover;
-	delete buttonTexClicked;
+	//delete newGame;
+	//delete controls;
+	//delete quitGame;
+	//delete buttonTex;
+	//delete buttonTexHover;
+	//delete buttonTexClicked;
 }
 
 
 void MainMenu::LoadContent() {
 	Font* font = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"quadrats.tga", 16, 16);
 
-	buttonTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"button.png", 0);
-	buttonTexHover = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"button_hover.jpg", 0);
-	buttonTexClicked = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"button_clicked.jpg", 0);
+	buttonTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/button.png", 0);
+	buttonTexHover = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/button_hover.png", 0);
+	buttonTexClicked = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/button_clicked.png", 0);
+	scoreBoardTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/score_board.png", 0);
 
 	float charWidth = 0.025f;
 	float charHeight = 0.06f;
@@ -41,7 +42,7 @@ void MainMenu::LoadContent() {
 	float btnScaleY = 0.19f;
 
 	//Button Position, determines the first button's postion, and Y is multiplied to place succesive buttons uniformly.
-	float btnX = 0.1f;
+	float btnX = 0.15f;
 	float btnY = 0.2f;
 
 	newGame = new UIButton(btnX, btnY, btnScaleX, btnScaleY, (void (GameScreen2D::*)()) &MainMenu::NewGameSelected, (void (GameScreen2D::*)(float, float)) &MainMenu::NewGameClicked, 
@@ -56,6 +57,10 @@ void MainMenu::LoadContent() {
 				new DrawableTexture2D(btnX, btnY * 3.0f, 1, btnScaleX, btnScaleY, buttonTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
 				new DrawableText2D(btnX + btnOffsetX, btnY * 3.0f + btnOffsetY, 2.0f, 0.16f, 0.1f, "QUIT GAME", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::QuitDeselcted, this);
 	
+	scoreBoard = new DrawableTexture2D(0.55f, 0.05f, 1, 0.4f, 0.9f, scoreBoardTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false);
+
+	AddDrawable(scoreBoard);
+
 	AddSelectable(newGame);
 	AddSelectable(controls);
 	AddSelectable(quitGame);
@@ -66,9 +71,10 @@ void MainMenu::LoadContent() {
 }
 
 void MainMenu::UnloadContent() {
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"button.png");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"button_hover.jpg");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"button_clicked.jpg");
+	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/button.png");
+	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/button_hover.png");
+	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/button_clicked.png");
+	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/score_board.png");
 }
 
 void MainMenu::NewGameClicked(float x, float y) {
