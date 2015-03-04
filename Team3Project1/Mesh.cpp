@@ -170,9 +170,9 @@ void Mesh::Draw(Shader* shader)
 }
 #endif
 
-#if WINDOWS_BUILD
 void	Mesh::BufferData()	
 {
+#if WINDOWS_BUILD
 	glBindVertexArray(arrayObject);
 
 	// Buffer Vertices
@@ -201,8 +201,16 @@ void	Mesh::BufferData()
 	}
 
 	glBindVertexArray(0);
-}
 #endif
+#if PS3_BUILD
+	a = cellGcmAddressToOffset(&vertices->x, &vertexOffsets[VertexAttributes::POSITION]);
+	b = cellGcmAddressToOffset(&vertices->nX, &vertexOffsets[VertexAttributes::NORMAL]);
+	c = cellGcmAddressToOffset(&vertices->rgba, &vertexOffsets[VertexAttributes::COLOUR]);
+	d = cellGcmAddressToOffset(&vertices->tX, &vertexOffsets[VertexAttributes::TEXCOORD]);
+	e = cellGcmAddressToOffset(&vertices->tnX, &vertexOffsets[VertexAttributes::TANGENT]);
+#endif
+}
+
 
 void	Mesh::GenerateNormals()	
 {
@@ -293,20 +301,36 @@ T3Vector3 Mesh::GenerateTangent(const T3Vector3 &a,const T3Vector3 &b,const T3Ve
 	return axis * factor;
 }
 
+void Mesh::AssignVertexMemory()
+{
+#if WINDOWS_BUILD
+	vertices = new Vertex[numVertices];
+	std::cout << "Vertices created on system memory" << std::endl;
+#endif
+#if PS3_BUILD
+	vertices = (Vertex*)GCMRenderer::localMemoryAlign(128, sizeof(Vertex) * numVertices);
+	std::cout << "Vertices created on local memory" << std::endl;
+#endif
+}
+
+void Mesh::AssignIndexMemory(unsigned int indexCount)
+{
+	#if WINDOWS_BUILD
+	indices = new unsigned int[indexCount];
+	std::cout << "Indices created on system memory" << std::endl;
+#endif
+#if PS3_BUILD
+	indices = (short*)GCMRenderer::localMemoryAlign(128, sizeof(short) * (indexCount));
+	std::cout << "Indices created on local memory" << std::endl;
+#endif
+}
 
 Mesh* Mesh::GenerateTriangle()	
 {
 	Mesh*m = new Mesh();
 	m->numVertices = 3;
 
-#ifdef WINDOWS_BUILD
-	m->vertices = new Vertex[m->numVertices];
-	std::cout << "Vertices created on system memory" << std::endl;
-#endif
-#ifdef PS3_BUILD
-	m->vertices = (Vertex*)GCMRenderer::localMemoryAlign(128, sizeof(Vertex) * m->numVertices);
-	std::cout << "Vertices created on local memory" << std::endl;
-#endif
+	m->AssignVertexMemory();
 
 	m->vertices[0] = Vertex(
 		T3Vector3(0.0f, 0.5f,	0.0f),
@@ -327,16 +351,7 @@ Mesh* Mesh::GenerateTriangle()
 	m->GenerateNormals();
 	m->GenerateTangents();
 	
-#ifdef WINDOWS_BUILD
 	m->BufferData();
-#endif
-#ifdef PS3_BUILD
-	m->a = cellGcmAddressToOffset(&m->vertices->x, &m->vertexOffsets[VertexAttributes::POSITION]);
-	m->b = cellGcmAddressToOffset(&m->vertices->nX, &m->vertexOffsets[VertexAttributes::NORMAL]);
-	m->c = cellGcmAddressToOffset(&m->vertices->rgba, &m->vertexOffsets[VertexAttributes::COLOUR]);
-	m->d = cellGcmAddressToOffset(&m->vertices->tX, &m->vertexOffsets[VertexAttributes::TEXCOORD]);
-	m->e = cellGcmAddressToOffset(&m->vertices->tnX, &m->vertexOffsets[VertexAttributes::TANGENT]);
-#endif
 
 	return m;
 }
@@ -349,14 +364,7 @@ Mesh* Mesh::GenerateQuad()
 
 	m->type = PrimitiveType::TRIANGLE_STRIP;
 
-#ifdef WINDOWS_BUILD
-	m->vertices = new Vertex[m->numVertices];
-	std::cout << "Vertices created on system memory" << std::endl;
-#endif
-#ifdef PS3_BUILD
-	m->vertices = (Vertex*)GCMRenderer::localMemoryAlign(128, sizeof(Vertex) * m->numVertices);
-	std::cout << "Vertices created on local memory" << std::endl;
-#endif
+	m->AssignVertexMemory();
 
 	m->vertices[0] = Vertex(
 		T3Vector3(-1.0f, -1.0f, 0.0f), // bottom left
@@ -383,16 +391,7 @@ Mesh* Mesh::GenerateQuad()
 		T3Vector2(1.0f, 1.0f),
 		T3Vector3(1.0f, 0.0f,0.0f));
 
-#if WINDOWS_BUILD
 	m->BufferData();
-#endif
-#if PS3_BUILD
-	m->a = cellGcmAddressToOffset(&m->vertices->x, &m->vertexOffsets[VertexAttributes::POSITION]);
-	m->b = cellGcmAddressToOffset(&m->vertices->nX, &m->vertexOffsets[VertexAttributes::NORMAL]);
-	m->c = cellGcmAddressToOffset(&m->vertices->rgba, &m->vertexOffsets[VertexAttributes::COLOUR]);
-	m->d = cellGcmAddressToOffset(&m->vertices->tX, &m->vertexOffsets[VertexAttributes::TEXCOORD]);
-	m->e = cellGcmAddressToOffset(&m->vertices->tnX, &m->vertexOffsets[VertexAttributes::TANGENT]);
-#endif
 
 	return m;
 }
@@ -405,14 +404,7 @@ Mesh* Mesh::GenerateQuadAlt()
 
 	m->type = PrimitiveType::TRIANGLE_STRIP;
 
-#ifdef WINDOWS_BUILD
-	m->vertices = new Vertex[m->numVertices];
-	std::cout << "Vertices created on system memory" << std::endl;
-#endif
-#ifdef PS3_BUILD
-	m->vertices = (Vertex*)GCMRenderer::localMemoryAlign(128, sizeof(Vertex) * m->numVertices);
-	std::cout << "Vertices created on local memory" << std::endl;
-#endif
+	m->AssignVertexMemory();
 
 	m->vertices[0] = Vertex(
 		T3Vector3(0.0f, 0.0f, 0.0f),
@@ -439,16 +431,7 @@ Mesh* Mesh::GenerateQuadAlt()
 		T3Vector2(1.0f, 1.0f),
 		T3Vector3(1.0f, 0.0f,0.0f));
 
-#if WINDOWS_BUILD
 	m->BufferData();
-#endif
-#if PS3_BUILD
-	cellGcmAddressToOffset(&m->vertices->x, &m->vertexOffsets[VertexAttributes::POSITION]);	
-	cellGcmAddressToOffset(&m->vertices->nX, &m->vertexOffsets[VertexAttributes::NORMAL]);
-	cellGcmAddressToOffset(&m->vertices->rgba, &m->vertexOffsets[VertexAttributes::COLOUR]);
-	cellGcmAddressToOffset(&m->vertices->tX, &m->vertexOffsets[VertexAttributes::TEXCOORD]);
-	cellGcmAddressToOffset(&m->vertices->tnX, &m->vertexOffsets[VertexAttributes::TANGENT]);
-#endif
 
 	return m;
 }
@@ -458,17 +441,11 @@ Mesh* Mesh::GenerateQuadCentral()
 	Mesh* m = new Mesh();
 
 	m->numVertices = 4;
+	m->AssignVertexMemory();
 
 	m->type = PrimitiveType::TRIANGLE_STRIP;
 
-#ifdef WINDOWS_BUILD
-	m->vertices = new Vertex[m->numVertices];
-	std::cout << "Vertices created on system memory" << std::endl;
-#endif
-#ifdef PS3_BUILD
-	m->vertices = (Vertex*)GCMRenderer::localMemoryAlign(128, sizeof(Vertex) * m->numVertices);
-	std::cout << "Vertices created on local memory" << std::endl;
-#endif
+	m->AssignVertexMemory();
 
 	m->vertices[0] = Vertex(
 		T3Vector3(-0.5f, -0.5f, 0.0f),
@@ -495,16 +472,7 @@ Mesh* Mesh::GenerateQuadCentral()
 		T3Vector2(1.0f, 1.0f),
 		T3Vector3(1.0f, 0.0f,0.0f));
 
-#if WINDOWS_BUILD
 	m->BufferData();
-#endif
-#if PS3_BUILD
-	cellGcmAddressToOffset(&m->vertices->x, &m->vertexOffsets[VertexAttributes::POSITION]);
-	cellGcmAddressToOffset(&m->vertices->nX, &m->vertexOffsets[VertexAttributes::NORMAL]);
-	cellGcmAddressToOffset(&m->vertices->rgba, &m->vertexOffsets[VertexAttributes::COLOUR]);
-	cellGcmAddressToOffset(&m->vertices->tX, &m->vertexOffsets[VertexAttributes::TEXCOORD]);
-	cellGcmAddressToOffset(&m->vertices->tnX, &m->vertexOffsets[VertexAttributes::TANGENT]);
-#endif
 
 	return m;
 }
@@ -514,15 +482,7 @@ Mesh* Mesh::GenerateCone(unsigned int subdivs)
 	Mesh* m = new Mesh();
 	
 	m->numVertices = subdivs * 2; // Need subdiv copies of the tip vertex to maintain normals
-
-#ifdef WINDOWS_BUILD
-	m->vertices = new Vertex[m->numVertices];
-	std::cout << "Vertices created on system memory" << std::endl;
-#endif
-#ifdef PS3_BUILD
-	m->vertices = (Vertex*)GCMRenderer::localMemoryAlign(128, sizeof(Vertex) * m->numVertices);
-	std::cout << "Vertices created on local memory" << std::endl;
-#endif
+	m->AssignVertexMemory();
 	
 	float subdiv_angle = 2 * PI / subdivs;
 	float tex_inc = 1.0f / (float) subdivs;
@@ -542,12 +502,7 @@ Mesh* Mesh::GenerateCone(unsigned int subdivs)
 		m->vertices[i + subdivs].SetTexCoord(T3Vector2((float) i * tex_inc, 1));
 	}	
 	
-#if WINDOWS_BUILD
-	m->indices = new unsigned int[subdivs * 3 + 3];
-#endif
-#if PS3_BUILD
-	m->indices = (short*)GCMRenderer::localMemoryAlign(128, sizeof(short) * (subdivs * 3 + 3));
-#endif
+	m->AssignIndexMemory(subdivs * 3 + 3);
 
 	for (unsigned int i = 0; i < subdivs; ++i) 
 	{
@@ -564,17 +519,7 @@ Mesh* Mesh::GenerateCone(unsigned int subdivs)
 	m->GenerateNormals();
 	m->GenerateTangents();
 
-#if WINDOWS_BUILD
 	m->BufferData();
-#endif
-#if PS3_BUILD
-	cellGcmAddressToOffset(&m->vertices->x, &m->vertexOffsets[VertexAttributes::POSITION]);
-	cellGcmAddressToOffset(&m->vertices->nX, &m->vertexOffsets[VertexAttributes::NORMAL]);
-	cellGcmAddressToOffset(&m->vertices->rgba, &m->vertexOffsets[VertexAttributes::COLOUR]);
-	cellGcmAddressToOffset(&m->vertices->tX, &m->vertexOffsets[VertexAttributes::TEXCOORD]);
-	cellGcmAddressToOffset(&m->vertices->tnX, &m->vertexOffsets[VertexAttributes::TANGENT]);
-	cellGcmAddressToOffset(&m->indices, &m->vertexOffsets[VertexAttributes::MAX]);
-#endif
 
 	return m;
 }
@@ -584,14 +529,7 @@ Mesh* Mesh::GenerateCylinder(unsigned int subdivs)
 	Mesh* m = new Mesh();
 
 	m->numVertices = (subdivs + 1) * 2;
-#ifdef WINDOWS_BUILD
-	m->vertices = new Vertex[m->numVertices];
-	std::cout << "Vertices created on system memory" << std::endl;
-#endif
-#ifdef PS3_BUILD
-	m->vertices = (Vertex*)GCMRenderer::localMemoryAlign(128, sizeof(Vertex) * m->numVertices);
-	std::cout << "Vertices created on local memory" << std::endl;
-#endif
+	m->AssignVertexMemory();
 
 	float subdiv_angle = 2 * PI / subdivs;
 	float alpha = 0.0f;
@@ -613,12 +551,7 @@ Mesh* Mesh::GenerateCylinder(unsigned int subdivs)
 	}
 
 	// Setup index buffer
-#if WINDOWS_BUILD
-	m->indices = new unsigned int[subdivs * 6];
-#endif
-#if PS3_BUILD
-	m->indices = (short*)GCMRenderer::localMemoryAlign(128, sizeof(short) * subdivs * 6);
-#endif
+	m->AssignIndexMemory(subdivs * 6);
 	
 	m->numIndices = 0;
 	for (unsigned int i = 0; i < subdivs; ++i) {
@@ -632,17 +565,7 @@ Mesh* Mesh::GenerateCylinder(unsigned int subdivs)
 		m->indices[m->numIndices++] = i + subdivs + 2;
 	}
 
-#if WINDOWS_BUILD
 	m->BufferData();
-#endif
-#if PS3_BUILD
-	cellGcmAddressToOffset(&m->vertices->x, &m->vertexOffsets[VertexAttributes::POSITION]);
-	cellGcmAddressToOffset(&m->vertices->nX, &m->vertexOffsets[VertexAttributes::NORMAL]);
-	cellGcmAddressToOffset(&m->vertices->rgba, &m->vertexOffsets[VertexAttributes::COLOUR]);
-	cellGcmAddressToOffset(&m->vertices->tX, &m->vertexOffsets[VertexAttributes::TEXCOORD]);
-	cellGcmAddressToOffset(&m->vertices->tnX, &m->vertexOffsets[VertexAttributes::TANGENT]);
-	cellGcmAddressToOffset(&m->indices, &m->vertexOffsets[VertexAttributes::MAX]);
-#endif
 
 	return m;
 }
@@ -656,15 +579,7 @@ Mesh* Mesh::GenerateCircle(unsigned int subdivs)
 	m->type = PrimitiveType::TRIANGLE_FAN;
 
 	m->numVertices = subdivs + 2; // Additional vertex at circle centre + repeat first vertex on circumference to close off circle
-
-#ifdef WINDOWS_BUILD
-	m->vertices = new Vertex[m->numVertices];
-	std::cout << "Vertices created on system memory" << std::endl;
-#endif
-#ifdef PS3_BUILD
-	m->vertices = (Vertex*)GCMRenderer::localMemoryAlign(128, sizeof(Vertex) * m->numVertices);
-	std::cout << "Vertices created on local memory" << std::endl;
-#endif
+	m->AssignVertexMemory();
 
 	m->vertices[0].SetPosition(T3Vector3(0.0f, 0.0f, 0.0f)); // Circle centre at origin
 	m->vertices[0].SetColor(T3Vector4(0, 0, 0, 1.0f));
@@ -686,16 +601,7 @@ Mesh* Mesh::GenerateCircle(unsigned int subdivs)
 		alpha += subdiv_angle;
 	}
 
-#if WINDOWS_BUILD
 	m->BufferData();
-#endif
-#if PS3_BUILD
-	cellGcmAddressToOffset(&m->vertices->x, &m->vertexOffsets[VertexAttributes::POSITION]);
-	cellGcmAddressToOffset(&m->vertices->nX, &m->vertexOffsets[VertexAttributes::NORMAL]);
-	cellGcmAddressToOffset(&m->vertices->rgba, &m->vertexOffsets[VertexAttributes::COLOUR]);
-	cellGcmAddressToOffset(&m->vertices->tX, &m->vertexOffsets[VertexAttributes::TEXCOORD]);
-	cellGcmAddressToOffset(&m->vertices->tnX, &m->vertexOffsets[VertexAttributes::TANGENT]);
-#endif
 
 	return m;
 }

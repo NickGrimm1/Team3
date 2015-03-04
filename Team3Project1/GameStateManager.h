@@ -268,6 +268,11 @@ public:
 		for (unsigned int i = 0; i < gameScreens.size(); i++)
 			gameScreens[i]->GamepadAnalogueDisplacement(playerID, analogueControl, amount);
 	}
+	void GamepadDisconnect(GamepadEvents::PlayerIndex playerID)
+	{
+		for (unsigned int i = 0; i < gameScreens.size(); i++)
+			gameScreens[i]->GamepadDisconnect(playerID);
+	}
 #pragma endregion
 #pragma region Screen Changes
 	/**
