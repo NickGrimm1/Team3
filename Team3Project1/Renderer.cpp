@@ -266,7 +266,7 @@ bool Renderer::LoadAssets() {
 	nightSkyTex = (GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"night_sky.jpg", 0))->GetTextureName();
 	//SetTextureRepeating(nightSkyTex, true);
 	daySkyTex = (GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"day_sky.jpg", 0))->GetTextureName();
-	
+
 	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh) {
 		cout << "Renderer::LoadAssets() - unable to load rendering assets";
 		return false;
@@ -328,17 +328,17 @@ void Renderer::RenderScene() {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	if (camera) {
-	cameraMatrix = camera->BuildViewMatrix();
+		cameraMatrix = camera->BuildViewMatrix();
 
 		//Main Render
-	ShadowPass();
-	DrawScene();
-	DeferredLightPass();
-	CombineBuffers();
+		ShadowPass();
+		DrawScene();
+		DeferredLightPass();
+		CombineBuffers();
 
 		//Post-Processing
 		BloomPass();
-	MotionBlurPass();
+		MotionBlurPass();
 
 		DrawFrameBufferTex(postProcessingTex[0]);
 	}
@@ -783,7 +783,7 @@ void Renderer::DrawSkybox() {
 	
 	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
 	SetCurrentShader(skyBoxShader);
-	
+
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), GL_TEXTURE0);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "nightSkyTex"), SKYBOX_TEXTURE_UNIT0);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "daySkyTex"), SKYBOX_TEXTURE_UNIT1);
@@ -868,7 +868,7 @@ void Renderer::BloomPass()
 
 		screenMesh->Draw();
 		++z;
-}
+	}
 
 	/*--------------------Gaussian Blur the downsampled images--------------------*/
 
@@ -1060,8 +1060,8 @@ void Renderer::DrawFrameBufferTex(GLuint fboTex) {
 
 void Renderer::Draw2DOverlay() {
 	glDisable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
-	
+
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glCullFace(GL_FRONT);
 	SetCurrentShader(hudShader);
 	projMatrix = hudMatrix;
@@ -1071,6 +1071,11 @@ void Renderer::Draw2DOverlay() {
 
 		glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "blendColour"), 1, (float*) &overlayElements[i]->GetColor());
 		
+		if (overlayElements[i]->GetTransparent())
+			glEnable(GL_BLEND);
+		else
+			glDisable(GL_BLEND);
+
 		switch (overlayElements[i]->GetType()) {
 		case DrawableType::Text:
 			Draw2DText((DrawableText2D&) *overlayElements[i]);
@@ -1105,7 +1110,7 @@ void Renderer::Draw2DText(DrawableText2D& text) {
 	else {
 		textMesh = (*i).second;
 	}
-	
+
 	T3Vector3 origin = T3Vector3(text.GetOrigin().x * text.width * width, text.GetOrigin().y * text.height * height, 0);
 	T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(text.GetRotation(), T3Vector3(0,0,1)) * T3Matrix4::Translation(origin * -1.0f);
 	modelMatrix = T3Matrix4::Translation(T3Vector3(text.x * width, text.y * height, 0)) * rotation * T3Matrix4::Scale(T3Vector3(width * text.width / (float) text.GetText().length(), height * text.height, 1));

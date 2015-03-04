@@ -81,6 +81,7 @@ void GameScreen2D::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseBut
 */
 void GameScreen2D::MouseMoved(T3Vector2& finish)
 {
+	bool selected = false;
 	// Check if input is being accepted
 	if (inputEnabled)
 	{
@@ -91,8 +92,15 @@ void GameScreen2D::MouseMoved(T3Vector2& finish)
 			for (unsigned int i = 0; i < selectables.size(); i++)
 			{
 				// If it is, call Select()
-				selectables[i]->Select();
-				currentSelected = i;
+				if (MathHelper::Contains(finish, *selectables[i])) {
+					if (currentSelected != i) {
+						if (i > 0)
+							selectables[currentSelected]->UnSelect();
+						
+						currentSelected = i;
+					}
+					selectables[i]->Select();
+				}
 			}
 		}
 	}

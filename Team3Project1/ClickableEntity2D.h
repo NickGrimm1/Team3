@@ -21,7 +21,8 @@ public:
 	<summary>Constructor.</summary>
 	<param name='actionOnClick'>Function pointer to the action to take on click.</param>m>
 	*/
-	ClickableEntity2D(float x, float y, float width, float height, void (*actionOnSelect)(), void (*actionOnClick)(float, float)) : SelectableEntity2D(x, y, width, height, actionOnSelect), actionOnClick(actionOnClick)
+	ClickableEntity2D(float x, float y, float width, float height, void (GameScreen2D::*actionOnSelect)(), void (GameScreen2D::*actionOnClick)(float, float), void (GameScreen2D::*actionOnUnSelect)(), GameScreen2D* arg) 
+		: SelectableEntity2D(x, y, width, height, actionOnSelect, actionOnUnSelect, arg), actionOnClick(actionOnClick)
 	{ }
 	/**
 	<summary>Process the action this object takes when it is clicked.</summary>
@@ -30,13 +31,13 @@ public:
 	*/
 	void Click(float x, float y)
 	{
-		actionOnClick(x, y);
+		(arg->*actionOnClick)(x, y);
 	}
 	/**
 	<summary>Sets the action to take on click.</summary>
 	<param name='value'>Function pointer to the action to take on click.</param>m>
 	*/
-	void SetActionOnClick(void (*value)(float, float)) { actionOnClick = value; }
+	void SetActionOnClick(void (GameScreen2D::*value)(float, float)) { actionOnClick = value; }
 protected:
-	void (*actionOnClick)(float x, float y);
+	void (GameScreen2D::*actionOnClick)(float x, float y);
 };

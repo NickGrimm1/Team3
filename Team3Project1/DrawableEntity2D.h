@@ -36,7 +36,7 @@ public:
 	<param name='height'>The height of the entity.</param>
 	<param name='blendColor'>The colour. Default is White (1,1,1,1).</param>
 	*/
-	DrawableEntity2D(float x, float y, int depth, float width, float height, DrawableType::Type type, T3Vector4 blendColor = T3Vector4(1.0f, 1.0f, 1.0f ,1.0f)) : T3Rectangle(x, y, width, height), blendColor(blendColor), type(type), depth(depth)
+	DrawableEntity2D(float x, float y, int depth, float width, float height, DrawableType::Type type, T3Vector4 blendColor = T3Vector4(1.0f, 1.0f, 1.0f ,1.0f), bool trans = true) : T3Rectangle(x, y, width, height), blendColor(blendColor), type(type), depth(depth), transparent(trans)
 	{ }
 
 	virtual ~DrawableEntity2D() {}
@@ -64,7 +64,12 @@ public:
 	*/
 	void SetColor(const int& value) { depth = value; }
 	
+	void SetTransparent(bool arg) { transparent = arg; }
+
+	bool GetTransparent() { return transparent; }
+
 protected:
+	bool transparent;
 	int depth;
 	T3Vector4 blendColor;
 	DrawableType::Type type;
