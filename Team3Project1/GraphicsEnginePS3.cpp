@@ -73,12 +73,12 @@ void GraphicsEngine::RemoveDrawableTextFromScene(DrawableText2D* drawableText)
 	removeHudList.push_back(drawableText);
 }
 
-void GraphicsEngine::AddDrawable(DrawableEntity3D* drawable, DrawableEntity3D* parent = NULL)
+void GraphicsEngine::AddDrawable(DrawableEntity3D* drawable, DrawableEntity3D* parent )
 {
-	addGameList.push_back(pair<DrawableEntity3D*, DrawableEntity3D*>(drawable, parent))
+	addGameList.push_back(pair<DrawableEntity3D*, DrawableEntity3D*>(drawable, parent));
 }
 
-void GraphicsEngine::RemoveDrawable(DrawableEntity3D* drawable, bool removeChildren = true)
+void GraphicsEngine::RemoveDrawable(DrawableEntity3D* drawable, bool removeChildren)
 {
 	removeGameList.push_back(pair<DrawableEntity3D*, bool>(drawable, removeChildren));
 }
@@ -207,11 +207,15 @@ void GraphicsEngine::ClearNodeLists()
 }
 void GraphicsEngine::DrawNodes()
 {
+		// Draw opaque objects - closest to camera first
+//	for (vector<SceneNode*>::const_iterator i = nodeList.begin(); i < nodeList.end(); ++i) renderer->Render(*i);
 
+	// Draw transparent objects - furthest from camera first
+//	for (vector<SceneNode*>::const_reverse_iterator i = transparentNodeList.rbegin(); i < transparentNodeList.rend(); ++i) renderer->Render(*i);
 }
 
 void GraphicsEngine::AddLight(Light* light)
 {
-
+	addLightsList.push_back(light);
 }
 #endif
