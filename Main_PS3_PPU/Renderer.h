@@ -12,7 +12,11 @@ _-_-_-_-_-_-_-|   /\_/\   NYANYANYAN
 _-_-_-_-_-_-_-""  ""   
 
 *//////////////////////////////////////////////////////////////////////////////
-
+/*
+*Extended by: Matt J
+*Implemented functionality missing from Richards renderer as
+*his renderer only had RenderScene, Renderer & ~Renderer
+*/
 #pragma once
 #include "../Team3Project1/GCMRenderer.h"
 #include "../Team3Project1/Mesh.h"
@@ -45,4 +49,10 @@ public:
 protected:
 	bool	drawDeferredLights;
 
+	Mesh* circleMesh;
+	Mesh* quadMesh;
+	Mesh* sphereMesh;
+	Mesh* coneMesh;
+
+	Shader* basicShader;
 };

@@ -175,5 +175,6 @@ CellGcmTexture* Texture::LoadGTF(std::string filename) {
 
 	return texture;
 }
-
+Texture::~Texture(){}
+void Texture::SetRepeating(bool repeat){}
 #endif

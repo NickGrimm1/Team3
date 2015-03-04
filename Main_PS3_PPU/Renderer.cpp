@@ -1,7 +1,7 @@
 #include "Renderer.h"
 #include "../Framework/Shader.h"
 #include "../Team3Project1/ShaderPart.h"
-
+#include "../Team3Project1/GameStateManager.h"
 Renderer::Renderer(void)	{
 	/*
 	You're provided with a very basic vertex / fragment shader, to get you started
@@ -81,4 +81,45 @@ void Renderer::RenderScene() {
 
 	SwapBuffers();
 	//cout << "Frame Drawn"
+}
+
+bool Renderer::LoadShaders()
+{
+	basicShader = GameStateManager::Assets()->LoadShader(this, "../Shaders/vertex.vpo","../Shaders/fragment.fpo");
+	return true;
+}
+void Renderer::UnloadShaders()
+{
+	GameStateManager::Assets()->UnloadShader(this,  "../Shaders/vertex.vpo","../Shaders/fragment.fpo");
+}
+bool Renderer::LoadAssets()
+{
+	circleMesh = GameStateManager::Assets()->LoadCircle(this, 20);				  // Circle for spotlight rendering
+	quadMesh   = GameStateManager::Assets()->LoadQuad(this); 
+	sphereMesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
+	coneMesh   = GameStateManager::Assets()->LoadCone(this, 20);				  // Cone for spotlight rendering
+	
+	if (!sphereMesh || !coneMesh || !circleMesh || !quadMesh) {
+		cout << "Renderer::LoadAssets() - unable to load rendering assets";
+		return false;
+	}
+	
+	return true;
+}
+void Renderer::UnloadAssets()
+{
+	GameStateManager::Assets()->UnloadCircle(this, 20);				   // Circle for spotlight rendering
+	GameStateManager::Assets()->UnloadQuad(this);					   // Quad for rendering textures to screen
+	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
+	GameStateManager::Assets()->UnloadCone(this, 20);				   // Cone for spotlight rendering
+	
+}
+
+unsigned int Renderer::CreateShadowCube()
+{
+	return 0;//look into this later
+}
+unsigned int Renderer::CreateShadowTexture()
+{
+	return 0;//look into this later
 }

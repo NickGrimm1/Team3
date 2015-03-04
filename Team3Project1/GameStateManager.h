@@ -28,7 +28,7 @@ Version: 1.0.0 03/02/2015.</summary>
 #include <iostream>
 
 using namespace std;
-
+class GraphicsEngine;
 class GameStateManager : public InputListener
 {
 public:

@@ -38,7 +38,7 @@ Version: 0.0.3 06/02/2015.</summary>
 #include <vector>
 #include <algorithm>
 
-
+class Renderer;
 
 
 class GraphicsEngine : public Thread
