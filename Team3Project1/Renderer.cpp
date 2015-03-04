@@ -1126,18 +1126,21 @@ void Renderer::Draw2DText(DrawableText2D& text) {
 
 void Renderer::Draw2DTexture(DrawableTexture2D& texture) 
 {
-	T3Vector3 origin = T3Vector3(texture.GetOrigin().x * texture.width * width, texture.GetOrigin().y * texture.height * height, 0);
-	T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(texture.GetRotation(), T3Vector3(0,0,1)) * T3Matrix4::Translation(-origin);
+	if (texture.GetTexture())
+	{
+		T3Vector3 origin = T3Vector3(texture.GetOrigin().x * texture.width * width, texture.GetOrigin().y * texture.height * height, 0);
+		T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(texture.GetRotation(), T3Vector3(0,0,1)) * T3Matrix4::Translation(-origin);
 	
-	modelMatrix = T3Matrix4::Translation(T3Vector3(texture.x * width, texture.y * height, 0)) * rotation * T3Matrix4::Scale(T3Vector3(texture.width * width, texture.height * height, 1));
-	textureMatrix.ToIdentity();	
-	UpdateShaderMatrices();
+		modelMatrix = T3Matrix4::Translation(T3Vector3(texture.x * width, texture.y * height, 0)) * rotation * T3Matrix4::Scale(T3Vector3(texture.width * width, texture.height * height, 1));
+		textureMatrix.ToIdentity();	
+		UpdateShaderMatrices();
 
-	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-	glBindTexture(GL_TEXTURE_2D, texture.GetTexture()->GetTextureName());
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+		glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+		glBindTexture(GL_TEXTURE_2D, texture.GetTexture()->GetTextureName());
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 
-	quadMesh->Draw();
+		quadMesh->Draw();
+	}
 }
 
 void Renderer::GenerateScreenTexture(GLuint &into, bool depth)

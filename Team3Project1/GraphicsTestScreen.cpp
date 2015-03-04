@@ -148,7 +148,8 @@ void GraphicsTestScreen::LoadContent() {
 	
 //	directionalLight = GameStateManager::Graphics()->AddDirectionalLight(T3Vector3(-1, -1, -1), T3Vector4(1,1,1,1), T3Vector4(0,0,0,1));
 
-	camera = new ChaseCamera(ent, T3Vector3(0, 2, 20), 0, 0, 0);
+	SetPlayer(ent);
+	camera = new ChaseCamera(ent, T3Vector3(0, 2, 50), 0, 0, 0);
 	//camera->SetPosition(T3Vector3(0,10,80));
 	
 	SetCamera(camera);
@@ -193,22 +194,22 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 		switch (key) {
 
 		case KeyboardEvents::KEYBOARD_W:
-			camera->AddMovement(T3Vector3(0,0,-1));
+			GetPlayer()->Move(T3Vector3(0,0,-1));
 			break;
 		case KeyboardEvents::KEYBOARD_S:
-			camera->AddMovement(T3Vector3(0,0,1));
+			GetPlayer()->Move(T3Vector3(0,0,1));
 			break;
 		case KeyboardEvents::KEYBOARD_A:
-			camera->AddMovement(T3Vector3(-1,0,0));
+			GetPlayer()->Move(T3Vector3(-1,0,0));
 			break;
 		case KeyboardEvents::KEYBOARD_D:
-			camera->AddMovement(T3Vector3(1,0,0));
+			GetPlayer()->Move(T3Vector3(1,0,0));
 			break;
 		case KeyboardEvents::KEYBOARD_SHIFT:
-			camera->AddMovement(T3Vector3(0,1,0));
+			GetPlayer()->Move(T3Vector3(0,1,0));
 			break;
 		case KeyboardEvents::KEYBOARD_SPACE:
-			camera->AddMovement(T3Vector3(0,-1,0));
+			GetPlayer()->Move(T3Vector3(0,-1,0));
 			break;
 		case KeyboardEvents::KEYBOARD_LEFT:
 			camera->AddYaw(1);
@@ -242,7 +243,7 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 	}
 }
 	
-void GraphicsTestScreen::MouseMoved(T3Vector2& finish) {
+void GraphicsTestScreen::MouseMoved(T3Vector2& start, T3Vector2& finish) {
 	camera->AddPitch(-finish.y);
 	camera->AddYaw(-finish.x);
 }

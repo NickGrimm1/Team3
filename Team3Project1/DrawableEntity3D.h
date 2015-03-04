@@ -29,16 +29,6 @@ public:
 		: mesh(mesh), shader(shader), texture(texture), origin(origin), rotation(rotation), scale(scale), boundingRadius(boundingRadius), bumpTexture(bumpTexture)
 	{ }
 
-
-
-
-
-
-
-
-
-
-	
 	/**
 	<summary>Gets the model mesh for this entity.</summary>
 	*/
@@ -128,6 +118,10 @@ public:
 	<param name='value'>The amount to scale by.</param>
 	*/
 	void AddScale(const T3Vector3& amount) { scale += amount; }
+
+	T3Vector3 GetRight() { return rotation.ToMatrix() * T3Vector3::UnitX(); }
+	T3Vector3 GetUp() { return rotation.ToMatrix() * T3Vector3::UnitY(); }
+	T3Vector3 GetForward() { return rotation.ToMatrix() * -T3Vector3::UnitZ(); }
 protected:
 	Mesh* mesh;
 	Shader* shader;
