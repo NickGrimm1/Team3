@@ -178,6 +178,9 @@
     <Filter Include="Framework\Audio\Artificial Intelligence\Source Files">
       <UniqueIdentifier>{e41fb13d-e937-41de-a3ef-f1cb43bf71f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Web Interface">
+      <UniqueIdentifier>{7b56afba-50ff-4105-87a4-bb9e3118758c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameStateManager.h">
@@ -822,6 +825,12 @@
     </None>
     <None Include="..\Resources\Shaders\SkyDomeFragment.glsl">
       <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\PHP\getScores.php">
+      <Filter>Game\Web Interface</Filter>
+    </None>
+    <None Include="..\Resources\PHP\postScore.php">
+      <Filter>Game\Web Interface</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

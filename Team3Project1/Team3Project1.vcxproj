@@ -419,6 +419,8 @@
     <ClCompile Include="Vehicle_Wheel.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Resources\PHP\getScores.php" />
+    <None Include="..\Resources\PHP\postScore.php" />
     <None Include="..\Resources\Shaders\BlendedFragment.glsl" />
     <None Include="..\Resources\Shaders\BloomCombFragment.glsl" />
     <None Include="..\Resources\Shaders\BloomFinalFragment.glsl" />
