@@ -138,7 +138,7 @@ public:
 	//static GraphicsEngine& GetGraphicsEngine() {return *engine;}
 
 	void EnableLoadingIcon(bool value) {isLoading = value;}
-	void EnableMousePointer(bool value);
+	void EnableMousePointer(bool value) { Window::GetWindow().ShowOSPointer(value); }
 
 	// Debugging
 	void DrawDeferredLights(bool on);

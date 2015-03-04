@@ -1056,8 +1056,8 @@ void Renderer::DrawFrameBufferTex(GLuint fboTex) {
 
 void Renderer::Draw2DOverlay() {
 	glDisable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
-
+	
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glCullFace(GL_FRONT);
 	SetCurrentShader(hudShader);
 	projMatrix = hudMatrix;
@@ -1067,6 +1067,11 @@ void Renderer::Draw2DOverlay() {
 
 		glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "blendColour"), 1, (float*) &overlayElements[i]->GetColor());
 		
+		if (overlayElements[i]->GetTransparent())
+			glEnable(GL_BLEND);
+		else
+			glDisable(GL_BLEND);
+
 		switch (overlayElements[i]->GetType()) {
 		case DrawableType::Text:
 			Draw2DText((DrawableText2D&) *overlayElements[i]);

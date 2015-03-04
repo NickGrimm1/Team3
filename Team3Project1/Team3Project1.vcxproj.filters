@@ -486,6 +486,9 @@
     <ClInclude Include="VehicleTestingScreen.h">
       <Filter>Game\MainGame\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">
@@ -700,6 +703,9 @@
     </ClCompile>
     <ClCompile Include="VehicleTestingScreen.cpp">
       <Filter>Game\MainGame\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenu.cpp">
+      <Filter>Engine\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
