@@ -149,7 +149,7 @@ void GraphicsTestScreen::LoadContent() {
 //	directionalLight = GameStateManager::Graphics()->AddDirectionalLight(T3Vector3(-1, -1, -1), T3Vector4(1,1,1,1), T3Vector4(0,0,0,1));
 
 	SetPlayer(ent);
-	camera = new OffsetCamera(ent, T3Vector3(0, 2, 50), 0, 0, 0);
+	camera = new ChaseCamera(ent, T3Vector3(0, 2, 50), 0, 0, 0);
 	//camera->SetPosition(T3Vector3(0,10,80));
 	
 	SetCamera(camera);

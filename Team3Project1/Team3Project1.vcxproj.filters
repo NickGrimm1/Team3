@@ -728,6 +728,9 @@
     <ClCompile Include="MainMenu.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ChaseCamera.cpp">
+      <Filter>Framework\Graphics\Common\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\TechFragment.glsl">
