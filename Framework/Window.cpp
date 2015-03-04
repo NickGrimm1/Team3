@@ -205,7 +205,8 @@ void Window::CheckMessages(MSG &msg)	{
 				Window::GetKeyboard()->Update(raw, diff);
 			}
 
-			if (mouse && raw->header.dwType == RIM_TYPEMOUSE) {
+			if (mouse && raw->header.dwType == RIM_TYPEMOUSE) 
+			{
 				Window::GetMouse()->Update(raw, diff);
 			}
 			delete lpb;
@@ -337,5 +338,6 @@ void	Window::ShowOSPointer(bool show)	{
 	else{
 		ShowCursor(0);
 	}
+	mouse->SetIsCursorVisible(show);
 }
 #endif

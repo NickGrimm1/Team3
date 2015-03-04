@@ -14,7 +14,6 @@ public:
 	virtual void UnloadContent();
 
 #if WINDOWS_BUILD
-	virtual void MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position);
 	virtual void MouseScrolled(T3Vector2& position, int amount) { }
 	virtual void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) { }
 #endif

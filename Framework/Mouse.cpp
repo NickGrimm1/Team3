@@ -3,15 +3,15 @@
 #include "../Team3Project1/GameStateManager.h"
 
 Mouse::Mouse(HWND &hwnd)	{
-	ZeroMemory( buttons,	 sizeof(bool) * MouseEvents::MOUSE_MAX );
-	ZeroMemory( doubleClicks,  sizeof(bool)  * MouseEvents::MOUSE_MAX );
-	ZeroMemory( lastClickTime, sizeof(float) * MouseEvents::MOUSE_MAX );
-	ZeroMemory( lastMouseDown, sizeof(float) * MouseEvents::MOUSE_MAX );
+	ZeroMemory(buttons,	sizeof(bool) * MouseEvents::MOUSE_MAX);
+	ZeroMemory(doubleClicks, sizeof(bool)  * MouseEvents::MOUSE_MAX);
+	ZeroMemory(lastClickTime, sizeof(float) * MouseEvents::MOUSE_MAX);
+	ZeroMemory(lastMouseDown, sizeof(float) * MouseEvents::MOUSE_MAX);
 
-	lastWheel   = 0;
-	frameWheel  = 0;
+	lastWheel = 0;
+	frameWheel = 0;
 	sensitivity = 0.07f;	//Chosen for no other reason than it's a nice value for my Deathadder ;)
-	clickLimit  = 200.0f;
+	clickLimit = 200.0f;
 	doubleClickLimit = 400.f;
 
 	rid.usUsagePage = HID_USAGE_PAGE_GENERIC; 
@@ -25,24 +25,30 @@ void Mouse::Update(RAWINPUT* raw, float msec)
 {
 	if(isAwake)	{
 		// Get the current position
-		position.x += (float)raw->data.mouse.lLastX;
-		position.y += (float)raw->data.mouse.lLastY;
-		// Is this different from lasat frame?
-		T3Vector2 mouseMove = position - lastPosition;
-		if (mouseMove != 0)
-		{
-			// Convert to resolution-independent
-			float newX = mouseMove.x / Window::GetWindow().GetScreenSize().x;
-			float newY = mouseMove.y / Window::GetWindow().GetScreenSize().y;
-			GameStateManager::Instance()->MouseMoved(mouseMove.Normal());
-		}
+		POINT cursorPos;
+		GetCursorPos(&cursorPos);
+		ScreenToClient(Window::GetWindow().GetHandle(), &cursorPos);
+		position = T3Vector2(cursorPos.x, cursorPos.y);
+
 		// Clamp the current position to bounds
 		position.x = maximum(position.x, 0.0f);
 		position.x = minimum(position.x, bounds.x);
 
 		position.y = maximum(position.y, 0.0f);
 		position.y = minimum(position.y, bounds.y);
-	
+
+		T3Vector2 mouseMove = position - lastPosition;
+		if (mouseMove != 0)
+		{
+			// Convert to resolution-independent
+			GameStateManager::Instance()->MouseMoved(T3Vector2(lastPosition.x / Window::GetWindow().GetScreenSize().x, lastPosition.y / Window::GetWindow().GetScreenSize().y), T3Vector2(position.x / Window::GetWindow().GetScreenSize().x, position.y / Window::GetWindow().GetScreenSize().y));
+		}
+		
+		// If the mouse cursor isn't visible, lock to the center of the screen...
+		if (!isCursorVisible)
+			position.x = Window::GetWindow().GetScreenSize().x / 2;
+			position.y = Window::GetWindow().GetScreenSize().y / 2;
+
 		/*
 		TODO: How framerate independent is this?
 		*/
@@ -117,7 +123,11 @@ void Mouse::Update(RAWINPUT* raw, float msec)
 				}
 			}
 		}
-		lastPosition = position;
+		// If the mouse cursor isn't visible, lock to the center of the screen...
+		if (!isCursorVisible)
+			lastPosition = Window::GetWindow().GetScreenSize() / 2;
+		else
+			lastPosition = position;
 	}
 }
 
