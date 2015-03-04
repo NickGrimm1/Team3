@@ -12,7 +12,7 @@ class BaseSocket;
 class ServerSocket
 {
 public:
-	ServerSocket(string port = PORT, unsigned int maxConnections = 4); // listen on port num
+	ServerSocket(string port, unsigned int maxConnections = 4); // listen on port num
 	virtual ~ServerSocket(void);
 
 	unsigned int GetNewConnections();

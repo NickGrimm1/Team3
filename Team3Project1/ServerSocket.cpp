@@ -21,7 +21,7 @@ ServerSocket::ServerSocket(string portNum, unsigned int maxConnections) : portNu
 	hints.ai_socktype = TCP;
 	hints.ai_flags = AI_PASSIVE; // use localhost for address
 	
-	unsigned int addrResult = getaddrinfo("127.0.0.1", portNum.c_str(), &hints, &addressData);
+	unsigned int addrResult = getaddrinfo(LOCALHOST, portNum.c_str(), &hints, &addressData);
 	if (addrResult != 0) {
 		cout << "getaddrinfo() failed with error:" << endl;
 		cout << addrResult << ": " << gai_strerror(WSAGetLastError()) << endl;
@@ -47,7 +47,7 @@ ServerSocket::ServerSocket(string portNum, unsigned int maxConnections) : portNu
 
 	freeaddrinfo(addressData);
 
-	if (listen(serverSocket, BACKLOG) != 0) {
+	if (listen(serverSocket, CONNECTION_BACKLOG) != 0) {
 		cout << "Can not listen on server socket on port " << portNum << endl;
 		cout << "Failed with error " << WSAGetLastError() << " - " << gai_strerror(WSAGetLastError()) << endl;
 		return;

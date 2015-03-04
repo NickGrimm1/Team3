@@ -46,7 +46,7 @@ public:
 	bool HasInitialised() const {return hasInitialised;}
 
 	ServerSocket* StartServer(string portNum, unsigned int maxConnections = 4);
-	ClientSocket* ConnectToServer(string ipAddress, string portNum) {}
+	BaseSocket* ConnectToServer(string ipAddress, string portNum);
 
 private:
 	NetworkManager();

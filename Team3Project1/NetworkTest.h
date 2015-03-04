@@ -29,7 +29,7 @@ public:
 protected:
 	ServerSocket* server;
 	bool connected;
-	BaseSocket* connection;
+	BaseSocket* connection;	
 };
 
 #endif
