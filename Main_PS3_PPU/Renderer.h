@@ -16,6 +16,14 @@ _-_-_-_-_-_-_-""  ""
 #pragma once
 #include "../Team3Project1/GCMRenderer.h"
 #include "../Team3Project1/Mesh.h"
+#include "../Framework/SceneNode.h"
+#include "../Team3Project1/DrawableEntity2D.h"
+#include "../Team3Project1/DrawableEntity3D.h"
+#include "../Team3Project1/DrawableText2D.h"
+#include "../Team3Project1/DrawableTexture2D.h"
+
+#include <vector>
+
 
 class Renderer : public GCMRenderer	{
 public:
@@ -23,6 +31,18 @@ public:
 	~Renderer(void);
 
 	virtual void RenderScene();
+
+	bool LoadShaders();
+	void UnloadShaders();
+	bool LoadAssets();
+	void UnloadAssets();
+
+	unsigned int CreateShadowCube();
+	unsigned int CreateShadowTexture();
+
+	void DrawDeferredLights(bool on) {drawDeferredLights = on;}
+
 protected:
-	//Shader* s ;//= new Shader();
+	bool	drawDeferredLights;
+
 };

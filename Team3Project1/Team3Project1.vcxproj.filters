@@ -635,6 +635,9 @@
     <ClCompile Include="GCMRenderer.cpp">
       <Filter>Framework\Graphics\PS3\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GraphicsEnginePS3.cpp">
+      <Filter>Framework\Graphics\Common\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\TechFragment.glsl">

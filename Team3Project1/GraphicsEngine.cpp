@@ -1,7 +1,8 @@
+#if WINDOWS_BUILD
 #include "GraphicsEngine.h"
 #include "GraphicsCommon.h"
 #include <algorithm>
-#if WINDOWS_BUILD
+
 GraphicsEngine* GraphicsEngine::engine = NULL;
 
 bool GraphicsEngine::Initialize(GraphicsEngine*& out) {

@@ -27,13 +27,16 @@ Version: 0.0.3 06/02/2015.</summary>
 #if WINDOWS_BUILD
 #include "Renderer.h"
 #endif
+#if PS3_BUILD
+#include "../Main_PS3_PPU/Renderer.h"
+#endif
 #include "DrawableTexture2D.h"
 #include "DrawableText2D.h"
 #include "DrawableEntity3D.h"
 #include "Thread.h"
 #include "MutexClass.h"
-
-
+#include <vector>
+#include <algorithm>
 
 
 
@@ -159,9 +162,9 @@ private:
     <param name="light">The light.</param>
 	*/
 	void AddLight(Light* light);
-#if WINDOWS_BUILD
-	Renderer* renderer;
 
+	Renderer* renderer;
+#if WINDOWS_BUILD
 	Frustum frameFrustum;
 #endif
 	Camera* camera;

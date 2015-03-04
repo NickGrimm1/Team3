@@ -94,7 +94,7 @@ void Mesh::Draw(Shader* shader)
 			cellGcmSetVertexDataArray(shader_idx,
 				0, 
 				sizeof(Vertex), 
-				2, 
+				3, 
 				CELL_GCM_VERTEX_F, 
 				CELL_GCM_LOCATION_LOCAL, 
 				(uint32_t)vertexOffsets[VertexAttributes::NORMAL]
@@ -145,7 +145,7 @@ void Mesh::Draw(Shader* shader)
 			cellGcmSetVertexDataArray(shader_idx,
 				0, 
 				sizeof(Vertex), 
-				2, 
+				3, 
 				CELL_GCM_VERTEX_F, 
 				CELL_GCM_LOCATION_LOCAL, 
 				(uint32_t)vertexOffsets[VertexAttributes::TANGENT]

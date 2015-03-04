@@ -365,6 +365,7 @@
     <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="GCMRenderer.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
+    <ClCompile Include="GraphicsEnginePS3.cpp" />
     <ClCompile Include="GraphicsTestScreen.cpp" />
     <ClCompile Include="HudTestScreen.cpp" />
     <ClCompile Include="InputManager.cpp" />
