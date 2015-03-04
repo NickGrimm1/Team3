@@ -44,4 +44,5 @@ private:
 	Texture* buttonTex;
 	Texture* buttonTexHover;
 	Texture* buttonTexClicked;
+	Texture* scoreBoardTex;
 };

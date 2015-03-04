@@ -31,8 +31,8 @@ namespace EntryPoint
 		GraphicsTestScreen* game = new GraphicsTestScreen();
 		GameStateManager::Instance()->AddGameScreen(game);
 
-		//MainMenu* main = new MainMenu();
-		//GameStateManager::Instance()->AddGameScreen(main);
+		MainMenu* main = new MainMenu();
+		GameStateManager::Instance()->AddGameScreen(main);
 
 		//HudTestScreen* hud = new HudTestScreen();
 		//GameStateManager::Instance()->AddGameScreen(hud);
@@ -45,8 +45,8 @@ namespace EntryPoint
 		GameStateManager::Instance()->Start();*/
 
 
-		AudioTestClass* audio = new AudioTestClass();
-		GameStateManager::Instance()->AddGameScreen(audio);
+		//AudioTestClass* audio = new AudioTestClass();
+		//GameStateManager::Instance()->AddGameScreen(audio);
 
 
 		//NetworkTest* network = new NetworkTest();
