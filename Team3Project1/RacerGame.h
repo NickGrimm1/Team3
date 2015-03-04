@@ -19,7 +19,7 @@ public:
 
 	// Input Listener methods - not implemented
 	virtual void MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position) {};
-	virtual void MouseMoved(T3Vector2& finish);
+	virtual void MouseMoved(T3Vector2& start, T3Vector2& finish);
 	virtual void MouseScrolled(T3Vector2& position, int amount) {};
 	virtual void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key);
 	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button) {};
