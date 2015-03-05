@@ -4,6 +4,9 @@
 #include "../Framework/Shader.h"
 #include "../Team3Project1/ShaderPart.h"
 #include "../Team3Project1/GameStateManager.h"
+/**********************************************************************************************/
+//TODO : pass a reference to the graphics engines scenenodes into ps3 as seen in PC Renderer //
+/*********************************************************************************************/
 Renderer::Renderer(void)	{
 	/*
 	You're provided with a very basic vertex / fragment shader, to get you started
