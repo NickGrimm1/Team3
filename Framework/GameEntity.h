@@ -57,8 +57,13 @@ public:
 	virtual void			ConnectToSystems();
 	void			DisconnectFromSystems();
 
+	void SetType(char type){Type=type;}
+	char GetType(){return Type;};
+	
+
 protected:
 	PhysicsNode*		physicsNode;
+	char Type;
 
 };
 

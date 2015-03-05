@@ -76,6 +76,7 @@ void RacerGame::LoadContent() {
 
 	checkpoint= new CheckPoint(10);
 	checkpoint->SetPhysics(10,'c');
+	checkpoint->SetType('g');
 	checkpoint->GetPhysicsNode().SetPGE(checkpoint);
 	AddDrawable(checkpoint);
 	
@@ -87,7 +88,9 @@ void RacerGame::LoadContent() {
 	GameStateManager::Physics()->AddNode(vpn);
 
 	car = new Vehicle(5);
+	car->SetType('v');
 	//car->SetPhysics(5,(vpn->GetCar()));
+	vpn->SetPGE(car);
 	car->SetPhysics(5, vpn);
 	AddDrawable(car);
 
@@ -505,7 +508,7 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 			   //cout<<car->GetCarNode().GetLinearVelocity().Length()<<endl;
 				if(car->GetCarNode().GetOrientation().y<0)
 				{
-					float angle=-0.5/90*FrontRightTire->GetPhysicsNode().GetOrientation().y;
+					float angle=-0.5/90*car->GetCarNode().GetOrientation().y;
 					float l=  car->GetCarNode().GetLinearVelocity().Length();
 					float x=l*sin(angle/2/3.14);
 					float z=l*cos(angle/2/3.14);
@@ -521,7 +524,7 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 
 				if(car->GetCarNode().GetOrientation().y>0)
 				{
-					float angle=0.5/90*FrontRightTire->GetPhysicsNode().GetOrientation().y;
+					float angle=0.5/90*car->GetCarNode().GetOrientation().y;
 					float l=  car->GetCarNode().GetLinearVelocity().Length();
 					float x=-l*sin(angle/2/3.14);
 					float z=l*cos(angle/2/3.14);
@@ -560,7 +563,7 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 		}
 		if(car->GetCarNode().GetOrientation().y<0)
 		{
-		float angle=-0.5/90*FrontRightTire->GetPhysicsNode().GetOrientation().y;
+		float angle=-0.5/90*car->GetCarNode().GetOrientation().y;
 
 		float l=  car->GetCarNode().GetLinearVelocity().Length();
 
@@ -580,7 +583,7 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 
 		if(car->GetCarNode().GetOrientation().y>0)
 		{
-		float angle=0.5/90*FrontRightTire->GetPhysicsNode().GetOrientation().y;
+		float angle=0.5/90*car->GetCarNode().GetOrientation().y;
 
 		float l=  car->GetCarNode().GetLinearVelocity().Length();
 

@@ -16,7 +16,7 @@ Version: 0.0.1 03/02/2015.</summary>
 #include <algorithm> 
 
 using std::vector;
-
+class RacerGame;
 class PhysicsEngine : public Thread
 {
 	// TODO: Implement Physics Engine.
@@ -66,6 +66,7 @@ public:
 	
 	//sam
 	bool   check;
+	static void SetGame(RacerGame * g) { instance->gameClass = g; }
 	//sam
 
     vector<T3Vector3> worldpoints1;
@@ -82,6 +83,8 @@ public:
 	void	AddDebugDraw(DebugDrawer* d);
 
 	void	RemoveDebugDraw(DebugDrawer* d);
+
+	void OnCollision(PhysicsNode& p1, PhysicsNode& p2);
 
 	void    DrawDebug();
 private:
@@ -114,4 +117,5 @@ private:
 	int frameRate;
 
 	void ThreadRun();
+	RacerGame* gameClass;
 };

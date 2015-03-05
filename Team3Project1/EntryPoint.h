@@ -56,6 +56,7 @@ namespace EntryPoint
 
 		RacerGame* game = new RacerGame();
 		GameStateManager::Instance()->AddGameScreen(game);
+		PhysicsEngine::SetGame(game);
 		//VehicleTestingScreen* physicsgame = new VehicleTestingScreen();
 		//GameStateManager::Instance()->AddGameScreen(physicsgame);
 		GameStateManager::Instance()->Start();

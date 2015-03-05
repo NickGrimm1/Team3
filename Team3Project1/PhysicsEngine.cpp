@@ -507,15 +507,23 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 			if(CollisionDetection(first, second))
 			{
 				//cout << "GJK passed" << endl;
+
+				if(first.GetIsCollide()==false && second.GetIsCollide ()==true)
+				{
+					OnCollision(first, second);
+				}
+
 				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
 				{
-					if(check==true)
+					//OnCollision(first, second);
+
+					/*if(check==true)
 					{
-                    cout << "Collision" << endl;
+                    cout <<endl<< "Collision" << endl;
 
 					   if(first.GetType()=='c'||second.GetType()=='c')
 					   {
-						cout<<"c is call";
+						cout<<"c is call"<<endl;
 						if(first.GetGameEntity()){
 							cout<<"call if"<<endl;
 						RacerGame::update=1;}
@@ -530,7 +538,7 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 					    }
 					
 						check=false;
-					}
+					}*/
 					/*first.SetLinearVelocity(T3Vector3(0,0,0));
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
@@ -666,4 +674,8 @@ void    PhysicsEngine::DrawDebug() {
 	for(vector<DebugDrawer*>::iterator i = allDebug.begin(); i != allDebug.end(); ++i) {
 		(*i)->DebugDraw();
 	}
+}
+
+void PhysicsEngine::OnCollision(PhysicsNode& p1, PhysicsNode& p2) {
+	gameClass->CollisionBetween(p1.GetGameEntity(), p2.GetGameEntity());
 }
