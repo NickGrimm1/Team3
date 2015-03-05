@@ -144,7 +144,7 @@
     <LibraryPath>..\GLEW\lib;..\SOIL\$(Configuration);..\$(Configuration)\;.\Framework\$(Configuration)\;..\GLEW\lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='WINDOWS_DEBUG|Win32'">
-    <IncludePath>..\GLEW\include;..\SOIL;..\;$(IncludePath)</IncludePath>
+    <IncludePath>..\GLEW\include;..\SOIL;..\;$(IncludePath);..\DX\Include</IncludePath>
     <LibraryPath>..\GLEW\lib;..\SOIL\$(Configuration);..\$(Configuration)\;.\Framework\$(Configuration)\;..\DX\Lib;..\GLEW\lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
