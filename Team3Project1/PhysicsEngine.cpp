@@ -608,7 +608,7 @@ void	PhysicsEngine::AddNode(PhysicsNode* n) {
 void	PhysicsEngine::RemoveNode(PhysicsNode* n) {
 	for(vector<PhysicsNode*>::iterator i = allNodes.begin(); i != allNodes.end(); ++i) {
 		if((*i) == n) {
-			allNodes.erase(i);
+			i = allNodes.erase(i);
 			return;
 		}
 	}
@@ -621,7 +621,7 @@ void	PhysicsEngine::AddConstraint(Constraint* s) {
 void	PhysicsEngine::RemoveConstraint(Constraint* c) {
 	for(vector<Constraint*>::iterator i = allSprings.begin(); i != allSprings.end(); ++i) {
 		if((*i) == c) {
-			allSprings.erase(i);
+			i = allSprings.erase(i);
 			return;
 		}
 	}
@@ -634,7 +634,7 @@ void	PhysicsEngine::AddDebugDraw(DebugDrawer* d) {
 void	PhysicsEngine::RemoveDebugDraw(DebugDrawer* d) {
 	for(vector<DebugDrawer*>::iterator i = allDebug.begin(); i != allDebug.end(); ++i) {
 		if((*i) == d) {
-			allDebug.erase(i);
+			i = allDebug.erase(i);
 			return;
 		}
 	}

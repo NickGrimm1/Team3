@@ -88,7 +88,7 @@ public:
 					delete *i;
 					*i = NULL;
 				}
-				entities.erase(i);
+				i = entities.erase(i);
 				break;
 			}
 		}
@@ -136,7 +136,7 @@ public:
 		{
 			if (*i == selectable)
 			{
-				selectables.erase(i);
+				i = selectables.erase(i);
 				break;
 			}
 		}
@@ -172,7 +172,7 @@ public:
 		{
 			if (*i == clickable)
 			{
-				clickables.erase(i);
+				i = clickables.erase(i);
 				break;
 			}
 		}
