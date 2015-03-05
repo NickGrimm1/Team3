@@ -16,19 +16,20 @@ Version: 1.0.0 03/02/2015.</summary>
 #include "AssetManager.h"
 #include "InputManager.h"
 #include "DebugManager.h"
-#include "AudioEngine.h"
 #include "StorageManager.h"
+#include "InputListener.h"
+#include "GamePad.h"
+#ifdef WINDOWS_BUILD
+#include "AudioEngine.h"
 #include "NetworkManager.h"
 #include "../Framework/Keyboard.h"
 #include "../Framework/Mouse.h"
-#include "InputListener.h"
-#include "GamePad.h"
+#endif
 #include <iostream>
 
 using namespace std;
-
+class GraphicsEngine;
 #define GAME_FRAME_TIME 1000.0f / 60.0f
-
 class GameStateManager : public InputListener
 {
 public:
@@ -55,10 +56,12 @@ public:
 				return false;
 			if (!InputManager::Initialize(instance->input))
 				return false;
+#ifdef WINDOWS_BUILD
 			if (!AudioEngine::Initialize(instance->audio))
 				return false;
 			if (!NetworkManager::Initialize(instance->network))
 				return false;
+#endif
 			if (!DebugManager::Initialize(instance->debug))
 				return false;
 			instance->isLoaded = true;
@@ -68,19 +71,14 @@ public:
 
 	void Start() {
 		// Start Threads
-		Instance()->graphics->Start();
-		Instance()->physics->Start();
-		Instance()->input->Start();
-		//Instance()->audio->Start();
+		Instance()->graphics->Start("Graphics");
+		Instance()->physics->Start("Physics");
+		Instance()->input->Start("Input");
 
-#ifdef WINDOWS_BUILD
-		GameTimer timer;
-		float lastUpdate = timer.GetMS();
-#endif
 		while (instance->isRunning) {
 #ifdef WINDOWS_BUILD
-			while (timer.GetMS() - lastUpdate < GAME_FRAME_TIME) {;}
-			lastUpdate = timer.GetMS();
+			while (Window::GetWindow().GetTimer()->GetMS() - instance->lastUpdate < GAME_FRAME_TIME) { ; }
+			instance->lastUpdate = Window::GetWindow().GetTimer()->GetMS();
 			Window::GetWindow().UpdateWindow();
 #endif
 			for (unsigned int i = 0; i < gameScreens.size(); i++) {
@@ -103,37 +101,53 @@ public:
 			graphics->Terminate();
 			physics->Terminate();
 			input->Terminate();
-			//audio->Terminate();
+
+			std::cout << "Threads terminated" << std::endl;
 
 			// Clean up
 			graphics->Join();
 			physics->Join();
 			input->Join();
-			//audio->Join();
+
+			std::cout << "Threads joined" << std::endl;
 
 			vector<GameScreen*>::iterator i = instance->gameScreens.begin();
 			while (i != instance->gameScreens.end())
 			{
+				std::cout << "A Gamescreen is about to be killed" << std::endl;
 				(*i)->UnloadContent();
 				delete *i;
 				i = instance->gameScreens.erase(i);
+				std::cout << "A Gamescreen has been killed." << std::endl;
 			}
+
+			std::cout << "Gamescreens Killed" << std::endl;
 
 			// Unload Engine Assets
 			GraphicsEngine::UnloadContent();
-
+			std::cout << "Graphics Engine Content Unloaded" << std::endl;
 			// Destroy everything
 			AssetManager::Destroy(); // Do not destroy before graphics in Windows Build - requires OpenGL context
+			std::cout << "AssetManager Killed" << std::endl;
 			GraphicsEngine::Destroy();
+			std::cout << "Graphics Engine Killed" << std::endl;
 			PhysicsEngine::Destroy();
+			std::cout << "Physics Engine Killed" << std::endl;
 			StorageManager::Destroy();
+			std::cout << "Storage Manager Killed" << std::endl;
 			InputManager::Destroy();
+			std::cout << "Input Manager Killed" << std::endl;
+#if WINDOWS_BUILD
 			AudioEngine::Destroy();
 			NetworkManager::Destroy();
+#endif
 			DebugManager::Destroy();
+			std::cout << "Debug Manager Killed" << std::endl;
 
 			delete instance;
 			instance = NULL;
+
+			std::cout << "GameStateManager Killed" << std::endl;
 		}
 	}
 	~GameStateManager()
@@ -145,10 +159,16 @@ public:
 	<summary>Gets the game's Graphics Engine.</summary>
 	*/
 	static GraphicsEngine* Graphics() { return Instance()->graphics; }
+#if WINDOWS_BUILD
 	/**
 	<summary>Gets the game's Audio Engine.</summary>
 	*/
 	static AudioEngine* Audio() { return Instance()->audio; }
+	/**
+	<summary>Gets the game's Network Manager.</summary>
+	*/
+	static NetworkManager* Network() { return Instance()->network; }
+#endif
 	/**
 	<summary>Gets the game's Asset Manager.</summary>
 	*/
@@ -169,10 +189,6 @@ public:
 	<summary>Gets the game's Storage Manager.</summary>
 	*/
 	static StorageManager* Storage() { return Instance()->storage; }
-	/**
-	<summary>Gets the game's Network Manager.</summary>
-	*/
-	static NetworkManager* Network() { return Instance()->network; }
 #pragma endregion
 #pragma region State Methods
 	/**
@@ -224,10 +240,10 @@ public:
 	<param name='start'>The resolution independent co-ordinates of the mouse cursor at the start of the frame.</param>
 	<param name='finish'>The resolution independent co-ordinates of the mouse cursor at the end of the frame.</param>
 	*/
-	void MouseMoved(T3Vector2& finish)
+	void MouseMoved(T3Vector2& start, T3Vector2& finish)
 	{
 		for (unsigned int i = 0; i < instance->gameScreens.size(); i++)
-			instance->gameScreens[i]->MouseMoved(finish);
+			instance->gameScreens[i]->MouseMoved(start, finish);
 	}
 	/**
 	<summary>Notifies all screens in the stack that the mouse scroll wheel has moved.</summary>
@@ -271,6 +287,11 @@ public:
 		for (unsigned int i = 0; i < gameScreens.size(); i++)
 			gameScreens[i]->GamepadAnalogueDisplacement(playerID, analogueControl, amount);
 	}
+	void GamepadDisconnect(GamepadEvents::PlayerIndex playerID)
+	{
+		for (unsigned int i = 0; i < gameScreens.size(); i++)
+			gameScreens[i]->GamepadDisconnect(playerID);
+	}
 #pragma endregion
 #pragma region Screen Changes
 	/**
@@ -311,7 +332,7 @@ public:
 			{
 				(*i)->UnloadContent();
 				delete *i;
-				Instance()->gameScreens.erase(i);
+				i = Instance()->gameScreens.erase(i);
 				break;
 			}
 		}
@@ -345,14 +366,17 @@ private:
 #pragma region Framework Components
 	bool isLoaded;
 	GraphicsEngine* graphics;
-	AudioEngine* audio;
 	AssetManager* assets;
 	DebugManager* debug;
 	InputManager* input;
 	PhysicsEngine* physics;
 	StorageManager* storage;
+#ifdef WINDOWS_BUILD
+	AudioEngine* audio;
 	NetworkManager* network;
+#endif
 #pragma endregion
 	vector<GameScreen*> gameScreens;
 	bool isRunning;
+	float lastUpdate;
 };

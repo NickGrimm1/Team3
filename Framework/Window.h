@@ -31,7 +31,7 @@ public:
 	static void Destroy();
 	static Window& GetWindow() { return *window; }
 
-
+	T3Vector2 GetPosition() { return position; }
 
 
 	bool	UpdateWindow();	

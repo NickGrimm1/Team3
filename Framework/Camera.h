@@ -17,6 +17,8 @@ Version: 0.0.6 11/02/2015.</summary>
 #include "T3Vector3.h"
 #include "../Team3Project1/DrawableEntity3D.h"
 
+class DrawableEntity3D;
+
 class Camera	
 {
 public:
@@ -27,11 +29,16 @@ public:
 	<param name='yaw'>The initial yaw. Default is 0.</param>
 	<param name='roll'>The initial roll. Default is 0.</param>
 	<param name='position'>The initial position. Default is (0, 0, 0).</param>
-	<param name='target'>The initial target position. Default is (0, 0, -1).</param>
+	<param name='forward'>The initial forward vector. Default is (0, 0, -1).</param>
 	<param name='up'>The initial up vector. Default is (0, 1, 0).</param>
 	*/
-	Camera(DrawableEntity3D* targetEntity = NULL, float pitch = 0, float yaw = 0, float roll = 0, T3Vector3 position = T3Vector3(), T3Vector3 target = T3Vector3(0, 0, -1), bool invertY = false)
-		: position(position), originalTarget((target - position).Normal()), originalUp(T3Vector3::UnitOrthogonal(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix() * T3Vector3::UnitX(), (target - position).Normal())), invertY(invertY), targetEntity(targetEntity), originalRight(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix() * T3Vector3::UnitX()), rotation(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix())
+	Camera(float pitch = 0, float yaw = 0, float roll = 0, T3Vector3 position = T3Vector3(), T3Vector3 target = T3Vector3(0, 0, -1), bool invertY = false)
+		: position(position),
+		originalTarget(target.Normal()),
+		originalUp(T3Vector3::UnitOrthogonal(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix() * T3Vector3::UnitX(), (target).Normal())),
+		invertY(invertY),
+		originalRight(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix() * T3Vector3::UnitX()),
+		rotation(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix())
 	{ }
 	~Camera(void){}
 
@@ -108,5 +115,4 @@ protected:
 	T3Vector3 rotatedUp;
 	T3Vector3 rotatedRight;
 	bool invertY;
-	DrawableEntity3D* targetEntity;
 };

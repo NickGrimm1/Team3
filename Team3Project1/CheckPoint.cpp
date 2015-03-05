@@ -10,7 +10,7 @@ CheckPoint::CheckPoint(float size):
 	boundingRadius = size;
 	origin = position;
 	rotation = Quaternion::EulerAnglesToQuaternion(0,0,0);
-	scale = T3Vector3(size,size,size);
+	scale = T3Vector3(0.1*size,size,10*size);
 	texture =NULL;
 	bumpTexture = NULL;
 	shader = NULL;
@@ -26,17 +26,19 @@ CheckPoint::~CheckPoint(void){
 
 
 
-void CheckPoint::SetPhysics(float size)
+void CheckPoint::SetPhysics(float size,char type)
 {
     physicsNode = new PhysicsNode();
     physicsNode->SetUseGravity(false);
 	physicsNode->SetPosition(origin);
 	physicsNode->SetMass(5);
 
-	physicsNode->SetCollisionVolume(new CollisionAABB(T3Vector3(size,size,size)));
 	physicsNode->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj"));
 	physicsNode->SetXstart(physicsNode->GetPosition().x-1*size);
 	physicsNode->SetXend(physicsNode->GetPosition().x+1*size); 
+	physicsNode->SetType(type);
+	physicsNode->SetCollisionVolume(new CollisionAABB(T3Vector3(0.1*size,size,10*size)));
+
 	physicsNode->SetIsCollide(false);
 
 

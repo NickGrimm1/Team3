@@ -17,15 +17,7 @@ public:
 		: OffsetCamera(targetEntity, positionOffset, pitchOffset, yawOffset, rollOffset)
 	{ }
 	
-	void UpdateCamera() 
-	{
-		// Get new target position
-		expectedPosition = targetEntity->GetOriginPosition() + offset;
-		T3Matrix4 expectedRotation = targetEntity->GetRotation().ToMatrix() * Quaternion::EulerAnglesToQuaternion(pitchOffset, yawOffset, rollOffset).ToMatrix();
-		rotation = MathHelper::Lerp(rotation, expectedRotation, 0.05f);
-
-		Camera::UpdateCamera();
-	}
+	void UpdateCamera(); 
 private:
 	T3Vector3 expectedPosition;
 	float expectedPitch;

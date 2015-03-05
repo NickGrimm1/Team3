@@ -10,7 +10,7 @@ public:
 	~CheckPoint(void);
 
 	
-	void SetPhysics(float size);
+	void SetPhysics(float size,char type);
 	
 
 

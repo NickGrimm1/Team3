@@ -1,3 +1,5 @@
+#if WINDOWS_BUILD
+
 /*******************************************************************\
 *                                                                   *
 *  EFX-UTIL.H - EFX Utilities functions and Reverb Presets          *
@@ -444,3 +446,5 @@ EFX_API void __cdecl AdjustEnvironmentSize(EAXREVERBPROPERTIES *pEAXProp, float 
 #endif // __cplusplus
 
 #endif // EFX-UTIL_H_INCLUDED
+
+#endif

@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 #include "Renderer.h"
 #include "GraphicsCommon.h"
 #include "DrawableEntity3D.h"
@@ -408,7 +409,7 @@ void Renderer::DrawScene()
 	char buffer[20];
 	for (unsigned int i = 0; i < lights.size(); i++) {
 		if (lights[i]->GetShadowTexture() > 0) { // Shadow depth texture exists for light, so use
-			// Calculate the view projection matrix for the light so can sample shadow map (binding to textureMatrix for the minimumute
+			// Calculate the view projection matrix for the light so can sample shadow map
 			T3Matrix4 shadowMatrix = biasMatrix * lights[i]->GetProjectionMatrix() * lights[i]->GetViewMatrix(T3Vector3(cameraMatrix.GetPositionVector()));
 			
 			sprintf_s(buffer, 20, "shadowProjMatrix[%d]", i);
@@ -555,7 +556,7 @@ void Renderer::DrawNodes(bool enableTextures) {
 			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
 		}
 
-		// ignore shader for the minimumute
+		// ignore shader for the minute
 		
 		modelMatrix = sceneNodes[i]->GetWorldTransform() * T3Matrix4::Scale(entity.GetScale());
 		glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"),	1,false, (float*)&modelMatrix);
@@ -1060,8 +1061,8 @@ void Renderer::DrawFrameBufferTex(GLuint fboTex) {
 
 void Renderer::Draw2DOverlay() {
 	glDisable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
 
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glCullFace(GL_FRONT);
 	SetCurrentShader(hudShader);
 	projMatrix = hudMatrix;
@@ -1071,6 +1072,11 @@ void Renderer::Draw2DOverlay() {
 
 		glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "blendColour"), 1, (float*) &overlayElements[i]->GetColor());
 		
+		if (overlayElements[i]->GetTransparent())
+			glEnable(GL_BLEND);
+		else
+			glDisable(GL_BLEND);
+
 		switch (overlayElements[i]->GetType()) {
 		case DrawableType::Text:
 			Draw2DText((DrawableText2D&) *overlayElements[i]);
@@ -1121,18 +1127,21 @@ void Renderer::Draw2DText(DrawableText2D& text) {
 
 void Renderer::Draw2DTexture(DrawableTexture2D& texture) 
 {
-	T3Vector3 origin = T3Vector3(texture.GetOrigin().x * texture.width * width, texture.GetOrigin().y * texture.height * height, 0);
-	T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(texture.GetRotation(), T3Vector3(0,0,1)) * T3Matrix4::Translation(-origin);
+	if (texture.GetTexture())
+	{
+		T3Vector3 origin = T3Vector3(texture.GetOrigin().x * texture.width * width, texture.GetOrigin().y * texture.height * height, 0);
+		T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(texture.GetRotation(), T3Vector3(0,0,1)) * T3Matrix4::Translation(-origin);
 	
-	modelMatrix = T3Matrix4::Translation(T3Vector3(texture.x * width, texture.y * height, 0)) * rotation * T3Matrix4::Scale(T3Vector3(texture.width * width, texture.height * height, 1));
-	textureMatrix.ToIdentity();	
-	UpdateShaderMatrices();
+		modelMatrix = T3Matrix4::Translation(T3Vector3(texture.x * width, texture.y * height, 0)) * rotation * T3Matrix4::Scale(T3Vector3(texture.width * width, texture.height * height, 1));
+		textureMatrix.ToIdentity();	
+		UpdateShaderMatrices();
 
-	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-	glBindTexture(GL_TEXTURE_2D, texture.GetTexture()->GetTextureName());
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+		glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+		glBindTexture(GL_TEXTURE_2D, texture.GetTexture()->GetTextureName());
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 
-	quadMesh->Draw();
+		quadMesh->Draw();
+	}
 }
 
 void Renderer::GenerateScreenTexture(GLuint &into, bool depth)
@@ -1341,3 +1350,4 @@ unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char
 
 	return output;
 }
+#endif

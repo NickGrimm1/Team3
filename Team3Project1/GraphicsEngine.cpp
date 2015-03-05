@@ -121,7 +121,7 @@ void GraphicsEngine::Run() {
 		for (unsigned int i = 0; i < removeHudList.size(); i++) {
 			for (vector<DrawableEntity2D*>::iterator j = overlayElementsList.begin(); j != overlayElementsList.end(); ++j) {
 				if ((*j) == removeHudList[i]) {
-					overlayElementsList.erase(j);
+					j = overlayElementsList.erase(j);
 				}
 			}
 		}
@@ -139,13 +139,13 @@ void GraphicsEngine::Run() {
 					unsigned int shadowTex = (*i)->GetShadowTexture();
 					if (shadowTex > 0) 
 						renderer->DestroyTexture(shadowTex);
-					lights.erase(i);
+					i = lights.erase(i);
 				}
 			}
 		}
 		removeLightsList.clear();
 
-		contentGuard.unlock_mutex();
+		
 			
 		// Update data in scene nodes
 		sceneRoot->Update(msec); // TODO - sort out proper timestep value - or remove timestep if not needed
@@ -203,6 +203,8 @@ void GraphicsEngine::Run() {
 
 		// Clear node lists in preparation for next render cycle
 		ClearNodeLists();
+
+		contentGuard.unlock_mutex();
 	}
 }
 

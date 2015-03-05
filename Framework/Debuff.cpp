@@ -1,3 +1,5 @@
+#if WINDOWS_BUILD
+
 #include "Debuff.h"
 #include "Vehicle.h"
 //#include "../../nclgl/Keyboard.h"
@@ -193,3 +195,5 @@ void Debuff::SwitchleftAndright(Vehicle *Player){
 		}
 	}*/
 }
+
+#endif

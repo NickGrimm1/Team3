@@ -40,7 +40,9 @@ namespace PrimitiveType
 class Mesh
 {
 public:
+#if WINDOWS_BUILD
 	friend class MD5Mesh;
+#endif
 	Mesh();
 	virtual ~Mesh();
 
@@ -113,11 +115,13 @@ protected:
 	// Primitive type for this mesh (GL_TRIANGLES...etc)
 	unsigned int type;
 	
+	//Buffers all VBO data into graphics memory. Required before drawing!
+	void BufferData();
+	void AssignVertexMemory();
+	void AssignIndexMemory(unsigned int indexCount);
 #if WINDOWS_BUILD
 	// Pointer to vertex indices attribute data
 	unsigned int* indices;
-	//Buffers all VBO data into graphics memory. Required before drawing!
-	void BufferData();
 	//VAO for this mesh
 	GLuint arrayObject;
 	//VBOs for this mesh
@@ -127,5 +131,6 @@ protected:
 	unsigned int vertexOffsets[VertexAttributes::MAX];
 	// Pointer to vertex indices attribute data
 	short* indices;
+	int32_t a,b,c,d,e;
 #endif
 };

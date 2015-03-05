@@ -13,7 +13,7 @@ In addition to the tutorial code, this class contains a pointer to a SceneNode.
 This pointer is to the 'graphical' representation of your game object, just 
 like the SceneNode's used in the graphics module. However, instead of 
 calculating positions etc as part of the SceneNode, it should instead be up
-to your 'physics' representation to determinimume - so we calculate a transform
+to your 'physics' representation to determine - so we calculate a transform
 matrix for your SceneNode here, and apply it to the pointer. 
 
 Your SceneNode should still have an Update function, though, in order to
@@ -40,10 +40,14 @@ _-_-_-_-_-_-_-""  ""
 #include "../Team3Project1/DrawableEntity3D.h"
 
 #include "CollisionVolume.h"
+//#include "GameEntity.h"
+
 using namespace std;
 #define LINEAR_VELOCITY_DAMP 0.98
 #define ANGULAR_VELOCITY_DAMP 0.7
 #define LINEAR_VELOCITY_MIN 0.00001
+
+class GameEntity;
 
 class PhysicsNode	{
 public:
@@ -124,11 +128,19 @@ public:
 	Mesh* GetPhysicsMesh() {return physicsMesh;}
 	void SetMesh(Mesh* mesh) {physicsMesh = mesh;}
 
-protected:
-	Mesh* physicsMesh;
+
+	void SetType(char type){Type=type;}
+	char GetType(){return Type;};
+
+	void SetPGE(GameEntity* pge){parentGameEntity=pge;}
+	GameEntity* GetGameEntity() {return parentGameEntity;}
 
 	bool useGravity;
 	bool isCollide;
+
+	Mesh* physicsMesh;
+
+	char Type;
 
 	//<---------LINEAR-------------->
 	T3Vector3		m_position;
@@ -153,6 +165,8 @@ protected:
 
 	DrawableEntity3D*	target;
 	CollisionVolume* vol;
+
+	GameEntity* parentGameEntity;
 //	Function* callback;
 //	GameClass* interestedObject;
 

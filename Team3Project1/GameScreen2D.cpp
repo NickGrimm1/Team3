@@ -37,13 +37,14 @@ void GameScreen2D::RemoveDrawable(DrawableEntity2D* drawable)
 			else if (drawable->GetType() == DrawableType::Text)
 				GameStateManager::Graphics()->RemoveDrawableTextFromScene((DrawableText2D*)drawable);
 
-			drawables.erase(i);
+			i = drawables.erase(i);
 			break;
 		}
 	}
 	RemoveEntity(drawable);
 }
 
+#if WINDOWS_BUILD
 /**
 <summary>Notifies all screens in the stack of a mouse event.</summary>
 <param name='type'>The event type.</param>
@@ -79,20 +80,29 @@ void GameScreen2D::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseBut
 <param name='start'>The resolution independent co-ordinates of the mouse cursor at the start of the frame.</param>
 <param name='finish'>The resolution independent co-ordinates of the mouse cursor at the end of the frame.</param>
 */
-void GameScreen2D::MouseMoved(T3Vector2& finish)
+void GameScreen2D::MouseMoved(T3Vector2& start, T3Vector2& finish)
 {
+	bool selected = false;
 	// Check if input is being accepted
 	if (inputEnabled)
 	{
 		// Check if input is within screen bounds
 		if (MathHelper::Contains(finish, *this))
 		{
+			// Unselect everything
+			for (unsigned int i = 0; i < selectables.size(); ++i)
+			{
+				selectables[i]->UnSelect();
+			}
+
 			// Check if the finish location is within bounds of a selectable
-			for (unsigned int i = 0; i < selectables.size(); i++)
+			for (unsigned int i = 0; i < selectables.size(); ++i)
 			{
 				// If it is, call Select()
-				selectables[i]->Select();
-				currentSelected = i;
+				if (MathHelper::Contains(finish, *selectables[i])) 
+				{
+					selectables[i]->Select();
+				}
 			}
 		}
 	}
@@ -123,6 +133,7 @@ void GameScreen2D::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents:
 {
 	// Not implemented in 2D. Can be overridden for specific screens if neccessary.
 }
+#endif
 /**
 <summary>Notifies all screens in the stack of a gamepad event.</summary>
 <param name='playerID'>The ID for the controller.</param>
@@ -166,7 +177,8 @@ void GameScreen2D::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex player
 		// Check for right stick movement
 		if (analogueControl == GamepadEvents::RIGHT_STICK)
 		{
-			Scroll(T3Vector2(), amount);
+			T3Vector2 s = T3Vector2();
+			Scroll(s, amount);
 		}
 	}
 }

@@ -1,3 +1,5 @@
+#if WINDOWS_BUILD
+
 #pragma once
 #include"MyGame.h"
 
@@ -32,3 +34,5 @@ protected:
 	float Speed_Rotate;*/
 	bool LR;
 };
+
+#endif

@@ -13,7 +13,12 @@ HudTestScreen::~HudTestScreen(void)
 
 void HudTestScreen::LoadContent() {
 	Font* f = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"tahoma.tga", 16, 16);
+#if WINDOWS_BUILD
 	Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.jpg", SOIL_FLAG_MIPMAPS);
+#endif
+#if PS3_BUILD
+	Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.jpg", 0);
+#endif
 	Texture* calvinTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", 0);
 
 	AddDrawable(new DrawableText2D(

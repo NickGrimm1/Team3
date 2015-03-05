@@ -24,7 +24,7 @@ public:
 	<param name='start'>The resolution independent co-ordinates of the mouse cursor at the start of the frame.</param>
 	<param name='finish'>The resolution independent co-ordinates of the mouse cursor at the end of the frame.</param>
 	*/
-	virtual void MouseMoved(T3Vector2& finish) = 0;
+	virtual void MouseMoved(T3Vector2& start, T3Vector2& finish) = 0;
 	/**
 	<summary>Notifies all screens in the stack that the mouse scroll wheel has moved.</summary>
 	<param name='amount'>The amount of the movement.</param>
@@ -51,4 +51,5 @@ public:
 	<param name='amount'>The amount of the displacement. For the triggers, only the x co-ordinate is used.</param>
 	*/
 	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) = 0;
+	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID) = 0;
 };

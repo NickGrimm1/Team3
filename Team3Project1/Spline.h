@@ -30,5 +30,5 @@ public:
 protected:
 	T3Vector3* ctrlPoints;
 	unsigned int segments;
-	GLuint controlVBO;
+	unsigned int controlVBO;
 };

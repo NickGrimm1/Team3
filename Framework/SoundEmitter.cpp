@@ -14,7 +14,7 @@
 
  void SoundEmitter :: Reset () {
 	 priority = SOUNDPRIORTY_LOW ;
-	 volume = 1.0f ;
+	 volume1 = 1.0f ;
 	 radius = 500.0f ;
 	 timeLeft = 0.0f ;
 	 isLooping = true ;
@@ -41,7 +41,7 @@
 	 DetachSource ();
 	 if( sound ) {
 		 timeLeft = sound -> GetLength ();
-		 if( sound -> IsStreaminimumg ()) { // new bit !
+		 if( sound -> IsStreaming ()) { // new bit !
 			alGenBuffers ( NUM_STREAM_BUFFERS , streamBuffers );
 		 }
 		 else {
@@ -67,7 +67,7 @@
 	 alSourcef ( currentSource -> source , AL_MAX_DISTANCE , radius );
 	 alSourcef ( currentSource -> source , AL_REFERENCE_DISTANCE , radius * 0.2f );
 
-	 if( sound -> IsStreaminimumg ()) {
+	 if( sound -> IsStreaming ()) {
 		 streamPos = timeLeft ; // Seeks to correct position in stream
 		 int numBuffered = 0; // How many buffers have we filled ?
 		 while ( numBuffered < NUM_STREAM_BUFFERS ) {
@@ -102,7 +102,7 @@
 	 }
 		 alSourcef ( currentSource -> source , AL_GAIN ,0.0f );
 		 alSourceStop ( currentSource -> source );
-		 if( sound && sound -> IsStreaminimumg ()) { // Part 2
+		 if( sound && sound -> IsStreaming ()) { // Part 2
 			 int numProcessed = 0;
 			 ALuint tempBuffer ;
 			 alGetSourcei ( currentSource -> source , AL_BUFFERS_PROCESSED ,& numProcessed );
@@ -130,7 +130,7 @@
 
 		 else{
 			 if( target ) {
-				pos = T3Vector3(0,0,0);/*target -> GetWorldTransform ().GetPositionVector ();*/// set sound source's current position
+				pos = T3Vector3(0,0,0);//target -> GetWorldTransform ().GetPositionVector ();// set sound source's current position
 						  }
 			 else {
 				pos = this -> position ;
@@ -138,7 +138,7 @@
 		 }
 		 alSourcefv ( currentSource -> source , AL_POSITION ,(float *)& pos );
 
-		 if( sound -> IsStreaminimumg ()) {
+		 if( sound -> IsStreaming ()) {
 			 int numProcessed ;
 			 alGetSourcei ( currentSource -> source , AL_BUFFERS_PROCESSED ,& numProcessed );
 			 alSourcei ( currentSource -> source , AL_LOOPING ,0);
@@ -160,7 +160,7 @@
 			 alSourcei ( currentSource -> source , AL_LOOPING , isLooping ? 1 : 0);
 		 }
 
-		 alSourcef ( currentSource -> source , AL_GAIN , volume );
+		 alSourcef ( currentSource -> source , AL_GAIN , volume1 );
 		 alSourcei ( currentSource -> source , AL_LOOPING , isLooping ? 1 : 0);
 		 alSourcef (currentSource->source	,AL_PITCH	,pitch);
 		 alSourcef ( currentSource -> source , AL_MAX_DISTANCE , radius );

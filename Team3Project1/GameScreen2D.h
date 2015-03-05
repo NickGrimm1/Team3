@@ -88,7 +88,7 @@ public:
 					delete *i;
 					*i = NULL;
 				}
-				entities.erase(i);
+				i = entities.erase(i);
 				break;
 			}
 		}
@@ -136,7 +136,7 @@ public:
 		{
 			if (*i == selectable)
 			{
-				selectables.erase(i);
+				i = selectables.erase(i);
 				break;
 			}
 		}
@@ -172,7 +172,7 @@ public:
 		{
 			if (*i == clickable)
 			{
-				clickables.erase(i);
+				i = clickables.erase(i);
 				break;
 			}
 		}
@@ -181,7 +181,7 @@ public:
 #pragma endregion
 protected:
 	/**
-	<summary>Gets the maximumimum screen deviations for scroll.</summary>
+	<summary>Gets the maximum screen deviations for scroll.</summary>
 	*/
 	void GetMaxScreenDeviation()
 	{
@@ -218,6 +218,7 @@ protected:
 	float maximumDeviationDown;
 	float maximumDeviationLeft;
 	float maximumDeviationRight;
+#if WINDOWS_BUILD
 	/**
 	<summary>Notifies all screens in the stack of a mouse event.</summary>
 	<param name='type'>The event type.</param>
@@ -229,7 +230,7 @@ protected:
 	<param name='start'>The resolution independent co-ordinates of the mouse cursor at the start of the frame.</param>
 	<param name='finish'>The resolution independent co-ordinates of the mouse cursor at the end of the frame.</param>
 	*/
-	virtual void MouseMoved(T3Vector2& finish);
+	virtual void MouseMoved(T3Vector2& start, T3Vector2& finish);
 	/**
 	<summary>Notifies all screens in the stack that the mouse scroll wheel has moved.</summary>
 	<param name='amount'>The amount of the movement.</param>
@@ -241,6 +242,7 @@ protected:
 	<param name='key'>The key.</param>
 	*/
 	virtual void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key);
+#endif
 	/**
 	<summary>Notifies all screens in the stack of a gamepad event.</summary>
 	<param name='playerID'>The ID for the controller.</param>
