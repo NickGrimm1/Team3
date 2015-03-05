@@ -2,6 +2,7 @@
 #include "RacerGame.h"
 #include "../Framework/CollisionHelper.h"
 #include <algorithm>
+#include <list>
 
 PhysicsEngine* PhysicsEngine::instance = NULL;
 
@@ -654,6 +655,7 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* 
 		BOOL operator==(const EPA_Point &a) const { return v == a.v; }
 	};
 
+	//the edge to store points of triangle
 	struct EPA_Edge
 	{
 		EPA_Point Point[2];
@@ -700,11 +702,13 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* 
 	}*/
 
 
+	// add the adge to the list when finding the triangle which can be seen by the new point
 
 	auto addEdge = [&](const T3Vector3 &a, const T3Vector3 &b) -> void
 	{
 		for(auto it = lst_EPA_Edge.begin(); it != lst_EPA_Edge.end();it++)
 		{
+			//if the adge already exsists, delete it and do not add the new one
 			if((it->Point[0].v - b).Length() < _EXIT_THRESHOLD && (it->Point[1].v - a).Length() < _EXIT_THRESHOLD)
 			{
 				it = lst_EPA_Edge.erase(it);
@@ -716,7 +720,7 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* 
 	};
 
 	
-
+	// loop to find the final triangle which is cloest to the origin
 	while (true)
 	{
 	
@@ -739,15 +743,18 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* 
 			}
 		}
 
-		//new point in the direction of closest triangle's normal
+		//new point which is in the direction of closest triangle's normal
 		T3Vector3 new_point = support(shape1, shape2, closest_triangle->Triangle_normal);
 	
-		//destance from new point to the closest triangle
+		//distance from new point to the closest triangle
 		float distance_new_point = abs(T3Vector3::Dot(closest_triangle->Triangle_normal, new_point));
 	
 		if(distance_new_point - closest_distance < _EXIT_THRESHOLD)
 		{
 			float bary_x,bary_y,bary_z;
+
+			//calculate the barycentric coordinates of the closest point
+
 			barycentric(closest_triangle->Triangle_normal * closest_distance,
 				closest_triangle->Point[0].v, closest_triangle->Point[1].v, closest_triangle->Point[2].v, 
 				&bary_x, &bary_y, &bary_z);
@@ -757,13 +764,13 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* 
 			//OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, closest_triangle->Point[1].v, closest_triangle->Point[2].v, Vector3(0, 1,0), Vector3(0, 1, 0));
 			//OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, closest_triangle->Point[0].v, closest_triangle->Point[2].v, Vector3(0, 0, 1), Vector3(0, 0, 1));
 
-			// cantact point
+			// contact point
 			contactpoint = ((closest_triangle->Point[0].v*bary_x)+
 						  (closest_triangle->Point[1].v*bary_y)+
 						  (closest_triangle->Point[2].v*bary_z));		
 
 
-
+			//collision data
 			data-> m_point = contactpoint;
 			data-> m_normal =  -closest_triangle->Triangle_normal;
 			data-> m_penetration = closest_distance;
@@ -772,9 +779,10 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* 
 				
 		}
 
-
+		// remove the triangles which can be seen by the new point
 		for(auto it= lst_EPA_Triangle.begin(); it!= lst_EPA_Triangle.end();)
 		{
+			//can 'it' be seen from the new point?
 			if(T3Vector3::Dot(it->Triangle_normal, (new_point - it->Point[0].v)) > 0.0f)
 			{
 
@@ -794,6 +802,7 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* 
 			it++;
 		}
 
+		// add new triangles which contains new point to the list 
 		for(auto it= lst_EPA_Edge.begin(); it!= lst_EPA_Edge.end();it++)
 		{
 			lst_EPA_Triangle.emplace_back(new_point, it->Point[0].v, it->Point[1].v);
@@ -804,7 +813,6 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* 
 
 	return false;
 }
-
 
 void PhysicsEngine::barycentric(const T3Vector3 &p, const T3Vector3 &a, const T3Vector3 &b, const T3Vector3 &c, float *x, float *y, float *z) {
 	// code from Crister Erickson's Real-Time Collision Detection      
