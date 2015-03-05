@@ -308,8 +308,9 @@ void Mesh::AssignVertexMemory()
 	std::cout << "Vertices created on system memory" << std::endl;
 #endif
 #if PS3_BUILD
+	std::cout << "Mesh: Getting Vertex Memory" << std::endl;
 	vertices = (Vertex*)GCMRenderer::localMemoryAlign(128, sizeof(Vertex) * numVertices);
-	std::cout << "Vertices created on local memory" << std::endl;
+	std::cout << "Mesh: Vertices created on local memory" << std::endl;
 #endif
 }
 
@@ -320,8 +321,9 @@ void Mesh::AssignIndexMemory(unsigned int indexCount)
 	std::cout << "Indices created on system memory" << std::endl;
 #endif
 #if PS3_BUILD
+	std::cout << "Mesh: Getting Index Memory" << std::endl;
 	indices = (short*)GCMRenderer::localMemoryAlign(128, sizeof(short) * (indexCount));
-	std::cout << "Indices created on local memory" << std::endl;
+	std::cout << "Mesh: Indices created on local memory" << std::endl;
 #endif
 }
 

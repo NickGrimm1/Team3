@@ -26,7 +26,7 @@ void GameScreen2D::AddDrawable(DrawableEntity2D* drawable, bool autoScreenDeviat
 <summary>Removes a drawable entity. Idempotent.</summary>
 <param name="drawable">The entity.</param>
 */
-void GameScreen2D::RemoveDrawable(DrawableEntity2D* drawable)
+void GameScreen2D::RemoveDrawable(DrawableEntity2D* drawable, bool del)
 {
 	for (vector<DrawableEntity2D*>::iterator i = drawables.begin(); i != drawables.end(); i++)
 	{
@@ -41,7 +41,7 @@ void GameScreen2D::RemoveDrawable(DrawableEntity2D* drawable)
 			break;
 		}
 	}
-	RemoveEntity(drawable);
+	RemoveEntity(drawable, del);
 }
 
 #if WINDOWS_BUILD
@@ -148,7 +148,7 @@ void GameScreen2D::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEven
 		// Check for select actions
 		if (type == GamepadEvents::BUTTON_PRESS)
 		{
-			if (button == GamepadEvents::INPUT_CROSS)
+			if (button == GamepadEvents::INPUT_CROSS_A)
 			{
 				// Find the currently selected entity in clickables, and 'Click' it
 				for (unsigned int i = 0; i < clickables.size(); i++)
@@ -157,9 +157,24 @@ void GameScreen2D::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEven
 						clickables[i]->Click(0.0f, 0.0f);
 				}
 			}
-
-			// Check for DPad & Thumbstick movement for changing the selected item.
-
+			else
+			{
+				// Check for DPad & Thumbstick movement for changing the selected item.
+				if (button == GamepadEvents::LEFT_STICK_DOWN || button == GamepadEvents::INPUT_DPAD_DOWN)
+				{
+					++currentSelected;
+					currentSelected %= selectables.size();
+				}
+				if (button == GamepadEvents::LEFT_STICK_UP || button == GamepadEvents::INPUT_DPAD_UP)
+				{
+					--currentSelected;
+					if (currentSelected < 0)
+						currentSelected = selectables.size() - 1;
+				}
+				for (int i = 0; i < selectables.size(); ++i)
+					selectables[i]->UnSelect();
+				selectables[currentSelected]->Select();
+			}
 		}
 	}
 }

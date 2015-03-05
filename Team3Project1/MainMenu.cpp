@@ -9,10 +9,24 @@ MainMenu::MainMenu(void)
 #endif
 	musicMuted = false;
 	soundMuted = false;
+	playerOne = GamepadEvents::PLAYERINDEX_MAX;
 }
 
-void MainMenu::Update(void) {
+void MainMenu::Update(void) 
+{
+	if (playerOne == GamepadEvents::PLAYERINDEX_MAX)
+	{
+		playerOne = GameStateManager::Input()->GetActiveController();
+		if (playerOne != GamepadEvents::PLAYERINDEX_MAX)
+		{
+			RemoveDrawable(pressStart, false);
+#if WINDOWS_BUILD
+			GameStateManager::Graphics()->EnableMousePointer(false);
+#endif
+			SetCurrentSelected(0);
 
+		}
+	}
 }
 
 MainMenu::~MainMenu(void)
@@ -23,6 +37,13 @@ MainMenu::~MainMenu(void)
 	//delete buttonTex;
 	//delete buttonTexHover;
 	//delete buttonTexClicked;
+
+	// This may have been removed from entities if we have a controller...
+	if (pressStart)
+	{
+		delete pressStart;
+		pressStart = NULL;
+	}
 }
 
 
@@ -94,6 +115,10 @@ void MainMenu::LoadContent() {
 	AddClickable(quitGame);
 	AddClickable(music);
 	AddClickable(sounds);
+
+	Font* startFont = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"tahoma.tga", 16, 16);
+	pressStart = new DrawableText2D(0.3f, 0.1f, 1, 0.4f, 0.05f, "Player 1 Press Start or A", startFont);
+	AddDrawable(pressStart);
 }
 
 void MainMenu::UnloadContent() {
@@ -118,6 +143,9 @@ void MainMenu::UnloadContent() {
 	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/sound_nomute_selected.png");
 	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/sound_mute.png");
 	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/sound_mute_selected.png");
+
+	GameStateManager::Assets()->UnloadFont(this, TEXTUREDIR"quadrats.tga");
+	GameStateManager::Assets()->UnloadFont(this, TEXTUREDIR"tahoma.tga");
 }
 
 /*--------------------Clicked Methods--------------------*/
@@ -220,3 +248,25 @@ void MainMenu::SoundDeselected() {
 	else
 		sounds->GetTexture()->SetTexture(soundNoMute);
 }
+
+void MainMenu::GamepadDisconnect(GamepadEvents::PlayerIndex playerID)
+{
+	playerOne = GamepadEvents::PLAYERINDEX_MAX;
+	AddDrawable(pressStart);
+#if WINDOWS_BUILD
+		GameStateManager::Graphics()->EnableMousePointer(true);
+#endif
+		ClearSelection();
+}
+#if WINDOWS_BUILD
+void MainMenu::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position)
+{
+	if (playerOne == GamepadEvents::PLAYERINDEX_MAX)
+		GameScreen2D::MouseEvent(type, button, position);
+}
+void MainMenu::MouseMoved(T3Vector2& start, T3Vector2& finish)
+{
+	if (playerOne == GamepadEvents::PLAYERINDEX_MAX)
+		GameScreen2D::MouseMoved(start, finish);
+}
+#endif

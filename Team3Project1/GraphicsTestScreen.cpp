@@ -68,9 +68,12 @@ void GraphicsTestScreen::LoadContent() {
 	*/
 
 	GameStateManager::Graphics()->GetRenderContext();
+#if WINDOWS_BUILD
 	track = new TrackSegment(T3Vector3(-400, 0, 400), T3Vector3(-400,0,0), T3Vector3(0,0,-400), 10, 50.0);
+#endif
 	GameStateManager::Graphics()->DropRenderContext();
 
+#if WINDOWS_BUILD
 	ent = new DrawableEntity3D(
 		track,
 		NULL,
@@ -87,7 +90,7 @@ void GraphicsTestScreen::LoadContent() {
 		T3Vector3(1,1,1));
 	gameEntities.push_back(ent);
 	AddDrawable(ent);
-
+#endif
 
 	ent = new DrawableEntity3D(
 		cylinder, 
@@ -124,6 +127,7 @@ void GraphicsTestScreen::LoadContent() {
 	gameEntities.push_back(ent);
 	AddDrawable(ent);
 
+#if WINDOWS_BUILD
 	ent = new DrawableEntity3D(
 		cylinder, 
 		NULL,
@@ -157,7 +161,7 @@ void GraphicsTestScreen::LoadContent() {
 		T3Vector3(5,15,5));
 	gameEntities.push_back(ent);
 	AddDrawable(ent);
-
+#endif
 	ent = new DrawableEntity3D(
 		car,
 		NULL,
