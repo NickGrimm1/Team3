@@ -503,7 +503,7 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 				   car->GetCarNode().SetForce(T3Vector3(f /*+ 100.0f*/,0,0));   
 					//		    f=f+100;
 		       }
-			  cout<<car->GetCarNode().GetLinearVelocity().Length ()<<endl;
+			  //cout<<car->GetCarNode().GetLinearVelocity().Length ()<<endl;
 
 			   //cout<<car->GetCarNode().GetLinearVelocity().Length()<<endl;
 				if(car->GetCarNode().GetOrientation().y<0)

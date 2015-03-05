@@ -322,6 +322,7 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="NetworkManager.h" />
+    <ClInclude Include="PauseScreen.h" />
     <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="RacerGame.h" />
     <ClInclude Include="SelectableEntity2D.h" />
@@ -404,6 +405,7 @@
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="NetworkTest.cpp" />
     <ClCompile Include="OffsetCamera.cpp" />
+    <ClCompile Include="PauseScreen.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="RacerGame.cpp" />
     <ClCompile Include="Renderer.cpp" />
