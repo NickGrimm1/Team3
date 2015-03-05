@@ -64,6 +64,10 @@ public:
 	bool containsOrigin( T3Vector3& dir);
     bool CollisionDetection(PhysicsNode& shape1,PhysicsNode& shape2);
 	
+	//sam
+	bool   check;
+	//sam
+
     vector<T3Vector3> worldpoints1;
     vector<T3Vector3> worldpoints2;
 
@@ -82,10 +86,11 @@ public:
 	void    DrawDebug();
 private:
 #if WINDOWS_BUILD
-	PhysicsEngine() 
+	PhysicsEngine()
 		: PHYSICS_TIME(1000.0f / 120)
 	{
 		frameRate = 0;
+		check=true;
 	}
 #endif
 #if PS3_BUILD

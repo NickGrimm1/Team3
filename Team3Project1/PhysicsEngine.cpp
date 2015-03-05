@@ -1,4 +1,5 @@
 #include "PhysicsEngine.h"
+#include "RacerGame.h"
 #include "../Framework/CollisionHelper.h"
 #include <algorithm>
 
@@ -34,7 +35,7 @@ void PhysicsEngine::ThreadRun()
 #endif
 		frameRate = (int)(1000.0f / msec);
 
-		NarrowPhaseCollisions();
+	   // NarrowPhaseCollisions();
 
 		narrowlist.clear();
 
@@ -46,7 +47,7 @@ void PhysicsEngine::ThreadRun()
 			(*i)->Update(msec);
 			narrowlist.push_back((*i));
 		}
-		//BroadPhaseCollisions();
+		BroadPhaseCollisions();
 	}
 }
 
@@ -447,36 +448,37 @@ void  PhysicsEngine::SortandSweep()
 #if WINDOWS_BUILD
 	std::sort(narrowlist.begin(),narrowlist.end(), [](PhysicsNode* xleft, PhysicsNode* xright){return xleft->GetPosition().x < xright->GetPosition().x;});
 
-	for( vector<PhysicsNode*>::iterator i=narrowlist.begin(); i <narrowlist.end(); ++i) 
+	for( vector<PhysicsNode*>::iterator i=narrowlist.begin(); i <narrowlist.end() - 1; ++i) 
 	{
-		for( vector<PhysicsNode*>::iterator j= i +1; j !=narrowlist.end(); ++j) 
+		for( vector<PhysicsNode*>::iterator j= i +1; j < narrowlist.end(); ++j) 
 		{
 			
 			if((*i)->GetXend() > (*j)->GetXstart())
 			{
-				PhysicsNode& first =*(*i);
-				PhysicsNode& second =*(*j);
-
+				    PhysicsNode& first =*(*i);
+				    PhysicsNode& second =*(*j);
+					//cout << "car x start = " << first.GetXstart() << " x end = " << first.GetXend() << endl;
+						//cout << "box x start = " << second.GetXstart() << " x end = " << second.GetXend() << endl;
 					
-				if(CollisionDetection(first, second))
+					if(CollisionDetection(first, second))
+			    {
+				//cout << "GJK passed" << endl;
+				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
 				{
-					//cout << "GJK passed" << endl;
-					if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
-					{
-						//cout << "Collision" << endl;
-						first.SetLinearVelocity(T3Vector3(0,0,0));
-						first.SetForce(T3Vector3(0,0,0));
-						second.SetLinearVelocity(T3Vector3(0,0,0));
-						second.SetForce(T3Vector3(0,0,0));
-					}
+					//cout << "Collision" << endl;
+					first.SetLinearVelocity(T3Vector3(0,0,0));
+					first.SetForce(T3Vector3(0,0,0));
+                    second.SetLinearVelocity(T3Vector3(0,0,0));
+					second.SetForce(T3Vector3(0,0,0));
+				}
 				}
 
-			}	
+						}
+				}
 		}
-	}
 #endif
-}
-
+	}
+	
 
 
 
@@ -505,14 +507,37 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 			
 			if(CollisionDetection(first, second))
 			{
+						
+				
 				//cout << "GJK passed" << endl;
 				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
 				{
-					//cout << "Collision" << endl;
-					first.SetLinearVelocity(T3Vector3(0,0,0));
+					if(check==true)
+					{
+                    cout << "Collision" << endl;
+
+					   if(first.GetType()=='c'||second.GetType()=='c')
+					   {
+						cout<<"c is call";
+						if(first.GetGameEntity()){
+							cout<<"call if"<<endl;
+						RacerGame::update=1;}
+					   }
+
+					   else{
+						if(second.GetGameEntity())
+					      {
+						cout<<"call else"<<endl;
+					RacerGame::update=1;
+						  }
+					    }
+					
+						check=false;
+					}
+					/*first.SetLinearVelocity(T3Vector3(0,0,0));
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
-					second.SetForce(T3Vector3(0,0,0));
+					second.SetForce(T3Vector3(0,0,0));*/
 				}
 			
 			
@@ -608,7 +633,7 @@ void	PhysicsEngine::AddNode(PhysicsNode* n) {
 void	PhysicsEngine::RemoveNode(PhysicsNode* n) {
 	for(vector<PhysicsNode*>::iterator i = allNodes.begin(); i != allNodes.end(); ++i) {
 		if((*i) == n) {
-			allNodes.erase(i);
+			i = allNodes.erase(i);
 			return;
 		}
 	}
@@ -621,7 +646,7 @@ void	PhysicsEngine::AddConstraint(Constraint* s) {
 void	PhysicsEngine::RemoveConstraint(Constraint* c) {
 	for(vector<Constraint*>::iterator i = allSprings.begin(); i != allSprings.end(); ++i) {
 		if((*i) == c) {
-			allSprings.erase(i);
+			i = allSprings.erase(i);
 			return;
 		}
 	}
@@ -634,7 +659,7 @@ void	PhysicsEngine::AddDebugDraw(DebugDrawer* d) {
 void	PhysicsEngine::RemoveDebugDraw(DebugDrawer* d) {
 	for(vector<DebugDrawer*>::iterator i = allDebug.begin(); i != allDebug.end(); ++i) {
 		if((*i) == d) {
-			allDebug.erase(i);
+			i = allDebug.erase(i);
 			return;
 		}
 	}

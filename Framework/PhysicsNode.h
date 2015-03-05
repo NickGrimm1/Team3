@@ -40,10 +40,14 @@ _-_-_-_-_-_-_-""  ""
 #include "../Team3Project1/DrawableEntity3D.h"
 
 #include "CollisionVolume.h"
+//#include "GameEntity.h"
+
 using namespace std;
 #define LINEAR_VELOCITY_DAMP 0.98
 #define ANGULAR_VELOCITY_DAMP 0.7
 #define LINEAR_VELOCITY_MIN 0.00001
+
+class GameEntity;
 
 class PhysicsNode	{
 public:
@@ -124,11 +128,19 @@ public:
 	Mesh* GetPhysicsMesh() {return physicsMesh;}
 	void SetMesh(Mesh* mesh) {physicsMesh = mesh;}
 
-protected:
-	Mesh* physicsMesh;
+
+	void SetType(char type){Type=type;}
+	char GetType(){return Type;};
+
+	void SetPGE(GameEntity* pge){parentGameEntity=pge;}
+	GameEntity* GetGameEntity() {return parentGameEntity;}
 
 	bool useGravity;
 	bool isCollide;
+
+	Mesh* physicsMesh;
+
+	char Type;
 
 	//<---------LINEAR-------------->
 	T3Vector3		m_position;
@@ -153,6 +165,8 @@ protected:
 
 	DrawableEntity3D*	target;
 	CollisionVolume* vol;
+
+	GameEntity* parentGameEntity;
 //	Function* callback;
 //	GameClass* interestedObject;
 

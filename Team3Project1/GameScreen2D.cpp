@@ -37,7 +37,7 @@ void GameScreen2D::RemoveDrawable(DrawableEntity2D* drawable, bool del)
 			else if (drawable->GetType() == DrawableType::Text)
 				GameStateManager::Graphics()->RemoveDrawableTextFromScene((DrawableText2D*)drawable);
 
-			drawables.erase(i);
+			i = drawables.erase(i);
 			break;
 		}
 	}

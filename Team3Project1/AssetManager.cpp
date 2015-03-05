@@ -31,25 +31,25 @@ void AssetManager::Destroy()
 	{
 		map<string, LoadedTexture>::iterator i = instance->loadedTextures.begin();
 		delete (*i).second.texture;
-		instance->loadedTextures.erase(i);
+		i = instance->loadedTextures.erase(i);
 	}
 	while (!instance->loadedMeshes.empty()) 
 	{
 		map<string, LoadedMesh>::iterator i = instance->loadedMeshes.begin();
 		delete (*i).second.mesh;
-		instance->loadedMeshes.erase(i);
+		i = instance->loadedMeshes.erase(i);
 	}
 	while (!instance->loadedShaders.empty())
 	{
 		map<string, LoadedShader>::iterator i = instance->loadedShaders.begin();
 		delete (*i).second.shader;
-		instance->loadedShaders.erase(i);
+		i = instance->loadedShaders.erase(i);
 	}
 	while (!instance->loadedShaderParts.empty())
 	{
 		map<string, LoadedShaderPart>::iterator i = instance->loadedShaderParts.begin();
 		delete (*i).second.shaderPart;
-		instance->loadedShaderParts.erase(i);
+		i = instance->loadedShaderParts.erase(i);
 	}
 	GameStateManager::Graphics()->DropRenderContext();
 

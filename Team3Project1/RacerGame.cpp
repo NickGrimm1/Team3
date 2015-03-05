@@ -64,7 +64,7 @@ void RacerGame::LoadContent() {
 	
 	VehiclePhysicsNode* vpn = new VehiclePhysicsNode();
 	
-	GameStateManager::Physics()->AddNode(vpn);
+	GameStateManager::Physics()->AddNode((PhysicsNode*)vpn);
 
 	car = new Vehicle(5);
 	car->SetPhysics(5,(vpn->GetCar()));
@@ -127,7 +127,6 @@ void RacerGame::Update() {
 	//ent->AddRotation(Quaternion::FromMatrix(m));
 }
 
-#if WINDOWS_BUILD
 void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
 
 
@@ -292,8 +291,7 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 	}
 }
 	
-void RacerGame::MouseMoved(T3Vector2& star, T3Vector2& finish) {
+void RacerGame::MouseMoved(T3Vector2& finish) {
 	camera->AddPitch(-finish.y);
 	camera->AddYaw(finish.x);
 }
-#endif
