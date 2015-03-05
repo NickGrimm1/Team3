@@ -138,6 +138,7 @@ void VehicleTestingScreen::Update() {
 	//ent->AddRotation(Quaternion::FromMatrix(m));
 }
 
+#if WINDOWS_BUILD
 void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
 
 
@@ -367,7 +368,9 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 	}
 }
 	
-void VehicleTestingScreen::MouseMoved(T3Vector2& finish) {
+void VehicleTestingScreen::MouseMoved(T3Vector2& start, T3Vector2& finish) {
 	camera->AddPitch(-finish.y);
 	camera->AddYaw(finish.x);
 }
+
+#endif

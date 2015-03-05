@@ -1,10 +1,27 @@
 #include "PhysicsEngine.h"
 #include "RacerGame.h"
 #include "../Framework/CollisionHelper.h"
+#include <algorithm>
 
 PhysicsEngine* PhysicsEngine::instance = NULL;
 
+#if WINDOWS_BUILD
 void PhysicsEngine::Run()
+{
+	ThreadRun();
+}
+#endif
+#if PS3_BUILD
+void PhysicsEngine::Run(uint64_t arg)
+{
+	std::cout << "Physics Thread Started! " << std::endl;
+	//instance->ThreadRun();
+	std::cout << "Physics Thread Ended! " << std::endl;
+	sys_ppu_thread_exit(0);
+}
+#endif
+
+void PhysicsEngine::ThreadRun()
 {
 	while (isRunning)
 	{
@@ -12,6 +29,9 @@ void PhysicsEngine::Run()
 		while (Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp < PHYSICS_TIME) { ; } // Fix the timestep
 		float msec = Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp;
 		lastFrameTimeStamp = Window::GetWindow().GetTimer()->GetMS();
+#endif
+#if PS3_BUILD
+		float msec = 8;
 #endif
 		frameRate = (int)(1000.0f / msec);
 
@@ -425,8 +445,8 @@ void  PhysicsEngine::SortandSweep()
 {
 
 	
-
-	sort(narrowlist.begin(),narrowlist.end(), [](PhysicsNode* xleft, PhysicsNode* xright){return xleft->GetPosition().x < xright->GetPosition().x;});
+#if WINDOWS_BUILD
+	std::sort(narrowlist.begin(),narrowlist.end(), [](PhysicsNode* xleft, PhysicsNode* xright){return xleft->GetPosition().x < xright->GetPosition().x;});
 
 	for( vector<PhysicsNode*>::iterator i=narrowlist.begin(); i <narrowlist.end(); ++i) 
 	{
@@ -440,30 +460,22 @@ void  PhysicsEngine::SortandSweep()
 
 					
 					if(CollisionDetection(first, second))
-								 {
+			    {
 				//cout << "GJK passed" << endl;
 				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
-									  {
+				{
 					//cout << "Collision" << endl;
 					first.SetLinearVelocity(T3Vector3(0,0,0));
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
 					second.SetForce(T3Vector3(0,0,0));
-											   }
-											 }
-
-
-						 
-										 
-				
-
-				    					
-									 
-						}
-		
 				}
-	
+				}
+
+						}
+				}
 		}
+#endif
 	}
 	
 

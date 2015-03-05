@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 #include "TcpSocket.h"
 
 #include <ws2tcpip.h>
@@ -41,3 +42,4 @@ unsigned int TcpSocket::Receive(char* data, unsigned int max_length) {
 	}
 	return bytesReceived;
 }
+#endif

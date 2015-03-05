@@ -18,6 +18,7 @@ public:
 #endif
 	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button) { }
 	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) { }
+	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID) { }
 private:
 	DrawableText2D* renderFrameRate;
 	DrawableText2D* physicsFrameRate;

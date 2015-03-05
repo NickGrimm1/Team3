@@ -1,3 +1,12 @@
+/**
+<summary>Its a main menu. Lets user launch game/quit game etc.
+This will be how the actual game is started and quit.
+
+Author: Sherif Salem
+Version: 0.0.1 02/03/2015.</summary>
+*/
+
+
 #pragma once
 
 #include "GameScreen2D.h"
@@ -19,11 +28,14 @@ public:
 #endif
 	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerId, GamepadEvents::EventType type, GamepadEvents::Button button) { }
 	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) { }
+	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID){}
 private:
 
 	void NewGameClicked(float x, float y);
 	void ControlsClicked(float x, float y);
 	void QuitClicked(float x, float y);
+	void MusicClicked(float x, float y);
+	void SoundClicked(float x, float  y);
 
 	void NewGameSelected();
 	void NewGameDeselcted();
@@ -32,11 +44,19 @@ private:
 	void ControlsDeselected();
 
 	void QuitSelected();
-	void QuitDeselcted();
+	void QuitDeselected();
+
+	void MusicSelected();
+	void MusicDeselected();
+
+	void SoundSelected();
+	void SoundDeselected();
 
 	UIButton*	newGame;
 	UIButton*	controls;
 	UIButton*	quitGame;
+	UIButton*	sounds;
+	UIButton*	music;
 
 	DrawableTexture2D*	scoreBoard;
 
@@ -44,4 +64,17 @@ private:
 	Texture* buttonTexHover;
 	Texture* buttonTexClicked;
 	Texture* scoreBoardTex;
+
+	Texture* musicNoMute;
+	Texture* musicNoMuteHover;
+	Texture* musicMute;
+	Texture* musicMuteHover;
+
+	Texture* soundNoMute;
+	Texture* soundNoMuteHover;
+	Texture* soundMute;
+	Texture* soundMuteHover;
+
+	bool musicMuted;
+	bool soundMuted;
 };

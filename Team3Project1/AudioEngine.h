@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 /**
 <summary>Static Singleton.
 The game's audio engine.
@@ -5,6 +6,8 @@ The game's audio engine.
 Author: Nick Grimm
 Version: 0.0.1 03/02/2015.</summary>
 */
+
+
  #pragma once
  #include <vector> // I imagine we'll probably need one eventually. It's just here so NULL is defined atm.
  # include <algorithm>
@@ -19,6 +22,10 @@ Version: 0.0.1 03/02/2015.</summary>
  # include "../FrameWork/camera.h"
  //# include   "../FrameWork/Vehicle.h"
  using std :: vector ;
+
+ #pragma comment(lib, "../OpenAL 1.1 SDK/libs/Win32/EFX-Util_MTDLL/EFX-Util.lib")
+ #pragma comment(lib, "../OpenAL 1.1 SDK/libs/Win32/EFX-Util_MT/EFX-Util.lib")
+ #pragma comment(lib, "../OpenAL 1.1 SDK/libs/Win32/OpenAl32.lib")
 
  class Vehicle;
  class SoundEmitter ;
@@ -110,3 +117,4 @@ private:
 	static AudioEngine* instance;
 	//bool isRunning;
 };
+#endif

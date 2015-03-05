@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 #pragma once
 #include "../Framework/SoundManager.h"
 #include "GameScreen3D.h"
@@ -21,10 +22,11 @@ public:
 	virtual void MouseScrolled(T3Vector2& position, int amount) {};
 	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button) {};
 	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) {};
-
+	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID){}
 private:
 	Sound* laser;
 	Sound* laser1;
 	Sound* laser2;
 };
+#endif
 

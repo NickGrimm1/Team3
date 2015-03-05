@@ -1,3 +1,5 @@
+#if WINDOWS_BUILD
+
 #ifndef AL_AL_H
 #define AL_AL_H
 
@@ -730,3 +732,5 @@ typedef void           (AL_APIENTRY *LPALDISTANCEMODEL)( ALenum distanceModel );
 #endif
 
 #endif /* AL_AL_H */
+
+#endif

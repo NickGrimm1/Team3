@@ -1,3 +1,5 @@
+#if WINDOWS_BUILD
+
 #include "Spline.h"
 
 
@@ -88,3 +90,4 @@ void Spline::Draw() { // Method assumes that the Shader in use has been bound
 
 	glBindVertexArray(0); // unbind current VAO
 }
+#endif

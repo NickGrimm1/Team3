@@ -11,7 +11,7 @@ class FreeCamera : public Camera
 {
 public:
 	FreeCamera(float pitch = 0, float yaw = 0, float roll = 0, T3Vector3 position = T3Vector3(), T3Vector3 target = T3Vector3(0, 0, -1)) 
-		: Camera(NULL, pitch, yaw, roll, position, target)
+		: Camera(pitch, yaw, roll, position, target)
 	{ }
 	
 	void UpdateCamera() 

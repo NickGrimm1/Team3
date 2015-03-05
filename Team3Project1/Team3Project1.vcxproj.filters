@@ -178,6 +178,9 @@
     <Filter Include="Framework\Audio\Artificial Intelligence\Source Files">
       <UniqueIdentifier>{e41fb13d-e937-41de-a3ef-f1cb43bf71f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Web Interface">
+      <UniqueIdentifier>{7b56afba-50ff-4105-87a4-bb9e3118758c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameStateManager.h">
@@ -468,9 +471,6 @@
     <ClInclude Include="CheckPoint.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DebugOverlay.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Heightmap.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
@@ -503,6 +503,9 @@
     </ClInclude>
     <ClInclude Include="NetworkCommon.h">
       <Filter>Framework\Network\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugOverlay.h">
+      <Filter>Framework\Debug\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -698,9 +701,6 @@
     <ClCompile Include="AudioTestClass.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DebugOverlay.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="HeightMap.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
@@ -727,6 +727,15 @@
     </ClCompile>
     <ClCompile Include="MainMenu.cpp">
       <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChaseCamera.cpp">
+      <Filter>Framework\Graphics\Common\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsEnginePS3.cpp">
+      <Filter>Framework\Graphics\PS3\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugOverlay.cpp">
+      <Filter>Framework\Debug\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -820,16 +829,11 @@
     <None Include="..\Resources\Shaders\SkyDomeFragment.glsl">
       <Filter>Shaders</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\OpenAL32.lib">
-      <Filter>Framework\Audio\Header Files</Filter>
-    </Library>
-    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MT\EFX-Util.lib">
-      <Filter>Framework\Audio\Header Files</Filter>
-    </Library>
-    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MTDLL\EFX-Util.lib">
-      <Filter>Framework\Audio\Header Files</Filter>
-    </Library>
+    <None Include="..\Resources\PHP\getScores.php">
+      <Filter>Game\Web Interface</Filter>
+    </None>
+    <None Include="..\Resources\PHP\postScore.php">
+      <Filter>Game\Web Interface</Filter>
+    </None>
   </ItemGroup>
 </Project>

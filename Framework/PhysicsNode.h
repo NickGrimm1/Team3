@@ -125,15 +125,7 @@ public:
 	bool GetIsCollide(){ return isCollide;};
 	void SetIsCollide(bool iscollide){ isCollide=iscollide;}
 
-	Mesh* GetPhysicsMesh() {return physicsMesh;}
-	void SetMesh(Mesh* mesh) {physicsMesh = mesh;}
-	void SetType(char type){Type=type;}
-	char GetType(){return Type;};
 
-	void SetPGE(GameEntity* pge){parentGameEntity=pge;}
-	GameEntity* GetGameEntity() {return parentGameEntity;}
-protected:
-	Mesh* physicsMesh;
 
 	bool useGravity;
 	bool isCollide;

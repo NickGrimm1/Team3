@@ -78,13 +78,13 @@ void RacerGame::LoadContent() {
 	checkpoint->SetPhysics(10,'c');
 	checkpoint->GetPhysicsNode().SetPGE(checkpoint);
 	AddDrawable(checkpoint);
-
+	
 	
 
 
 	VehiclePhysicsNode* vpn = new VehiclePhysicsNode();
 	
-	GameStateManager::Physics()->AddNode((PhysicsNode*)vpn);
+	GameStateManager::Physics()->AddNode(vpn);
 
 	car = new Vehicle(5);
 	car->SetPhysics(5,(vpn->GetCar()));
@@ -267,12 +267,13 @@ void RacerGame::Update() {
 	}
 }
 
+#if WINDOWS_BUILD
 void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
 
 
 	PlayerPosition = car->GetPhysicsNode().GetPosition();
 
-	
+
 	switch (type) {
 	case KeyboardEvents::KEY_DOWN:
 	case KeyboardEvents::KEY_HELD:
@@ -467,8 +468,9 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 		
 	}
 }
-
-void RacerGame::MouseMoved(T3Vector2& finish) {
+	
+void RacerGame::MouseMoved(T3Vector2& star, T3Vector2& finish) {
 	camera->AddPitch(-finish.y);
 	camera->AddYaw(finish.x);
 }
+#endif
