@@ -1,4 +1,5 @@
 #include "PhysicsEngine.h"
+#include "RacerGame.h"
 #include "../Framework/CollisionHelper.h"
 #include <algorithm>
 
@@ -454,29 +455,29 @@ void  PhysicsEngine::SortandSweep()
 			
 			if((*i)->GetXend() > (*j)->GetXstart())
 			{
-				PhysicsNode& first =*(*i);
-				PhysicsNode& second =*(*j);
+				    PhysicsNode& first =*(*i);
+				    PhysicsNode& second =*(*j);
 
 					
-				if(CollisionDetection(first, second))
+					if(CollisionDetection(first, second))
+			    {
+				//cout << "GJK passed" << endl;
+				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
 				{
-					//cout << "GJK passed" << endl;
-					if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
-					{
-						//cout << "Collision" << endl;
-						first.SetLinearVelocity(T3Vector3(0,0,0));
-						first.SetForce(T3Vector3(0,0,0));
-						second.SetLinearVelocity(T3Vector3(0,0,0));
-						second.SetForce(T3Vector3(0,0,0));
-					}
+					//cout << "Collision" << endl;
+					first.SetLinearVelocity(T3Vector3(0,0,0));
+					first.SetForce(T3Vector3(0,0,0));
+                    second.SetLinearVelocity(T3Vector3(0,0,0));
+					second.SetForce(T3Vector3(0,0,0));
+				}
 				}
 
-			}	
+						}
+				}
 		}
-	}
 #endif
-}
-
+	}
+	
 
 
 
@@ -508,11 +509,32 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 				//cout << "GJK passed" << endl;
 				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
 				{
-					//cout << "Collision" << endl;
-					first.SetLinearVelocity(T3Vector3(0,0,0));
+					if(check==true)
+					{
+                    cout << "Collision" << endl;
+
+					   if(first.GetType()=='c'||second.GetType()=='c')
+					   {
+						cout<<"c is call";
+						if(first.GetGameEntity()){
+							cout<<"call if"<<endl;
+						RacerGame::update=1;}
+					   }
+
+					   else{
+						if(second.GetGameEntity())
+					      {
+						cout<<"call else"<<endl;
+					RacerGame::update=1;
+						  }
+					    }
+					
+						check=false;
+					}
+					/*first.SetLinearVelocity(T3Vector3(0,0,0));
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
-					second.SetForce(T3Vector3(0,0,0));
+					second.SetForce(T3Vector3(0,0,0));*/
 				}
 			
 			

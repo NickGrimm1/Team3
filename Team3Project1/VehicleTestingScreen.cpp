@@ -1,4 +1,4 @@
-#include "VehicleTestingScreen.h"
+
 
 
 #include "VehicleTestingScreen.h"
@@ -59,7 +59,7 @@ void VehicleTestingScreen::LoadContent() {
 
 	camera = new FreeCamera();
 	checkpoint= new CheckPoint(10);
-	checkpoint->SetPhysics(10);
+	checkpoint->SetPhysics(10,'c');
 	AddDrawable(checkpoint);
 	
 	VehiclePhysicsNode* vpn = new VehiclePhysicsNode();
