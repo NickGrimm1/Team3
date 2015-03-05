@@ -507,6 +507,9 @@
     <ClInclude Include="DebugOverlay.h">
       <Filter>Framework\Debug\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Scoreboard.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">
@@ -738,6 +741,9 @@
       <Filter>Framework\Debug\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CheckPoint.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scoreboard.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
   </ItemGroup>

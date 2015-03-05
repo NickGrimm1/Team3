@@ -323,6 +323,7 @@
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="RacerGame.h" />
+    <ClInclude Include="Scoreboard.h" />
     <ClInclude Include="SelectableEntity2D.h" />
     <ClInclude Include="ServerSocket.h" />
     <ClInclude Include="ShaderPart.h" />
@@ -405,6 +406,7 @@
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="RacerGame.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Scoreboard.cpp" />
     <ClCompile Include="ServerSocket.cpp" />
     <ClCompile Include="ShaderPart.cpp" />
     <ClCompile Include="Spline.cpp" />
