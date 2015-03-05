@@ -1,0 +1,10 @@
+void main
+(
+	
+)
+{
+	float4 AmbientColor = float4(1,1,1,1);
+	float AmbientIntensity  = 0.1;
+	
+	return AmbientColor * AmbientIntensity;
+}
