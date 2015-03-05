@@ -75,7 +75,8 @@ void Renderer::RenderScene() {
 		viewMatrix = Matrix4::identity();
 	}
 
-	shader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
+	basicShader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
+	
 	if(root) {
 		DrawNode(root);
 	}
