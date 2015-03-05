@@ -44,6 +44,7 @@ void GameScreen2D::RemoveDrawable(DrawableEntity2D* drawable)
 	RemoveEntity(drawable);
 }
 
+#if WINDOWS_BUILD
 /**
 <summary>Notifies all screens in the stack of a mouse event.</summary>
 <param name='type'>The event type.</param>
@@ -132,6 +133,7 @@ void GameScreen2D::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents:
 {
 	// Not implemented in 2D. Can be overridden for specific screens if neccessary.
 }
+#endif
 /**
 <summary>Notifies all screens in the stack of a gamepad event.</summary>
 <param name='playerID'>The ID for the controller.</param>
@@ -175,7 +177,8 @@ void GameScreen2D::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex player
 		// Check for right stick movement
 		if (analogueControl == GamepadEvents::RIGHT_STICK)
 		{
-			Scroll(T3Vector2(), amount);
+			T3Vector2 s = T3Vector2();
+			Scroll(s, amount);
 		}
 	}
 }

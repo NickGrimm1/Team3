@@ -35,7 +35,14 @@ public:
 			delete instance;
 		instance = NULL;
 	}
+
+#if WINDOWS_BUILD
 	void Run();
+#endif
+#if PS3_BUILD
+	static void Run(uint64_t arg);
+#endif
+
 	void Terminate() { isRunning = false; }
 
 	void		BroadPhaseCollisions();
@@ -57,6 +64,10 @@ public:
 	bool containsOrigin( T3Vector3& dir);
     bool CollisionDetection(PhysicsNode& shape1,PhysicsNode& shape2);
 	
+	//sam
+	bool   check;
+	//sam
+
     vector<T3Vector3> worldpoints1;
     vector<T3Vector3> worldpoints2;
 
@@ -74,11 +85,22 @@ public:
 
 	void    DrawDebug();
 private:
+#if WINDOWS_BUILD
 	PhysicsEngine()
 		: PHYSICS_TIME(1000.0f / 120)
 	{
 		frameRate = 0;
+		check=true;
 	}
+#endif
+#if PS3_BUILD
+	PhysicsEngine()
+		: Thread(Run), PHYSICS_TIME(1000.0f / 120)
+	{
+		frameRate = 0;
+	}
+#endif
+
 	~PhysicsEngine() { }
 	static PhysicsEngine* instance;
 
@@ -90,4 +112,6 @@ private:
 	const float PHYSICS_TIME;
 	float lastFrameTimeStamp;
 	int frameRate;
+
+	void ThreadRun();
 };

@@ -31,7 +31,7 @@ _-_-_-_-_-_-_-""  ""
 
 *//////////////////////////////////////////////////////////////////////////////
 
-
+#if WINDOWS_BUILD
 
 #pragma once
 #include "GameEntity.h"
@@ -43,6 +43,7 @@ _-_-_-_-_-_-_-""  ""
 #include "SoundSystem.h"
 #include "SoundEmitter.h"
 #include "SoundManager.h"
+
 class Vehicle;
 //class Debuff;
 class MyGame : public GameClass	{
@@ -91,4 +92,4 @@ protected:
 	
 	
 };
-
+#endif

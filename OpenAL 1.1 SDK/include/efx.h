@@ -1,3 +1,5 @@
+#if WINDOWS_BUILD
+
 #ifndef __efx_h_
 #define __efx_h_
 
@@ -735,3 +737,5 @@ typedef void (__cdecl *LPALGETAUXILIARYEFFECTSLOTFV)( ALuint asid, ALenum pname,
 #endif
 
 #endif /* __efx_h_ */
+
+#endif

@@ -5,8 +5,9 @@ HeightMap::HeightMap(string name, bool useTextureWeights, unsigned char minHeigh
 {
 	numVertices = RAW_WIDTH * RAW_HEIGHT;
 	numIndices = (RAW_WIDTH - 1) * (RAW_HEIGHT - 1) * 6;
-	vertices = new Vertex[numVertices];
-	indices = new unsigned int[numIndices];
+	
+	AssignVertexMemory();
+	AssignIndexMemory(numIndices);
 	data = new unsigned char[numVertices];
 
 	if (name != "")

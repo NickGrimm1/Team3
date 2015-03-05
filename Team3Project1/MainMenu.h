@@ -28,6 +28,7 @@ public:
 #endif
 	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerId, GamepadEvents::EventType type, GamepadEvents::Button button) { }
 	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) { }
+	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID){}
 private:
 
 	void NewGameClicked(float x, float y);

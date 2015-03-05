@@ -1,3 +1,5 @@
+#if WINDOWS_BUILD
+
 #include "UdpSocket.h"
 
 
@@ -20,3 +22,5 @@ unsigned int UdpSocket::Receive(char* data, unsigned int max_length) {
 
 	return 0;
 }
+
+#endif

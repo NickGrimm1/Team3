@@ -6,11 +6,11 @@
 
 class CheckPoint : public GameEntity {
 public:
-	CheckPoint(float size){};
-	~CheckPoint(void){};
+	CheckPoint(float size);
+	~CheckPoint(void);
 
 	
-	void SetPhysics(float size){};
+	void SetPhysics(float size,char type);
 	
 
 

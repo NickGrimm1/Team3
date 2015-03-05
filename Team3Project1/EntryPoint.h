@@ -9,8 +9,10 @@ Version: 0.0.3 06/02/2015.</summary>
 
 #include "GraphicsCommon.h"
 #include "LoadingScreen.h"
+#if WINDOWS_BUILD
 #include "AudioTestClass.h"
 #include "NetworkTest.h"
+#endif
 
 // FOR TESTING PURPOSES - REMOVE IN FINAL BUILD
 #include "GraphicsTestScreen.h"
@@ -28,17 +30,17 @@ namespace EntryPoint
 		//LoadingScreen* loadingScreen = new LoadingScreen();
 		//GameStateManager::Instance()->AddGameScreen(loadingScreen);
 
-		GraphicsTestScreen* game = new GraphicsTestScreen();
-		GameStateManager::Instance()->AddGameScreen(game);
+		//GraphicsTestScreen* game = new GraphicsTestScreen();
+		//GameStateManager::Instance()->AddGameScreen(game);
 
-		//MainMenu* main = new MainMenu();
-		//GameStateManager::Instance()->AddGameScreen(main);
-
+		/*MainMenu* main = new MainMenu();
+		GameStateManager::Instance()->AddGameScreen(main);
+*/
 		//HudTestScreen* hud = new HudTestScreen();
 		//GameStateManager::Instance()->AddGameScreen(hud);
 
-		DebugOverlay* debug = new DebugOverlay();
-		GameStateManager::Instance()->AddGameScreen(debug);
+		//DebugOverlay* debug = new DebugOverlay();
+		//GameStateManager::Instance()->AddGameScreen(debug);
 
 		//RacerGame* game = new RacerGame();
 		//GameStateManager::Instance()->AddGameScreen(game);
@@ -52,8 +54,8 @@ namespace EntryPoint
 		//NetworkTest* network = new NetworkTest();
 		//GameStateManager::Instance()->AddGameScreen(network);
 
-		//RacerGame* game = new RacerGame();
-		//GameStateManager::Instance()->AddGameScreen(game);
+		RacerGame* game = new RacerGame();
+		GameStateManager::Instance()->AddGameScreen(game);
 		//VehicleTestingScreen* physicsgame = new VehicleTestingScreen();
 		//GameStateManager::Instance()->AddGameScreen(physicsgame);
 		GameStateManager::Instance()->Start();

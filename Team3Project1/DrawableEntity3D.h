@@ -8,7 +8,10 @@ Version: 0.0.5 10/02/2015.</summary>
 #include "Mesh.h"
 #include "Texture.h"
 #include "ShaderPart.h"
+
 class Mesh;
+class Texture;
+
 class DrawableEntity3D
 {
 public:
