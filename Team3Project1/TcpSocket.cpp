@@ -26,17 +26,17 @@ bool TcpSocket::Send(const char* data, unsigned int length) {
 		}
 		bytesToSend -= bytesSent;
 	}
-	return (bytesToSend == length);
+	return (bytesToSend == 0);
 }
 
 unsigned int TcpSocket::Receive(char* data, unsigned int max_length) {
-	int bytesReceived = recv(socket, data, max_length, 0);
+	unsigned int bytesReceived = recv(socket, data, max_length, 0);
 	if (bytesReceived == SOCKET_ERROR) {
 		if (WSAGetLastError() == WSAEWOULDBLOCK) {
 			return 0; // using non-blocking sockets and there is no data to receive at this time
 		}
 		else {
-			cout << "TcpSocket::Send() - Failed to recieve data" << endl;
+			cout << "TcpSocket::Receive() - Failed to recieve data" << endl;
 			cout << "Failed with error: " << WSAGetLastError() << " - " << gai_strerror(WSAGetLastError()) << endl;
 		}
 	}
