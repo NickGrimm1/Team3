@@ -32,15 +32,20 @@ void GraphicsTestScreen::LoadContent() {
 	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
 	circle = GameStateManager::Assets()->LoadCircle(this, 20);
 	Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.jpg", 0);
+#if WINDOWS_BUILD
 	Texture* calvinTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", SOIL_FLAG_INVERT_Y);
+#endif
+#if PS3_BUILD
+	Texture* nclTex = GameStateManager::Assets()->LoadTexture(this, "/ncl.gtf", 0);
+#endif
 	Mesh* car = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
 
 #ifdef WINDOWS_BUILD
-	cout << "GraphicsTestScreen-Quad: " << quad->GetArrayObject() << ", " << quad->GetBufferObject() << endl;
-	cout << "GraphicsTestScreen-Cylinder: " << cylinder->GetArrayObject() << ", " << cylinder->GetBufferObject() << endl;
-	cout << "GraphicsTestScreen-circle: " << circle->GetArrayObject() << ", " << circle->GetBufferObject() << endl;
-	cout << "GraphicsTestScreen-grass: " << grassTex->GetTextureName() << endl;
-	cout << "GraphicsTestScreen-calvin: " << calvinTex->GetTextureName() << endl;
+	//cout << "GraphicsTestScreen-Quad: " << quad->GetArrayObject() << ", " << quad->GetBufferObject() << endl;
+	//cout << "GraphicsTestScreen-Cylinder: " << cylinder->GetArrayObject() << ", " << cylinder->GetBufferObject() << endl;
+	//cout << "GraphicsTestScreen-circle: " << circle->GetArrayObject() << ", " << circle->GetBufferObject() << endl;
+	//cout << "GraphicsTestScreen-grass: " << grassTex->GetTextureName() << endl;
+	//cout << "GraphicsTestScreen-calvin: " << calvinTex->GetTextureName() << endl;
 #endif
 	
 	DrawableEntity3D* ent;
@@ -69,7 +74,12 @@ void GraphicsTestScreen::LoadContent() {
 	ent = new DrawableEntity3D(
 		track,
 		NULL,
+#if WINDOWS_BUILD
 		grassTex,
+#endif
+#if PS3_BUILD
+		nclTex,
+#endif
 		NULL,
 		800.0f,
 		T3Vector3(0,0,0),
@@ -82,7 +92,12 @@ void GraphicsTestScreen::LoadContent() {
 	ent = new DrawableEntity3D(
 		cylinder, 
 		NULL,
+#if WINDOWS_BUILD
 		calvinTex,
+#endif
+#if PS3_BUILD
+		nclTex,
+#endif
 		NULL,
 		30.0f, 
 		T3Vector3(35,0,35), 
@@ -95,7 +110,12 @@ void GraphicsTestScreen::LoadContent() {
 	ent = new DrawableEntity3D(
 		circle, 
 		NULL,
+#if WINDOWS_BUILD
 		calvinTex,
+#endif
+#if PS3_BUILD
+		nclTex,
+#endif
 		NULL,
 		30.0f, // needs same bounding radius as cylinder
 		T3Vector3(35,30,35), 
@@ -107,7 +127,12 @@ void GraphicsTestScreen::LoadContent() {
 	ent = new DrawableEntity3D(
 		cylinder, 
 		NULL,
+#if WINDOWS_BUILD
 		calvinTex,
+#endif
+#if PS3_BUILD
+		nclTex,
+#endif
 		NULL,
 		30.0f, // needs same bounding radius as cylinder
 		track->GetTrackCentreLeft(),
@@ -119,7 +144,12 @@ void GraphicsTestScreen::LoadContent() {
 	ent = new DrawableEntity3D(
 		cylinder, 
 		NULL,
+#if WINDOWS_BUILD
 		calvinTex,
+#endif
+#if PS3_BUILD
+		nclTex,
+#endif
 		NULL,
 		30.0f, // needs same bounding radius as cylinder
 		track->GetTrackCentreRight(),
@@ -185,7 +215,7 @@ void GraphicsTestScreen::Update() {
 
 	//GameStateManager::Assets()->LoadHeightmap(true);
 }
-
+#if WINDOWS_BUILD
 void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
 
 	switch (type) {
@@ -247,3 +277,4 @@ void GraphicsTestScreen::MouseMoved(T3Vector2& start, T3Vector2& finish) {
 	camera->AddPitch(-finish.y);
 	camera->AddYaw(-finish.x);
 }
+#endif

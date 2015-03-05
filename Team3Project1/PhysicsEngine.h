@@ -35,7 +35,14 @@ public:
 			delete instance;
 		instance = NULL;
 	}
+
+#if WINDOWS_BUILD
 	void Run();
+#endif
+#if PS3_BUILD
+	static void Run(uint64_t arg);
+#endif
+
 	void Terminate() { isRunning = false; }
 
 	void		BroadPhaseCollisions();
@@ -74,11 +81,21 @@ public:
 
 	void    DrawDebug();
 private:
-	PhysicsEngine()
+#if WINDOWS_BUILD
+	PhysicsEngine() 
 		: PHYSICS_TIME(1000.0f / 120)
 	{
 		frameRate = 0;
 	}
+#endif
+#if PS3_BUILD
+	PhysicsEngine()
+		: Thread(Run), PHYSICS_TIME(1000.0f / 120)
+	{
+		frameRate = 0;
+	}
+#endif
+
 	~PhysicsEngine() { }
 	static PhysicsEngine* instance;
 
@@ -90,4 +107,6 @@ private:
 	const float PHYSICS_TIME;
 	float lastFrameTimeStamp;
 	int frameRate;
+
+	void ThreadRun();
 };

@@ -4,7 +4,9 @@
 
 MainMenu::MainMenu(void)
 {
+#if WINDOWS_BUILD
 	GameStateManager::Graphics()->EnableMousePointer(true);
+#endif
 	musicMuted = false;
 	soundMuted = false;
 }
@@ -112,7 +114,9 @@ void MainMenu::UnloadContent() {
 
 void MainMenu::NewGameClicked(float x, float y) {
 	newGame->GetTexture()->SetTexture(buttonTexClicked);
+#if WINDOWS_BUILD
 	GameStateManager::Graphics()->EnableMousePointer(false);
+#endif
 	//Some code will be here to launch the game...
 }
 
@@ -128,11 +132,15 @@ void MainMenu::QuitClicked(float x, float y) {
 void MainMenu::MusicClicked(float x, float y) {
 	if (musicMuted) {
 		music->GetTexture()->SetTexture(musicNoMuteHover);
+#if WINDOWS_BUILD
 		GameStateManager::Audio()->SetMasterVolume(1.0f);
+#endif
 	}
 	else {
 		music->GetTexture()->SetTexture(musicMuteHover);
+#if WINDOWS_BUILD
 		GameStateManager::Audio()->SetMasterVolume(0.0f);
+#endif
 	}
 	musicMuted = !musicMuted;
 }

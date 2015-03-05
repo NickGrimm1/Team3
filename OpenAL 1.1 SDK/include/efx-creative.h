@@ -1,3 +1,5 @@
+#if WINDOWS_BUILD
+
 #ifndef __efxcreative_h_
 #define __efxcreative_h_
 
@@ -149,3 +151,5 @@ extern "C" {
 #endif
 
 #endif /* __efxcreative_h_ */
+
+#endif

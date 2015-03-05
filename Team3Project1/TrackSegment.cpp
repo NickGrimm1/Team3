@@ -1,3 +1,5 @@
+#if WINDOWS_BUILD
+
 #include "TrackSegment.h"
 
 
@@ -120,3 +122,5 @@ T3Vector3 TrackSegment::GetTrackCentreRight() const {
 		return (trackMesh[pos].GetPosition() + trackMesh[pos + 1].GetPosition()) / 2.0f;
 	}
 }
+
+#endif

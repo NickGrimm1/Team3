@@ -78,12 +78,14 @@ Texture* AssetManager::LoadTexture(void* callerID, string filePath, unsigned int
 		// Load this texture in...
 		GameStateManager::Graphics()->GetRenderContext();
 		Texture* newTexture = new Texture(filePath, flags);
+#if WINDOWS_BUILD
 		if (newTexture->GetTextureName() == 0)
 		{
 			delete newTexture;
 			GameStateManager::Graphics()->DropRenderContext();
 			return NULL;
 		}
+#endif
 		newTexture->SetRepeating(true);
 		GameStateManager::Graphics()->DropRenderContext();
 		loadedTextures.insert(pair<string, LoadedTexture>(filePath, LoadedTexture(newTexture, callerID)));
@@ -652,7 +654,7 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 			loadedShaderParts.insert(pair<string, LoadedShaderPart>(fragmentShaderFilePath, LoadedShaderPart(fragmentShader, newShader)));
 			
 		}
-
+#if WINDOWS_BUILD
 		if (geometryShaderFilePath != "")
 		{
 			j = loadedShaderParts.find(geometryShaderFilePath);
@@ -675,6 +677,7 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 		}
 		else
 			geometryShader = NULL;
+#endif
 
 		// Load this Shader
 		newShader->SetVertex(vertexShader);
@@ -804,7 +807,12 @@ Font* AssetManager::LoadFont(void* callerID, string filePath, unsigned int xCoun
 		// Load this font in...
 		//GameStateManager::Graphics()->GetRenderContext();
 		Font* newFont = new Font(xCount, yCount);
+#if WINDOWS_BUILD
 		newFont->SetTexture(LoadTexture(newFont, filePath, SOIL_FLAG_COMPRESS_TO_DXT));
+#endif
+#if PS3_BUILD
+		newFont->SetTexture(LoadTexture(newFont, filePath, 0));
+#endif
 		//GameStateManager::Graphics()->DropRenderContext();
 		loadedFonts.insert(pair<string, LoadedFont>(filePath, LoadedFont(newFont, callerID)));
 		return newFont;

@@ -3,25 +3,31 @@
 #include "GL/glew.h"
 #endif
 #include <string>
+#include <fstream>
+#include <iostream>
+#include <stdio.h>
+#include "../Framework/common.h"
 #if PS3_BUILD
 #include <cell\gcm.h>
+#include "GCMRenderer.h"
+#include <sys\paths.h> 
 #endif
 using namespace std;
 
-//#if PS3_BUILD
-//typedef struct {
-//	uint32_t Version;
-//	uint32_t Size;
-//	uint32_t NumTexture;
-//} CellGtfFileHeader;
-//
-//typedef struct {
-//	uint32_t Id;
-//	uint32_t OffsetToTex;
-//	uint32_t TextureSize;
-//	CellGcmTexture tex;
-//} CellGtfTextureAttribute;
-//#endif
+#if PS3_BUILD
+typedef struct {
+	uint32_t Version;
+	uint32_t Size;
+	uint32_t NumTexture;
+} CellGtfFileHeader;
+
+typedef struct {
+	uint32_t Id;
+	uint32_t OffsetToTex;
+	uint32_t TextureSize;
+	CellGcmTexture tex;
+} CellGtfTextureAttribute;
+#endif
 
 class Texture
 {
@@ -35,6 +41,9 @@ public:
 	Texture(GLuint textureObj);
 	GLuint GetTextureName() const { return textureObject; }
 	void SetMinMagFiltering(GLint min, GLint mag);
+#endif
+#if PS3_BUILD
+	CellGcmTexture* GetTexture() const { return textureObject; }
 #endif
 protected:
 	#if WINDOWS_BUILD
@@ -51,6 +60,7 @@ private:
 #if PS3_BUILD
 	CellGcmTexture* LoadTGA(std::string name);
 	CellGcmTexture* LoadGTF(std::string name);
+	CellGcmTexture* textureObject;
 #endif
 };
 

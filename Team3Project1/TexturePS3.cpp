@@ -1,8 +1,25 @@
 #if PS3_BUILD
+#pragma once
+
 #include "Texture.h"
-Texture(string filename, unsigned int flags);
+Texture::Texture(string filename, unsigned int flags)
 {
 	// TODO: Sort if this is TGA or GTF and load accordingly.
+	if (filename.substr(filename.length() - 3, 3) == "tga")
+	{
+		std::cout << "Loading TGA File: " << filename << std::endl;
+		textureObject = LoadTGA(filename);
+	}
+	else if (filename.substr(filename.length() - 3, 3) == "gtf")
+	{
+		std::cout << "Loading GTF File: " << filename << std::endl;
+		textureObject = LoadGTF(filename);
+	}
+	else
+	{
+		std::cout << "Filetype not recognised: " << filename << std::endl;
+		textureObject = NULL;
+	}
 }
 
 /*
@@ -57,7 +74,7 @@ CellGcmTexture* Texture::LoadTGA(std::string filename)	{
 
 	std::cout << filename << " has size "	 << (unsigned int)size		<< std::endl;
 
-	char*rsxdata = (char*)localMemoryAlign(128, size);	//A texture in graphics memory needs aligning...
+	char*rsxdata = (char*)GCMRenderer::localMemoryAlign(128, size);	//A texture in graphics memory needs aligning...
 
 	//Read in the texture straight into graphics memory. Challenge! How fast will this data
 	//transfer be? Why? How could it be sped up?
@@ -103,6 +120,7 @@ CellGcmTexture* Texture::LoadTGA(std::string filename)	{
 	texture->cubemap	= CELL_GCM_FALSE;	//No...it's not a cubemap
 	texture->dimension	= CELL_GCM_TEXTURE_DIMENSION_2;	//It's a 2D Texture...
 
+	//memory = (width * height * 4) / 1024.0f / 1024.0f; // Assume all textures are 32 bit for the moment.
 	std::cout << "Finished loading texture!" << std::endl;
 
 	return texture;
@@ -146,17 +164,19 @@ CellGcmTexture* Texture::LoadGTF(std::string filename) {
 
 		file.seekg(attributes[i].OffsetToTex);
 
-		char*rsxdata = (char*)localMemoryAlign(128, attributes[i].TextureSize);
+		char*rsxdata = (char*)GCMRenderer::localMemoryAlign(128, attributes[i].TextureSize);
 		file.read(rsxdata,attributes[i].TextureSize);
 
 		cellGcmAddressToOffset( rsxdata, &texture->offset );
 	}
 
+	//memory = (width * height * 4) / 1024.0f / 1024.0f; // Assume all textures are 32 bit for the moment.
 	std::cout << "LoadGTF success!" << std::endl;
 
 	delete[] attributes;
 
 	return texture;
 }
-
+Texture::~Texture(){}
+void Texture::SetRepeating(bool repeat){}
 #endif

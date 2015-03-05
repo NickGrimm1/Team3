@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 #include "Renderer.h"
 #include "GraphicsCommon.h"
 #include "DrawableEntity3D.h"
@@ -1349,3 +1350,4 @@ unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char
 
 	return output;
 }
+#endif

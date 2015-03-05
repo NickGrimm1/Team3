@@ -127,6 +127,7 @@ void RacerGame::Update() {
 	//ent->AddRotation(Quaternion::FromMatrix(m));
 }
 
+#if WINDOWS_BUILD
 void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
 
 
@@ -295,3 +296,4 @@ void RacerGame::MouseMoved(T3Vector2& star, T3Vector2& finish) {
 	camera->AddPitch(-finish.y);
 	camera->AddYaw(finish.x);
 }
+#endif

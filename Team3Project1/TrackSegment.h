@@ -31,6 +31,6 @@ public:
 
 protected:
 	Vertex* trackMesh;
-	GLuint trackVBO;
+	unsigned int trackVBO;
 };
 

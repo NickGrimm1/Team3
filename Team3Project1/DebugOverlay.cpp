@@ -53,20 +53,24 @@ void DebugOverlay::LoadContent()
 }
 void DebugOverlay::Update()
 {
+#if WINDOWS_BUILD
 	renderFrameRate->SetText(to_string(GameStateManager::Graphics()->GetFrameRate()));
 	physicsFrameRate->SetText(to_string(GameStateManager::Physics()->GetFrameRate()));
 	inputFrameRate->SetText(to_string(GameStateManager::Input()->GetFrameRate()));
 	totalMemory->SetText(to_string(GameStateManager::Assets()->GetTotalMemory()));
 	textureMemory->SetText(to_string(GameStateManager::Assets()->GetTextureMemory()));
 	meshMemory->SetText(to_string(GameStateManager::Assets()->GetMeshMemory()));
+#endif
 }
 void DebugOverlay::UnloadContent()
 {
 	GameStateManager::Assets()->UnloadFont(this, TEXTUREDIR"tahoma.tga");
 	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"TitleSafeArea.png");
 }
+#if WINDOWS_BUILD
 void DebugOverlay::MouseMoved(T3Vector2& start, T3Vector2& finish)
 {
 	mouseX->SetText(to_string(finish.x));
 	mouseY->SetText(to_string(finish.y));
 }
+#endif

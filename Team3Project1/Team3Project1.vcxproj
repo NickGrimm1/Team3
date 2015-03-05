@@ -229,7 +229,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">
     <ClCompile>
-      <PreprocessorDefinitions>PS3_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CELL_GCM_DEBUG;PS3_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -388,6 +388,7 @@
     <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="GCMRenderer.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
+    <ClCompile Include="GraphicsEnginePS3.cpp" />
     <ClCompile Include="GraphicsTestScreen.cpp" />
     <ClCompile Include="HeightMap.cpp" />
     <ClCompile Include="HudTestScreen.cpp" />
@@ -451,11 +452,6 @@
     <None Include="..\Resources\Shaders\VelocityVertex.glsl" />
     <None Include="..\Shaders\TechFragment.glsl" />
     <None Include="..\Shaders\TechVertex.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MTDLL\EFX-Util.lib" />
-    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MT\EFX-Util.lib" />
-    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\OpenAL32.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

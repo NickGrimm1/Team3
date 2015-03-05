@@ -38,13 +38,8 @@ static inline double DegToRad(const double rad)	{
 #define SHADERDIR	"../Resources/Shaders/"
 #define MESHDIR		"../Resources/Meshes/"
 #define TEXTUREDIR  "../Resources/Textures/"
+#if WINDOWS_BUILD
 #define SOUNDSDIR	"../Resources/Sounds/"
+#endif
 
-class DivideByZeroException
-{
-	virtual const char* reason() const throw()
-	{
-		return "Divide By Zero";
-	}
-};
 

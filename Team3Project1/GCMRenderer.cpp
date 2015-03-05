@@ -5,6 +5,13 @@
 //Static member variables need initialising!
 uint32_t		GCMRenderer::localHeapStart	= 0;
 
+void my_check_callback(uint32_t* cmd)
+{
+  printf( "### Bad command 0x%X at memory location 0x%x ###\n", *cmd, cmd);
+}
+
+
+
 GCMRenderer::GCMRenderer(void)	{
 	if(cellGcmInit(COMMAND_SIZE, BUFFER_SIZE, memalign(1024*1024, BUFFER_SIZE))!= CELL_OK) {
 		std::cout << "cellGcmInit failed!" << std::endl;	
@@ -12,10 +19,11 @@ GCMRenderer::GCMRenderer(void)	{
 
 	camera	= NULL;
 	root	= NULL;
-
+	shader = new Shader();
 	InitDisplay();
 	InitSurfaces();
-	texture = (GCMRenderer::LoadGTF("/ncl.gtf"));
+	//texture = new Texture("/ncl.gtf", 0);
+	std::cout <<"Got to end of GCMrenderer constructor" << std::endl;
 }
 
 /*
@@ -71,6 +79,9 @@ void GCMRenderer::InitDisplay() {
 	CellGcmConfig config;
 	cellGcmGetConfiguration(&config);
 	setLocalMem((uint32_t)config.localAddress);
+
+	//gCellGcmDebugCheckCallback = my_check_callback;
+	//cellGcmDebugCheckEnable(CELL_GCM_TRUE);
 }
 
 /*
@@ -200,7 +211,7 @@ void GCMRenderer::SetViewport() {
 	to GCM, this will be done with another matrix.
 
 	To map an x axis range of -1 to 1 to screen coordinates, we can multiply
-	the x axis by half the width (assuming a default width of 720, that gives
+	the x axis by half the width (assuminimumg a default width of 720, that gives
 	us a new range of -360 to 360), and then translating / offsetting it also
 	by half of the width (moving us to 0 to 720). The same is done with the Y
 	axis, while the Z axis goes from 0.0 to 1.0 (remember the depth buffer
@@ -294,11 +305,11 @@ ridiculous, but it is because vertex shaders can be ran from system memory,
 while fragment shaders MUST be ran in graphics memory, and so its address
 must be 'offsettable'. 
 */
-void	GCMRenderer::SetCurrentShader(Shader* shader) {
-	
-
-	cellGcmSetFragmentProgram(shader->GetFragment()->GetProgram(), shader->GetFragment()->GetOffset());
-	cellGcmSetVertexProgram(shader->GetVertex()->GetProgram(), shader->GetVertex()->GetuCode());
+void	GCMRenderer::SetCurrentShader(Shader* s) {
+	std::cout<<"GCMRenderer: setCurrentShader"<<std::endl;
+	cellGcmSetFragmentProgram(s->GetFragment()->GetProgram(), s->GetFragment()->GetOffset());
+	cellGcmSetVertexProgram(s->GetVertex()->GetProgram(), s->GetVertex()->GetuCode());
+	std::cout<<"GCMRenderer: got to the end of setCurrentShader"<<std::endl;
 }
 
 //Sets the camera. Can be NULL
@@ -330,16 +341,47 @@ specific #ifdefs to encapsulate API code). You'll have to think up some way
 of safely setting shaders and textures on a renderer...
 */
 void	GCMRenderer::DrawNode(SceneNode*n)	{
+	std::cout << "Drawing Node" << std::endl;
 	if(n->GetMesh()) {
+		std::cout << "Drawing a mesh: " << std::endl;
+		std::cout << n->GetMesh()->GetNumVertices() << std::endl;
 		//GCC complains about function returns being used as parameters passed
 		//around, or we'd just use GetWorldTransform as the function param
-		T3Matrix4 transform = n->GetWorldTransform();
-		
+		T3Matrix4 transform = //n->GetTransform();
+			Quaternion::EulerAnglesToQuaternion(90, 0, 0).ToMatrix() * T3Matrix4::Scale(T3Vector3(1000,1000,1));
+
+		/*std::cout << "GCMRenderer: ViewMatrix (SCE): " << std::endl;
+		for (int x = 0; x < 4; ++x)
+		{
+			for (int y = 0; y < 4; ++y)
+			{
+				std::cout << viewMatrix.getElem(x,y) << ",";
+			}
+			std::cout << std::endl;
+		}
+
+		std::cout << "Transform (T3): " << std::endl;
+		std::cout << n->GetTransform() << std::endl;
+		std::cout << transform << std::endl;*/
+
 		Matrix4 m;
 		for (int x = 0; x < 4; ++x)
 			for (int y = 0; y < 4; ++y)
-				m.setElem(y, x, transform.values[y + x * 4]);
+				m.setElem(x, y, transform.values[y + x * 4]);
+
+		
+		/*std::cout << "Transform (SCE): " << std::endl;
+		for (int x = 0; x < 4; ++x)
+		{
+			for (int y = 0; y < 4; ++y)
+			{
+				std::cout << m.getElem(x,y) << ",";
+			}
+			std::cout << std::endl;
+		}*/
+		
 		shader->GetVertex()->SetParameter("modelMat", m);
+		//shader->GetVertex()->UpdateShaderMatrices(m, viewMatrix, projMatrix);
 
 		/*
 		If your SceneNodes can have their own texture, handle the setting of it
@@ -348,7 +390,14 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		make it more intuitive to place it here, instead.
 		*/
 	
-		SetTextureSampler(shader->GetFragment()->GetParameter("texture"),texture);
+		CellGcmTexture* t = texture->GetTexture();
+		
+		if (t)
+			std::cout << "Has Texture" << std::endl;
+		else
+			std::cout << "No Has Texture :(" << std::endl;
+
+		SetTextureSampler(shader->GetFragment()->GetParameter("texture"), t);
 
 		/*
 		The GCM Mesh class needs the current vertex shader, fragment
