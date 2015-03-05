@@ -145,7 +145,7 @@ void GraphicsEngine::Run() {
 		}
 		removeLightsList.clear();
 
-		contentGuard.unlock_mutex();
+		
 			
 		// Update data in scene nodes
 		sceneRoot->Update(msec); // TODO - sort out proper timestep value - or remove timestep if not needed
@@ -203,6 +203,8 @@ void GraphicsEngine::Run() {
 
 		// Clear node lists in preparation for next render cycle
 		ClearNodeLists();
+
+		contentGuard.unlock_mutex();
 	}
 }
 
