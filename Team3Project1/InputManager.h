@@ -44,7 +44,7 @@ public:
 private:
 #if WINDOWS_BUILD
 	InputManager() 
-		: INPUT_TIME(1000.0f / 60)
+		: INPUT_TIME(1000.0f / 180)
 	{
 		gamePads = new GamePad*[GamepadEvents::PLAYERINDEX_MAX];
 		for (int i = 0; i < GamepadEvents::PLAYERINDEX_MAX; ++i)
