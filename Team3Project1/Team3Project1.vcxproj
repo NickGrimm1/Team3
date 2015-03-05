@@ -380,6 +380,7 @@
     <ClCompile Include="AudioEngine.cpp" />
     <ClCompile Include="AudioTestClass.cpp" />
     <ClCompile Include="ChaseCamera.cpp" />
+    <ClCompile Include="CheckPoint.cpp" />
     <ClCompile Include="DebugManager.cpp" />
     <ClCompile Include="DebugOverlay.cpp" />
     <ClCompile Include="GamePad.cpp" />
