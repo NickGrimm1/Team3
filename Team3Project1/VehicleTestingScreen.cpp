@@ -71,7 +71,7 @@ void VehicleTestingScreen::LoadContent() {
 	
 	VehiclePhysicsNode* vpn = new VehiclePhysicsNode();
 	
-	GameStateManager::Physics()->AddNode((PhysicsNode*)vpn);
+//	GameStateManager::Physics()->AddNode((PhysicsNode*)vpn);
 
 	car = new Vehicle(5);
 //	car->SetPhysics(5,(vpn->GetCar()));

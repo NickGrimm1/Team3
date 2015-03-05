@@ -536,6 +536,25 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
                     second.SetLinearVelocity(T3Vector3(0,0,0));
 					second.SetForce(T3Vector3(0,0,0));
 				}
+
+				if ((first.GetIsCollide()==true && second.GetIsCollide ()==true) && ((first.Getcar_wheel()==true && second.Getcar_wheel()==true)))
+				{
+
+					/*first.SetLinearVelocity(T3Vector3(0,0,0));
+					first.SetForce(T3Vector3(0,0,0));
+                    second.SetLinearVelocity(T3Vector3(0,0,0));
+					second.SetForce(T3Vector3(0,0,0));*/
+
+					CollisionData* data = new CollisionData();
+					bool succeeded = EPA(first, second, data);
+					if (succeeded)
+					{
+						CollisionHelper::AddCollisionImpulse( first, second, *data);
+
+					}
+				}
+
+
 			
 			
 			}
@@ -621,6 +640,184 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 		//
 		}
 	}
+}
+
+bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* data)
+{
+	const unsigned _EXIT_ITERATION_LIMIT =50;
+	unsigned _EXIT_ITERATION_NUM = 0;
+	const float _EXIT_THRESHOLD = 0.0001f;
+
+	struct EPA_Point
+	{
+		T3Vector3 v;
+		BOOL operator==(const EPA_Point &a) const { return v == a.v; }
+	};
+
+	struct EPA_Edge
+	{
+		EPA_Point Point[2];
+		EPA_Edge(const T3Vector3 &a, const T3Vector3 &b)
+		{
+			Point[0].v = a;
+			Point[1].v = b;
+		}
+	};
+
+	struct EPA_Triangle
+	{
+		EPA_Point Point[3];
+		T3Vector3 Triangle_normal;
+
+		EPA_Triangle(const T3Vector3 &a, const T3Vector3 &b, const T3Vector3 &c)
+		{
+			Point[0].v = a;
+			Point[1].v = b;
+			Point[2].v = c;
+
+			Triangle_normal= T3Vector3::Cross((a-b),(a-c));
+			Triangle_normal.Normalise();
+		}
+	};
+
+	std::list<EPA_Triangle> lst_EPA_Triangle;
+	std::list<EPA_Edge> lst_EPA_Edge;
+
+	// add the triangles from GJK to the list
+	lst_EPA_Triangle.emplace_back(a,b,c);
+	lst_EPA_Triangle.emplace_back(a,c,d);
+	lst_EPA_Triangle.emplace_back(b,c,d);
+	lst_EPA_Triangle.emplace_back(a,b,d);
+
+	// fix tetrahedron winding  
+	/*const Vector3 v30 = a - d;
+	const Vector3 v31 = b - d;
+	const Vector3 v32 = c - d;
+	const float det = Vector3::Dot(v30, Vector3::Cross(v31, v32));
+	if (det > 0.0f)
+	{
+		std::swap(a, b);
+	}*/
+
+
+
+	auto addEdge = [&](const T3Vector3 &a, const T3Vector3 &b) -> void
+	{
+		for(auto it = lst_EPA_Edge.begin(); it != lst_EPA_Edge.end();it++)
+		{
+			if((it->Point[0].v - b).Length() < _EXIT_THRESHOLD && (it->Point[1].v - a).Length() < _EXIT_THRESHOLD)
+			{
+				it = lst_EPA_Edge.erase(it);
+				break;
+			}
+			//it++;
+		}
+		lst_EPA_Edge.push_back(EPA_Edge(a, b));
+	};
+
+	
+
+	while (true)
+	{
+	
+		if(_EXIT_ITERATION_NUM++ >= _EXIT_ITERATION_LIMIT) 
+			break;
+
+		float closest_distance = 10000.0f;
+		T3Vector3 contactpoint;
+		std::list<EPA_Triangle>::iterator closest_triangle = lst_EPA_Triangle.begin();
+
+		// find the initial closest triangle to origin
+		for(auto it = lst_EPA_Triangle.begin(); it != lst_EPA_Triangle.end(); it++)
+		{
+			float distance = fabs(T3Vector3::Dot (it->Triangle_normal, it->Point[0].v));
+
+			if(distance < closest_distance)
+			{
+				closest_distance = distance;
+				closest_triangle = it;
+			}
+		}
+
+		//new point in the direction of closest triangle's normal
+		T3Vector3 new_point = support(shape1, shape2, closest_triangle->Triangle_normal);
+	
+		//destance from new point to the closest triangle
+		float distance_new_point = abs(T3Vector3::Dot(closest_triangle->Triangle_normal, new_point));
+	
+		if(distance_new_point - closest_distance < _EXIT_THRESHOLD)
+		{
+			float bary_x,bary_y,bary_z;
+			barycentric(closest_triangle->Triangle_normal * closest_distance,
+				closest_triangle->Point[0].v, closest_triangle->Point[1].v, closest_triangle->Point[2].v, 
+				&bary_x, &bary_y, &bary_z);
+
+
+			//OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, closest_triangle->Point[0].v, closest_triangle->Point[1].v, Vector3(1, 0, 0), Vector3(1, 0, 0));
+			//OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, closest_triangle->Point[1].v, closest_triangle->Point[2].v, Vector3(0, 1,0), Vector3(0, 1, 0));
+			//OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, closest_triangle->Point[0].v, closest_triangle->Point[2].v, Vector3(0, 0, 1), Vector3(0, 0, 1));
+
+			// cantact point
+			contactpoint = ((closest_triangle->Point[0].v*bary_x)+
+						  (closest_triangle->Point[1].v*bary_y)+
+						  (closest_triangle->Point[2].v*bary_z));		
+
+
+
+			data-> m_point = contactpoint;
+			data-> m_normal =  -closest_triangle->Triangle_normal;
+			data-> m_penetration = closest_distance;
+
+			return (closest_triangle->Triangle_normal.Length() > 0.9f);
+				
+		}
+
+
+		for(auto it= lst_EPA_Triangle.begin(); it!= lst_EPA_Triangle.end();)
+		{
+			if(T3Vector3::Dot(it->Triangle_normal, (new_point - it->Point[0].v)) > 0.0f)
+			{
+
+			/*float distance_new_point_now = abs(T3Vector3::Dot(it->Triangle_normal, new_point));
+			float distance = abs(T3Vector3::Dot (it->Triangle_normal, it->Point[0].v));
+
+			if(distance_new_point_now >= distance)
+			{*/
+
+				addEdge(it->Point[0].v, it->Point[1].v);
+				addEdge(it->Point[1].v, it->Point[2].v);
+				addEdge(it->Point[2].v, it->Point[0].v);
+
+				it = lst_EPA_Triangle.erase(it);
+				continue;
+			}
+			it++;
+		}
+
+		for(auto it= lst_EPA_Edge.begin(); it!= lst_EPA_Edge.end();it++)
+		{
+			lst_EPA_Triangle.emplace_back(new_point, it->Point[0].v, it->Point[1].v);
+		}
+		lst_EPA_Edge.clear();
+				
+	}
+
+	return false;
+}
+
+
+void PhysicsEngine::barycentric(const T3Vector3 &p, const T3Vector3 &a, const T3Vector3 &b, const T3Vector3 &c, float *x, float *y, float *z) {
+	// code from Crister Erickson's Real-Time Collision Detection      
+	T3Vector3 v0 = b - a,v1 = c - a,v2 = p - a; 
+	float d00 = T3Vector3::Dot(v0,v0); 
+	float d01 = T3Vector3::Dot(v0,v1);
+	float d11 = T3Vector3::Dot(v1,v1);
+	float d20 = T3Vector3::Dot(v2,v0); 
+	float d21 = T3Vector3::Dot(v2,v1); 
+	float denom = d00 * d11 - d01 * d01; 
+	*y = (d11 * d20 - d01 * d21) / denom;     
+	*z = (d00 * d21 - d01 * d20) / denom;      
+	*x = 1.0f - *y - *z; 
 }
 
 void	PhysicsEngine::AddNode(PhysicsNode* n) {

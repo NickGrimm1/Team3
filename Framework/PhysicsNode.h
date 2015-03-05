@@ -125,6 +125,9 @@ public:
 	bool GetIsCollide(){ return isCollide;};
 	void SetIsCollide(bool iscollide){ isCollide=iscollide;}
 
+	bool Getcar_wheel(){ return car_wheel;};
+	void Setcar_wheel(bool Car_wheel){ car_wheel=Car_wheel;}
+
 	Mesh* GetPhysicsMesh() {return physicsMesh;}
 	void SetMesh(Mesh* mesh) {physicsMesh = mesh;}
 
@@ -137,6 +140,7 @@ public:
 
 	bool useGravity;
 	bool isCollide;
+	bool car_wheel;
 
 	Mesh* physicsMesh;
 

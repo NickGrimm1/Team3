@@ -314,6 +314,7 @@ void Vehicle::SetPhysics(float size,PhysicsNode * a)
 	car->SetXend(car->GetPosition().x+3*size);                                                                                         
 
 	car->SetIsCollide(true);
+	car->Setcar_wheel(true);
 
 
 

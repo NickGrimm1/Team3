@@ -59,6 +59,7 @@ void Vehicle_Wheel::SetPhysics(float size,PhysicsNode * a)
 	physicsNode->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Tire.obj"));
 //	physicsNode->SetMesh(NULL);
 	physicsNode->SetIsCollide(true);
+	physicsNode->Setcar_wheel(false);
 
 
 
