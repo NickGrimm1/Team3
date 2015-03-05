@@ -5,6 +5,7 @@ PhysicsEngine* PhysicsEngine::instance = NULL;
 
 #define PHYSICS_HZ 1.0f / 120.0f
 
+#if WINDOWS_BUILD
 void PhysicsEngine::Run()
 {
 
@@ -28,6 +29,14 @@ void PhysicsEngine::Run()
 		//BroadPhaseCollisions();
 	}
 }
+#endif
+#if PS3_BUILD
+void PhysicsEngine::Run(uint64_t arg) 
+{
+	std::cout << "Physics Thread Started! " << std::endl;
+	sys_ppu_thread_exit (0);	std::cout << "Physics Thread Ended! " << std::endl;
+}
+#endif
 
 T3Vector3 PhysicsEngine::support(PhysicsNode& shape1,PhysicsNode& shape2, T3Vector3 dir)
 {

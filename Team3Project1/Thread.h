@@ -5,7 +5,14 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#if PS3_BUILD
+#include<sys/ppu_thread.h>
+#include<sys/paths.h>
+#include<stdlib.h>
 
+#define PPU_STACK_SIZE 4096
+#define PPU_PRIORITY 200
+#endif
 using std::vector;
 using std::string;
 
@@ -15,10 +22,19 @@ using std::string;
 class Thread
 {
 public:
+#if WINDOWS_BUILD
 	Thread()
 	{
 		isRunning = false;
 	}
+#endif
+#if PS3_BUILD
+	Thread(void (*Run)(uint64_t arg))
+		: Run(Run)
+	{
+		isRunning = false;
+	}
+#endif
 #if WINDOWS_BUILD
 	virtual ~Thread(){ CloseHandle(thread_handle);}
 #endif
@@ -29,11 +45,16 @@ public:
 	virtual DWORD get_id() const {return tid;}
 #endif
 protected:
-	virtual void Run() = 0;
 #if WINDOWS_BUILD
+	virtual void Run() = 0;
 	friend DWORD thread_ftn(LPVOID T);
 	HANDLE thread_handle;
 	DWORD tid;
+#endif
+#if PS3_BUILD
+	void (*Run)(uint64_t arg);
+	sys_ppu_thread_t thread;
+	int return_val;
 #endif
 	bool isRunning;
 private:

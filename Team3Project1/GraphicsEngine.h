@@ -84,7 +84,12 @@ public:
 	<summary>Gets whether the graphics engine has initialized and is ready to render.</summary>
 	*/
 	bool HasInitialised() { return isInitialised; }
+#if WINDOWS_BUILD
 	void Run();
+#endif
+#if PS3_BUILD
+	static void Run(uint64_t arg);
+#endif
 #pragma endregion
 #pragma region TwoD
 	/**

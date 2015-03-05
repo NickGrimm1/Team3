@@ -33,10 +33,16 @@ public:
 		instance = NULL;
 	}
 
+#if WINDOWS_BUILD
 	void Run();
+#endif
+#if PS3_BUILD
+	static void Run(uint64_t arg);
+#endif
 	// Gets a controller for a player (Press start or A type prompt...). Specify playerID if a controller needs re-connecting, otherwise assigns the first free playerID
 	GamepadEvents::PlayerIndex GetActiveController(GamepadEvents::PlayerIndex playerID = GamepadEvents::PLAYERINDEX_MAX);
 private:
+#if WINDOWS_BUILD
 	InputManager() 
 	{
 		gamePads = new GamePad*[GamepadEvents::PLAYERINDEX_MAX];
@@ -45,8 +51,22 @@ private:
 
 		if(cellPadInit(GamepadEvents::PLAYERINDEX_MAX) != CELL_PAD_OK) {
 			std::cout << "cellPadInit failed!" << std::endl;	
+		}
 	}
+#endif
+#if PS3_BUILD
+	InputManager() 
+		: Thread(Run)
+	{
+		gamePads = new GamePad*[GamepadEvents::PLAYERINDEX_MAX];
+		for (int i = 0; i < GamepadEvents::PLAYERINDEX_MAX; ++i)
+			gamePads[i] = NULL;
+
+		if(cellPadInit(GamepadEvents::PLAYERINDEX_MAX) != CELL_PAD_OK) {
+			std::cout << "cellPadInit failed!" << std::endl;	
+		}
 	}
+#endif
 	~InputManager() 
 	{
 		cellPadEnd();

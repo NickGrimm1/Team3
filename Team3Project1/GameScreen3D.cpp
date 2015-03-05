@@ -9,10 +9,15 @@ GameScreen3D::~GameScreen3D()
 		RemoveDrawable(drawables.front());
 	}
 	// Clear lights
+	#if WINDOWS_BUILD
 	while (!lights.empty())
 	{
+		// TODO: PS3 cleanup :)
+
 		RemoveLight(lights.front());
+
 	}
+	#endif
 	// Clear Camera
 	if (camera)
 		delete camera;

@@ -35,7 +35,13 @@ public:
 			delete instance;
 		instance = NULL;
 	}
+#if WINDOWS_BUILD
 	void Run();
+#endif
+#if PS3_BUILD
+	static void Run(uint64_t arg);
+#endif
+
 	void Terminimumate() { isRunning = false; }
 
 	void		BroadPhaseCollisions();
@@ -73,7 +79,14 @@ public:
 
 	void    DrawDebug();
 private:
+#if WINDOWS_BUILD
 	PhysicsEngine() { }
+#endif
+#if PS3_BUILD
+	PhysicsEngine()
+		: Thread(Run)
+	{ }
+#endif
 	~PhysicsEngine() { }
 	static PhysicsEngine* instance;
 	bool isRunning;

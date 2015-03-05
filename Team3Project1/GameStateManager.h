@@ -81,6 +81,9 @@ public:
 			for (unsigned int i = 0; i < gameScreens.size(); i++) {
 				gameScreens[i]->Update();
 			}
+
+			//TODO: REMOVE!!
+			Instance()->Exit();
 		}
 		instance->Destroy();
 	}
@@ -99,36 +102,53 @@ public:
 			physics->Terminimumate();
 			input->Terminimumate();
 
+			std::cout << "Threads terminated" << std::endl;
+
 			// Clean up
 			graphics->Join();
 			physics->Join();
 			input->Join();
 
+			std::cout << "Threads joined" << std::endl;
+
 			vector<GameScreen*>::iterator i = instance->gameScreens.begin();
 			while (i != instance->gameScreens.end())
 			{
+				std::cout << "A Gamescreen is about to be killed" << std::endl;
 				(*i)->UnloadContent();
 				delete *i;
 				i = instance->gameScreens.erase(i);
+				std::cout << "A Gamescreen has been killed." << std::endl;
 			}
+
+			std::cout << "Gamescreens Killed" << std::endl;
 
 			// Unload Engine Assets
 			GraphicsEngine::UnloadContent();
-
+			std::cout << "Graphics Engine Content Unloaded" << std::endl;
 			// Destroy everything
 			AssetManager::Destroy(); // Do not destroy before graphics in Windows Build - requires OpenGL context
+			std::cout << "AssetManager Killed" << std::endl;
 			GraphicsEngine::Destroy();
+			std::cout << "Graphics Engine Killed" << std::endl;
 			PhysicsEngine::Destroy();
+			std::cout << "Physics Engine Killed" << std::endl;
 			StorageManager::Destroy();
+			std::cout << "Storage Manager Killed" << std::endl;
 			InputManager::Destroy();
+			std::cout << "Input Manager Killed" << std::endl;
 #if WINDOWS_BUILD
 			AudioEngine::Destroy();
 #endif
 			NetworkManager::Destroy();
+			std::cout << "Network Manager Killed" << std::endl;
 			DebugManager::Destroy();
+			std::cout << "Debug Manager Killed" << std::endl;
 
 			delete instance;
 			instance = NULL;
+
+			std::cout << "GameStateManager Killed" << std::endl;
 		}
 	}
 	~GameStateManager()

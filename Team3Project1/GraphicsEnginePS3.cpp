@@ -48,9 +48,11 @@ bool GraphicsEngine::Destroy()
 	return true;
 }
 
-void GraphicsEngine::Run()
+void GraphicsEngine::Run(uint64_t arg)
 {
 	//needed for PS3?
+	std::cout << "Graphics Thread Started! " << std::endl;
+	sys_ppu_thread_exit (0);	std::cout << "Graphics Thread Ended! " << std::endl;
 }
 /*may need to make these methods thread safe for PS3*/
 void GraphicsEngine::AddTextureToScene(DrawableTexture2D* drawableTexture)
@@ -124,6 +126,7 @@ void GraphicsEngine::DrawDeferredLights(bool on)
 }
 
 GraphicsEngine::GraphicsEngine()
+	: Thread(Run)
 {
 	//initialise the renderer
 	isInitialised = false;

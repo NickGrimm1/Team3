@@ -5,6 +5,7 @@
 
 InputManager* InputManager::instance = NULL;
 
+#if WINDOWS_BUILD
 void InputManager::Run()
 {
 	isRunning = true;
@@ -38,6 +39,14 @@ void InputManager::Run()
 		}
 	}
 }
+#endif
+#if PS3_BUILD
+void InputManager::Run(uint64_t arg) 
+{
+	std::cout << "Input Thread Started! " << std::endl;
+	sys_ppu_thread_exit (0);	std::cout << "Input Thread Ended! " << std::endl;
+}
+#endif
 
 GamepadEvents::PlayerIndex InputManager::GetActiveController(GamepadEvents::PlayerIndex playerID)
 {
