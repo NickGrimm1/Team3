@@ -292,6 +292,7 @@
     <ClInclude Include="DrawableTexture2D.h" />
     <ClInclude Include="EntryPoint.h" />
     <ClInclude Include="GCMRenderer.h" />
+    <ClInclude Include="Gold_cion.h" />
     <ClInclude Include="GraphicsTestScreen.h" />
     <ClInclude Include="Heightmap.h" />
     <ClInclude Include="HudTestScreen.h" />
@@ -372,6 +373,7 @@
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="AudioEngine.cpp" />
     <ClCompile Include="AudioTestClass.cpp" />
+    <ClCompile Include="CheckPoint.cpp" />
     <ClCompile Include="DebugManager.cpp" />
     <ClCompile Include="DebugOverlay.cpp" />
     <ClCompile Include="GamePad.cpp" />
@@ -379,6 +381,7 @@
     <ClCompile Include="GameScreen3D.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="GCMRenderer.cpp" />
+    <ClCompile Include="Gold_cion.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
     <ClCompile Include="GraphicsTestScreen.cpp" />
     <ClCompile Include="HeightMap.cpp" />

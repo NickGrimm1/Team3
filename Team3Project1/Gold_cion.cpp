@@ -1,12 +1,12 @@
-#include"CheckPoint.h"
+#include"Gold_cion.h"
 #include "../Team3Project1/GameStateManager.h"
 
 
-CheckPoint::CheckPoint(float size):
+Gold_cion::Gold_cion(float size):
 	carPhysicNode(carPhysicNode) 
 {
-	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj");
-	T3Vector3 position =T3Vector3(-50, -2, 0);
+	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj");
+	T3Vector3 position =T3Vector3(100, -2, 0);
 	boundingRadius = size;
 	origin = position;
 	rotation = Quaternion::EulerAnglesToQuaternion(0,0,0);
@@ -20,13 +20,13 @@ CheckPoint::CheckPoint(float size):
 
 }
 
-CheckPoint::~CheckPoint(void){
+Gold_cion::~Gold_cion(void){
 	
 }
 
 
 
-void CheckPoint::SetPhysics(float size)
+void Gold_cion::SetPhysics(float size)
 {
     physicsNode = new PhysicsNode();
     physicsNode->SetUseGravity(false);
@@ -34,9 +34,9 @@ void CheckPoint::SetPhysics(float size)
 	physicsNode->SetMass(5);
 
 	physicsNode->SetCollisionVolume(new CollisionAABB(T3Vector3(size,size,size)));
-	physicsNode->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj"));
-	physicsNode->SetXstart(physicsNode->GetPosition().x-1*size);
-	physicsNode->SetXend(physicsNode->GetPosition().x+1*size); 
+	physicsNode->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"));
+	physicsNode->SetXstart(physicsNode->GetPosition().x-0.95*size);
+	physicsNode->SetXend(physicsNode->GetPosition().x+0.95*size); 
 	physicsNode->SetIsCollide(false);
 
 
@@ -44,5 +44,3 @@ void CheckPoint::SetPhysics(float size)
     ConnectToSystems(); 
 
 }
-
-

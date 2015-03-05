@@ -14,7 +14,7 @@ void PhysicsEngine::Run()
 #endif
 		frameRate = (int)(1000.0f / msec);
 
-		NarrowPhaseCollisions();
+	   // NarrowPhaseCollisions();
 
 		narrowlist.clear();
 
@@ -26,7 +26,7 @@ void PhysicsEngine::Run()
 			(*i)->Update(msec);
 			narrowlist.push_back((*i));
 		}
-		//BroadPhaseCollisions();
+		BroadPhaseCollisions();
 	}
 }
 
@@ -427,16 +427,17 @@ void  PhysicsEngine::SortandSweep()
 
 	sort(narrowlist.begin(),narrowlist.end(), [](PhysicsNode* xleft, PhysicsNode* xright){return xleft->GetPosition().x < xright->GetPosition().x;});
 
-	for( vector<PhysicsNode*>::iterator i=narrowlist.begin(); i <narrowlist.end(); ++i) 
+	for( vector<PhysicsNode*>::iterator i=narrowlist.begin(); i <narrowlist.end() - 1; ++i) 
 	{
-		for( vector<PhysicsNode*>::iterator j= i +1; j !=narrowlist.end(); ++j) 
+		for( vector<PhysicsNode*>::iterator j= i +1; j < narrowlist.end(); ++j) 
 		{
 			
 			if((*i)->GetXend() > (*j)->GetXstart())
 			{
 				    PhysicsNode& first =*(*i);
 				    PhysicsNode& second =*(*j);
-
+					//cout << "car x start = " << first.GetXstart() << " x end = " << first.GetXend() << endl;
+						//cout << "box x start = " << second.GetXstart() << " x end = " << second.GetXend() << endl;
 					
 					if(CollisionDetection(first, second))
 			    {
@@ -493,6 +494,8 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 			
 			if(CollisionDetection(first, second))
 			{
+						
+				
 				//cout << "GJK passed" << endl;
 				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
 				{

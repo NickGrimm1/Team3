@@ -483,6 +483,9 @@
     <ClInclude Include="AudioTestClass.h">
       <Filter>Game\MainGame\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Gold_cion.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">
@@ -680,9 +683,6 @@
     <ClCompile Include="VehiclePhysicsNode.cpp">
       <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CheckPoint.cpp">
-      <Filter>Framework\Physics\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DebugOverlay.cpp">
       <Filter>Framework\Debug\Source Files</Filter>
     </ClCompile>
@@ -694,6 +694,12 @@
     </ClCompile>
     <ClCompile Include="AudioTestClass.cpp">
       <Filter>Game\MainGame\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckPoint.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gold_cion.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

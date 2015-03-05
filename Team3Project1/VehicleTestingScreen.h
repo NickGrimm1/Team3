@@ -7,6 +7,7 @@
 #include "Vehicle_Wheel.h"
 #include "VehiclePhysicsNode.h"
 #include "CheckPoint.h"
+#include "Gold_cion.h"
 class VehicleTestingScreen : public GameScreen3D
 {
 public:
@@ -38,6 +39,8 @@ private:
 	SpotLight* light;
 	FreeCamera* camera;
 	Vehicle* car;
+	Gold_cion * gold_cion;
+	
 
 	CheckPoint * checkpoint;
 	Vehicle_Wheel * FrontRightTire;

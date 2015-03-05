@@ -4,10 +4,10 @@
 #include "../Team3Project1/DrawableEntity3D.h"
 #include "../Framework/GameEntity.h"
 
-class CheckPoint : public GameEntity {
+class Gold_cion : public GameEntity {
 public:
-	CheckPoint(float size);
-	~CheckPoint(void);
+	Gold_cion(float size);
+	~Gold_cion(void);
 
 	
 	void SetPhysics(float size);
