@@ -518,33 +518,41 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 
 					   if(first.GetType()=='c'||second.GetType()=='c')
 					   {
-						cout<<"c is call";
-						if(first.GetGameEntity()){
-							cout<<"call if"<<endl;
-						RacerGame::update=1;}
-					   }
+							cout<<"c is call";
+							if(first.GetGameEntity())
+							{
+								cout<<"call if"<<endl;
+#if WINDOWS_BUILD
+								//RacerGame::update=1;}
+#endif
+							}
+							else
+							{
+							
+								if(second.GetGameEntity())
+								{
+								
 
-					   else{
-						if(second.GetGameEntity())
-					      {
 						cout<<"call else"<<endl;
-					RacerGame::update=1;
-						  }
-					    }
-					
-						check=false;
-					}
+#if WINDOWS_BUILD
+					//RacerGame::update=1;
+#endif
+								}
+							}
+							check=false;
+						}
 					/*first.SetLinearVelocity(T3Vector3(0,0,0));
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
 					second.SetForce(T3Vector3(0,0,0));*/
+					}
+			
+			
 				}
-			
-			
-			}
 				
+			}
 
-
+	
 
 
 		//	switch(fv->GetType()) {

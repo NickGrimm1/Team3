@@ -258,6 +258,7 @@ void MainMenu::GamepadDisconnect(GamepadEvents::PlayerIndex playerID)
 #endif
 		ClearSelection();
 }
+#if WINDOWS_BUILD
 void MainMenu::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position)
 {
 	if (playerOne == GamepadEvents::PLAYERINDEX_MAX)
@@ -268,3 +269,4 @@ void MainMenu::MouseMoved(T3Vector2& start, T3Vector2& finish)
 	if (playerOne == GamepadEvents::PLAYERINDEX_MAX)
 		GameScreen2D::MouseMoved(start, finish);
 }
+#endif

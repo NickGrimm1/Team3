@@ -57,10 +57,11 @@ ShaderPart::ShaderPart(std::string raw, ShaderType::Type type) : type(type)
 	//This is the slightly messy default way to determinimume the size
 	//of a file (seek to the end of it, grab the read position, seek
 	//back to the start)
+	std::cout << "ShaderPart: Getting File Size" << std::endl;
 	file.seekg(0, std::ios::end);
 	dataSize = file.tellg();
 	file.seekg(0, std::ios::beg);
-
+	std::cout << "ShaderPart: Got File Size" << std::endl;
 	//Allocate some graphics memory for the shader.
 	//data = (char*)GCMRenderer::localMemoryAlign(64,dataSize);
 
@@ -85,10 +86,12 @@ ShaderPart::ShaderPart(std::string raw, ShaderType::Type type) : type(type)
 	unsigned int ucodeSize;
 	void *ucodePtr;
 
+	std::cout << "ShaderPart: Getting Memory" << std::endl;
 	cellGcmCgGetUCode(program, &ucodePtr, &ucodeSize);
 	ucode = GCMRenderer::localMemoryAlign(64,ucodeSize);
 	memcpy(ucode, ucodePtr, ucodeSize);
 	cellGcmAddressToOffset(ucode, &offset);
+	std::cout << "ShaderPart: Got Memory" << std::endl;
 
 	if (type == ShaderType::VERTEX)
 	{
@@ -99,6 +102,8 @@ ShaderPart::ShaderPart(std::string raw, ShaderType::Type type) : type(type)
 	}
 	else if (type == ShaderType::FRAGMENT)
 		UpdateShaderVariables();
+
+	std::cout << "ShaderPart: Finished Load" << std::endl;
 #endif
 }
 #if WINDOWS_BUILD
