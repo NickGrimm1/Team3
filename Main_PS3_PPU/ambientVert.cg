@@ -1,0 +1,27 @@
+struct output 
+{
+	float4 position : POSITION;
+	float4 color 	: COLOR;
+	float2 texCoord : TEXCOORD0;
+};
+
+output main 
+(
+
+	float4 position : POSITION,
+	float4 color 	: COLOR,
+	float2 texCoord : TEXCOORD0,
+	
+	uniform float4x4 modelMat,
+	uniform float4x4 viewMat,
+	uniform float4x4 projMat
+)
+{
+	output OUT;
+	
+	float4x4 mvp = mul(projMat, mul(viewMat, modelMat));
+
+	OUT.position = 
+
+	
+}

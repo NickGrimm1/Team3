@@ -3,11 +3,13 @@
 #include "NetworkCommon.h"
 #include "TcpSocket.h"
 #include "ServerSocket.h"
+#include "Scoreboard.h"
 
 //#define TEST_SERVER
 NetworkTest::NetworkTest(void)
 {
 	connected = false;
+	Scoreboard* s = new Scoreboard();	
 }
 
 
@@ -29,9 +31,33 @@ void NetworkTest::Update() {
 			return;
 		}
 		cout << "connection established" << endl;
-		
+
 		char header[1024];
 		string host(SCOREBOARD_HOSTNAME);
+		string name("DK1");
+		unsigned int score = 0;
+		sprintf(header,
+        "POST /postScore.php?n=%s&s=%d HTTP/1.1\r\n"
+        "Host: %s\r\n"
+        "User-Agent: Mozilla Firefox/4.0\r\n"
+        "Content-Type: text/html\r\n"
+        "Accept-Language: en-US,en;q=0.5\r\n"
+		"Accept-Encoding: identity\r\n"
+		"Connection: keep-alive\r\n\r\n", 
+        name.c_str(),
+		score,
+		host.c_str());
+
+		cout << header << endl;
+
+		connection->Send(header, strlen(header));
+
+		char buffer[1024];
+		int i = 0;
+		if (connection->Receive(buffer + i, 1024 - i) > 0) {
+	 		cout << string(buffer) << endl;
+		}
+
 		sprintf(header,
         "GET /getScores.php HTTP/1.1\r\n"
         "Host: %s\r\n"
@@ -39,13 +65,12 @@ void NetworkTest::Update() {
 		"Accept: text/plain\r\n"
 		"Accept-Language: en-US,en;q=0.5\r\n"
 		"Accept-Encoding: identity\r\n"
-		"Connection: keep-alive\r\n\r\n\0", 
+		"Connection: keep-alive\r\n\r\n", 
 		host.c_str());
 
 		connection->Send(header, strlen(header));
 
-        char buffer[1024];
-		int i = 0;
+		i = 0;
 		if (connection->Receive(buffer + i, 1024 - i) > 0) {
 	 		cout << string(buffer) << endl;
 		}

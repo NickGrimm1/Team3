@@ -22,24 +22,31 @@ float RacerGame::gx =300.0f;
 
 RacerGame::RacerGame(void)
 {
+#if WINDOWS_BUILD
 	srand(time(NULL));
 	T3Vector3 sp1= T3Vector3(100,0,0);
 	T3Vector3 sp2= T3Vector3(200,0,0);
 	T3Vector3 sp3= T3Vector3(300,0,0);
+
 	SplinePoint.push_back(sp1);
 	SplinePoint.push_back(sp2);
 	SplinePoint.push_back(sp3);
+#endif
 	//Strack = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2],5,50.f);
 	//TrackSegmentVector.push_back(Strack);
 }
 
 RacerGame::~RacerGame(void)
 {
+#if WINDOWS_BUILD
 	delete quad;
+
 	delete light;
+#endif
 }
 
 void RacerGame::LoadContent() {
+#if WINDOWS_BUILD	
 	//Mesh* coneMesh = Mesh::GenerateCone(20);
 	quad = GameStateManager::Assets()->LoadCylinder(this, 20);
 	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
@@ -144,9 +151,11 @@ void RacerGame::LoadContent() {
 	camera->SetPosition(T3Vector3(0,10.0f, 80.0f));
 	//camera->SetYaw(180.0f);
 	GameStateManager::Graphics()->SetCamera(camera);
+#endif
 }
 
 void RacerGame::Update() { 
+	#if WINDOWS_BUILD
 	if(car->GetCarNode().GetLinearVelocity().Length()>=15)
 	{
 		car->GetCarNode().SetForce(T3Vector3(0,0,0));
@@ -169,7 +178,9 @@ void RacerGame::Update() {
 		gx += 100*( 3*abs(cos(DegToRad(angle))));
 
 		T3Vector3 spn= T3Vector3(gx,0,g);
+
 		SplinePoint.push_back(spn);
+
 		//2
 //		g += 100*(sin(RadToDeg(angle)));
 //		gx += 100*(2 * abs(cos(RadToDeg(angle))));
@@ -179,22 +190,28 @@ void RacerGame::Update() {
 		gx += 100*(3* abs(cos(DegToRad(angle))));
 
 		T3Vector3 spn2= T3Vector3(gx,0,g);
+
 		SplinePoint.push_back(spn2);
+
 		//create new track
+		
 		T3Vector3 avg = (SplinePoint[1] + SplinePoint[2] + SplinePoint[3]) / 3.0f;
 		T3Vector3 avg2 = (SplinePoint[2] + SplinePoint[3] + SplinePoint[4]) / 3.0f;
+
 		GameStateManager::Graphics()->GetRenderContext();
 		TrackSegment* Strackn = new TrackSegment(SplinePoint[1] - avg,SplinePoint[2] - avg,SplinePoint[3] - avg,5,50.f);
+
 		TrackSegmentVector.push_back(Strackn);
-		
+
 		/*TrackSegment* Strackn = new TrackSegment(SplinePoint[1],SplinePoint[2],T3Vector3(400,0,0),5,50.f);
 		TrackSegmentVector.push_back(Strackn);*/
 		GameStateManager::Graphics()->DropRenderContext();
 
 		GameStateManager::Graphics()->GetRenderContext();
 		TrackSegment* Strackn2 = new TrackSegment(SplinePoint[2] - avg2,SplinePoint[3] - avg2,SplinePoint[4] - avg2,5,50.f);
+
 		TrackSegmentVector.push_back(Strackn2);
-		
+
 		/*TrackSegment* Strackn = new TrackSegment(SplinePoint[1],SplinePoint[2],T3Vector3(400,0,0),5,50.f);
 		TrackSegmentVector.push_back(Strackn);*/
 		GameStateManager::Graphics()->DropRenderContext();
@@ -204,7 +221,9 @@ void RacerGame::Update() {
 		GameStateManager::Graphics()->GetRenderContext();
 	TrackSegment* track = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5, 50.0);
 	//push back track
+
 	TrackSegmentVector.push_back(track);
+
 	GameStateManager::Graphics()->DropRenderContext();
 
 	DrawableEntity3D* ent = new DrawableEntity3D(
@@ -253,31 +272,42 @@ void RacerGame::Update() {
 
 	T3Vector3 L =  Strackn2->GetTrackCentreLeft();
 	T3Vector3 R = Strackn2->GetTrackCentreRight();
+
 	T3Vector3 rl = R-L;
 	T3Vector3 lr = L-R;
+
 	T3Vector3 F = T3Vector3(0,0,1); 
 	F.Normalise();
+
 	rl.Normalise();
+
 	float cosc= T3Vector3::Dot(rl,F); 
 	//float Degc= 
 	double degc=acos(cosc);
+
 	float anglec=RadToDeg(degc);
 	cout<<anglec<<endl;
+
+
 	if(L.x<R.x)
 	{
 	anglec=-anglec;
 	}
+
 	cout<<"updated"<<endl;
 
 	CheckPoint* checkpoint2= new CheckPoint(10);
 	//checkpoint2->SetPhysics(10,'c');
 	checkpoint2->SetOriginPosition(SplinePoint[3]);
+
 	checkpoint2->SetRotation(Quaternion::EulerAnglesToQuaternion(0,-(anglec),0));
+
 	//checkpoint2->GetPhysicsNode().SetPGE(checkpoint2);
 	AddDrawable(checkpoint2);
 
 	update=0;
 	}
+#endif
 }
 
 #if WINDOWS_BUILD
@@ -481,7 +511,8 @@ void RacerGame::Update() {
 //		
 //	}
 //}
-	
+#endif
+#if WINDOWS_BUILD
 void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
 
 
@@ -503,7 +534,7 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 				   car->GetCarNode().SetForce(T3Vector3(f /*+ 100.0f*/,0,0));   
 					//		    f=f+100;
 		       }
-			  cout<<car->GetCarNode().GetLinearVelocity().Length ()<<endl;
+			  //cout<<car->GetCarNode().GetLinearVelocity().Length ()<<endl;
 
 			   //cout<<car->GetCarNode().GetLinearVelocity().Length()<<endl;
 				if(car->GetCarNode().GetOrientation().y<0)
@@ -748,9 +779,12 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 		}
 		
 	}
-}
 
+}
+#endif
+#if WINDOWS_BUILD
 void RacerGame::MouseMoved(T3Vector2& star, T3Vector2& finish) {
+
 	T3Vector2 amount = finish - star;
 	
 	camera->AddPitch(10*(-amount.y));
