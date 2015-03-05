@@ -21,3 +21,5 @@
 #define SQL_DB_SCORES	"1823820_scores"
 #define SQL_USER		"1823820_scores"
 #define SQL_PASSWORD	"94857GLOW423895"
+
+#define HTTP_OK	"HTTP/1.1 200 OK"

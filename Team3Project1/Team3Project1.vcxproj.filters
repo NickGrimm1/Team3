@@ -507,6 +507,9 @@
     <ClInclude Include="DebugOverlay.h">
       <Filter>Framework\Debug\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Scoreboard.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Gold_cion.h">
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
@@ -748,6 +751,9 @@
     </ClCompile>
     <ClCompile Include="Gold_cion.cpp">
       <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scoreboard.cpp">
+      <Filter>Engine\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

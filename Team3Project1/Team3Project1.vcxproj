@@ -144,7 +144,7 @@
     <LibraryPath>..\GLEW\lib;..\SOIL\$(Configuration);..\$(Configuration)\;.\Framework\$(Configuration)\;..\GLEW\lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='WINDOWS_DEBUG|Win32'">
-    <IncludePath>..\GLEW\include;..\SOIL;..\;$(IncludePath)</IncludePath>
+    <IncludePath>..\GLEW\include;..\SOIL;..\;$(IncludePath);..\DX\Include</IncludePath>
     <LibraryPath>..\GLEW\lib;..\SOIL\$(Configuration);..\$(Configuration)\;.\Framework\$(Configuration)\;..\DX\Lib;..\GLEW\lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -324,6 +324,7 @@
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="RacerGame.h" />
+    <ClInclude Include="Scoreboard.h" />
     <ClInclude Include="SelectableEntity2D.h" />
     <ClInclude Include="ServerSocket.h" />
     <ClInclude Include="ShaderPart.h" />
@@ -407,6 +408,7 @@
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="RacerGame.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Scoreboard.cpp" />
     <ClCompile Include="ServerSocket.cpp" />
     <ClCompile Include="ShaderPart.cpp" />
     <ClCompile Include="Spline.cpp" />
