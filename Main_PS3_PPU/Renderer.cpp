@@ -1,3 +1,5 @@
+#if PS3_BUILD
+
 #include "Renderer.h"
 #include "../Framework/Shader.h"
 #include "../Team3Project1/ShaderPart.h"
@@ -75,7 +77,8 @@ void Renderer::RenderScene() {
 		viewMatrix = Matrix4::identity();
 	}
 
-	shader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
+	basicShader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
+	
 	if(root) {
 		DrawNode(root);
 	}
@@ -124,3 +127,4 @@ unsigned int Renderer::CreateShadowTexture()
 {
 	return 0;//look into this later
 }
+#endif

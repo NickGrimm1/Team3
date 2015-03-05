@@ -531,10 +531,10 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 					
 						check=false;
 					}
-					/*first.SetLinearVelocity(T3Vector3(0,0,0));
+					first.SetLinearVelocity(T3Vector3(0,0,0));
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
-					second.SetForce(T3Vector3(0,0,0));*/
+					second.SetForce(T3Vector3(0,0,0));
 				}
 			
 			

@@ -74,7 +74,9 @@ CellGcmTexture* Texture::LoadTGA(std::string filename)	{
 
 	std::cout << filename << " has size "	 << (unsigned int)size		<< std::endl;
 
+	std::cout << "Texture: Getting Memory" << std::endl;
 	char*rsxdata = (char*)GCMRenderer::localMemoryAlign(128, size);	//A texture in graphics memory needs aligning...
+	std::cout << "Texture: Got Memory" << std::endl;
 
 	//Read in the texture straight into graphics memory. Challenge! How fast will this data
 	//transfer be? Why? How could it be sped up?
@@ -164,10 +166,12 @@ CellGcmTexture* Texture::LoadGTF(std::string filename) {
 
 		file.seekg(attributes[i].OffsetToTex);
 
+		std::cout << "Texture: Getting Memory" << std::endl;
 		char*rsxdata = (char*)GCMRenderer::localMemoryAlign(128, attributes[i].TextureSize);
 		file.read(rsxdata,attributes[i].TextureSize);
 
 		cellGcmAddressToOffset( rsxdata, &texture->offset );
+		std::cout << "Texture: Got Memory" << std::endl;
 	}
 
 	//memory = (width * height * 4) / 1024.0f / 1024.0f; // Assume all textures are 32 bit for the moment.

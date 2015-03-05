@@ -332,7 +332,7 @@ public:
 			{
 				(*i)->UnloadContent();
 				delete *i;
-				Instance()->gameScreens.erase(i);
+				i = Instance()->gameScreens.erase(i);
 				break;
 			}
 		}

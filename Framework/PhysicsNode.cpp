@@ -40,7 +40,11 @@ void	PhysicsNode::Update(float msec) {
 	m_position = m_position + m_linearVelocity*sec;
 
 	
-	switch(vol->GetType())
+
+
+	
+	
+	/*switch(vol->GetType())
 	{
 	 case COLLISION_SPHERE:
 		{ CollisionSphere& cSphere = *(CollisionSphere*)vol;  
@@ -68,7 +72,7 @@ void	PhysicsNode::Update(float msec) {
 		}
 			break;
 	
-	}
+	}*/
 
 	//F=u*T_engine*xg*xd*n/Rw;
 

@@ -44,6 +44,17 @@ public:
 	
 	vector<T3Vector3> SplinePoint;
 	vector<TrackSegment*> TrackSegmentVector;
+	 virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
+		 cout<<obj1->GetType()<<endl;
+		  cout<<"collisionbetween"<<endl;
+		  cout<<obj2->GetType()<<endl;
+		  if(obj1->GetType()=='g')
+		  {
+			  obj1->GetPhysicsNode().SetIsCollide(true);
+			  cout<<"set = true ok"<<endl;
+			  RacerGame::update=1;
+		  }
+   }
 	//sam
 
 

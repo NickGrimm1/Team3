@@ -33,14 +33,14 @@ namespace EntryPoint
 		//GraphicsTestScreen* game = new GraphicsTestScreen();
 		//GameStateManager::Instance()->AddGameScreen(game);
 
-		/*MainMenu* main = new MainMenu();
+		MainMenu* main = new MainMenu();
 		GameStateManager::Instance()->AddGameScreen(main);
-*/
+
 		//HudTestScreen* hud = new HudTestScreen();
 		//GameStateManager::Instance()->AddGameScreen(hud);
 
-		//DebugOverlay* debug = new DebugOverlay();
-		//GameStateManager::Instance()->AddGameScreen(debug);
+		DebugOverlay* debug = new DebugOverlay();
+		GameStateManager::Instance()->AddGameScreen(debug);
 
 		//RacerGame* game = new RacerGame();
 		//GameStateManager::Instance()->AddGameScreen(game);
@@ -56,6 +56,7 @@ namespace EntryPoint
 
 		RacerGame* game = new RacerGame();
 		GameStateManager::Instance()->AddGameScreen(game);
+		PhysicsEngine::SetGame(game);
 		//VehicleTestingScreen* physicsgame = new VehicleTestingScreen();
 		//GameStateManager::Instance()->AddGameScreen(physicsgame);
 		GameStateManager::Instance()->Start();
