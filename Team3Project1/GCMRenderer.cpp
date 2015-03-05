@@ -306,10 +306,10 @@ while fragment shaders MUST be ran in graphics memory, and so its address
 must be 'offsettable'. 
 */
 void	GCMRenderer::SetCurrentShader(Shader* s) {
-	std::cout<<"GCMRenderer: setCurrentShader"<<std::endl;
+	//std::cout<<"GCMRenderer: setCurrentShader"<<std::endl;
 	cellGcmSetFragmentProgram(s->GetFragment()->GetProgram(), s->GetFragment()->GetOffset());
 	cellGcmSetVertexProgram(s->GetVertex()->GetProgram(), s->GetVertex()->GetuCode());
-	std::cout<<"GCMRenderer: got to the end of setCurrentShader"<<std::endl;
+	//std::cout<<"GCMRenderer: got to the end of setCurrentShader"<<std::endl;
 }
 
 //Sets the camera. Can be NULL
@@ -341,10 +341,10 @@ specific #ifdefs to encapsulate API code). You'll have to think up some way
 of safely setting shaders and textures on a renderer...
 */
 void	GCMRenderer::DrawNode(SceneNode*n)	{
-	std::cout << "Drawing Node" << std::endl;
+//	std::cout << "Drawing Node" << std::endl;
 	if(n->GetMesh()) {
-		std::cout << "Drawing a mesh: " << std::endl;
-		std::cout << n->GetMesh()->GetNumVertices() << std::endl;
+	//	std::cout << "Drawing a mesh: " << std::endl;
+	//	std::cout << n->GetMesh()->GetNumVertices() << std::endl;
 		//GCC complains about function returns being used as parameters passed
 		//around, or we'd just use GetWorldTransform as the function param
 		T3Matrix4 transform = //n->GetTransform();
@@ -392,10 +392,10 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 	
 		CellGcmTexture* t = texture->GetTexture();
 		
-		if (t)
+		/*if (t)
 			std::cout << "Has Texture" << std::endl;
 		else
-			std::cout << "No Has Texture :(" << std::endl;
+			std::cout << "No Has Texture :(" << std::endl;*/
 
 		SetTextureSampler(shader->GetFragment()->GetParameter("texture"), t);
 

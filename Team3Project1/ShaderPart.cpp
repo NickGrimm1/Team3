@@ -10,7 +10,7 @@
 
 ShaderPart::ShaderPart(std::string raw, ShaderType::Type type) : type(type)
 {
-	std::cout <<"shader part started" << std::endl;
+	//std::cout <<"shader part started" << std::endl;
 #if WINDOWS_BUILD
 	shader = glCreateShader(type);
 	const char *chars = raw.c_str();
@@ -35,17 +35,17 @@ ShaderPart::ShaderPart(std::string raw, ShaderType::Type type) : type(type)
 #endif
 #endif
 #if PS3_BUILD
-	std::cout <<"ShaderPart: got to first ps3 block" << std::endl;
+	//std::cout <<"ShaderPart: got to first ps3 block" << std::endl;
 	
 	string name = SYS_APP_HOME + raw;
-	std::cout <<"ShaderPart:made a string" << std::endl;
+	//std::cout <<"ShaderPart:made a string" << std::endl;
 	unsigned int dataSize = 0;
-	std::cout <<"ShaderPart: made an int" << std::endl; 
+	//std::cout <<"ShaderPart: made an int" << std::endl; 
 	char* data = NULL;
-	std::cout <<"ShaderPart: initialised some variables" << std::endl;
+	//std::cout <<"ShaderPart: initialised some variables" << std::endl;
 	//Open the file
 	std::ifstream	file(name.c_str(),std::ios::in|std::ios::binary);
-	std::cout <<"ShaderPart: opened the shader file" << std::endl;
+	//std::cout <<"ShaderPart: opened the shader file" << std::endl;
 	//Oh no!
 	if(!file) 
 	{
@@ -57,11 +57,11 @@ ShaderPart::ShaderPart(std::string raw, ShaderType::Type type) : type(type)
 	//This is the slightly messy default way to determinimume the size
 	//of a file (seek to the end of it, grab the read position, seek
 	//back to the start)
-	std::cout << "ShaderPart: Getting File Size" << std::endl;
+	//std::cout << "ShaderPart: Getting File Size" << std::endl;
 	file.seekg(0, std::ios::end);
 	dataSize = file.tellg();
 	file.seekg(0, std::ios::beg);
-	std::cout << "ShaderPart: Got File Size" << std::endl;
+//	std::cout << "ShaderPart: Got File Size" << std::endl;
 	//Allocate some graphics memory for the shader.
 	//data = (char*)GCMRenderer::localMemoryAlign(64,dataSize);
 
@@ -86,12 +86,12 @@ ShaderPart::ShaderPart(std::string raw, ShaderType::Type type) : type(type)
 	unsigned int ucodeSize;
 	void *ucodePtr;
 
-	std::cout << "ShaderPart: Getting Memory" << std::endl;
+	//std::cout << "ShaderPart: Getting Memory" << std::endl;
 	cellGcmCgGetUCode(program, &ucodePtr, &ucodeSize);
 	ucode = GCMRenderer::localMemoryAlign(64,ucodeSize);
 	memcpy(ucode, ucodePtr, ucodeSize);
 	cellGcmAddressToOffset(ucode, &offset);
-	std::cout << "ShaderPart: Got Memory" << std::endl;
+	//std::cout << "ShaderPart: Got Memory" << std::endl;
 
 	if (type == ShaderType::VERTEX)
 	{
@@ -103,7 +103,7 @@ ShaderPart::ShaderPart(std::string raw, ShaderType::Type type) : type(type)
 	else if (type == ShaderType::FRAGMENT)
 		UpdateShaderVariables();
 
-	std::cout << "ShaderPart: Finished Load" << std::endl;
+	//std::cout << "ShaderPart: Finished Load" << std::endl;
 #endif
 }
 #if WINDOWS_BUILD
@@ -151,7 +151,7 @@ wrong when incorrect data is sent to it.
 */
 void	ShaderPart::SetParameter(std::string name, float*data) 
 {
-	std::cout << "Shader Part: Getting parameter: " << name << std::endl;
+//	std::cout << "Shader Part: Getting parameter: " << name << std::endl;
 	CGparameter p = GetParameter(name);
 
 	//DON'T try to set a non-existent parameter. GCM will instantly
@@ -160,12 +160,12 @@ void	ShaderPart::SetParameter(std::string name, float*data)
 		if(type == ShaderType::VERTEX)
 		{
 			cellGcmSetVertexProgramParameter(p, data);
-			std::cout << "ShaderPart(Vertex): Set Parameter: " <<  name << std::endl;
+	//		std::cout << "ShaderPart(Vertex): Set Parameter: " <<  name << std::endl;
 		}
 		else
 		{
 			cellGcmSetFragmentProgramParameter(program, p, data, offset);
-			std::cout << "ShaderPart(Fragment): Set Parameter: " <<  name << std::endl;
+	//		std::cout << "ShaderPart(Fragment): Set Parameter: " <<  name << std::endl;
 		}
 	}
 }
@@ -178,9 +178,9 @@ transpose function, so it's less likely you'll accidentally set your
 matrix wrong
 */
 void ShaderPart::SetParameter(std::string name, Matrix4 &totranpose) {
-	std::cout << "Transposing: " << name << std::endl;
+	//std::cout << "Transposing: " << name << std::endl;
 	Matrix4 tempMatrix = transpose(totranpose);
-	std::cout << "Shader Part: Transposed Matrix (SCE): " << std::endl;
+	//std::cout << "Shader Part: Transposed Matrix (SCE): " << std::endl;
 		for (int x = 0; x < 4; ++x)
 		{
 			for (int y = 0; y < 4; ++y)
@@ -190,9 +190,9 @@ void ShaderPart::SetParameter(std::string name, Matrix4 &totranpose) {
 			std::cout << std::endl;
 		}
 		float* m = (float*)&tempMatrix;
-		std::cout << "Shader Part: Setting " << name << " " << &tempMatrix << std::endl;
+	//	std::cout << "Shader Part: Setting " << name << " " << &tempMatrix << std::endl;
 	SetParameter(name, m);
-	std::cout << "Shader Part: " << name << " Set" << std::endl;
+//	std::cout << "Shader Part: " << name << " Set" << std::endl;
 }
 
 /*
@@ -279,7 +279,7 @@ CGparameter ShaderPart::GetParameter(string target)
 	if(i != uniforms.end()) 
 	{ 
 		// if its in the map , return it!
-		std::cout << "ShaderPart::GetParameterL: Returning " << target << " from map." << std::endl;
+	//	std::cout << "ShaderPart::GetParameterL: Returning " << target << " from map." << std::endl;
 		return i->second;
 	}
 
@@ -290,7 +290,7 @@ CGparameter ShaderPart::GetParameter(string target)
 	}
 
 	uniforms.insert (std::make_pair(target, p));
-	std::cout << "ShaderPart::GetParameterL: Returning " << target << " from named." << std::endl;
+	//std::cout << "ShaderPart::GetParameterL: Returning " << target << " from named." << std::endl;
 	return p;
 }
 
