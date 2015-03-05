@@ -1,3 +1,5 @@
+#if PS3_BUILD
+
 #include "Renderer.h"
 #include "../Framework/Shader.h"
 #include "../Team3Project1/ShaderPart.h"
@@ -125,3 +127,4 @@ unsigned int Renderer::CreateShadowTexture()
 {
 	return 0;//look into this later
 }
+#endif
