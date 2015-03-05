@@ -39,8 +39,6 @@ public:
 	DrawableEntity2D(float x, float y, int depth, float width, float height, DrawableType::Type type, T3Vector4 blendColor = T3Vector4(1.0f, 1.0f, 1.0f ,1.0f)) : T3Rectangle(x, y, width, height), blendColor(blendColor), type(type), depth(depth)
 	{ }
 
-	virtual ~DrawableEntity2D() {}
-
 	/**
 	<summary>Gets the drawable type of this object.</summary>
 	*/

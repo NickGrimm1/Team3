@@ -71,21 +71,12 @@ public:
 	Shader* LoadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath = "");
 	void UnloadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath = "");
 
-	Mesh* LoadHeightmap(void* callerID, string filename, bool useTextureWeights = true);
-	Mesh* LoadHeightmap(unsigned char minHeight = 0, unsigned char maxHeight = 255, bool useTextureWeights = true);
-	void UnloadHeightmap(void* callerID, string filename);
-	void UnloadHeightmap(Mesh* heightmap);
+	// Generate Heightmap
 	// Load audio
 
-	int GetTotalMemory() { return (int)(textureMemory + meshMemory); }
-	int GetTextureMemory() { return (int)textureMemory; }
-	int GetMeshMemory() { return (int)meshMemory; }
 private:
 	AssetManager()
-	{
-		meshMemory = 0;
-		textureMemory = 0;
-	}
+	{ }
 	~AssetManager()
 	{ }
 
@@ -112,12 +103,8 @@ private:
 	vector<void*> quadAltUsers;
 	vector<void*> quadCentralUsers;
 	vector<void*> quadTexCoordColUsers;
-	vector<Mesh*> generatedHeightmaps;
 	
 	map<unsigned int, LoadedMesh> circleUsers;
 	map<unsigned int, LoadedMesh> coneUsers;
 	map<unsigned int, LoadedMesh> cylinderUsers;
-
-	float meshMemory;
-	float textureMemory;
 };

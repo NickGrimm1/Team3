@@ -3,17 +3,17 @@
 
 PhysicsEngine* PhysicsEngine::instance = NULL;
 
+#define PHYSICS_HZ 1.0f / 120.0f
+
+#if WINDOWS_BUILD
 void PhysicsEngine::Run()
 {
+
+
+	isRunning = true;
+	float msec = PHYSICS_HZ;
 	while (isRunning)
 	{
-#if WINDOWS_BUILD
-		while (Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp < PHYSICS_TIME) { ; } // Fix the timestep
-		float msec = Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp;
-		lastFrameTimeStamp = Window::GetWindow().GetTimer()->GetMS();
-#endif
-		frameRate = (int)(1000.0f / msec);
-
 		NarrowPhaseCollisions();
 
 		//narrowlist.clear();
@@ -29,6 +29,14 @@ void PhysicsEngine::Run()
 		//BroadPhaseCollisions();
 	}
 }
+#endif
+#if PS3_BUILD
+void PhysicsEngine::Run(uint64_t arg) 
+{
+	std::cout << "Physics Thread Started! " << std::endl;
+	sys_ppu_thread_exit (0);	std::cout << "Physics Thread Ended! " << std::endl;
+}
+#endif
 
 T3Vector3 PhysicsEngine::support(PhysicsNode& shape1,PhysicsNode& shape2, T3Vector3 dir)
 {
@@ -291,14 +299,14 @@ bool PhysicsEngine::triangle(T3Vector3& dir)
 		 abc = adb;
 		 return checkTetrahedron(ao, ab, ac, abc, dir);
 	 }
-
+#if WINDOWS_BUILD
 					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, a, b, T3Vector3(1, 0, 1), T3Vector3(1, 0, 1));
 					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, c, b, T3Vector3(1, 0, 1), T3Vector3(1, 0, 1));
 					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, a, c, T3Vector3(1, 0, 1), T3Vector3(1, 0, 1));
 					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, a, d, T3Vector3(1, 1, 1), T3Vector3(1, 1, 1));
 					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, b, d, T3Vector3(1, 1, 1), T3Vector3(1, 1, 1));
 					OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, c, d, T3Vector3(1, 1, 1), T3Vector3(1, 1, 1));
-
+#endif
 	 //origin in tetrahedron
 	 return true;
 
@@ -461,7 +469,7 @@ void  PhysicsEngine::SortandSweep()
 {
 
 	
-
+#if WINDOWS_BUILD
 	sort(narrowlist.begin(),narrowlist.end(), [](PhysicsNode* xleft, PhysicsNode* xright){return xleft->GetPosition().x < xright->GetPosition().x;});
 
 	for( vector<PhysicsNode*>::iterator i=narrowlist.begin(); i <narrowlist.end(); ++i) 
@@ -546,7 +554,8 @@ void  PhysicsEngine::SortandSweep()
 				}
 	
 		}
-	}
+#endif
+}
 	
 
 

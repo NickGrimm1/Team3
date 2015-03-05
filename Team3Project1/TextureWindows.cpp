@@ -10,14 +10,6 @@ Texture::Texture(string filename, unsigned int flags)
 		textureObject = 0; // make sure GetTexture will return an error
 		return;
 	}
-
-	GLint width = 0;
-	GLint height = 0;
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, textureObject);
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
-	memory = (width * height * 4) / 1024.0f / 1024.0f; // Assume all textures are 32 bit for the moment.
 }
 
 Texture::Texture(GLuint textureObj)

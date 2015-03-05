@@ -39,7 +39,7 @@ public:
 	/**
 	<summary>Destructor.</summary>
 	*/
-	virtual ~T3Rectangle() {}
+	~T3Rectangle() {}
 #pragma endregion
 #pragma region Methods
 	/**

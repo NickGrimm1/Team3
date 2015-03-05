@@ -21,10 +21,8 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "DrawableText2D.h"
 #include "DrawableTexture2D.h"
 #include "MutexClass.h"
-#include "TextMesh.h"
 
 #include <vector>
-#include <map>
 
 #define SAMPLENUM 3
 #define SHADOWSIZE 2048 //* 8 ?
@@ -57,7 +55,7 @@ public:
 	void			RenderScene();
 	void			ToggleDebug(int arg, bool onOff);
 
-	GLuint			CreateTexture(const char* filename, bool enableMipMaps = false, bool enableAnisotropicFiltering = false, unsigned int flags = 0);
+	GLuint			CreateTexture(const char* filename, bool enableMipMaps = false, bool enableAnisotropicFiltering = false);
 	GLuint			CreateCubeTexture(const char* filename);
 	GLuint			CreateShadowTexture();
 	GLuint			CreateShadowCube();
@@ -68,19 +66,15 @@ public:
 	T3Vector4			GetAmbientColour() const {return ambientLightColour;}
 	void			SetAmbientColour(T3Vector4& colour) {ambientLightColour = colour;}
 
-	void			SetDayNight(float arg) { dayNight = arg; }
-
 	bool			GetRenderContextForThread();
 	bool			DropRenderContextForThread();
 
-	bool			LoadShaders();
-	bool			LoadAssets();
-	void			UnloadShaders();
-	void			UnloadAssets();
+	bool LoadShaders();
+	bool LoadAssets();
+	void UnloadShaders();
+	void UnloadAssets();
 
-	void			DrawDeferredLights(bool on) {drawDeferredLights = on;}
-
-	unsigned char* GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue);
+	void DrawDeferredLights(bool on) {drawDeferredLights = on;}
 
 protected:
 
@@ -111,8 +105,6 @@ protected:
 	bool			LoadCheck();
 	bool			ActiveTex();
 
-	void			CreateStaticMap(GLuint* target, const int resolution, unsigned char minValue, unsigned char maxValue); // Generate a static noise map that can be turned into Perlin noise.
-
 	//Member variables.
 	bool			activeTex;
 	unsigned int	nextTextureUnit;
@@ -133,8 +125,6 @@ protected:
 	Mesh*			sphereMesh;			// A sphere mesh for drawing deferred point lights
 	Mesh*			coneMesh;			// A cone mesh for drawing deferred spot lights
 	Mesh*			circleMesh;			// A circle mesh for drawing deferred spot lights
-	Mesh*			skyDome;			// The top of a sphere - used as a 'hat' to wear a skybox :)
-	Mesh*			quadMesh;			// A quad mesh (0-1) for drawing 2D textures.
 
 	SceneNode*		root;
 	Camera*			camera;
@@ -151,8 +141,7 @@ protected:
 	Shader*			shadowShader;
 	Shader*			sceneShader;
 	Shader*			lightingShader;
-	Shader*			cloudShader; // Generates clouds
-	Shader*			skyBoxShader; // Draws the cloud texture on the skydome.
+	Shader*			skyBoxShader;
 	Shader*			combineShader;
 	Shader*			particleShader;
 	Shader*			brightPassShader;
@@ -168,12 +157,7 @@ protected:
 	GLuint			postProcessingFBO;
 	GLuint			deferredLightingFBO;
 	GLuint			shadowFBO;
-	GLuint			skyColourBuffer[2]; //The buffer for holding the cloud texture.
-	GLuint			skyBufferFBO;
-	
-	GLuint			daySkyTex;
-	GLuint			nightSkyTex;
-	GLuint			cloudMap;	// The texture for holding the static map the clouds are generated from.
+
 	GLuint			gbufferColourTex;
 	GLuint			gbufferDepthTex;
 	GLuint			gbufferNormalTex;
@@ -186,14 +170,10 @@ protected:
 	GLuint			postProcessingTex[3]; // At start of post-processing, postProcessingTex[0] holds the rendered scene
 	GLuint			downSampleTex[SAMPLENUM * 2];
 
-	T3Vector4		ambientLightColour; // The scenes ambient light settings
+	T3Vector4			ambientLightColour; // The scenes ambient light settings
 
 	MutexClass		openglMutex;		// Prevents different threads for using OpenGL at same time	
 
 	float			samples[3];
-
-	float			dayNight;
-
-	map<string, TextMesh*> loadedTextMeshes;
 };
 #endif

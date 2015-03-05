@@ -56,7 +56,7 @@ void Keyboard::Update(RAWINPUT* raw, float msec)	{
 			}
 			else
 			{
-				//GameStateManager::Instance()->KeyboardEvent(KeyboardEvents::KEY_HELD, (KeyboardEvents::Key)key);
+				GameStateManager::Instance()->KeyboardEvent(KeyboardEvents::KEY_HELD, (KeyboardEvents::Key)key);
 			}
 		}
 		else
@@ -71,17 +71,8 @@ void Keyboard::Update(RAWINPUT* raw, float msec)	{
 				}
 			}
 		}
+
+		memcpy(prevStates, keyStates, KeyboardEvents::KEYBOARD_MAX * sizeof(bool));
 	}
 }
-
-void Keyboard::UpdateHolds() {
-	for (int i = 0; i < KeyboardEvents::KEYBOARD_MAX; i++) {
-		if (prevStates[i]) { // key is down, and has not recieved an up
-			GameStateManager::Instance()->KeyboardEvent(KeyboardEvents::KEY_HELD, (KeyboardEvents::Key) i);
-		}
-	}
-
-	memcpy(prevStates, keyStates, KeyboardEvents::KEYBOARD_MAX * sizeof(bool));
-}
-
 #endif

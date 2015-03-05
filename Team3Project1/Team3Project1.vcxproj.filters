@@ -207,9 +207,6 @@
     <ClInclude Include="StorageManager.h">
       <Filter>Framework\Storage\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioEngine.h">
-      <Filter>Framework\Audio\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Framework\BumpTexture.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
@@ -420,21 +417,6 @@
     <ClInclude Include="..\Framework\SpringDemo.h">
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Framework\SoundEntity.h">
-      <Filter>Framework\Audio\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\Sound.h">
-      <Filter>Framework\Audio\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\SoundEmitter.h">
-      <Filter>Framework\Audio\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\SoundManager.h">
-      <Filter>Framework\Audio\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\SoundSystem.h">
-      <Filter>Framework\Audio\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Framework\Debuff.h">
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
@@ -470,12 +452,6 @@
     </ClInclude>
     <ClInclude Include="..\Framework\T3Matrix4.h">
       <Filter>Framework\Common\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DebugOverlay.h">
-      <Filter>Framework\Debug\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Heightmap.h">
-      <Filter>Framework\Resource Manager\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -578,9 +554,6 @@
     <ClCompile Include="AssetManager.cpp">
       <Filter>Framework\Resource Manager\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AudioEngine.cpp">
-      <Filter>Framework\Audio\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="NetworkManager.cpp">
       <Filter>Framework\Network\Source Files</Filter>
     </ClCompile>
@@ -632,21 +605,6 @@
     <ClCompile Include="..\Framework\Vehicle.cpp">
       <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Framework\SoundEntity.cpp">
-      <Filter>Framework\Audio\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\Sound.cpp">
-      <Filter>Framework\Audio\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\SoundEmitter.cpp">
-      <Filter>Framework\Audio\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\SoundManager.cpp">
-      <Filter>Framework\Audio\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\SoundSystem.cpp">
-      <Filter>Framework\Audio\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Framework\Debuff.cpp">
       <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
@@ -677,11 +635,8 @@
     <ClCompile Include="GCMRenderer.cpp">
       <Filter>Framework\Graphics\PS3\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DebugOverlay.cpp">
-      <Filter>Framework\Debug\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HeightMap.cpp">
-      <Filter>Framework\Resource Manager\Source Files</Filter>
+    <ClCompile Include="GraphicsEnginePS3.cpp">
+      <Filter>Framework\Graphics\Common\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -763,28 +718,5 @@
     <None Include="..\Resources\Shaders\VelocityFragment.glsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\Resources\Shaders\PassThroughVertex.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\PerlinFragment.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\SkyDomeFragment.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\SkyDomeVertex.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\OpenAL32.lib">
-      <Filter>Framework\Audio\Header Files</Filter>
-    </Library>
-    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MT\EFX-Util.lib">
-      <Filter>Framework\Audio\Header Files</Filter>
-    </Library>
-    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MTDLL\EFX-Util.lib">
-      <Filter>Framework\Audio\Header Files</Filter>
-    </Library>
   </ItemGroup>
 </Project>

@@ -54,34 +54,32 @@ TextMesh::TextMesh(const std::string &text, const Font &font) :  font(font)	{
 		//Now we can simply use our worked out font character sizes
 		//to generate the correct texture coordinates for each glyph...
 
-		// For drawing the HUD, using an upside down orthographic matrix to create top left origin
-		// so to draw right, flipping mesh/texture
 		vertices[(i*4)  ] = Vertex(
-			T3Vector3((float) i, 1, 0),
-			T3Vector3(0,0,0),
-			T3Vector4(1,1,1,1),
-			T3Vector2(x*texelWidth, (y+1)*texelHeight),
-			T3Vector3(0,0,0));
-
-		vertices[(i*4)+1] = Vertex(
 			T3Vector3((float) i, 0, 0),
 			T3Vector3(0,0,0),
 			T3Vector4(1,1,1,1),
-			T3Vector2(x*texelWidth, (y) * texelHeight),
+			T3Vector2(x*texelWidth, (y)*texelHeight),
+			T3Vector3(0,0,0));
+
+		vertices[(i*4)+1] = Vertex(
+			T3Vector3((float) i, -1, 0),
+			T3Vector3(0,0,0),
+			T3Vector4(1,1,1,1),
+			T3Vector2(x*texelWidth, (y+1) * texelHeight),
 			T3Vector3(0,0,0));
 	
 		vertices[(i*4)+2] = Vertex(
-			T3Vector3((float) i+1, 1,0),
+			T3Vector3((float) i+1, 0,0),
 			T3Vector3(0,0,0),
 			T3Vector4(1,1,1,1),
-			T3Vector2((x+1)*texelWidth , (y+1)*texelHeight),
+			T3Vector2((x+1)*texelWidth , (y)*texelHeight),
 			T3Vector3(0,0,0));
 		
 		vertices[(i*4)+3] = Vertex(
-			T3Vector3((float) i+1, 0, 0), 
+			T3Vector3((float) i+1, -1, 0), 
 			T3Vector3(0,0,0),
 			T3Vector4(1,1,1,1),
-			T3Vector2((x+1)*texelWidth , (y) * texelHeight),
+			T3Vector2((x+1)*texelWidth , (y+1) * texelHeight),
 			T3Vector3(0,0,0));
 	}
 

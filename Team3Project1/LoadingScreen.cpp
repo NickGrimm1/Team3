@@ -10,16 +10,14 @@ void LoadingScreen::LoadContent() {
 
 void LoadingScreen::Update() {
 	if (isLoading) {
-		GraphicsTestScreen* game = new GraphicsTestScreen();
-		GameStateManager::Instance()->AddGameScreen(game);
-
-		HudTestScreen* hud = new HudTestScreen();
-		GameStateManager::Instance()->AddGameScreen(hud);
+//		HudTestScreen* hud = new HudTestScreen();
+//		GameStateManager::Instance()->AddGameScreen(hud);
+		
+//		GraphicsTestScreen* game = new GraphicsTestScreen();
+//		GameStateManager::Instance()->AddGameScreen(game);
 		
 		GameStateManager::Graphics()->EnableLoadingIcon(false);
 		isLoading = false;
-		
-		GameStateManager::Instance()->RemoveGameScreen(this);
 	}
 }
 

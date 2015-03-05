@@ -459,6 +459,15 @@ public:
 	{
 		return T3Vector3(-x, -y, -z);
 	}
+	/**
+	<summary>Negates this vector.</summary>
+	*/
+	void operator-()
+	{
+		x = -x;
+		y = -y;
+		z = -z;
+	}
 #pragma endregion
 #pragma endregion
 #pragma region Standards
