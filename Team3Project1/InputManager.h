@@ -35,6 +35,7 @@ public:
 
 #if WINDOWS_BUILD
 	void Run();
+<<<<<<< HEAD
 #endif
 #if PS3_BUILD
 	static void Run(uint64_t arg);
@@ -75,3 +76,20 @@ private:
 	GamePad** gamePads;
 	#endif
 };
+=======
+
+	int GetFrameRate() { return frameRate; }
+private:
+	InputManager() 
+		: INPUT_TIME(1000.0f / 60)
+	{ 
+		frameRate = 0;
+	}
+	~InputManager() { }
+	static InputManager* instance;
+
+	const float INPUT_TIME;
+	float lastFrameTimeStamp;
+	int frameRate;
+};
+>>>>>>> main

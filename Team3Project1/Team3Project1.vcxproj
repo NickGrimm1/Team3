@@ -280,6 +280,7 @@
     <ClInclude Include="ChaseCamera.h" />
     <ClInclude Include="ClickableEntity2D.h" />
     <ClInclude Include="DebugManager.h" />
+    <ClInclude Include="DebugOverlay.h" />
     <ClInclude Include="DrawableEntity2D.h" />
     <ClInclude Include="DrawableEntity3D.h" />
     <ClInclude Include="DrawableText2D.h" />
@@ -287,6 +288,7 @@
     <ClInclude Include="EntryPoint.h" />
     <ClInclude Include="GCMRenderer.h" />
     <ClInclude Include="GraphicsTestScreen.h" />
+    <ClInclude Include="Heightmap.h" />
     <ClInclude Include="HudTestScreen.h" />
     <ClInclude Include="LoadedFont.h" />
     <ClInclude Include="LoadedMesh.h" />
@@ -359,6 +361,7 @@
     <ClCompile Include="..\Framework\Window.cpp" />
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="DebugManager.cpp" />
+    <ClCompile Include="DebugOverlay.cpp" />
     <ClCompile Include="GamePad.cpp" />
     <ClCompile Include="GameScreen2D.cpp" />
     <ClCompile Include="GameScreen3D.cpp" />
@@ -367,6 +370,7 @@
     <ClCompile Include="GraphicsEngine.cpp" />
     <ClCompile Include="GraphicsEnginePS3.cpp" />
     <ClCompile Include="GraphicsTestScreen.cpp" />
+    <ClCompile Include="HeightMap.cpp" />
     <ClCompile Include="HudTestScreen.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LoadingScreen.cpp" />
@@ -402,12 +406,16 @@
     <None Include="..\Resources\Shaders\DownSampleFragment.glsl" />
     <None Include="..\Resources\Shaders\MainFragShader.glsl" />
     <None Include="..\Resources\Shaders\MainVertShader.glsl" />
+    <None Include="..\Resources\Shaders\PassThroughVertex.glsl" />
+    <None Include="..\Resources\Shaders\PerlinFragment.glsl" />
     <None Include="..\Resources\Shaders\PointToCircleGeom.glsl" />
     <None Include="..\Resources\Shaders\PointToQuadGeom.glsl" />
     <None Include="..\Resources\Shaders\ShadowFragment.glsl" />
     <None Include="..\Resources\Shaders\ShadowVertex.glsl" />
     <None Include="..\Resources\Shaders\SkyBoxFragment.glsl" />
     <None Include="..\Resources\Shaders\SkyBoxVertex.glsl" />
+    <None Include="..\Resources\Shaders\SkyDomeFragment.glsl" />
+    <None Include="..\Resources\Shaders\SkyDomeVertex.glsl" />
     <None Include="..\Resources\Shaders\TexturedFragment.glsl" />
     <None Include="..\Resources\Shaders\TexturedVertex.glsl" />
     <None Include="..\Resources\Shaders\VelocityFragment.glsl" />

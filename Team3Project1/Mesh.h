@@ -54,6 +54,20 @@ public:
 	} 
 	bool TransformsTexCoords() { return transformCoords;}
 
+	float GetMemoryUsage()
+	{
+		float output = 0;
+
+		output += numVertices * sizeof(Vertex);
+		if (indices)
+			output += numIndices * 4;
+
+		output /= 1024.0f;
+		output /= 1024.0f;
+
+		return output;
+	}
+
 #if WINDOWS_BUILD
 	virtual void Draw();
 #elif PS3_BUILD
@@ -77,6 +91,10 @@ public:
 
 	Vertex* GetVertices() const {return vertices;}
 	unsigned int GetNumVertices() const {return numVertices;}
+#if WINDOWS_BUILD
+	unsigned int GetArrayObject() {return arrayObject;}
+	unsigned int GetBufferObject() {return bufferObject[0];}
+#endif
 
 protected:
 	//Generates normals for all facets. Assumes geometry type is GL_TRIANGLES...

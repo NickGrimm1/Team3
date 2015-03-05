@@ -3,7 +3,6 @@
 #include "GraphicsCommon.h"
 #include "DrawableEntity3D.h"
 #include "GameStateManager.h"
-#include "TextMesh.h"
 
 // Structures required for point light shadows
 struct CameraDirection {
@@ -31,12 +30,13 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	if (!init) return;
 	init = false;
 
-	camera	= new Camera();
+	camera	= NULL;
 
 	// Setup projection matrices - gonna just keep copies of the matrices rather than keep recreating them
 	perspectiveMatrix = T3Matrix4::Perspective(1.0f, 10000.0f, (float) width / (float) height, 45.0f);
 	orthographicMatrix = T3Matrix4::Orthographic(-1,1,1,-1,1,-1); // for drawing full screen quads
-	hudMatrix = T3Matrix4::Orthographic(-1.0f,1.0f,(float)width, 0.0f,(float)height, 0.0f); // For HUD Elements only
+	hudMatrix = T3Matrix4::Orthographic(-1.0f,1.0f,(float)width, 0.0f, 0.0f, (float)height); // For HUD Elements only
+	//hudMatrix = T3Matrix4::Orthographic(-1.0f,1.0f,(float)width, 0.0f, (float)height, 0.0f); // For HUD Elements only
 	
 	//Creation of buffers.
 	GenerateScreenTexture(gbufferNormalTex);
@@ -70,6 +70,15 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, width, height, 0, GL_RG, GL_HALF_FLOAT, 0);
 
+	// Generate Sky Buffer & initial static map.
+	for (int i = 0; i < 2; ++i) {
+		glGenTextures(1, &skyColourBuffer[i]);
+		glBindTexture(GL_TEXTURE_2D, skyColourBuffer[i]);
+		glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_NEAREST );
+		glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST );
+		glTexImage2D ( GL_TEXTURE_2D , 0, GL_RGBA8 , width , height , 0, GL_RGBA , GL_UNSIGNED_BYTE , NULL );
+	}
+
 	samples[0] = 1.5f;
 	samples[1] = 2.0f;
 	samples[2] = 3.0f;
@@ -102,11 +111,17 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glGenFramebuffers(1, &postProcessingFBO);	//PP in this.
 	glGenFramebuffers(1, &shadowFBO);			//Shadow pre-render in this one.
 	glGenFramebuffers(1, &deferredLightingFBO);	//Deferred lighting in this FBO.
+	glGenFramebuffers(1, &skyBufferFBO);
 
 	GLenum buffers[3];
 	buffers[0] = GL_COLOR_ATTACHMENT0;
 	buffers[1] = GL_COLOR_ATTACHMENT1;
 	buffers[2] = GL_COLOR_ATTACHMENT2;
+
+	glBindFramebuffer(GL_FRAMEBUFFER, skyBufferFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer[0], 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	
 
 	glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufferColourTex, 0);
@@ -163,6 +178,9 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); // cube sampling
 
+	CreateStaticMap(&cloudMap, 128, 0, 255);
+	//CreateStaticMap(&cloudMap, 128, 1, 1000);
+
 	glClearColor(0, 0, 0, 1);
 	SwapBuffers();
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
@@ -178,7 +196,8 @@ bool Renderer::LoadShaders()
 	sceneShader		 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl");
 	shadowShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl");
 	lightingShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl");
-	skyBoxShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl");
+	skyBoxShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"SkyDomeVertex.glsl", SHADERDIR"SkyDomeFragment.glsl");
+	cloudShader		 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"PassThroughVertex.glsl", SHADERDIR"PerlinFragment.glsl");
 	combineShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
 	particleShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
 	brightPassShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BrightPassFragment.glsl");
@@ -199,6 +218,7 @@ bool Renderer::LoadCheck()
 			shadowShader		!= NULL	&&
 			lightingShader		!= NULL	&&
 			skyBoxShader		!= NULL	&&
+			cloudShader			!= NULL &&
 			combineShader		!= NULL	&&
 			particleShader		!= NULL	&&
 			brightPassShader	!= NULL &&
@@ -217,7 +237,8 @@ void Renderer::UnloadShaders()
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl");
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl");
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl");
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"SkyBoxVertex.glsl", SHADERDIR"SkyBoxFragment.glsl");
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"SkyDomeVertex.glsl", SHADERDIR"SkyDomeFragment.glsl");
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"PassThroughVertex.glsl", SHADERDIR"PerlinFragment.glsl");
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BrightPassFragment.glsl");//Bright-pass Shader
@@ -237,7 +258,12 @@ bool Renderer::LoadAssets() {
 	screenMesh = GameStateManager::Assets()->LoadQuad(this); // Quad for rendering textures to screen
 	sphereMesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
 	coneMesh = GameStateManager::Assets()->LoadCone(this, 20); // Cone for spotlight rendering
-	
+	skyDome = GameStateManager::Assets()->LoadMesh(this, MESHDIR"dome.obj"); // Skydome
+	quadMesh = GameStateManager::Assets()->LoadQuadAlt(this);
+	nightSkyTex = (GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"night_sky4.jpg", 0))->GetTextureName();
+	//SetTextureRepeating(nightSkyTex, true);
+	daySkyTex = (GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"day_sky3.jpg", 0))->GetTextureName();
+
 	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh) {
 		cout << "Renderer::LoadAssets() - unable to load rendering assets";
 		return false;
@@ -247,10 +273,14 @@ bool Renderer::LoadAssets() {
 }
 
 void Renderer::UnloadAssets() {
-	GameStateManager::Assets()->LoadCircle(this, 20); // Circle for spotlight rendering
-	GameStateManager::Assets()->LoadQuad(this); // Quad for rendering textures to screen
-	GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
-	GameStateManager::Assets()->LoadCone(this, 20); // Cone for spotlight rendering
+	GameStateManager::Assets()->UnloadCircle(this, 20); // Circle for spotlight rendering
+	GameStateManager::Assets()->UnloadQuad(this); // Quad for rendering textures to screen
+	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
+	GameStateManager::Assets()->UnloadCone(this, 20); // Cone for spotlight rendering
+	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"dome.obj"); // Skydome
+	GameStateManager::Assets()->UnloadQuadAlt(this);
+	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"night_sky4.jpg");
+	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"day_sky3.jpg");
 }
 
 Renderer::~Renderer(void)
@@ -260,6 +290,11 @@ Renderer::~Renderer(void)
 	delete rain;
 	delete sandstorm;
 	*/
+
+	for (map<string, TextMesh*>::iterator i = loadedTextMeshes.begin(); i != loadedTextMeshes.end(); i++) {
+		delete (*i).second;
+	}
+	loadedTextMeshes.clear();
 
 	currentShader = NULL;
 
@@ -288,21 +323,24 @@ void Renderer::RenderScene() {
 		cout << "Renderer::RenderScene() - unable to obtain rendering context!!!" << endl;
 	}
 	glClear(GL_COLOR_BUFFER_BIT);
-	cameraMatrix = camera->BuildViewMatrix();
 
-	// Main Render
-	ShadowPass();
-	DrawScene();
-	DeferredLightPass();
-	CombineBuffers();
+	if (camera) {
+		cameraMatrix = camera->BuildViewMatrix();
 
-	// Post-Processing
-	//BloomPass();
-	MotionBlurPass();
+		//Main Render
+		ShadowPass();
+		DrawScene();
+		DeferredLightPass();
+		CombineBuffers();
 
-	DrawFrameBufferTex(postProcessingTex[1]);
+		//Post-Processing
+		BloomPass();
+		MotionBlurPass();
 
-	// Draw HUD/Menu overlay
+		DrawFrameBufferTex(postProcessingTex[0]);
+	}
+
+	//Draw HUD/Menu overlay
 	Draw2DOverlay();
 
 	SwapBuffers();
@@ -524,6 +562,7 @@ void Renderer::DrawNodes(bool enableTextures) {
 		entity.GetMesh()->Draw();
 	}
 }
+
 void Renderer::DeferredLightPass()
 {
 	SetCurrentShader(lightingShader);
@@ -679,29 +718,93 @@ void Renderer::CombineBuffers() {// merge scene render with lighting pass
 	screenMesh->Draw(); // Render scene
 	glStencilMask(GL_TRUE);
 
-//	DrawSkybox(); // Finally, draw the skybox
-	
+	DrawSkybox(); // Finally, draw the skybox
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, 0, 0); // Stencil buffer from the first pass render
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glEnable(GL_DEPTH_TEST);
 	glUseProgram(0);
 }
 
-void Renderer::DrawSkybox() { // Draw skybox only where screen has not previously been written to
+void Renderer::DrawSkybox() { 
+	// Generate clouds - captures perlin noise to texture.
+	glBindFramebuffer(GL_FRAMEBUFFER, skyBufferFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer[0], 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	SetCurrentShader(cloudShader);
+
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), GL_TEXTURE0);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), Window::GetWindow().GetTimer()->GetMS() / 100000.0f);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, cloudMap);
+
+	screenMesh->Draw();
+	
+	SetCurrentShader(gaussianShader);
+	glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / (float)width, 1.0f / (float)height);
+	//A quick blur on the clouds to make them less pixellated.
+	for (int i = 0; i < 2; ++i) {
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer[1], 0);
+		glClear(GL_COLOR_BUFFER_BIT);
+		
+		glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+		glBindTexture(GL_TEXTURE_2D, skyColourBuffer[0]);
+
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 0);
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+
+		screenMesh->Draw();
+
+		//now to swap the colour buffers, and do the second blur Pass
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, skyColourBuffer[0], 0);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+		glBindTexture(GL_TEXTURE_2D, skyColourBuffer[1]);
+
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 1);
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+
+		screenMesh->Draw();
+	}
+
+	glUseProgram(GL_NONE);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, GL_NONE);
+	
+	// Draw skybox only where screen has not previously been written to
 	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_NOTEQUAL, 1, 1); // Stencil test should only pass if stencil buffer not already set to 1 (from scene render)
 	glDepthMask(GL_FALSE); // Disable writes to the depth buffer
+	glDisable(GL_CULL_FACE);
 	
+	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
 	SetCurrentShader(skyBoxShader);
+
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), GL_TEXTURE0);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "nightSkyTex"), SKYBOX_TEXTURE_UNIT0);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "daySkyTex"), SKYBOX_TEXTURE_UNIT1);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "dayNightMix"), dayNight); 
+	
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, skyColourBuffer[0]);
+
+	glActiveTexture(GL_TEXTURE0 + SKYBOX_TEXTURE_UNIT0);
+	glBindTexture(GL_TEXTURE_2D, nightSkyTex);
+	
+	glActiveTexture(GL_TEXTURE0 + SKYBOX_TEXTURE_UNIT1);
+	glBindTexture(GL_TEXTURE_2D, daySkyTex);
+
+	skyDome->Draw();
+	
+	glEnable(GL_CULL_FACE);
 	
 	// Bind shader variables
 	viewMatrix = cameraMatrix;
 	projMatrix = perspectiveMatrix;
+	modelMatrix = T3Matrix4::Translation(T3Vector3(camera->GetPosition().x, camera->GetPosition().y - 25, camera->GetPosition().z)) * T3Matrix4::Scale(T3Vector3(100, 100, 100));
 	UpdateShaderMatrices();
 
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "cubeTex"), SKYBOX_TEXTURE_UNIT);
-	glActiveTexture(GL_TEXTURE0 + SKYBOX_TEXTURE_UNIT);
-	glBindTexture(GL_TEXTURE_2D , skyBoxTex);
-
-	screenMesh->Draw();
 
 	glUseProgram(0);
 	glDisable(GL_STENCIL_TEST); // finished with the stencil for now
@@ -709,7 +812,7 @@ void Renderer::DrawSkybox() { // Draw skybox only where screen has not previousl
 }
 
 /*--------Post-Processing methods--------*/
-//TODO: finish this
+
 void Renderer::BloomPass()
 {
 /*	
@@ -722,17 +825,19 @@ void Renderer::BloomPass()
 
 	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[1], 0);
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
 
 	SetCurrentShader(brightPassShader);
-	projMatrix = T3Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
+	projMatrix = orthographicMatrix;
 	viewMatrix.ToIdentity();
+	textureMatrix.ToIdentity();
+	modelMatrix.ToIdentity();
 	UpdateShaderMatrices();
 
 	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 	glBindTexture(GL_TEXTURE_2D, postProcessingTex[0]);
 
-	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "luminimumance"), 0.09f);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "luminance"), 0.09f);
 	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "middleGrey"), 0.18f);
 	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "whiteCutOff"), 0.8f);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
@@ -741,7 +846,6 @@ void Renderer::BloomPass()
 
 	/*---------------------------Downsample the images----------------------------*/
 
-	glClear(GL_COLOR_BUFFER_BIT);
 	SetCurrentShader(downSampleShader);
 	UpdateShaderMatrices();
 
@@ -761,7 +865,7 @@ void Renderer::BloomPass()
 
 		screenMesh->Draw();
 		++z;
-}
+	}
 
 	/*--------------------Gaussian Blur the downsampled images--------------------*/
 
@@ -799,8 +903,8 @@ void Renderer::BloomPass()
 	glViewport(0, 0, width, height);
 
 	/*-------------------Combine the brightpass images together-------------------*/
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, downSampleTex[2], 0);
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[2], 0);
+	glClear(GL_COLOR_BUFFER_BIT);
 	
 	SetCurrentShader(bloomCombShader);
 	UpdateShaderMatrices();
@@ -822,6 +926,8 @@ void Renderer::BloomPass()
 
 	SetCurrentShader(gaussianShader);
 	UpdateShaderMatrices();
+
+	glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / (float)width, 1.0f / (float)height);
 
 	for (int i = 0; i < 2; ++i) {
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[1], 0);
@@ -855,13 +961,13 @@ void Renderer::BloomPass()
 	SetCurrentShader(bloomFinalShader);
 	UpdateShaderMatrices();
 
-	glActiveTexture(GL_TEXTURE5);
+	glActiveTexture(GL_TEXTURE0 + GBUFFER_COLOUR_TEXTURE_UNIT);
 	glBindTexture(GL_TEXTURE_2D, postProcessingTex[2]);
 	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 	glBindTexture(GL_TEXTURE_2D, postProcessingTex[0]);
 	
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "darkTex"), 5);
-	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "mixVal"), 0.5);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "darkTex"), GBUFFER_COLOUR_TEXTURE_UNIT);
+	//glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "mixVal"), 0.7f);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 	
 	screenMesh->Draw();
@@ -869,7 +975,7 @@ void Renderer::BloomPass()
 	glUseProgram(0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
-//TODO: just need to work out how to write the scene texture to the quad.
+
 void Renderer::MotionBlurPass()
 {
 	glClearColor(0,0,0,0);
@@ -897,7 +1003,7 @@ void Renderer::MotionBlurPass()
 		sceneNodes[i]->SetPrevMVP(projMatrix * viewMatrix * modelMatrix);
 	}
 	
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[1], 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[0], 0);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 	SetCurrentShader(motionBlurShader);
@@ -912,7 +1018,7 @@ void Renderer::MotionBlurPass()
 	glActiveTexture(GL_TEXTURE0 + GBUFFER_VELOCITY_UNIT);
 	glBindTexture(GL_TEXTURE_2D, gbufferVelocity);
 	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-	glBindTexture(GL_TEXTURE_2D, postProcessingTex[0]);
+	glBindTexture(GL_TEXTURE_2D, postProcessingTex[1]);
 
 	//TODO: Create a method that does the currFPS/TargetFPS calc
 	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "velocityScale"), 1.0);
@@ -951,7 +1057,8 @@ void Renderer::DrawFrameBufferTex(GLuint fboTex) {
 void Renderer::Draw2DOverlay() {
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
-	
+
+	glCullFace(GL_FRONT);
 	SetCurrentShader(hudShader);
 	projMatrix = hudMatrix;
 	viewMatrix.ToIdentity();
@@ -975,14 +1082,29 @@ void Renderer::Draw2DOverlay() {
 	glUseProgram(0);
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
+	glCullFace(GL_BACK);
 }
 
 void Renderer::Draw2DText(DrawableText2D& text) {
-	TextMesh* textMesh = new TextMesh(text.GetText(), *text.GetFont());
-	
-	T3Vector3 origin = T3Vector3(text.GetOrigin().x * text.width, text.GetOrigin().y * text.height, 0);
-	T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(text.GetRotation(), T3Vector3(0,0,-1)) * T3Matrix4::Translation(origin * -1.0f);
-	modelMatrix = T3Matrix4::Translation(T3Vector3(text.x, height - text.y, 0)) * rotation * T3Matrix4::Scale(T3Vector3(text.width / (float) text.GetText().length(), text.height, 1));
+	TextMesh* textMesh = NULL;
+	map<string, TextMesh*>::iterator i = loadedTextMeshes.find(text.GetText());
+	if (i == loadedTextMeshes.end()) {
+		// Create a text mesh of appropriate length to display text and store
+		textMesh = new TextMesh(text.GetText(), *text.GetFont());
+		if (textMesh == NULL)
+		{
+			cout << "Renderer::Draw2DText() - Unable to create textmesh - " << text.GetText() << endl;
+			return;
+		}
+		loadedTextMeshes.insert(pair<string, TextMesh*>(text.GetText(), textMesh));
+	}
+	else {
+		textMesh = (*i).second;
+	}
+
+	T3Vector3 origin = T3Vector3(text.GetOrigin().x * text.width * width, text.GetOrigin().y * text.height * height, 0);
+	T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(text.GetRotation(), T3Vector3(0,0,1)) * T3Matrix4::Translation(origin * -1.0f);
+	modelMatrix = T3Matrix4::Translation(T3Vector3(text.x * width, text.y * height, 0)) * rotation * T3Matrix4::Scale(T3Vector3(width * text.width / (float) text.GetText().length(), height * text.height, 1));
 	textureMatrix.ToIdentity();	
 	UpdateShaderMatrices();
 
@@ -991,13 +1113,14 @@ void Renderer::Draw2DText(DrawableText2D& text) {
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 	
 	textMesh->Draw();
-	delete textMesh;
 }
 
-void Renderer::Draw2DTexture(DrawableTexture2D& texture) {
-	T3Vector3 origin = T3Vector3(texture.GetOrigin().x * texture.width, texture.GetOrigin().y * texture.height, 0);
-	T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(texture.GetRotation(), T3Vector3(0,0,-1)) * T3Matrix4::Translation(origin * -1.0f);
-	modelMatrix = T3Matrix4::Translation(T3Vector3(texture.x, height - texture.y, 0)) * rotation * T3Matrix4::Scale(T3Vector3(texture.width, texture.height, 1));
+void Renderer::Draw2DTexture(DrawableTexture2D& texture) 
+{
+	T3Vector3 origin = T3Vector3(texture.GetOrigin().x * texture.width * width, texture.GetOrigin().y * texture.height * height, 0);
+	T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(texture.GetRotation(), T3Vector3(0,0,1)) * T3Matrix4::Translation(-origin);
+	
+	modelMatrix = T3Matrix4::Translation(T3Vector3(texture.x * width, texture.y * height, 0)) * rotation * T3Matrix4::Scale(T3Vector3(texture.width * width, texture.height * height, 1));
 	textureMatrix.ToIdentity();	
 	UpdateShaderMatrices();
 
@@ -1005,7 +1128,7 @@ void Renderer::Draw2DTexture(DrawableTexture2D& texture) {
 	glBindTexture(GL_TEXTURE_2D, texture.GetTexture()->GetTextureName());
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 
-	screenMesh->Draw();
+	quadMesh->Draw();
 }
 
 void Renderer::GenerateScreenTexture(GLuint &into, bool depth)
@@ -1033,13 +1156,13 @@ bool Renderer::ActiveTex()
 	return activeTex;
 }
 
-GLuint Renderer::CreateTexture(const char* filename, bool enableMipMaps, bool enableAnisotropicFiltering) {
+GLuint Renderer::CreateTexture(const char* filename, bool enableMipMaps, bool enableAnisotropicFiltering, unsigned int flags) {
 	openglMutex.lock_mutex();
 	wglMakeCurrent(deviceContext, renderContext);
 
-	unsigned int flags = false;
+	unsigned int texFlags = flags;
 	if (enableMipMaps) flags |= SOIL_FLAG_MIPMAPS;
-	GLuint textureObject = SOIL_load_OGL_texture(filename, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, flags);
+	GLuint textureObject = SOIL_load_OGL_texture(filename, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, texFlags);
 	if (!textureObject)
 		textureObject = 0; // make sure GetTexture will return an error
 
@@ -1127,4 +1250,94 @@ bool Renderer::DropRenderContextForThread() {
 	openglMutex.unlock_mutex(); 
 	return result;
 }
+<<<<<<< HEAD
 #endif
+=======
+
+void Renderer::CreateStaticMap(GLuint* target, const int resolution, unsigned char minValue, unsigned char maxValue)
+{
+	float* colors = new float[resolution * resolution];
+	for (int x = 0; x < resolution; x++)
+		for (int y = 0; y < resolution; y++)
+			colors[x + y * resolution] = (rand() % (maxValue - minValue) + minValue) / (float)maxValue;
+
+	glGenTextures(1, target);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, *target);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, resolution, resolution, 0, GL_RED, GL_FLOAT, colors);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	delete colors;
+}
+
+unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue)
+{
+	GLuint staticMap;
+	GLuint texture;
+	GLuint FBO;
+
+	CreateStaticMap(&staticMap, resolution, minValue, maxValue);
+
+	GLenum x = glGetError();
+	// Draw for perlin noise.
+	glGenTextures(1, &texture);
+	x = glGetError();
+	glBindTexture(GL_TEXTURE_2D, texture);
+	x = glGetError();
+	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_NEAREST );
+	x = glGetError();
+	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST );
+	x = glGetError();
+	glTexImage2D ( GL_TEXTURE_2D , 0, GL_RGBA8 , resolution , resolution , 0, GL_RGBA , GL_UNSIGNED_BYTE , NULL );
+	x = glGetError();
+	glGenFramebuffers(1, &FBO);
+	x = glGetError();
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+	x = glGetError();
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+	x = glGetError();
+	glClear(GL_COLOR_BUFFER_BIT);
+	x = glGetError();
+	SetCurrentShader(cloudShader);
+	x = glGetError();
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), GL_TEXTURE0);
+	x = glGetError();
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), 0.0f);
+	x = glGetError();
+	glActiveTexture(GL_TEXTURE0);
+	x = glGetError();
+	glBindTexture(GL_TEXTURE_2D, staticMap);
+	x = glGetError();
+	screenMesh->Draw();
+	glUseProgram(GL_NONE);
+	x = glGetError();
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
+	x = glGetError();
+	glBindFramebuffer(GL_FRAMEBUFFER, GL_NONE);
+	x = glGetError();
+
+	// Extract the data from the texture.
+	float* data = new float[resolution * resolution * 4];
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, FBO);
+	glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+	GLenum y = glCheckFramebufferStatus(GL_READ_FRAMEBUFFER);
+	x = glGetError();
+	glReadBuffer(GL_COLOR_ATTACHMENT0);
+	x = glGetError();
+	glReadPixels(0, 0, resolution, resolution, GL_RGBA, GL_FLOAT, data);
+	x = glGetError();
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, GL_NONE);
+	x = glGetError();
+
+	unsigned char* output = new unsigned char[resolution * resolution];
+	for (int i = 0; i < resolution * resolution; ++i)
+		output[i] = data[i * 4];
+
+	return output;
+}
+>>>>>>> main

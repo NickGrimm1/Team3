@@ -16,9 +16,7 @@ Version: 1.0.0 03/02/2015.</summary>
 #include "AssetManager.h"
 #include "InputManager.h"
 #include "DebugManager.h"
-#if WINDOWS_BUILD
 #include "AudioEngine.h"
-#endif
 #include "StorageManager.h"
 #include "NetworkManager.h"
 #include "../Framework/Keyboard.h"
@@ -28,7 +26,9 @@ Version: 1.0.0 03/02/2015.</summary>
 #include <iostream>
 
 using namespace std;
-class GraphicsEngine;
+
+#define GAME_FRAME_TIME 1000.0f / 60.0f
+
 class GameStateManager : public InputListener
 {
 public:
@@ -55,10 +55,8 @@ public:
 				return false;
 			if (!InputManager::Initialize(instance->input))
 				return false;
-#if WINDOWS_BUILD
 			if (!AudioEngine::Initialize(instance->audio))
 				return false;
-#endif
 			if (!NetworkManager::Initialize(instance->network))
 				return false;
 			if (!DebugManager::Initialize(instance->debug))
@@ -74,8 +72,12 @@ public:
 		Instance()->physics->Start();
 		Instance()->input->Start();
 
+		GameTimer timer;
+		float lastUpdate = timer.GetMS();
 		while (instance->isRunning) {
 #if WINDOWS_BUILD
+			while (timer.GetMS() - lastUpdate < GAME_FRAME_TIME) {;}
+			lastUpdate = timer.GetMS();
 			Window::GetWindow().UpdateWindow();
 #endif
 			for (unsigned int i = 0; i < gameScreens.size(); i++) {
@@ -95,57 +97,38 @@ public:
 
 	void Destroy() {
 		if (instance != NULL) {
-			graphics->Terminimumate();
-			physics->Terminimumate();
-			input->Terminimumate();
-
-			std::cout << "Threads terminated" << std::endl;
+			graphics->Terminate();
+			physics->Terminate();
+			input->Terminate();
 
 			// Clean up
 			graphics->Join();
 			physics->Join();
 			input->Join();
 
-			std::cout << "Threads joined" << std::endl;
-
 			vector<GameScreen*>::iterator i = instance->gameScreens.begin();
 			while (i != instance->gameScreens.end())
 			{
-				std::cout << "A Gamescreen is about to be killed" << std::endl;
 				(*i)->UnloadContent();
 				delete *i;
 				i = instance->gameScreens.erase(i);
-				std::cout << "A Gamescreen has been killed." << std::endl;
 			}
-
-			std::cout << "Gamescreens Killed" << std::endl;
 
 			// Unload Engine Assets
 			GraphicsEngine::UnloadContent();
-			std::cout << "Graphics Engine Content Unloaded" << std::endl;
+
 			// Destroy everything
 			AssetManager::Destroy(); // Do not destroy before graphics in Windows Build - requires OpenGL context
-			std::cout << "AssetManager Killed" << std::endl;
 			GraphicsEngine::Destroy();
-			std::cout << "Graphics Engine Killed" << std::endl;
 			PhysicsEngine::Destroy();
-			std::cout << "Physics Engine Killed" << std::endl;
 			StorageManager::Destroy();
-			std::cout << "Storage Manager Killed" << std::endl;
 			InputManager::Destroy();
-			std::cout << "Input Manager Killed" << std::endl;
-#if WINDOWS_BUILD
 			AudioEngine::Destroy();
-#endif
 			NetworkManager::Destroy();
-			std::cout << "Network Manager Killed" << std::endl;
 			DebugManager::Destroy();
-			std::cout << "Debug Manager Killed" << std::endl;
 
 			delete instance;
 			instance = NULL;
-
-			std::cout << "GameStateManager Killed" << std::endl;
 		}
 	}
 	~GameStateManager()
@@ -160,9 +143,7 @@ public:
 	/**
 	<summary>Gets the game's Audio Engine.</summary>
 	*/
-#if WINDOWS_BUILD
 	static AudioEngine* Audio() { return Instance()->audio; }
-#endif
 	/**
 	<summary>Gets the game's Asset Manager.</summary>
 	*/
@@ -285,11 +266,6 @@ public:
 		for (unsigned int i = 0; i < gameScreens.size(); i++)
 			gameScreens[i]->GamepadAnalogueDisplacement(playerID, analogueControl, amount);
 	}
-	void GamepadDisconnect(GamepadEvents::PlayerIndex playerID)
-	{
-		for (unsigned int i = 0; i < gameScreens.size(); i++)
-			gameScreens[i]->GamepadDisconnect(playerID);
-	}
 #pragma endregion
 #pragma region Screen Changes
 	/**
@@ -364,9 +340,7 @@ private:
 #pragma region Framework Components
 	bool isLoaded;
 	GraphicsEngine* graphics;
-#if WINDOWS_BUILD
 	AudioEngine* audio;
-#endif
 	AssetManager* assets;
 	DebugManager* debug;
 	InputManager* input;

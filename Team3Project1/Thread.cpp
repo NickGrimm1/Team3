@@ -41,7 +41,7 @@ void Thread::Join() {
 #endif
 }
 
-void Thread::Terminimumate()
+void Thread::Terminate()
 {
 	isRunning = false;
 }

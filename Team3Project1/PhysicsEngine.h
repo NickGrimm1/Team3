@@ -10,8 +10,6 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "../Framework/PhysicsNode.h"
 #include "../Framework/Constraint.h"
 #include "../Framework/DebugDrawer.h"
-#include "Vertex.h"
-#include "Mesh.h"
 #include <vector>
 #include <algorithm> 
 
@@ -35,13 +33,7 @@ public:
 			delete instance;
 		instance = NULL;
 	}
-#if WINDOWS_BUILD
 	void Run();
-#endif
-#if PS3_BUILD
-	static void Run(uint64_t arg);
-#endif
-
 	void Terminimumate() { isRunning = false; }
 
 	void		BroadPhaseCollisions();
@@ -51,6 +43,7 @@ public:
 	bool   count;
 	int numPointsSimplex;
 
+	int GetFrameRate() { return frameRate; }
 
 	
 	T3Vector3 a, b, c, d;
@@ -79,23 +72,20 @@ public:
 
 	void    DrawDebug();
 private:
-#if WINDOWS_BUILD
-	PhysicsEngine() { }
-#endif
-#if PS3_BUILD
 	PhysicsEngine()
-		: Thread(Run)
-	{ }
-#endif
+		: PHYSICS_TIME(1000.0f / 120)
+	{
+		frameRate = 0;
+	}
 	~PhysicsEngine() { }
 	static PhysicsEngine* instance;
-	bool isRunning;
-
-
-
 
 	vector<PhysicsNode*> allNodes;
 	vector<Constraint*> allSprings;
 	vector<DebugDrawer*> allDebug;
 	vector<PhysicsNode*> narrowlist;
+
+	const float PHYSICS_TIME;
+	float lastFrameTimeStamp;
+	int frameRate;
 };
