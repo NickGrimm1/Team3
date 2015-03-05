@@ -49,7 +49,7 @@ public:
 	ShaderPart* GetGeometry() { return geometryShader; }
 #endif
 	void SetVertex(ShaderPart* value) { vertexShader = value; }
-	ShaderPart* GetVertex() { return vertexShader; }
+	ShaderPart* GetVertex() { std::cout<<"ShaderPart:Hello from getVertex"<<std::endl; return vertexShader; }
 	void SetFragment(ShaderPart* value) { fragmentShader = value; }
 	ShaderPart* GetFragment() { std::cout<<"ShaderPart:Hello from getFragment"<<std::endl; return fragmentShader; }
 protected:

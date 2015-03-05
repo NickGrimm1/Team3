@@ -145,7 +145,9 @@ function, which takes a CGparameter and a pointer to some float data,
 and the function works out the rest. Simpler, but more likely to go
 wrong when incorrect data is sent to it. 
 */
-void	ShaderPart::SetParameter(std::string name, float*data) {
+void	ShaderPart::SetParameter(std::string name, float*data) 
+{
+	//std::cout << "Shader Part: Getting parameter: " << name << std::endl;
 	CGparameter p = GetParameter(name);
 
 	//DON'T try to set a non-existent parameter. GCM will instantly
@@ -174,16 +176,19 @@ matrix wrong
 void ShaderPart::SetParameter(std::string name, Matrix4 &totranpose) {
 	std::cout << "Transposing: " << name << std::endl;
 	Matrix4 tempMatrix = transpose(totranpose);
-	std::cout << "Shader Part: Transposed Matrix (SCE): " << std::endl;
-		for (int x = 0; x < 4; ++x)
-		{
-			for (int y = 0; y < 4; ++y)
-			{
-				std::cout << tempMatrix.getElem(x,y) << ",";
-			}
-			std::cout << std::endl;
-		}
+	//std::cout << "Shader Part: Transposed Matrix (SCE): " << std::endl;
+	//	for (int x = 0; x < 4; ++x)
+	//	{
+	//		for (int y = 0; y < 4; ++y)
+	//		{
+	//			std::cout << tempMatrix.getElem(x,y) << ",";
+	//		}
+	//		std::cout << std::endl;
+	//	}
+	//	float* m = (float*)&tempMatrix;
+	//	std::cout << "Shader Part: Setting " << name << " " << &tempMatrix << std::endl;
 	SetParameter(name, (float*)&tempMatrix);
+	std::cout << "Shader Part: " << name << " Set" << std::endl;
 }
 
 /*
@@ -236,21 +241,21 @@ Sets the shaders matrices to the passed in values. Handy to call at the start of
 a frame, or when using a shader for the first time. It's more efficient to use
 SetParameter directly for setting just a single matrix, though. 
 */
-std::ostream& operator<<(std::ostream& o, const Matrix4& m)
-{
-
-	o << "PS3_Mat4(";
-	for (int i = 0; i < 4; ++i)
-	{
-		o << "\t\t" << m[i][0] << "," << m[i][1] << "," << m[i][2] << "," << m[i][3] << "\n";
-	}
-	o << ");\n\n";
-	return o;
-}
+//std::ostream& operator<<(std::ostream& o, const Matrix4& m)
+//{
+//
+//	o << "PS3_Mat4(";
+//	for (int i = 0; i < 4; ++i)
+//	{
+//		o << "\t\t" << m[i][0] << "," << m[i][1] << "," << m[i][2] << "," << m[i][3] << "\n";
+//	}
+//	o << ");\n\n";
+//	return o;
+//}
 
 void	ShaderPart::UpdateShaderMatrices(Matrix4 &model,Matrix4 &view, Matrix4 &proj) {
 
-	std::cout << "####MODEL MTX:" << model << "\n#####VIEW MTX: " << view << "\n####PROJ MTX: " << proj;
+	//std::cout << "####MODEL MTX:" << model << "\n#####VIEW MTX: " << view << "\n####PROJ MTX: " << proj;
 
 	SetParameter("modelMat", model);
 	SetParameter("viewMat", view);

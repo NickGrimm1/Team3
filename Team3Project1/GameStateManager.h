@@ -81,9 +81,6 @@ public:
 			for (unsigned int i = 0; i < gameScreens.size(); i++) {
 				gameScreens[i]->Update();
 			}
-
-			//TODO: REMOVE!!
-			Instance()->Exit();
 		}
 		instance->Destroy();
 	}

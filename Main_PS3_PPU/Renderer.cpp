@@ -25,7 +25,7 @@ Renderer::Renderer(void)	{
 	Projection matrix...0.7853982 is 45 degrees in radians.
 	*/
 	projMatrix	= Matrix4::perspective(0.7853982, screenRatio, 1.0f, 10000.0f);	//CHANGED TO THIS!!
-	
+		
 }
 
 Renderer::~Renderer(void)	{
