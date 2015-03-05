@@ -155,126 +155,126 @@ void RacerGame::Update() {
 	}
 	//T3Matrix4 m = T3Matrix4::Rotation(0.016f, T3Vector3(0,1,0));
 	//ent->AddRotation(Quaternion::FromMatrix(m));
-//	if(update==1)
-//	{
-//		//create a new control point
-//		//float angle = (rand() % 150) - 75;
-//		float angle = -65;
-////		g += 100*(sin(RadToDeg(angle)));
-////		gx += 100*(2 * abs(cos(RadToDeg(angle))));
-//		g += 100*(sin(DegToRad(angle)));
-//		gx += 100*( 3*abs(cos(DegToRad(angle))));
-//
-//		T3Vector3 spn= T3Vector3(gx,0,g);
-//		SplinePoint.push_back(spn);
-//		//2
-////		g += 100*(sin(RadToDeg(angle)));
-////		gx += 100*(2 * abs(cos(RadToDeg(angle))));
-//		//float angle2 = 15;
-//		 //angle = (rand() % 150) - 75;
-//		g += 100*(sin(DegToRad(angle)));
-//		gx += 100*(3* abs(cos(DegToRad(angle))));
-//
-//		T3Vector3 spn2= T3Vector3(gx,0,g);
-//		SplinePoint.push_back(spn2);
-//		//create new track
-//		T3Vector3 avg = (SplinePoint[1] + SplinePoint[2] + SplinePoint[3]) / 3.0f;
-//		T3Vector3 avg2 = (SplinePoint[2] + SplinePoint[3] + SplinePoint[4]) / 3.0f;
-//		GameStateManager::Graphics()->GetRenderContext();
-//		TrackSegment* Strackn = new TrackSegment(SplinePoint[1] - avg,SplinePoint[2] - avg,SplinePoint[3] - avg,5,50.f);
-//		TrackSegmentVector.push_back(Strackn);
-//		
-//		/*TrackSegment* Strackn = new TrackSegment(SplinePoint[1],SplinePoint[2],T3Vector3(400,0,0),5,50.f);
-//		TrackSegmentVector.push_back(Strackn);*/
-//		GameStateManager::Graphics()->DropRenderContext();
-//
-//		GameStateManager::Graphics()->GetRenderContext();
-//		TrackSegment* Strackn2 = new TrackSegment(SplinePoint[2] - avg2,SplinePoint[3] - avg2,SplinePoint[4] - avg2,5,50.f);
-//		TrackSegmentVector.push_back(Strackn2);
-//		
-//		/*TrackSegment* Strackn = new TrackSegment(SplinePoint[1],SplinePoint[2],T3Vector3(400,0,0),5,50.f);
-//		TrackSegmentVector.push_back(Strackn);*/
-//		GameStateManager::Graphics()->DropRenderContext();
-//		//create end
-//
-//			Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"water.jpg", 0);
-//		GameStateManager::Graphics()->GetRenderContext();
-//	TrackSegment* track = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5, 50.0);
-//	//push back track
-//	TrackSegmentVector.push_back(track);
-//	GameStateManager::Graphics()->DropRenderContext();
-//
-//	DrawableEntity3D* ent = new DrawableEntity3D(
-//		track,
-//		NULL,
-//		grassTex,
-//		NULL,
-//		800.0f,
-//		T3Vector3(0,0,0),
-//		Quaternion::EulerAnglesToQuaternion(0,0,0),
-//		T3Vector3(1,1,1));
-//	//gameEntities.push_back(ent);
-//	AddDrawable(ent);
-//
-//	//add new track to draw
-//	DrawableEntity3D* ent2 = new DrawableEntity3D(
-//		Strackn,
-//		NULL,
-//		grassTex,
-//		NULL,
-//		800.0f,
-//		//T3Vector3(0,0,0),
-//		avg,
-//		Quaternion::EulerAnglesToQuaternion(0,0,0),
-//		T3Vector3(1,1,1));
-//	//gameEntities.push_back(ent);
-//	AddDrawable(ent2);
-//	//add end
-//
-//
-//	//add3
-//	DrawableEntity3D* ent3 = new DrawableEntity3D(
-//		Strackn2,
-//		NULL,
-//		grassTex,
-//		NULL,
-//		800.0f,
-//		/*T3Vector3(0,0,0),*/
-//		avg2,
-//		Quaternion::EulerAnglesToQuaternion(0,0,0),
-//		T3Vector3(1,1,1));
-//	//gameEntities.push_back(ent);
-//	AddDrawable(ent3);
-//	//add 3 end
-//
-//
-//	T3Vector3 L =  Strackn2->GetTrackCentreLeft();
-//	T3Vector3 R = Strackn2->GetTrackCentreRight();
-//	T3Vector3 rl = R-L;
-//	T3Vector3 lr = L-R;
-//	T3Vector3 F = T3Vector3(0,0,1); 
-//	F.Normalise();
-//	rl.Normalise();
-//	float cosc= T3Vector3::Dot(rl,F); 
-//	//float Degc= 
-//	double degc=acos(cosc);
-//	float anglec=RadToDeg(degc);
-//	cout<<anglec<<endl;
-//	if(L.x<R.x)
-//	{
-//	anglec=-anglec;
-//	}
-//	cout<<"updated"<<endl;
-//
-//	CheckPoint* checkpoint2= new CheckPoint(10);
-//	//checkpoint2->SetPhysics(10,'c');
-//	checkpoint2->SetOriginPosition(SplinePoint[3]);
-//	checkpoint2->SetRotation(Quaternion::EulerAnglesToQuaternion(0,-(anglec),0));
-//	//checkpoint2->GetPhysicsNode().SetPGE(checkpoint2);
-//	AddDrawable(checkpoint2);
-//
-//	update=0;
-//	}
+	if(update==1)
+	{
+		//create a new control point
+		//float angle = (rand() % 150) - 75;
+		float angle = -65;
+//		g += 100*(sin(RadToDeg(angle)));
+//		gx += 100*(2 * abs(cos(RadToDeg(angle))));
+		g += 100*(sin(DegToRad(angle)));
+		gx += 100*( 3*abs(cos(DegToRad(angle))));
+
+		T3Vector3 spn= T3Vector3(gx,0,g);
+		SplinePoint.push_back(spn);
+		//2
+//		g += 100*(sin(RadToDeg(angle)));
+//		gx += 100*(2 * abs(cos(RadToDeg(angle))));
+		//float angle2 = 15;
+		 //angle = (rand() % 150) - 75;
+		g += 100*(sin(DegToRad(angle)));
+		gx += 100*(3* abs(cos(DegToRad(angle))));
+
+		T3Vector3 spn2= T3Vector3(gx,0,g);
+		SplinePoint.push_back(spn2);
+		//create new track
+		T3Vector3 avg = (SplinePoint[1] + SplinePoint[2] + SplinePoint[3]) / 3.0f;
+		T3Vector3 avg2 = (SplinePoint[2] + SplinePoint[3] + SplinePoint[4]) / 3.0f;
+		GameStateManager::Graphics()->GetRenderContext();
+		TrackSegment* Strackn = new TrackSegment(SplinePoint[1] - avg,SplinePoint[2] - avg,SplinePoint[3] - avg,5,50.f);
+		TrackSegmentVector.push_back(Strackn);
+		
+		/*TrackSegment* Strackn = new TrackSegment(SplinePoint[1],SplinePoint[2],T3Vector3(400,0,0),5,50.f);
+		TrackSegmentVector.push_back(Strackn);*/
+		GameStateManager::Graphics()->DropRenderContext();
+
+		GameStateManager::Graphics()->GetRenderContext();
+		TrackSegment* Strackn2 = new TrackSegment(SplinePoint[2] - avg2,SplinePoint[3] - avg2,SplinePoint[4] - avg2,5,50.f);
+		TrackSegmentVector.push_back(Strackn2);
+		
+		/*TrackSegment* Strackn = new TrackSegment(SplinePoint[1],SplinePoint[2],T3Vector3(400,0,0),5,50.f);
+		TrackSegmentVector.push_back(Strackn);*/
+		GameStateManager::Graphics()->DropRenderContext();
+		//create end
+
+			Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"water.jpg", 0);
+		GameStateManager::Graphics()->GetRenderContext();
+	TrackSegment* track = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5, 50.0);
+	//push back track
+	TrackSegmentVector.push_back(track);
+	GameStateManager::Graphics()->DropRenderContext();
+
+	DrawableEntity3D* ent = new DrawableEntity3D(
+		track,
+		NULL,
+		grassTex,
+		NULL,
+		800.0f,
+		T3Vector3(0,0,0),
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(1,1,1));
+	//gameEntities.push_back(ent);
+	AddDrawable(ent);
+
+	//add new track to draw
+	DrawableEntity3D* ent2 = new DrawableEntity3D(
+		Strackn,
+		NULL,
+		grassTex,
+		NULL,
+		800.0f,
+		//T3Vector3(0,0,0),
+		avg,
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(1,1,1));
+	//gameEntities.push_back(ent);
+	AddDrawable(ent2);
+	//add end
+
+
+	//add3
+	DrawableEntity3D* ent3 = new DrawableEntity3D(
+		Strackn2,
+		NULL,
+		grassTex,
+		NULL,
+		800.0f,
+		/*T3Vector3(0,0,0),*/
+		avg2,
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(1,1,1));
+	//gameEntities.push_back(ent);
+	AddDrawable(ent3);
+	//add 3 end
+
+
+	T3Vector3 L =  Strackn2->GetTrackCentreLeft();
+	T3Vector3 R = Strackn2->GetTrackCentreRight();
+	T3Vector3 rl = R-L;
+	T3Vector3 lr = L-R;
+	T3Vector3 F = T3Vector3(0,0,1); 
+	F.Normalise();
+	rl.Normalise();
+	float cosc= T3Vector3::Dot(rl,F); 
+	//float Degc= 
+	double degc=acos(cosc);
+	float anglec=RadToDeg(degc);
+	cout<<anglec<<endl;
+	if(L.x<R.x)
+	{
+	anglec=-anglec;
+	}
+	cout<<"updated"<<endl;
+
+	CheckPoint* checkpoint2= new CheckPoint(10);
+	//checkpoint2->SetPhysics(10,'c');
+	checkpoint2->SetOriginPosition(SplinePoint[3]);
+	checkpoint2->SetRotation(Quaternion::EulerAnglesToQuaternion(0,-(anglec),0));
+	//checkpoint2->GetPhysicsNode().SetPGE(checkpoint2);
+	AddDrawable(checkpoint2);
+
+	update=0;
+	}
 }
 
 #if WINDOWS_BUILD
