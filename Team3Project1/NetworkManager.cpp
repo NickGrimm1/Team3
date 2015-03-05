@@ -55,7 +55,7 @@ BaseSocket* NetworkManager::ConnectToServer(string ipAddress, string portNum) {
 	hints.ai_socktype = TCP;
 	hints.ai_flags = AI_PASSIVE; // use localhost for address
 	
-	unsigned int addrResult = getaddrinfo(LOCALHOST, portNum.c_str(), &hints, &addressData);
+	unsigned int addrResult = getaddrinfo(ipAddress.c_str(), portNum.c_str(), &hints, &addressData);
 	if (addrResult != 0) {
 		cout << "getaddrinfo() failed with error:" << endl;
 		cout << addrResult << ": " << gai_strerror(WSAGetLastError()) << endl;
@@ -81,8 +81,13 @@ BaseSocket* NetworkManager::ConnectToServer(string ipAddress, string portNum) {
 		return NULL;
 	}
 
+	freeaddrinfo(addressData);
+
 	// Connection established - return socket object
 	// TCP for time being
+
+	unsigned long nonblocking = NON_BLOCKING;
+	ioctlsocket(connectionSocket, FIONBIO, &nonblocking);
 
 	TcpSocket* tcpSocket = new TcpSocket(connectionSocket);
 	connections.push_back(tcpSocket);

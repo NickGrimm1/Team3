@@ -38,7 +38,7 @@ Vehicle::Vehicle(float size) {
 
 	//ConnectToSystems();
 
-	maxSpeed=15;
+	maxSpeed=T3Vector3(15,15,15);
 
 
 
@@ -307,9 +307,11 @@ void Vehicle::SetPhysics(float size,PhysicsNode * a)
 	car->SetUseGravity(false);
 	car->SetPosition(origin);
 	car->SetMass(5);
-	car->SetCollisionVolume(new CollisionAABB(T3Vector3(size,size,size)));
+	car->SetCollisionVolume(new CollisionAABB(T3Vector3(size ,size ,size )));
 	car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"CarPhysics.obj"));
 	car->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,0,0));
+	car->SetXstart(car->GetPosition().x-3*size);
+	car->SetXend(car->GetPosition().x+3*size);                                                                                         
 
 	car->SetIsCollide(true);
 

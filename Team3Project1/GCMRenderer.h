@@ -88,8 +88,8 @@ public:
 
 	void	DrawNode(SceneNode*n);
 
-	static CellGcmTexture* LoadTGA(std::string name);
-	static CellGcmTexture* LoadGTF(std::string name);
+	//static CellGcmTexture* LoadTGA(std::string name);
+	//static CellGcmTexture* LoadGTF(std::string name);
 
 	Shader* GetCurrentShader()const{return shader;}
 

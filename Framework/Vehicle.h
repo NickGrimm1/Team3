@@ -38,8 +38,31 @@ public:
 
 	}
 
+	float GetX() {return car->GetLinearVelocity().x;}
+	void SetX(float x) {
+		T3Vector3 temp = car->GetLinearVelocity();
+		temp.x = x;
+		car->SetLinearVelocity(temp);
+	}
+
+	float GetY() {return car->GetLinearVelocity().y;}
+	void SetY(float y) {
+		T3Vector3 temp1 = car->GetLinearVelocity();
+		temp1.y = y;
+		car->SetLinearVelocity(temp1);
+	}
+
+	float GetZ() {return car->GetLinearVelocity().z;}
+	void SetZ(float z) {
+		T3Vector3 temp2 = car->GetLinearVelocity();
+		temp2.z = z;
+		car->SetLinearVelocity(temp2);
+	}
+
+
+
 protected:
-	float maxSpeed;
+	T3Vector3 maxSpeed;
 
 
 

@@ -119,9 +119,9 @@ void GraphicsEngine::Run() {
 		addHudList.clear();
 
 		for (unsigned int i = 0; i < removeHudList.size(); i++) {
-			for (vector<DrawableEntity2D*>::iterator j = overlayElementsList.begin(); j != overlayElementsList.end(); ++j) {
-				if ((*j) == removeHudList[i]) {
-					overlayElementsList.erase(j);
+			for (unsigned int j = 0; j < overlayElementsList.size(); ++j) {
+				if (overlayElementsList[j] == removeHudList[i]) {
+					overlayElementsList.erase(overlayElementsList.begin() + j);
 				}
 			}
 		}
@@ -134,18 +134,18 @@ void GraphicsEngine::Run() {
 
 		// Add/Remove lights
 		for (unsigned int l = 0; l < removeLightsList.size(); l++) {
-			for (vector<Light*>::iterator i = lights.begin(); i != lights.end(); ++i) {
-				if ((*i) == removeLightsList[l]) {
-					unsigned int shadowTex = (*i)->GetShadowTexture();
+			for (unsigned int i = 0; i < lights.size(); ++i) {
+				if (lights[i] == removeLightsList[l]) {
+					unsigned int shadowTex = lights[i]->GetShadowTexture();
 					if (shadowTex > 0) 
 						renderer->DestroyTexture(shadowTex);
-					lights.erase(i);
+					lights.erase(lights.begin() + i);
 				}
 			}
 		}
 		removeLightsList.clear();
 
-		contentGuard.unlock_mutex();
+		
 			
 		// Update data in scene nodes
 		sceneRoot->Update(msec); // TODO - sort out proper timestep value - or remove timestep if not needed
@@ -203,6 +203,8 @@ void GraphicsEngine::Run() {
 
 		// Clear node lists in preparation for next render cycle
 		ClearNodeLists();
+
+		contentGuard.unlock_mutex();
 	}
 }
 

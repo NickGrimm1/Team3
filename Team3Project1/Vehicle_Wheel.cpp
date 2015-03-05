@@ -57,7 +57,7 @@ void Vehicle_Wheel::SetPhysics(float size,PhysicsNode * a)
 	physicsNode->SetMass(5);
 	physicsNode->SetCollisionVolume(new CollisionAABB(T3Vector3(size,size,size)));
 	physicsNode->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Tire.obj"));
-	physicsNode->SetMesh(NULL);
+//	physicsNode->SetMesh(NULL);
 	physicsNode->SetIsCollide(true);
 
 

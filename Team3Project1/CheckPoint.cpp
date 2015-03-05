@@ -6,7 +6,7 @@ CheckPoint::CheckPoint(float size):
 	carPhysicNode(carPhysicNode) 
 {
 	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj");
-	T3Vector3 position =T3Vector3(50, -2, 0);
+	T3Vector3 position =T3Vector3(-50, -2, 0);
 	boundingRadius = size;
 	origin = position;
 	rotation = Quaternion::EulerAnglesToQuaternion(0,0,0);
@@ -34,6 +34,8 @@ void CheckPoint::SetPhysics(float size,char type)
 	physicsNode->SetMass(5);
 
 	physicsNode->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj"));
+	physicsNode->SetXstart(physicsNode->GetPosition().x-1*size);
+	physicsNode->SetXend(physicsNode->GetPosition().x+1*size); 
 	physicsNode->SetType(type);
 	physicsNode->SetCollisionVolume(new CollisionAABB(T3Vector3(0.1*size,size,10*size)));
 

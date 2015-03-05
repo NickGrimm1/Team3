@@ -76,19 +76,19 @@ public:
 	<summary>Removes this entity from the screen.</summary>
     <param name="entity">The entity.</param>
 	*/
-    void RemoveEntity(T3Rectangle* entity)
+    void RemoveEntity(T3Rectangle* entity, bool del = true)
     {
 		for (vector<T3Rectangle*>::iterator i = entities.begin(); i != entities.end(); i++)
 		{
 			if (*i == entity)
 			{
-				// TODO: Ensure that this is also removed from Graphics & Input.
 				if (*i)
 				{
-					delete *i;
-					*i = NULL;
+					if (del)
+						delete *i;
+						*i = NULL;
 				}
-				entities.erase(i);
+				i = entities.erase(i);
 				break;
 			}
 		}
@@ -106,7 +106,7 @@ public:
 	<summary>Removes a drawable entity. Idempotent.</summary>
     <param name="drawable">The entity.</param>
 	*/
-    void RemoveDrawable(DrawableEntity2D* drawable);
+    void RemoveDrawable(DrawableEntity2D* drawable, bool del = true);
 #pragma endregion
 #pragma region Selectables
 	/**
@@ -130,20 +130,20 @@ public:
 	<param name="removeFromDraw">Remove the entity from draw. Default is true.</param>
     <param name="selectable">The entity.</param>
 	*/
-	void RemoveSelectable(SelectableEntity2D* selectable, bool removeFromDraw = true)
+	void RemoveSelectable(SelectableEntity2D* selectable, bool removeFromDraw = true, bool del = true)
     {
         for (vector<SelectableEntity2D*>::iterator i = selectables.begin(); i != selectables.end(); i++)
 		{
 			if (*i == selectable)
 			{
-				selectables.erase(i);
+				i = selectables.erase(i);
 				break;
 			}
 		}
 
         if (removeFromDraw)
 			for (unsigned int i = 0 ;i < selectable->GetDrawables().size(); i++)
-				RemoveDrawable(selectable->GetDrawables()[i]);
+				RemoveDrawable(selectable->GetDrawables()[i], del);
     }
 #pragma endregion
 #pragma region Clickables
@@ -166,19 +166,36 @@ public:
 	<param name="removeFromDraw">Remove the entity from draw. Default is true.</param>
     <param name="clickable">The entity.</param>
 	*/
-	void RemoveClickable(ClickableEntity2D* clickable, bool removeFromDraw = true)
+	void RemoveClickable(ClickableEntity2D* clickable, bool removeFromDraw = true, bool del = true)
     {
         for (vector<ClickableEntity2D*>::iterator i = clickables.begin(); i != clickables.end(); i++)
 		{
 			if (*i == clickable)
 			{
-				clickables.erase(i);
+				i = clickables.erase(i);
 				break;
 			}
 		}
-		RemoveSelectable(clickable, removeFromDraw);
+		RemoveSelectable(clickable, removeFromDraw, del);
     }
 #pragma endregion
+	void SetCurrentSelected(unsigned int value)
+	{
+		currentSelected = value;
+		if (selectables.size() > 0)
+		{
+			currentSelected %= selectables.size();
+			for (int i = 0; i < selectables.size(); ++i)
+				selectables[i]->UnSelect();
+			selectables[currentSelected]->Select();
+		}
+	}
+	void ClearSelection()
+	{
+		currentSelected = 0;
+		for (int i = 0; i < selectables.size(); ++i)
+			selectables[i]->UnSelect();
+	}
 protected:
 	/**
 	<summary>Gets the maximum screen deviations for scroll.</summary>
