@@ -181,14 +181,14 @@ void ShaderPart::SetParameter(std::string name, Matrix4 &totranpose) {
 	//std::cout << "Transposing: " << name << std::endl;
 	Matrix4 tempMatrix = transpose(totranpose);
 	//std::cout << "Shader Part: Transposed Matrix (SCE): " << std::endl;
-		for (int x = 0; x < 4; ++x)
+		/*for (int x = 0; x < 4; ++x)
 		{
 			for (int y = 0; y < 4; ++y)
 			{
 				std::cout << tempMatrix.getElem(x,y) << ",";
 			}
 			std::cout << std::endl;
-		}
+		}*/
 		float* m = (float*)&tempMatrix;
 	//	std::cout << "Shader Part: Setting " << name << " " << &tempMatrix << std::endl;
 	SetParameter(name, m);
@@ -267,7 +267,7 @@ void	ShaderPart::UpdateShaderMatrices(Matrix4 &model,Matrix4 &view, Matrix4 &pro
 }
 #endif
 #if PS3_BUILD
-CGprogram ShaderPart::GetProgram(){std::cout<<"ShaderPart: Program: " << &program << program << std::endl; return program;}
+CGprogram ShaderPart::GetProgram(){/*std::cout<<"ShaderPart: Program: " << &program << program << std::endl;*/ return program;}
 
 unsigned int ShaderPart::GetOffset(){return offset;}
 

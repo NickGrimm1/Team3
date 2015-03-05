@@ -56,7 +56,7 @@ void Renderer::RenderScene() {
 
 	if(camera) {
 		T3Matrix4 m = camera->BuildViewMatrix();
-		std::cout << "Renderer: View Matrix (T3): " << m << std::endl;
+	//	std::cout << "Renderer: View Matrix (T3): " << m << std::endl;
 
 		viewMatrix = Matrix4::identity();
 		for (int x = 0; x < 4; ++x)
@@ -93,10 +93,12 @@ bool Renderer::LoadShaders()
 	basicShader = GameStateManager::Assets()->LoadShader(this, "/vertex.vpo","/fragment.fpo");
 	return true;
 }
+
 void Renderer::UnloadShaders()
 {
 	GameStateManager::Assets()->UnloadShader(this,  "/vertex.vpo","/fragment.fpo");
 }
+
 bool Renderer::LoadAssets()
 {
 	circleMesh = GameStateManager::Assets()->LoadCircle(this, 20);				  // Circle for spotlight rendering
@@ -111,6 +113,7 @@ bool Renderer::LoadAssets()
 	
 	return true;
 }
+
 void Renderer::UnloadAssets()
 {
 	GameStateManager::Assets()->UnloadCircle(this, 20);				   // Circle for spotlight rendering
@@ -124,6 +127,7 @@ unsigned int Renderer::CreateShadowCube()
 {
 	return 0;//look into this later
 }
+
 unsigned int Renderer::CreateShadowTexture()
 {
 	return 0;//look into this later
