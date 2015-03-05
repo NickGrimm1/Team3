@@ -71,7 +71,7 @@ void VehicleTestingScreen::LoadContent() {
 	
 	VehiclePhysicsNode* vpn = new VehiclePhysicsNode();
 	
-	GameStateManager::Physics()->AddNode((PhysicsNode*)vpn);
+	//GameStateManager::Physics()->AddNode((PhysicsNode*)vpn);
 
 	car = new Vehicle(5);
 //	car->SetPhysics(5,(vpn->GetCar()));
@@ -118,12 +118,11 @@ void VehicleTestingScreen::LoadContent() {
 	*/
 
 
-	Speed_Player = 2;
+	
 	f=0;
-	temp2=T3Vector3(0,0,0);
+	
 	Speed_Rotate =  -0.4;
-	tempPosition = T3Vector3(0,350,-800);
-	PlayerPosition=T3Vector3(500,100,-800);
+	
 
 	camera->SetPosition(T3Vector3(0,10.0f, 80.0f));
 	//camera->SetYaw(180.0f);
@@ -172,12 +171,22 @@ void VehicleTestingScreen::Update() {
 
 	
 	
-	car->GetCarNode().SetXstart(car->GetCarNode().GetPosition().x-3*5);
-	car->GetCarNode().SetXend(car->GetCarNode().GetPosition().x+3*5);
+	car->GetCarNode().SetXstart(car->GetCarNode().GetPosition().x-3*5 +10);
+	car->GetCarNode().SetXend(car->GetCarNode().GetPosition().x+3*5+10);
 	checkpoint->GetPhysicsNode().SetXstart(checkpoint->GetPhysicsNode().GetPosition().x-1*10);
 	checkpoint->GetPhysicsNode().SetXend(checkpoint->GetPhysicsNode().GetPosition().x+1*10);
-	gold_cion->GetPhysicsNode().SetXstart(gold_cion->GetPhysicsNode().GetPosition().x-0.95*10);
-	gold_cion->GetPhysicsNode().SetXend(gold_cion->GetPhysicsNode().GetPosition().x+0.95*10);
+	gold_cion->GetPhysicsNode().SetXstart(gold_cion->GetPhysicsNode().GetPosition().x-1*10+10);
+	gold_cion->GetPhysicsNode().SetXend(gold_cion->GetPhysicsNode().GetPosition().x+1*10+10);
+	FrontRightTire->GetPhysicsNode().SetXstart(FrontRightTire->GetPhysicsNode().GetPosition().x-1*5);
+	FrontRightTire->GetPhysicsNode().SetXend(FrontRightTire->GetPhysicsNode().GetPosition().x+1*5);
+
+	FrontLeftTire->GetPhysicsNode().SetXstart(FrontLeftTire->GetPhysicsNode().GetPosition().x-1*5);
+	FrontLeftTire->GetPhysicsNode().SetXend(FrontLeftTire->GetPhysicsNode().GetPosition().x+1*5);
+
+	BackRightTire->GetPhysicsNode().SetXstart(BackRightTire->GetPhysicsNode().GetPosition().x-1*5);
+	BackRightTire->GetPhysicsNode().SetXend(BackRightTire->GetPhysicsNode().GetPosition().x+1*5);
+	BackLeftTire->GetPhysicsNode().SetXstart(BackLeftTire->GetPhysicsNode().GetPosition().x-1*5);
+	BackLeftTire->GetPhysicsNode().SetXend(BackLeftTire->GetPhysicsNode().GetPosition().x+1*5);
 
 	
 	
@@ -416,9 +425,11 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 	}
 }
 	
-void VehicleTestingScreen::MouseMoved(T3Vector2& start, T3Vector2& finish) {
-	camera->AddPitch(-finish.y);
-	camera->AddYaw(finish.x);
+void VehicleTestingScreen::MouseMoved(T3Vector2& star, T3Vector2& finish) {
+T3Vector2 amount = finish - star;
+	
+	camera->AddPitch(10*(-amount.y));
+	camera->AddYaw(10*(amount.x));
 }
 
 #endif

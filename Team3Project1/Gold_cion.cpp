@@ -5,7 +5,7 @@
 Gold_cion::Gold_cion(float size):
 	carPhysicNode(carPhysicNode) 
 {
-	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj");
+	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj");
 	T3Vector3 position =T3Vector3(100, -2, 0);
 	boundingRadius = size;
 	origin = position;
@@ -34,9 +34,9 @@ void Gold_cion::SetPhysics(float size)
 	physicsNode->SetMass(5);
 
 	physicsNode->SetCollisionVolume(new CollisionAABB(T3Vector3(size,size,size)));
-	physicsNode->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"));
-	physicsNode->SetXstart(physicsNode->GetPosition().x-0.95*size);
-	physicsNode->SetXend(physicsNode->GetPosition().x+0.95*size); 
+	physicsNode->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj"));
+	physicsNode->SetXstart(physicsNode->GetPosition().x-1*size);
+	physicsNode->SetXend(physicsNode->GetPosition().x+1*size); 
 	physicsNode->SetIsCollide(false);
 
 
