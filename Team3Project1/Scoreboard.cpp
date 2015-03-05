@@ -5,89 +5,128 @@
 #include "GameStateManager.h"
 #include "NetworkCommon.h"
 
+#include <sstream>
+
 Scoreboard::Scoreboard(void)
 {
-	scoreboardConnected = false;
-	scoreboardRequestSent = false;
-	scoreboardRequestSucceeded = false;
-	scoreboardRetrieved = false;
-
+	scoreboardLoaded = false;
 	scoreboardHost = SCOREBOARD_HOSTNAME;
-	ConnectToScoreboard();
-	if (!scoreboardConnected) return;
-
-	RetrieveScoreboard();
-	
-
 }
 
 bool Scoreboard::ConnectToScoreboard() {
 	scoreboardDB = GameStateManager::Network()->ConnectToServer(SCOREBOARD_HOST_IP, SCOREBOARD_PORT);
-	scoreboardConnected = (scoreboardDB != NULL);
-	return scoreboardConnected;
+	return (scoreboardDB != NULL);
 }
 
 Scoreboard::~Scoreboard(void)
 {
+	scoreboard.clear();
 }
 
 bool Scoreboard::RetrieveScoreboard() {
+	scoreboard.clear();
+	scoreboardLoaded = false;
+
+	if (!ConnectToScoreboard()) return false;
+
 	char buffer[1024];
-	
 	// Send Message Request
-	if (!scoreboardRequestSent) {
-		sprintf(buffer, 
-	        "GET /getScores.php HTTP/1.1\r\n"
-	        "Host: %s\r\n"
-	        "User-Agent: Mozilla Firefox/4.0\r\n"
-			"Accept: text/plain\r\n"
-			"Accept-Language: en-US,en;q=0.5\r\n"
-			"Accept-Encoding: identity\r\n"
-			"Connection: keep-alive\r\n\r\n", 
-			scoreboardHost.c_str());
+	sprintf(buffer, 
+		"GET /getScores.php HTTP/1.1\r\n"
+	    "Host: %s\r\n"
+	    "User-Agent: Mozilla Firefox/4.0\r\n"
+		"Accept: text/plain\r\n"
+		"Accept-Language: en-US,en;q=0.5\r\n"
+		"Accept-Encoding: identity\r\n"
+		"Connection: keep-alive\r\n\r\n", 
+		scoreboardHost.c_str());
 
-		if (!scoreboardDB->Send(buffer, strlen(buffer))) {
-			return false;
-		}
-		scoreboardRequestSent = true;
+	if (!scoreboardDB->Send(buffer, strlen(buffer))) {
+		return false;
 	}
-
+	
 	unsigned int bytesReceived = 0;
 	unsigned int i = 0;
-	while ((i = scoreboardDB->Receive(buffer + bytesReceived, 1024 - bytesReceived)) > 0) {
+	while ((i = scoreboardDB->Receive(buffer + bytesReceived, 1024 - bytesReceived, true)) > 0) {
 		bytesReceived += i;
 	}
 	if (bytesReceived > 0) {
 		string httpResponse(buffer, buffer + bytesReceived);
 		cout << httpResponse << endl;
 
-		// Parse HTTP Response
+		if (httpResponse.find(HTTP_OK) != string::npos) {
+			stringstream httpStream(httpResponse);
+		
+			// Parse HTTP Response
+			unsigned int scoreboardLength = 0;
+			bool scoreboardStarted = false;
+			while (!httpStream.eof()) {
+				getline(httpStream, httpResponse);
+				unsigned int pos = 0;
 
+				if (httpResponse == "") continue;
 
+				if (scoreboardStarted) {
+					string name;
+					string score;
+					unsigned int delim = httpResponse.find(" ");
+					name = httpResponse.substr(0, delim);
+					score = httpResponse.substr(delim + 1, string::npos);
+					scoreboard.push_back(pair<string, string>(name, score));
+					scoreboardLength -= httpResponse.length() + 1; // + 1 for EOL
+				}
+				else if ((pos = httpResponse.find(HTTP_CONTENT_LENGTH)) != string::npos) {
+					scoreboardLength = atoi(httpResponse.substr(pos + strlen(HTTP_CONTENT_LENGTH), string::npos).c_str());
+				}
+				else if (httpResponse == "\r") { // End of HTTP Response
+					scoreboardStarted = true;
+				}
+				// Don't care about the rest of the response
+			}
+
+			scoreboardLoaded = (scoreboardLength == 0);
+		}
 	}
-	return true;
+	delete scoreboardDB;
+	return scoreboardLoaded;
 }
 
 bool Scoreboard::PostScore(string name, unsigned int score) {
+	if (!ConnectToScoreboard()) return false;
+
 	char buffer[1024];
-	if (score > GetLowestScore()) {
-		sprintf(buffer,
-        "POST /postScore.php?n=%s&s=%d HTTP/1.1\r\n"
-        "Host: %s\r\n"
-        "User-Agent: Mozilla Firefox/4.0\r\n"
-        "Content-Type: text/html\r\n"
-        "Accept-Language: en-US,en;q=0.5\r\n"
-		"Accept-Encoding: identity\r\n"
-		"Connection: keep-alive\r\n\r\n", 
-        name.c_str(),
-		score,
-		scoreboardHost.c_str());
+	sprintf(buffer,
+    "GET /postScore.php?n=%s&s=%d HTTP/1.1\r\n"
+    "Host: %s\r\n"
+    "User-Agent: Mozilla Firefox/4.0\r\n"
+    "Content-Type: text/html\r\n"
+    "Accept-Language: en-US,en;q=0.5\r\n"
+	"Accept-Encoding: identity\r\n"
+	"Connection: keep-alive\r\n\r\n", 
+    name.c_str(),
+	score,
+	scoreboardHost.c_str());
+	
+	cout << string(buffer, buffer + strlen(buffer)) << endl;
+
+	if (!scoreboardDB->Send(buffer, strlen(buffer))) {
+		cout << "Could not post score" << endl;	
+		return false;
 	}
-	return true;
+
+	// Check score was posted correctly
+	unsigned int bytesReceived = 0;
+	unsigned int i = 0;
+	while ((i = scoreboardDB->Receive(buffer + bytesReceived, 1024 - bytesReceived, true)) > 0) {
+		bytesReceived += i;
+	}
+	cout << string(buffer, buffer + strlen(buffer)) << endl;
+	delete scoreboardDB;
+	return (bytesReceived > 0 && string(buffer, buffer + bytesReceived).find(HTTP_OK));
 }
 
 bool Scoreboard::IsScoreboardLoaded() const {
-	return scoreboardRetrieved;
+	return scoreboardLoaded;
 }
 	
 unsigned int Scoreboard::GetLowestScore() const {

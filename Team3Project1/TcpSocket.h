@@ -10,7 +10,7 @@ public:
 	virtual ~TcpSocket(void);
 
 	virtual bool Send(const char* data, unsigned int length);
-	virtual unsigned int Receive(char* data, unsigned int max_length);
+	virtual unsigned int Receive(char* data, unsigned int max_length, bool blocking = true);
 	
 protected:
 	SOCKET socket;
