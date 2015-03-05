@@ -146,7 +146,7 @@ wrong when incorrect data is sent to it.
 */
 void	ShaderPart::SetParameter(std::string name, float*data) 
 {
-	//std::cout << "Shader Part: Getting parameter: " << name << std::endl;
+	std::cout << "Shader Part: Getting parameter: " << name << std::endl;
 	CGparameter p = GetParameter(name);
 
 	//DON'T try to set a non-existent parameter. GCM will instantly
@@ -175,18 +175,18 @@ matrix wrong
 void ShaderPart::SetParameter(std::string name, Matrix4 &totranpose) {
 	std::cout << "Transposing: " << name << std::endl;
 	Matrix4 tempMatrix = transpose(totranpose);
-	//std::cout << "Shader Part: Transposed Matrix (SCE): " << std::endl;
-	//	for (int x = 0; x < 4; ++x)
-	//	{
-	//		for (int y = 0; y < 4; ++y)
-	//		{
-	//			std::cout << tempMatrix.getElem(x,y) << ",";
-	//		}
-	//		std::cout << std::endl;
-	//	}
-	//	float* m = (float*)&tempMatrix;
-	//	std::cout << "Shader Part: Setting " << name << " " << &tempMatrix << std::endl;
-	SetParameter(name, (float*)&tempMatrix);
+	std::cout << "Shader Part: Transposed Matrix (SCE): " << std::endl;
+		for (int x = 0; x < 4; ++x)
+		{
+			for (int y = 0; y < 4; ++y)
+			{
+				std::cout << tempMatrix.getElem(x,y) << ",";
+			}
+			std::cout << std::endl;
+		}
+		float* m = (float*)&tempMatrix;
+		std::cout << "Shader Part: Setting " << name << " " << &tempMatrix << std::endl;
+	SetParameter(name, m);
 	std::cout << "Shader Part: " << name << " Set" << std::endl;
 }
 

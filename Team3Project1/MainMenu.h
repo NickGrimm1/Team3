@@ -8,8 +8,8 @@ Version: 0.0.1 02/03/2015.</summary>
 
 
 #pragma once
-
 #include "GameScreen2D.h"
+#include "GamePad.h"
 #include "UIButton.h"
 
 class MainMenu : public GameScreen2D
@@ -23,12 +23,12 @@ public:
 	virtual void UnloadContent();
 
 #if WINDOWS_BUILD
-	//virtual void MouseScrolled(T3Vector2& position, int amount) { }
-	//virtual void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) { }
+	virtual void MouseScrolled(T3Vector2& position, int amount) { }
+	virtual void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) { }
+	virtual void MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position);
+	virtual void MouseMoved(T3Vector2& start, T3Vector2& finish);
 #endif
-	//virtual void GamepadEvent(GamepadEvents::PlayerIndex playerId, GamepadEvents::EventType type, GamepadEvents::Button button) { }
-	//virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) { }
-	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID){}
+	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID);
 private:
 
 	void NewGameClicked(float x, float y);
@@ -77,4 +77,7 @@ private:
 
 	bool musicMuted;
 	bool soundMuted;
+
+	DrawableText2D* pressStart;
+	GamepadEvents::PlayerIndex playerOne;
 };
