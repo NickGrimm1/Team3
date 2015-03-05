@@ -13,3 +13,11 @@
 
 #define BLOCKING 0
 #define NON_BLOCKING 1
+
+#define SCOREBOARD_HOST_IP	"83.125.22.192"
+#define SCOREBOARD_HOSTNAME	"glow.mygamesonline.org" //getaddrinfo unable to resolve DNS
+#define SCOREBOARD_PORT "80"
+#define SQL_PORT "3306"
+#define SQL_DB_SCORES	"1823820_scores"
+#define SQL_USER		"1823820_scores"
+#define SQL_PASSWORD	"94857GLOW423895"

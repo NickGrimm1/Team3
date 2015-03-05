@@ -1,13 +1,14 @@
 #include "UdpSocket.h"
 
 
-UdpSocket::UdpSocket(void)
+UdpSocket::UdpSocket(void) : socket(socket)
 {
 }
 
 
 UdpSocket::~UdpSocket(void)
 {
+	closesocket(socket);
 }
 
 bool UdpSocket::Send(const char* data, unsigned int length) {
