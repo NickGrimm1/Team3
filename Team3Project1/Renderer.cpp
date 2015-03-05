@@ -1291,7 +1291,7 @@ unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char
 	GLuint texture;
 	GLuint FBO;
 
-	CreateStaticMap(&staticMap, resolution, minValue, maxValue);
+	CreateStaticMap(&staticMap, 48, minValue, maxValue);
 
 	GLenum x = glGetError();
 	// Draw for perlin noise.
@@ -1299,18 +1299,27 @@ unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char
 	x = glGetError();
 	glBindTexture(GL_TEXTURE_2D, texture);
 	x = glGetError();
-	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_NEAREST );
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	x = glGetError();
-	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST );
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	x = glGetError();
-	glTexImage2D ( GL_TEXTURE_2D , 0, GL_RGBA8 , resolution , resolution , 0, GL_RGBA , GL_UNSIGNED_BYTE , NULL );
+	glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, resolution, resolution, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	x = glGetError();
 	glGenFramebuffers(1, &FBO);
 	x = glGetError();
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 	x = glGetError();
+
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+	cout << "binding texture " << texture << endl;
+	GLenum color = GL_COLOR_ATTACHMENT0;
+	glDrawBuffers(1, &color);
 	x = glGetError();
+
+	GLenum y = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	if (y == GL_FRAMEBUFFER_COMPLETE)
+		bool a = true;
+
 	glClear(GL_COLOR_BUFFER_BIT);
 	x = glGetError();
 	SetCurrentShader(cloudShader);
@@ -1335,7 +1344,7 @@ unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char
 	float* data = new float[resolution * resolution * 4];
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, FBO);
 	glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
-	GLenum y = glCheckFramebufferStatus(GL_READ_FRAMEBUFFER);
+	y = glCheckFramebufferStatus(GL_READ_FRAMEBUFFER);
 	x = glGetError();
 	glReadBuffer(GL_COLOR_ATTACHMENT0);
 	x = glGetError();
@@ -1346,7 +1355,7 @@ unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char
 
 	unsigned char* output = new unsigned char[resolution * resolution];
 	for (int i = 0; i < resolution * resolution; ++i)
-		output[i] = data[i * 4];
+		output[i] = data[i * 4] * 255;
 
 	return output;
 }

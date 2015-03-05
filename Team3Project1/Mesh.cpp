@@ -222,7 +222,7 @@ void	Mesh::GenerateNormals()
 			int b = indices[i + 1];
 			int c = indices[i + 2];
 
-			T3Vector3 normal = T3Vector3::Cross((vertices[b].GetPosition() - vertices[a].GetPosition()), (vertices[c].GetPosition() - vertices[a].GetPosition()));
+			T3Vector3 normal = T3Vector3::Cross((vertices[b].GetPosition() - vertices[a].GetPosition()), (vertices[c].GetPosition() - vertices[a].GetPosition())).Normal();
 
 			vertices[a].SetNormal(normal);
 			vertices[b].SetNormal(normal);
@@ -238,7 +238,7 @@ void	Mesh::GenerateNormals()
 			T3Vector3 b = vertices[i + 1].GetPosition();
 			T3Vector3 c = vertices[i + 2].GetPosition();
 
-			T3Vector3 normal = T3Vector3::Cross(b - a, c - a);
+			T3Vector3 normal = T3Vector3::Cross(b - a, c - a).Normal();
 
 			vertices[i].SetNormal(normal);
 			vertices[i + 1].SetNormal(normal);

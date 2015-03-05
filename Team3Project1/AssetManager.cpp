@@ -875,7 +875,7 @@ Mesh* AssetManager::LoadHeightmap(void* callerID, string filename, bool useTextu
 Mesh* AssetManager::LoadHeightmap(unsigned char minHeight, unsigned char maxHeight, bool useTextureWeights)
 {
 	GameStateManager::Graphics()->GetRenderContext();
-	Mesh* mesh = new HeightMap("", minHeight, maxHeight, useTextureWeights);
+	Mesh* mesh = new HeightMap("", useTextureWeights, minHeight, maxHeight);
 	GameStateManager::Graphics()->DropRenderContext();
 	generatedHeightmaps.push_back(mesh);
 	meshMemory += mesh->GetMemoryUsage();

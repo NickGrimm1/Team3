@@ -85,8 +85,10 @@ public:
 				if (*i)
 				{
 					if (del)
+					{
 						delete *i;
 						*i = NULL;
+					}
 				}
 				i = entities.erase(i);
 				break;
