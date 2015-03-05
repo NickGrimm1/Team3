@@ -49,8 +49,8 @@ void GraphicsTestScreen::LoadContent() {
 #endif
 	
 	DrawableEntity3D* ent;
-	/*
-	for (unsigned int i = 0; i < 8; i++) {
+	
+	/*for (unsigned int i = 0; i < 8; i++) {
 		for (unsigned int j = 0; j < 8; j++) {
 			ent = new DrawableEntity3D(
 				quad,
@@ -64,14 +64,30 @@ void GraphicsTestScreen::LoadContent() {
 			gameEntities.push_back(ent);
 			AddDrawable(ent);
 		}
-	}
-	*/
+	}*/
+	
 
 	GameStateManager::Graphics()->GetRenderContext();
 #if WINDOWS_BUILD
 	track = new TrackSegment(T3Vector3(-400, 0, 400), T3Vector3(-400,0,0), T3Vector3(0,0,-400), 10, 50.0);
 #endif
 	GameStateManager::Graphics()->DropRenderContext();
+
+	ent = new DrawableEntity3D(
+		GameStateManager::Assets()->LoadHeightmap(0, 15, true),
+		NULL,
+#if WINDOWS_BUILD
+		grassTex,
+#endif
+#if PS3_BUILD
+		nclTex,
+#endif
+		NULL,
+		800.0f,
+		T3Vector3(),
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(1,1,1));
+	AddDrawable(ent);
 
 #if WINDOWS_BUILD
 	ent = new DrawableEntity3D(
@@ -217,7 +233,7 @@ void GraphicsTestScreen::Update() {
 	//T3Matrix4 m = T3Matrix4::Rotation(0.016f, T3Vector3(0,1,0));
 	//ent->AddRotation(Quaternion::FromMatrix(m));
 
-	//GameStateManager::Assets()->LoadHeightmap(true);
+	//GameStateManager::Assets()->LoadHeightmap();
 }
 #if WINDOWS_BUILD
 void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {

@@ -11,6 +11,9 @@ Version: 0.0.1 02/03/2015.</summary>
 #include "GameScreen2D.h"
 #include "GamePad.h"
 #include "UIButton.h"
+#include "GameStateManager.h"
+#include "GraphicsTestScreen.h"
+
 
 class MainMenu : public GameScreen2D
 {

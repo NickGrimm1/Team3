@@ -1,6 +1,5 @@
 #include "MainMenu.h"
-#include "GameStateManager.h"
-#include "GraphicsTestScreen.h"
+
 
 MainMenu::MainMenu(void)
 {
@@ -41,8 +40,8 @@ MainMenu::~MainMenu(void)
 	// This may have been removed from entities if we have a controller...
 	if (pressStart)
 	{
-		delete pressStart;
-		pressStart = NULL;
+	//	delete pressStart;
+	//	pressStart = NULL;
 	}
 }
 
@@ -78,7 +77,7 @@ void MainMenu::LoadContent() {
 
 	//Button Position, determines the first button's postion, and Y is multiplied to place succesive buttons uniformly.
 	float btnX = 0.25f;
-	float btnY = 0.35f;
+	float btnY = 0.38f;
 
 	newGame	= new UIButton(btnX, btnY, btnScaleX, btnScaleY, (void (GameScreen2D::*)()) &MainMenu::NewGameSelected, (void (GameScreen2D::*)(float, float)) &MainMenu::NewGameClicked, 
 				new DrawableTexture2D(btnX, btnY, 1, btnScaleX, btnScaleY, buttonTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
@@ -96,7 +95,7 @@ void MainMenu::LoadContent() {
 	float musicBtnHeight = 0.089f;
 
 	float musicBtnX = 0.095f;
-	float musicBtnY = 0.72f;
+	float musicBtnY = 0.70f;
 
 	music = new UIButton(musicBtnX, musicBtnY, musicBtnWidth, musicBtnHeight, (void(GameScreen2D::*)()) &MainMenu::MusicSelected, (void (GameScreen2D::*)(float, float)) &MainMenu::MusicClicked,
 				new DrawableTexture2D(musicBtnX, musicBtnY, 1, musicBtnWidth, musicBtnHeight, musicNoMute, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),

@@ -4,21 +4,24 @@
 #include "../Framework/Shader.h"
 #include "../Team3Project1/ShaderPart.h"
 #include "../Team3Project1/GameStateManager.h"
+/**********************************************************************************************/
+//TODO : pass a reference to the graphics engines scenenodes into ps3 as seen in PC Renderer //
+/*********************************************************************************************/
 Renderer::Renderer(void)	{
 	/*
 	You're provided with a very basic vertex / fragment shader, to get you started
 	with Cg, and drawing textured objects. 
 	*/
-	std::cout << "begin renderer constructor"<<std::endl;
+	//std::cout << "begin renderer constructor"<<std::endl;
 	//get to shader part and fall over, gg, next map pls ps3.
 	//ShaderPart* basicVert		= new ShaderPart("/vertex.vpo", ShaderType::VERTEX);
 	
-	std::cout <<"basic vert did something" << std::endl;
+	//std::cout <<"basic vert did something" << std::endl;
 	//ShaderPart* basicFrag		= new ShaderPart("/fragment.fpo", ShaderType::FRAGMENT);
-	std::cout <<"basic frag did something" << std::endl;
+	//std::cout <<"basic frag did something" << std::endl;
 	//Shader* s = new Shader();
 	//s = new Shader();
-	std::cout <<"shader did something" << std::endl;
+	//std::cout <<"shader did something" << std::endl;
 	//shader->SetVertex(basicVert);
 	//shader->SetFragment(basicFrag);
 	//this->SetCurrentShader(shader);
@@ -30,7 +33,8 @@ Renderer::Renderer(void)	{
 		
 }
 
-Renderer::~Renderer(void)	{
+Renderer::~Renderer(void)	
+{
 }
 
 /*
@@ -55,7 +59,7 @@ void Renderer::RenderScene() {
 
 	if(camera) {
 		T3Matrix4 m = camera->BuildViewMatrix();
-		std::cout << "Renderer: View Matrix (T3): " << m << std::endl;
+	//	std::cout << "Renderer: View Matrix (T3): " << m << std::endl;
 
 		viewMatrix = Matrix4::identity();
 		for (int x = 0; x < 4; ++x)
@@ -92,10 +96,12 @@ bool Renderer::LoadShaders()
 	basicShader = GameStateManager::Assets()->LoadShader(this, "/vertex.vpo","/fragment.fpo");
 	return true;
 }
+
 void Renderer::UnloadShaders()
 {
 	GameStateManager::Assets()->UnloadShader(this,  "/vertex.vpo","/fragment.fpo");
 }
+
 bool Renderer::LoadAssets()
 {
 	circleMesh = GameStateManager::Assets()->LoadCircle(this, 20);				  // Circle for spotlight rendering
@@ -110,6 +116,7 @@ bool Renderer::LoadAssets()
 	
 	return true;
 }
+
 void Renderer::UnloadAssets()
 {
 	GameStateManager::Assets()->UnloadCircle(this, 20);				   // Circle for spotlight rendering
@@ -123,6 +130,7 @@ unsigned int Renderer::CreateShadowCube()
 {
 	return 0;//look into this later
 }
+
 unsigned int Renderer::CreateShadowTexture()
 {
 	return 0;//look into this later
