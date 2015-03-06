@@ -348,11 +348,12 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 	//	std::cout << n->GetMesh()->GetNumVertices() << std::endl;
 		//GCC complains about function returns being used as parameters passed
 		//around, or we'd just use GetWorldTransform as the function param
-
+		cout << "GCMRenderer: Have drawable entity" << endl;
 		DrawableEntity3D& entity = *n->GetDrawableEntity();
+		cout << "GCMRenderer: initialised entity" << endl;
 		T3Matrix4 transform = //n->GetTransform();
 			Quaternion::EulerAnglesToQuaternion(90, 0, 0).ToMatrix() * T3Matrix4::Scale(T3Vector3(1000,1000,1));
-
+		cout << "GCMRenderer: set a transform matrix" << endl;
 
 
 		/*std::cout << "GCMRenderer: ViewMatrix (SCE): " << std::endl;
@@ -373,7 +374,8 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		for (int x = 0; x < 4; ++x)
 			for (int y = 0; y < 4; ++y)
 				m.setElem(x, y, transform.values[y + x * 4]);
-
+		
+		cout << "GCMRenderer: turned that matrix into a PS3 matrix " << endl; 
 		
 		/*std::cout << "Transform (SCE): " << std::endl;
 		for (int x = 0; x < 4; ++x)
@@ -386,6 +388,7 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		}*/
 		
 		shader->GetVertex()->SetParameter("modelMat", m);
+		cout << "GCMRenderer: set the shader" << endl;
 		//shader->GetVertex()->UpdateShaderMatrices(m, viewMatrix, projMatrix);
 
 		/*
@@ -396,20 +399,26 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		*/
 	
 		CellGcmTexture* t = texture->GetTexture();
-		
+		cout << "GCMRenderer: extracted the texture" << endl;
 		/*if (t)
 			std::cout << "Has Texture" << std::endl;
 		else
 			std::cout << "No Has Texture :(" << std::endl;*/
 
 		SetTextureSampler(shader->GetFragment()->GetParameter("texture"), t);
+		cout << "GCMRenderer: Set the texture sampler" << endl;
 
 		/*
 		The GCM Mesh class needs the current vertex shader, fragment
 		shader is just sent for convenience, in case it's needed in future...
 		*/
-		n->GetMesh()->Draw(shader);
+		//n->GetMesh()->Draw(shader);
+		cout << "GCMRenderer: about to draw entity" << endl;
+		entity.GetMesh()->Draw(shader);
+		cout << "GCMRenderer: managed to draw the entity" << endl;
 	}
+
+
 
 	//Remember to draw our children!
 	for(std::vector<SceneNode*>::const_iterator i = n->GetChildIteratorStart(); i != n->GetChildIteratorEnd(); ++i) {

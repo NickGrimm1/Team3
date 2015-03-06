@@ -50,7 +50,6 @@ bool GraphicsEngine::Destroy()
 
 void GraphicsEngine::Run()
 {
-	//needed for PS3?
 	std::cout << "Graphics Thread Started! " << std::endl;
 	engine->isRunning = true;
 	while (engine->isRunning)
@@ -64,15 +63,17 @@ void GraphicsEngine::Run()
 			if(addGameList[i].second == NULL)
 			{
 				sceneRoot->AddChild(new SceneNode(addGameList[i].first));
-				
 			}
 			else
 			{
 				sceneRoot->AddChildToParent(addGameList[i].first, addGameList[i].second);
 			}
 		}
+		GameTimer* msec = new GameTimer();
 		addGameList.clear();
-
+		sceneRoot->Update(msec->GetMS());
+		BuildNodeLists(sceneRoot);
+		SortNodeLists();
 		//std::cout << "Graphics Thread Rendering! " << std::endl;
 		engine->renderer->RenderScene();
 	}

@@ -99,6 +99,7 @@ void Renderer::RenderScene() {
 		vector<SceneNode*>::iterator i = sceneNodes.begin();
 		while(i != sceneNodes.end())
 		{
+			
 			DrawNode(*i);
 			cout << "Node: " << *i << " Drawn" << endl;
 		}
