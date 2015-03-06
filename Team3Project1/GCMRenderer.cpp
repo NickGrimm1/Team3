@@ -22,7 +22,7 @@ GCMRenderer::GCMRenderer(void)	{
 	shader = new Shader();
 	InitDisplay();
 	InitSurfaces();
-	//texture = new Texture("/ncl.gtf", 0);
+	texture = new Texture("/ncl.gtf", 0);
 	std::cout <<"Got to end of GCMrenderer constructor" << std::endl;
 }
 
@@ -386,7 +386,7 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 			}
 			std::cout << std::endl;
 		}*/
-		
+		//shader = entity.GetShader();
 		shader->GetVertex()->SetParameter("modelMat", m);
 		cout << "GCMRenderer: set the shader" << endl;
 		//shader->GetVertex()->UpdateShaderMatrices(m, viewMatrix, projMatrix);
@@ -397,7 +397,7 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		of textures to units, but the slight changes in how GCM handles textures
 		make it more intuitive to place it here, instead.
 		*/
-	
+		
 		CellGcmTexture* t = texture->GetTexture();
 		cout << "GCMRenderer: extracted the texture" << endl;
 		/*if (t)

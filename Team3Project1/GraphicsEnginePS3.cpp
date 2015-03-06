@@ -58,14 +58,18 @@ void GraphicsEngine::Run()
 		{
 			cout << " NOTHING IS ANYWHERE D: D: D:" << endl;
 		}*/
+		cout << "addGameList.size() = " << addGameList.size() << endl;
 		for (unsigned int i = 0; i < addGameList.size(); ++i)
 		{
+			cout << "adding game entities" << endl;
 			if(addGameList[i].second == NULL)
 			{
+				cout << "adding game entities1" << endl;
 				sceneRoot->AddChild(new SceneNode(addGameList[i].first));
 			}
 			else
 			{
+				cout << "adding game entities2" << endl;
 				sceneRoot->AddChildToParent(addGameList[i].first, addGameList[i].second);
 			}
 		}
@@ -181,15 +185,17 @@ GraphicsEngine::~GraphicsEngine()
 
 void GraphicsEngine::BuildNodeLists(SceneNode* from)
 {
+	cout << "Graphics Engine: attempting to build node list mf" << endl;
 	if(from->GetDrawableEntity() != NULL)
 	{
+		cout << "Graphics Engine: Have a drawable entity" << endl;
 			T3Vector3 dir = from->GetWorldTransform().GetPositionVector() - camera->GetPosition();
 			from->SetCameraDistance(T3Vector3::Dot(dir,dir));
-
+			cout << "Graphics Engine: got world transform and set camera" << endl;
 			T3Vector3 pos = from->GetWorldTransform().GetPositionVector() - camera->GetPosition();
 			float boundingRadius = from->GetDrawableEntity()->GetBoundingRadius();
-
-			if (pos.x - boundingRadius < boundingMin.x) 
+			cout << "Graphics Engine: got world transform and bounding radius" << endl;
+			/*if (pos.x - boundingRadius < boundingMin.x) 
 			{
 				boundingMin.x = pos.x - boundingRadius;
 			}
@@ -213,7 +219,7 @@ void GraphicsEngine::BuildNodeLists(SceneNode* from)
 			{
 				boundingMax.z = pos.z + boundingRadius;
 			}
-
+*/
 			if(from->GetColour().w < 1.0f)
 			{
 				//if transparent add to transparent entity list
@@ -224,7 +230,7 @@ void GraphicsEngine::BuildNodeLists(SceneNode* from)
 				gameEntityList.push_back(from);
 			}
 	}
-	
+	cout << "scene node Children: " << from->GetChildren() << endl;
 	for(vector<SceneNode*>::const_iterator i = from->GetChildIteratorStart(); i < from->GetChildIteratorEnd(); ++i)
 	{
 			BuildNodeLists(*i);

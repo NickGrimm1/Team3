@@ -34,6 +34,7 @@ class DrawableEntity3D;
 
 class SceneNode{
 public:
+	unsigned int GetChildren() {return children.size();}
 	 SceneNode(Mesh*m = NULL, T3Vector4 colour = T3Vector4(1,1,1,1));
 	 SceneNode(DrawableEntity3D *entity);
 

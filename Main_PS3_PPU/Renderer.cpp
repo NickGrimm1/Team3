@@ -37,7 +37,7 @@ Renderer::Renderer(vector<Light*>& lightsVec, vector<SceneNode*>& SceneNodesVec,
 	/*lights(lightsVec);
 	sceneNodes(SceneNodesVec);
 	overlayElements (overlayVec);*/
-
+	shader = basicShader;
 
 	projMatrix	= Matrix4::perspective(0.7853982, screenRatio, 1.0f, 10000.0f);	//CHANGED TO THIS!!
 		
@@ -60,6 +60,7 @@ void Renderer::RenderScene() {
 	ClearBuffer();
 	//this->SetCurrentShader(shader);
 	this->SetCurrentShader(basicShader);
+	shader = basicShader;
 	cellGcmSetDepthTestEnable(CELL_GCM_FALSE);
 	cellGcmSetDepthFunc(CELL_GCM_LESS);
 	cellGcmSetCullFaceEnable(CELL_GCM_FALSE);

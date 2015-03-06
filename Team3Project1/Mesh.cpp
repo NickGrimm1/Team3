@@ -66,8 +66,8 @@ void Mesh::Draw(Shader* shader)
 	std::cout << "Set Texcoord: " << d << std::endl;
 	std::cout << "Set Tangent: " << e << std::endl;
 
-	std::cout << "CELL_OK: " << CELL_OK << std::endl;
-	std::cout << "CELL_GCM_ERROR_FAILURE: " << CELL_GCM_ERROR_FAILURE << std::endl;
+	//std::cout << "CELL_OK: " << CELL_OK << std::endl;
+	//std::cout << "CELL_GCM_ERROR_FAILURE: " << CELL_GCM_ERROR_FAILURE << std::endl;
 	int shader_idx;
 
 	shader_idx = shader->GetVertex()->GetAttributeIndex(VertexAttributes::POSITION);
