@@ -342,13 +342,18 @@ of safely setting shaders and textures on a renderer...
 */
 void	GCMRenderer::DrawNode(SceneNode*n)	{
 //	std::cout << "Drawing Node" << std::endl;
-	if(n->GetMesh()) {
+
+	if(n->GetDrawableEntity()) {
 	//	std::cout << "Drawing a mesh: " << std::endl;
 	//	std::cout << n->GetMesh()->GetNumVertices() << std::endl;
 		//GCC complains about function returns being used as parameters passed
 		//around, or we'd just use GetWorldTransform as the function param
+
+		DrawableEntity3D& entity = *n->GetDrawableEntity();
 		T3Matrix4 transform = //n->GetTransform();
 			Quaternion::EulerAnglesToQuaternion(90, 0, 0).ToMatrix() * T3Matrix4::Scale(T3Vector3(1000,1000,1));
+
+
 
 		/*std::cout << "GCMRenderer: ViewMatrix (SCE): " << std::endl;
 		for (int x = 0; x < 4; ++x)

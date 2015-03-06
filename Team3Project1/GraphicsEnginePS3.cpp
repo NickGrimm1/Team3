@@ -48,19 +48,44 @@ bool GraphicsEngine::Destroy()
 	return true;
 }
 
-void GraphicsEngine::Run(uint64_t arg)
+void GraphicsEngine::Run()
 {
 	//needed for PS3?
 	std::cout << "Graphics Thread Started! " << std::endl;
 	engine->isRunning = true;
 	while (engine->isRunning)
 	{
-		std::cout << "Graphics Thread Rendering! " << std::endl;
+		/*if(addGameList.empty())
+		{
+			cout << " NOTHING IS ANYWHERE D: D: D:" << endl;
+		}*/
+		for (unsigned int i = 0; i < addGameList.size(); ++i)
+		{
+			if(addGameList[i].second == NULL)
+			{
+				sceneRoot->AddChild(new SceneNode(addGameList[i].first));
+				
+			}
+			else
+			{
+				sceneRoot->AddChildToParent(addGameList[i].first, addGameList[i].second);
+			}
+		}
+		addGameList.clear();
+
+		//std::cout << "Graphics Thread Rendering! " << std::endl;
 		engine->renderer->RenderScene();
 	}
 	std::cout << "Graphics Thread Ended! " << std::endl;
 	sys_ppu_thread_exit (0);
 }
+
+ void GraphicsEngine::threadExecution(uint64_t arg)
+{
+	GraphicsEngine* myArg = (GraphicsEngine*)arg;
+	myArg->Run();
+}
+
 /*may need to make these methods thread safe for PS3*/
 void GraphicsEngine::AddTextureToScene(DrawableTexture2D* drawableTexture)
 {
@@ -133,11 +158,12 @@ void GraphicsEngine::DrawDeferredLights(bool on)
 }
 
 GraphicsEngine::GraphicsEngine()
-	: Thread(Run), RENDER_TIME(1000.0f / 60.0f)
+	: Thread(&GraphicsEngine::threadExecution), RENDER_TIME(1000.0f / 60.0f)
 {
 	//initialise the renderer
 	isInitialised = false;
-	renderer = new Renderer();
+	if(gameEntityList.empty()){cout << "gameEntityList is empty for reals" << endl;}
+	renderer = new Renderer(lights,gameEntityList,overlayElementsList);
 	if(!renderer)
 	{
 		return;
@@ -198,7 +224,7 @@ void GraphicsEngine::BuildNodeLists(SceneNode* from)
 			}
 	}
 	
-	for (vector<SceneNode*>::const_iterator i = from->GetChildIteratorStart(); i < from->GetChildIteratorEnd(); ++i)
+	for(vector<SceneNode*>::const_iterator i = from->GetChildIteratorStart(); i < from->GetChildIteratorEnd(); ++i)
 	{
 			BuildNodeLists(*i);
 	}

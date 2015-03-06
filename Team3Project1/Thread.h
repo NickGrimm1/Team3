@@ -29,8 +29,8 @@ public:
 	}
 #endif
 #if PS3_BUILD
-	Thread(void (*Run)(uint64_t arg))
-		: Run(Run)
+	Thread(void (*runs)(uint64_t arg))
+		: Run(runs)
 	{
 		isRunning = false;
 	}
