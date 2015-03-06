@@ -154,7 +154,7 @@ void MainMenu::NewGameClicked(float x, float y) {
 #if WINDOWS_BUILD
 	GameStateManager::Graphics()->EnableMousePointer(false);
 #endif
-	GraphicsTestScreen* game = new GraphicsTestScreen();
+	RacerGame* game = new RacerGame();
 	GameStateManager::Instance()->ChangeScreen(game);
 }
 

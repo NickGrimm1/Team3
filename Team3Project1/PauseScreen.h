@@ -14,6 +14,7 @@ Version: 0.0.1 02/03/2015.</summary>
 #include "UIButton.h"
 #include "GameStateManager.h"
 #include "GraphicsTestScreen.h"
+#include "MainMenu.h"
 
 class PauseScreen :	public GameScreen2D
 {
@@ -28,8 +29,8 @@ public:
 #if WINDOWS_BUILD
 	virtual void MouseScrolled(T3Vector2& position, int amount) { }
 	virtual void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) { }
-	virtual void MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position) { }
-	virtual void MouseMoved(T3Vector2& start, T3Vector2& finish) { }
+	//virtual void MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position);
+	//virtual void MouseMoved(T3Vector2& start, T3Vector2& finish);
 #endif
 	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID) { }
 private:
@@ -56,6 +57,8 @@ private:
 	UIButton* sounds;
 	UIButton* music;
 
+	DrawableTexture2D* pauseLogo;
+
 	Texture* buttonTex;
 	Texture* buttonTexHover;
 	Texture* buttonTexClicked;
@@ -69,6 +72,8 @@ private:
 	Texture* soundNoMuteHover;
 	Texture* soundMute;
 	Texture* soundMuteHover;
+
+	Texture* pauseTex;
 
 	bool musicMuted;
 	bool soundMuted;
