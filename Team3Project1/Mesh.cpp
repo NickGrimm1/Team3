@@ -33,6 +33,7 @@ Mesh::~Mesh(void)
 #if WINDOWS_BUILD
 void Mesh::Draw()	
 {
+	
 	glBindVertexArray(arrayObject);
 	if(numIndices > 0)
 		glDrawElements(type, numIndices, GL_UNSIGNED_INT, 0);

@@ -45,8 +45,10 @@ MainMenu::~MainMenu(void)
 	}
 }
 
-
 void MainMenu::LoadContent() {
+	MenuScreen3D* wallpaper = new MenuScreen3D();
+	GameStateManager::AddGameScreen(wallpaper);
+
 	Font* font = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"quadrats.tga", 16, 16);
 
 	buttonTex			= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/button.png", 0);
@@ -126,6 +128,7 @@ void MainMenu::UnloadContent() {
 	RemoveClickable(quitGame);
 	RemoveClickable(music);
 	RemoveClickable(sounds);
+
 	RemoveDrawable(scoreBoard);
 
 	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/button.png");
