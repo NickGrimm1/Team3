@@ -31,8 +31,8 @@ void GraphicsTestScreen::LoadContent() {
 	quad = GameStateManager::Assets()->LoadQuad(this);
 	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
 	circle = GameStateManager::Assets()->LoadCircle(this, 20);
-	Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.jpg", 0);
 #if WINDOWS_BUILD
+	Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.jpg", 0);
 	Texture* calvinTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", SOIL_FLAG_INVERT_Y);
 #endif
 #if PS3_BUILD
@@ -72,9 +72,14 @@ void GraphicsTestScreen::LoadContent() {
 	track = new TrackSegment(T3Vector3(-400, 0, 400), T3Vector3(-400,0,0), T3Vector3(0,0,-400), 10, 50.0);
 #endif
 	GameStateManager::Graphics()->DropRenderContext();
-
+	
 	ent = new DrawableEntity3D(
+#if WINDOWS_BUILD
 		GameStateManager::Assets()->LoadHeightmap(0, 15, true),
+#endif
+#if PS3_BUILD //TODO : PS3 Needs to draw a heightmap instead of a quad, change when heightmap fixed
+		GameStateManager::Assets()->LoadQuad(this),
+#endif
 		NULL,
 #if WINDOWS_BUILD
 		grassTex,

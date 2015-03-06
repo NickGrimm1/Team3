@@ -849,6 +849,8 @@ void AssetManager::UnloadFont(void* callerID, string filePath)
 
 Mesh* AssetManager::LoadHeightmap(void* callerID, string filename, bool useTextureWeights)
 {
+/*Broken For PS3*/
+#if WINDOWS_BUILD //TODO : Fix For PS3
 	// Check if this mesh is already loaded
 	map<string, LoadedMesh>::iterator i = loadedMeshes.find(filename);
 	if (i != loadedMeshes.end())
@@ -871,6 +873,7 @@ Mesh* AssetManager::LoadHeightmap(void* callerID, string filename, bool useTextu
 		meshMemory += loadedMeshes[filename].mesh->GetMemoryUsage();
 		return loadedMeshes[filename].mesh;
 	}
+#endif
 }
 Mesh* AssetManager::LoadHeightmap(unsigned char minHeight, unsigned char maxHeight, bool useTextureWeights)
 {
