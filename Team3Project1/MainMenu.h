@@ -13,7 +13,7 @@ Version: 0.0.1 02/03/2015.</summary>
 #include "UIButton.h"
 #include "GameStateManager.h"
 #include "GraphicsTestScreen.h"
-
+#include "RacerGame.h"
 
 class MainMenu : public GameScreen2D
 {

@@ -36,14 +36,14 @@ namespace EntryPoint
 		//MainMenu* main = new MainMenu();
 		//GameStateManager::Instance()->AddGameScreen(main);
 
-		//PauseScreen* pause = new PauseScreen();
-		//GameStateManager::Instance()->AddGameScreen(pause);
+		PauseScreen* pause = new PauseScreen();
+		GameStateManager::Instance()->AddGameScreen(pause);
 
 		//HudTestScreen* hud = new HudTestScreen();
 		//GameStateManager::Instance()->AddGameScreen(hud);
 
-		//DebugOverlay* debug = new DebugOverlay();
-		//GameStateManager::Instance()->AddGameScreen(debug);
+		DebugOverlay* debug = new DebugOverlay();
+		GameStateManager::Instance()->AddGameScreen(debug);
 
 		//RacerGame* game = new RacerGame();
 		//GameStateManager::Instance()->AddGameScreen(game);
