@@ -7,7 +7,11 @@
 /**********************************************************************************************/
 //TODO : pass a reference to the graphics engines scenenodes into ps3 as seen in PC Renderer //
 /*********************************************************************************************/
-Renderer::Renderer(void)	{
+Renderer::Renderer(vector<Light*>& lightsVec, vector<SceneNode*>& SceneNodesVec, vector<DrawableEntity2D*>& overlayVec)
+	: lights(lightsVec),
+	sceneNodes(SceneNodesVec),
+	overlayElements (overlayVec)
+{
 	/*
 	You're provided with a very basic vertex / fragment shader, to get you started
 	with Cg, and drawing textured objects. 
@@ -29,6 +33,12 @@ Renderer::Renderer(void)	{
 	/*
 	Projection matrix...0.7853982 is 45 degrees in radians.
 	*/
+	
+	/*lights(lightsVec);
+	sceneNodes(SceneNodesVec);
+	overlayElements (overlayVec);*/
+
+
 	projMatrix	= Matrix4::perspective(0.7853982, screenRatio, 1.0f, 10000.0f);	//CHANGED TO THIS!!
 		
 }
@@ -82,9 +92,21 @@ void Renderer::RenderScene() {
 	}
 
 	basicShader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
-	
-	if(root) {
-		DrawNode(root);
+
+	if(!sceneNodes.empty())
+	{
+		//cout << "Renderer: scenenode list is not empty!" << endl;
+		vector<SceneNode*>::iterator i = sceneNodes.begin();
+		while(i != sceneNodes.end())
+		{
+			DrawNode(*i);
+			cout << "Node: " << *i << " Drawn" << endl;
+		}
+	}
+	else 
+	{
+	 cout << "Renderer: sceneNode list empty! Nothing to draw" << endl;
+	 
 	}
 
 	SwapBuffers();

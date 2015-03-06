@@ -203,6 +203,18 @@ void GraphicsTestScreen::LoadContent() {
 	
 //	directionalLight = GameStateManager::Graphics()->AddDirectionalLight(T3Vector3(-1, -1, -1), T3Vector4(1,1,1,1), T3Vector4(0,0,0,1));
 
+	DrawableEntity3D* myEnt = new DrawableEntity3D(
+		quad,
+		NULL,
+		NULL,
+		NULL,
+		25.0f,
+		T3Vector3(0,5,10),
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(5,5,5));
+	gameEntities.push_back(myEnt);
+	AddDrawable(myEnt);
+
 	SetPlayer(ent);
 	camera = new ChaseCamera(ent, T3Vector3(0, 2, 50), 0, 0, 0);
 	//camera->SetPosition(T3Vector3(0,10,80));
