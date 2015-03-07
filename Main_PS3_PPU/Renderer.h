@@ -25,13 +25,14 @@ _-_-_-_-_-_-_-""  ""
 #include "../Team3Project1/DrawableEntity3D.h"
 #include "../Team3Project1/DrawableText2D.h"
 #include "../Team3Project1/DrawableTexture2D.h"
+#include "../Framework/Light.h"
 
 #include <vector>
 
 
 class Renderer : public GCMRenderer	{
 public:
-	Renderer(void);
+	Renderer(vector<Light*>& lightsVec, vector<SceneNode*>& SceneNodesVec, vector<DrawableEntity2D*>& overlayVec);
 	~Renderer(void);
 
 	virtual void RenderScene();
@@ -55,5 +56,9 @@ protected:
 	Mesh* coneMesh;
 
 	Shader* basicShader;
+
+	vector<Light*>& lights;
+	vector<SceneNode*>& sceneNodes;
+	vector<DrawableEntity2D*>& overlayElements;
 };
 

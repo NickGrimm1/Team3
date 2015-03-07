@@ -1,5 +1,6 @@
 #if WINDOWS_BUILD
 #include "TcpSocket.h"
+#include "NetworkCommon.h"
 
 #include <ws2tcpip.h>
 #include <iostream>
@@ -29,17 +30,26 @@ bool TcpSocket::Send(const char* data, unsigned int length) {
 	return (bytesToSend == 0);
 }
 
-unsigned int TcpSocket::Receive(char* data, unsigned int max_length) {
+unsigned int TcpSocket::Receive(char* data, unsigned int max_length, bool blocking) {
+
+	if (blocking) {
+		unsigned long blocking = BLOCKING;
+		ioctlsocket(socket, FIONBIO, &blocking);
+	}
+
 	unsigned int bytesReceived = recv(socket, data, max_length, 0);
 	if (bytesReceived == SOCKET_ERROR) {
-		if (WSAGetLastError() == WSAEWOULDBLOCK) {
-			return 0; // using non-blocking sockets and there is no data to receive at this time
-		}
-		else {
+		if (WSAGetLastError() != WSAEWOULDBLOCK) { // using non-blocking sockets and there is no data to receive at this time
 			cout << "TcpSocket::Receive() - Failed to recieve data" << endl;
 			cout << "Failed with error: " << WSAGetLastError() << " - " << gai_strerror(WSAGetLastError()) << endl;
 		}
+		bytesReceived = 0;
 	}
+
+	// Restore to non-blocking
+	unsigned long nonblocking = NON_BLOCKING;
+	ioctlsocket(socket, FIONBIO, &nonblocking);
+	
 	return bytesReceived;
 }
 #endif

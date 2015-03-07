@@ -1,18 +1,19 @@
 #include "PhysicsNode.h"
 
-const T3Vector3 PhysicsNode::gravity = T3Vector3(0,-0.001,0);
+const T3Vector3 PhysicsNode::gravity = T3Vector3(0,-5,0);
 
 PhysicsNode::PhysicsNode(void): vol(NULL) {
 	target = NULL;
 	useGravity = true;
-	
+	physicsMesh = NULL;
 }
 
 PhysicsNode::PhysicsNode(Quaternion orientation, T3Vector3 position): vol(NULL) {
 	m_orientation	= orientation;
 	m_position		= position;
+	m_linearVelocity = T3Vector3(0,0,0);
 	useGravity = true;
-
+	physicsMesh = NULL;
 }
 
 PhysicsNode::~PhysicsNode(void)	{
@@ -24,6 +25,8 @@ PhysicsNode::~PhysicsNode(void)	{
 //graphical representation of this object, too.
 void	PhysicsNode::Update(float msec) {
 	//FUN GOES HERE
+	if (msec > 10000)
+		msec = 80;
 
 	float sec = msec / 1000.f;
 
@@ -33,9 +36,9 @@ void	PhysicsNode::Update(float msec) {
 	m_linearVelocity = m_linearVelocity + acc*sec;
 
 	m_linearVelocity = m_linearVelocity*LINEAR_VELOCITY_DAMP;
-	//if (T3Vector3::Dot(m_linearVelocity, m_linearVelocity) < LINEAR_VELOCITY_MIN) {
-	//	m_linearVelocity = T3Vector3(0,0,0);
-	//}
+	/*if (T3Vector3::Dot(m_linearVelocity, m_linearVelocity) < LINEAR_VELOCITY_MIN) {
+		m_linearVelocity = T3Vector3(0,0,0);
+	}*/
 
 	m_position = m_position + m_linearVelocity*sec;
 

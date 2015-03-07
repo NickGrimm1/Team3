@@ -19,7 +19,9 @@ Version: 0.0.1 16/02/2015</summary>
 class TrackSegment : public Spline
 {
 public:
+	
 	TrackSegment(const T3Vector3& a, const T3Vector3& b, const T3Vector3& c, unsigned int subdivisions, float trackWidth);
+	
 	virtual ~TrackSegment(void);
 
 	void DrawSpline();
@@ -28,6 +30,9 @@ public:
 
 	T3Vector3 GetTrackCentreLeft() const;
 	T3Vector3 GetTrackCentreRight() const;
+
+	virtual Vertex* GetVertices() const {return trackMesh;}
+	virtual unsigned int GetNumVertices() const {return numVertices * 2;}
 
 protected:
 	Vertex* trackMesh;

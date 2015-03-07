@@ -1,9 +1,10 @@
 #include"Vehicle.h"
 #include "../Team3Project1/GameStateManager.h"
+#include "InertialMatrixHelper.h"
 
 
 Vehicle::Vehicle(float size) {
-	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
+	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj");
 //	BuffMesh = new OBJMesh(MESHDIR"ico.obj");
 	
 	//TT =  SOIL_load_OGL_texture ("../../Texture/footballpitch.jpg", SOIL_LOAD_AUTO , SOIL_CREATE_NEW_ID , SOIL_FLAG_MIPMAPS);
@@ -12,7 +13,7 @@ Vehicle::Vehicle(float size) {
 	T3Vector3 position =T3Vector3(0, 0, 0);
 	boundingRadius = size;
 	origin = position;
-	rotation = Quaternion::EulerAnglesToQuaternion(0,0,0);
+	rotation = Quaternion::EulerAnglesToQuaternion(0,-90,0);
 	scale = T3Vector3(size,size,size);
 	texture = NULL;
 	bumpTexture = NULL;
@@ -304,18 +305,23 @@ Makes a Player. Every game has a crate in it somewhere!
 void Vehicle::SetPhysics(float size,PhysicsNode * a)
 {
     car=a;
-	car->SetUseGravity(false);
+	car->SetUseGravity(true);
 	car->SetPosition(origin);
 	car->SetMass(5);
+	car->SetInverseMass(1.0f);
 	car->SetCollisionVolume(new CollisionAABB(T3Vector3(size ,size ,size )));
+	//car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj"));
+	car->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,-90,0));
 	car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"CarPhysics.obj"));
 	Quaternion Test=car->GetOrientation();
 	car->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,-90,0));
 	Quaternion Test2=car->GetOrientation();
 	car->SetXstart(car->GetPosition().x-3*size);
 	car->SetXend(car->GetPosition().x+3*size);                                                                                         
+	car->SetInverseInertia(InertialMatrixHelper::createCuboidInvInertial(5.0f,size,size,size));
 
 	car->SetIsCollide(true);
+	car->Setcar_wheel(true);
 
 
 

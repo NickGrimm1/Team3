@@ -48,19 +48,49 @@ bool GraphicsEngine::Destroy()
 	return true;
 }
 
-void GraphicsEngine::Run(uint64_t arg)
+void GraphicsEngine::Run()
 {
-	//needed for PS3?
 	std::cout << "Graphics Thread Started! " << std::endl;
 	engine->isRunning = true;
 	while (engine->isRunning)
 	{
-		std::cout << "Graphics Thread Rendering! " << std::endl;
+		/*if(addGameList.empty())
+		{
+			cout << " NOTHING IS ANYWHERE D: D: D:" << endl;
+		}*/
+		cout << "addGameList.size() = " << addGameList.size() << endl;
+		for (unsigned int i = 0; i < addGameList.size(); ++i)
+		{
+			cout << "adding game entities" << endl;
+			if(addGameList[i].second == NULL)
+			{
+				cout << "adding game entities1" << endl;
+				sceneRoot->AddChild(new SceneNode(addGameList[i].first));
+			}
+			else
+			{
+				cout << "adding game entities2" << endl;
+				sceneRoot->AddChildToParent(addGameList[i].first, addGameList[i].second);
+			}
+		}
+		GameTimer* msec = new GameTimer();
+		addGameList.clear();
+		sceneRoot->Update(msec->GetMS());
+		BuildNodeLists(sceneRoot);
+		SortNodeLists();
+		//std::cout << "Graphics Thread Rendering! " << std::endl;
 		engine->renderer->RenderScene();
 	}
 	std::cout << "Graphics Thread Ended! " << std::endl;
 	sys_ppu_thread_exit (0);
 }
+
+ void GraphicsEngine::threadExecution(uint64_t arg)
+{
+	GraphicsEngine* myArg = (GraphicsEngine*)arg;
+	myArg->Run();
+}
+
 /*may need to make these methods thread safe for PS3*/
 void GraphicsEngine::AddTextureToScene(DrawableTexture2D* drawableTexture)
 {
@@ -133,11 +163,12 @@ void GraphicsEngine::DrawDeferredLights(bool on)
 }
 
 GraphicsEngine::GraphicsEngine()
-	: Thread(Run), RENDER_TIME(1000.0f / 60.0f)
+	: Thread(&GraphicsEngine::threadExecution), RENDER_TIME(1000.0f / 60.0f)
 {
 	//initialise the renderer
 	isInitialised = false;
-	renderer = new Renderer();
+	if(gameEntityList.empty()){cout << "gameEntityList is empty for reals" << endl;}
+	renderer = new Renderer(lights,gameEntityList,overlayElementsList);
 	if(!renderer)
 	{
 		return;
@@ -154,15 +185,17 @@ GraphicsEngine::~GraphicsEngine()
 
 void GraphicsEngine::BuildNodeLists(SceneNode* from)
 {
+	cout << "Graphics Engine: attempting to build node list mf" << endl;
 	if(from->GetDrawableEntity() != NULL)
 	{
+		cout << "Graphics Engine: Have a drawable entity" << endl;
 			T3Vector3 dir = from->GetWorldTransform().GetPositionVector() - camera->GetPosition();
 			from->SetCameraDistance(T3Vector3::Dot(dir,dir));
-
+			cout << "Graphics Engine: got world transform and set camera" << endl;
 			T3Vector3 pos = from->GetWorldTransform().GetPositionVector() - camera->GetPosition();
 			float boundingRadius = from->GetDrawableEntity()->GetBoundingRadius();
-
-			if (pos.x - boundingRadius < boundingMin.x) 
+			cout << "Graphics Engine: got world transform and bounding radius" << endl;
+			/*if (pos.x - boundingRadius < boundingMin.x) 
 			{
 				boundingMin.x = pos.x - boundingRadius;
 			}
@@ -186,7 +219,7 @@ void GraphicsEngine::BuildNodeLists(SceneNode* from)
 			{
 				boundingMax.z = pos.z + boundingRadius;
 			}
-
+*/
 			if(from->GetColour().w < 1.0f)
 			{
 				//if transparent add to transparent entity list
@@ -197,8 +230,8 @@ void GraphicsEngine::BuildNodeLists(SceneNode* from)
 				gameEntityList.push_back(from);
 			}
 	}
-	
-	for (vector<SceneNode*>::const_iterator i = from->GetChildIteratorStart(); i < from->GetChildIteratorEnd(); ++i)
+	cout << "scene node Children: " << from->GetChildren() << endl;
+	for(vector<SceneNode*>::const_iterator i = from->GetChildIteratorStart(); i < from->GetChildIteratorEnd(); ++i)
 	{
 			BuildNodeLists(*i);
 	}

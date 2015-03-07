@@ -122,9 +122,9 @@ void CollisionHelper::AddCollisionImpulse(PhysicsNode& p0, PhysicsNode& p1, Coll
 	
 	if (p0.GetInverseMass() + p1.GetInverseMass() == 0.0f) return;
 	
-	T3Vector3 r0 = data.m_point - p0.GetPosition();
-	T3Vector3 r1 = data.m_point - p1.GetPosition();
-	
+	T3Vector3 r0 = data.m_point;// - p0.GetPosition();
+	T3Vector3 r1 = -data.m_point;// - p1.GetPosition();
+
 	T3Vector3 v0 = p0.GetLinearVelocity() + T3Vector3::Cross(p0.GetAngularVelocity(), r0);
 	T3Vector3 v1 = p1.GetLinearVelocity() + T3Vector3::Cross(p1.GetAngularVelocity(), r1);
 
@@ -134,7 +134,7 @@ void CollisionHelper::AddCollisionImpulse(PhysicsNode& p0, PhysicsNode& p1, Coll
 	if (relMov < -0.01f) return;
 
 	{
-		float e = 0.0f;
+		float e = 0.9f;
 		float normDiv = (p0.GetInverseMass() + p1.GetInverseMass()) +
 			T3Vector3::Dot(data.m_normal,
 				T3Vector3::Cross(p0.GetInverseInertia()*T3Vector3::Cross(r0, data.m_normal), r0) +

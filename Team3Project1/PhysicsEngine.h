@@ -63,6 +63,8 @@ public:
 	bool GJK(PhysicsNode& shape1,PhysicsNode& shape2);
 	bool containsOrigin( T3Vector3& dir);
     bool CollisionDetection(PhysicsNode& shape1,PhysicsNode& shape2);
+	bool EPA(PhysicsNode& shape1, PhysicsNode& shape2, CollisionData* data);
+	void barycentric(const T3Vector3 &p, const T3Vector3 &a, const T3Vector3 &b, const T3Vector3 &c, float *x, float *y, float *z);
 	
 	//sam
 	bool   check;

@@ -1,12 +1,13 @@
 #include"CheckPoint.h"
 #include "../Team3Project1/GameStateManager.h"
+#include "../Framework/InertialMatrixHelper.h"
 
 
 CheckPoint::CheckPoint(float size):
 	carPhysicNode(carPhysicNode) 
 {
 	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj");
-	T3Vector3 position =T3Vector3(-50, -2, 0);
+	T3Vector3 position =T3Vector3(50, -2, 0);
 	boundingRadius = size;
 	origin = position;
 	rotation = Quaternion::EulerAnglesToQuaternion(0,0,0);
@@ -38,10 +39,10 @@ void CheckPoint::SetPhysics(float size,char type)
 	physicsNode->SetXend(physicsNode->GetPosition().x+1*size); 
 	physicsNode->SetType(type);
 	physicsNode->SetCollisionVolume(new CollisionAABB(T3Vector3(0.1*size,size,10*size)));
+	physicsNode->SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
 
-	physicsNode->SetIsCollide(false);
-
-
+	physicsNode->SetIsCollide(true);
+	physicsNode->Setcar_wheel(true);
 
     ConnectToSystems(); 
 

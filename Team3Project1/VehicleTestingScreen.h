@@ -8,6 +8,7 @@
 #include "VehiclePhysicsNode.h"
 #include "CheckPoint.h"
 #include "Gold_cion.h"
+
 class VehicleTestingScreen : public GameScreen3D
 {
 public:
@@ -45,6 +46,8 @@ private:
 	Gold_cion * gold_cion;
 	
 
+	vector<T3Vector3> SplinePoint;
+	vector<TrackSegment*> TrackSegmentVector;
 	CheckPoint * checkpoint;
 	Vehicle_Wheel * FrontRightTire;
 	Vehicle_Wheel * FrontLeftTire;

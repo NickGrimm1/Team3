@@ -29,6 +29,7 @@ Version: 0.0.3 06/02/2015.</summary>
 #endif
 #if PS3_BUILD
 #include "../Main_PS3_PPU/Renderer.h"
+#include "../Framework/GameTimer.h"
 #endif
 #include "DrawableTexture2D.h"
 #include "DrawableText2D.h"
@@ -87,7 +88,7 @@ public:
 	void Run();
 #endif
 #if PS3_BUILD
-	static void Run(uint64_t arg);
+	 void Run();
 #endif
 #pragma endregion
 #pragma region TwoD
@@ -152,6 +153,10 @@ public:
 	void DrawDeferredLights(bool on);
 
 	unsigned char* GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue);
+
+#if PS3_BUILD
+	static void threadExecution(uint64_t arg);
+#endif
 
 private:
 	static GraphicsEngine* engine;

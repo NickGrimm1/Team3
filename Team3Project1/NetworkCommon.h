@@ -22,4 +22,5 @@
 #define SQL_USER		"1823820_scores"
 #define SQL_PASSWORD	"94857GLOW423895"
 
-#define HTTP_OK	"HTTP/1.1 200 OK"
+#define HTTP_OK	"HTTP/1.1 200 OK\r"
+#define HTTP_CONTENT_LENGTH "Content-Length: "

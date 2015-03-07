@@ -1,4 +1,4 @@
-#if WINDOWS_BUILD
+
 
 #include "TrackSegment.h"
 
@@ -6,6 +6,7 @@
 TrackSegment::TrackSegment(const T3Vector3& a, const T3Vector3& b, const T3Vector3& c, unsigned int subdivisions, float trackWidth) :
 	Spline(a, b, c, subdivisions)
 {
+#if WINDOWS_BUILD
 	// Now spline is built, generate mesh around it
 	trackMesh = new Vertex[numVertices * 2]; // left boundary then right boundary
 	T3Vector3 right;
@@ -63,17 +64,21 @@ TrackSegment::TrackSegment(const T3Vector3& a, const T3Vector3& b, const T3Vecto
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(GLuint), indices, GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
+#endif
 }
 
 
 TrackSegment::~TrackSegment(void)
 {	
+#if WINDOWS_BUILD
 	// Mesh destructor should handle deletion of indices/texture coords
 	glDeleteBuffers(1, &trackVBO);
 	delete[] trackMesh;
+#endif
 }
 
 void TrackSegment::Draw() {
+#if WINDOWS_BUILD
 	type = GL_TRIANGLES;
 
 	glBindVertexArray(arrayObject); // Make mesh VAO currently bound object
@@ -95,13 +100,17 @@ void TrackSegment::Draw() {
 	glDrawElements(type, numIndices, GL_UNSIGNED_INT, 0); 
 	
 	glBindVertexArray(0); // unbind current VAO
+#endif
 }
 
 void TrackSegment::DrawSpline() {
+#if WINDOWS_BUILD
 	Spline::Draw();
+#endif
 }
 
 T3Vector3 TrackSegment::GetTrackCentreLeft() const {
+#if WINDOWS_BUILD
 	if (segments % 2 == 0) {
 		return trackMesh[segments / 2].GetPosition();
 	}
@@ -110,9 +119,11 @@ T3Vector3 TrackSegment::GetTrackCentreLeft() const {
 		unsigned int pos = segments / 2;
 		return (trackMesh[pos].GetPosition() + trackMesh[pos + 1].GetPosition()) / 2.0f;
 	}
+#endif
 }
 
 T3Vector3 TrackSegment::GetTrackCentreRight() const {
+	#if WINDOWS_BUILD
 	if (segments % 2 == 0) {
 		return trackMesh[segments + (segments / 2) + 1].GetPosition();
 	}
@@ -121,6 +132,6 @@ T3Vector3 TrackSegment::GetTrackCentreRight() const {
 		unsigned int pos = segments + 1 + (segments / 2);
 		return (trackMesh[pos].GetPosition() + trackMesh[pos + 1].GetPosition()) / 2.0f;
 	}
-}
-
+	
 #endif
+}
