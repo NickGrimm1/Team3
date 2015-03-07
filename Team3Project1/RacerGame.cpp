@@ -8,6 +8,7 @@
 #include "FreeCamera.h"
 #include "../Framework/ObjMesh.h"
 #include "TrackSegment.h"
+#include "../Framework/InertialMatrixHelper.h"
 //#include "../Framework/Vehicle.h"
 #include <math.h>
 
@@ -74,18 +75,50 @@ void RacerGame::LoadContent() {
 
 	camera = new FreeCamera();
 
-	checkpoint= new CheckPoint(10);
-	checkpoint->SetPhysics(10,'c');
-	checkpoint->SetType('g');
-	checkpoint->GetPhysicsNode().SetPGE(checkpoint);
-	AddDrawable(checkpoint);
+	//checkpoint= new CheckPoint(10);
+	//checkpoint->SetPhysics(10,'c');
+	//checkpoint->SetType('g');
+	//checkpoint->GetPhysicsNode().SetPGE(checkpoint);
+	//AddDrawable(checkpoint);
 	
+	//add road
 	
+	Texture* grassTex2 = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"water.jpg", 0);
+	GameStateManager::Graphics()->GetRenderContext();
+	TrackSegment* trackr = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5, 50.0);
 
+	//push back track
+	TrackSegmentVector.push_back(trackr);
+	GameStateManager::Graphics()->DropRenderContext();
+	PhysicsNode* proad = new PhysicsNode();
+	GameEntity* road= new GameEntity(proad);
+		road->SetMesh(trackr);
+		road->SetShader(NULL);
+		road->SetTexture(grassTex2);
+		road->SetBumpTexture(NULL);
+		road->SetBoundingRadius(800.0f);
+		road->SetOriginPosition(T3Vector3(-200,-20,0));
+		road->SetRotation(Quaternion::EulerAnglesToQuaternion(0,0,0));
+		road->SetScale(T3Vector3(1,1,1));
+		road->GetPhysicsNode().SetMass(5);
+		road->GetPhysicsNode().SetMesh(trackr);
+		road->GetPhysicsNode().SetInverseMass(0);
+		road->GetPhysicsNode().SetUseGravity(false);
+		road->GetPhysicsNode().SetIsCollide(true);
+	    road->GetPhysicsNode().Setcar_wheel(true);
+		road->GetPhysicsNode().SetPosition(T3Vector3(-200,-20,0));
+		road->GetPhysicsNode().SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
+		road->ConnectToSystems();
+		AddDrawable(road);
+
+	/*	road =new Road (5);
+		road->SetPhysics(5);*/
+
+//add road end
 
 	VehiclePhysicsNode* vpn = new VehiclePhysicsNode();
 	
-	GameStateManager::Physics()->AddNode(vpn);
+	//GameStateManager::Physics()->AddNode(vpn);
 
 	car = new Vehicle(5);
 	car->SetType('v');
@@ -206,6 +239,7 @@ void RacerGame::Update() {
 	//push back track
 	TrackSegmentVector.push_back(track);
 	GameStateManager::Graphics()->DropRenderContext();
+
 
 	DrawableEntity3D* ent = new DrawableEntity3D(
 		track,

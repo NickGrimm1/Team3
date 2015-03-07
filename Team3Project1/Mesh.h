@@ -89,8 +89,8 @@ public:
 	static Mesh* GenerateCone(unsigned int subdivs);
 	static Mesh* GenerateCylinder(unsigned int subdivs);
 
-	Vertex* GetVertices() const {return vertices;}
-	unsigned int GetNumVertices() const {return numVertices;}
+	virtual Vertex* GetVertices() const {return vertices;}
+	virtual unsigned int GetNumVertices() const {return numVertices;}
 #if WINDOWS_BUILD
 	unsigned int GetArrayObject() {return arrayObject;}
 	unsigned int GetBufferObject() {return bufferObject[0];}

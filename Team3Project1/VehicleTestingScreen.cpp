@@ -8,6 +8,8 @@
 #include "FreeCamera.h"
 #include "../Framework/ObjMesh.h"
 //#include "../Framework/Vehicle.h"
+#include "TrackSegment.h"
+#include "../Framework/InertialMatrixHelper.h"
 
 
 //TODO - remove
@@ -36,10 +38,45 @@ void VehicleTestingScreen::LoadContent() {
 		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.tga", 0), 
 		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"snowflake.png", 0),
 		50.0f, 
-		T3Vector3(0,0,0), 
+		T3Vector3(0,-20,0), 
 		Quaternion::FromMatrix(T3Matrix4::Rotation(90.0f, T3Vector3(1,0,0))),
 		T3Vector3(50,50,1));
 	
+
+	T3Vector3 sp1= T3Vector3(100,0,0);
+	T3Vector3 sp2= T3Vector3(200,0,0);
+	T3Vector3 sp3= T3Vector3(300,0,0);
+	SplinePoint.push_back(sp1);
+	SplinePoint.push_back(sp2);
+	SplinePoint.push_back(sp3);
+ Texture* grassTex2 = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"water.jpg", 0);
+	GameStateManager::Graphics()->GetRenderContext();
+	TrackSegment* trackr = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5, 50.0);
+	//push back track
+	TrackSegmentVector.push_back(trackr);
+	GameStateManager::Graphics()->DropRenderContext();
+	PhysicsNode* proad = new PhysicsNode();
+	GameEntity* road= new GameEntity(proad);
+		road->SetMesh(trackr);
+		road->SetShader(NULL);
+		road->SetTexture(grassTex2);
+		road->SetBumpTexture(NULL);
+		road->SetBoundingRadius(800.0f);
+		road->SetOriginPosition(T3Vector3(-200,-20,0));
+		road->SetRotation(Quaternion::EulerAnglesToQuaternion(0,0,0));
+		road->SetScale(T3Vector3(1,1,1));
+		road->GetPhysicsNode().SetMass(5);
+		road->GetPhysicsNode().SetMesh(trackr);
+		road->GetPhysicsNode().SetInverseMass(0);
+		road->GetPhysicsNode().SetUseGravity(false);
+		road->GetPhysicsNode().SetIsCollide(true);
+	    road->GetPhysicsNode().Setcar_wheel(true);
+		road->GetPhysicsNode().SetPosition(T3Vector3(-200,-20,0));
+		road->GetPhysicsNode().SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
+		road->ConnectToSystems();
+		AddDrawable(road);
+
+
 
 
 
@@ -197,8 +234,8 @@ void VehicleTestingScreen::Update() {
 
 #if WINDOWS_BUILD
 void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
-
-
+	float e=0.707106829f;
+	float r=car->GetCarNode().GetOrientation().y+e;
 	switch (type) {
 	case KeyboardEvents::KEY_DOWN:
 	case KeyboardEvents::KEY_HELD:
@@ -208,11 +245,11 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 		{
 				//camera->AddMovement(T3Vector3(1,0,0));
 
-		
+		float a=car->GetCarNode().GetOrientation().y;
 				
 			   f=f+5;
 				//  car->GetCarNode().SetForce(T3Vector3(10+f,0,0));
-			   if(car->GetCarNode().GetOrientation().y==0)
+			   if(((car->GetCarNode().GetOrientation().y)+e)==0)
 		       {
 				   car->GetCarNode().SetForce(T3Vector3(f /*+ 100.0f*/,0,0));   
 					//		    f=f+100;
@@ -220,7 +257,7 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 			//  cout<<car->GetCarNode().GetLinearVelocity().x<<"   "<<car->GetCarNode().GetLinearVelocity().y<<"   "<<car->GetCarNode().GetLinearVelocity().z<<"   "<<endl;
 
 			   //cout<<car->GetCarNode().GetLinearVelocity().Length()<<endl;
-				if(car->GetCarNode().GetOrientation().y<0)
+				if(((car->GetCarNode().GetOrientation().y)+e)<0)
 				{
 					float angle=-0.5/90*car->GetCarNode().GetOrientation().y;
 					float l=  car->GetCarNode().GetLinearVelocity().Length();
@@ -236,7 +273,7 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 		
 				}
 
-				if(car->GetCarNode().GetOrientation().y>0)
+				if(((car->GetCarNode().GetOrientation().y)+e)>0)
 				{
 					float angle=0.5/90*car->GetCarNode().GetOrientation().y;
 					float l=  car->GetCarNode().GetLinearVelocity().Length();

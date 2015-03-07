@@ -29,6 +29,9 @@ public:
 	T3Vector3 GetTrackCentreLeft() const;
 	T3Vector3 GetTrackCentreRight() const;
 
+	virtual Vertex* GetVertices() const {return trackMesh;}
+	virtual unsigned int GetNumVertices() const {return numVertices * 2;}
+
 protected:
 	Vertex* trackMesh;
 	unsigned int trackVBO;

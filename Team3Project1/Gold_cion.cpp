@@ -37,7 +37,8 @@ void Gold_cion::SetPhysics(float size)
 	physicsNode->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj"));
 	physicsNode->SetXstart(physicsNode->GetPosition().x-1*size);
 	physicsNode->SetXend(physicsNode->GetPosition().x+1*size); 
-	physicsNode->SetIsCollide(false);
+	physicsNode->SetIsCollide(true);
+	physicsNode->Setcar_wheel(true);
 
 
 

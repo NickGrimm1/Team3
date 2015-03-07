@@ -495,18 +495,19 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 
 		if (allNodes[i]->GetPhysicsMesh() == NULL) continue;
 		PhysicsNode& first = *allNodes[i];
-		CollisionVolume* fv = first.GetCollisionVolume();
-		if (!fv) continue;
+	//	CollisionVolume* fv = first.GetCollisionVolume();
+	//	if (!fv) continue;
 		for (unsigned int j = i + 1; j < allNodes.size(); j++) {
 			if (allNodes[j]->GetPhysicsMesh() == NULL) continue;
 
 			PhysicsNode& second = *allNodes[j];
-			CollisionVolume* sv = second.GetCollisionVolume();
-			if (!sv) continue;
+		//	CollisionVolume* sv = second.GetCollisionVolume();
+			//if (!sv) continue;
 
 			
 			if(CollisionDetection(first, second))
 			{
+				cout<<"ffffffffff"<<endl;
 				//cout << "GJK passed" << endl;
 				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
 				{
@@ -548,7 +549,7 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 
 					CollisionData* data = new CollisionData();
 					bool succeeded = EPA(first, second, data);
-					if (succeeded)
+ 					if (succeeded)
 					{
 						CollisionHelper::AddCollisionImpulse( first, second, *data);
 

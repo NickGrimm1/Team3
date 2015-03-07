@@ -1,6 +1,6 @@
 #include "PhysicsNode.h"
 
-const T3Vector3 PhysicsNode::gravity = T3Vector3(0,-0.001,0);
+const T3Vector3 PhysicsNode::gravity = T3Vector3(0,-5,0);
 
 PhysicsNode::PhysicsNode(void): vol(NULL) {
 	target = NULL;
@@ -25,6 +25,10 @@ PhysicsNode::~PhysicsNode(void)	{
 void	PhysicsNode::Update(float msec) {
 	//FUN GOES HERE
 
+	if(msec>10000)
+	{
+		msec =80;
+	}
 	float sec = msec / 1000.f;
 
 	T3Vector3 acc = (m_force+m_friction)*m_invMass + (useGravity? gravity: T3Vector3(0,0,0));
