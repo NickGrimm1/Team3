@@ -144,7 +144,7 @@
     <LibraryPath>..\GLEW\lib;..\SOIL\$(Configuration);..\$(Configuration)\;.\Framework\$(Configuration)\;..\GLEW\lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='WINDOWS_DEBUG|Win32'">
-    <IncludePath>..\GLEW\include;..\SOIL;..\;$(IncludePath)</IncludePath>
+    <IncludePath>..\GLEW\include;..\SOIL;..\;$(IncludePath);..\DX\Include</IncludePath>
     <LibraryPath>..\GLEW\lib;..\SOIL\$(Configuration);..\$(Configuration)\;.\Framework\$(Configuration)\;..\DX\Lib;..\GLEW\lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -304,6 +304,7 @@
     <ClInclude Include="LoadedTexture.h" />
     <ClInclude Include="LoadingScreen.h" />
     <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="MenuScreen3D.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MutexClass.h" />
     <ClInclude Include="NetworkCommon.h" />
@@ -322,8 +323,10 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="NetworkManager.h" />
+    <ClInclude Include="PauseScreen.h" />
     <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="RacerGame.h" />
+    <ClInclude Include="Scoreboard.h" />
     <ClInclude Include="SelectableEntity2D.h" />
     <ClInclude Include="ServerSocket.h" />
     <ClInclude Include="ShaderPart.h" />
@@ -399,14 +402,17 @@
     <ClCompile Include="LoadingScreen.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="MenuScreen3D.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MutexClass.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="NetworkTest.cpp" />
     <ClCompile Include="OffsetCamera.cpp" />
+    <ClCompile Include="PauseScreen.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="RacerGame.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Scoreboard.cpp" />
     <ClCompile Include="ServerSocket.cpp" />
     <ClCompile Include="ShaderPart.cpp" />
     <ClCompile Include="Spline.cpp" />
