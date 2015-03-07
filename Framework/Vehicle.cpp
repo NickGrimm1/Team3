@@ -310,10 +310,10 @@ void Vehicle::SetPhysics(float size,PhysicsNode * a)
 	car->SetMass(5);
 	car->SetInverseMass(1.0f);
 	car->SetCollisionVolume(new CollisionAABB(T3Vector3(size ,size ,size )));
-	car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj"));
+	//car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj"));
 	car->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,-90,0));
 	car->SetXstart(car->GetPosition().x-3*size);
-	car->SetXend(car->GetPosition().x+3*size);                             
+	car->SetXend(car->GetPosition().x+3*size);                                                                                         
 	car->SetInverseInertia(InertialMatrixHelper::createCuboidInvInertial(5.0f,size,size,size));
 
 	car->SetIsCollide(true);

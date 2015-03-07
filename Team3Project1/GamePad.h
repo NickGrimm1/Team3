@@ -19,7 +19,7 @@ Version: 0.0.2 </summary>
 
 typedef void (*PadInput)();
 
-// Forward Declaration of InputListener
+// Forward Declaration of InputListener//
 class InputListener;
 
 namespace GamepadEvents

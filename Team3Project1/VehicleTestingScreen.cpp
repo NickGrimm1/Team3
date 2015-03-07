@@ -6,7 +6,9 @@
 #include "../Framework/Light.h"
 #include "GameStateManager.h"
 #include "FreeCamera.h"
+#include "ChaseCamera.h"
 #include "../Framework/ObjMesh.h"
+
 //#include "../Framework/Vehicle.h"
 #include "TrackSegment.h"
 #include "../Framework/InertialMatrixHelper.h"
@@ -41,6 +43,7 @@ void VehicleTestingScreen::LoadContent() {
 		T3Vector3(0,-20,0), 
 		Quaternion::FromMatrix(T3Matrix4::Rotation(90.0f, T3Vector3(1,0,0))),
 		T3Vector3(50,50,1));
+	//AddDrawable(ent);
 	
 
 	T3Vector3 sp1= T3Vector3(100,0,0);
@@ -106,36 +109,41 @@ void VehicleTestingScreen::LoadContent() {
 	checkpoint->SetPhysics(10,'c');
 	AddDrawable(checkpoint);
 	
-	VehiclePhysicsNode* vpn = new VehiclePhysicsNode();
+	unsigned int size = 5;
+	VehiclePhysicsNode* vpn = new VehiclePhysicsNode(size);
 	
 	//GameStateManager::Physics()->AddNode((PhysicsNode*)vpn);
 
-	car = new Vehicle(5);
+	
+	car = new Vehicle(size);
+	
+	//ChaseCamera* chasecamera= new ChaseCamera(car,T3Vector3(0,2,20),0,0,0);
+
 //	car->SetPhysics(5,(vpn->GetCar()));
-	car->SetPhysics(5, vpn);
+	car->SetPhysics(size, vpn);
 	AddDrawable(car);
 
 
-	FrontRightTire = new Vehicle_Wheel(5);
-	FrontRightTire->SetOriginPosition(T3Vector3(10, -2, 8));
-	FrontRightTire->SetPhysics(5, (vpn->getRFW()));
+	FrontRightTire = new Vehicle_Wheel(size);
+	//FrontRightTire->SetOriginPosition(T3Vector3(2.5, -0.5, 1.5));
+	FrontRightTire->SetPhysics(size, (vpn->getRFW()));
 	AddDrawable(FrontRightTire);
 
 
-	FrontLeftTire = new Vehicle_Wheel(5);
-	FrontLeftTire->SetOriginPosition(T3Vector3(10, -2, -5));
-	FrontLeftTire->SetPhysics(5, (vpn->getLFW()));
+	FrontLeftTire = new Vehicle_Wheel(size);
+	//FrontLeftTire->SetOriginPosition(T3Vector3(10, -2, -5));
+	FrontLeftTire->SetPhysics(size, (vpn->getLFW()));
 	AddDrawable(FrontLeftTire);
 
 
-    BackRightTire = new Vehicle_Wheel(5/*, car->GetCarNode()*/);
-	BackRightTire->SetOriginPosition(T3Vector3(-11, -2, 8));
-	BackRightTire->SetPhysics(5,(vpn->getBRW()));
+    BackRightTire = new Vehicle_Wheel(size/*, car->GetCarNode()*/);
+	//BackRightTire->SetOriginPosition(T3Vector3(-11, -2, 8));
+	BackRightTire->SetPhysics(size,(vpn->getBRW()));
 	AddDrawable(BackRightTire);
 
-	BackLeftTire = new Vehicle_Wheel(5/*, car->GetCarNode()*/);
-	BackLeftTire->SetOriginPosition(T3Vector3(-11, -2, -5));
-	BackLeftTire->SetPhysics(5, (vpn->getBLW()));
+	BackLeftTire = new Vehicle_Wheel(size/*, car->GetCarNode()*/);
+	//BackLeftTire->SetOriginPosition(T3Vector3(-11, -2, -5));
+	BackLeftTire->SetPhysics(size, (vpn->getBLW()));
 	AddDrawable(BackLeftTire);
 
 
@@ -159,7 +167,7 @@ void VehicleTestingScreen::LoadContent() {
 	f=0;
 	
 	Speed_Rotate =  -0.4;
-
+	
 
 	camera->SetPosition(T3Vector3(0,10.0f, 80.0f));
 	//camera->SetYaw(180.0f);
@@ -227,15 +235,16 @@ void VehicleTestingScreen::Update() {
 
 	
 	
-	
+	//cout<<car->GetCarNode().GetPosition().y<<endl;
 	//T3Matrix4 m = T3Matrix4::Rotation(0.016f, T3Vector3(0,1,0));
 	//ent->AddRotation(Quaternion::FromMatrix(m));
 }
 
 #if WINDOWS_BUILD
 void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
-	float e=0.707106829f;
-	float r=car->GetCarNode().GetOrientation().y+e;
+			float E=0.707106829f;
+			//cout<<"ttt "<<car->GetCarNode().GetOrientation().y<<" ttt"<<endl;
+			//cout<<"ttt "<<((car->GetCarNode().GetOrientation().y)+E)<<" ttt"<<endl;
 	switch (type) {
 	case KeyboardEvents::KEY_DOWN:
 	case KeyboardEvents::KEY_HELD:
@@ -245,11 +254,10 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 		{
 				//camera->AddMovement(T3Vector3(1,0,0));
 
-		float a=car->GetCarNode().GetOrientation().y;
-				
+		
 			   f=f+5;
 				//  car->GetCarNode().SetForce(T3Vector3(10+f,0,0));
-			   if(((car->GetCarNode().GetOrientation().y)+e)==0)
+			   if((car->GetCarNode().GetOrientation().y+E)==0)
 		       {
 				   car->GetCarNode().SetForce(T3Vector3(f /*+ 100.0f*/,0,0));   
 					//		    f=f+100;
@@ -257,7 +265,7 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 			//  cout<<car->GetCarNode().GetLinearVelocity().x<<"   "<<car->GetCarNode().GetLinearVelocity().y<<"   "<<car->GetCarNode().GetLinearVelocity().z<<"   "<<endl;
 
 			   //cout<<car->GetCarNode().GetLinearVelocity().Length()<<endl;
-				if(((car->GetCarNode().GetOrientation().y)+e)<0)
+				if((car->GetCarNode().GetOrientation().y+E)<0)
 				{
 					float angle=-0.5/90*car->GetCarNode().GetOrientation().y;
 					float l=  car->GetCarNode().GetLinearVelocity().Length();
@@ -273,7 +281,7 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 		
 				}
 
-				if(((car->GetCarNode().GetOrientation().y)+e)>0)
+				if((car->GetCarNode().GetOrientation().y+E)>0)
 				{
 					float angle=0.5/90*car->GetCarNode().GetOrientation().y;
 					float l=  car->GetCarNode().GetLinearVelocity().Length();
@@ -304,7 +312,7 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 
 
 
-				if(car->GetCarNode().GetOrientation().y==0)
+				if((car->GetCarNode().GetOrientation().y+E)==0)
 		{
 		  
 		 car->GetCarNode().SetForce(T3Vector3(-f ,0,0));   
@@ -312,7 +320,7 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 
 //		    f=f+100;
 		}
-		if(car->GetCarNode().GetOrientation().y<0)
+		if((car->GetCarNode().GetOrientation().y+E)<0)
 		{
 		float angle=-0.5/90*FrontRightTire->GetPhysicsNode().GetOrientation().y;
 
@@ -332,7 +340,7 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 		
 		}
 
-		if(car->GetCarNode().GetOrientation().y>0)
+		if((car->GetCarNode().GetOrientation().y+E)>0)
 		{
 		float angle=0.5/90*FrontRightTire->GetPhysicsNode().GetOrientation().y;
 
@@ -365,7 +373,7 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 			*/
 		    //	f=f+100;
 
-			if( car->GetCarNode().GetOrientation().y<=0.6){
+			if((car->GetCarNode().GetOrientation().y+E)<=0.6){
 
 				// car->GetCarNode().SetOrientation( car->GetCarNode().GetOrientation()+Quaternion::FromMatrix(T3Matrix4::Rotation(30,T3Vector3(0,-1,0))));
 
@@ -422,7 +430,7 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 		      tempPosition.x = PlayerPosition.x;*/
 
 
-				if( car->GetCarNode().GetOrientation().y>=-0.6){
+				if((car->GetCarNode().GetOrientation().y+E)>=-0.6){
 		
 			 FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate-0.001,0));
 		     FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate-0.001,0));
@@ -444,6 +452,18 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 
 
 			}
+			break;
+			case KeyboardEvents::KEYBOARD_I:
+			camera->AddMovement(T3Vector3(0,0,-1));
+			break;
+		case KeyboardEvents::KEYBOARD_K:
+			camera->AddMovement(T3Vector3(0,0,1));
+			break;
+		case KeyboardEvents::KEYBOARD_J:
+			camera->AddMovement(T3Vector3(-1,0,0));
+			break;
+		case KeyboardEvents::KEYBOARD_L:
+			camera->AddMovement(T3Vector3(1,0,0));
 			break;
 		case KeyboardEvents::KEYBOARD_SHIFT:
 			camera->AddMovement(T3Vector3(0,1,0));

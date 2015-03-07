@@ -41,10 +41,12 @@ public:
 	static float g;
 	static float gx;
 	TrackSegment* Strack;
-	
+#if WINDOWS_BUILD	
 	vector<T3Vector3> SplinePoint;
+
 	vector<TrackSegment*> TrackSegmentVector;
-	 virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
+#endif 
+	virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
 		 cout<<obj1->GetType()<<endl;
 		  cout<<"collisionbetween"<<endl;
 		  cout<<obj2->GetType()<<endl;
@@ -61,7 +63,10 @@ public:
 private:
 	Mesh* quad;
 	Mesh* cylinder;
+	#if WINDOWS_BUILD
+
 	SpotLight* light;
+#endif
 	FreeCamera* camera;
 	Vehicle* car;
 

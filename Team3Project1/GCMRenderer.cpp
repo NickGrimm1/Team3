@@ -22,7 +22,7 @@ GCMRenderer::GCMRenderer(void)	{
 	shader = new Shader();
 	InitDisplay();
 	InitSurfaces();
-	//texture = new Texture("/ncl.gtf", 0);
+	texture = new Texture("/ncl.gtf", 0);
 	std::cout <<"Got to end of GCMrenderer constructor" << std::endl;
 }
 
@@ -306,10 +306,10 @@ while fragment shaders MUST be ran in graphics memory, and so its address
 must be 'offsettable'. 
 */
 void	GCMRenderer::SetCurrentShader(Shader* s) {
-	std::cout<<"GCMRenderer: setCurrentShader"<<std::endl;
+	//std::cout<<"GCMRenderer: setCurrentShader"<<std::endl;
 	cellGcmSetFragmentProgram(s->GetFragment()->GetProgram(), s->GetFragment()->GetOffset());
 	cellGcmSetVertexProgram(s->GetVertex()->GetProgram(), s->GetVertex()->GetuCode());
-	std::cout<<"GCMRenderer: got to the end of setCurrentShader"<<std::endl;
+	//std::cout<<"GCMRenderer: got to the end of setCurrentShader"<<std::endl;
 }
 
 //Sets the camera. Can be NULL
@@ -341,14 +341,20 @@ specific #ifdefs to encapsulate API code). You'll have to think up some way
 of safely setting shaders and textures on a renderer...
 */
 void	GCMRenderer::DrawNode(SceneNode*n)	{
-	std::cout << "Drawing Node" << std::endl;
-	if(n->GetMesh()) {
-		std::cout << "Drawing a mesh: " << std::endl;
-		std::cout << n->GetMesh()->GetNumVertices() << std::endl;
+//	std::cout << "Drawing Node" << std::endl;
+
+	if(n->GetDrawableEntity()) {
+	//	std::cout << "Drawing a mesh: " << std::endl;
+	//	std::cout << n->GetMesh()->GetNumVertices() << std::endl;
 		//GCC complains about function returns being used as parameters passed
 		//around, or we'd just use GetWorldTransform as the function param
+		cout << "GCMRenderer: Have drawable entity" << endl;
+		DrawableEntity3D& entity = *n->GetDrawableEntity();
+		cout << "GCMRenderer: initialised entity" << endl;
 		T3Matrix4 transform = //n->GetTransform();
 			Quaternion::EulerAnglesToQuaternion(90, 0, 0).ToMatrix() * T3Matrix4::Scale(T3Vector3(1000,1000,1));
+		cout << "GCMRenderer: set a transform matrix" << endl;
+
 
 		/*std::cout << "GCMRenderer: ViewMatrix (SCE): " << std::endl;
 		for (int x = 0; x < 4; ++x)
@@ -368,7 +374,8 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		for (int x = 0; x < 4; ++x)
 			for (int y = 0; y < 4; ++y)
 				m.setElem(x, y, transform.values[y + x * 4]);
-
+		
+		cout << "GCMRenderer: turned that matrix into a PS3 matrix " << endl; 
 		
 		/*std::cout << "Transform (SCE): " << std::endl;
 		for (int x = 0; x < 4; ++x)
@@ -379,8 +386,9 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 			}
 			std::cout << std::endl;
 		}*/
-		
+		//shader = entity.GetShader();
 		shader->GetVertex()->SetParameter("modelMat", m);
+		cout << "GCMRenderer: set the shader" << endl;
 		//shader->GetVertex()->UpdateShaderMatrices(m, viewMatrix, projMatrix);
 
 		/*
@@ -389,22 +397,28 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		of textures to units, but the slight changes in how GCM handles textures
 		make it more intuitive to place it here, instead.
 		*/
-	
-		CellGcmTexture* t = texture->GetTexture();
 		
-		if (t)
+		CellGcmTexture* t = texture->GetTexture();
+		cout << "GCMRenderer: extracted the texture" << endl;
+		/*if (t)
 			std::cout << "Has Texture" << std::endl;
 		else
-			std::cout << "No Has Texture :(" << std::endl;
+			std::cout << "No Has Texture :(" << std::endl;*/
 
 		SetTextureSampler(shader->GetFragment()->GetParameter("texture"), t);
+		cout << "GCMRenderer: Set the texture sampler" << endl;
 
 		/*
 		The GCM Mesh class needs the current vertex shader, fragment
 		shader is just sent for convenience, in case it's needed in future...
 		*/
-		n->GetMesh()->Draw(shader);
+		//n->GetMesh()->Draw(shader);
+		cout << "GCMRenderer: about to draw entity" << endl;
+		entity.GetMesh()->Draw(shader);
+		cout << "GCMRenderer: managed to draw the entity" << endl;
 	}
+
+
 
 	//Remember to draw our children!
 	for(std::vector<SceneNode*>::const_iterator i = n->GetChildIteratorStart(); i != n->GetChildIteratorEnd(); ++i) {
