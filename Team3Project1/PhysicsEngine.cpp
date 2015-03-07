@@ -14,9 +14,9 @@ void PhysicsEngine::Run()
 #if PS3_BUILD
 void PhysicsEngine::Run(uint64_t arg)
 {
-	std::cout << "Physics Thread Started! " << std::endl;
+//	std::cout << "Physics Thread Started! " << std::endl;
 	//instance->ThreadRun();
-	std::cout << "Physics Thread Ended! " << std::endl;
+	//std::cout << "Physics Thread Ended! " << std::endl;
 	sys_ppu_thread_exit(0);
 }
 #endif

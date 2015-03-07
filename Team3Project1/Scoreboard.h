@@ -27,13 +27,8 @@ public:
 
 protected:
 	bool ConnectToScoreboard();
-
-
-	bool scoreboardConnected;
-	bool scoreboardRequestSent;
-	bool scoreboardRequestSucceeded;
-	bool scoreboardRetrieved;
 	vector<pair<string, string>> scoreboard; //<name, score>
+	bool scoreboardLoaded;
 
 	string scoreboardHost;
 	BaseSocket* scoreboardDB;

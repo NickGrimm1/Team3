@@ -174,3 +174,4 @@ Framework/nclgl.vcxproj.filters
 *.self
 *.elf
 *.unsuccessfulbuild
+*.a

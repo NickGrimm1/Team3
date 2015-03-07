@@ -304,6 +304,7 @@
     <ClInclude Include="LoadedTexture.h" />
     <ClInclude Include="LoadingScreen.h" />
     <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="MenuScreen3D.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MutexClass.h" />
     <ClInclude Include="NetworkCommon.h" />
@@ -322,6 +323,7 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="NetworkManager.h" />
+    <ClInclude Include="PauseScreen.h" />
     <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="RacerGame.h" />
     <ClInclude Include="Scoreboard.h" />
@@ -400,11 +402,13 @@
     <ClCompile Include="LoadingScreen.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="MenuScreen3D.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MutexClass.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="NetworkTest.cpp" />
     <ClCompile Include="OffsetCamera.cpp" />
+    <ClCompile Include="PauseScreen.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="RacerGame.cpp" />
     <ClCompile Include="Renderer.cpp" />

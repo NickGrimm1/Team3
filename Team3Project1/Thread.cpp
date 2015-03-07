@@ -22,10 +22,10 @@ void Thread::Start(std::string name) {
 		&tid);
 #endif
 #if PS3_BUILD
-	return_val = sys_ppu_thread_create(&thread, Run, 0, PPU_PRIORITY,PPU_STACK_SIZE,SYS_PPU_THREAD_CREATE_JOINABLE, name.c_str());
+	return_val = sys_ppu_thread_create(&thread, Run, (uint64_t)this, PPU_PRIORITY,PPU_STACK_SIZE,SYS_PPU_THREAD_CREATE_JOINABLE, name.c_str());
 	if (return_val != CELL_OK)
 	{
-		std::cout << "Bugger, creating the thread didn't work" << std::endl;
+		std::cout << "Thread initialise failed with error code: " << return_val <<std::endl;
 		return;
 	}
 #endif

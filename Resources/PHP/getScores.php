@@ -9,8 +9,7 @@ mysql_select_db("1823820_scores", $con);
 $result = mysql_query("SELECT * FROM Scores ORDER BY Score DESC LIMIT 10");
 while($row = mysql_fetch_array($result))
 {
-echo $row['Name'] . "|" . $row['Score'];
-echo ";";
+echo $row['Name'] . " " . $row['Score'] . PHP_EOL;
 }
 mysql_close($con);
 ?>

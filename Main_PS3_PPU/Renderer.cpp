@@ -4,21 +4,28 @@
 #include "../Framework/Shader.h"
 #include "../Team3Project1/ShaderPart.h"
 #include "../Team3Project1/GameStateManager.h"
-Renderer::Renderer(void)	{
+/**********************************************************************************************/
+//TODO : pass a reference to the graphics engines scenenodes into ps3 as seen in PC Renderer //
+/*********************************************************************************************/
+Renderer::Renderer(vector<Light*>& lightsVec, vector<SceneNode*>& SceneNodesVec, vector<DrawableEntity2D*>& overlayVec)
+	: lights(lightsVec),
+	sceneNodes(SceneNodesVec),
+	overlayElements (overlayVec)
+{
 	/*
 	You're provided with a very basic vertex / fragment shader, to get you started
 	with Cg, and drawing textured objects. 
 	*/
-	std::cout << "begin renderer constructor"<<std::endl;
+	//std::cout << "begin renderer constructor"<<std::endl;
 	//get to shader part and fall over, gg, next map pls ps3.
 	//ShaderPart* basicVert		= new ShaderPart("/vertex.vpo", ShaderType::VERTEX);
 	
-	std::cout <<"basic vert did something" << std::endl;
+	//std::cout <<"basic vert did something" << std::endl;
 	//ShaderPart* basicFrag		= new ShaderPart("/fragment.fpo", ShaderType::FRAGMENT);
-	std::cout <<"basic frag did something" << std::endl;
+	//std::cout <<"basic frag did something" << std::endl;
 	//Shader* s = new Shader();
 	//s = new Shader();
-	std::cout <<"shader did something" << std::endl;
+	//std::cout <<"shader did something" << std::endl;
 	//shader->SetVertex(basicVert);
 	//shader->SetFragment(basicFrag);
 	//this->SetCurrentShader(shader);
@@ -26,11 +33,18 @@ Renderer::Renderer(void)	{
 	/*
 	Projection matrix...0.7853982 is 45 degrees in radians.
 	*/
+	
+	/*lights(lightsVec);
+	sceneNodes(SceneNodesVec);
+	overlayElements (overlayVec);*/
+	shader = basicShader;
+
 	projMatrix	= Matrix4::perspective(0.7853982, screenRatio, 1.0f, 10000.0f);	//CHANGED TO THIS!!
 		
 }
 
-Renderer::~Renderer(void)	{
+Renderer::~Renderer(void)	
+{
 }
 
 /*
@@ -46,6 +60,7 @@ void Renderer::RenderScene() {
 	ClearBuffer();
 	//this->SetCurrentShader(shader);
 	this->SetCurrentShader(basicShader);
+	shader = basicShader;
 	cellGcmSetDepthTestEnable(CELL_GCM_FALSE);
 	cellGcmSetDepthFunc(CELL_GCM_LESS);
 	cellGcmSetCullFaceEnable(CELL_GCM_FALSE);
@@ -55,7 +70,7 @@ void Renderer::RenderScene() {
 
 	if(camera) {
 		T3Matrix4 m = camera->BuildViewMatrix();
-		std::cout << "Renderer: View Matrix (T3): " << m << std::endl;
+	//	std::cout << "Renderer: View Matrix (T3): " << m << std::endl;
 
 		viewMatrix = Matrix4::identity();
 		for (int x = 0; x < 4; ++x)
@@ -78,9 +93,22 @@ void Renderer::RenderScene() {
 	}
 
 	basicShader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
-	
-	if(root) {
-		DrawNode(root);
+
+	if(!sceneNodes.empty())
+	{
+		//cout << "Renderer: scenenode list is not empty!" << endl;
+		vector<SceneNode*>::iterator i = sceneNodes.begin();
+		while(i != sceneNodes.end())
+		{
+			
+			DrawNode(*i);
+			cout << "Node: " << *i << " Drawn" << endl;
+		}
+	}
+	else 
+	{
+	 cout << "Renderer: sceneNode list empty! Nothing to draw" << endl;
+	 
 	}
 
 	SwapBuffers();
@@ -92,10 +120,12 @@ bool Renderer::LoadShaders()
 	basicShader = GameStateManager::Assets()->LoadShader(this, "/vertex.vpo","/fragment.fpo");
 	return true;
 }
+
 void Renderer::UnloadShaders()
 {
 	GameStateManager::Assets()->UnloadShader(this,  "/vertex.vpo","/fragment.fpo");
 }
+
 bool Renderer::LoadAssets()
 {
 	circleMesh = GameStateManager::Assets()->LoadCircle(this, 20);				  // Circle for spotlight rendering
@@ -110,6 +140,7 @@ bool Renderer::LoadAssets()
 	
 	return true;
 }
+
 void Renderer::UnloadAssets()
 {
 	GameStateManager::Assets()->UnloadCircle(this, 20);				   // Circle for spotlight rendering
@@ -123,6 +154,7 @@ unsigned int Renderer::CreateShadowCube()
 {
 	return 0;//look into this later
 }
+
 unsigned int Renderer::CreateShadowTexture()
 {
 	return 0;//look into this later

@@ -19,7 +19,7 @@ Version: 0.0.3 06/02/2015.</summary>
 #include "HudTestScreen.h"
 #include "DebugOverlay.h"
 #include "MainMenu.h"
-
+#include "PauseScreen.h"
 #include "RacerGame.h"
 #include "VehicleTestingScreen.h"
 namespace EntryPoint
@@ -30,11 +30,14 @@ namespace EntryPoint
 		//LoadingScreen* loadingScreen = new LoadingScreen();
 		//GameStateManager::Instance()->AddGameScreen(loadingScreen);
 
-		//GraphicsTestScreen* game = new GraphicsTestScreen();
-		//GameStateManager::Instance()->AddGameScreen(game);
+		GraphicsTestScreen* game = new GraphicsTestScreen();
+		GameStateManager::Instance()->AddGameScreen(game);
 
 		//MainMenu* main = new MainMenu();
 		//GameStateManager::Instance()->AddGameScreen(main);
+
+		//PauseScreen* pause = new PauseScreen();
+		//GameStateManager::Instance()->AddGameScreen(pause);
 
 		//HudTestScreen* hud = new HudTestScreen();
 		//GameStateManager::Instance()->AddGameScreen(hud);
@@ -57,8 +60,8 @@ namespace EntryPoint
 		//RacerGame* game = new RacerGame();
 		//GameStateManager::Instance()->AddGameScreen(game);
 		//PhysicsEngine::SetGame(game);
-		VehicleTestingScreen* physicsgame = new VehicleTestingScreen();
-		GameStateManager::Instance()->AddGameScreen(physicsgame);
+		//VehicleTestingScreen* physicsgame = new VehicleTestingScreen();
+		//GameStateManager::Instance()->AddGameScreen(physicsgame);
 		GameStateManager::Instance()->Start();
 	}
 }
