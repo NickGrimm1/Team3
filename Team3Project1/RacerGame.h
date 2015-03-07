@@ -4,6 +4,7 @@
 #include "../Framework/Vehicle.h"
 #include "../Framework/MyGame.h"
 #include "FreeCamera.h"
+#include "ChaseCamera.h"
 #include "Vehicle_Wheel.h"
 #include "VehiclePhysicsNode.h"
 #include "CheckPoint.h"
@@ -45,9 +46,9 @@ public:
 	vector<T3Vector3> SplinePoint;
 	vector<TrackSegment*> TrackSegmentVector;
 	 virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
-		 cout<<obj1->GetType()<<endl;
-		  cout<<"collisionbetween"<<endl;
-		  cout<<obj2->GetType()<<endl;
+		 cout<<obj1->GetType();
+		  cout<<" collisionbetween ";
+		 cout<<obj2->GetType()<<endl;
 		  if(obj1->GetType()=='g')
 		  {
 			  obj1->GetPhysicsNode().SetIsCollide(true);
@@ -63,6 +64,7 @@ private:
 	Mesh* cylinder;
 	SpotLight* light;
 	FreeCamera* camera;
+	ChaseCamera* chasecamera;
 	Vehicle* car;
 
 	CheckPoint * checkpoint;

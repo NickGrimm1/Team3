@@ -309,7 +309,9 @@ void Vehicle::SetPhysics(float size,PhysicsNode * a)
 	car->SetMass(5);
 	car->SetCollisionVolume(new CollisionAABB(T3Vector3(size ,size ,size )));
 	car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"CarPhysics.obj"));
-	car->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,0,0));
+	Quaternion Test=car->GetOrientation();
+	car->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,-90,0));
+	Quaternion Test2=car->GetOrientation();
 	car->SetXstart(car->GetPosition().x-3*size);
 	car->SetXend(car->GetPosition().x+3*size);                                                                                         
 

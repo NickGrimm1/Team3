@@ -506,10 +506,18 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 			
 			if(CollisionDetection(first, second))
 			{
+				//OnCollision(first,second);
 				//cout << "GJK passed" << endl;
+				if(first.GetIsCollide()==false && second.GetIsCollide ()==true)
+				{
+					//if(second.GetType()=='f'){
+					OnCollision(first,second);
+					//}
+				}
 				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
 				{
-					if(check==true)
+					//OnCollision(first,second);
+						/*if(check==true)
 					{
                     cout << "Collision" << endl;
 
@@ -534,7 +542,7 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 					first.SetLinearVelocity(T3Vector3(0,0,0));
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
-					second.SetForce(T3Vector3(0,0,0));
+					second.SetForce(T3Vector3(0,0,0));*/
 				}
 			
 			
@@ -666,4 +674,10 @@ void    PhysicsEngine::DrawDebug() {
 	for(vector<DebugDrawer*>::iterator i = allDebug.begin(); i != allDebug.end(); ++i) {
 		(*i)->DebugDraw();
 	}
+}
+
+void PhysicsEngine::OnCollision(PhysicsNode& p1, PhysicsNode& p2)
+{
+	gameClass->CollisionBetween(p1.GetGameEntity(),p2.GetGameEntity());
+	cout<<"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa="<<p2.GetType()<<endl;
 }

@@ -6,6 +6,7 @@
 #include "../Framework/Light.h"
 #include "GameStateManager.h"
 #include "FreeCamera.h"
+#include "ChaseCamera.h"
 #include "../Framework/ObjMesh.h"
 #include "TrackSegment.h"
 //#include "../Framework/Vehicle.h"
@@ -73,7 +74,7 @@ void RacerGame::LoadContent() {
 	//PointLight* l = GameStateManager::Graphics()->AddPointLight(T3Vector3(0,5,0), 10, T3Vector4(1,1,1,1), T3Vector4(1,1,1,1), false); 
 
 	camera = new FreeCamera();
-
+	
 	checkpoint= new CheckPoint(10);
 	checkpoint->SetPhysics(10,'c');
 	checkpoint->SetType('g');
@@ -85,12 +86,29 @@ void RacerGame::LoadContent() {
 
 	VehiclePhysicsNode* vpn = new VehiclePhysicsNode();
 	
-	GameStateManager::Physics()->AddNode(vpn);
+	//GameStateManager::Physics()->AddNode(vpn);
 
 	car = new Vehicle(5);
-	car->SetType('v');
+	car->SetRotation(Quaternion::EulerAnglesToQuaternion(0,-90,0));
+	car->SetType('u');
+	cout<<car->GetType()<<endl;
+	chasecamera = new ChaseCamera(car,T3Vector3(0,5,110),0,0,0);
+	//chasecamera->AddYaw(500);
+	//chasecamera->AddPitch(90);
 	//car->SetPhysics(5,(vpn->GetCar()));
+
 	vpn->SetPGE(car);
+	vpn->getRFW()->SetPGE(car);
+	vpn->getRFW()->SetType('z');
+	vpn->getLFW()->SetPGE(car);
+	vpn->getLFW()->SetType('b');
+	vpn->getBRW()->SetPGE(car);
+	vpn->getBRW()->SetType('n');
+	vpn->getBLW()->SetPGE(car);
+	vpn->getBLW()->SetType('m');
+	vpn->SetType('f');
+	cout<<"35"<<vpn->GetGameEntity()->GetType()<<"45"<<endl;
+
 	car->SetPhysics(5, vpn);
 	AddDrawable(car);
 
@@ -143,7 +161,7 @@ void RacerGame::LoadContent() {
 
 	camera->SetPosition(T3Vector3(0,10.0f, 80.0f));
 	//camera->SetYaw(180.0f);
-	GameStateManager::Graphics()->SetCamera(camera);
+	GameStateManager::Graphics()->SetCamera(chasecamera);
 }
 
 void RacerGame::Update() { 
@@ -484,7 +502,7 @@ void RacerGame::Update() {
 	
 void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
 
-
+	float R=0.707106829f;
 	switch (type) {
 	case KeyboardEvents::KEY_DOWN:
 	case KeyboardEvents::KEY_HELD:
@@ -495,20 +513,27 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 				//camera->AddMovement(T3Vector3(1,0,0));
 
 		
-				
+				/*cout<<"bRbbbbbbbbbbbbbbbbbbbb"<<R<<endl;
+
+				cout<<"bYbbbbbbbbbbbbbbbbbbbb"<<car->GetCarNode().GetOrientation().y<<endl;
+				cout<<"bEbbbbbbbbbbbbbbbbbbbb"<<((car->GetCarNode().GetOrientation().y)+R)<<endl;*/
+
+				//float E=R+(car->GetCarNode().GetOrientation().y);
 			   f=f+5;
 				//  car->GetCarNode().SetForce(T3Vector3(10+f,0,0));
-			   if(car->GetCarNode().GetOrientation().y==0)
+			   if(((car->GetCarNode().GetOrientation().y)+R)==0)
 		       {
+				   //cout<<"b1bbbbbbbbbbbbbbbbbbbb"<<(car->GetCarNode().GetOrientation().y)+R<<endl;
 				   car->GetCarNode().SetForce(T3Vector3(f /*+ 100.0f*/,0,0));   
 					//		    f=f+100;
 		       }
-			  cout<<car->GetCarNode().GetLinearVelocity().Length ()<<endl;
+			 // cout<<car->GetCarNode().GetLinearVelocity().Length ()<<endl;
 
 			   //cout<<car->GetCarNode().GetLinearVelocity().Length()<<endl;
-				if(car->GetCarNode().GetOrientation().y<0)
+				if(((car->GetCarNode().GetOrientation().y)+R)<0)
 				{
-					float angle=-0.5/90*car->GetCarNode().GetOrientation().y;
+					//cout<<"b2bbbbbbbbbbbbbbbbbbbb"<<car->GetCarNode().GetOrientation().y<<endl;
+					float angle=-0.5/90*((car->GetCarNode().GetOrientation().y)+R);
 					float l=  car->GetCarNode().GetLinearVelocity().Length();
 					float x=l*sin(angle/2/3.14);
 					float z=l*cos(angle/2/3.14);
@@ -522,9 +547,10 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 		
 				}
 
-				if(car->GetCarNode().GetOrientation().y>0)
+				if(((car->GetCarNode().GetOrientation().y)+R)>0)
 				{
-					float angle=0.5/90*car->GetCarNode().GetOrientation().y;
+					//cout<<"b3bbbbbbbbbbbbbbbbbbbb"<<((car->GetCarNode().GetOrientation().y)+0.707107)<<endl;
+					float angle=0.5/90*((car->GetCarNode().GetOrientation().y)+R);
 					float l=  car->GetCarNode().GetLinearVelocity().Length();
 					float x=-l*sin(angle/2/3.14);
 					float z=l*cos(angle/2/3.14);
@@ -553,7 +579,7 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 
 
 
-				if(car->GetCarNode().GetOrientation().y==0)
+				if(((car->GetCarNode().GetOrientation().y)+R)==0)
 		{
 		  
 		 car->GetCarNode().SetForce(T3Vector3(-f ,0,0));   
@@ -561,9 +587,9 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 
 //		    f=f+100;
 		}
-		if(car->GetCarNode().GetOrientation().y<0)
+		if(((car->GetCarNode().GetOrientation().y)+R)<0)
 		{
-		float angle=-0.5/90*car->GetCarNode().GetOrientation().y;
+		float angle=-0.5/90*((car->GetCarNode().GetOrientation().y)+R);
 
 		float l=  car->GetCarNode().GetLinearVelocity().Length();
 
@@ -581,9 +607,9 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 		
 		}
 
-		if(car->GetCarNode().GetOrientation().y>0)
+		if(((car->GetCarNode().GetOrientation().y)+R)>0)
 		{
-		float angle=0.5/90*car->GetCarNode().GetOrientation().y;
+		float angle=0.5/90*((car->GetCarNode().GetOrientation().y)+R);
 
 		float l=  car->GetCarNode().GetLinearVelocity().Length();
 
@@ -614,7 +640,7 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 			*/
 		    //	f=f+100;
 
-			if( car->GetCarNode().GetOrientation().y<=0.6){
+			if( ((car->GetCarNode().GetOrientation().y)+R)<=0.6){
 
 				// car->GetCarNode().SetOrientation( car->GetCarNode().GetOrientation()+Quaternion::FromMatrix(T3Matrix4::Rotation(30,T3Vector3(0,-1,0))));
 
@@ -671,7 +697,7 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 		      tempPosition.x = PlayerPosition.x;*/
 
 
-				if( car->GetCarNode().GetOrientation().y>=-0.6){
+				if( ((car->GetCarNode().GetOrientation().y)+R)>=-0.6){
 		
 			 FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate-0.001,0));
 		     FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate-0.001,0));
