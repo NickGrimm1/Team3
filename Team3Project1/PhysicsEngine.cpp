@@ -508,11 +508,18 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 			
 			if(CollisionDetection(first, second))
 			{
-				cout<<"ffffffffff"<<endl;
+				//OnCollision(first,second);
 				//cout << "GJK passed" << endl;
-				/*if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
+				if(first.GetIsCollide()==false && second.GetIsCollide ()==true)
 				{
-					if(check==true)
+					//if(second.GetType()=='f'){
+					OnCollision(first,second);
+					//}
+				}
+				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
+				{
+					//OnCollision(first,second);
+						/*if(check==true)
 					{
                     cout << "Collision" << endl;
 
@@ -556,12 +563,12 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 
 			}
 				}
-				
-
+			
+			
 
 
 			}
-
+				
 
 
 
@@ -681,7 +688,7 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* 
 
 			Triangle_normal= T3Vector3::Cross((a-b),(a-c));
 			Triangle_normal.Normalise();
-		}
+	}
 	};
 
 	std::list<EPA_Triangle> lst_EPA_Triangle;
@@ -873,4 +880,10 @@ void    PhysicsEngine::DrawDebug() {
 	for(vector<DebugDrawer*>::iterator i = allDebug.begin(); i != allDebug.end(); ++i) {
 		(*i)->DebugDraw();
 	}
+}
+
+void PhysicsEngine::OnCollision(PhysicsNode& p1, PhysicsNode& p2)
+{
+	gameClass->CollisionBetween(p1.GetGameEntity(),p2.GetGameEntity());
+	cout<<"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa="<<p2.GetType()<<endl;
 }

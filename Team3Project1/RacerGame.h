@@ -4,6 +4,7 @@
 #include "../Framework/Vehicle.h"
 #include "../Framework/MyGame.h"
 #include "FreeCamera.h"
+#include "ChaseCamera.h"
 #include "Vehicle_Wheel.h"
 #include "VehiclePhysicsNode.h"
 #include "CheckPoint.h"
@@ -46,9 +47,9 @@ public:
 
 	vector<TrackSegment*> TrackSegmentVector;
 #endif 
-	virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
-		 cout<<obj1->GetType()<<endl;
-		  cout<<"collisionbetween"<<endl;
+	 virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
+		 cout<<obj1->GetType();
+		  cout<<" collisionbetween ";
 		  cout<<obj2->GetType()<<endl;
 		  if(obj1->GetType()=='g')
 		  {
@@ -68,6 +69,7 @@ private:
 	SpotLight* light;
 #endif
 	FreeCamera* camera;
+	ChaseCamera* chasecamera;
 	Vehicle* car;
 
 	CheckPoint * checkpoint;
