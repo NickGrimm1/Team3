@@ -6,7 +6,7 @@ CheckPoint::CheckPoint(float size):
 	carPhysicNode(carPhysicNode) 
 {
 	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj");
-	T3Vector3 position =T3Vector3(-50, -2, 0);
+	T3Vector3 position =T3Vector3(50, -2, 0);
 	boundingRadius = size;
 	origin = position;
 	rotation = Quaternion::EulerAnglesToQuaternion(0,0,0);

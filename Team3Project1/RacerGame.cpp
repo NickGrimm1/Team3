@@ -82,16 +82,17 @@ void RacerGame::LoadContent() {
 	
 	
 
+	unsigned int size = 5;
 
-	VehiclePhysicsNode* vpn = new VehiclePhysicsNode();
+	VehiclePhysicsNode* vpn = new VehiclePhysicsNode(size);
 	
 	GameStateManager::Physics()->AddNode(vpn);
 
-	car = new Vehicle(5);
+	car = new Vehicle(size);
 	car->SetType('v');
 	//car->SetPhysics(5,(vpn->GetCar()));
 	vpn->SetPGE(car);
-	car->SetPhysics(5, vpn);
+	car->SetPhysics(size, vpn);
 	AddDrawable(car);
 
 

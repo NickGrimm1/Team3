@@ -12,7 +12,7 @@ Vehicle::Vehicle(float size) {
 	T3Vector3 position =T3Vector3(0, 0, 0);
 	boundingRadius = size;
 	origin = position;
-	rotation = Quaternion::EulerAnglesToQuaternion(0,0,0);
+	rotation = Quaternion::EulerAnglesToQuaternion(0,-90,0);
 	scale = T3Vector3(size,size,size);
 	texture = NULL;
 	bumpTexture = NULL;
@@ -306,14 +306,14 @@ void Vehicle::SetPhysics(float size,PhysicsNode * a)
     car=a;
 	car->SetUseGravity(false);
 	car->SetPosition(origin);
-	car->SetMass(5);
+	car->SetMass(10);
 	car->SetCollisionVolume(new CollisionAABB(T3Vector3(size ,size ,size )));
-	car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"CarPhysics.obj"));
-	car->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,0,0));
+	//car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj"));
+	car->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,-90,0));
 	car->SetXstart(car->GetPosition().x-3*size);
 	car->SetXend(car->GetPosition().x+3*size);                                                                                         
 
-	car->SetIsCollide(true);
+	car->SetIsCollide(false);
 
 
 

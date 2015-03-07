@@ -125,6 +125,8 @@ public:
 	bool GetIsCollide(){ return isCollide;};
 	void SetIsCollide(bool iscollide){ isCollide=iscollide;}
 
+	virtual int GetNunmberVertex() {return physicsMesh->GetNumVertices();}
+	virtual Vertex* GetPhysicsVertex() {return (physicsMesh != NULL) ? physicsMesh->GetVertices() : NULL;}
 	Mesh* GetPhysicsMesh() {return physicsMesh;}
 	void SetMesh(Mesh* mesh) {physicsMesh = mesh;}
 

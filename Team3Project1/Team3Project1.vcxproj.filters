@@ -474,15 +474,6 @@
     <ClInclude Include="Heightmap.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VehiclePhysicsNode.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VehicleTestingScreen.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Vehicle_Wheel.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="UdpSocket.h">
       <Filter>Framework\Network\Header Files</Filter>
     </ClInclude>
@@ -511,6 +502,15 @@
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Gold_cion.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vehicle_Wheel.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VehiclePhysicsNode.h">
+      <Filter>Framework\Physics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VehicleTestingScreen.h">
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -710,15 +710,6 @@
     <ClCompile Include="HeightMap.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VehiclePhysicsNode.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VehicleTestingScreen.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Vehicle_Wheel.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="NetworkTest.cpp">
       <Filter>Framework\Network\Source Files</Filter>
     </ClCompile>
@@ -754,6 +745,15 @@
     </ClCompile>
     <ClCompile Include="Scoreboard.cpp">
       <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VehicleTestingScreen.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VehiclePhysicsNode.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vehicle_Wheel.cpp">
+      <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
