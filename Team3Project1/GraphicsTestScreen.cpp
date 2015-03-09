@@ -213,7 +213,7 @@ void GraphicsTestScreen::LoadContent() {
 		Quaternion::EulerAnglesToQuaternion(0,0,0),
 		T3Vector3(5,5,5));
 	gameEntities.push_back(myEnt);
-//	AddDrawable(myEnt);
+	AddDrawable(myEnt);
 
 	//SetPlayer(ent);
 	camera = new FreeCamera();//ChaseCamera(ent, T3Vector3(0, 2, 50), 0, 0, 0);

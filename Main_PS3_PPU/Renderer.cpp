@@ -63,57 +63,57 @@ void Renderer::RenderScene() {
 	ClearBuffer();
 	std::cout << "RenderScene: Buffer Cleared" << std::endl;
 	//this->SetCurrentShader(shader);
-	//this->SetCurrentShader(basicShader);
-	//shader = basicShader;
-	//cellGcmSetDepthTestEnable(CELL_GCM_FALSE);
-	//cellGcmSetDepthFunc(CELL_GCM_LESS);
-	//cellGcmSetCullFaceEnable(CELL_GCM_FALSE);
-	//cellGcmSetFrontFace(CELL_GCM_CW);
+	this->SetCurrentShader(basicShader);
+	shader = basicShader;
+	cellGcmSetDepthTestEnable(CELL_GCM_FALSE);
+	cellGcmSetDepthFunc(CELL_GCM_LESS);
+	cellGcmSetCullFaceEnable(CELL_GCM_FALSE);
+	cellGcmSetFrontFace(CELL_GCM_CW);
 
-	//modelMatrix = Matrix4::identity(); 
+	modelMatrix = Matrix4::identity(); 
 
-	//if(camera) {
-	//	T3Matrix4 m = camera->BuildViewMatrix();
-	////	std::cout << "Renderer: View Matrix (T3): " << m << std::endl;
+	if(camera) {
+		T3Matrix4 m = camera->BuildViewMatrix();
+	//	std::cout << "Renderer: View Matrix (T3): " << m << std::endl;
 
-	//	viewMatrix = Matrix4::identity();
-	//	for (int x = 0; x < 4; ++x)
-	//		for (int y = 0; y < 4; ++y)
-	//			viewMatrix.setElem(x, y, m.values[y + x * 4]);
+		viewMatrix = Matrix4::identity();
+		for (int x = 0; x < 4; ++x)
+			for (int y = 0; y < 4; ++y)
+				viewMatrix.setElem(x, y, m.values[y + x * 4]);
 
 
-	//	/*std::cout << "Renderer: View Matrix (SCE): " << std::endl;
-	//	for (int x = 0; x < 4; ++x)
-	//	{
-	//		for (int y = 0; y < 4; ++y)
-	//		{
-	//			std::cout << viewMatrix.getElem(x,y) << ",";
-	//		}
-	//		std::cout << std::endl;
-	//	}*/
-	//}
-	//else{
-	//	viewMatrix = Matrix4::identity();
-	//}
+		/*std::cout << "Renderer: View Matrix (SCE): " << std::endl;
+		for (int x = 0; x < 4; ++x)
+		{
+			for (int y = 0; y < 4; ++y)
+			{
+				std::cout << viewMatrix.getElem(x,y) << ",";
+			}
+			std::cout << std::endl;
+		}*/
+	}
+	else{
+		viewMatrix = Matrix4::identity();
+	}
 
-	//basicShader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
+	basicShader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
 
-	//if(!sceneNodes.empty())
-	//{
-	//	//cout << "Renderer: scenenode list is not empty!" << endl;
-	//	vector<SceneNode*>::iterator i = sceneNodes.begin();
-	//	while(i != sceneNodes.end())
-	//	{
-	//		
-	//		DrawNode(*i);
-	//		cout << "Node: " << *i << " Drawn" << endl;
-	//	}
-	//}
-	//else 
-	//{
-	// cout << "Renderer: sceneNode list empty! Nothing to draw" << endl;
-	// 
-	//}
+	if(!sceneNodes.empty())
+	{
+		//cout << "Renderer: scenenode list is not empty!" << endl;
+		vector<SceneNode*>::iterator i = sceneNodes.begin();
+		while(i != sceneNodes.end())
+		{
+			
+			DrawNode(*i);
+			cout << "Node: " << *i << " Drawn" << endl;
+		}
+	}
+	else 
+	{
+	 cout << "Renderer: sceneNode list empty! Nothing to draw" << endl;
+	 
+	}
 
 	std::cout << "RenderScene: Swapping Buffers" << std::endl;
 	SwapBuffers();
