@@ -83,15 +83,15 @@ void MainMenu::LoadContent() {
 
 	newGame	= new UIButton(btnX, btnY, btnScaleX, btnScaleY, (void (GameScreen2D::*)()) &MainMenu::NewGameSelected, (void (GameScreen2D::*)(float, float)) &MainMenu::NewGameClicked, 
 				new DrawableTexture2D(btnX, btnY, 1, btnScaleX, btnScaleY, buttonTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
-				new DrawableText2D(btnX + btnOffsetX, btnY + btnOffsetY, 2.0f, charWidth, charHeight, "NEW GAME", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::NewGameDeselcted, this);
+				new DrawableText2D(btnX + btnOffsetX, btnY + btnOffsetY, 2, charWidth, charHeight, "NEW GAME", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::NewGameDeselcted, this);
 	
 	controls = new UIButton(btnX, btnY + 0.2f, btnScaleX, btnScaleY, (void (GameScreen2D::*)()) &MainMenu::ControlsSelcted, (void (GameScreen2D::*)(float, float)) &MainMenu::ControlsClicked, 
 				new DrawableTexture2D(btnX, btnY + 0.17f, 1, btnScaleX, btnScaleY, buttonTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
-				new DrawableText2D(btnX + btnOffsetX, btnY + 0.17f + btnOffsetY, 2.0f, charWidth, charHeight, "CONTROLS", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::ControlsDeselected, this);
+				new DrawableText2D(btnX + btnOffsetX, btnY + 0.17f + btnOffsetY, 2, charWidth, charHeight, "CONTROLS", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::ControlsDeselected, this);
 	
 	quitGame = new UIButton(btnX, btnY + 0.4f, btnScaleX, btnScaleY, (void (GameScreen2D::*)()) &MainMenu::QuitSelected, (void (GameScreen2D::*)(float, float)) &MainMenu::QuitClicked, 
 				new DrawableTexture2D(btnX, btnY + 0.34f, 1, btnScaleX, btnScaleY, buttonTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
-				new DrawableText2D(btnX + btnOffsetX, btnY + 0.34f + btnOffsetY, 2.0f, charWidth, charHeight, "QUIT GAME", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::QuitDeselected, this);
+				new DrawableText2D(btnX + btnOffsetX, btnY + 0.34f + btnOffsetY, 2, charWidth, charHeight, "QUIT GAME", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::QuitDeselected, this);
 	
 	float musicBtnWidth = 0.045f;
 	float musicBtnHeight = 0.089f;
@@ -101,11 +101,11 @@ void MainMenu::LoadContent() {
 
 	music = new UIButton(musicBtnX, musicBtnY, musicBtnWidth, musicBtnHeight, (void(GameScreen2D::*)()) &MainMenu::MusicSelected, (void (GameScreen2D::*)(float, float)) &MainMenu::MusicClicked,
 				new DrawableTexture2D(musicBtnX, musicBtnY, 1, musicBtnWidth, musicBtnHeight, musicNoMute, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
-				new DrawableText2D(musicBtnX, musicBtnY, 0.0f, 0.0f, 0.0f, "", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::MusicDeselected, this);
+				new DrawableText2D(musicBtnX, musicBtnY, 0, 0.0f, 0.0f, "", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::MusicDeselected, this);
 
 	sounds = new UIButton(musicBtnX, musicBtnY + musicBtnHeight, musicBtnWidth, musicBtnHeight, (void(GameScreen2D::*)()) &MainMenu::SoundSelected, (void (GameScreen2D::*)(float, float)) &MainMenu::SoundClicked,
 				new DrawableTexture2D(musicBtnX, musicBtnY + musicBtnHeight, 1, musicBtnWidth, musicBtnHeight, soundNoMute, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
-				new DrawableText2D(musicBtnX, musicBtnY + musicBtnHeight, 0.0f, 0.0f, 0.0f, "", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::SoundDeselected, this);
+				new DrawableText2D(musicBtnX, musicBtnY + musicBtnHeight, 0, 0.0f, 0.0f, "", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::SoundDeselected, this);
 
 	scoreBoard = new DrawableTexture2D(0.55f, 0.145f, 1, 0.35f, 0.75f, scoreBoardTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false);
 
@@ -127,7 +127,7 @@ void MainMenu::LoadContent() {
 	for (unsigned int i = 0; i < 10; i++) {
 		scoreBoardConn->GetName(i);
 		scores.push_back(pair<DrawableText2D*, DrawableText2D*>(new DrawableText2D(0.57f, 0.180f + (0.065f * i), 2, 0.12f, 0.065f, scoreBoardConn->GetName(i), font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
-			new DrawableText2D(0.75, 0.180 + (0.065 * i), 2, 0.12, 0.065, scoreBoardConn->GetScore(i), font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false)));
+			new DrawableText2D(0.75f, 0.180f + (0.065f * i), 2, 0.12f, 0.065f, scoreBoardConn->GetScore(i), font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false)));
 		AddDrawable(scores.back().first);
 		AddDrawable(scores.back().second);
 	}

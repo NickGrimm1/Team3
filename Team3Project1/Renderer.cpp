@@ -744,7 +744,7 @@ void Renderer::DrawSkybox() {
 	SetCurrentShader(cloudShader);
 
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), GL_TEXTURE0);
-	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), Window::GetWindow().GetTimer()->GetMS() / 100000.0f);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), (float) Window::GetWindow().GetTimer()->GetMS() / 100000.0f);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, cloudMap);

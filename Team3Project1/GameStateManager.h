@@ -78,7 +78,7 @@ public:
 		while (instance->isRunning) {
 #ifdef WINDOWS_BUILD
 			while (Window::GetWindow().GetTimer()->GetMS() - instance->lastUpdate < GAME_FRAME_TIME) { ; }
-			instance->lastUpdate = Window::GetWindow().GetTimer()->GetMS();
+			instance->lastUpdate = (float) Window::GetWindow().GetTimer()->GetMS();
 			Window::GetWindow().UpdateWindow();
 #endif
 			for (unsigned int i = 0; i < gameScreens.size(); i++) {
