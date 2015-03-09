@@ -46,7 +46,7 @@ MainMenu::~MainMenu(void)
 }
 
 void MainMenu::LoadContent() {
-	MenuScreen3D* wallpaper = new MenuScreen3D();
+	wallpaper = new MenuScreen3D();
 	GameStateManager::AddGameScreen(wallpaper);
 
 	Font* font = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"quadrats.tga", 16, 16);
@@ -130,6 +130,7 @@ void MainMenu::UnloadContent() {
 	RemoveClickable(sounds);
 
 	RemoveDrawable(scoreBoard);
+	RemoveDrawable(pressStart);
 
 	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/button.png");
 	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/button_selected.png");
@@ -150,6 +151,8 @@ void MainMenu::UnloadContent() {
 	GameStateManager::Assets()->UnloadFont(this, TEXTUREDIR"tahoma.tga");
 }
 
+
+
 /*--------------------Clicked Methods--------------------*/
 
 void MainMenu::NewGameClicked(float x, float y) {
@@ -157,7 +160,11 @@ void MainMenu::NewGameClicked(float x, float y) {
 #if WINDOWS_BUILD
 	GameStateManager::Graphics()->EnableMousePointer(false);
 #endif
+	GameStateManager::Instance()->RemoveGameScreen(wallpaper);
+	GameStateManager::Instance()->RemoveGameScreen(this);
+
 	RacerGame* game = new RacerGame();
+	GameStateManager::Physics()->SetGame(game);
 	GameStateManager::Instance()->ChangeScreen(game);
 }
 

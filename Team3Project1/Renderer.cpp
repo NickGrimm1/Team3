@@ -350,9 +350,11 @@ void Renderer::RenderScene() {
 	//Draw HUD/Menu overlay
 	Draw2DOverlay();
 
-	projMatrix = perspectiveMatrix;
-	viewMatrix = camera->BuildViewMatrix();
-	modelMatrix.ToIdentity();
+	if (camera) {
+		projMatrix = perspectiveMatrix;
+		viewMatrix = camera->BuildViewMatrix();
+		modelMatrix.ToIdentity();
+	}
 
 	SwapBuffers();
 	wglMakeCurrent(deviceContext, NULL);

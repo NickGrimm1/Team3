@@ -320,6 +320,7 @@ public:
 		gameScreen->LoadContent();
 		Instance()->gameScreens.push_back(gameScreen);
 	}
+
 	/**
 	<summary>Removes the first instance of a screen from the stack without clearing it. Useful for removing pause & loading screens.</summary>
 	<param name='gameScreen'>The GameScreen to remove.</param>

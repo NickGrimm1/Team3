@@ -161,12 +161,12 @@ void GraphicsEngine::Run() {
 			T3Matrix4 viewMatrix = camera->BuildViewMatrix();
 			T3Matrix4 projMatrix = T3Matrix4::Perspective(1.0f, 10000.0f, (float) width / (float) height, 45.0f);
 			frameFrustum.FromMatrix(projMatrix * viewMatrix);
-		}
-
-		// Build Node lists
-		BuildNodeLists(sceneRoot);
-		SortNodeLists();
 		
+
+			// Build Node lists
+			BuildNodeLists(sceneRoot);
+			SortNodeLists();
+		}
 		// Update directional lights with scene bounding box
 		// Transform bounding volume by camera transform
 		DirectionalLight::UpdateLightVolume(boundingMin, boundingMax);
@@ -332,8 +332,10 @@ void GraphicsEngine::RemoveLight(Light* light) {
 
 void GraphicsEngine::SetCamera(Camera* cam)
 {
+	contentGuard.lock_mutex();
 	camera = cam;
 	renderer->SetCamera(cam);
+	contentGuard.unlock_mutex();
 }
 
 bool GraphicsEngine::LoadContent()
