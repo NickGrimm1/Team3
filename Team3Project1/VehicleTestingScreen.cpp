@@ -170,7 +170,9 @@ void VehicleTestingScreen::LoadContent() {
 	camera->SetPosition(T3Vector3(0,10.0f, 80.0f));
 	//camera->SetYaw(180.0f);
 	GameStateManager::Graphics()->SetCamera(camera);
+#if WINDOWS_BUILD
 	GameStateManager::Audio()->SetListener(car);
+#endif
 }
 
 void VehicleTestingScreen::Update() { 
