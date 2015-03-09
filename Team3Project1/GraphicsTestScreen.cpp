@@ -235,7 +235,7 @@ void GraphicsTestScreen::UnloadContent()
 	//
 	// RemoveDrawable() etc will also be called automatically upon destruction so calling it is uneccessary.
 
-	delete track;
+	//delete track;
 
 	GameStateManager::Assets()->UnloadQuad(this);
 	GameStateManager::Assets()->UnloadCylinder(this, 20);
