@@ -296,6 +296,7 @@
     <ClInclude Include="Gold_cion.h" />
     <ClInclude Include="GraphicsTestScreen.h" />
     <ClInclude Include="Heightmap.h" />
+    <ClInclude Include="HighScore.h" />
     <ClInclude Include="HudTestScreen.h" />
     <ClInclude Include="LoadedFont.h" />
     <ClInclude Include="LoadedMesh.h" />
@@ -397,6 +398,7 @@
     <ClCompile Include="GraphicsEnginePS3.cpp" />
     <ClCompile Include="GraphicsTestScreen.cpp" />
     <ClCompile Include="HeightMap.cpp" />
+    <ClCompile Include="HighScore.cpp" />
     <ClCompile Include="HudTestScreen.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LoadingScreen.cpp" />
