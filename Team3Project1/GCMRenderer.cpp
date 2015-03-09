@@ -326,7 +326,9 @@ void	GCMRenderer::SetCurrentShader(Shader* s) {
 }
 
 //Sets the camera. Can be NULL
-void	GCMRenderer::SetCamera(Camera* c) {
+void	GCMRenderer::SetCamera(Camera* c) 
+{
+	std::cout << "GCMRenderer: Set Camera" << c->BuildViewMatrix() << std::endl;
 	camera = c;
 }
 
@@ -364,8 +366,8 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		cout << "GCMRenderer: Have drawable entity" << endl;
 		DrawableEntity3D& entity = *n->GetDrawableEntity();
 		cout << "GCMRenderer: initialised entity" << endl;
-		T3Matrix4 transform = //n->GetTransform();
-			Quaternion::EulerAnglesToQuaternion(90, 0, 0).ToMatrix() * T3Matrix4::Scale(T3Vector3(1000,1000,1));
+		T3Matrix4 transform = n->GetTransform();
+			//Quaternion::EulerAnglesToQuaternion(90, 0, 0).ToMatrix() * T3Matrix4::Scale(T3Vector3(1000,1000,1));
 		cout << "GCMRenderer: set a transform matrix" << endl;
 
 
@@ -390,7 +392,7 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		
 		cout << "GCMRenderer: turned that matrix into a PS3 matrix " << endl; 
 		
-		/*std::cout << "Transform (SCE): " << std::endl;
+		std::cout << "Transform (SCE): " << std::endl;
 		for (int x = 0; x < 4; ++x)
 		{
 			for (int y = 0; y < 4; ++y)
@@ -398,7 +400,7 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 				std::cout << m.getElem(x,y) << ",";
 			}
 			std::cout << std::endl;
-		}*/
+		}
 		//shader = entity.GetShader();
 		shader->GetVertex()->SetParameter("modelMat", m);
 		cout << "GCMRenderer: set the shader" << endl;

@@ -122,6 +122,7 @@ void MainMenu::LoadContent() {
 	AddDrawable(pressStart);
 
 	// Load Scoreboard
+#if WINDOWS
 	scoreBoardConn = new Scoreboard();
 	scoreBoardConn->RetrieveScoreboard();
 	for (unsigned int i = 0; i < 10; i++) {
@@ -131,7 +132,7 @@ void MainMenu::LoadContent() {
 		AddDrawable(scores.back().first);
 		AddDrawable(scores.back().second);
 	}
-
+#endif
 }
 
 void MainMenu::UnloadContent() {
