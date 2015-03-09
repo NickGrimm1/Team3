@@ -82,7 +82,7 @@ private:
 
 	bool musicMuted;
 	bool soundMuted;
-
+	MenuScreen3D* wallpaper;
 	DrawableText2D* pressStart;
 	GamepadEvents::PlayerIndex playerOne;
 

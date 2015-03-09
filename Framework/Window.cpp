@@ -125,7 +125,7 @@ Window::Window(std::string title, int sizeX, int sizeY, bool fullScreen)	{
 	//if(!timer) {
 		timer		= new GameTimer();
 	//}
-	elapsedMS	= timer->GetMS();
+	elapsedMS	= (float) timer->GetMS();
 
 	Window::GetMouse()->SetAbsolutePositionBounds((unsigned int)size.x,(unsigned int)size.y);
 
@@ -168,7 +168,7 @@ void	Window::SetRenderer(OGLRenderer* r)	{
 bool	Window::UpdateWindow() {
 	MSG		msg;
 
-	float diff = timer->GetMS()-elapsedMS;
+	float diff = (float) timer->GetMS()-elapsedMS;
 
 
 	while(PeekMessage(&msg,windowHandle,0,0,PM_REMOVE)) {
@@ -177,7 +177,7 @@ bool	Window::UpdateWindow() {
 
 	Window::GetKeyboard()->UpdateHolds();
 
-	elapsedMS = timer->GetMS();
+	elapsedMS = (float) timer->GetMS();
 
 	return !forceQuit;
 }
@@ -199,7 +199,7 @@ void Window::CheckMessages(MSG &msg)	{
 			GetRawInputData((HRAWINPUT)msg.lParam, RID_INPUT, lpb, &dwSize,sizeof(RAWINPUTHEADER));
 			RAWINPUT* raw = (RAWINPUT*)lpb;
 
-			float diff = timer->GetMS()-elapsedMS;
+			float diff = (float) timer->GetMS()-elapsedMS;
 
 			if (keyboard && raw->header.dwType == RIM_TYPEKEYBOARD) {
 				Window::GetKeyboard()->Update(raw, diff);

@@ -26,8 +26,8 @@ void InputManager::ThreadRun()
 	{
 #if WINDOWS_BUILD
 		while (Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp < INPUT_TIME) { ; } // Fix the timestep
-		float msec = Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp;
-		lastFrameTimeStamp = Window::GetWindow().GetTimer()->GetMS();
+		float msec = (float) Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp;
+		lastFrameTimeStamp = (float) Window::GetWindow().GetTimer()->GetMS();
 #endif
 #if PS3_BUILD
 		float msec = 16.6f; // TODO: Get the timer for this

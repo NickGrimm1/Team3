@@ -68,6 +68,7 @@ void GameScreen2D::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseBut
 					{
 						// If it is, calculate relative co-ords of click and call Click(x, y)
 						clickables[i]->Click((position.x - clickables[i]->x) / clickables[i]->width, (position.y - clickables[i]->y) / clickables[i]->height);
+						return;
 					}
 				}
 			}
@@ -171,7 +172,7 @@ void GameScreen2D::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEven
 					if (currentSelected < 0)
 						currentSelected = selectables.size() - 1;
 				}
-				for (int i = 0; i < selectables.size(); ++i)
+				for (unsigned int i = 0; i < selectables.size(); ++i)
 					selectables[i]->UnSelect();
 				selectables[currentSelected]->Select();
 			}

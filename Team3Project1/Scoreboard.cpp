@@ -31,7 +31,7 @@ bool Scoreboard::RetrieveScoreboard() {
 
 	char buffer[1024];
 	// Send Message Request
-	sprintf(buffer, 
+	sprintf_s(buffer, 1024, 
 		"GET /getScores.php HTTP/1.1\r\n"
 	    "Host: %s\r\n"
 	    "User-Agent: Mozilla Firefox/4.0\r\n"
@@ -97,7 +97,7 @@ bool Scoreboard::PostScore(string name, unsigned int score) {
 	if (!ConnectToScoreboard()) return false;
 
 	char buffer[1024];
-	sprintf(buffer,
+	sprintf_s(buffer, 1024,
     "GET /postScore.php?n=%s&s=%d HTTP/1.1\r\n"
     "Host: %s\r\n"
     "User-Agent: Mozilla Firefox/4.0\r\n"
