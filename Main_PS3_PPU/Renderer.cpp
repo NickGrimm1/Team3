@@ -70,11 +70,13 @@ void Renderer::RenderScene() {
 	cellGcmSetCullFaceEnable(CELL_GCM_FALSE);
 	cellGcmSetFrontFace(CELL_GCM_CW);
 
-	modelMatrix = Matrix4::identity(); 
+	
 
-	if(camera) {
+	if(camera) 
+	{
+		std::cout << "Renderer: Has Camera" << std::endl;
 		T3Matrix4 m = camera->BuildViewMatrix();
-	//	std::cout << "Renderer: View Matrix (T3): " << m << std::endl;
+		std::cout << "Renderer: View Matrix (T3): " << m << std::endl;
 
 		viewMatrix = Matrix4::identity();
 		for (int x = 0; x < 4; ++x)
@@ -82,7 +84,7 @@ void Renderer::RenderScene() {
 				viewMatrix.setElem(x, y, m.values[y + x * 4]);
 
 
-		/*std::cout << "Renderer: View Matrix (SCE): " << std::endl;
+		std::cout << "Renderer: View Matrix (SCE): " << std::endl;
 		for (int x = 0; x < 4; ++x)
 		{
 			for (int y = 0; y < 4; ++y)
@@ -90,23 +92,24 @@ void Renderer::RenderScene() {
 				std::cout << viewMatrix.getElem(x,y) << ",";
 			}
 			std::cout << std::endl;
-		}*/
+		}
 	}
 	else{
 		viewMatrix = Matrix4::identity();
 	}
 
+	modelMatrix = Matrix4::identity();
 	basicShader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
 
 	if(!sceneNodes.empty())
 	{
-		//cout << "Renderer: scenenode list is not empty!" << endl;
+		cout << "Renderer: scenenode list is not empty!" << endl;
 		vector<SceneNode*>::iterator i = sceneNodes.begin();
 		while(i != sceneNodes.end())
-		{
-			
+		{		
 			DrawNode(*i);
 			cout << "Node: " << *i << " Drawn" << endl;
+			i++;
 		}
 	}
 	else 

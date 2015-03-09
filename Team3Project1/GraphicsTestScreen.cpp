@@ -216,7 +216,7 @@ void GraphicsTestScreen::LoadContent() {
 	AddDrawable(myEnt);
 
 	//SetPlayer(ent);
-	camera = new FreeCamera();//ChaseCamera(ent, T3Vector3(0, 2, 50), 0, 0, 0);
+	camera = new FreeCamera();//ChaseCamera(myEnt, T3Vector3(0, 2, 50), 0, 0, 0);
 	camera->SetPosition(T3Vector3(0,10,80));
 	
 	SetCamera(camera);
