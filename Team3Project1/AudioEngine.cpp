@@ -38,8 +38,9 @@
 	 context = alcCreateContext ( device , NULL );
 	 alcMakeContextCurrent ( context );
 
-//	 alDistanceModel (AL_NONE);// AL_LINEAR_DISTANCE_CLAMPED );
+//	 alDistanceModel (AL_NONE);
 	 alDistanceModel (AL_LINEAR_DISTANCE_CLAMPED );
+
 	 
 	 for ( unsigned int i = 0; i < channels ; ++ i ) {
 		 ALuint source ;
@@ -82,18 +83,17 @@
 
  void AudioEngine :: UpdateListener () {
 	 if( listener ) {
-		 //T3Vector3 worldPos = listener->GetOriginPosition();
-		 T3Vector3 worldPos = listenerTransform.GetPositionVector ();//T3Vector3(0,0,10);
-		 listener->SetOriginPosition(worldPos);
+		 listenerTransform = T3Matrix4::Translation(listener->GetOriginPosition()) * listener->GetRotation().ToMatrix();
+		 T3Vector3 worldPos = listener->GetOriginPosition();
 		 T3Vector3 dirup [2];
 		 // forward
-		 dirup [0].x = 0;//- listenerTransform.values [2];
-		 dirup [0].y = 0;//- listenerTransform.values [6];
-		 dirup [0].z = 1;//- listenerTransform.values [10];
+		 dirup [0].x = - listenerTransform.values [2];
+		 dirup [0].y = - listenerTransform.values [6];
+		 dirup [0].z = - listenerTransform.values [10];
 		 // Up
-		 dirup [1].x = 0;//listenerTransform.values [1];
-		 dirup [1].y = 1;//listenerTransform.values [5];
-		 dirup [1].z = 0; //listenerTransform.values [9];
+		 dirup [1].x = listenerTransform.values [1];
+		 dirup [1].y = listenerTransform.values [5];
+		 dirup [1].z = listenerTransform.values [9];
 
 		 alListenerfv ( AL_POSITION ,( float *)& worldPos );
 		 alListenerfv ( AL_ORIENTATION ,( float *)& dirup );
@@ -103,17 +103,10 @@
  
  void AudioEngine :: Update(float msec) {
 	 alcMakeContextCurrent(context);
-	 //Vehicle *car = new Vehicle(5);
-	 T3Matrix4 tempMatrix = T3Matrix4();
-	 tempMatrix.ToIdentity();
-	 //T3Vector3 Carpostion=car->GetPlayer()->GetOriginPosition();
-	 //listener->SetOriginPosition(Carpostion);
-	 listener->SetOriginPosition(T3Vector3(10,0,0));
-	 tempMatrix.SetPositionVector(listener->GetOriginPosition());
-	 listenerTransform = tempMatrix;
+
 	 UpdateListener ();
 	 
-	 CullNodes ();
+	
 	 if (temporaryEmitters.size() > 0) {
 		UpdateTemporaryEmitters ( msec ); 
 	 }
@@ -122,7 +115,8 @@
 		 (* i ) -> Update ( msec );
 	 }
 
-	
+
+	 CullNodes ();
 	 if( frameEmitters.size () > sources.size ()) {
 		 std :: sort ( frameEmitters.begin () , frameEmitters.end () ,SoundEmitter :: CompareNodesByPriority );//Sort the remaining nodes by their priority
 
@@ -152,40 +146,72 @@
 	 }
  }
 
-
- void AudioEngine :: PlaySoundA ( Sound * s , T3Vector3 position ) {
+  void AudioEngine :: PlaySound ( Sound * s , T3Vector3 position , bool isLooping) {
 	// alcMakeContextCurrent(context);
 	 SoundEmitter * n = new SoundEmitter ();
 	 T3Matrix4 tempmatrix = T3Matrix4();
 	 tempmatrix.ToIdentity();
 	 tempmatrix.SetPositionVector(position);
 	 n -> SetTransform(tempmatrix);
-	 n -> SetLooping ( false );
+	 n -> SetLooping ( isLooping );
+	 n -> SetIsGlobal( false );
+	 n -> SetSound ( s ); 
+	 n -> SetRadius(50.0f);
+
+	 if (isLooping) {
+		 emitters.push_back(n);
+	 }
+	 else {
+		 temporaryEmitters.push_back ( n );
+	 }
+	 // alcMakeContextCurrent(NULL);
+ }
+
+ void AudioEngine :: PlaySound ( Sound * s , DrawableEntity3D* entity , bool isLooping) {
+	// alcMakeContextCurrent(context);
+	 SoundEmitter * n = new SoundEmitter ();
+	 T3Matrix4 tempmatrix = T3Matrix4();
+	 tempmatrix.ToIdentity();
+	 tempmatrix.SetPositionVector(entity->GetOriginPosition());
+	 n -> SetTransform(tempmatrix);
+	 n -> SetLooping ( isLooping );
 	 n -> SetIsGlobal( false );
 	 n -> SetSound ( s ); 
 	 n -> SetRadius(10.0f);
-	 temporaryEmitters.push_back ( n );
-	// alcMakeContextCurrent(NULL);
+	 n -> SetTarget(entity);
+
+	 if (isLooping) {
+		 emitters.push_back(n);
+	 }
+	 else {
+		 temporaryEmitters.push_back ( n );
+	 }
+	 // alcMakeContextCurrent(NULL);
  }
 
- void AudioEngine :: PlaySoundW ( Sound * s , SoundPriority p) {
+ void AudioEngine :: PlaySound ( Sound * s , SoundPriority p, bool isLooping) {
 	 //alcMakeContextCurrent(context);
 	 SoundEmitter * n = new SoundEmitter ();
-	 n -> SetLooping ( true );
+	 n -> SetLooping ( isLooping );
 	 n -> SetSound ( s );
 	 n -> SetIsGlobal ( true );
 	 n -> SetPriority ( p );
-	 n -> SetVolume(1.0f);
-	 n -> SetRadius(0.0f);
-	 temporaryEmitters.push_back ( n );
-	// alcMakeContextCurrent(NULL);
+	 //n -> SetVolume(1.0f);
+	 //n -> SetRadius(0.0f);
+ 	 if (isLooping) {
+			emitters.push_back ( n );
+	 }
+	 else {
+		    temporaryEmitters.push_back(n);
+	 }
+		// alcMakeContextCurrent(NULL);
  }
 
 
  void	AudioEngine::CullNodes() {
-	//for(vector<SoundEmitter*>::iterator i = emitters.begin(); i != emitters.end();) {
+	//for(vector<SoundEmitter*>::iterator i = frameEmitters.begin(); i != emitters.end();) {
 
-	  for(vector<SoundEmitter*>::iterator i = temporaryEmitters.begin(); i != temporaryEmitters.end();) {
+	  for(vector<SoundEmitter*>::iterator i = frameEmitters.begin(); i != frameEmitters.end();) {
 
 		float length;
 
@@ -199,8 +225,7 @@
 		
 		if(length > (*i)->GetRadius() || !(*i)->GetSound() || (*i)->GetTimeLeft() < 0) {
 			(*i)->DetachSource();	//Important!
-			//= emitters.erase(i);
-			i = temporaryEmitters.erase(i);
+			i = frameEmitters.erase(i);
 		}
 		else{
 			++i;

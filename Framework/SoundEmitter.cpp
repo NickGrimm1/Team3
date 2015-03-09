@@ -5,11 +5,13 @@
  SoundEmitter :: SoundEmitter ( void ) {
 	Reset ();
 	pitch = 1;
+	target = NULL;
  }
  SoundEmitter :: SoundEmitter ( Sound * s ) {
 	 Reset ();
 	 SetSound ( s );
 	 pitch = 1;
+	 target = NULL;
  }
 
  void SoundEmitter :: Reset () {
@@ -23,6 +25,7 @@
 	 // We ’re adding stuff to the existing constructor !!!
 	 streamPos = 0;
 	 isGlobal = false ;
+	 target = NULL;
 	 for( unsigned int i = 0; i < NUM_STREAM_BUFFERS ; ++ i ) {
 		streamBuffers [ i ] = 0;
 	 }
@@ -130,7 +133,7 @@
 
 		 else{
 			 if( target ) {
-				pos = T3Vector3(0,0,0);//target -> GetWorldTransform ().GetPositionVector ();// set sound source's current position
+				pos = target ->GetOriginPosition();// set sound source's current position
 						  }
 			 else {
 				pos = this -> position ;

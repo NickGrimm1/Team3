@@ -15,7 +15,7 @@ public:
 	virtual void LoadContent();
 	virtual void UnloadContent() {}
 	virtual void Update();
-
+	Vehicle* GetCar(){return car;}
 
 	// Input Listener methods - not implemented
 	virtual void MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position) {};
@@ -25,6 +25,7 @@ public:
 	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button) {};
 	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) {};
 	
+
 	float f;
 	int Speed_Player;
 	float Speed_Rotate;
