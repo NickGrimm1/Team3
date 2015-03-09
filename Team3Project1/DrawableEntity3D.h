@@ -8,7 +8,10 @@ Version: 0.0.5 10/02/2015.</summary>
 #include "Mesh.h"
 #include "Texture.h"
 #include "ShaderPart.h"
+
 class Mesh;
+class Texture;
+
 class DrawableEntity3D
 {
 public:
@@ -18,7 +21,7 @@ public:
 	<param name='shader'>The shader to use.</param>
 	<param name='texture'>The texture to use.</param>
 	<param name='bumpTexture'>The bump map to use.</param>
-	<param name='boundingRadius'>The bounding radius of the object. Denotes the object's maximumimum size for view frustrum culling.</param>
+	<param name='boundingRadius'>The bounding radius of the object. Denotes the object's maximum size for view frustrum culling.</param>
 	<param name='origin'>The origin position of the model in world space relative to its parent. Default is (0, 0, 0).</param>
 	<param name='rotation'>The rotation of the model in world space relative to its parent. Default is (0, 0, 0).</param>
 	<param name='scale'>The scale of the model in world space relative to its parent. Default is (0, 0, 0).</param>
@@ -29,16 +32,6 @@ public:
 		: mesh(mesh), shader(shader), texture(texture), origin(origin), rotation(rotation), scale(scale), boundingRadius(boundingRadius), bumpTexture(bumpTexture)
 	{ }
 
-
-
-
-
-
-
-
-
-
-	
 	/**
 	<summary>Gets the model mesh for this entity.</summary>
 	*/
@@ -128,6 +121,10 @@ public:
 	<param name='value'>The amount to scale by.</param>
 	*/
 	void AddScale(const T3Vector3& amount) { scale += amount; }
+
+	T3Vector3 GetRight() { return rotation.ToMatrix() * T3Vector3::UnitX(); }
+	T3Vector3 GetUp() { return rotation.ToMatrix() * T3Vector3::UnitY(); }
+	T3Vector3 GetForward() { return rotation.ToMatrix() * -T3Vector3::UnitZ(); }
 protected:
 	Mesh* mesh;
 	Shader* shader;

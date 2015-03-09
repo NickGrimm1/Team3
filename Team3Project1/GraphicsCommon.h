@@ -24,6 +24,7 @@
 #define RENDER_HZ 60
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
+
 #define GAME_TITLE "Team^3 - Endless Racer"
 
 // Debug settings

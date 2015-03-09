@@ -9,7 +9,7 @@
 	 freqRate = 0;
 	 length = 0;
 	 data = NULL ;
-	 streaminimumg = false ;
+	 streaming = false ;
  }
 
  Sound ::~ Sound ( void ) {

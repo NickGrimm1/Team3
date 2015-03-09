@@ -16,7 +16,7 @@ Version: 0.0.1 03/02/2015.</summary>
 #include <algorithm> 
 
 using std::vector;
-
+class RacerGame;
 class PhysicsEngine : public Thread
 {
 	// TODO: Implement Physics Engine.
@@ -35,8 +35,15 @@ public:
 			delete instance;
 		instance = NULL;
 	}
+
+#if WINDOWS_BUILD
 	void Run();
-	void Terminimumate() { isRunning = false; }
+#endif
+#if PS3_BUILD
+	static void Run(uint64_t arg);
+#endif
+
+	void Terminate() { isRunning = false; }
 
 	void		BroadPhaseCollisions();
 	void        SortandSweep();
@@ -56,7 +63,14 @@ public:
 	bool GJK(PhysicsNode& shape1,PhysicsNode& shape2);
 	bool containsOrigin( T3Vector3& dir);
     bool CollisionDetection(PhysicsNode& shape1,PhysicsNode& shape2);
+	bool EPA(PhysicsNode& shape1, PhysicsNode& shape2, CollisionData* data);
+	void barycentric(const T3Vector3 &p, const T3Vector3 &a, const T3Vector3 &b, const T3Vector3 &c, float *x, float *y, float *z);
 	
+	//sam
+	bool   check;
+	static void SetGame(RacerGame * g) { instance->gameClass = g; }
+	//sam
+
     vector<T3Vector3> worldpoints1;
     vector<T3Vector3> worldpoints2;
 
@@ -72,13 +86,26 @@ public:
 
 	void	RemoveDebugDraw(DebugDrawer* d);
 
+	void OnCollision(PhysicsNode& p1, PhysicsNode& p2);
+
 	void    DrawDebug();
 private:
+#if WINDOWS_BUILD
 	PhysicsEngine()
 		: PHYSICS_TIME(1000.0f / 120)
 	{
 		frameRate = 0;
+		check=true;
 	}
+#endif
+#if PS3_BUILD
+	PhysicsEngine()
+		: Thread(Run), PHYSICS_TIME(1000.0f / 120)
+	{
+		frameRate = 0;
+	}
+#endif
+
 	~PhysicsEngine() { }
 	static PhysicsEngine* instance;
 
@@ -90,4 +117,7 @@ private:
 	const float PHYSICS_TIME;
 	float lastFrameTimeStamp;
 	int frameRate;
+
+	void ThreadRun();
+	RacerGame* gameClass;
 };

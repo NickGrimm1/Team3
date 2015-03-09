@@ -31,25 +31,25 @@ void AssetManager::Destroy()
 	{
 		map<string, LoadedTexture>::iterator i = instance->loadedTextures.begin();
 		delete (*i).second.texture;
-		instance->loadedTextures.erase(i);
+		i = instance->loadedTextures.erase(i);
 	}
 	while (!instance->loadedMeshes.empty()) 
 	{
 		map<string, LoadedMesh>::iterator i = instance->loadedMeshes.begin();
 		delete (*i).second.mesh;
-		instance->loadedMeshes.erase(i);
+		i = instance->loadedMeshes.erase(i);
 	}
 	while (!instance->loadedShaders.empty())
 	{
 		map<string, LoadedShader>::iterator i = instance->loadedShaders.begin();
 		delete (*i).second.shader;
-		instance->loadedShaders.erase(i);
+		i = instance->loadedShaders.erase(i);
 	}
 	while (!instance->loadedShaderParts.empty())
 	{
 		map<string, LoadedShaderPart>::iterator i = instance->loadedShaderParts.begin();
 		delete (*i).second.shaderPart;
-		instance->loadedShaderParts.erase(i);
+		i = instance->loadedShaderParts.erase(i);
 	}
 	GameStateManager::Graphics()->DropRenderContext();
 
@@ -78,12 +78,14 @@ Texture* AssetManager::LoadTexture(void* callerID, string filePath, unsigned int
 		// Load this texture in...
 		GameStateManager::Graphics()->GetRenderContext();
 		Texture* newTexture = new Texture(filePath, flags);
+#if WINDOWS_BUILD
 		if (newTexture->GetTextureName() == 0)
 		{
 			delete newTexture;
 			GameStateManager::Graphics()->DropRenderContext();
 			return NULL;
 		}
+#endif
 		newTexture->SetRepeating(true);
 		GameStateManager::Graphics()->DropRenderContext();
 		loadedTextures.insert(pair<string, LoadedTexture>(filePath, LoadedTexture(newTexture, callerID)));
@@ -652,7 +654,7 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 			loadedShaderParts.insert(pair<string, LoadedShaderPart>(fragmentShaderFilePath, LoadedShaderPart(fragmentShader, newShader)));
 			
 		}
-
+#if WINDOWS_BUILD
 		if (geometryShaderFilePath != "")
 		{
 			j = loadedShaderParts.find(geometryShaderFilePath);
@@ -675,6 +677,7 @@ Shader* AssetManager::LoadShader(void* callerID, string vertexShaderFilePath, st
 		}
 		else
 			geometryShader = NULL;
+#endif
 
 		// Load this Shader
 		newShader->SetVertex(vertexShader);
@@ -804,7 +807,12 @@ Font* AssetManager::LoadFont(void* callerID, string filePath, unsigned int xCoun
 		// Load this font in...
 		//GameStateManager::Graphics()->GetRenderContext();
 		Font* newFont = new Font(xCount, yCount);
+#if WINDOWS_BUILD
 		newFont->SetTexture(LoadTexture(newFont, filePath, SOIL_FLAG_COMPRESS_TO_DXT));
+#endif
+#if PS3_BUILD
+		newFont->SetTexture(LoadTexture(newFont, filePath, 0));
+#endif
 		//GameStateManager::Graphics()->DropRenderContext();
 		loadedFonts.insert(pair<string, LoadedFont>(filePath, LoadedFont(newFont, callerID)));
 		return newFont;
@@ -841,6 +849,8 @@ void AssetManager::UnloadFont(void* callerID, string filePath)
 
 Mesh* AssetManager::LoadHeightmap(void* callerID, string filename, bool useTextureWeights)
 {
+/*Broken For PS3*/
+#if WINDOWS_BUILD //TODO : Fix For PS3
 	// Check if this mesh is already loaded
 	map<string, LoadedMesh>::iterator i = loadedMeshes.find(filename);
 	if (i != loadedMeshes.end())
@@ -863,11 +873,12 @@ Mesh* AssetManager::LoadHeightmap(void* callerID, string filename, bool useTextu
 		meshMemory += loadedMeshes[filename].mesh->GetMemoryUsage();
 		return loadedMeshes[filename].mesh;
 	}
+#endif
 }
 Mesh* AssetManager::LoadHeightmap(unsigned char minHeight, unsigned char maxHeight, bool useTextureWeights)
 {
 	GameStateManager::Graphics()->GetRenderContext();
-	Mesh* mesh = new HeightMap("", minHeight, maxHeight, useTextureWeights);
+	Mesh* mesh = new HeightMap("", useTextureWeights, minHeight, maxHeight);
 	GameStateManager::Graphics()->DropRenderContext();
 	generatedHeightmaps.push_back(mesh);
 	meshMemory += mesh->GetMemoryUsage();

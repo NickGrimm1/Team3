@@ -11,26 +11,32 @@ _-_-_-_-_-_-_-|   /\_/\   NYANYANYAN
 _-_-_-_-_-_-_-""  ""   
 
 *//////////////////////////////////////////////////////////////////////////////
-#if WINDOWS_BUILD
 #pragma once
-
+#if WINDOWS_BUILD
 #include "Windows.h"
+#endif
+#if PS3_BUILD
+#include <sys/sys_time.h>
+#endif
 
 class GameTimer	{
 public:
-	GameTimer(void);
-	~GameTimer(void) {}
+	GameTimer();
+	~GameTimer() { }
 
 	//How many milliseconds have passed since the GameTimer was created
-	float	GetMS();
-
+	double	GetMS();
 	//How many milliseconds have passed since GetTimedMS was last called
-	float	GetTimedMS();
+	double	GetTimedMS();
 
 protected:
+	double lastTime; //Last time GetTimedMS was called
+#if WINDOWS_BUILD
 	LARGE_INTEGER	start;			//Start of timer
 	LARGE_INTEGER	frequency;		//Ticks Per Second
-
-	float lastTime;					//Last time GetTimedMS was called
-};
 #endif
+#if PS3_BUILD
+	system_time_t GetTime();
+	system_time_t startTime;
+#endif				
+};

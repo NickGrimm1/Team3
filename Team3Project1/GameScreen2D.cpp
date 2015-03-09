@@ -26,7 +26,7 @@ void GameScreen2D::AddDrawable(DrawableEntity2D* drawable, bool autoScreenDeviat
 <summary>Removes a drawable entity. Idempotent.</summary>
 <param name="drawable">The entity.</param>
 */
-void GameScreen2D::RemoveDrawable(DrawableEntity2D* drawable)
+void GameScreen2D::RemoveDrawable(DrawableEntity2D* drawable, bool del)
 {
 	for (vector<DrawableEntity2D*>::iterator i = drawables.begin(); i != drawables.end(); i++)
 	{
@@ -37,13 +37,14 @@ void GameScreen2D::RemoveDrawable(DrawableEntity2D* drawable)
 			else if (drawable->GetType() == DrawableType::Text)
 				GameStateManager::Graphics()->RemoveDrawableTextFromScene((DrawableText2D*)drawable);
 
-			drawables.erase(i);
+			i = drawables.erase(i);
 			break;
 		}
 	}
-	RemoveEntity(drawable);
+	RemoveEntity(drawable, del);
 }
 
+#if WINDOWS_BUILD
 /**
 <summary>Notifies all screens in the stack of a mouse event.</summary>
 <param name='type'>The event type.</param>
@@ -67,6 +68,7 @@ void GameScreen2D::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseBut
 					{
 						// If it is, calculate relative co-ords of click and call Click(x, y)
 						clickables[i]->Click((position.x - clickables[i]->x) / clickables[i]->width, (position.y - clickables[i]->y) / clickables[i]->height);
+						return;
 					}
 				}
 			}
@@ -79,20 +81,29 @@ void GameScreen2D::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseBut
 <param name='start'>The resolution independent co-ordinates of the mouse cursor at the start of the frame.</param>
 <param name='finish'>The resolution independent co-ordinates of the mouse cursor at the end of the frame.</param>
 */
-void GameScreen2D::MouseMoved(T3Vector2& finish)
+void GameScreen2D::MouseMoved(T3Vector2& start, T3Vector2& finish)
 {
+	bool selected = false;
 	// Check if input is being accepted
 	if (inputEnabled)
 	{
 		// Check if input is within screen bounds
 		if (MathHelper::Contains(finish, *this))
 		{
+			// Unselect everything
+			for (unsigned int i = 0; i < selectables.size(); ++i)
+			{
+				selectables[i]->UnSelect();
+			}
+
 			// Check if the finish location is within bounds of a selectable
-			for (unsigned int i = 0; i < selectables.size(); i++)
+			for (unsigned int i = 0; i < selectables.size(); ++i)
 			{
 				// If it is, call Select()
-				selectables[i]->Select();
-				currentSelected = i;
+				if (MathHelper::Contains(finish, *selectables[i])) 
+				{
+					selectables[i]->Select();
+				}
 			}
 		}
 	}
@@ -123,6 +134,7 @@ void GameScreen2D::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents:
 {
 	// Not implemented in 2D. Can be overridden for specific screens if neccessary.
 }
+#endif
 /**
 <summary>Notifies all screens in the stack of a gamepad event.</summary>
 <param name='playerID'>The ID for the controller.</param>
@@ -137,7 +149,7 @@ void GameScreen2D::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEven
 		// Check for select actions
 		if (type == GamepadEvents::BUTTON_PRESS)
 		{
-			if (button == GamepadEvents::INPUT_CROSS)
+			if (button == GamepadEvents::INPUT_CROSS_A)
 			{
 				// Find the currently selected entity in clickables, and 'Click' it
 				for (unsigned int i = 0; i < clickables.size(); i++)
@@ -146,9 +158,24 @@ void GameScreen2D::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEven
 						clickables[i]->Click(0.0f, 0.0f);
 				}
 			}
-
-			// Check for DPad & Thumbstick movement for changing the selected item.
-
+			else
+			{
+				// Check for DPad & Thumbstick movement for changing the selected item.
+				if (button == GamepadEvents::LEFT_STICK_DOWN || button == GamepadEvents::INPUT_DPAD_DOWN)
+				{
+					++currentSelected;
+					currentSelected %= selectables.size();
+				}
+				if (button == GamepadEvents::LEFT_STICK_UP || button == GamepadEvents::INPUT_DPAD_UP)
+				{
+					--currentSelected;
+					if (currentSelected < 0)
+						currentSelected = selectables.size() - 1;
+				}
+				for (unsigned int i = 0; i < selectables.size(); ++i)
+					selectables[i]->UnSelect();
+				selectables[currentSelected]->Select();
+			}
 		}
 	}
 }
@@ -166,7 +193,8 @@ void GameScreen2D::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex player
 		// Check for right stick movement
 		if (analogueControl == GamepadEvents::RIGHT_STICK)
 		{
-			Scroll(T3Vector2(), amount);
+			T3Vector2 s = T3Vector2();
+			Scroll(s, amount);
 		}
 	}
 }

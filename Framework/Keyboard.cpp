@@ -42,7 +42,7 @@ void Keyboard::Update(RAWINPUT* raw, float msec)	{
 			return;
 		}
 
-		//First bit of the flags tag determinimumes whether the key is down or up
+		//First bit of the flags tag determines whether the key is down or up
 		keyStates[key] = !(raw->data.keyboard.Flags & RI_KEY_BREAK);
 		for (int i = 0; i < KeyboardEvents::KEYBOARD_MAX; i++)
 			lastKeyDown[i] += msec;

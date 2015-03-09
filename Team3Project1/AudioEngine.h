@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 /**
 <summary>Static Singleton.
 The game's audio engine.
@@ -5,6 +6,8 @@ The game's audio engine.
 Author: Nick Grimm
 Version: 0.0.1 03/02/2015.</summary>
 */
+
+
  #pragma once
  #include <vector> // I imagine we'll probably need one eventually. It's just here so NULL is defined atm.
  # include <algorithm>
@@ -20,6 +23,11 @@ Version: 0.0.1 03/02/2015.</summary>
  //# include   "../FrameWork/Vehicle.h"
  using std :: vector ;
 
+ #pragma comment(lib, "../OpenAL 1.1 SDK/libs/Win32/EFX-Util_MTDLL/EFX-Util.lib")
+ #pragma comment(lib, "../OpenAL 1.1 SDK/libs/Win32/EFX-Util_MT/EFX-Util.lib")
+ #pragma comment(lib, "../OpenAL 1.1 SDK/libs/Win32/OpenAl32.lib")
+
+ class Vehicle;
  class GameEntity;
  class SoundEmitter ;
 
@@ -76,7 +84,7 @@ public:
 	void PlaySound ( Sound * s , T3Vector3 position, bool isLooping = false );
 	void PlaySound ( Sound * s , DrawableEntity3D* entity , bool isLooping = false);
 	void PlaySound ( Sound * s , SoundPriority p = SOUNDPRIORTY_LOW, bool isLooping = false);
-	
+
 	Sound * GetSound ( string name );
 
 	/*void Run();
@@ -113,3 +121,4 @@ private:
 	
 	//bool isRunning;
 };
+#endif

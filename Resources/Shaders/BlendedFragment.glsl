@@ -10,5 +10,12 @@ out vec4 gl_FragColor;
 
 void main(void){
 	vec4 texColor = texture(diffuseTex, IN.texCoord);
-	gl_FragColor = texColor * blendColour;
+	if (texColor.a < 0.2) {
+		discard;
+	} else if ((texColor.r == 0.0) && (texColor.g == 0.0) && (texColor.b == 1.0)) {
+		discard;
+	}
+	else {
+		gl_FragColor = texColor * blendColour;
+	}
 }

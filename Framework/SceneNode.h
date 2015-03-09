@@ -4,7 +4,7 @@ Implements:
 Author:Rich Davison	<richard.davison4@newcastle.ac.uk>
 Description:A basic, but functional SceneNode class. SceneNodes have a
 transformation matrix, and any number of children. They also have a parent, 
-forminimumg a tree structure, with their parent above them, and children below.
+formimg a tree structure, with their parent above them, and children below.
 
 They also have a seperate scale for their Mesh, for no other reason than
 it made the CubeRobot class easier ;) You might find it useful, though...
@@ -34,6 +34,7 @@ class DrawableEntity3D;
 
 class SceneNode{
 public:
+	unsigned int GetChildren() {return children.size();}
 	 SceneNode(Mesh*m = NULL, T3Vector4 colour = T3Vector4(1,1,1,1));
 	 SceneNode(DrawableEntity3D *entity);
 

@@ -37,9 +37,9 @@ public:
 	void* GetuCode();
 	CGprogram GetProgram();
 	unsigned int GetOffset();
-	unsigned int GetAttributeIndex(VertexAttributes::Attributes attribute);
+	int GetAttributeIndex(VertexAttributes::Attributes attribute);
 	CGparameter GetParameter(string target);
-	void SetParameter(string name, T3Matrix4 &totranpose);
+	void SetParameter(string name, Matrix4 &totranpose);
 	void UpdateShaderMatrices(Matrix4 &model,Matrix4 &view, Matrix4 &proj);
 #endif
 #if WINDOWS_BUILD
@@ -47,16 +47,20 @@ public:
 	static string LoadShaderFile(string filename);
 #endif
 #if PS3_BUILD
+	static string LoadShaderFile(string filename){return filename;};
 	void SetDefaultAttributes();
-	unsigned int attributes[VertexAttributes::MAX];
+	int attributes[VertexAttributes::MAX];
 	CGprogram program;
 	void* ucode;
-	unsigned int offset;
+	//unsigned int offset;
+	uint32_t offset;
 	map<string, CGparameter> uniforms;
-	virtual void SetParameter(string name, float* data);
+	virtual void SetParameter(std::string name, float* data);
 	void UpdateShaderVariables();
+	
 #endif
 private:
 	ShaderPart(const ShaderPart& in);
 	ShaderPart operator=(const ShaderPart& in);
+	ShaderType::Type type;
 };

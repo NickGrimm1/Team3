@@ -27,16 +27,19 @@ Version: 0.0.3 06/02/2015.</summary>
 #if WINDOWS_BUILD
 #include "Renderer.h"
 #endif
+#if PS3_BUILD
+#include "../Main_PS3_PPU/Renderer.h"
+#include "../Framework/GameTimer.h"
+#endif
 #include "DrawableTexture2D.h"
 #include "DrawableText2D.h"
 #include "DrawableEntity3D.h"
 #include "Thread.h"
 #include "MutexClass.h"
+#include <vector>
+#include <algorithm>
 
-
-
-
-
+class Renderer;
 
 class GraphicsEngine : public Thread
 {
@@ -81,7 +84,12 @@ public:
 	<summary>Gets whether the graphics engine has initialized and is ready to render.</summary>
 	*/
 	bool HasInitialised() { return isInitialised; }
+#if WINDOWS_BUILD
 	void Run();
+#endif
+#if PS3_BUILD
+	 void Run();
+#endif
 #pragma endregion
 #pragma region TwoD
 	/**
@@ -138,12 +146,17 @@ public:
 	//static GraphicsEngine& GetGraphicsEngine() {return *engine;}
 
 	void EnableLoadingIcon(bool value) {isLoading = value;}
-	void EnableMousePointer(bool value);
-
+#if WINDOWS_BUILD
+	void EnableMousePointer(bool value) { Window::GetWindow().ShowOSPointer(value); }
+#endif
 	// Debugging
 	void DrawDeferredLights(bool on);
 
 	unsigned char* GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue);
+
+#if PS3_BUILD
+	static void threadExecution(uint64_t arg);
+#endif
 
 private:
 	static GraphicsEngine* engine;
@@ -165,9 +178,9 @@ private:
     <param name="light">The light.</param>
 	*/
 	void AddLight(Light* light);
-#if WINDOWS_BUILD
-	Renderer* renderer;
 
+	Renderer* renderer;
+#if WINDOWS_BUILD
 	Frustum frameFrustum;
 #endif
 	Camera* camera;

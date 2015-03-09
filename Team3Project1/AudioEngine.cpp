@@ -1,6 +1,8 @@
-# include  "AudioEngine.h"
-# include "../FrameWork/SoundManager.h"
-# include "../FrameWork/SoundEmitter.h"
+#if WINDOWS_BUILD
+
+#include  "AudioEngine.h"
+#include "../FrameWork/SoundManager.h"
+#include "../FrameWork/SoundEmitter.h"
 #define RENDER_HZ  60.0f
  //AudioEngine* AudioEngine::instance = NULL;
 
@@ -264,3 +266,5 @@ Sound * AudioEngine::GetSound ( string name ) {
 	//alcMakeContextCurrent(context);
 	return sound;
 }
+
+#endif

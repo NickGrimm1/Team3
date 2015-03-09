@@ -5,6 +5,13 @@
 //Static member variables need initialising!
 uint32_t		GCMRenderer::localHeapStart	= 0;
 
+void my_check_callback(uint32_t* cmd)
+{
+  printf( "### Bad command 0x%X at memory location 0x%x ###\n", *cmd, cmd);
+}
+
+
+
 GCMRenderer::GCMRenderer(void)	{
 	if(cellGcmInit(COMMAND_SIZE, BUFFER_SIZE, memalign(1024*1024, BUFFER_SIZE))!= CELL_OK) {
 		std::cout << "cellGcmInit failed!" << std::endl;	
@@ -12,10 +19,11 @@ GCMRenderer::GCMRenderer(void)	{
 
 	camera	= NULL;
 	root	= NULL;
-
+	shader = new Shader();
 	InitDisplay();
 	InitSurfaces();
-	texture = (GCMRenderer::LoadGTF("/ncl.gtf"));
+	texture = new Texture("/ncl.gtf", 0);
+	std::cout <<"Got to end of GCMrenderer constructor" << std::endl;
 }
 
 /*
@@ -71,6 +79,9 @@ void GCMRenderer::InitDisplay() {
 	CellGcmConfig config;
 	cellGcmGetConfiguration(&config);
 	setLocalMem((uint32_t)config.localAddress);
+
+	//gCellGcmDebugCheckCallback = my_check_callback;
+	//cellGcmDebugCheckEnable(CELL_GCM_TRUE);
 }
 
 /*
@@ -184,9 +195,16 @@ void GCMRenderer::setLocalMem(uint32_t to) {
 Sets up the current viewport
 */
 void GCMRenderer::SetViewport() {
-	uint16_t x,y,w,h;
-	float minimum, maximum;
-	float scale[4],offset[4];
+	std::cout << "GCMRenderer::SetViewport: Setting Viewport" << std::endl;
+	
+	uint16_t x;
+	uint16_t y;
+	uint16_t w;
+	uint16_t h;
+	float minimum;
+	float maximum;
+	float scale[4];
+	float offset[4];
 
 	/*
 	I kinda gloss over what this function does in the GCM tutorial text,
@@ -231,14 +249,20 @@ void GCMRenderer::SetViewport() {
 
 	//analogous to the glViewport function...but with extra values!
 	cellGcmSetViewport(x, y, w, h, minimum, maximum, scale, offset);
+
+	std::cout << "GCMRenderer::SetViewport: Viewport Set" << std::endl;
 }
 
 void GCMRenderer::SwapBuffers() {
+	std::cout << "GCMRenderer::SwapBuffers: Wait for Flip Status" << std::endl;
+	
 	// wait until FlipStatus = 0 so that PPU does not run too ahead of RSX
 	// FlipStatus turns to 0 when the previous flip is finished
 	while (cellGcmGetFlipStatus()!=0){
 		sys_timer_usleep(300);
 	}
+
+	std::cout << "GCMRenderer::SwapBuffers: Finised Wiating for Flip Status" << std::endl;
 
 	// reset FlipStatus = 1
 	cellGcmResetFlipStatus();
@@ -272,7 +296,7 @@ void GCMRenderer::ClearBuffer() {
 	//glClearColor, but taking a single 32 bit value, in ARGB byte format
 	//Note how we're shifting bytes to byte aligned positions in the 32
 	//bit value we're sending.
-	cellGcmSetClearColor((64<<0)|(64<<8)|(64<<16)|(255<<24));
+	cellGcmSetClearColor((255<<0)|(255<<8)|(255<<16)|(255<<24));
 
 	//Tell GCM that we want to clear all of the colours of the current
 	//surface
@@ -294,11 +318,11 @@ ridiculous, but it is because vertex shaders can be ran from system memory,
 while fragment shaders MUST be ran in graphics memory, and so its address
 must be 'offsettable'. 
 */
-void	GCMRenderer::SetCurrentShader(Shader* shader) {
-	
-
-	cellGcmSetFragmentProgram(shader->GetFragment()->GetProgram(), shader->GetFragment()->GetOffset());
-	cellGcmSetVertexProgram(shader->GetVertex()->GetProgram(), shader->GetVertex()->GetuCode());
+void	GCMRenderer::SetCurrentShader(Shader* s) {
+	//std::cout<<"GCMRenderer: setCurrentShader"<<std::endl;
+	cellGcmSetFragmentProgram(s->GetFragment()->GetProgram(), s->GetFragment()->GetOffset());
+	cellGcmSetVertexProgram(s->GetVertex()->GetProgram(), s->GetVertex()->GetuCode());
+	//std::cout<<"GCMRenderer: got to the end of setCurrentShader"<<std::endl;
 }
 
 //Sets the camera. Can be NULL
@@ -330,16 +354,55 @@ specific #ifdefs to encapsulate API code). You'll have to think up some way
 of safely setting shaders and textures on a renderer...
 */
 void	GCMRenderer::DrawNode(SceneNode*n)	{
-	if(n->GetMesh()) {
+//	std::cout << "Drawing Node" << std::endl;
+
+	if(n->GetDrawableEntity()) {
+	//	std::cout << "Drawing a mesh: " << std::endl;
+	//	std::cout << n->GetMesh()->GetNumVertices() << std::endl;
 		//GCC complains about function returns being used as parameters passed
 		//around, or we'd just use GetWorldTransform as the function param
-		T3Matrix4 transform = n->GetWorldTransform();
-		
+		cout << "GCMRenderer: Have drawable entity" << endl;
+		DrawableEntity3D& entity = *n->GetDrawableEntity();
+		cout << "GCMRenderer: initialised entity" << endl;
+		T3Matrix4 transform = //n->GetTransform();
+			Quaternion::EulerAnglesToQuaternion(90, 0, 0).ToMatrix() * T3Matrix4::Scale(T3Vector3(1000,1000,1));
+		cout << "GCMRenderer: set a transform matrix" << endl;
+
+
+		/*std::cout << "GCMRenderer: ViewMatrix (SCE): " << std::endl;
+		for (int x = 0; x < 4; ++x)
+		{
+			for (int y = 0; y < 4; ++y)
+			{
+				std::cout << viewMatrix.getElem(x,y) << ",";
+			}
+			std::cout << std::endl;
+		}
+
+		std::cout << "Transform (T3): " << std::endl;
+		std::cout << n->GetTransform() << std::endl;
+		std::cout << transform << std::endl;*/
+
 		Matrix4 m;
 		for (int x = 0; x < 4; ++x)
 			for (int y = 0; y < 4; ++y)
-				m.setElem(y, x, transform.values[y + x * 4]);
+				m.setElem(x, y, transform.values[y + x * 4]);
+		
+		cout << "GCMRenderer: turned that matrix into a PS3 matrix " << endl; 
+		
+		/*std::cout << "Transform (SCE): " << std::endl;
+		for (int x = 0; x < 4; ++x)
+		{
+			for (int y = 0; y < 4; ++y)
+			{
+				std::cout << m.getElem(x,y) << ",";
+			}
+			std::cout << std::endl;
+		}*/
+		//shader = entity.GetShader();
 		shader->GetVertex()->SetParameter("modelMat", m);
+		cout << "GCMRenderer: set the shader" << endl;
+		//shader->GetVertex()->UpdateShaderMatrices(m, viewMatrix, projMatrix);
 
 		/*
 		If your SceneNodes can have their own texture, handle the setting of it
@@ -347,15 +410,28 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		of textures to units, but the slight changes in how GCM handles textures
 		make it more intuitive to place it here, instead.
 		*/
-	
-		SetTextureSampler(shader->GetFragment()->GetParameter("texture"),texture);
+		
+		CellGcmTexture* t = texture->GetTexture();
+		cout << "GCMRenderer: extracted the texture" << endl;
+		/*if (t)
+			std::cout << "Has Texture" << std::endl;
+		else
+			std::cout << "No Has Texture :(" << std::endl;*/
+
+		SetTextureSampler(shader->GetFragment()->GetParameter("texture"), t);
+		cout << "GCMRenderer: Set the texture sampler" << endl;
 
 		/*
 		The GCM Mesh class needs the current vertex shader, fragment
 		shader is just sent for convenience, in case it's needed in future...
 		*/
-		n->GetMesh()->Draw(shader);
+		//n->GetMesh()->Draw(shader);
+		cout << "GCMRenderer: about to draw entity" << endl;
+		entity.GetMesh()->Draw(shader);
+		cout << "GCMRenderer: managed to draw the entity" << endl;
 	}
+
+
 
 	//Remember to draw our children!
 	for(std::vector<SceneNode*>::const_iterator i = n->GetChildIteratorStart(); i != n->GetChildIteratorEnd(); ++i) {
@@ -380,143 +456,143 @@ bit, but it should be fairly straightforward, TGA uses simple 'run length
 encoding' for its compression technique. 
 
 */
-CellGcmTexture* GCMRenderer::LoadTGA(std::string filename)	{
-	CellGcmTexture* texture = new CellGcmTexture();	//A new GCM texture!
-
-	std::ifstream file;
-
-	std::string folder = SYS_APP_HOME + filename;
-	//Attempt to open the texture file
-	std::cout << "Loading TGA from(" << folder << ")" << std::endl;
-	file.open(folder.c_str(), std::ios::binary);
-	if(!file.is_open()){
-		//File hasn't loaded! 
-		delete texture;
-		std::cout << "LoadTGATexture file error" << std::endl;
-		return NULL;
-	}
-
-	//Read in the first 18 bytes of the file, containing the header
-	unsigned char TGAheader[18];
-	file.read((char*)TGAheader,sizeof(TGAheader));
-
-	//Width and height take up 2 bytes each, so we need to do a bit of
-	//bit shifting to make up the final value
-	texture->width	= (TGAheader[12] + (TGAheader[13] << 8));
-	texture->height = (TGAheader[14] + (TGAheader[15] << 8));
-	texture->pitch  = texture->width*(TGAheader[16] / 8);
-	texture->depth  = 1;
-
-	std::cout << filename << " has width " << texture->width << std::endl;
-	std::cout << filename << " has height " << texture->height << std::endl;
-	std::cout << filename << " has bitdepth " << (unsigned int)TGAheader[16] << std::endl;
-
-	//We're going to assume it's uncompressed data, and just read in a load of data.
-	int size = texture->width*texture->height*(TGAheader[16] / 8);
-
-	std::cout << filename << " has size "	 << (unsigned int)size		<< std::endl;
-
-	char*rsxdata = (char*)localMemoryAlign(128, size);	//A texture in graphics memory needs aligning...
-
-	//Read in the texture straight into graphics memory. Challenge! How fast will this data
-	//transfer be? Why? How could it be sped up?
-	file.read(rsxdata,size);	
-	file.close();				//Close the file
-
-
-	unsigned int offset;
-
-	//As we're dealing with graphics memory, we need an offset
-	if(cellGcmAddressToOffset( rsxdata, &offset ) != CELL_OK) {
-		std::cout << "offset failure (texture)!" << std::endl;		
-	};
-
-	texture->location = CELL_GCM_LOCATION_LOCAL;	//We want the texture in graphics memory
-	texture->offset   = offset;						//at he following offset
-
-	std::cout << filename << " has RSX memory location " << (unsigned int)rsxdata	<< std::endl;
-	std::cout << filename << " has RSX memory offset "   << (unsigned int)offset	<< std::endl;
-
-	texture->format  = CELL_GCM_TEXTURE_A8R8G8B8;	//ARGB format - there doesn't seem to be a RGB format!
-	texture->format |= CELL_GCM_TEXTURE_LN;		//Data is a 'linear' array of values
-
-	/*
-	Remap allows us to swap around values on the texture when it is sampled.
-	For example we could swap around red and blue (normally, we think of textures
-	as being in 'red green blue alpha' format, whereas TGA saves its data in
-	'blue green red alpha' format, so you might think we need a remapping to handle
-	that, but no! GCM uses 'b g r a' format natively, so the data can stay as-is
-	*/
-
-	texture->remap = 
-		CELL_GCM_TEXTURE_REMAP_REMAP << 14 |
-		CELL_GCM_TEXTURE_REMAP_REMAP << 12 |
-		CELL_GCM_TEXTURE_REMAP_REMAP << 10 |
-		CELL_GCM_TEXTURE_REMAP_REMAP << 8 |
-		CELL_GCM_TEXTURE_REMAP_FROM_A << 6 |
-		CELL_GCM_TEXTURE_REMAP_FROM_R << 4 |
-		CELL_GCM_TEXTURE_REMAP_FROM_G << 2 |
-		CELL_GCM_TEXTURE_REMAP_FROM_B;
-
-	texture->mipmap		= 1;		//How many mipmap levels are there (1 == 'largest level mipmap')
-	texture->cubemap	= CELL_GCM_FALSE;	//No...it's not a cubemap
-	texture->dimension	= CELL_GCM_TEXTURE_DIMENSION_2;	//It's a 2D Texture...
-
-	std::cout << "Finished loading texture!" << std::endl;
-
-	return texture;
-}
-
-/*
-Drop a DDS file onto the DDS2GTF exe inside the 
-C:\usr\local\cell\host-win32\bin folder to make a GTF 
-file suitable for loading with this function.
-*/
-CellGcmTexture* GCMRenderer::LoadGTF(std::string filename) {
-	CellGcmTexture* texture = new CellGcmTexture();	//A new GCM texture!
-
-	std::ifstream file;
-
-	std::string folder = SYS_APP_HOME + filename;
-	//Attempt to open the texture file
-	std::cout << "Loading GTF from(" << folder << ")" << std::endl;
-	file.open(folder.c_str(), std::ios::binary);
-	if(!file.is_open()){
-		//File hasn't loaded! 
-		delete texture;
-		std::cout << "LoadGTF file error" << std::endl;
-		return NULL;
-	}
-
-	CellGtfFileHeader header;
-	file.read((char*)&header,sizeof(CellGtfFileHeader));
-
-	CellGtfTextureAttribute*attributes = new CellGtfTextureAttribute[header.NumTexture];
-
-	file.read((char*)attributes,header.NumTexture * sizeof(CellGtfTextureAttribute));
-
-
-	/*
-	GTF textures can technically have multiple textures in it, for now
-	lets just load 1
-	*/
-	for(int i = 0; i < minimum(1,header.NumTexture); ++i) {
-		memcpy((void*)texture,(void*)&(attributes[i].tex), sizeof(CellGcmTexture));
-
-		file.seekg(attributes[i].OffsetToTex);
-
-		char*rsxdata = (char*)localMemoryAlign(128, attributes[i].TextureSize);
-		file.read(rsxdata,attributes[i].TextureSize);
-
-		cellGcmAddressToOffset( rsxdata, &texture->offset );
-	}
-
-	std::cout << "LoadGTF success!" << std::endl;
-
-	delete[] attributes;
-
-	return texture;
-}
+//CellGcmTexture* GCMRenderer::LoadTGA(std::string filename)	{
+//	CellGcmTexture* texture = new CellGcmTexture();	//A new GCM texture!
+//
+//	std::ifstream file;
+//
+//	std::string folder = SYS_APP_HOME + filename;
+//	//Attempt to open the texture file
+//	std::cout << "Loading TGA from(" << folder << ")" << std::endl;
+//	file.open(folder.c_str(), std::ios::binary);
+//	if(!file.is_open()){
+//		//File hasn't loaded! 
+//		delete texture;
+//		std::cout << "LoadTGATexture file error" << std::endl;
+//		return NULL;
+//	}
+//
+//	//Read in the first 18 bytes of the file, containing the header
+//	unsigned char TGAheader[18];
+//	file.read((char*)TGAheader,sizeof(TGAheader));
+//
+//	//Width and height take up 2 bytes each, so we need to do a bit of
+//	//bit shifting to make up the final value
+//	texture->width	= (TGAheader[12] + (TGAheader[13] << 8));
+//	texture->height = (TGAheader[14] + (TGAheader[15] << 8));
+//	texture->pitch  = texture->width*(TGAheader[16] / 8);
+//	texture->depth  = 1;
+//
+//	std::cout << filename << " has width " << texture->width << std::endl;
+//	std::cout << filename << " has height " << texture->height << std::endl;
+//	std::cout << filename << " has bitdepth " << (unsigned int)TGAheader[16] << std::endl;
+//
+//	//We're going to assume it's uncompressed data, and just read in a load of data.
+//	int size = texture->width*texture->height*(TGAheader[16] / 8);
+//
+//	std::cout << filename << " has size "	 << (unsigned int)size		<< std::endl;
+//
+//	char*rsxdata = (char*)localMemoryAlign(128, size);	//A texture in graphics memory needs aligning...
+//
+//	//Read in the texture straight into graphics memory. Challenge! How fast will this data
+//	//transfer be? Why? How could it be sped up?
+//	file.read(rsxdata,size);	
+//	file.close();				//Close the file
+//
+//
+//	unsigned int offset;
+//
+//	//As we're dealing with graphics memory, we need an offset
+//	if(cellGcmAddressToOffset( rsxdata, &offset ) != CELL_OK) {
+//		std::cout << "offset failure (texture)!" << std::endl;		
+//	};
+//
+//	texture->location = CELL_GCM_LOCATION_LOCAL;	//We want the texture in graphics memory
+//	texture->offset   = offset;						//at he following offset
+//
+//	std::cout << filename << " has RSX memory location " << (unsigned int)rsxdata	<< std::endl;
+//	std::cout << filename << " has RSX memory offset "   << (unsigned int)offset	<< std::endl;
+//
+//	texture->format  = CELL_GCM_TEXTURE_A8R8G8B8;	//ARGB format - there doesn't seem to be a RGB format!
+//	texture->format |= CELL_GCM_TEXTURE_LN;		//Data is a 'linear' array of values
+//
+//	/*
+//	Remap allows us to swap around values on the texture when it is sampled.
+//	For example we could swap around red and blue (normally, we think of textures
+//	as being in 'red green blue alpha' format, whereas TGA saves its data in
+//	'blue green red alpha' format, so you might think we need a remapping to handle
+//	that, but no! GCM uses 'b g r a' format natively, so the data can stay as-is
+//	*/
+//
+//	texture->remap = 
+//		CELL_GCM_TEXTURE_REMAP_REMAP << 14 |
+//		CELL_GCM_TEXTURE_REMAP_REMAP << 12 |
+//		CELL_GCM_TEXTURE_REMAP_REMAP << 10 |
+//		CELL_GCM_TEXTURE_REMAP_REMAP << 8 |
+//		CELL_GCM_TEXTURE_REMAP_FROM_A << 6 |
+//		CELL_GCM_TEXTURE_REMAP_FROM_R << 4 |
+//		CELL_GCM_TEXTURE_REMAP_FROM_G << 2 |
+//		CELL_GCM_TEXTURE_REMAP_FROM_B;
+//
+//	texture->mipmap		= 1;		//How many mipmap levels are there (1 == 'largest level mipmap')
+//	texture->cubemap	= CELL_GCM_FALSE;	//No...it's not a cubemap
+//	texture->dimension	= CELL_GCM_TEXTURE_DIMENSION_2;	//It's a 2D Texture...
+//
+//	std::cout << "Finished loading texture!" << std::endl;
+//
+//	return texture;
+//}
+//
+///*
+//Drop a DDS file onto the DDS2GTF exe inside the 
+//C:\usr\local\cell\host-win32\bin folder to make a GTF 
+//file suitable for loading with this function.
+//*/
+//CellGcmTexture* GCMRenderer::LoadGTF(std::string filename) {
+//	CellGcmTexture* texture = new CellGcmTexture();	//A new GCM texture!
+//
+//	std::ifstream file;
+//
+//	std::string folder = SYS_APP_HOME + filename;
+//	//Attempt to open the texture file
+//	std::cout << "Loading GTF from(" << folder << ")" << std::endl;
+//	file.open(folder.c_str(), std::ios::binary);
+//	if(!file.is_open()){
+//		//File hasn't loaded! 
+//		delete texture;
+//		std::cout << "LoadGTF file error" << std::endl;
+//		return NULL;
+//	}
+//
+//	CellGtfFileHeader header;
+//	file.read((char*)&header,sizeof(CellGtfFileHeader));
+//
+//	CellGtfTextureAttribute*attributes = new CellGtfTextureAttribute[header.NumTexture];
+//
+//	file.read((char*)attributes,header.NumTexture * sizeof(CellGtfTextureAttribute));
+//
+//
+//	/*
+//	GTF textures can technically have multiple textures in it, for now
+//	lets just load 1
+//	*/
+//	for(int i = 0; i < minimum(1,header.NumTexture); ++i) {
+//		memcpy((void*)texture,(void*)&(attributes[i].tex), sizeof(CellGcmTexture));
+//
+//		file.seekg(attributes[i].OffsetToTex);
+//
+//		char*rsxdata = (char*)localMemoryAlign(128, attributes[i].TextureSize);
+//		file.read(rsxdata,attributes[i].TextureSize);
+//
+//		cellGcmAddressToOffset( rsxdata, &texture->offset );
+//	}
+//
+//	std::cout << "LoadGTF success!" << std::endl;
+//
+//	delete[] attributes;
+//
+//	return texture;
+//}
 
 /*
 GCM handles texturing in a pretty similar way to OpenGL - texture samplers in 

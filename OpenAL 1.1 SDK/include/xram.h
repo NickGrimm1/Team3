@@ -1,3 +1,5 @@
+#if WINDOWS_BUILD
+
 #include <al.h>
 
 // X-RAM Function pointer definitions
@@ -92,3 +94,5 @@ typedef ALenum    (__cdecl *EAXGetBufferMode)(ALuint buffer, ALint *value);
 // alBufferData(...);
 //
 //////////////////////////////////////////////////////////////////////////////
+
+#endif

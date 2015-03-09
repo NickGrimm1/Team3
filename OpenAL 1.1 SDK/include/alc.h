@@ -1,3 +1,5 @@
+#if WINDOWS_BUILD
+
 #ifndef AL_ALC_H
 #define AL_ALC_H
 
@@ -279,3 +281,5 @@ typedef void           (ALC_APIENTRY *LPALCCAPTURESAMPLES)( ALCdevice *device, A
 #endif
 
 #endif /* AL_ALC_H */
+
+#endif

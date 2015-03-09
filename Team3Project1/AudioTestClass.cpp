@@ -1,3 +1,5 @@
+#if WINDOWS_BUILD
+
 #include "AudioTestClass.h"
 #include "GameStateManager.h"
 //#include "../Framework/SoundManager.h"
@@ -109,3 +111,5 @@ void AudioTestClass::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvent
 //		} 
 	}
 }
+
+#endif

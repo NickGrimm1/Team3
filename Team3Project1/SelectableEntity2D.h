@@ -6,7 +6,11 @@ Version: 1.0.0 07/02/2015.</summary>
 */
 #pragma once
 #include "DrawableEntity2D.h"
+//#include "GameScreen2D.h"
+//#include "MainMenu.h"
 #include <vector>
+
+class GameScreen2D;
 
 using namespace std;
 
@@ -17,7 +21,8 @@ public:
 	<summary>Constructor.</summary>
 	<param name='actionOnClick'>Function pointer to the action to take on click.</param>m>
 	*/
-	SelectableEntity2D(float x, float y, float width, float height, void (*actionOnSelect)()) : T3Rectangle(x, y, width, height), actionOnSelect(actionOnSelect)
+	SelectableEntity2D(float x, float y, float width, float height, void (GameScreen2D::*actionOnSelect)(), void (GameScreen2D::*actionOnUnselect)(), GameScreen2D* arg ) 
+		: T3Rectangle(x, y, width, height), actionOnSelect(actionOnSelect), actionOnUnselect(actionOnUnselect), arg(arg)
 	{ }
 	/**
 	<summary>Process the action this object takes when it is clicked.</summary>
@@ -26,15 +31,24 @@ public:
 	*/
 	void Select()
 	{
-		actionOnSelect();
+		(arg->*actionOnSelect)();
+	}
+
+	void UnSelect()
+	{
+		(arg->*actionOnUnselect)();
 	}
 	/**
 	<summary>Sets the action to take on select.</summary>
 	<param name='value'>Function pointer to the action to take on select.</param>m>
 	*/
-	void SetActionOnSelect(void (*value)()) { actionOnSelect = value; }
+
+	void SetActionOnSelect(void (GameScreen2D::*value)()) { actionOnSelect = value; }
+	void SetActionOnUnSelect(void (GameScreen2D::*value)()) { actionOnUnselect = value; }
 	vector<DrawableEntity2D*> GetDrawables() { return drawables; }
 protected:
-	void (*actionOnSelect)();
+	GameScreen2D* arg;
+	void (GameScreen2D::*actionOnSelect)();
+	void (GameScreen2D::*actionOnUnselect)();
 	vector<DrawableEntity2D*> drawables;
 };

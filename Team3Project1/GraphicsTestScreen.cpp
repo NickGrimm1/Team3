@@ -2,9 +2,9 @@
 #include "Mesh.h"
 #include "../Framework/Light.h"
 #include "GameStateManager.h"
-#include "FreeCamera.h"
+#include "ChaseCamera.h"
 #include "../Framework/ObjMesh.h"
-
+#include "FreeCamera.h"
 //TODO - remove
 #include <iostream>
 
@@ -31,21 +31,26 @@ void GraphicsTestScreen::LoadContent() {
 	quad = GameStateManager::Assets()->LoadQuad(this);
 	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
 	circle = GameStateManager::Assets()->LoadCircle(this, 20);
+#if WINDOWS_BUILD
 	Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.jpg", 0);
 	Texture* calvinTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", SOIL_FLAG_INVERT_Y);
-	Mesh* car = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
+#endif
+#if PS3_BUILD
+	Texture* nclTex = GameStateManager::Assets()->LoadTexture(this, "/ncl.gtf", 0);
+#endif
+	//Mesh* car = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
 
 #ifdef WINDOWS_BUILD
-	cout << "GraphicsTestScreen-Quad: " << quad->GetArrayObject() << ", " << quad->GetBufferObject() << endl;
-	cout << "GraphicsTestScreen-Cylinder: " << cylinder->GetArrayObject() << ", " << cylinder->GetBufferObject() << endl;
-	cout << "GraphicsTestScreen-circle: " << circle->GetArrayObject() << ", " << circle->GetBufferObject() << endl;
-	cout << "GraphicsTestScreen-grass: " << grassTex->GetTextureName() << endl;
-	cout << "GraphicsTestScreen-calvin: " << calvinTex->GetTextureName() << endl;
+	//cout << "GraphicsTestScreen-Quad: " << quad->GetArrayObject() << ", " << quad->GetBufferObject() << endl;
+	//cout << "GraphicsTestScreen-Cylinder: " << cylinder->GetArrayObject() << ", " << cylinder->GetBufferObject() << endl;
+	//cout << "GraphicsTestScreen-circle: " << circle->GetArrayObject() << ", " << circle->GetBufferObject() << endl;
+	//cout << "GraphicsTestScreen-grass: " << grassTex->GetTextureName() << endl;
+	//cout << "GraphicsTestScreen-calvin: " << calvinTex->GetTextureName() << endl;
 #endif
 	
-	DrawableEntity3D* ent;
-	/*
-	for (unsigned int i = 0; i < 8; i++) {
+	//DrawableEntity3D* ent;
+	
+	/*for (unsigned int i = 0; i < 8; i++) {
 		for (unsigned int j = 0; j < 8; j++) {
 			ent = new DrawableEntity3D(
 				quad,
@@ -59,88 +64,138 @@ void GraphicsTestScreen::LoadContent() {
 			gameEntities.push_back(ent);
 			AddDrawable(ent);
 		}
-	}
-	*/
-
-	GameStateManager::Graphics()->GetRenderContext();
-	track = new TrackSegment(T3Vector3(-400, 0, 400), T3Vector3(-400,0,0), T3Vector3(0,0,-400), 10, 50.0);
-	GameStateManager::Graphics()->DropRenderContext();
-
-	ent = new DrawableEntity3D(
-		track,
-		NULL,
-		grassTex,
-		NULL,
-		800.0f,
-		T3Vector3(0,0,0),
-		Quaternion::EulerAnglesToQuaternion(0,0,0),
-		T3Vector3(1,1,1));
-	gameEntities.push_back(ent);
-	AddDrawable(ent);
-
-
-	ent = new DrawableEntity3D(
-		cylinder, 
-		NULL,
-		calvinTex,
-		NULL,
-		30.0f, 
-		T3Vector3(35,0,35), 
-		Quaternion::EulerAnglesToQuaternion(0,0,0),
-		T3Vector3(15,30,15));
-	gameEntities.push_back(ent);
-	AddDrawable(ent);
+	}*/
 	
 
-	ent = new DrawableEntity3D(
-		circle, 
-		NULL,
-		calvinTex,
-		NULL,
-		30.0f, // needs same bounding radius as cylinder
-		T3Vector3(35,30,35), 
-		Quaternion::EulerAnglesToQuaternion(0,0,0),
-		T3Vector3(15,1,15));
-	gameEntities.push_back(ent);
-	AddDrawable(ent);
-
-	ent = new DrawableEntity3D(
-		cylinder, 
-		NULL,
-		calvinTex,
-		NULL,
-		30.0f, // needs same bounding radius as cylinder
-		track->GetTrackCentreLeft(),
-		Quaternion::EulerAnglesToQuaternion(0,0,0),
-		T3Vector3(5,15,5));
-	gameEntities.push_back(ent);
-	AddDrawable(ent);
-
-	ent = new DrawableEntity3D(
-		cylinder, 
-		NULL,
-		calvinTex,
-		NULL,
-		30.0f, // needs same bounding radius as cylinder
-		track->GetTrackCentreRight(),
-		Quaternion::EulerAnglesToQuaternion(0,0,0),
-		T3Vector3(5,15,5));
-	gameEntities.push_back(ent);
-	AddDrawable(ent);
-
-	ent = new DrawableEntity3D(
-		car,
-		NULL,
-		NULL,
-		NULL,
-		25.0f,
-		T3Vector3(-25, 20, 0),
-		Quaternion::EulerAnglesToQuaternion(0,0,0),
-		T3Vector3(5,5,5));
-	gameEntities.push_back(ent);
-	AddDrawable(ent);
+//	GameStateManager::Graphics()->GetRenderContext();
+//#if WINDOWS_BUILD
+//	track = new TrackSegment(T3Vector3(-400, 0, 400), T3Vector3(-400,0,0), T3Vector3(0,0,-400), 10, 50.0);
+//#endif
+//	GameStateManager::Graphics()->DropRenderContext();
 	
-	bool enableShadows = false;
+//	ent = new DrawableEntity3D(
+//#if WINDOWS_BUILD
+//		GameStateManager::Assets()->LoadHeightmap(0, 15, true),
+//#endif
+//#if PS3_BUILD //TODO : PS3 Needs to draw a heightmap instead of a quad, change when heightmap fixed
+//		GameStateManager::Assets()->LoadQuad(this),
+//#endif
+//		NULL,
+//#if WINDOWS_BUILD
+//		grassTex,
+//#endif
+//#if PS3_BUILD
+//		nclTex,
+//#endif
+//		NULL,
+//		800.0f,
+//		T3Vector3(),
+//		Quaternion::EulerAnglesToQuaternion(0,0,0),
+//		T3Vector3(1,1,1));
+//	AddDrawable(ent);
+
+//#if WINDOWS_BUILD
+//	ent = new DrawableEntity3D(
+//		track,
+//		NULL,
+//#if WINDOWS_BUILD
+//		grassTex,
+//#endif
+//#if PS3_BUILD
+//		nclTex,
+//#endif
+//		NULL,
+//		800.0f,
+//		T3Vector3(0,0,0),
+//		Quaternion::EulerAnglesToQuaternion(0,0,0),
+//		T3Vector3(1,1,1));
+//	gameEntities.push_back(ent);
+//	AddDrawable(ent);
+//#endif
+//
+//	ent = new DrawableEntity3D(
+//		cylinder, 
+//		NULL,
+//#if WINDOWS_BUILD
+//		calvinTex,
+//#endif
+//#if PS3_BUILD
+//		nclTex,
+//#endif
+//		NULL,
+//		30.0f, 
+//		T3Vector3(35,0,35), 
+//		Quaternion::EulerAnglesToQuaternion(0,0,0),
+//		T3Vector3(15,30,15));
+//	gameEntities.push_back(ent);
+//	AddDrawable(ent);
+//	
+//
+//	ent = new DrawableEntity3D(
+//		circle, 
+//		NULL,
+//#if WINDOWS_BUILD
+//		calvinTex,
+//#endif
+//#if PS3_BUILD
+//		nclTex,
+//#endif
+//		NULL,
+//		30.0f, // needs same bounding radius as cylinder
+//		T3Vector3(35,30,35), 
+//		Quaternion::EulerAnglesToQuaternion(0,0,0),
+//		T3Vector3(15,1,15));
+//	gameEntities.push_back(ent);
+//	AddDrawable(ent);
+//
+//#if WINDOWS_BUILD
+//	ent = new DrawableEntity3D(
+//		cylinder, 
+//		NULL,
+//#if WINDOWS_BUILD
+//		calvinTex,
+//#endif
+//#if PS3_BUILD
+//		nclTex,
+//#endif
+//		NULL,
+//		30.0f, // needs same bounding radius as cylinder
+//		track->GetTrackCentreLeft(),
+//		Quaternion::EulerAnglesToQuaternion(0,0,0),
+//		T3Vector3(5,15,5));
+//	gameEntities.push_back(ent);
+//	AddDrawable(ent);
+//
+//	ent = new DrawableEntity3D(
+//		cylinder, 
+//		NULL,
+//#if WINDOWS_BUILD
+//		calvinTex,
+//#endif
+//#if PS3_BUILD
+//		nclTex,
+//#endif
+//		NULL,
+//		30.0f, // needs same bounding radius as cylinder
+//		track->GetTrackCentreRight(),
+//		Quaternion::EulerAnglesToQuaternion(0,0,0),
+//		T3Vector3(5,15,5));
+//	gameEntities.push_back(ent);
+//	AddDrawable(ent);
+//#endif
+//	ent = new DrawableEntity3D(
+//		car,
+//		NULL,
+//		NULL,
+//		NULL,
+//		25.0f,
+//		T3Vector3(-25, 20, 0),
+//		Quaternion::EulerAnglesToQuaternion(0,0,0),
+//		T3Vector3(5,5,5));
+//	gameEntities.push_back(ent);
+//	AddDrawable(ent);
+//	
+//	bool enableShadows = false;
 	//AddSpotLight(T3Vector3(-10, 40, -10), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 45.0f, T3Vector4(1,0,0,1), T3Vector4(0,0,1,1), enableShadows);
 	//AddSpotLight(T3Vector3(50, 40, 50), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 90.0f, T3Vector4(0.5,0.5,0.5,1), T3Vector4(0,0,1,1), enableShadows);
 	//AddPointLight(T3Vector3(-50,60,-50), 500, T3Vector4(1,0,1,1), T3Vector4(0,0.5,0,1), enableShadows); 
@@ -148,7 +203,20 @@ void GraphicsTestScreen::LoadContent() {
 	
 //	directionalLight = GameStateManager::Graphics()->AddDirectionalLight(T3Vector3(-1, -1, -1), T3Vector4(1,1,1,1), T3Vector4(0,0,0,1));
 
-	camera = new FreeCamera();
+	DrawableEntity3D* myEnt = new DrawableEntity3D(
+		quad,
+		NULL,
+		GameStateManager::Assets()->LoadTexture(this,TEXTUREDIR"ncl.gtf",0),
+		NULL,
+		25.0f,
+		T3Vector3(0,5,10),
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(5,5,5));
+	gameEntities.push_back(myEnt);
+	AddDrawable(myEnt);
+
+	//SetPlayer(ent);
+	camera = new FreeCamera();//ChaseCamera(ent, T3Vector3(0, 2, 50), 0, 0, 0);
 	camera->SetPosition(T3Vector3(0,10,80));
 	
 	SetCamera(camera);
@@ -167,7 +235,7 @@ void GraphicsTestScreen::UnloadContent()
 	//
 	// RemoveDrawable() etc will also be called automatically upon destruction so calling it is uneccessary.
 
-	delete track;
+	//delete track;
 
 	GameStateManager::Assets()->UnloadQuad(this);
 	GameStateManager::Assets()->UnloadCylinder(this, 20);
@@ -182,9 +250,9 @@ void GraphicsTestScreen::Update() {
 	//T3Matrix4 m = T3Matrix4::Rotation(0.016f, T3Vector3(0,1,0));
 	//ent->AddRotation(Quaternion::FromMatrix(m));
 
-	//GameStateManager::Assets()->LoadHeightmap(true);
+	//GameStateManager::Assets()->LoadHeightmap();
 }
-
+#if WINDOWS_BUILD
 void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
 
 	switch (type) {
@@ -193,22 +261,22 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 		switch (key) {
 
 		case KeyboardEvents::KEYBOARD_W:
-			camera->AddMovement(T3Vector3(0,0,-1));
+			GetPlayer()->Move(T3Vector3(0,0,-1));
 			break;
 		case KeyboardEvents::KEYBOARD_S:
-			camera->AddMovement(T3Vector3(0,0,1));
+			GetPlayer()->Move(T3Vector3(0,0,1));
 			break;
 		case KeyboardEvents::KEYBOARD_A:
-			camera->AddMovement(T3Vector3(-1,0,0));
+			GetPlayer()->Move(T3Vector3(-1,0,0));
 			break;
 		case KeyboardEvents::KEYBOARD_D:
-			camera->AddMovement(T3Vector3(1,0,0));
+			GetPlayer()->Move(T3Vector3(1,0,0));
 			break;
 		case KeyboardEvents::KEYBOARD_SHIFT:
-			camera->AddMovement(T3Vector3(0,1,0));
+			GetPlayer()->Move(T3Vector3(0,1,0));
 			break;
 		case KeyboardEvents::KEYBOARD_SPACE:
-			camera->AddMovement(T3Vector3(0,-1,0));
+			GetPlayer()->Move(T3Vector3(0,-1,0));
 			break;
 		case KeyboardEvents::KEYBOARD_LEFT:
 			camera->AddYaw(1);
@@ -242,7 +310,8 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 	}
 }
 	
-void GraphicsTestScreen::MouseMoved(T3Vector2& finish) {
+void GraphicsTestScreen::MouseMoved(T3Vector2& start, T3Vector2& finish) {
 	camera->AddPitch(-finish.y);
 	camera->AddYaw(-finish.x);
 }
+#endif

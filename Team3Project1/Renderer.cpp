@@ -1,3 +1,4 @@
+#if WINDOWS_BUILD
 #include "Renderer.h"
 #include "GraphicsCommon.h"
 #include "DrawableEntity3D.h"
@@ -185,7 +186,7 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	//CreateStaticMap(&cloudMap, 128, 1, 1000);
 
 	glClearColor(0, 0, 0, 1);
-	SwapBuffers();
+//	SwapBuffers();
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
 	wglMakeCurrent(deviceContext, NULL);
@@ -211,6 +212,7 @@ bool Renderer::LoadShaders()
 	velocityShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"VelocityVertex.glsl", SHADERDIR"VelocityFragment.glsl");
 	motionBlurShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlurFragment.glsl");
 	hudShader		 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl");
+	debugDrawShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"debugVertex.glsl", SHADERDIR"debugFragment.glsl");
 	return LoadCheck();
 }
 
@@ -231,7 +233,8 @@ bool Renderer::LoadCheck()
 			bloomFinalShader	!= NULL &&
 			velocityShader		!= NULL &&
 			motionBlurShader	!= NULL &&
-			hudShader			!= NULL);
+			hudShader			!= NULL &&
+			debugDrawShader		!= NULL);
 }
 
 void Renderer::UnloadShaders()
@@ -252,6 +255,7 @@ void Renderer::UnloadShaders()
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"VelocityVertex.glsl", SHADERDIR"VelocityFragment.glsl");//VBuffer Shader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlurFragment.glsl");//Motion blur Shader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl");
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"debugVertex.glsl", SHADERDIR"debugFragment.glsl");
 }
 
 bool Renderer::LoadAssets() {
@@ -346,6 +350,12 @@ void Renderer::RenderScene() {
 	//Draw HUD/Menu overlay
 	Draw2DOverlay();
 
+	if (camera) {
+		projMatrix = perspectiveMatrix;
+		viewMatrix = camera->BuildViewMatrix();
+		modelMatrix.ToIdentity();
+	}
+
 	SwapBuffers();
 	wglMakeCurrent(deviceContext, NULL);
 	openglMutex.unlock_mutex();
@@ -408,7 +418,7 @@ void Renderer::DrawScene()
 	char buffer[20];
 	for (unsigned int i = 0; i < lights.size(); i++) {
 		if (lights[i]->GetShadowTexture() > 0) { // Shadow depth texture exists for light, so use
-			// Calculate the view projection matrix for the light so can sample shadow map (binding to textureMatrix for the minimumute
+			// Calculate the view projection matrix for the light so can sample shadow map
 			T3Matrix4 shadowMatrix = biasMatrix * lights[i]->GetProjectionMatrix() * lights[i]->GetViewMatrix(T3Vector3(cameraMatrix.GetPositionVector()));
 			
 			sprintf_s(buffer, 20, "shadowProjMatrix[%d]", i);
@@ -555,7 +565,7 @@ void Renderer::DrawNodes(bool enableTextures) {
 			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
 		}
 
-		// ignore shader for the minimumute
+		// ignore shader for the minute
 		
 		modelMatrix = sceneNodes[i]->GetWorldTransform() * T3Matrix4::Scale(entity.GetScale());
 		glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"),	1,false, (float*)&modelMatrix);
@@ -736,7 +746,7 @@ void Renderer::DrawSkybox() {
 	SetCurrentShader(cloudShader);
 
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), GL_TEXTURE0);
-	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), Window::GetWindow().GetTimer()->GetMS() / 100000.0f);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), (float) Window::GetWindow().GetTimer()->GetMS() / 100000.0f);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, cloudMap);
@@ -1060,8 +1070,8 @@ void Renderer::DrawFrameBufferTex(GLuint fboTex) {
 
 void Renderer::Draw2DOverlay() {
 	glDisable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
 
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glCullFace(GL_FRONT);
 	SetCurrentShader(hudShader);
 	projMatrix = hudMatrix;
@@ -1071,6 +1081,11 @@ void Renderer::Draw2DOverlay() {
 
 		glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "blendColour"), 1, (float*) &overlayElements[i]->GetColor());
 		
+		if (overlayElements[i]->GetTransparent())
+			glEnable(GL_BLEND);
+		else
+			glDisable(GL_BLEND);
+
 		switch (overlayElements[i]->GetType()) {
 		case DrawableType::Text:
 			Draw2DText((DrawableText2D&) *overlayElements[i]);
@@ -1121,18 +1136,21 @@ void Renderer::Draw2DText(DrawableText2D& text) {
 
 void Renderer::Draw2DTexture(DrawableTexture2D& texture) 
 {
-	T3Vector3 origin = T3Vector3(texture.GetOrigin().x * texture.width * width, texture.GetOrigin().y * texture.height * height, 0);
-	T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(texture.GetRotation(), T3Vector3(0,0,1)) * T3Matrix4::Translation(-origin);
+	if (texture.GetTexture())
+	{
+		T3Vector3 origin = T3Vector3(texture.GetOrigin().x * texture.width * width, texture.GetOrigin().y * texture.height * height, 0);
+		T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(texture.GetRotation(), T3Vector3(0,0,1)) * T3Matrix4::Translation(-origin);
 	
-	modelMatrix = T3Matrix4::Translation(T3Vector3(texture.x * width, texture.y * height, 0)) * rotation * T3Matrix4::Scale(T3Vector3(texture.width * width, texture.height * height, 1));
-	textureMatrix.ToIdentity();	
-	UpdateShaderMatrices();
+		modelMatrix = T3Matrix4::Translation(T3Vector3(texture.x * width, texture.y * height, 0)) * rotation * T3Matrix4::Scale(T3Vector3(texture.width * width, texture.height * height, 1));
+		textureMatrix.ToIdentity();	
+		UpdateShaderMatrices();
 
-	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-	glBindTexture(GL_TEXTURE_2D, texture.GetTexture()->GetTextureName());
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+		glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+		glBindTexture(GL_TEXTURE_2D, texture.GetTexture()->GetTextureName());
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 
-	quadMesh->Draw();
+		quadMesh->Draw();
+	}
 }
 
 void Renderer::GenerateScreenTexture(GLuint &into, bool depth)
@@ -1282,7 +1300,7 @@ unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char
 	GLuint texture;
 	GLuint FBO;
 
-	CreateStaticMap(&staticMap, resolution, minValue, maxValue);
+	CreateStaticMap(&staticMap, 48, minValue, maxValue);
 
 	GLenum x = glGetError();
 	// Draw for perlin noise.
@@ -1290,18 +1308,27 @@ unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char
 	x = glGetError();
 	glBindTexture(GL_TEXTURE_2D, texture);
 	x = glGetError();
-	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_NEAREST );
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	x = glGetError();
-	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST );
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	x = glGetError();
-	glTexImage2D ( GL_TEXTURE_2D , 0, GL_RGBA8 , resolution , resolution , 0, GL_RGBA , GL_UNSIGNED_BYTE , NULL );
+	glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, resolution, resolution, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	x = glGetError();
 	glGenFramebuffers(1, &FBO);
 	x = glGetError();
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 	x = glGetError();
+
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+	cout << "binding texture " << texture << endl;
+	GLenum color = GL_COLOR_ATTACHMENT0;
+	glDrawBuffers(1, &color);
 	x = glGetError();
+
+	GLenum y = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	if (y == GL_FRAMEBUFFER_COMPLETE)
+		bool a = true;
+
 	glClear(GL_COLOR_BUFFER_BIT);
 	x = glGetError();
 	SetCurrentShader(cloudShader);
@@ -1326,7 +1353,7 @@ unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char
 	float* data = new float[resolution * resolution * 4];
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, FBO);
 	glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
-	GLenum y = glCheckFramebufferStatus(GL_READ_FRAMEBUFFER);
+	y = glCheckFramebufferStatus(GL_READ_FRAMEBUFFER);
 	x = glGetError();
 	glReadBuffer(GL_COLOR_ATTACHMENT0);
 	x = glGetError();
@@ -1337,7 +1364,8 @@ unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char
 
 	unsigned char* output = new unsigned char[resolution * resolution];
 	for (int i = 0; i < resolution * resolution; ++i)
-		output[i] = data[i * 4];
+		output[i] = data[i * 4] * 255;
 
 	return output;
 }
+#endif

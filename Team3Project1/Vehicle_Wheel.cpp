@@ -1,5 +1,6 @@
 #include"Vehicle_Wheel.h"
 #include "../Team3Project1/GameStateManager.h"
+#include "../Framework/InertialMatrixHelper.h"
 
 
 Vehicle_Wheel::Vehicle_Wheel(float size/*,PhysicsNode * carPhysicNode*/):
@@ -9,7 +10,7 @@ Vehicle_Wheel::Vehicle_Wheel(float size/*,PhysicsNode * carPhysicNode*/):
 	T3Vector3 position =T3Vector3(-11, -2, 7);
 	boundingRadius = size;
 	origin = position;
-	rotation = Quaternion::EulerAnglesToQuaternion(0,0,0);
+	rotation = Quaternion::EulerAnglesToQuaternion(0,-90,0);
 	scale = T3Vector3(size,size,size);
 	texture = NULL;
 	bumpTexture = NULL;
@@ -36,7 +37,7 @@ void Vehicle_Wheel::AddMove_W()
 void Vehicle_Wheel::SetPhysics(float size)
 {
     physicsNode = new PhysicsNode();
-    physicsNode->SetUseGravity(false);
+    physicsNode->SetUseGravity(true);
 	physicsNode->SetPosition(origin);
 	physicsNode->SetMass(5);
 	physicsNode->SetCollisionVolume(new CollisionAABB(T3Vector3(size,size,size)));
@@ -52,13 +53,16 @@ void Vehicle_Wheel::SetPhysics(float size)
 void Vehicle_Wheel::SetPhysics(float size,PhysicsNode * a)
 {
     physicsNode=a;
-	physicsNode->SetUseGravity(false);
+	physicsNode->SetUseGravity(true);
 	physicsNode->SetPosition(origin);
 	physicsNode->SetMass(5);
+	physicsNode->SetInverseMass(1.0f);
+	physicsNode->SetInverseInertia(InertialMatrixHelper::createCuboidInvInertial(5.0f,size,size,size));
 	physicsNode->SetCollisionVolume(new CollisionAABB(T3Vector3(size,size,size)));
-	physicsNode->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Tire.obj"));
-	physicsNode->SetMesh(NULL);
+	//physicsNode->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Tire.obj"));
+	physicsNode->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,-90,0));
 	physicsNode->SetIsCollide(true);
+	physicsNode->Setcar_wheel(false);
 
 
 
