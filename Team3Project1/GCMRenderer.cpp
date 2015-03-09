@@ -1,7 +1,7 @@
 #if PS3_BUILD
 
 #include "GCMRenderer.h"
-
+#include <iostream>
 //Static member variables need initialising!
 uint32_t		GCMRenderer::localHeapStart	= 0;
 
@@ -247,25 +247,31 @@ void GCMRenderer::SetViewport() {
 void GCMRenderer::SwapBuffers() {
 	// wait until FlipStatus = 0 so that PPU does not run too ahead of RSX
 	// FlipStatus turns to 0 when the previous flip is finished
+	std::cout << "SwapBuffers: begin"<< std::endl;
 	while (cellGcmGetFlipStatus()!=0){
 		sys_timer_usleep(300);
 	}
-
+	std::cout << "SwapBuffers: reset flip status "<< std::endl;
 	// reset FlipStatus = 1
 	cellGcmResetFlipStatus();
-
+	std::cout << "SwapBuffers: flip"<< std::endl;
 	// queue Flip command
 	cellGcmSetFlip((uint8_t)swapValue);
 	//Force all commands up to and including the flip command to be processed
+	std::cout << "SwapBuffers: flush"<< std::endl;
 	cellGcmFlush();
 
 	// wait the flip is done before start rendering to the other buffer
+	std::cout << "SwapBuffers: wait for flip to finish"<< std::endl; 
 	cellGcmSetWaitFlip();
 
 	//Invert the boolean 
+	std::cout << "SwapBuffers: invert the swapValue bool"<< std::endl; 
 	swapValue = !swapValue;
 	//Use the bool as an index into our array of surfaces (a bit naughty!)
+	std::cout << "SwapBuffers: access array using bool"<< std::endl;
 	cellGcmSetSurface(&surfaces[swapValue]);
+	std::cout << "SwapBuffers: done!"<< std::endl;
 }
 
 /*
@@ -283,7 +289,7 @@ void GCMRenderer::ClearBuffer() {
 	//glClearColor, but taking a single 32 bit value, in ARGB byte format
 	//Note how we're shifting bytes to byte aligned positions in the 32
 	//bit value we're sending.
-	cellGcmSetClearColor((64<<0)|(64<<8)|(64<<16)|(255<<24));
+	cellGcmSetClearColor((255<<0)|(255<<8)|(255<<16)|(255<<24));
 
 	//Tell GCM that we want to clear all of the colours of the current
 	//surface
