@@ -28,26 +28,26 @@ _-_-_-_-_-_-_-""  ""
 
 class CubeRobot : public SceneNode	{
 public:
-	CubeRobot(void);
+	CubeRobot(void) {}
 	virtual ~CubeRobot(void){};
 
 	//Overloaded from SceneNode, makes the CubeRobot dance!
-	virtual void	Update(float msec);
+	//virtual void	Update(float msec);
 
 	//CubeRobot relies on their being a cube Mesh - this creates that Mesh.
 	static void	CreateCube() {
 		OBJMesh*m = new OBJMesh();
 		m->LoadOBJMesh(MESHDIR"cube.obj");
-		cube = m; 
+		//cube = m; 
 	}
 
 	//Deletes the CubeRobot cube Mesh.
 	static void DeleteCube(){
-		delete cube;
+	//	delete cube;
 	}
 
 protected:
-	static Mesh* cube;
+	//static Mesh* cube;
 	//These are just handy pointers to the limbs, to make animating them easier
 	SceneNode*head;
 

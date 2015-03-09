@@ -76,6 +76,9 @@ public:
 	static Mesh* GenerateCone(unsigned int subdivs);
 	static Mesh* GenerateCylinder(unsigned int subdivs);
 
+	Vertex* GetVertices() const {return vertices;}
+	unsigned int GetNumVertices() const {return numVertices;}
+
 protected:
 	//Generates normals for all facets. Assumes geometry type is GL_TRIANGLES...
 	void GenerateNormals();
