@@ -206,14 +206,14 @@ void GraphicsTestScreen::LoadContent() {
 	DrawableEntity3D* myEnt = new DrawableEntity3D(
 		quad,
 		NULL,
-		NULL,
+		GameStateManager::Assets()->LoadTexture(this,TEXTUREDIR"ncl.gtf",0),
 		NULL,
 		25.0f,
 		T3Vector3(0,5,10),
 		Quaternion::EulerAnglesToQuaternion(0,0,0),
 		T3Vector3(5,5,5));
 	gameEntities.push_back(myEnt);
-	AddDrawable(myEnt);
+//	AddDrawable(myEnt);
 
 	//SetPlayer(ent);
 	camera = new FreeCamera();//ChaseCamera(ent, T3Vector3(0, 2, 50), 0, 0, 0);
@@ -235,7 +235,7 @@ void GraphicsTestScreen::UnloadContent()
 	//
 	// RemoveDrawable() etc will also be called automatically upon destruction so calling it is uneccessary.
 
-	delete track;
+	//delete track;
 
 	GameStateManager::Assets()->UnloadQuad(this);
 	GameStateManager::Assets()->UnloadCylinder(this, 20);

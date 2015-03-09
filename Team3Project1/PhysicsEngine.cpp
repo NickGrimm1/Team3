@@ -1,8 +1,10 @@
 #include "PhysicsEngine.h"
 #include "RacerGame.h"
 #include "../Framework/CollisionHelper.h"
+#if WINDOWS_BUILD
 #include <algorithm>
 #include <list>
+#endif
 
 PhysicsEngine* PhysicsEngine::instance = NULL;
 
@@ -36,6 +38,7 @@ void PhysicsEngine::ThreadRun()
 #endif
 		frameRate = (int)(1000.0f / msec);
 
+#if WINDOWS_BUILD
 		NarrowPhaseCollisions();
 
 		narrowlist.clear();
@@ -49,9 +52,10 @@ void PhysicsEngine::ThreadRun()
 			narrowlist.push_back((*i));
 		}
 		//BroadPhaseCollisions();
+#endif
 	}
 }
-
+#if WINDOWS_BUILD
 T3Vector3 PhysicsEngine::support(PhysicsNode& shape1,PhysicsNode& shape2, T3Vector3 dir)
 {
 	
@@ -447,7 +451,6 @@ void  PhysicsEngine::SortandSweep()
 {
 
 	
-#if WINDOWS_BUILD
 	std::sort(narrowlist.begin(),narrowlist.end(), [](PhysicsNode* xleft, PhysicsNode* xright){return xleft->GetPosition().x < xright->GetPosition().x;});
 
 	for( vector<PhysicsNode*>::iterator i=narrowlist.begin(); i <narrowlist.end(); ++i) 
@@ -477,7 +480,6 @@ void  PhysicsEngine::SortandSweep()
 						}
 				}
 		}
-#endif
 	}
 	
 
@@ -648,10 +650,10 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 		//						  }
 		//	}
 		//
-			}
-		}
+		}}
 	}
 }
+
 bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* data)
 {
 	const unsigned _EXIT_ITERATION_LIMIT =50;
@@ -887,3 +889,4 @@ void PhysicsEngine::OnCollision(PhysicsNode& p1, PhysicsNode& p2)
 	gameClass->CollisionBetween(p1.GetGameEntity(),p2.GetGameEntity());
 	cout<<"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa="<<p2.GetType()<<endl;
 }
+#endif
