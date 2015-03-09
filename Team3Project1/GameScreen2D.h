@@ -187,7 +187,7 @@ public:
 		if (selectables.size() > 0)
 		{
 			currentSelected %= selectables.size();
-			for (int i = 0; i < selectables.size(); ++i)
+			for (unsigned int i = 0; i < selectables.size(); ++i)
 				selectables[i]->UnSelect();
 			selectables[currentSelected]->Select();
 		}
@@ -195,7 +195,7 @@ public:
 	void ClearSelection()
 	{
 		currentSelected = 0;
-		for (int i = 0; i < selectables.size(); ++i)
+		for (unsigned int i = 0; i < selectables.size(); ++i)
 			selectables[i]->UnSelect();
 	}
 protected:

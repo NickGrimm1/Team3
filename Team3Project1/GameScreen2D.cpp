@@ -172,7 +172,7 @@ void GameScreen2D::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEven
 					if (currentSelected < 0)
 						currentSelected = selectables.size() - 1;
 				}
-				for (int i = 0; i < selectables.size(); ++i)
+				for (unsigned int i = 0; i < selectables.size(); ++i)
 					selectables[i]->UnSelect();
 				selectables[currentSelected]->Select();
 			}

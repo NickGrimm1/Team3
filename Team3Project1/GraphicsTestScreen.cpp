@@ -206,7 +206,7 @@ void GraphicsTestScreen::LoadContent() {
 	DrawableEntity3D* myEnt = new DrawableEntity3D(
 		quad,
 		NULL,
-		NULL,
+		GameStateManager::Assets()->LoadTexture(this,TEXTUREDIR"ncl.gtf",0),
 		NULL,
 		25.0f,
 		T3Vector3(0,5,10),
@@ -235,7 +235,7 @@ void GraphicsTestScreen::UnloadContent()
 	//
 	// RemoveDrawable() etc will also be called automatically upon destruction so calling it is uneccessary.
 
-	delete track;
+	//delete track;
 
 	GameStateManager::Assets()->UnloadQuad(this);
 	GameStateManager::Assets()->UnloadCylinder(this, 20);
