@@ -71,7 +71,9 @@ bool Scoreboard::RetrieveScoreboard() {
 					string score;
 					unsigned int delim = httpResponse.find(" ");
 					name = httpResponse.substr(0, delim);
+					while (name.length() < 3) name += " ";
 					score = httpResponse.substr(delim + 1, string::npos);
+					while (score.length() < 3) score = '0' + score;
 					scoreboard.push_back(pair<string, string>(name, score));
 					scoreboardLength -= httpResponse.length() + 1; // + 1 for EOL
 				}
@@ -139,20 +141,20 @@ unsigned int Scoreboard::GetLowestScore() const {
 }
 
 string Scoreboard::GetName(unsigned int position) const {
-	if (scoreboard.size() > 0) {
+	if (scoreboard.size() > position) {
 		return scoreboard[position].first;
 	}
 	else { // no scores loaded
-		return "";
+		return "___";
 	}
 }
 
 string Scoreboard::GetScore(unsigned int position) const {
-	if (scoreboard.size() > 0) {
+	if (scoreboard.size() > position) {
 		return scoreboard[position].second;
 	}
 	else { // no scores loaded
-		return "";
+		return "000";
 	}
 }
 
