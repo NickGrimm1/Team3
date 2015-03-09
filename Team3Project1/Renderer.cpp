@@ -186,7 +186,7 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	//CreateStaticMap(&cloudMap, 128, 1, 1000);
 
 	glClearColor(0, 0, 0, 1);
-	SwapBuffers();
+//	SwapBuffers();
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
 	wglMakeCurrent(deviceContext, NULL);
@@ -212,6 +212,7 @@ bool Renderer::LoadShaders()
 	velocityShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"VelocityVertex.glsl", SHADERDIR"VelocityFragment.glsl");
 	motionBlurShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlurFragment.glsl");
 	hudShader		 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl");
+	debugDrawShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"debugVertex.glsl", SHADERDIR"debugFragment.glsl");
 	return LoadCheck();
 }
 
@@ -232,7 +233,8 @@ bool Renderer::LoadCheck()
 			bloomFinalShader	!= NULL &&
 			velocityShader		!= NULL &&
 			motionBlurShader	!= NULL &&
-			hudShader			!= NULL);
+			hudShader			!= NULL &&
+			debugDrawShader		!= NULL);
 }
 
 void Renderer::UnloadShaders()
@@ -253,6 +255,7 @@ void Renderer::UnloadShaders()
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"VelocityVertex.glsl", SHADERDIR"VelocityFragment.glsl");//VBuffer Shader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlurFragment.glsl");//Motion blur Shader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl");
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"debugVertex.glsl", SHADERDIR"debugFragment.glsl");
 }
 
 bool Renderer::LoadAssets() {
@@ -346,6 +349,10 @@ void Renderer::RenderScene() {
 
 	//Draw HUD/Menu overlay
 	Draw2DOverlay();
+
+	projMatrix = perspectiveMatrix;
+	viewMatrix = camera->BuildViewMatrix();
+	modelMatrix.ToIdentity();
 
 	SwapBuffers();
 	wglMakeCurrent(deviceContext, NULL);
