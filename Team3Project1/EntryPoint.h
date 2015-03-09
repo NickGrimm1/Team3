@@ -30,11 +30,11 @@ namespace EntryPoint
 		//LoadingScreen* loadingScreen = new LoadingScreen();
 		//GameStateManager::Instance()->AddGameScreen(loadingScreen);
 
-		GraphicsTestScreen* game = new GraphicsTestScreen();
-		GameStateManager::Instance()->AddGameScreen(game);
+		//GraphicsTestScreen* game = new GraphicsTestScreen();
+		//GameStateManager::Instance()->AddGameScreen(game);
 
-		//MainMenu* main = new MainMenu();
-		//GameStateManager::Instance()->AddGameScreen(main);
+		MainMenu* main = new MainMenu();
+		GameStateManager::Instance()->AddGameScreen(main);
 
 		//PauseScreen* pause = new PauseScreen();
 		//GameStateManager::Instance()->AddGameScreen(pause);

@@ -66,7 +66,7 @@ void MainMenu::LoadContent() {
 	soundMute			= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/sound_mute.png", 0);
 	soundMuteHover		= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/sound_mute_selected.png", 0);
 
-	float charWidth = 0.128f;
+	float charWidth = 0.200f;
 	float charHeight = 0.08f;
 
 	//Offset for the text to keep it central in the button.
@@ -74,7 +74,7 @@ void MainMenu::LoadContent() {
 	float btnOffsetY = 0.04f;
 
 	//Button size
-	float btnScaleX = 0.168f;
+	float btnScaleX = 0.240f;
 	float btnScaleY = 0.152f;
 
 	//Button Position, determines the first button's postion, and Y is multiplied to place succesive buttons uniformly.
@@ -107,7 +107,7 @@ void MainMenu::LoadContent() {
 				new DrawableTexture2D(musicBtnX, musicBtnY + musicBtnHeight, 1, musicBtnWidth, musicBtnHeight, soundNoMute, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
 				new DrawableText2D(musicBtnX, musicBtnY + musicBtnHeight, 0.0f, 0.0f, 0.0f, "", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::SoundDeselected, this);
 
-	scoreBoard = new DrawableTexture2D(0.55f, 0.125f, 1, 0.35f, 0.75f, scoreBoardTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false);
+	scoreBoard = new DrawableTexture2D(0.55f, 0.145f, 1, 0.35f, 0.75f, scoreBoardTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false);
 
 	AddDrawable(scoreBoard);
 
@@ -120,6 +120,18 @@ void MainMenu::LoadContent() {
 	Font* startFont = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"tahoma.tga", 16, 16);
 	pressStart = new DrawableText2D(0.3f, 0.1f, 1, 0.4f, 0.05f, "Player 1 Press Start or A", startFont);
 	AddDrawable(pressStart);
+
+	// Load Scoreboard
+	scoreBoardConn = new Scoreboard();
+	scoreBoardConn->RetrieveScoreboard();
+	for (unsigned int i = 0; i < 10; i++) {
+		scoreBoardConn->GetName(i);
+		scores.push_back(pair<DrawableText2D*, DrawableText2D*>(new DrawableText2D(0.57f, 0.180f + (0.065f * i), 2, 0.12f, 0.065f, scoreBoardConn->GetName(i), font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
+			new DrawableText2D(0.75, 0.180 + (0.065 * i), 2, 0.12, 0.065, scoreBoardConn->GetScore(i), font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false)));
+		AddDrawable(scores.back().first);
+		AddDrawable(scores.back().second);
+	}
+
 }
 
 void MainMenu::UnloadContent() {

@@ -648,10 +648,10 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 		//						  }
 		//	}
 		//
+			}
 		}
 	}
 }
-
 bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* data)
 {
 	const unsigned _EXIT_ITERATION_LIMIT =50;

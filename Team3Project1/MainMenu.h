@@ -15,6 +15,7 @@ Version: 0.0.1 02/03/2015.</summary>
 #include "GraphicsTestScreen.h"
 #include "RacerGame.h"
 #include "MenuScreen3D.h"
+#include "Scoreboard.h"
 
 class MainMenu : public GameScreen2D
 {
@@ -84,4 +85,10 @@ private:
 
 	DrawableText2D* pressStart;
 	GamepadEvents::PlayerIndex playerOne;
+
+#if WINDOWS_BUILD
+	Scoreboard* scoreBoardConn;
+	vector<pair<DrawableText2D*, DrawableText2D*>> scores;
+
+#endif
 };
