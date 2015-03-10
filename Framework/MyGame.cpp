@@ -42,7 +42,7 @@ MyGame::MyGame()	{
 	cube	= new OBJMesh(MESHDIR"cube.obj");
 	quad	= Mesh::GenerateQuad();
 	sphere	= new OBJMesh(MESHDIR"ico.obj");
-	newCar= new OBJMesh(MESHDIR"Nova Car.obj");
+	newCar= new OBJMesh(MESHDIR"NovaCar.obj");
 
 	/*
 	A more 'robust' system would check the entities vector for duplicates so as

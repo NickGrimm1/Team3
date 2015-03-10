@@ -30,8 +30,9 @@ public:
 protected:
 
 	bool SubmitScore();
-
+#if WINDOWS_BUILD
 	Scoreboard* scoreboard;
+#endif
 	unsigned int currentPos;
 	string name;
 	DrawableText2D* nameEntities[3];
