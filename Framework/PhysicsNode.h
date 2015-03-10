@@ -43,7 +43,7 @@ _-_-_-_-_-_-_-""  ""
 //#include "GameEntity.h"
 
 using namespace std;
-#define LINEAR_VELOCITY_DAMP 0.92
+#define LINEAR_VELOCITY_DAMP 0.9992
 #define ANGULAR_VELOCITY_DAMP 0.7
 #define LINEAR_VELOCITY_MIN 0.00001
 
@@ -87,6 +87,9 @@ public:
 	DrawableEntity3D* GetTarget() {return target;}
 	void	SetUseGravity(bool value) { useGravity = value; }
 	void	SetCollisionVolume(CollisionVolume* vol) { this->vol = vol; }
+
+	bool Getplanecollision(){return planecollision;};
+	void Setplanecollision(bool Planecollision){planecollision =Planecollision;};
 
 	T3Vector3 GetFriction() {return m_friction;}
 	void    SetFriction(T3Vector3 friction)  {m_friction=friction;}
@@ -143,6 +146,7 @@ public:
 	bool useGravity;
 	bool isCollide;
 	bool car_wheel;
+	bool planecollision;
 
 	Mesh* physicsMesh;
 

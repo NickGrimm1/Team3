@@ -132,7 +132,8 @@ public:
 
 class CollisionData {
 public:
-	T3Vector3 m_point;
+	T3Vector3 m_point1;
+	T3Vector3 m_point2;
 	T3Vector3 m_normal;
 	float m_penetration;
 };

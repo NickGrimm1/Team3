@@ -121,7 +121,7 @@ void Renderer::RenderScene() {
 	std::cout << "RenderScene: Swapping Buffers" << std::endl;
 	SwapBuffers();
 	std::cout << "RenderScene: Buffers Swapped" << std::endl;
-	std::cout << "RenderScene: Frame Drawn" << std::endl;
+	//std::cout << "RenderScene: Frame Drawn" << std::endl;
 }
 
 bool Renderer::LoadShaders()

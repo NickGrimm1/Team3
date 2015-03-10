@@ -35,13 +35,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="duck256.gtf" />
-    <None Include="fragment.cg" />
+    <CustomBuild Include="fragment.cg">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">$(SCE PS3 ROOT)/host-win32/Cg/bin/sce-cgc -profile sce fp rsx -o ”$(InputName).fpo”</Command>
+    </CustomBuild>
     <None Include="fragment.fpo" />
     <None Include="fragment_asm.txt" />
     <None Include="gpad_config.txt" />
     <None Include="ncl.gtf" />
     <None Include="ncl.tga" />
-    <None Include="vertex.cg" />
+    <CustomBuild Include="vertex.cg">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">$(SCE PS3 ROOT)/host-win32/Cg/bin/sce-cgc -profile sce vp rsx -o ”$(InputName).vpo”</Command>
+    </CustomBuild>
     <None Include="vertex.vpo" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
