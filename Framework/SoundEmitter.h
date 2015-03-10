@@ -49,8 +49,8 @@
 
 	 inline OALSource * GetSource () { return currentSource;}
 
-	 void SetTarget ( SceneNode * s ) { target = s;}
-	 SceneNode* target;
+	 void SetTarget ( DrawableEntity3D * s ) { target = s;}
+	 DrawableEntity3D* target;
 	 void AttachSource ( OALSource * s ); //attach them from a SoundEmitter
 	 void DetachSource ();//detach them from a SoundEmitter
 

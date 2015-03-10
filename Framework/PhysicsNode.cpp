@@ -1,6 +1,6 @@
 #include "PhysicsNode.h"
 
-const T3Vector3 PhysicsNode::gravity = T3Vector3(0,-5,0);
+const T3Vector3 PhysicsNode::gravity = T3Vector3(0,-10,0);
 
 PhysicsNode::PhysicsNode(void): vol(NULL) {
 	target = NULL;

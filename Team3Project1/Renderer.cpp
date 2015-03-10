@@ -350,10 +350,10 @@ void Renderer::RenderScene() {
 	//Draw HUD/Menu overlay
 	Draw2DOverlay();
 
-	if (camera) {
-		projMatrix = perspectiveMatrix;
-		viewMatrix = camera->BuildViewMatrix();
-		modelMatrix.ToIdentity();
+	if (camera) { //TODO - remove
+	projMatrix = perspectiveMatrix;
+	viewMatrix = camera->BuildViewMatrix();
+	modelMatrix.ToIdentity();
 	}
 
 	SwapBuffers();
