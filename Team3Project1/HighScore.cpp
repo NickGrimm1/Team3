@@ -20,7 +20,9 @@ HighScore::~HighScore(void)
 }
 
 void HighScore::LoadContent() {
+#if WINDOWS_BUILD
 	scoreboard = new Scoreboard();
+#endif
 	Font* font = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"quadrats.tga", 16, 16);
 	Texture* scoreBoardTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"score_board.png", 0);
 	DrawableTexture2D* scoreBoardBG = new DrawableTexture2D(0.2f, 0.1f, 5, 0.6f, 0.8f, scoreBoardTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false);
@@ -61,7 +63,9 @@ void HighScore::Update() {
 }
 
 void HighScore::UnloadContent() {
+#if WINDOWS_BUILD
 	delete scoreboard;
+#endif
 }
 
 bool HighScore::SubmitScore() {
