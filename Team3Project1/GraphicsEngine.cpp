@@ -62,6 +62,8 @@ GraphicsEngine::GraphicsEngine()
 		T3Vector2(0.5f, 0.5f),
 		T3Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
+	renderer->SetLoadingIcon(loadingIcon);
+
 	isInitialised = true; // Graphics Engine has initialised successfully
 }
 
@@ -187,13 +189,17 @@ void GraphicsEngine::Run() {
 			overlayElementsList.push_back(loadingIcon);
 			isLoadingDrawing = true;
 		}
-//		else if (!isLoading && isLoadingDrawing) {
-//			overlayElementsList
-//		}
-
-		if (isLoadingDrawing) {
-			loadingIcon->SetRotation(loadingIcon->GetRotation() + 1.0f);
+		else if (!isLoading && isLoadingDrawing) {
+			for (unsigned int i = 0; i < overlayElementsList.size(); i++) {
+				if (overlayElementsList[i] == loadingIcon) {
+					overlayElementsList.erase(overlayElementsList.begin() + i);
+				}
+			}
 		}
+
+//		if (isLoadingDrawing) {
+//			loadingIcon->SetRotation(loadingIcon->GetRotation() + 1.0f);
+//		}
 
 		//Update the day/night float
 		renderer->SetDayNight(DayNightCycle());
