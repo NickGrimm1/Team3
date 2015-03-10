@@ -561,10 +561,10 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 					bool succeeded = EPA(first, second, data);
  					if (succeeded)
 					{
-						CollisionHelper::AddCollisionImpulse( first, second, *data);
+						CollisionHelper::AddCollisionImpulse(first, second, *data);
 
 
-						if(first.Getplanecollision()==true && second.Getplanecollision()==true)
+						if(first.Getplanecollision()==true && second.Getplanecollision()==false)
 
 						{
 							first.SetUseGravity(false);
@@ -574,12 +574,10 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 							temp1.y = 0;
 							first.SetLinearVelocity(temp1);
 							
-							
 							temp2 =  second.GetLinearVelocity();
 							temp2.y = 0;
 							second.SetLinearVelocity(temp2);
-							
-							
+													
 			                second.SetPosition(second.GetPosition() + T3Vector3(0, 2.0f, 0));
 
 						}

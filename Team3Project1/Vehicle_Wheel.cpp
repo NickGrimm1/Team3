@@ -63,7 +63,7 @@ void Vehicle_Wheel::SetPhysics(float size,PhysicsNode * a)
 	physicsNode->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,-90,0));
 	physicsNode->SetIsCollide(true);
 	physicsNode->Setcar_wheel(false);
-	physicsNode->Setplanecollision(true);
+	physicsNode->Setplanecollision(false);
 
 
 
