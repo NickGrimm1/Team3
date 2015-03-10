@@ -470,12 +470,30 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 			camera->AddMovement(T3Vector3(0,1,0));
 			break;
 		case KeyboardEvents::KEYBOARD_SPACE:
-			{camera->AddMovement(T3Vector3(0,-1,0));
-			 temp1 =  car->GetCarNode().GetLinearVelocity();
-			  car->GetCarNode().SetUseGravity(TRUE);
-			 temp1.y = 0.4;
-			  car->GetCarNode().SetLinearVelocity(temp1);	
+			{
+				camera->AddMovement(T3Vector3(0,-1,0));
+			}
+			break;
+
+		case KeyboardEvents::KEYBOARD_N:
+			{
+				car->GetCarNode().SetPosition(car->GetCarNode().GetPosition() + T3Vector3(0.0f, -0.2f, 0.0f));	
+			}
+			break;
+		case KeyboardEvents::KEYBOARD_H:
+			{
+				car->GetCarNode().SetPosition(car->GetCarNode().GetPosition() + T3Vector3(0.0f, 0.2f, 0.0f));
 			
+			}
+			break;
+
+		case KeyboardEvents::KEYBOARD_B:
+			{
+			//	car->GetCarNode().SetOrientation(Quaternion::AxisAngleToQuaterion(T3Vector3(0, 0, 1), 20));
+			 temp1 =  car->GetCarNode().GetLinearVelocity();
+			 car->GetCarNode().SetUseGravity(TRUE);
+			 temp1.y = -1.4;
+			  car->GetCarNode().SetLinearVelocity(temp1);
 			}
 			break;
 		}

@@ -37,7 +37,7 @@ void Vehicle_Wheel::AddMove_W()
 void Vehicle_Wheel::SetPhysics(float size)
 {
     physicsNode = new PhysicsNode();
-    physicsNode->SetUseGravity(true);
+    physicsNode->SetUseGravity(false);
 	physicsNode->SetPosition(origin);
 	physicsNode->SetMass(5);
 	physicsNode->SetCollisionVolume(new CollisionAABB(T3Vector3(size,size,size)));
@@ -53,7 +53,7 @@ void Vehicle_Wheel::SetPhysics(float size)
 void Vehicle_Wheel::SetPhysics(float size,PhysicsNode * a)
 {
     physicsNode=a;
-	physicsNode->SetUseGravity(true);
+	physicsNode->SetUseGravity(false);
 	physicsNode->SetPosition(origin);
 	physicsNode->SetMass(5);
 	physicsNode->SetInverseMass(1.0f);
