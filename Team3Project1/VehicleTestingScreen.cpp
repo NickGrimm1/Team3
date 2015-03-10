@@ -72,6 +72,7 @@ void VehicleTestingScreen::LoadContent() {
 		road->GetPhysicsNode().SetUseGravity(false);
 		road->GetPhysicsNode().SetIsCollide(true);
 	    road->GetPhysicsNode().Setcar_wheel(true);
+		road->GetPhysicsNode().Setplanecollision(true);
 		road->GetPhysicsNode().SetPosition(T3Vector3(-200,-20,0));
 		road->GetPhysicsNode().SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
 		road->ConnectToSystems();
@@ -490,9 +491,9 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 		case KeyboardEvents::KEYBOARD_B:
 			{
 			//	car->GetCarNode().SetOrientation(Quaternion::AxisAngleToQuaterion(T3Vector3(0, 0, 1), 20));
-			 temp1 =  car->GetCarNode().GetLinearVelocity();
-			 car->GetCarNode().SetUseGravity(TRUE);
-			 temp1.y = -1.4;
+			  temp1 =  car->GetCarNode().GetLinearVelocity();
+			  car->GetCarNode().SetUseGravity(TRUE);
+			  temp1.y = -1.4;
 			  car->GetCarNode().SetLinearVelocity(temp1);
 			}
 			break;

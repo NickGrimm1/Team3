@@ -322,6 +322,7 @@ void Vehicle::SetPhysics(float size,PhysicsNode * a)
 
 	car->SetIsCollide(true);
 	car->Setcar_wheel(true);
+	car->Setplanecollision(true);
 
 
 

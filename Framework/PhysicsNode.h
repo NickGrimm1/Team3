@@ -88,6 +88,9 @@ public:
 	void	SetUseGravity(bool value) { useGravity = value; }
 	void	SetCollisionVolume(CollisionVolume* vol) { this->vol = vol; }
 
+	bool Getplanecollision(){return planecollision;};
+	void Setplanecollision(bool Planecollision){planecollision =Planecollision;};
+
 	T3Vector3 GetFriction() {return m_friction;}
 	void    SetFriction(T3Vector3 friction)  {m_friction=friction;}
 
@@ -143,6 +146,7 @@ public:
 	bool useGravity;
 	bool isCollide;
 	bool car_wheel;
+	bool planecollision;
 
 	Mesh* physicsMesh;
 

@@ -563,6 +563,26 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 					{
 						CollisionHelper::AddCollisionImpulse( first, second, *data);
 
+
+						if(first.Getplanecollision()==true && second.Getplanecollision()==true)
+
+						{
+							first.SetUseGravity(false);
+							second.SetUseGravity(false);
+							T3Vector3 temp1,temp2;
+							temp1 =  first.GetLinearVelocity();
+							temp1.y = 0;
+							first.SetLinearVelocity(temp1);
+							
+							
+							temp2 =  second.GetLinearVelocity();
+							temp2.y = 0;
+							second.SetLinearVelocity(temp2);
+							
+							
+			                second.SetPosition(second.GetPosition() + T3Vector3(0, 2.0f, 0));
+
+						}
 			        }
 				}
 			
