@@ -127,7 +127,7 @@ void HighScore::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents:
 }
 
 void HighScore::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) {
-	if (analogueControl == GamepadEvents::AnalogueControl::LEFT_STICK) {
+	if (analogueControl == GamepadEvents::LEFT_STICK) {
 		// Vertical movement if absolute value if vertical displacement and greater than horizontal displacement
 		if (abs(amount.y) > abs(amount.x)) {
 			if (amount.y > 0.8f && timer.GetMS() > lastUp + 250) { // really make user displace stick, prevent letter changing every frame

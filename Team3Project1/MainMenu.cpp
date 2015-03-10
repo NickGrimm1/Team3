@@ -163,8 +163,9 @@ void MainMenu::UnloadContent() {
 
 	GameStateManager::Assets()->UnloadFont(this, TEXTUREDIR"quadrats.tga");
 	GameStateManager::Assets()->UnloadFont(this, TEXTUREDIR"tahoma.tga");
-
+#if WINDOWS_BUILD
 	delete scoreBoardConn;
+#endif
 }
 
 
