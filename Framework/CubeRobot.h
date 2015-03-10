@@ -36,8 +36,7 @@ public:
 
 	//CubeRobot relies on their being a cube Mesh - this creates that Mesh.
 	static void	CreateCube() {
-		OBJMesh*m = new OBJMesh();
-		m->LoadOBJMesh(MESHDIR"cube.obj");
+		OBJMesh*m = new OBJMesh(MESHDIR"cube.obj");
 		//cube = m; 
 	}
 

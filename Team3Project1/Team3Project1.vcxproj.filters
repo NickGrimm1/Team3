@@ -540,6 +540,9 @@
     <ClInclude Include="Scoreboard.h">
       <Filter>Game\Menus\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PhysicsObjMesh.h">
+      <Filter>Framework\Resource Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">
