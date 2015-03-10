@@ -4,7 +4,7 @@
 
 
 Vehicle::Vehicle(float size) {
-	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
+	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaCar.obj");
 //	BuffMesh = new OBJMesh(MESHDIR"ico.obj");
 	
 	//TT =  SOIL_load_OGL_texture ("../../Texture/footballpitch.jpg", SOIL_LOAD_AUTO , SOIL_CREATE_NEW_ID , SOIL_FLAG_MIPMAPS);
@@ -256,7 +256,7 @@ Makes a Player. Every game has a crate in it somewhere!
 
 //
 //void* Vehicle::BuildPlayerEntity(float size, T3Vector3 pos) {   
-//	DrawableEntity3D* test = new DrawableEntity3D(GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj"),
+//	DrawableEntity3D* test = new DrawableEntity3D(GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaCar.obj"),
 //		NULL,
 //		NULL,
 //		NULL,

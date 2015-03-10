@@ -38,7 +38,7 @@ void GraphicsTestScreen::LoadContent() {
 #if PS3_BUILD
 	Texture* nclTex = GameStateManager::Assets()->LoadTexture(this, "/ncl.gtf", 0);
 #endif
-//	Mesh* car = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
+//	Mesh* car = GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaCar.obj");
 
 #ifdef WINDOWS_BUILD
 	//cout << "GraphicsTestScreen-Quad: " << quad->GetArrayObject() << ", " << quad->GetBufferObject() << endl;
@@ -242,7 +242,7 @@ void GraphicsTestScreen::UnloadContent()
 	GameStateManager::Assets()->UnloadCircle(this, 20);
 	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Grass_Color.jpg"),
 	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"calvin.bmp"),
-	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"Nova Car.obj");
+	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"NovaCar.obj");
 }
 
 

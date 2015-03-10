@@ -139,9 +139,6 @@
     <Filter Include="Framework\Audio\Source Files">
       <UniqueIdentifier>{59146a63-ef9f-4ff6-a2e0-f2012c0c6a7c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shaders">
-      <UniqueIdentifier>{adf2d61d-9124-4594-9fb3-582140c6248e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Framework\Graphics\Common">
       <UniqueIdentifier>{93bd36e0-9c30-41b2-9fb5-842163c13e2b}</UniqueIdentifier>
     </Filter>
@@ -180,6 +177,24 @@
     </Filter>
     <Filter Include="Game\Web Interface">
       <UniqueIdentifier>{7b56afba-50ff-4105-87a4-bb9e3118758c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{430eb0fa-7f87-4b42-98a2-d624eb6c6686}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Meshes">
+      <UniqueIdentifier>{511ee7e2-8c09-4c40-b0e9-373f68e01370}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\PHP">
+      <UniqueIdentifier>{48d27d25-5691-41e8-8575-a9bb9ff0e7c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Textures">
+      <UniqueIdentifier>{59bd5da2-f985-4a95-86b7-d312197cd23e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Sounds">
+      <UniqueIdentifier>{92042c69-d1c3-4e65-9c0d-a3d653f001f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders">
+      <UniqueIdentifier>{adf2d61d-9124-4594-9fb3-582140c6248e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -776,94 +791,94 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\TechFragment.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Shaders\TechVertex.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\CombineFragment.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\CombineVertex.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\DeferredPassVertex.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\MainFragShader.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\MainVertShader.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\PointToCircleGeom.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\PointToQuadGeom.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\SkyBoxFragment.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\SkyBoxVertex.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\debugFragment.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\debugVertex.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\TexturedFragment.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\TexturedVertex.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\BlendedFragment.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\BlurFragment.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\BrightPassFragment.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\BloomFinalFragment.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\BloomCombFragment.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\DownSampleFragment.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\DeferredPassFragment.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\ShadowFragment.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\ShadowVertex.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\VelocityVertex.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\VelocityFragment.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\SkyDomeVertex.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\PassThroughVertex.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\PerlinFragment.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\SkyDomeFragment.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\PHP\getScores.php">
       <Filter>Game\Web Interface</Filter>
@@ -871,5 +886,140 @@
     <None Include="..\Resources\PHP\postScore.php">
       <Filter>Game\Web Interface</Filter>
     </None>
+    <None Include="..\Resources\Meshes\NovaCar.mtl">
+      <Filter>Resources\Meshes</Filter>
+    </None>
+    <None Include="..\Resources\Meshes\NovaTire.mtl">
+      <Filter>Resources\Meshes</Filter>
+    </None>
+    <None Include="..\Resources\Textures\button.gtf">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\button_clicked.gtf">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\button_selected.gtf">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\day_sky.gtf">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\Grass_Color.gtf">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\Grass_Color.tga">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\night_sky.gtf">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\NovaCarUV.gtf">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\NovaCarUV.tga">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\pause_screen.gtf">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\quadrats.gtf">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\quadrats.tga">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\raindrop.gtf">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\refresh.gtf">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\score_board.gtf">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\snowflake.gtf">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\tahoma.gtf">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\tahoma.tga">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\TireUV.gtf">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\TireUV.tga">
+      <Filter>Resources\Textures</Filter>
+    </None>
+    <None Include="..\Resources\Textures\TitleSafeArea.gtf">
+      <Filter>Resources\Textures</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="..\Resources\Meshes\CarPhysics.obj">
+      <Filter>Resources\Meshes</Filter>
+    </Object>
+    <Object Include="..\Resources\Meshes\cube.obj">
+      <Filter>Resources\Meshes</Filter>
+    </Object>
+    <Object Include="..\Resources\Meshes\dome.obj">
+      <Filter>Resources\Meshes</Filter>
+    </Object>
+    <Object Include="..\Resources\Meshes\NovaCar.obj">
+      <Filter>Resources\Meshes</Filter>
+    </Object>
+    <Object Include="..\Resources\Meshes\NovaTire.obj">
+      <Filter>Resources\Meshes</Filter>
+    </Object>
+    <Object Include="..\Resources\Meshes\sphere.obj">
+      <Filter>Resources\Meshes</Filter>
+    </Object>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Resources\Textures\button.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\button_clicked.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\button_selected.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\calvin.bmp">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\day_sky.jpg">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\Grass_Color.jpg">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\night_sky.jpg">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\pause_screen.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\raindrop.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\refresh.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\score_board.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\snowflake.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\TitleSafeArea.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\Resources\Sounds\bgm2_42sec.wav">
+      <Filter>Resources\Sounds</Filter>
+    </Media>
   </ItemGroup>
 </Project>
