@@ -169,17 +169,17 @@
     <Filter Include="Framework\Graphics\Common\3D\Source Files">
       <UniqueIdentifier>{d95af220-a299-45e3-a458-26d2df988fec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\Audio\Artificial Intelligence">
-      <UniqueIdentifier>{2dcc95e2-a2cc-4712-b6f2-da28e0fff502}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Audio\Artificial Intelligence\Header Files">
-      <UniqueIdentifier>{8f5d6abe-8484-4d98-a766-9752a098c146}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Audio\Artificial Intelligence\Source Files">
-      <UniqueIdentifier>{e41fb13d-e937-41de-a3ef-f1cb43bf71f9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Web Interface">
       <UniqueIdentifier>{7b56afba-50ff-4105-87a4-bb9e3118758c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Artificial Intelligence">
+      <UniqueIdentifier>{2dcc95e2-a2cc-4712-b6f2-da28e0fff502}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Artificial Intelligence\Header Files">
+      <UniqueIdentifier>{8f5d6abe-8484-4d98-a766-9752a098c146}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Artificial Intelligence\Source Files">
+      <UniqueIdentifier>{e41fb13d-e937-41de-a3ef-f1cb43bf71f9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
