@@ -46,6 +46,7 @@ MainMenu::~MainMenu(void)
 }
 
 void MainMenu::LoadContent() {
+	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	wallpaper = new MenuScreen3D();
 	GameStateManager::AddGameScreen(wallpaper);
 
@@ -134,6 +135,8 @@ void MainMenu::LoadContent() {
 	}
 #endif
 
+	//finished loading screen
+	GameStateManager::Graphics()->EnableLoadingIcon(false);
 }
 
 void MainMenu::UnloadContent() {
@@ -172,6 +175,7 @@ void MainMenu::UnloadContent() {
 /*--------------------Clicked Methods--------------------*/
 
 void MainMenu::NewGameClicked(float x, float y) {
+	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	newGame->GetTexture()->SetTexture(buttonTexClicked);
 #if WINDOWS_BUILD
 	GameStateManager::Graphics()->EnableMousePointer(false);
@@ -180,6 +184,7 @@ void MainMenu::NewGameClicked(float x, float y) {
 	GameStateManager::Instance()->RemoveGameScreen(this);
 
 	RacerGame* game = new RacerGame();
+	//GraphicsTestScreen* game = new GraphicsTestScreen();
 	GameStateManager::Physics()->SetGame(game);
 	GameStateManager::Instance()->ChangeScreen(game);
 }

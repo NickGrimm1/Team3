@@ -431,8 +431,6 @@
     <ClCompile Include="Vehicle_Wheel.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Resources\Meshes\NovaCar.mtl" />
-    <None Include="..\Resources\Meshes\NovaTire.mtl" />
     <None Include="..\Resources\PHP\getScores.php" />
     <None Include="..\Resources\PHP\postScore.php" />
     <None Include="..\Resources\Shaders\BlendedFragment.glsl" />
@@ -486,14 +484,6 @@
     <None Include="..\Resources\Textures\TitleSafeArea.gtf" />
     <None Include="..\Shaders\TechFragment.glsl" />
     <None Include="..\Shaders\TechVertex.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="..\Resources\Meshes\CarPhysics.obj" />
-    <Object Include="..\Resources\Meshes\cube.obj" />
-    <Object Include="..\Resources\Meshes\dome.obj" />
-    <Object Include="..\Resources\Meshes\NovaCar.obj" />
-    <Object Include="..\Resources\Meshes\NovaTire.obj" />
-    <Object Include="..\Resources\Meshes\sphere.obj" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\Resources\Textures\button.png" />

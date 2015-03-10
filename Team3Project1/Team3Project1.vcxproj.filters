@@ -889,12 +889,6 @@
     <None Include="..\Resources\PHP\postScore.php">
       <Filter>Game\Web Interface</Filter>
     </None>
-    <None Include="..\Resources\Meshes\NovaCar.mtl">
-      <Filter>Resources\Meshes</Filter>
-    </None>
-    <None Include="..\Resources\Meshes\NovaTire.mtl">
-      <Filter>Resources\Meshes</Filter>
-    </None>
     <None Include="..\Resources\Textures\button.gtf">
       <Filter>Resources\Textures</Filter>
     </None>
@@ -958,26 +952,6 @@
     <None Include="..\Resources\Textures\TitleSafeArea.gtf">
       <Filter>Resources\Textures</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="..\Resources\Meshes\CarPhysics.obj">
-      <Filter>Resources\Meshes</Filter>
-    </Object>
-    <Object Include="..\Resources\Meshes\cube.obj">
-      <Filter>Resources\Meshes</Filter>
-    </Object>
-    <Object Include="..\Resources\Meshes\dome.obj">
-      <Filter>Resources\Meshes</Filter>
-    </Object>
-    <Object Include="..\Resources\Meshes\NovaCar.obj">
-      <Filter>Resources\Meshes</Filter>
-    </Object>
-    <Object Include="..\Resources\Meshes\NovaTire.obj">
-      <Filter>Resources\Meshes</Filter>
-    </Object>
-    <Object Include="..\Resources\Meshes\sphere.obj">
-      <Filter>Resources\Meshes</Filter>
-    </Object>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\Resources\Textures\button.png">

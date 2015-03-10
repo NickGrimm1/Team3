@@ -7,10 +7,10 @@ HighScore::HighScore(unsigned int score)
 	name = "AAA";
 	currentPos = 0;
 	highScore = score;
-	lastDown = timer.GetMS();
-	lastUp = timer.GetMS();
-	lastLeft = timer.GetMS();
-	lastRight = timer.GetMS();
+	lastDown = (float) timer.GetMS();
+	lastUp = (float) timer.GetMS();
+	lastLeft = (float) timer.GetMS();
+	lastRight = (float) timer.GetMS();
 }
 
 
@@ -142,7 +142,7 @@ void HighScore::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID,
 				convert << name[currentPos];
 				string letter = convert.str();
 				nameEntities[currentPos]->SetText(letter);
-				lastUp = timer.GetMS();
+				lastUp = (float) timer.GetMS();
 			}
 			else if (amount.y < -0.8f && timer.GetMS() > lastDown + 250) {
 				name[currentPos]--;
@@ -156,18 +156,18 @@ void HighScore::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID,
 				convert << name[currentPos];
 				string letter = convert.str();
 				nameEntities[currentPos]->SetText(letter);
-				lastDown = timer.GetMS();
+				lastDown = (float) timer.GetMS();
 			}
 		}
 		else {// Horizontal displacement - change letter position
 			if (amount.x > 0.8f && timer.GetMS() > lastRight + 250) {
 				currentPos = (currentPos + 1) % 4;
-				lastRight = timer.GetMS();
+				lastRight = (float) timer.GetMS();
 			}
 			else if (amount.x < -0.8f && timer.GetMS() > lastLeft + 250) {
 				currentPos--;
 				if (currentPos < 0) currentPos = 3;
-				lastLeft = timer.GetMS();
+				lastLeft = (float) timer.GetMS();
 			}
 		}
 	}
