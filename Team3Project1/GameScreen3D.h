@@ -56,6 +56,7 @@ public:
 	bool ChangeLightTarget(unsigned int lightReference, T3Vector3 newLightTarget, T3Vector3 newUpVector);*/
 private:
 	DrawableEntity3D* player;
+	vector<DrawableEntity3D*> entities;
 	vector<DrawableEntity3D*> drawables;
 	vector<Light*> lights;
 	Camera* camera;

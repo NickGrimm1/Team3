@@ -68,6 +68,7 @@ void GameScreen2D::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseBut
 					{
 						// If it is, calculate relative co-ords of click and call Click(x, y)
 						clickables[i]->Click((position.x - clickables[i]->x) / clickables[i]->width, (position.y - clickables[i]->y) / clickables[i]->height);
+						return;
 					}
 				}
 			}

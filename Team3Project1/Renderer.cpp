@@ -351,9 +351,9 @@ void Renderer::RenderScene() {
 	Draw2DOverlay();
 
 	if (camera) { //TODO - remove
-		projMatrix = perspectiveMatrix;
-		viewMatrix = camera->BuildViewMatrix();
-		modelMatrix.ToIdentity();
+	projMatrix = perspectiveMatrix;
+	viewMatrix = camera->BuildViewMatrix();
+	modelMatrix.ToIdentity();
 	}
 
 	SwapBuffers();

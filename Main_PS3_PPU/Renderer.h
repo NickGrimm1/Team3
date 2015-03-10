@@ -17,6 +17,7 @@ _-_-_-_-_-_-_-""  ""
 *Implemented functionality missing from Richards renderer as
 *his renderer only had RenderScene, Renderer & ~Renderer
 */
+#if PS3_BUILD
 #pragma once
 #include "../Team3Project1/GCMRenderer.h"
 #include "../Team3Project1/Mesh.h"
@@ -61,4 +62,4 @@ protected:
 	vector<SceneNode*>& sceneNodes;
 	vector<DrawableEntity2D*>& overlayElements;
 };
-
+#endif

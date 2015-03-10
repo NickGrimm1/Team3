@@ -1,4 +1,5 @@
 #include "T3Matrix4.h"
+#include <iostream>
 
 T3Matrix4::T3Matrix4(void)	{
 	ToIdentity();
@@ -79,6 +80,8 @@ T3Matrix4 T3Matrix4::Orthographic(float znear, float zfar,float right, float lef
 }
 
 T3Matrix4 T3Matrix4::BuildViewMatrix(const T3Vector3 &from, const T3Vector3 &lookingAt, const T3Vector3 up /*= T3Vector3(0,1,0)*/ )	{
+	std::cout << "T3Matrix4::BuildViewMatrix: From = " << from << " Looking At = " << lookingAt << " Up = " << up << std::endl;
+	
 	T3Matrix4 r;
 	r.SetPositionVector(T3Vector3(-from.x,-from.y,-from.z));
 
@@ -104,6 +107,8 @@ T3Matrix4 T3Matrix4::BuildViewMatrix(const T3Vector3 &from, const T3Vector3 &loo
 	m.values[2]  = -f.x;
 	m.values[6]  = -f.y;
 	m.values[10] = -f.z;
+
+	std::cout << "T3Matrix4::BuildViewMatrix: Result = " << m*r << std::endl;
 
 	return m*r;
 }

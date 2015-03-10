@@ -10,7 +10,7 @@
 
 ShaderPart::ShaderPart(std::string raw, ShaderType::Type type) : type(type)
 {
-	//std::cout <<"shader part started" << std::endl;
+	std::cout <<"shader part started" << std::endl;
 #if WINDOWS_BUILD
 	shader = glCreateShader(type);
 	const char *chars = raw.c_str();
@@ -86,12 +86,12 @@ ShaderPart::ShaderPart(std::string raw, ShaderType::Type type) : type(type)
 	unsigned int ucodeSize;
 	void *ucodePtr;
 
-	//std::cout << "ShaderPart: Getting Memory" << std::endl;
+	std::cout << "ShaderPart: Getting Memory" << std::endl;
 	cellGcmCgGetUCode(program, &ucodePtr, &ucodeSize);
 	ucode = GCMRenderer::localMemoryAlign(64,ucodeSize);
 	memcpy(ucode, ucodePtr, ucodeSize);
 	cellGcmAddressToOffset(ucode, &offset);
-	//std::cout << "ShaderPart: Got Memory" << std::endl;
+	std::cout << "ShaderPart: Got Memory" << std::endl;
 
 	if (type == ShaderType::VERTEX)
 	{
@@ -103,7 +103,7 @@ ShaderPart::ShaderPart(std::string raw, ShaderType::Type type) : type(type)
 	else if (type == ShaderType::FRAGMENT)
 		UpdateShaderVariables();
 
-	//std::cout << "ShaderPart: Finished Load" << std::endl;
+	std::cout << "ShaderPart: Finished Load" << std::endl;
 #endif
 }
 #if WINDOWS_BUILD
@@ -178,19 +178,19 @@ transpose function, so it's less likely you'll accidentally set your
 matrix wrong
 */
 void ShaderPart::SetParameter(std::string name, Matrix4 &totranpose) {
-	//std::cout << "Transposing: " << name << std::endl;
+	std::cout << "Transposing: " << name << std::endl;
 	Matrix4 tempMatrix = transpose(totranpose);
-	//std::cout << "Shader Part: Transposed Matrix (SCE): " << std::endl;
-		/*for (int x = 0; x < 4; ++x)
+	std::cout << "Shader Part: Transposed Matrix (SCE): " << std::endl;
+		for (int x = 0; x < 4; ++x)
 		{
 			for (int y = 0; y < 4; ++y)
 			{
 				std::cout << tempMatrix.getElem(x,y) << ",";
 			}
 			std::cout << std::endl;
-		}*/
+		}
 		float* m = (float*)&tempMatrix;
-	//	std::cout << "Shader Part: Setting " << name << " " << &tempMatrix << std::endl;
+		std::cout << "Shader Part: Setting " << name << " " << &tempMatrix << std::endl;
 	SetParameter(name, m);
 //	std::cout << "Shader Part: " << name << " Set" << std::endl;
 }
@@ -245,21 +245,21 @@ Sets the shaders matrices to the passed in values. Handy to call at the start of
 a frame, or when using a shader for the first time. It's more efficient to use
 SetParameter directly for setting just a single matrix, though. 
 */
-//std::ostream& operator<<(std::ostream& o, const Matrix4& m)
-//{
-//
-//	o << "PS3_Mat4(";
-//	for (int i = 0; i < 4; ++i)
-//	{
-//		o << "\t\t" << m[i][0] << "," << m[i][1] << "," << m[i][2] << "," << m[i][3] << "\n";
-//	}
-//	o << ");\n\n";
-//	return o;
-//}
+std::ostream& operator<<(std::ostream& o, const Matrix4& m)
+{
+
+	o << "PS3_Mat4(";
+	for (int i = 0; i < 4; ++i)
+	{
+		o << "\t\t" << m[i][0] << "," << m[i][1] << "," << m[i][2] << "," << m[i][3] << "\n";
+	}
+	o << ");\n\n";
+	return o;
+}
 
 void	ShaderPart::UpdateShaderMatrices(Matrix4 &model,Matrix4 &view, Matrix4 &proj) {
 
-	//std::cout << "####MODEL MTX:" << model << "\n#####VIEW MTX: " << view << "\n####PROJ MTX: " << proj;
+	std::cout << "####MODEL MTX:" << model << "\n#####VIEW MTX: " << view << "\n####PROJ MTX: " << proj;
 
 	SetParameter("modelMat", model);
 	SetParameter("viewMat", view);

@@ -24,8 +24,6 @@ VehicleTestingScreen::VehicleTestingScreen(void)
 
 VehicleTestingScreen::~VehicleTestingScreen(void)
 {
-	delete quad;
-	delete light;
 }
 
 void VehicleTestingScreen::LoadContent() {
@@ -172,6 +170,7 @@ void VehicleTestingScreen::LoadContent() {
 	camera->SetPosition(T3Vector3(0,10.0f, 80.0f));
 	//camera->SetYaw(180.0f);
 	GameStateManager::Graphics()->SetCamera(camera);
+	GameStateManager::Audio()->SetListener(car);
 }
 
 void VehicleTestingScreen::Update() { 

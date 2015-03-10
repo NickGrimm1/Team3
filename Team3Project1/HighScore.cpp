@@ -7,6 +7,10 @@ HighScore::HighScore(unsigned int score)
 	name = "AAA";
 	currentPos = 0;
 	highScore = score;
+	lastDown = timer.GetMS();
+	lastUp = timer.GetMS();
+	lastLeft = timer.GetMS();
+	lastRight = timer.GetMS();
 }
 
 
@@ -61,7 +65,13 @@ void HighScore::UnloadContent() {
 }
 
 bool HighScore::SubmitScore() {
+#if WINDOWS_BUILD
 	return false;
+#endif
+
+#ifdef PS3_BUILD
+	return false;
+#endif
 }
 
 #if WINDOWS_BUILD
@@ -87,7 +97,49 @@ void HighScore::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 	}
 }
 
-void HighScore::MouseMoved(T3Vector2& start, T3Vector2& finish) {
-
-}
 #endif
+
+void HighScore::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button) {
+	if (type == GamepadEvents::BUTTON_PRESS && button == GamepadEvents::INPUT_CROSS_A) { // same action as return on keyboard
+		if (currentPos < 3) {
+			currentPos++;
+		}
+		else {
+			// Submit score
+			SubmitScore();
+		}
+	}
+}
+
+void HighScore::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) {
+	if (analogueControl == GamepadEvents::AnalogueControl::LEFT_STICK) {
+		// Vertical movement if absolute value if vertical displacement and greater than horizontal displacement
+		if (abs(amount.y) > abs(amount.x)) {
+			if (amount.y > 0.5f && timer.GetMS() > lastUp + 0.25f) { // really make user displace stick, prevent letter changing every frame
+				name[currentPos] = (name[currentPos] + 1);
+				if (name[currentPos] > 'Z') { // change current letter on vertical movement
+					name[currentPos] = '1';
+				}
+				lastUp = timer.GetMS();
+			}
+			else if (amount.y < -0.5f && timer.GetMS() > lastDown + 0.25f) {
+				name[currentPos]--;
+				if (name[currentPos] < '1') {
+					name[currentPos] = 'Z';
+				}
+				lastDown = timer.GetMS();
+			}
+		}
+		else {// Horizontal displacement - change letter position
+			if (amount.x > 0.5f && timer.GetMS() > lastRight + 0.25f) {
+				currentPos = (currentPos + 1) % 4;
+				lastRight = timer.GetMS();
+			}
+			else if (amount.x < 0.5f && timer.GetMS() > lastLeft + 0.25f) {
+				currentPos--;
+				if (currentPos < 0) currentPos = 3;
+				lastLeft = timer.GetMS();
+			}
+		}
+	}
+}
