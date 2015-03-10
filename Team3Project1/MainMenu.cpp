@@ -140,14 +140,22 @@ void MainMenu::LoadContent() {
 }
 
 void MainMenu::UnloadContent() {
-	RemoveClickable(newGame);
-	RemoveClickable(controls);
-	RemoveClickable(quitGame);
-	RemoveClickable(music);
-	RemoveClickable(sounds);
+	RemoveClickable(newGame, true, false);
+	RemoveClickable(controls, true, false);
+	RemoveClickable(quitGame, true, false);
+	RemoveClickable(music, true, false);
+	RemoveClickable(sounds, true, false);
 
-	RemoveDrawable(scoreBoard);
-	RemoveDrawable(pressStart);
+	RemoveDrawable(scoreBoard, false);
+	RemoveDrawable(pressStart, false);
+
+#ifdef WINDOWS_BUILD
+	for (unsigned int i = 0; i < 10; i++) {
+		RemoveDrawable(scores[i].first, false);
+		RemoveDrawable(scores[i].second, false);
+	}
+	scores.clear();
+#endif
 
 	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/button.png");
 	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/button_selected.png");
@@ -185,9 +193,10 @@ void MainMenu::NewGameClicked(float x, float y) {
 	GameStateManager::Instance()->RemoveGameScreen(this);
 
 	RacerGame* game = new RacerGame();
-	//GraphicsTestScreen* game = new GraphicsTestScreen();
+//	GraphicsTestScreen* game = new GraphicsTestScreen();
 	GameStateManager::Physics()->SetGame(game);
 	GameStateManager::Instance()->ChangeScreen(game);
+	//GameStateManager::RemoveGameScreen(this);
 }
 
 void MainMenu::ControlsClicked(float x, float y) {

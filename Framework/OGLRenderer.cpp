@@ -409,11 +409,7 @@ void	OGLRenderer::DrawDebugCircle(DebugDrawMode mode, const T3Vector3 &at, const
 
 DebugDrawData::DebugDrawData() {
 	glGenVertexArrays(1, &array);
-	glGenBuffers(2, buffers);	
-	cout << "debug array object = " << array << endl;
-	cout << "debug buffer pos = " << buffers[0] << endl;
-	cout << "debug buffer col = " << buffers[1] << endl;
-
+	glGenBuffers(2, buffers);
 }
 
 void DebugDrawData::Draw() {
@@ -422,7 +418,6 @@ void DebugDrawData::Draw() {
 	}
 	glDisable(GL_DEPTH_TEST);
 	glBindVertexArray(array);
-	//glGenBuffers(2, buffers);
 
 	glBindBuffer(GL_ARRAY_BUFFER,buffers[0]);
 	glBufferData(GL_ARRAY_BUFFER,lines.size()*sizeof(T3Vector3), &lines[0], GL_DYNAMIC_DRAW);
@@ -435,11 +430,9 @@ void DebugDrawData::Draw() {
 	glVertexAttribPointer(VertexAttributes::COLOUR, 3, GL_FLOAT, GL_FALSE, 0, 0); 
 	glEnableVertexAttribArray(VertexAttributes::COLOUR);
 
-	//glLineWidth(5.0f);
 	glDrawArrays(GL_LINES,0,lines.size());
 
 	glBindVertexArray(0);
-	//glDeleteBuffers(2,buffers);
 	glEnable(GL_DEPTH_TEST);
 
 	Clear();
