@@ -54,6 +54,8 @@ public:
 
 	void			SetCamera(Camera* cam) {camera = cam;};
 
+	void			SetLoadingIcon(DrawableTexture2D* icon) {loadingIcon = icon;}
+
 	void			RenderScene();
 	void			ToggleDebug(int arg, bool onOff);
 
@@ -195,5 +197,7 @@ protected:
 	float			dayNight;
 
 	map<string, TextMesh*> loadedTextMeshes;
+
+	DrawableTexture2D* loadingIcon;
 };
 #endif

@@ -201,9 +201,9 @@ void RacerGame::LoadContent() {
 
 
 /*
-	Mesh* carMesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
+	Mesh* carMesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaCar.obj");
 	ent = new DrawableEntity3D(
-		GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj"),
+		GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaCar.obj"),
 		NULL,
 		NULL,
 		NULL,

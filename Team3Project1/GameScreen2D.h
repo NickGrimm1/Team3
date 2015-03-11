@@ -26,7 +26,7 @@ class GameScreen2D : public GameScreen
 	// TODO: Implement GameScreen 2D.
 public:
 	GameScreen2D(float x = 0.0f, float y = 0.0f, float width = 1.0f, float height = 1.0f) : GameScreen(x, y, width, height)
-	{ }
+	{currentSelected = 0; }
 	virtual ~GameScreen2D()
 	{
 		// Clear clickables. RemoveClickable also calls RemoveSelectable, RemoveDrawable & RemoveEntity.
@@ -187,7 +187,7 @@ public:
 		if (selectables.size() > 0)
 		{
 			currentSelected %= selectables.size();
-			for (int i = 0; i < selectables.size(); ++i)
+			for (unsigned int i = 0; i < selectables.size(); ++i)
 				selectables[i]->UnSelect();
 			selectables[currentSelected]->Select();
 		}
@@ -195,7 +195,7 @@ public:
 	void ClearSelection()
 	{
 		currentSelected = 0;
-		for (int i = 0; i < selectables.size(); ++i)
+		for (unsigned int i = 0; i < selectables.size(); ++i)
 			selectables[i]->UnSelect();
 	}
 protected:

@@ -15,6 +15,7 @@ _-_-_-_-_-_-_-""  ""
 #if WINDOWS_BUILD
 
 #include "OGLRenderer.h"
+#include "../Team3Project1/GameStateManager.h"
 
 DebugDrawData* OGLRenderer::orthoDebugData			= NULL;
 DebugDrawData* OGLRenderer::perspectiveDebugData	= NULL;
@@ -144,17 +145,9 @@ OGLRenderer::OGLRenderer(Window &window)	{
 	currentShader = 0;							//0 is the 'null' object name for shader programs...
 
 	window.SetRenderer(this);					//Tell our window about the new renderer! (Which will in turn resize the renderer window to fit...)
+	orthoDebugData		 = new DebugDrawData();
+	perspectiveDebugData = new DebugDrawData();
 
-	/*if(!debugDrawingRenderer) {
-		debugDrawShader		 = new Shader(SHADERDIR"/DebugVertex.glsl", SHADERDIR"DebugFragment.glsl");
-		orthoDebugData		 = new DebugDrawData();
-		perspectiveDebugData = new DebugDrawData();
-		debugDrawingRenderer = this;	
-		
-		if(!debugDrawShader->LinkProgram()) {
-			return;
-		}
-	}*/
 	init = true;
 }
 
@@ -194,10 +187,15 @@ every frame, at the end of RenderScene(), or whereever appropriate for
 your application.
 */
 void OGLRenderer::SwapBuffers() {
+	if(!debugDrawingRenderer) {
+		
+		debugDrawingRenderer = this;	
+	}
+
 	if(debugDrawingRenderer == this) {
-		if(!drawnDebugOrtho) {
+		/*if(!drawnDebugOrtho) {
 			DrawDebugOrtho();
-		}
+		}*/
 		if(!drawnDebugPerspective) {
 			DrawDebugPerspective();
 		}
@@ -312,6 +310,7 @@ void	OGLRenderer::DrawDebugPerspective(T3Matrix4*matrix)  {
 		glUniformMatrix4fv(glGetUniformLocation(debugDrawShader->GetProgram(), "viewProjMatrix"),	1,false, (float*)matrix);
 	}
 	else{
+		
 		T3Matrix4 temp = projMatrix*viewMatrix;
 		glUniformMatrix4fv(glGetUniformLocation(debugDrawShader->GetProgram(), "viewProjMatrix"),	1,false, (float*)&temp);
 	}
@@ -335,7 +334,7 @@ void	OGLRenderer::DrawDebugOrtho(T3Matrix4*matrix) {
 		glUniformMatrix4fv(glGetUniformLocation(debugDrawShader->GetProgram(), "viewProjMatrix"),	1,false, (float*)&ortho);
 	}
 
-	orthoDebugData->Draw();
+	//orthoDebugData->Draw();
 
 	orthoDebugData->Clear();
 	drawnDebugOrtho = true;
@@ -344,12 +343,16 @@ void	OGLRenderer::DrawDebugOrtho(T3Matrix4*matrix) {
 
 void	OGLRenderer::DrawDebugLine  (DebugDrawMode mode, const T3Vector3 &from,const T3Vector3 &to,const T3Vector3 &fromColour,const T3Vector3 &toColour) {
 	DebugDrawData*target = (mode == DEBUGDRAW_ORTHO ? target = orthoDebugData : target = perspectiveDebugData);
+	if (!target)
+		return;
 
 	target->AddLine(from,to,fromColour,toColour);
 }
 
 void	OGLRenderer::DrawDebugBox   (DebugDrawMode mode, const T3Vector3 &at,const T3Vector3 &scale,const T3Vector3 &colour) {
 	DebugDrawData*target = (mode == DEBUGDRAW_ORTHO ? target = orthoDebugData : target = perspectiveDebugData);
+	if (!target)
+		return;
 
 	target->AddLine(at + T3Vector3(-scale.x * 0.5f, scale.y * 0.5f, 0),
 					at + T3Vector3(-scale.x * 0.5f, -scale.y * 0.5f, 0),colour,colour);
@@ -367,6 +370,8 @@ void	OGLRenderer::DrawDebugBox   (DebugDrawMode mode, const T3Vector3 &at,const 
 
 void	OGLRenderer::DrawDebugCross (DebugDrawMode mode, const T3Vector3 &at,const T3Vector3 &scale,const T3Vector3 &colour) {
 	DebugDrawData*target = (mode == DEBUGDRAW_ORTHO ? target = orthoDebugData : target = perspectiveDebugData);
+	if (!target)
+		return;
 
 	target->AddLine(at + T3Vector3(-scale.x * 0.5f,-scale.y * 0.5f, 0),
 		at + T3Vector3(scale.x * 0.5f, scale.y * 0.5f, 0),colour,colour);
@@ -378,6 +383,8 @@ void	OGLRenderer::DrawDebugCross (DebugDrawMode mode, const T3Vector3 &at,const 
 
 void	OGLRenderer::DrawDebugCircle(DebugDrawMode mode, const T3Vector3 &at, const float radius,const T3Vector3 &colour) {
 	DebugDrawData*target = (mode == DEBUGDRAW_ORTHO ? target = orthoDebugData : target = perspectiveDebugData);
+	if (!target)
+		return;
 
 	const int stepCount = 18;
 	const float divisor = 360.0f / stepCount;
@@ -402,31 +409,32 @@ void	OGLRenderer::DrawDebugCircle(DebugDrawMode mode, const T3Vector3 &at, const
 
 DebugDrawData::DebugDrawData() {
 	glGenVertexArrays(1, &array);
-	glGenBuffers(2, buffers);	
+	glGenBuffers(2, buffers);
 }
 
 void DebugDrawData::Draw() {
-	/*if(lines.empty()) {
+	if(lines.empty()) {
 		return;
 	}
+	glDisable(GL_DEPTH_TEST);
 	glBindVertexArray(array);
-	glGenBuffers(2, buffers);
 
-	glBindBuffer(GL_ARRAY_BUFFER,buffers[VERTEX_BUFFER]);
+	glBindBuffer(GL_ARRAY_BUFFER,buffers[0]);
 	glBufferData(GL_ARRAY_BUFFER,lines.size()*sizeof(T3Vector3), &lines[0], GL_DYNAMIC_DRAW);
-	glVertexAttribPointer(VERTEX_BUFFER, 3, GL_FLOAT, GL_FALSE, 0, 0); 
-	glEnableVertexAttribArray(VERTEX_BUFFER);
+	glVertexAttribPointer(VertexAttributes::POSITION, 3, GL_FLOAT, GL_FALSE, 0, 0); 
+	glEnableVertexAttribArray(VertexAttributes::POSITION);
 
-	glBindBuffer(GL_ARRAY_BUFFER,buffers[COLOUR_BUFFER]);
+
+	glBindBuffer(GL_ARRAY_BUFFER,buffers[1]);
 	glBufferData(GL_ARRAY_BUFFER,colours.size()*sizeof(T3Vector3), &colours[0], GL_DYNAMIC_DRAW);
-	glVertexAttribPointer(COLOUR_BUFFER, 3, GL_FLOAT, GL_FALSE, 0, 0); 
-	glEnableVertexAttribArray(COLOUR_BUFFER);
+	glVertexAttribPointer(VertexAttributes::COLOUR, 3, GL_FLOAT, GL_FALSE, 0, 0); 
+	glEnableVertexAttribArray(VertexAttributes::COLOUR);
 
 	glDrawArrays(GL_LINES,0,lines.size());
 
 	glBindVertexArray(0);
-	glDeleteBuffers(2,buffers);
+	glEnable(GL_DEPTH_TEST);
 
-	Clear();*/
+	Clear();
 }
 #endif

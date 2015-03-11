@@ -4,6 +4,7 @@
 
 
 Vehicle::Vehicle(float size) {
+	//mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaCar.obj");
 	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
 //	BuffMesh = new OBJMesh(MESHDIR"ico.obj");
 	
@@ -322,6 +323,7 @@ void Vehicle::SetPhysics(float size,PhysicsNode * a)
 
 	car->SetIsCollide(true);
 	car->Setcar_wheel(true);
+	car->Setplanecollision(false);
 
 
 

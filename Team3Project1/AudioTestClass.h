@@ -12,6 +12,7 @@ public:
 	virtual void LoadContent();
 	virtual void Update();
 	virtual void UnloadContent() {}
+	float GetCurrentTimer(){return CurrentTime;}
 
 	// Input Listener methods - implemented
 	virtual void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key);
@@ -24,9 +25,21 @@ public:
 	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) {};
 	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID){}
 private:
+	Sound* BGM1;
+	Sound* BGM2;
+	Sound* BGM3;
 	Sound* laser;
 	Sound* laser1;
 	Sound* laser2;
+	Sound* laser3;
+	GameTimer timer;
+	float CurrentTime;
+	bool bgm1;
+	bool bgm2;
+	bool bgm3;
+	bool pressonce;
+	bool pressonce2;
+	bool pressonce3;
 };
 #endif
 

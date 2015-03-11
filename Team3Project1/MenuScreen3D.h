@@ -9,6 +9,8 @@ public:
 	virtual void LoadContent(void);
 	virtual void Update(void);
 	virtual void UnloadContent(void);
+	virtual void DrawContent(void);
+	virtual void UnDrawContent(void);
 
 #if WINDOWS_BUILD
 	virtual void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {};

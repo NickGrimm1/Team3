@@ -1,5 +1,6 @@
 #include"Gold_cion.h"
 #include "../Team3Project1/GameStateManager.h"
+#include "../Framework/InertialMatrixHelper.h"
 
 
 Gold_cion::Gold_cion(float size):
@@ -32,6 +33,7 @@ void Gold_cion::SetPhysics(float size)
     physicsNode->SetUseGravity(false);
 	physicsNode->SetPosition(origin);
 	physicsNode->SetMass(5);
+	
 
 	physicsNode->SetCollisionVolume(new CollisionAABB(T3Vector3(0.3*size,0.3*size,0.3*size)));
 	physicsNode->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj"));
@@ -39,6 +41,8 @@ void Gold_cion::SetPhysics(float size)
 	physicsNode->SetXend(physicsNode->GetPosition().x+1*size); 
 	physicsNode->SetIsCollide(true);
 	physicsNode->Setcar_wheel(true);
+	physicsNode->SetInverseInertia(InertialMatrixHelper::createCuboidInvInertial(5,size,size,size));
+	physicsNode->SetInverseMass(1.0f);
 
 
 

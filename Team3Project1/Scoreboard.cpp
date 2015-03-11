@@ -31,7 +31,7 @@ bool Scoreboard::RetrieveScoreboard() {
 
 	char buffer[1024];
 	// Send Message Request
-	sprintf(buffer, 
+	sprintf_s(buffer, 1024, 
 		"GET /getScores.php HTTP/1.1\r\n"
 	    "Host: %s\r\n"
 	    "User-Agent: Mozilla Firefox/4.0\r\n"
@@ -52,7 +52,7 @@ bool Scoreboard::RetrieveScoreboard() {
 	}
 	if (bytesReceived > 0) {
 		string httpResponse(buffer, buffer + bytesReceived);
-		cout << httpResponse << endl;
+		//cout << httpResponse << endl;
 
 		if (httpResponse.find(HTTP_OK) != string::npos) {
 			stringstream httpStream(httpResponse);
@@ -71,7 +71,9 @@ bool Scoreboard::RetrieveScoreboard() {
 					string score;
 					unsigned int delim = httpResponse.find(" ");
 					name = httpResponse.substr(0, delim);
+					while (name.length() < 3) name += " ";
 					score = httpResponse.substr(delim + 1, string::npos);
+					while (score.length() < 3) score = '0' + score;
 					scoreboard.push_back(pair<string, string>(name, score));
 					scoreboardLength -= httpResponse.length() + 1; // + 1 for EOL
 				}
@@ -95,7 +97,7 @@ bool Scoreboard::PostScore(string name, unsigned int score) {
 	if (!ConnectToScoreboard()) return false;
 
 	char buffer[1024];
-	sprintf(buffer,
+	sprintf_s(buffer, 1024,
     "GET /postScore.php?n=%s&s=%d HTTP/1.1\r\n"
     "Host: %s\r\n"
     "User-Agent: Mozilla Firefox/4.0\r\n"
@@ -139,20 +141,20 @@ unsigned int Scoreboard::GetLowestScore() const {
 }
 
 string Scoreboard::GetName(unsigned int position) const {
-	if (scoreboard.size() > 0) {
+	if (scoreboard.size() > position) {
 		return scoreboard[position].first;
 	}
 	else { // no scores loaded
-		return "";
+		return "___";
 	}
 }
 
 string Scoreboard::GetScore(unsigned int position) const {
-	if (scoreboard.size() > 0) {
+	if (scoreboard.size() > position) {
 		return scoreboard[position].second;
 	}
 	else { // no scores loaded
-		return "";
+		return "000";
 	}
 }
 

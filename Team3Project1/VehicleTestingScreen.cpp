@@ -24,8 +24,6 @@ VehicleTestingScreen::VehicleTestingScreen(void)
 
 VehicleTestingScreen::~VehicleTestingScreen(void)
 {
-	delete quad;
-	delete light;
 }
 
 void VehicleTestingScreen::LoadContent() {
@@ -74,6 +72,7 @@ void VehicleTestingScreen::LoadContent() {
 		road->GetPhysicsNode().SetUseGravity(false);
 		road->GetPhysicsNode().SetIsCollide(true);
 	    road->GetPhysicsNode().Setcar_wheel(true);
+		road->GetPhysicsNode().Setplanecollision(true);
 		road->GetPhysicsNode().SetPosition(T3Vector3(-200,-20,0));
 		road->GetPhysicsNode().SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
 		road->ConnectToSystems();
@@ -105,9 +104,9 @@ void VehicleTestingScreen::LoadContent() {
 	AddDrawable(gold_cion);
 
 
-	checkpoint= new CheckPoint(10);
-	checkpoint->SetPhysics(10,'c');
-	AddDrawable(checkpoint);
+	//checkpoint= new CheckPoint(10);
+	//checkpoint->SetPhysics(10,'c');
+	//AddDrawable(checkpoint);
 	
 	unsigned int size = 5;
 	VehiclePhysicsNode* vpn = new VehiclePhysicsNode(size);
@@ -148,9 +147,9 @@ void VehicleTestingScreen::LoadContent() {
 
 
 /*
-	Mesh* carMesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
+	Mesh* carMesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaCar.obj");
 	ent = new DrawableEntity3D(
-		GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj"),
+		GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaCar.obj"),
 		NULL,
 		NULL,
 		NULL,
@@ -172,6 +171,9 @@ void VehicleTestingScreen::LoadContent() {
 	camera->SetPosition(T3Vector3(0,10.0f, 80.0f));
 	//camera->SetYaw(180.0f);
 	GameStateManager::Graphics()->SetCamera(camera);
+#if WINDOWS_BUILD
+	GameStateManager::Audio()->SetListener(car);
+#endif
 }
 
 void VehicleTestingScreen::Update() { 
@@ -218,8 +220,8 @@ void VehicleTestingScreen::Update() {
 	
 	car->GetCarNode().SetXstart(car->GetCarNode().GetPosition().x-3*5 +10);
 	car->GetCarNode().SetXend(car->GetCarNode().GetPosition().x+3*5+10);
-	checkpoint->GetPhysicsNode().SetXstart(checkpoint->GetPhysicsNode().GetPosition().x-1*10);
-	checkpoint->GetPhysicsNode().SetXend(checkpoint->GetPhysicsNode().GetPosition().x+1*10);
+//	checkpoint->GetPhysicsNode().SetXstart(checkpoint->GetPhysicsNode().GetPosition().x-1*10);
+//	checkpoint->GetPhysicsNode().SetXend(checkpoint->GetPhysicsNode().GetPosition().x+1*10);
 	gold_cion->GetPhysicsNode().SetXstart(gold_cion->GetPhysicsNode().GetPosition().x-1*10+10);
 	gold_cion->GetPhysicsNode().SetXend(gold_cion->GetPhysicsNode().GetPosition().x+1*10+10);
 	FrontRightTire->GetPhysicsNode().SetXstart(FrontRightTire->GetPhysicsNode().GetPosition().x-1*5);
@@ -469,12 +471,30 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 			camera->AddMovement(T3Vector3(0,1,0));
 			break;
 		case KeyboardEvents::KEYBOARD_SPACE:
-			{camera->AddMovement(T3Vector3(0,-1,0));
-			 temp1 =  car->GetCarNode().GetLinearVelocity();
-			  car->GetCarNode().SetUseGravity(TRUE);
-			 temp1.y = 0.4;
-			  car->GetCarNode().SetLinearVelocity(temp1);	
+			{
+				camera->AddMovement(T3Vector3(0,-1,0));
+			}
+			break;
+
+		case KeyboardEvents::KEYBOARD_N:
+			{
+				car->GetCarNode().SetPosition(car->GetCarNode().GetPosition() + T3Vector3(0.0f, -0.2f, 0.0f));	
+			}
+			break;
+		case KeyboardEvents::KEYBOARD_H:
+			{
+				car->GetCarNode().SetPosition(car->GetCarNode().GetPosition() + T3Vector3(0.0f, 0.2f, 0.0f));
 			
+			}
+			break;
+
+		case KeyboardEvents::KEYBOARD_B:
+			{
+			//	car->GetCarNode().SetOrientation(Quaternion::AxisAngleToQuaterion(T3Vector3(0, 0, 1), 20));
+			  temp1 =  car->GetCarNode().GetLinearVelocity();
+			  car->GetCarNode().SetUseGravity(TRUE);
+			  temp1.y = -1.4;
+			  car->GetCarNode().SetLinearVelocity(temp1);
 			}
 			break;
 		}

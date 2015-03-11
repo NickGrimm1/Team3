@@ -21,3 +21,11 @@ void MenuScreen3D::Update(void) {
 void MenuScreen3D::UnloadContent(void) {
 	
 }
+
+void MenuScreen3D::DrawContent(void) {
+
+}
+
+void MenuScreen3D::UnDrawContent(void) {
+
+}

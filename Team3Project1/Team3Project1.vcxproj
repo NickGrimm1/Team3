@@ -296,6 +296,7 @@
     <ClInclude Include="Gold_cion.h" />
     <ClInclude Include="GraphicsTestScreen.h" />
     <ClInclude Include="Heightmap.h" />
+    <ClInclude Include="HighScore.h" />
     <ClInclude Include="HudTestScreen.h" />
     <ClInclude Include="LoadedFont.h" />
     <ClInclude Include="LoadedMesh.h" />
@@ -325,6 +326,7 @@
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="PauseScreen.h" />
     <ClInclude Include="PhysicsEngine.h" />
+    <ClInclude Include="PhysicsObjMesh.h" />
     <ClInclude Include="RacerGame.h" />
     <ClInclude Include="Scoreboard.h" />
     <ClInclude Include="SelectableEntity2D.h" />
@@ -397,6 +399,7 @@
     <ClCompile Include="GraphicsEnginePS3.cpp" />
     <ClCompile Include="GraphicsTestScreen.cpp" />
     <ClCompile Include="HeightMap.cpp" />
+    <ClCompile Include="HighScore.cpp" />
     <ClCompile Include="HudTestScreen.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LoadingScreen.cpp" />
@@ -459,8 +462,47 @@
     <None Include="..\Resources\Shaders\TexturedVertex.glsl" />
     <None Include="..\Resources\Shaders\VelocityFragment.glsl" />
     <None Include="..\Resources\Shaders\VelocityVertex.glsl" />
+    <None Include="..\Resources\Textures\button.gtf" />
+    <None Include="..\Resources\Textures\button_clicked.gtf" />
+    <None Include="..\Resources\Textures\button_selected.gtf" />
+    <None Include="..\Resources\Textures\day_sky.gtf" />
+    <None Include="..\Resources\Textures\Grass_Color.gtf" />
+    <None Include="..\Resources\Textures\Grass_Color.tga" />
+    <None Include="..\Resources\Textures\night_sky.gtf" />
+    <None Include="..\Resources\Textures\NovaCarUV.gtf" />
+    <None Include="..\Resources\Textures\NovaCarUV.tga" />
+    <None Include="..\Resources\Textures\pause_screen.gtf" />
+    <None Include="..\Resources\Textures\quadrats.gtf" />
+    <None Include="..\Resources\Textures\quadrats.tga" />
+    <None Include="..\Resources\Textures\raindrop.gtf" />
+    <None Include="..\Resources\Textures\refresh.gtf" />
+    <None Include="..\Resources\Textures\score_board.gtf" />
+    <None Include="..\Resources\Textures\snowflake.gtf" />
+    <None Include="..\Resources\Textures\tahoma.gtf" />
+    <None Include="..\Resources\Textures\tahoma.tga" />
+    <None Include="..\Resources\Textures\TireUV.gtf" />
+    <None Include="..\Resources\Textures\TireUV.tga" />
+    <None Include="..\Resources\Textures\TitleSafeArea.gtf" />
     <None Include="..\Shaders\TechFragment.glsl" />
     <None Include="..\Shaders\TechVertex.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Resources\Textures\button.png" />
+    <Image Include="..\Resources\Textures\button_clicked.png" />
+    <Image Include="..\Resources\Textures\button_selected.png" />
+    <Image Include="..\Resources\Textures\calvin.bmp" />
+    <Image Include="..\Resources\Textures\day_sky.jpg" />
+    <Image Include="..\Resources\Textures\Grass_Color.jpg" />
+    <Image Include="..\Resources\Textures\night_sky.jpg" />
+    <Image Include="..\Resources\Textures\pause_screen.png" />
+    <Image Include="..\Resources\Textures\raindrop.png" />
+    <Image Include="..\Resources\Textures\refresh.png" />
+    <Image Include="..\Resources\Textures\score_board.png" />
+    <Image Include="..\Resources\Textures\snowflake.png" />
+    <Image Include="..\Resources\Textures\TitleSafeArea.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\Resources\Sounds\bgm2_42sec.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

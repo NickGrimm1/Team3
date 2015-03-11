@@ -26,8 +26,8 @@ NetworkManager::NetworkManager() {
 		return;
 	}
 	
-	cout << "The Winsock API has been successfully initialised." << endl;
-	cout << "You are using version " << HIBYTE(wsaData.wVersion) << "." << LOBYTE(wsaData.wVersion) << endl;
+//	cout << "The Winsock API has been successfully initialised." << endl;
+//	cout << "You are using version " << HIBYTE(wsaData.wVersion) << "." << LOBYTE(wsaData.wVersion) << endl;
 	hasInitialised = true;
 }
 
