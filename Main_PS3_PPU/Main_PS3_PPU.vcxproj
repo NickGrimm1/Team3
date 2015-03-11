@@ -34,21 +34,23 @@
     <ClInclude Include="Renderer.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="duck256.gtf" />
-    <CustomBuild Include="fragment.cg">
+    <CustomBuild Include="..\Resources\Shaders\TexturedFragment.cg">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">$(SCE PS3 ROOT)/host-win32/Cg/bin/sce-cgc -profile sce fp rsx -o ”$(InputName).fpo”</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">%(RelativeDir)sce-cgc -profile sce_fp_rsx -o ”%(Filename).fpo” "%(FullPath)"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">%(Filename).fpo;%(Filename)_asm.txt</Outputs>
     </CustomBuild>
-    <None Include="fragment.fpo" />
-    <None Include="fragment_asm.txt" />
-    <None Include="gpad_config.txt" />
-    <None Include="ncl.gtf" />
-    <None Include="ncl.tga" />
-    <CustomBuild Include="vertex.cg">
+    <CustomBuild Include="..\Resources\Shaders\TexturedVertex.cg">
+      <Command Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">%(RelativeDir)sce-cgc -profile sce_vp_rsx -o ”%(Filename).vpo” "%(FullPath)"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">%(Filename).vpo;%(Filename)_asm.txt</Outputs>
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">$(SCE PS3 ROOT)/host-win32/Cg/bin/sce-cgc -profile sce vp rsx -o ”$(InputName).vpo”</Command>
     </CustomBuild>
-    <None Include="vertex.vpo" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\Resources\Shaders\BlendedFragment.cg">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">%(RelativeDir)sce-cgc -profile sce_fp_rsx -o ”%(Filename).fpo” "%(FullPath)"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">%(Filename).fpo;%(Filename)_asm.txt</Outputs>
+    </CustomBuild>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCTargetsPath Condition="'$(VCTargetsPath11)' != '' and '$(VSVersion)' == '' and '$(VisualStudioVersion)' == ''">$(VCTargetsPath11)</VCTargetsPath>
@@ -115,6 +117,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">
     <LibraryPath>..\PS3_PS3_DEBUG</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|PS3'">
     <ClCompile>

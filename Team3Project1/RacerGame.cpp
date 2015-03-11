@@ -57,8 +57,8 @@ void RacerGame::LoadContent() {
 	ent = new DrawableEntity3D(
 		quad, 
 		NULL,
-		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.tga", 0), 
-		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"snowflake.png", 0),
+		GameStateManager::Assets()->LoadTexture(this, "Grass_Color", 0), 
+		GameStateManager::Assets()->LoadTexture(this, "snowflake", 0),
 		50.0f, 
 		T3Vector3(0,0,0), 
 		Quaternion::FromMatrix(T3Matrix4::Rotation(90.0f, T3Vector3(1,0,0))),
@@ -91,7 +91,7 @@ void RacerGame::LoadContent() {
 	
 	//add road
 	
-	Texture* grassTex2 = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"water.jpg", 0);
+	Texture* grassTex2 = GameStateManager::Assets()->LoadTexture(this, "water", 0);
 	GameStateManager::Graphics()->GetRenderContext();
 	TrackSegment* trackr = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5, 50.0);
 	
@@ -269,7 +269,7 @@ void RacerGame::Update() {
 		GameStateManager::Graphics()->DropRenderContext();
 		//create end
 
-			Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"water.jpg", 0);
+			Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, "water.jpg", 0);
 		GameStateManager::Graphics()->GetRenderContext();
 	TrackSegment* track = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5, 50.0);
 	//push back track

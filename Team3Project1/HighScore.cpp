@@ -23,8 +23,8 @@ void HighScore::LoadContent() {
 #if WINDOWS_BUILD
 	scoreboard = new Scoreboard();
 #endif
-	Font* font = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"quadrats.tga", 16, 16);
-	Texture* scoreBoardTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"score_board.png", 0);
+	Font* font = GameStateManager::Assets()->LoadFont(this, "quadrats", 16, 16);
+	Texture* scoreBoardTex = GameStateManager::Assets()->LoadTexture(this, "score_board", 0);
 	DrawableTexture2D* scoreBoardBG = new DrawableTexture2D(0.2f, 0.1f, 5, 0.6f, 0.8f, scoreBoardTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false);
 	AddDrawable(scoreBoardBG);
 
@@ -116,7 +116,7 @@ void HighScore::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents:
 }
 
 void HighScore::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) {
-	if (analogueControl == GamepadEvents::AnalogueControl::LEFT_STICK) {
+	if (analogueControl == GamepadEvents::LEFT_STICK) {
 		// Vertical movement if absolute value if vertical displacement and greater than horizontal displacement
 		if (abs(amount.y) > abs(amount.x)) {
 			if (amount.y > 0.5f && timer.GetMS() > lastUp + 0.25f) { // really make user displace stick, prevent letter changing every frame

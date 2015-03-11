@@ -11,9 +11,9 @@ DebugOverlay::~DebugOverlay()
 }
 void DebugOverlay::LoadContent()
 {
-	Font* font = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"tahoma.tga", 16, 16);
+	Font* font = GameStateManager::Assets()->LoadFont(this, "tahoma", 16, 16);
 	
-	AddDrawable(new DrawableTexture2D(0, 0, -1, 1, 1, GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"TitleSafeArea.png", 0), 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1.0f, 0.0f, 0.0f, 0.25f)));
+	AddDrawable(new DrawableTexture2D(0, 0, -1, 1, 1, GameStateManager::Assets()->LoadTexture(this, "TitleSafeArea", 0), 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1.0f, 0.0f, 0.0f, 0.25f)));
 	
 	float charWidth = 0.0125f;
 	float charHeight = 0.03f;
@@ -64,8 +64,8 @@ void DebugOverlay::Update()
 }
 void DebugOverlay::UnloadContent()
 {
-	GameStateManager::Assets()->UnloadFont(this, TEXTUREDIR"tahoma.tga");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"TitleSafeArea.png");
+	GameStateManager::Assets()->UnloadFont(this, "tahoma");
+	GameStateManager::Assets()->UnloadTexture(this, "TitleSafeArea");
 }
 #if WINDOWS_BUILD
 void DebugOverlay::MouseMoved(T3Vector2& start, T3Vector2& finish)

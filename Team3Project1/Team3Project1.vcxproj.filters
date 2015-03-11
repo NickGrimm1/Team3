@@ -181,9 +181,6 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{430eb0fa-7f87-4b42-98a2-d624eb6c6686}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources\Meshes">
-      <UniqueIdentifier>{511ee7e2-8c09-4c40-b0e9-373f68e01370}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resources\PHP">
       <UniqueIdentifier>{48d27d25-5691-41e8-8575-a9bb9ff0e7c4}</UniqueIdentifier>
     </Filter>
@@ -758,9 +755,6 @@
     <ClCompile Include="ChaseCamera.cpp">
       <Filter>Framework\Graphics\Common\Source</Filter>
     </ClCompile>
-    <ClCompile Include="GraphicsEnginePS3.cpp">
-      <Filter>Framework\Graphics\PS3\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DebugOverlay.cpp">
       <Filter>Framework\Debug\Source Files</Filter>
     </ClCompile>
@@ -886,95 +880,6 @@
     <None Include="..\Resources\PHP\postScore.php">
       <Filter>Game\Web Interface</Filter>
     </None>
-    <None Include="..\Resources\Meshes\NovaCar.mtl">
-      <Filter>Resources\Meshes</Filter>
-    </None>
-    <None Include="..\Resources\Meshes\NovaTire.mtl">
-      <Filter>Resources\Meshes</Filter>
-    </None>
-    <None Include="..\Resources\Textures\button.gtf">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\button_clicked.gtf">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\button_selected.gtf">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\day_sky.gtf">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\Grass_Color.gtf">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\Grass_Color.tga">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\night_sky.gtf">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\NovaCarUV.gtf">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\NovaCarUV.tga">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\pause_screen.gtf">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\quadrats.gtf">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\quadrats.tga">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\raindrop.gtf">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\refresh.gtf">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\score_board.gtf">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\snowflake.gtf">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\tahoma.gtf">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\tahoma.tga">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\TireUV.gtf">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\TireUV.tga">
-      <Filter>Resources\Textures</Filter>
-    </None>
-    <None Include="..\Resources\Textures\TitleSafeArea.gtf">
-      <Filter>Resources\Textures</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="..\Resources\Meshes\CarPhysics.obj">
-      <Filter>Resources\Meshes</Filter>
-    </Object>
-    <Object Include="..\Resources\Meshes\cube.obj">
-      <Filter>Resources\Meshes</Filter>
-    </Object>
-    <Object Include="..\Resources\Meshes\dome.obj">
-      <Filter>Resources\Meshes</Filter>
-    </Object>
-    <Object Include="..\Resources\Meshes\NovaCar.obj">
-      <Filter>Resources\Meshes</Filter>
-    </Object>
-    <Object Include="..\Resources\Meshes\NovaTire.obj">
-      <Filter>Resources\Meshes</Filter>
-    </Object>
-    <Object Include="..\Resources\Meshes\sphere.obj">
-      <Filter>Resources\Meshes</Filter>
-    </Object>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\Resources\Textures\button.png">
@@ -984,18 +889,6 @@
       <Filter>Resources\Textures</Filter>
     </Image>
     <Image Include="..\Resources\Textures\button_selected.png">
-      <Filter>Resources\Textures</Filter>
-    </Image>
-    <Image Include="..\Resources\Textures\calvin.bmp">
-      <Filter>Resources\Textures</Filter>
-    </Image>
-    <Image Include="..\Resources\Textures\day_sky.jpg">
-      <Filter>Resources\Textures</Filter>
-    </Image>
-    <Image Include="..\Resources\Textures\Grass_Color.jpg">
-      <Filter>Resources\Textures</Filter>
-    </Image>
-    <Image Include="..\Resources\Textures\night_sky.jpg">
       <Filter>Resources\Textures</Filter>
     </Image>
     <Image Include="..\Resources\Textures\pause_screen.png">
@@ -1014,6 +907,75 @@
       <Filter>Resources\Textures</Filter>
     </Image>
     <Image Include="..\Resources\Textures\TitleSafeArea.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\calvin.PNG">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\day_sky.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\Grass_Color.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\night_sky.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\NovaCarUV.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\quadrats.PNG">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\tahoma.PNG">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\TireUV.PNG">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\Buttons\button.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\Buttons\button_clicked.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\Buttons\button_selected.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\Buttons\music_mute.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\Buttons\music_mute_clicked.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\Buttons\music_mute_selected.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\Buttons\music_nomute.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\Buttons\music_nomute_clicked.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\Buttons\music_nomute_selected.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\Buttons\sound_mute.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\Buttons\sound_mute_clicked.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\Buttons\sound_mute_selected.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\Buttons\sound_nomute.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\Buttons\sound_nomute_clicked.png">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="..\Resources\Textures\Buttons\sound_nomute_selected.png">
       <Filter>Resources\Textures</Filter>
     </Image>
   </ItemGroup>

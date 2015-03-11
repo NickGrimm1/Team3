@@ -348,12 +348,7 @@ GameEntity* MyGame::BuildQuadEntity(float size) {
 			ent = new DrawableEntity3D(
 				quad,
 				NULL,
-#if WINDOWS_BUILD
-				GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.tga", SOIL_FLAG_MIPMAPS),
-#endif
-#if PS3_BUILD
-				GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.tga", 0),
-#endif
+				GameStateManager::Assets()->LoadTexture(this, "Grass_Color", SOIL_FLAG_MIPMAPS),
 				NULL,
 				size,
 				T3Vector3(-350.0f + i * 100.0f,0,-350.0f + j * 100.0f),

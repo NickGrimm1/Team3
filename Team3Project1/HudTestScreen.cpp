@@ -12,14 +12,14 @@ HudTestScreen::~HudTestScreen(void)
 }
 
 void HudTestScreen::LoadContent() {
-	Font* f = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"tahoma.tga", 16, 16);
+	Font* f = GameStateManager::Assets()->LoadFont(this, "tahoma", 16, 16);
 #if WINDOWS_BUILD
-	Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.jpg", SOIL_FLAG_MIPMAPS);
+	Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, "Grass_Color", SOIL_FLAG_MIPMAPS);
 #endif
 #if PS3_BUILD
-	Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.jpg", 0);
+	Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, "Grass_Color", 0);
 #endif
-	Texture* calvinTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", 0);
+	Texture* calvinTex = GameStateManager::Assets()->LoadTexture(this, "calvin", 0);
 
 	AddDrawable(new DrawableText2D(
 		0.0f, 
@@ -120,7 +120,7 @@ void HudTestScreen::LoadContent() {
 
 void HudTestScreen::UnloadContent()
 {
-	GameStateManager::Assets()->UnloadFont(this, TEXTUREDIR"tahoma.tga");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Grass_Color.jpg");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"calvin.bmp");
+	GameStateManager::Assets()->UnloadFont(this, "tahoma");
+	GameStateManager::Assets()->UnloadTexture(this, "Grass_Color");
+	GameStateManager::Assets()->UnloadTexture(this, "calvin");
 }
