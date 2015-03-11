@@ -10,7 +10,6 @@
 
 ShaderPart::ShaderPart(std::string raw, ShaderType::Type type) : type(type)
 {
-	std::cout <<"shader part started" << std::endl;
 #if WINDOWS_BUILD
 	shader = glCreateShader(type);
 	const char *chars = raw.c_str();
@@ -22,46 +21,26 @@ ShaderPart::ShaderPart(std::string raw, ShaderType::Type type) : type(type)
 
 	if (status == GL_FALSE)	
 	{
-#if DEBUG
-		printf("Compiling failed!\n");
-		char error[512];
-		glGetInfoLogARB(shader, sizeof(error), NULL, error);
-		cout << error;
-#endif
 		return;
 	}
-#if DEBUG
-	printf("Compiling success!\n\n");
-#endif
 #endif
 #if PS3_BUILD
-	//std::cout <<"ShaderPart: got to first ps3 block" << std::endl;
-	
 	string name = SYS_APP_HOME + raw;
-	//std::cout <<"ShaderPart:made a string" << std::endl;
 	unsigned int dataSize = 0;
-	//std::cout <<"ShaderPart: made an int" << std::endl; 
 	char* data = NULL;
-	//std::cout <<"ShaderPart: initialised some variables" << std::endl;
 	//Open the file
 	std::ifstream	file(name.c_str(),std::ios::in|std::ios::binary);
-	//std::cout <<"ShaderPart: opened the shader file" << std::endl;
 	//Oh no!
 	if(!file) 
 	{
-//#if DEBUG
-		std::cout << "LoadBinaryShader: Can't find file: " << name << std::endl;
 		return;
-//#endif
 	}
 	//This is the slightly messy default way to determinimume the size
 	//of a file (seek to the end of it, grab the read position, seek
 	//back to the start)
-	//std::cout << "ShaderPart: Getting File Size" << std::endl;
 	file.seekg(0, std::ios::end);
 	dataSize = file.tellg();
 	file.seekg(0, std::ios::beg);
-//	std::cout << "ShaderPart: Got File Size" << std::endl;
 	//Allocate some graphics memory for the shader.
 	//data = (char*)GCMRenderer::localMemoryAlign(64,dataSize);
 
@@ -86,12 +65,10 @@ ShaderPart::ShaderPart(std::string raw, ShaderType::Type type) : type(type)
 	unsigned int ucodeSize;
 	void *ucodePtr;
 
-	std::cout << "ShaderPart: Getting Memory" << std::endl;
 	cellGcmCgGetUCode(program, &ucodePtr, &ucodeSize);
 	ucode = GCMRenderer::localMemoryAlign(64,ucodeSize);
 	memcpy(ucode, ucodePtr, ucodeSize);
 	cellGcmAddressToOffset(ucode, &offset);
-	std::cout << "ShaderPart: Got Memory" << std::endl;
 
 	if (type == ShaderType::VERTEX)
 	{
@@ -102,8 +79,6 @@ ShaderPart::ShaderPart(std::string raw, ShaderType::Type type) : type(type)
 	}
 	else if (type == ShaderType::FRAGMENT)
 		UpdateShaderVariables();
-
-	std::cout << "ShaderPart: Finished Load" << std::endl;
 #endif
 }
 #if WINDOWS_BUILD
@@ -113,17 +88,9 @@ string ShaderPart::LoadShaderFile(string filename)
 	ifstream file;
 	string temp;
 	string into;
-#if DEBUG
-	printf("Loading shader text from ");
-	printf(filename.c_str());
-	printf("\n\n");
-#endif
 	file.open(filename.c_str());
 	if(!file.is_open())
 	{
-#if DEBUG
-	printf("File does not exist!\n");
-#endif
 		return NULL;
 	}
 
@@ -132,11 +99,6 @@ string ShaderPart::LoadShaderFile(string filename)
 		into += temp + "\n";
 	}
 	file.close();
-#if DEBUG
-	printf("Loaded shader text!\n");
-
-	printf("Compiling Shader...\n");
-#endif
 
 	return into;
 }
@@ -151,7 +113,6 @@ wrong when incorrect data is sent to it.
 */
 void	ShaderPart::SetParameter(std::string name, float*data) 
 {
-//	std::cout << "Shader Part: Getting parameter: " << name << std::endl;
 	CGparameter p = GetParameter(name);
 
 	//DON'T try to set a non-existent parameter. GCM will instantly
@@ -160,12 +121,10 @@ void	ShaderPart::SetParameter(std::string name, float*data)
 		if(type == ShaderType::VERTEX)
 		{
 			cellGcmSetVertexProgramParameter(p, data);
-	//		std::cout << "ShaderPart(Vertex): Set Parameter: " <<  name << std::endl;
 		}
 		else
 		{
 			cellGcmSetFragmentProgramParameter(program, p, data, offset);
-	//		std::cout << "ShaderPart(Fragment): Set Parameter: " <<  name << std::endl;
 		}
 	}
 }
@@ -178,21 +137,8 @@ transpose function, so it's less likely you'll accidentally set your
 matrix wrong
 */
 void ShaderPart::SetParameter(std::string name, Matrix4 &totranpose) {
-	std::cout << "Transposing: " << name << std::endl;
-	Matrix4 tempMatrix = transpose(totranpose);
-	/*std::cout << "Shader Part: Transposed Matrix (SCE): " << std::endl;
-		for (int x = 0; x < 4; ++x)
-		{
-			for (int y = 0; y < 4; ++y)
-			{
-				std::cout << tempMatrix.getElem(x,y) << ",";
-			}
-			std::cout << std::endl;
-		}*/
-		float* m = (float*)&tempMatrix;
-		//std::cout << "Shader Part: Setting " << name << " " << &tempMatrix << std::endl;
-	SetParameter(name, m);
-//	std::cout << "Shader Part: " << name << " Set" << std::endl;
+	Matrix4 tempMatrix = transpose(totranpose);	
+	SetParameter(name, (float*)&tempMatrix);
 }
 
 /*
@@ -218,17 +164,6 @@ void ShaderPart::SetDefaultAttributes() {
 	attributes[VertexAttributes::TANGENT]	= (tangent_param  == 0) ? -1 : cellGcmCgGetParameterResource(program, tangent_param)  - CG_ATTR0;
 }
 
-//void ShaderPart::SetParameter(std::string name, float*data) 
-//{
-//	CGparameter p = GetParameter(name);
-//
-//	//DON'T try to set a non-existent parameter. GCM will instantly
-//	//fall over.
-//	if(p) {	
-//		cellGcmSetFragmentProgramParameter(program, p, data, offset);
-//	}
-//}
-
 /*
 When uniforms are changed in a fragment shader, we must tell GCM to reload
 the instruction cache of the shader, so call this after you've set anything
@@ -245,29 +180,16 @@ Sets the shaders matrices to the passed in values. Handy to call at the start of
 a frame, or when using a shader for the first time. It's more efficient to use
 SetParameter directly for setting just a single matrix, though. 
 */
-std::ostream& operator<<(std::ostream& o, const Matrix4& m)
+
+void	ShaderPart::UpdateShaderMatrices(Matrix4 &model,Matrix4 &view, Matrix4 &proj)
 {
-
-	o << "PS3_Mat4(";
-	for (int i = 0; i < 4; ++i)
-	{
-		o << "\t\t" << m[i][0] << "," << m[i][1] << "," << m[i][2] << "," << m[i][3] << "\n";
-	}
-	o << ");\n\n";
-	return o;
-}
-
-void	ShaderPart::UpdateShaderMatrices(Matrix4 &model,Matrix4 &view, Matrix4 &proj) {
-
-	//std::cout << "####MODEL MTX:" << model << "\n#####VIEW MTX: " << view << "\n####PROJ MTX: " << proj;
-
 	SetParameter("modelMatrix", model);
 	SetParameter("viewMatrix", view);
 	SetParameter("projMatrix", proj);
 }
 #endif
 #if PS3_BUILD
-CGprogram ShaderPart::GetProgram(){/*std::cout<<"ShaderPart: Program: " << &program << program << std::endl;*/ return program;}
+CGprogram ShaderPart::GetProgram(){ return program;}
 
 unsigned int ShaderPart::GetOffset(){return offset;}
 
@@ -279,18 +201,11 @@ CGparameter ShaderPart::GetParameter(string target)
 	if(i != uniforms.end()) 
 	{ 
 		// if its in the map , return it!
-	//	std::cout << "ShaderPart::GetParameterL: Returning " << target << " from map." << std::endl;
 		return i->second;
 	}
 
 	CGparameter p = cellGcmCgGetNamedParameter(program, target.c_str());
-	if(!p) 
-	{
-		std::cout << "Can't find named parameter:" << target << std::endl;
-	}
-
 	uniforms.insert (std::make_pair(target, p));
-	//std::cout << "ShaderPart::GetParameterL: Returning " << target << " from named." << std::endl;
 	return p;
 }
 

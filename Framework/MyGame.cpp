@@ -143,7 +143,6 @@ void MyGame::UpdateGame(float msec) {
 	//	allEntities.erase(allEntities.begin());
 	//	allEntities.erase(allEntities.begin());
 	//	allEntities.erase(allEntities.begin());
-	//	//cout<<"\n a2aaaa="<<allEntities.size()<<"a2aaaa \n";
 	//	/*GT3(g*2000.f);
 	//	GT2(g*2000.f);
 	//	g=g+1;*/
@@ -154,7 +153,6 @@ void MyGame::UpdateGame(float msec) {
 	//if (st==1)
 	//{
 	//	
-	//	//cout<<"\n a3aaaa="<<allEntities.size()<<"a3aaaa \n";
 	//	st = 0;
 	//}
 
@@ -217,7 +215,6 @@ void MyGame::GT(float y){
 
 	gt->GetPhysicsNode().SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
 	allEntities.push_back(gt);
-	cout<<"\n aaaa="<<allEntities.size()<<"aaaa \n";
 	//GameEntity* cube=BuildCubeEntity(500.f);
 }
 
@@ -231,7 +228,6 @@ void MyGame::GT3(float y){
 
 	gt->GetPhysicsNode().SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
 	allEntities.push_back(gt);
-	cout<<"\n aaaa="<<allEntities.size()<<"aaaa \n";
 	//GameEntity* cube=BuildCubeEntity(500.f);
 }
 
@@ -241,7 +237,6 @@ void MyGame::GT2(float y){
 	GameEntity* quadEntity = BuildQuadEntity(1000.0f);
 	quadEntity->GetPhysicsNode().SetPosition(T3Vector3(1000,0,y));
 	allEntities.push_back(quadEntity);
-	cout<<"\n aaaa="<<allEntities.size()<<"aaaa \n";
 }
 
 //t

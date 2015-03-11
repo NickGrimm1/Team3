@@ -23,8 +23,6 @@ map < string , Sound * > SoundManager::sounds;
 	//	 }
 	//	 else {
 	//		 s = NULL ;
-	//		 cout << " Incompatible file extension ’" << extension
-	//		 << " ’!" << endl ;
 	//	 }
 	//	 sounds.insert ( make_pair ( name , s ));
 	// }
@@ -44,7 +42,6 @@ void SoundManager :: AddSound ( string name ) {
 						s -> GetSize () ,( ALsizei )s -> GetFrequency ());    // sound PCM data
 		 }
 		 else {
-			cout << "Invalid extension ’" << extension << "’!" << endl;
 		 }
 		 sounds.insert ( make_pair ( name , s ));
 	 }

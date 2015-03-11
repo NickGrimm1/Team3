@@ -43,15 +43,7 @@ bool Shader::LinkProgram()
 	
 	if (code == GL_FALSE)	
 	{
-		#if DEBUG
-		cout << "Linking failed!" << endl;
-		char error[512];
-		glGetInfoLogARB(program, sizeof(error), NULL, error);
-		cout << error;
-		#endif
-	
 		loadFailed = true;
-		
 	}
 	
 	
@@ -63,7 +55,6 @@ bool Shader::LinkProgram()
 
 void	Shader::SetDefaultAttributes()	
 {
-	
 	glBindAttribLocation(program, 0, "position");
 	glBindAttribLocation(program, 1, "normal");
 	glBindAttribLocation(program, 2, "colour");

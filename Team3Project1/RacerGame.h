@@ -75,19 +75,14 @@ public:
 	vector<GameEntity*> checkPoint;
 
 	 virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
-		 cout<<obj1->GetType();
-		  cout<<" collisionbetween ";
-		  cout<<obj2->GetType()<<endl;
 		  if(obj1->GetType()=='g')
 		  {
 			  obj1->GetPhysicsNode().SetIsCollide(false);
-			  cout<<"set = true ok"<<endl;
 			  RacerGame::update=1;
 		  }
 		    if(obj2->GetType()=='g')
 		  {
 			  obj2->GetPhysicsNode().SetIsCollide(false);
-			  cout<<"set2 = true ok"<<endl;
 			
 			  RacerGame::update=1;
 			  
@@ -95,7 +90,6 @@ public:
 			 if(obj2->GetType()=='d')
 		  {
 			  obj2->GetPhysicsNode().SetIsCollide(false);
-			  cout<<"delete = true ok"<<endl;
 			  RacerGame::update=2;
 			    SettimeOrScore(1);
 			  
@@ -103,21 +97,17 @@ public:
 			  if(obj2->GetType()=='p')
 		  {
 			  obj2->GetPhysicsNode().SetIsCollide(false);
-			  cout<<"point get = true ok"<<endl;
 			  SetScore(1);
 			 // SoundManager::AddSound(SOUNDSDIR"Tokyo Drift2.wav");
 			 // GameStateManager::Audio()->PlaySoundW(GameStateManager::Audio()->GetSound(SOUNDSDIR"Tokyo Drift2.wav"),SOUNDPRIORITY_ALWAYS);
-			  cout<< "total point ="<<GetScore()<<endl; 
 			  GameStateManager::Graphics()->RemoveDrawable(obj2);
 	          obj2->DisconnectFromSystems();
 		  }
 			   if(obj2->GetType()=='t')
 		  {
 			  obj2->GetPhysicsNode().SetIsCollide(false);
-			  cout<<"time get = true ok"<<endl;
 			  SettimeOrScore(-(GettimeOrScore()));
 			  SetPlayTime(30);
-			  cout<< "total time ="<<GetTime()<<endl; 
 			  GameStateManager::Graphics()->RemoveDrawable(obj2);
 	          obj2->DisconnectFromSystems();
 		  }

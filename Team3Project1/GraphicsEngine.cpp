@@ -3,6 +3,10 @@
 #include "../Framework/T3Vector2.h"
 #include "../Framework/T3Vector4.h"
 #include <algorithm>
+#include "GameStateManager.h"
+#if PS3_BUILD
+#include <sys/timer.h>
+#endif
 
 GraphicsEngine* GraphicsEngine::engine = NULL;
 
@@ -107,7 +111,8 @@ void GraphicsEngine::threadExecution(uint64_t arg)
 }
 #endif
 
-void GraphicsEngine::Run() {
+void GraphicsEngine::Run() 
+{
 	isRunning = true;
 	
 	time = 0;
@@ -122,7 +127,11 @@ void GraphicsEngine::Run() {
 		frameRate = (int)(1000.0f / msec);
 #endif
 #if PS3_BUILD
-		float msec = 16.6f;
+		while (GameStateManager::GetTimer()->GetMS() - lastFrameTimeStamp < RENDER_TIME)
+			sys_timer_usleep(100);
+ 		float msec = (float)GameStateManager::GetTimer()->GetMS() - lastFrameTimeStamp;
+		lastFrameTimeStamp = (float)GameStateManager::GetTimer()->GetMS();
+		frameRate = (int)(1000.0f / msec);
 #endif
 
 		// add/remove requested items from scene lists
@@ -307,7 +316,6 @@ void GraphicsEngine::Run() {
 	}
 
 #if PS3_BUILD
-	std::cout << "Graphics Thread Ended! " << std::endl;
 	sys_ppu_thread_exit (0);
 #endif
 }
@@ -525,6 +533,5 @@ float GraphicsEngine::DayNightCycle() {
 			time--;
 	}
 
-//	cout << time << ", "  << out << endl;
 	return out;	
 }

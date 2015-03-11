@@ -609,7 +609,6 @@
 //
 //
 //									  //count=count+1;
-//									  // cout<<count<<endl;
 //									  }
 //									  continue;
 //
@@ -624,7 +623,6 @@
 //											  MyGame::dt=1 ;
 //										  count=false;}
 //									 // count=count+1;
-//									 //  cout<<count<<endl;
 //									  }
 //									 
 //										continue;
@@ -645,7 +643,6 @@
 //											  MyGame::dt=1 ;
 //										  count=false;}
 //									 // count=count+1;
-//									  // cout<<count<<endl;
 //									  }
 //									 
 //										continue;

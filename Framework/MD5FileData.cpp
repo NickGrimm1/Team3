@@ -54,25 +54,21 @@ MD5FileData::MD5FileData(const std::string &filename)	{
 			//We've found the MD5 version string!
 			//ifstream allows us to stream ints,floats etc into variables
 			f >> md5Version;
-			std::cout << "MD5 File version is: " << md5Version << std::endl;
 		}
 		else if(currentLine.find(MD5_COMMANDLINE_TAG) != std::string::npos) {
 			/*
 			MD5Mesh files sometimes have a 'command line' value, used by the game
 			toolchain to generate some data. We don't care about it!
 			*/
-			std::cout << "Ignoring commandline value" << std::endl;
 			getline(f,currentLine);
 		}
 		else if(currentLine.find(MD5_NUMJOINTS_TAG) != std::string::npos) {
 			f >> numExpectedJoints; //Load in the number of joints held in this MD5Mesh file
-			std::cout << "Expecting file to have " << numExpectedJoints << " joints" << std::endl;
 			//grab enough space for this number of joints
 			bindPose.joints = new MD5Joint[numExpectedJoints];
 		}
 		else if(currentLine.find(MD5_NUMMESHES_TAG) != std::string::npos) {
 			f >> numExpectedMeshes; //load in the number of submeshes held in this md5mesh
-			std::cout << "Expecting file to have " << numExpectedMeshes << " meshes" << std::endl;
 
 			subMeshes = new MD5SubMesh[numExpectedMeshes];
 		}
@@ -94,12 +90,10 @@ MD5FileData::MD5FileData(const std::string &filename)	{
 	//If what we've loaded in does not equal what we /should/ have loaded in, we'll output an error
 	//
 	if(numLoadedJoints != numExpectedJoints) {
-		std::cout << "Expected " << numExpectedJoints << " joints, but loaded " << numLoadedJoints << std::endl;
 		return;
 	}
 
 	if(numLoadedMeshes != numExpectedMeshes) {
-		std::cout << "Expected " << numExpectedMeshes << " meshes, but loaded " << numLoadedMeshes << std::endl;
 		return;
 	}
 
@@ -439,8 +433,6 @@ void MD5FileData::LoadMD5SubMesh( std::ifstream &from, int &count )	{
 
 			if(m.verts[vertsLoaded].weightElements > testweightcount) {
 				testweightcount = m.verts[vertsLoaded].weightElements;
-
-				std::cout << testweightcount << std::endl;
 			}
 
 			vertsLoaded++;
@@ -471,7 +463,6 @@ void MD5FileData::LoadMD5SubMesh( std::ifstream &from, int &count )	{
 		else{
 			//Perhaps different MD5 files have other data? Or maybe the file is screwed...
 			if(tempLine != "}" && tempLine != "{")	{
-				std::cout << "Unknown MD5 file tag: " << tempLine << std::endl;
 			}
 		}
 	}while(tempLine != "}");

@@ -52,9 +52,7 @@ HudTestScreen::~HudTestScreen(void)
 }
 
 void HudTestScreen::Update(){
-	//cout<<"2d update"<<endl;
-	
-	
+
 }
 
 void HudTestScreen::LoadContent() {
