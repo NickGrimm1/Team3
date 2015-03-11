@@ -15,7 +15,7 @@ Version: 0.0.2 </summary>
 #endif
 
 #define DEADZONE 0.05f
-#define PRESSLIMIT 200.0f
+#define PRESSLIMIT 400.0f
 
 typedef void (*PadInput)();
 

@@ -17,7 +17,7 @@ public:
 	virtual void LoadContent();
 	virtual void UnloadContent() {}
 	virtual void Update();
-
+	Vehicle* GetCar(){return car;}
 
 	// Input Listener methods - not implemented
 #if WINDOWS_BUILD
@@ -29,6 +29,7 @@ public:
 	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button) {};
 	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) {};
 	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID){}
+	
 
 	float f;
 	float b;

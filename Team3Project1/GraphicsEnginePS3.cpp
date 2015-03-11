@@ -78,7 +78,8 @@ void GraphicsEngine::Run()
 		sceneRoot->Update(msec->GetMS());
 		BuildNodeLists(sceneRoot);
 		SortNodeLists();
-		//std::cout << "Graphics Thread Rendering! " << std::endl;
+		std::cout << "Graphics Thread Rendering! " << std::endl;
+		camera->UpdateCamera();
 		engine->renderer->RenderScene();
 	}
 	std::cout << "Graphics Thread Ended! " << std::endl;

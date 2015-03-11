@@ -4,13 +4,14 @@
 
 
 Vehicle::Vehicle(float size) {
-	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
+	//mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaCar.obj");
+	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaCar.obj");
 //	BuffMesh = new OBJMesh(MESHDIR"ico.obj");
 	
 	//TT =  SOIL_load_OGL_texture ("../../Texture/footballpitch.jpg", SOIL_LOAD_AUTO , SOIL_CREATE_NEW_ID , SOIL_FLAG_MIPMAPS);
 //	PlayerPosition=T3Vector3(500,100,-800);
 
-	T3Vector3 position =T3Vector3(0, 0, 0);
+	T3Vector3 position =T3Vector3(0, 8, 0);
 	boundingRadius = size;
 	origin = position;
 	rotation = Quaternion::EulerAnglesToQuaternion(0,-90,0);
@@ -18,7 +19,7 @@ Vehicle::Vehicle(float size) {
 	texture = NULL;
 	bumpTexture = NULL;
 	shader = NULL;
-
+	
 	//	PlayerPosition=T3Vector3(-25, 20, 0);
 	//Player = BuildPlayerEntity(20.0f,PlayerPosition);
 
@@ -43,7 +44,7 @@ Vehicle::Vehicle(float size) {
 
 
 
-	Speed_Player = 2;
+	Speed_Player = 5;
 	f=0;
 	temp2=T3Vector3(0,0,0);
 	Speed_Rotate = -0.0004;
@@ -322,6 +323,7 @@ void Vehicle::SetPhysics(float size,PhysicsNode * a)
 
 	car->SetIsCollide(true);
 	car->Setcar_wheel(true);
+	car->Setplanecollision(false);
 
 
 

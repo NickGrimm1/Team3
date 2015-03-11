@@ -55,7 +55,7 @@ public:
 	<param name='amount'>The amount to interpolate.</param>
 	<returns>The final value of f1 moved amount towards f2.</returns>
 	*/
-	static T3Matrix4& Lerp(T3Matrix4 m1, T3Matrix4 m2, float amount)
+	static T3Matrix4 Lerp(T3Matrix4 m1, T3Matrix4 m2, float amount)
 	{
 		T3Matrix4 out;
 		for (int i = 0; i < 16; i++)

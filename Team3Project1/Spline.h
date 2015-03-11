@@ -26,7 +26,7 @@ public:
 	void DrawControlPoints();
 	virtual void Draw();
 
-
+	unsigned int GetSegments() const {return segments;}
 protected:
 	T3Vector3* ctrlPoints;
 	unsigned int segments;

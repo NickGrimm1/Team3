@@ -1,8 +1,10 @@
 #include "PhysicsEngine.h"
 #include "RacerGame.h"
 #include "../Framework/CollisionHelper.h"
+#if WINDOWS_BUILD
 #include <algorithm>
 #include <list>
+#endif
 
 PhysicsEngine* PhysicsEngine::instance = NULL;
 
@@ -36,6 +38,7 @@ void PhysicsEngine::ThreadRun()
 #endif
 		frameRate = (int)(1000.0f / msec);
 
+#if WINDOWS_BUILD
 		NarrowPhaseCollisions();
 
 		narrowlist.clear();
@@ -49,9 +52,10 @@ void PhysicsEngine::ThreadRun()
 			narrowlist.push_back((*i));
 		}
 		//BroadPhaseCollisions();
+#endif
 	}
 }
-
+#if WINDOWS_BUILD
 T3Vector3 PhysicsEngine::support(PhysicsNode& shape1,PhysicsNode& shape2, T3Vector3 dir)
 {
 	
@@ -76,7 +80,7 @@ T3Vector3 PhysicsEngine::support(PhysicsNode& shape1,PhysicsNode& shape2, T3Vect
 	for(int i=0;i<number1;i++)
 	{
 		worldpoints1.push_back(T3Matrix4::Translation(shape1.GetTarget()->GetOriginPosition()) * shape1.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape1.GetTarget()->GetScale()) * vertex1[i].GetPosition());
-	}	
+	}
 	shape1.SetWorldPoints(worldpoints1);
 
 	//Vertex * vertex2=shape2.GetTarget()->GetMesh()->GetVertices();
@@ -496,7 +500,7 @@ void  PhysicsEngine::SortandSweep()
 
 			}
 				}
-			
+
 			
 
 
@@ -541,14 +545,16 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 			{
 				//OnCollision(first,second);
 				//cout << "GJK passed" << endl;
-				if(first.GetIsCollide()==false && second.GetIsCollide ()==true)
+				if(first.GetIsCollide()==true && second.GetIsCollide ()==true)
 				{
-					//if(second.GetType()=='f'){
 					OnCollision(first,second);
+					//if(second.GetType()=='f'){
+					//OnCollision(first,second);
 					//}
 				}
 				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
 				{
+					//OnCollision(first,second);
 					//OnCollision(first,second);
 						/*if(check==true)
 					{
@@ -572,10 +578,10 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 					
 						check=false;
 					}*/
-					first.SetLinearVelocity(T3Vector3(0,0,0));
+					/*first.SetLinearVelocity(T3Vector3(0,0,0));
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
-					second.SetForce(T3Vector3(0,0,0));
+					second.SetForce(T3Vector3(0,0,0));*/
 				}
 			
 				if ((first.GetIsCollide()==true && second.GetIsCollide ()==true) && ((first.Getcar_wheel()==true && second.Getcar_wheel()==true)))
@@ -590,9 +596,27 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 					bool succeeded = EPA(first, second, data);
  					if (succeeded)
 					{
-						CollisionHelper::AddCollisionImpulse( first, second, *data);
+						CollisionHelper::AddCollisionImpulse(first, second, *data);
+
+
+						if(first.Getplanecollision()==true && second.Getplanecollision()==false)
+
+						{
+							first.SetUseGravity(false);
+							second.SetUseGravity(false);
+							T3Vector3 temp1,temp2;
+							temp1 =  first.GetLinearVelocity();
+							temp1.y = 0;
+							first.SetLinearVelocity(temp1);
+							
+							temp2 =  second.GetLinearVelocity();
+							temp2.y = 0;
+							second.SetLinearVelocity(temp2);
+													
+			                second.SetPosition(second.GetPosition() + T3Vector3(0, 2.0f, 0));
 
 			}
+				}
 				}
 			
 			
@@ -683,12 +707,13 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 	}
 }
 
-bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* data)
+float Dist(const T3Vector3& a, const T3Vector3& b)
 {
-	const unsigned _EXIT_ITERATION_LIMIT =50;
-	unsigned _EXIT_ITERATION_NUM = 0;
-	const float _EXIT_THRESHOLD = 0.0001f;
+	return (a-b).Length();
+}
 
+	const unsigned _EXIT_ITERATION_LIMIT =50;
+	const float _EXIT_THRESHOLD = 0.0001f;
 	struct EPA_Point
 	{
 		T3Vector3 v;
@@ -722,28 +747,8 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* 
 	}
 	};
 
-	std::list<EPA_Triangle> lst_EPA_Triangle;
-	std::list<EPA_Edge> lst_EPA_Edge;
-
-	// add the triangles from GJK to the list
-	lst_EPA_Triangle.emplace_back(a,b,c);
-	lst_EPA_Triangle.emplace_back(a,c,d);
-	lst_EPA_Triangle.emplace_back(b,c,d);
-	lst_EPA_Triangle.emplace_back(a,b,d);
-
-	// fix tetrahedron winding  
-	/*const Vector3 v30 = a - d;
-	const Vector3 v31 = b - d;
-	const Vector3 v32 = c - d;
-	const float det = Vector3::Dot(v30, Vector3::Cross(v31, v32));
-	if (det > 0.0f)
-	{
-		std::swap(a, b);
-	}*/
-
-
-	// add the adge to the list when finding the triangle which can be seen by the new point
-
+	std::vector<EPA_Triangle> lst_EPA_Triangle;
+	std::vector<EPA_Edge> lst_EPA_Edge;
 	auto addEdge = [&](const T3Vector3 &a, const T3Vector3 &b) -> void
 	{
 		for(auto it = lst_EPA_Edge.begin(); it != lst_EPA_Edge.end();it++)
@@ -760,16 +765,57 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* 
 	};
 
 	
+bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* data)
+{
+
+
+	lst_EPA_Edge.clear();
+	lst_EPA_Triangle.clear();
+
+
+	//Avoid Degenerate Triangles from GJK
+	if (Dist(a,b) < _EXIT_THRESHOLD 
+		|| Dist(a,c) < _EXIT_THRESHOLD 
+		|| Dist(a,d) < _EXIT_THRESHOLD 
+		|| Dist(b,c) < _EXIT_THRESHOLD
+		|| Dist(b,d) < _EXIT_THRESHOLD
+		|| Dist(c,d) < _EXIT_THRESHOLD)
+	return false;
+
+	// add the triangles from GJK to the list
+	lst_EPA_Triangle.emplace_back(a,b,c);
+	lst_EPA_Triangle.emplace_back(a,c,d);
+	lst_EPA_Triangle.emplace_back(b,c,d);
+	lst_EPA_Triangle.emplace_back(a,b,d);
+
+
+	// Fix Triangle winding order
+	T3Vector3 centre = (a + b + c + d) / 4.0f;
+	for (unsigned int i = 0, len = lst_EPA_Triangle.size(); i < len; ++i)
+	{
+		EPA_Triangle& t =  lst_EPA_Triangle[i];
+		if (T3Vector3::Dot(t.Triangle_normal, centre) > 0.0f)
+		{
+			EPA_Triangle replace = EPA_Triangle(t.Point[0].v, t.Point[2].v, t.Point[1].v);
+			t = replace;
+		}
+	}
+
+
+	// add the adge to the list when finding the triangle which can be seen by the new point
+	unsigned _EXIT_ITERATION_NUM = 0;
 	// loop to find the final triangle which is cloest to the origin
 	while (true)
 	{
-	
 		if(_EXIT_ITERATION_NUM++ >= _EXIT_ITERATION_LIMIT) 
+			break;
+	
+		if (lst_EPA_Triangle.size() > 500)
 			break;
 
 		float closest_distance = 10000.0f;
 		T3Vector3 contactpoint;
-		std::list<EPA_Triangle>::iterator closest_triangle = lst_EPA_Triangle.begin();
+		std::vector<EPA_Triangle>::iterator closest_triangle = lst_EPA_Triangle.begin();
 
 		// find the initial closest triangle to origin
 		for(auto it = lst_EPA_Triangle.begin(); it != lst_EPA_Triangle.end(); it++)
@@ -799,21 +845,28 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* 
 				closest_triangle->Point[0].v, closest_triangle->Point[1].v, closest_triangle->Point[2].v, 
 				&bary_x, &bary_y, &bary_z);
 
-
-			//OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, closest_triangle->Point[0].v, closest_triangle->Point[1].v, Vector3(1, 0, 0), Vector3(1, 0, 0));
-			//OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, closest_triangle->Point[1].v, closest_triangle->Point[2].v, Vector3(0, 1,0), Vector3(0, 1, 0));
-			//OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, closest_triangle->Point[0].v, closest_triangle->Point[2].v, Vector3(0, 0, 1), Vector3(0, 0, 1));
-
 			// contact point
 			contactpoint = ((closest_triangle->Point[0].v*bary_x)+
 						  (closest_triangle->Point[1].v*bary_y)+
 						  (closest_triangle->Point[2].v*bary_z));		
 
+			//OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, closest_triangle->Point[0].v, closest_triangle->Point[1].v);
+		//	OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, closest_triangle->Point[0].v, closest_triangle->Point[2].v);
+		//	OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, closest_triangle->Point[1].v, closest_triangle->Point[2].v);
 
 			//collision data
-			data-> m_point = contactpoint;
+			T3Matrix4 transform_1 = T3Matrix4::Translation(shape1.GetTarget()->GetOriginPosition()) * shape1.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape1.GetTarget()->GetScale());
+			T3Matrix4 transform_2 = T3Matrix4::Translation(shape2.GetTarget()->GetOriginPosition()) * shape2.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape2.GetTarget()->GetScale());
+
+
+			//contactpoint = shape2.GetPosition() - contactpoint;
+			OGLRenderer::DrawDebugCross(DEBUGDRAW_PERSPECTIVE, transform_1 * -contactpoint, T3Vector3(2, 2, 2), T3Vector3(1, 0, 1));
+			OGLRenderer::DrawDebugCross(DEBUGDRAW_PERSPECTIVE, transform_2 * contactpoint, T3Vector3(2, 2, 2), T3Vector3(0, 1, 1));
+
+			data-> m_point1 = transform_1 * -contactpoint;
+			data-> m_point2 = transform_2 * -contactpoint;
 			data-> m_normal =  -closest_triangle->Triangle_normal;
-			data-> m_penetration = closest_distance;
+			data-> m_penetration = closest_distance * 2.f;
 
 			return (closest_triangle->Triangle_normal.Length() > 0.9f);
 				
@@ -823,14 +876,13 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* 
 		for(auto it= lst_EPA_Triangle.begin(); it!= lst_EPA_Triangle.end();)
 		{
 			//can 'it' be seen from the new point?
-			if(T3Vector3::Dot(it->Triangle_normal, (new_point - it->Point[0].v)) > 0.0f)
+			if(T3Vector3::Dot(it->Triangle_normal, (new_point - it->Point[0].v)) > _EXIT_THRESHOLD)
 			{
-
-			/*float distance_new_point_now = abs(T3Vector3::Dot(it->Triangle_normal, new_point));
-			float distance = abs(T3Vector3::Dot (it->Triangle_normal, it->Point[0].v));
-
-			if(distance_new_point_now >= distance)
-			{*/
+				if (new_point == it->Point[0].v || new_point == it->Point[1].v)
+			{
+					printf("INVALID TRIANGLE!!");
+					return false;
+				}
 
 				addEdge(it->Point[0].v, it->Point[1].v);
 				addEdge(it->Point[1].v, it->Point[2].v);
@@ -918,3 +970,4 @@ void PhysicsEngine::OnCollision(PhysicsNode& p1, PhysicsNode& p2)
 	gameClass->CollisionBetween(p1.GetGameEntity(),p2.GetGameEntity());
 	cout<<"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa="<<p2.GetType()<<endl;
 }
+#endif

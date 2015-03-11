@@ -14,12 +14,26 @@ GameScreen3D::~GameScreen3D()
 		RemoveLight(lights.front());
 	}
 	// Clear Camera
-	if (camera)
+	if (camera) {
+		GameStateManager::Graphics()->SetCamera(NULL);
 		delete camera;
-	GameStateManager::Graphics()->SetCamera(NULL);
+	}
+
+	for (vector<DrawableEntity3D*>::iterator i = entities.begin(); i != entities.end(); i++) 
+	{
+		delete *i;
+	}	
 }
 void GameScreen3D::AddDrawable(DrawableEntity3D* value) 
 {
+	bool inent = false;
+	for (unsigned int i = 0; i < entities.size(); i++)
+		if (entities[i] == value)
+			inent = true;
+
+	if (!inent)
+		entities.push_back(value);
+
 	for (unsigned int i = 0; i < drawables.size(); i++)
 		if (drawables[i] == value)
 			return;
@@ -34,7 +48,7 @@ void GameScreen3D::RemoveDrawable(DrawableEntity3D* value)
 		if (*i == value)
 		{
 			GameStateManager::Graphics()->RemoveDrawable(value);
-			delete *i;
+			//delete *i;
 			i = drawables.erase(i);
 			break;
 		}

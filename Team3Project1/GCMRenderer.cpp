@@ -195,9 +195,16 @@ void GCMRenderer::setLocalMem(uint32_t to) {
 Sets up the current viewport
 */
 void GCMRenderer::SetViewport() {
-	uint16_t x,y,w,h;
-	float minimum, maximum;
-	float scale[4],offset[4];
+	std::cout << "GCMRenderer::SetViewport: Setting Viewport" << std::endl;
+	
+	uint16_t x;
+	uint16_t y;
+	uint16_t w;
+	uint16_t h;
+	float minimum;
+	float maximum;
+	float scale[4];
+	float offset[4];
 
 	/*
 	I kinda gloss over what this function does in the GCM tutorial text,
@@ -242,14 +249,20 @@ void GCMRenderer::SetViewport() {
 
 	//analogous to the glViewport function...but with extra values!
 	cellGcmSetViewport(x, y, w, h, minimum, maximum, scale, offset);
+
+	std::cout << "GCMRenderer::SetViewport: Viewport Set" << std::endl;
 }
 
 void GCMRenderer::SwapBuffers() {
+	std::cout << "GCMRenderer::SwapBuffers: Wait for Flip Status" << std::endl;
+	
 	// wait until FlipStatus = 0 so that PPU does not run too ahead of RSX
 	// FlipStatus turns to 0 when the previous flip is finished
 	while (cellGcmGetFlipStatus()!=0){
 		sys_timer_usleep(300);
 	}
+
+	std::cout << "GCMRenderer::SwapBuffers: Finised Wiating for Flip Status" << std::endl;
 
 	// reset FlipStatus = 1
 	cellGcmResetFlipStatus();
@@ -283,7 +296,7 @@ void GCMRenderer::ClearBuffer() {
 	//glClearColor, but taking a single 32 bit value, in ARGB byte format
 	//Note how we're shifting bytes to byte aligned positions in the 32
 	//bit value we're sending.
-	cellGcmSetClearColor((64<<0)|(64<<8)|(64<<16)|(255<<24));
+	cellGcmSetClearColor((255<<0)|(255<<8)|(255<<16)|(255<<24));
 
 	//Tell GCM that we want to clear all of the colours of the current
 	//surface
@@ -313,7 +326,9 @@ void	GCMRenderer::SetCurrentShader(Shader* s) {
 }
 
 //Sets the camera. Can be NULL
-void	GCMRenderer::SetCamera(Camera* c) {
+void	GCMRenderer::SetCamera(Camera* c) 
+{
+	std::cout << "GCMRenderer: Set Camera" << c->BuildViewMatrix() << std::endl;
 	camera = c;
 }
 
@@ -351,8 +366,8 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		cout << "GCMRenderer: Have drawable entity" << endl;
 		DrawableEntity3D& entity = *n->GetDrawableEntity();
 		cout << "GCMRenderer: initialised entity" << endl;
-		T3Matrix4 transform = //n->GetTransform();
-			Quaternion::EulerAnglesToQuaternion(90, 0, 0).ToMatrix() * T3Matrix4::Scale(T3Vector3(1000,1000,1));
+		T3Matrix4 transform = n->GetTransform();
+			//Quaternion::EulerAnglesToQuaternion(90, 0, 0).ToMatrix() * T3Matrix4::Scale(T3Vector3(1000,1000,1));
 		cout << "GCMRenderer: set a transform matrix" << endl;
 
 
@@ -377,7 +392,7 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		
 		cout << "GCMRenderer: turned that matrix into a PS3 matrix " << endl; 
 		
-		/*std::cout << "Transform (SCE): " << std::endl;
+		std::cout << "Transform (SCE): " << std::endl;
 		for (int x = 0; x < 4; ++x)
 		{
 			for (int y = 0; y < 4; ++y)
@@ -385,7 +400,7 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 				std::cout << m.getElem(x,y) << ",";
 			}
 			std::cout << std::endl;
-		}*/
+		}
 		//shader = entity.GetShader();
 		shader->GetVertex()->SetParameter("modelMat", m);
 		cout << "GCMRenderer: set the shader" << endl;

@@ -62,6 +62,8 @@ GraphicsEngine::GraphicsEngine()
 		T3Vector2(0.5f, 0.5f),
 		T3Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
+	renderer->SetLoadingIcon(loadingIcon);
+
 	isInitialised = true; // Graphics Engine has initialised successfully
 }
 
@@ -87,8 +89,8 @@ void GraphicsEngine::Run() {
 	while (isRunning) {
 
 		while (Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp < RENDER_TIME) { ; } // Fix the timestep
-		float msec = Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp;
-		lastFrameTimeStamp = Window::GetWindow().GetTimer()->GetMS();
+		float msec = (float) Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp;
+		lastFrameTimeStamp = (float) Window::GetWindow().GetTimer()->GetMS();
 		frameRate = (int)(1000.0f / msec);
 
 		// add/remove requested items from scene lists
@@ -161,12 +163,12 @@ void GraphicsEngine::Run() {
 			T3Matrix4 viewMatrix = camera->BuildViewMatrix();
 			T3Matrix4 projMatrix = T3Matrix4::Perspective(1.0f, 10000.0f, (float) width / (float) height, 45.0f);
 			frameFrustum.FromMatrix(projMatrix * viewMatrix);
-		}
-
-		// Build Node lists
-		BuildNodeLists(sceneRoot);
-		SortNodeLists();
 		
+
+			// Build Node lists
+			BuildNodeLists(sceneRoot);
+			SortNodeLists();
+		}
 		// Update directional lights with scene bounding box
 		// Transform bounding volume by camera transform
 		DirectionalLight::UpdateLightVolume(boundingMin, boundingMax);
@@ -187,13 +189,17 @@ void GraphicsEngine::Run() {
 			overlayElementsList.push_back(loadingIcon);
 			isLoadingDrawing = true;
 		}
-//		else if (!isLoading && isLoadingDrawing) {
-//			overlayElementsList
-//		}
-
-		if (isLoadingDrawing) {
-			loadingIcon->SetRotation(loadingIcon->GetRotation() + 1.0f);
+		else if (!isLoading && isLoadingDrawing) {
+			for (unsigned int i = 0; i < overlayElementsList.size(); i++) {
+				if (overlayElementsList[i] == loadingIcon) {
+					overlayElementsList.erase(overlayElementsList.begin() + i);
+				}
+			}
 		}
+
+//		if (isLoadingDrawing) {
+//			loadingIcon->SetRotation(loadingIcon->GetRotation() + 1.0f);
+//		}
 
 		//Update the day/night float
 		renderer->SetDayNight(DayNightCycle());
@@ -332,8 +338,10 @@ void GraphicsEngine::RemoveLight(Light* light) {
 
 void GraphicsEngine::SetCamera(Camera* cam)
 {
+	contentGuard.lock_mutex();
 	camera = cam;
 	renderer->SetCamera(cam);
+	contentGuard.unlock_mutex();
 }
 
 bool GraphicsEngine::LoadContent()
@@ -360,7 +368,7 @@ float GraphicsEngine::DayNightCycle() {
 
 	//Decide if day/night is transitioning
 	if (time > 4500 && time < 5500) {//Halfway through the cycle, it is changing.
-		out = time - 4500;
+		out = time - 4500.0f;
 		out /= 1000.0f;
 	}
 	else if (time < 4500)	//day

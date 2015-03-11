@@ -46,7 +46,8 @@ MainMenu::~MainMenu(void)
 }
 
 void MainMenu::LoadContent() {
-	MenuScreen3D* wallpaper = new MenuScreen3D();
+	GameStateManager::Graphics()->EnableLoadingIcon(true);
+	wallpaper = new MenuScreen3D();
 	GameStateManager::AddGameScreen(wallpaper);
 
 	Font* font = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"quadrats.tga", 16, 16);
@@ -66,7 +67,7 @@ void MainMenu::LoadContent() {
 	soundMute			= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/sound_mute.png", 0);
 	soundMuteHover		= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/sound_mute_selected.png", 0);
 
-	float charWidth = 0.128f;
+	float charWidth = 0.200f;
 	float charHeight = 0.08f;
 
 	//Offset for the text to keep it central in the button.
@@ -74,7 +75,7 @@ void MainMenu::LoadContent() {
 	float btnOffsetY = 0.04f;
 
 	//Button size
-	float btnScaleX = 0.168f;
+	float btnScaleX = 0.240f;
 	float btnScaleY = 0.152f;
 
 	//Button Position, determines the first button's postion, and Y is multiplied to place succesive buttons uniformly.
@@ -83,15 +84,15 @@ void MainMenu::LoadContent() {
 
 	newGame	= new UIButton(btnX, btnY, btnScaleX, btnScaleY, (void (GameScreen2D::*)()) &MainMenu::NewGameSelected, (void (GameScreen2D::*)(float, float)) &MainMenu::NewGameClicked, 
 				new DrawableTexture2D(btnX, btnY, 1, btnScaleX, btnScaleY, buttonTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
-				new DrawableText2D(btnX + btnOffsetX, btnY + btnOffsetY, 2.0f, charWidth, charHeight, "NEW GAME", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::NewGameDeselcted, this);
+				new DrawableText2D(btnX + btnOffsetX, btnY + btnOffsetY, 2, charWidth, charHeight, "NEW GAME", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::NewGameDeselcted, this);
 	
 	controls = new UIButton(btnX, btnY + 0.2f, btnScaleX, btnScaleY, (void (GameScreen2D::*)()) &MainMenu::ControlsSelcted, (void (GameScreen2D::*)(float, float)) &MainMenu::ControlsClicked, 
 				new DrawableTexture2D(btnX, btnY + 0.17f, 1, btnScaleX, btnScaleY, buttonTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
-				new DrawableText2D(btnX + btnOffsetX, btnY + 0.17f + btnOffsetY, 2.0f, charWidth, charHeight, "CONTROLS", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::ControlsDeselected, this);
+				new DrawableText2D(btnX + btnOffsetX, btnY + 0.17f + btnOffsetY, 2, charWidth, charHeight, "CONTROLS", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::ControlsDeselected, this);
 	
 	quitGame = new UIButton(btnX, btnY + 0.4f, btnScaleX, btnScaleY, (void (GameScreen2D::*)()) &MainMenu::QuitSelected, (void (GameScreen2D::*)(float, float)) &MainMenu::QuitClicked, 
 				new DrawableTexture2D(btnX, btnY + 0.34f, 1, btnScaleX, btnScaleY, buttonTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
-				new DrawableText2D(btnX + btnOffsetX, btnY + 0.34f + btnOffsetY, 2.0f, charWidth, charHeight, "QUIT GAME", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::QuitDeselected, this);
+				new DrawableText2D(btnX + btnOffsetX, btnY + 0.34f + btnOffsetY, 2, charWidth, charHeight, "QUIT GAME", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::QuitDeselected, this);
 	
 	float musicBtnWidth = 0.045f;
 	float musicBtnHeight = 0.089f;
@@ -101,13 +102,13 @@ void MainMenu::LoadContent() {
 
 	music = new UIButton(musicBtnX, musicBtnY, musicBtnWidth, musicBtnHeight, (void(GameScreen2D::*)()) &MainMenu::MusicSelected, (void (GameScreen2D::*)(float, float)) &MainMenu::MusicClicked,
 				new DrawableTexture2D(musicBtnX, musicBtnY, 1, musicBtnWidth, musicBtnHeight, musicNoMute, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
-				new DrawableText2D(musicBtnX, musicBtnY, 0.0f, 0.0f, 0.0f, "", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::MusicDeselected, this);
+				new DrawableText2D(musicBtnX, musicBtnY, 0, 0.0f, 0.0f, "", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::MusicDeselected, this);
 
 	sounds = new UIButton(musicBtnX, musicBtnY + musicBtnHeight, musicBtnWidth, musicBtnHeight, (void(GameScreen2D::*)()) &MainMenu::SoundSelected, (void (GameScreen2D::*)(float, float)) &MainMenu::SoundClicked,
 				new DrawableTexture2D(musicBtnX, musicBtnY + musicBtnHeight, 1, musicBtnWidth, musicBtnHeight, soundNoMute, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
-				new DrawableText2D(musicBtnX, musicBtnY + musicBtnHeight, 0.0f, 0.0f, 0.0f, "", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::SoundDeselected, this);
+				new DrawableText2D(musicBtnX, musicBtnY + musicBtnHeight, 0, 0.0f, 0.0f, "", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &MainMenu::SoundDeselected, this);
 
-	scoreBoard = new DrawableTexture2D(0.55f, 0.125f, 1, 0.35f, 0.75f, scoreBoardTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false);
+	scoreBoard = new DrawableTexture2D(0.55f, 0.145f, 1, 0.35f, 0.75f, scoreBoardTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false);
 
 	AddDrawable(scoreBoard);
 
@@ -120,16 +121,41 @@ void MainMenu::LoadContent() {
 	Font* startFont = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"tahoma.tga", 16, 16);
 	pressStart = new DrawableText2D(0.3f, 0.1f, 1, 0.4f, 0.05f, "Player 1 Press Start or A", startFont);
 	AddDrawable(pressStart);
+
+	// Load Scoreboard
+#if WINDOWS_BUILD
+	scoreBoardConn = new Scoreboard();
+	scoreBoardConn->RetrieveScoreboard();
+	for (unsigned int i = 0; i < 10; i++) {
+		scoreBoardConn->GetName(i);
+		scores.push_back(pair<DrawableText2D*, DrawableText2D*>(new DrawableText2D(0.57f, 0.180f + (0.065f * i), 2, 0.12f, 0.065f, scoreBoardConn->GetName(i), font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
+			new DrawableText2D(0.75f, 0.180f + (0.065f * i), 2, 0.12f, 0.065f, scoreBoardConn->GetScore(i), font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false)));
+		AddDrawable(scores.back().first);
+		AddDrawable(scores.back().second);
+	}
+#endif
+
+	//finished loading screen
+	GameStateManager::Graphics()->EnableLoadingIcon(false);
 }
 
 void MainMenu::UnloadContent() {
-	RemoveClickable(newGame);
-	RemoveClickable(controls);
-	RemoveClickable(quitGame);
-	RemoveClickable(music);
-	RemoveClickable(sounds);
+	RemoveClickable(newGame, true, false);
+	RemoveClickable(controls, true, false);
+	RemoveClickable(quitGame, true, false);
+	RemoveClickable(music, true, false);
+	RemoveClickable(sounds, true, false);
 
-	RemoveDrawable(scoreBoard);
+	RemoveDrawable(scoreBoard, false);
+	RemoveDrawable(pressStart, false);
+
+#ifdef WINDOWS_BUILD
+	for (unsigned int i = 0; i < 10; i++) {
+		RemoveDrawable(scores[i].first, false);
+		RemoveDrawable(scores[i].second, false);
+	}
+	scores.clear();
+#endif
 
 	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/button.png");
 	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/button_selected.png");
@@ -148,17 +174,29 @@ void MainMenu::UnloadContent() {
 
 	GameStateManager::Assets()->UnloadFont(this, TEXTUREDIR"quadrats.tga");
 	GameStateManager::Assets()->UnloadFont(this, TEXTUREDIR"tahoma.tga");
+#if WINDOWS_BUILD
+	delete scoreBoardConn;
+#endif
 }
+
+
 
 /*--------------------Clicked Methods--------------------*/
 
 void MainMenu::NewGameClicked(float x, float y) {
+	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	newGame->GetTexture()->SetTexture(buttonTexClicked);
 #if WINDOWS_BUILD
 	GameStateManager::Graphics()->EnableMousePointer(false);
 #endif
+	GameStateManager::Instance()->RemoveGameScreen(wallpaper);
+	GameStateManager::Instance()->RemoveGameScreen(this);
+
 	RacerGame* game = new RacerGame();
+//	GraphicsTestScreen* game = new GraphicsTestScreen();
+	GameStateManager::Physics()->SetGame(game);
 	GameStateManager::Instance()->ChangeScreen(game);
+	//GameStateManager::RemoveGameScreen(this);
 }
 
 void MainMenu::ControlsClicked(float x, float y) {
