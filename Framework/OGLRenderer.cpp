@@ -40,7 +40,6 @@ OGLRenderer::OGLRenderer(Window &window)	{
 
 	// Did We Get A Device Context?
 	if (!(deviceContext=GetDC(windowHandle)))		{					
-		std::cout << "OGLRenderer::OGLRenderer(): Failed to create window!" << std::endl;
 		return;
 	}
 	
@@ -59,24 +58,20 @@ OGLRenderer::OGLRenderer(Window &window)	{
 
 	GLuint		PixelFormat;
 	if (!(PixelFormat=ChoosePixelFormat(deviceContext,&pfd)))		{	// Did Windows Find A Matching Pixel Format for our PFD?
-		std::cout << "OGLRenderer::OGLRenderer(): Failed to choose a pixel format!" << std::endl;
 		return;
 	}
 
 	if(!SetPixelFormat(deviceContext,PixelFormat,&pfd))			{		// Are We Able To Set The Pixel Format?
-		std::cout << "OGLRenderer::OGLRenderer(): Failed to set a pixel format!" << std::endl;
 		return;
 	}
 
 	HGLRC		tempContext;		//We need a temporary OpenGL context to check for OpenGL 3.2 compatibility...stupid!!!
 	if (!(tempContext=wglCreateContext(deviceContext)))				{	// Are We Able To get the temporary context?
-		std::cout << "OGLRenderer::OGLRenderer(): Cannot create a temporary context!" << std::endl;
 		wglDeleteContext(tempContext);
 		return;
 	}
 
 	if(!wglMakeCurrent(deviceContext,tempContext))					{	// Try To Activate The Rendering Context
-		std::cout << "OGLRenderer::OGLRenderer(): Cannot set temporary context!" << std::endl;
 		wglDeleteContext(tempContext);
 		return;
 	}
@@ -87,13 +82,11 @@ OGLRenderer::OGLRenderer(Window &window)	{
 	int minor = ver[2] - '0';		//casts the 'correct' minor version integer from our version string
 
 	if(major < 3) {					//Graphics hardware does not support OGL 3! Erk...
-		std::cout << "OGLRenderer::OGLRenderer(): Device does not support OpenGL 3.x!" << std::endl;
 		wglDeleteContext(tempContext);
 		return;
 	}
 
 	if(major == 3 && minor < 2) {	//Graphics hardware does not support ENOUGH of OGL 3! Erk...
-		std::cout << "OGLRenderer::OGLRenderer(): Device does not support OpenGL 3.2!" << std::endl;
 		wglDeleteContext(tempContext);
 		return;
 	}
@@ -117,7 +110,6 @@ OGLRenderer::OGLRenderer(Window &window)	{
 
 	// Check for the context, and try to make it the current rendering context
 	if(!renderContext || !wglMakeCurrent(deviceContext,renderContext))		{			
-		std::cout << "OGLRenderer::OGLRenderer(): Cannot set OpenGL 3 context!" << std::endl;	//It's all gone wrong!
 		wglDeleteContext(renderContext);
 		wglDeleteContext(tempContext);
 		return;
@@ -129,7 +121,6 @@ OGLRenderer::OGLRenderer(Window &window)	{
 								//for determining whether a OGL context supports a particular function or not
 	
 	if (glewInit() != GLEW_OK) {	//Try to initialise GLEW
-		std::cout << "OGLRenderer::OGLRenderer(): Cannot initialise GLEW!" << std::endl;	//It's all gone wrong!
 		return;
 	}
 	//If we get this far, everything's going well!
@@ -188,14 +179,13 @@ your application.
 */
 void OGLRenderer::SwapBuffers() {
 	if(!debugDrawingRenderer) {
-		
 		debugDrawingRenderer = this;	
 	}
 
 	if(debugDrawingRenderer == this) {
-		/*if(!drawnDebugOrtho) {
+		if(!drawnDebugOrtho) {
 			DrawDebugOrtho();
-		}*/
+		}
 		if(!drawnDebugPerspective) {
 			DrawDebugPerspective();
 		}
@@ -298,47 +288,49 @@ void OGLRenderer::DebugCallback(GLuint source, GLuint type,GLuint id, GLuint sev
 			case GL_DEBUG_SEVERITY_MEDIUM_ARB	: severityName = "Priority(Medium)"		;break;
 			case GL_DEBUG_SEVERITY_LOW_ARB		: severityName = "Priority(Low)"		;break;
 		}
-
-		cout << "OpenGL Debug Output: " + sourceName + ", " + typeName + ", " + severityName + ", " + string(message) << endl;
 }
 #endif
 
 void	OGLRenderer::DrawDebugPerspective(T3Matrix4*matrix)  {
-	glUseProgram(debugDrawShader->GetProgram());
+	if (debugDrawShader != NULL) {
+		glUseProgram(debugDrawShader->GetProgram());
 
-	if(matrix) {
-		glUniformMatrix4fv(glGetUniformLocation(debugDrawShader->GetProgram(), "viewProjMatrix"),	1,false, (float*)matrix);
-	}
-	else{
+		if(matrix) {
+			glUniformMatrix4fv(glGetUniformLocation(debugDrawShader->GetProgram(), "viewProjMatrix"),	1,false, (float*)matrix);
+		}
+		else{
 		
-		T3Matrix4 temp = projMatrix*viewMatrix;
-		glUniformMatrix4fv(glGetUniformLocation(debugDrawShader->GetProgram(), "viewProjMatrix"),	1,false, (float*)&temp);
-	}
+			T3Matrix4 temp = projMatrix*viewMatrix;
+			glUniformMatrix4fv(glGetUniformLocation(debugDrawShader->GetProgram(), "viewProjMatrix"),	1,false, (float*)&temp);
+		}
 
-	perspectiveDebugData->Draw();
+		perspectiveDebugData->Draw();
 	
-	perspectiveDebugData->Clear();
-	drawnDebugPerspective = true;
-	SetCurrentShader(currentShader);
+		perspectiveDebugData->Clear();
+		drawnDebugPerspective = true;
+		SetCurrentShader(currentShader);
+	}
 }
 
 
 void	OGLRenderer::DrawDebugOrtho(T3Matrix4*matrix) {
-	glUseProgram(debugDrawShader->GetProgram());
+	if (debugDrawShader != NULL) {
+		glUseProgram(debugDrawShader->GetProgram());
 
-	if(matrix) {
-		glUniformMatrix4fv(glGetUniformLocation(debugDrawShader->GetProgram(), "viewProjMatrix"),	1,false, (float*)matrix);
+		if(matrix) {
+			glUniformMatrix4fv(glGetUniformLocation(debugDrawShader->GetProgram(), "viewProjMatrix"),	1,false, (float*)matrix);
+		}
+		else{
+			static T3Matrix4 ortho = T3Matrix4::Orthographic(-1,1,720,0,0,480);
+			glUniformMatrix4fv(glGetUniformLocation(debugDrawShader->GetProgram(), "viewProjMatrix"),	1,false, (float*)&ortho);
+		}
+
+		orthoDebugData->Draw();
+
+		orthoDebugData->Clear();
+		drawnDebugOrtho = true;
+		SetCurrentShader(currentShader);
 	}
-	else{
-		static T3Matrix4 ortho = T3Matrix4::Orthographic(-1,1,720,0,0,480);
-		glUniformMatrix4fv(glGetUniformLocation(debugDrawShader->GetProgram(), "viewProjMatrix"),	1,false, (float*)&ortho);
-	}
-
-	//orthoDebugData->Draw();
-
-	orthoDebugData->Clear();
-	drawnDebugOrtho = true;
-	SetCurrentShader(currentShader);
 }
 
 void	OGLRenderer::DrawDebugLine  (DebugDrawMode mode, const T3Vector3 &from,const T3Vector3 &to,const T3Vector3 &fromColour,const T3Vector3 &toColour) {

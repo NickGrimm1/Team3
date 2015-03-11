@@ -23,15 +23,11 @@ ServerSocket::ServerSocket(string portNum, unsigned int maxConnections) : portNu
 	
 	unsigned int addrResult = getaddrinfo(LOCALHOST, portNum.c_str(), &hints, &addressData);
 	if (addrResult != 0) {
-		cout << "getaddrinfo() failed with error:" << endl;
-		cout << addrResult << ": " << gai_strerror(WSAGetLastError()) << endl;
 		return;
 	}
 		
 	serverSocket = socket(addressData->ai_family, addressData->ai_socktype, addressData->ai_protocol);
 	if (serverSocket == INVALID_SOCKET) {
-		cout << "Could not create server socket on port " << portNum << endl;
-		cout << "Failed with error " << WSAGetLastError() << " - " << gai_strerror(WSAGetLastError()) << endl;
 		return;
 	}
 
@@ -40,16 +36,12 @@ ServerSocket::ServerSocket(string portNum, unsigned int maxConnections) : portNu
 	ioctlsocket(serverSocket, FIONBIO, &nonblocking);
 
 	if (bind(serverSocket, addressData->ai_addr, addressData->ai_addrlen) != 0) {
-		cout << "Could not bind server socket on port " << portNum << endl;
-		cout << "Failed with error " << WSAGetLastError() << " - " << gai_strerror(WSAGetLastError()) << endl;
 		return;
 	}
 
 	freeaddrinfo(addressData);
 
 	if (listen(serverSocket, CONNECTION_BACKLOG) != 0) {
-		cout << "Can not listen on server socket on port " << portNum << endl;
-		cout << "Failed with error " << WSAGetLastError() << " - " << gai_strerror(WSAGetLastError()) << endl;
 		return;
 	}
 
@@ -73,8 +65,6 @@ unsigned int ServerSocket::GetNewConnections() {
 		incomingConnection = accept(serverSocket, (struct sockaddr *) &incomingAddr, &addrSize);
 		if (incomingConnection == INVALID_SOCKET) {
 			if (WSAGetLastError() != WSAEWOULDBLOCK) { // Ignore error if non-blocking and no connections exist to accept, its really an error
-				cout << "Failed to accept new connection" << endl;
-				cout << "Failed with error: " << WSAGetLastError() << " - " << gai_strerror(WSAGetLastError()) << endl;
 			}
 			return connectionsCount;
 		}

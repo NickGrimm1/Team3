@@ -51,10 +51,6 @@ private:
 			gamePads[i] = NULL;
 
 		frameRate = 0;
-
-		//if(cellPadInit(GamepadEvents::PLAYERINDEX_MAX) != CELL_PAD_OK) {
-			//std::cout << "cellPadInit failed!" << std::endl;	
-		//}
 	}
 #endif
 #if PS3_BUILD
@@ -66,9 +62,7 @@ private:
 			gamePads[i] = NULL;
 
 		if(cellPadInit(GamepadEvents::PLAYERINDEX_MAX) != CELL_PAD_OK)
-		{
-			std::cout << "cellPadInit failed!" << std::endl;	
-		}
+			return;
 
 		frameRate = 0;
 	}

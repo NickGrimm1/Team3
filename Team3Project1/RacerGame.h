@@ -68,35 +68,30 @@ public:
 	static float g;
 	static float gx;
 	TrackSegment* Strack;
-#if WINDOWS_BUILD	
+
 	vector<T3Vector3> SplinePoint;
 	vector<DrawableEntity3D*> allEntities;
 	vector<TrackSegment*> TrackSegmentVector;
 	vector<GameEntity*> checkPoint;
 	vector<GameEntity*> pickup;
-#endif 
+
 	 virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
-		 cout<<obj1->GetType();
-		  cout<<" collisionbetween ";
-		  cout<<obj2->GetType()<<endl;
 		  if(obj1->GetType()=='g')
 		  {
 			  obj1->GetPhysicsNode().SetIsCollide(false);
-			  cout<<"set = true ok"<<endl;
 			  RacerGame::update=1;
 		  }
 		    if(obj2->GetType()=='g')
 		  {
 			  obj2->GetPhysicsNode().SetIsCollide(false);
-			  cout<<"set2 = true ok"<<endl;
 			
 			  RacerGame::update=1;
 			  
 		  }
 			 if(obj1->GetType()=='d')
 		  {
-			  obj1->GetPhysicsNode().SetIsCollide(false);
-			  cout<<"delete = true ok"<<endl;
+			  obj2->GetPhysicsNode().SetIsCollide(false);
+			  RacerGame::update=2;
 			    SettimeOrScore(1);
 			  RacerGame::update=2;
 			  
@@ -104,12 +99,11 @@ public:
 		  }
 			  if(obj1->GetType()=='p')
 		  {
-			  obj1->GetPhysicsNode().SetIsCollide(false);
-			  cout<<"point get = true ok"<<endl;
+			  obj2->GetPhysicsNode().SetIsCollide(false);
 			  SetScore(1);
 			 // SoundManager::AddSound(SOUNDSDIR"Tokyo Drift2.wav");
 			 // GameStateManager::Audio()->PlaySoundW(GameStateManager::Audio()->GetSound(SOUNDSDIR"Tokyo Drift2.wav"),SOUNDPRIORITY_ALWAYS);
-			  GameStateManager::Audio()->PlaySoundA(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
+			  GameStateManager::Audio()->PlaySound(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
 			  cout<< "total point ="<<GetScore()<<endl; 
 			  GameStateManager::Graphics()->RemoveDrawable(obj1);
 	          obj1->DisconnectFromSystems();
@@ -117,14 +111,11 @@ public:
 		  }
 			   if(obj1->GetType()=='t')
 		  {
-			  obj1->GetPhysicsNode().SetIsCollide(false);
-			  cout<<"time get = true ok"<<endl;
-			 
-			  SetPlayTime(20);
-			  cout<< "total time ="<<GetTime()<<endl; 
-			  GameStateManager::Graphics()->RemoveDrawable(obj1);
-	          obj1->DisconnectFromSystems();
-			  pickup.erase(pickup.begin());
+			  obj2->GetPhysicsNode().SetIsCollide(false);
+			  SettimeOrScore(-(GettimeOrScore()));
+			  SetPlayTime(30);
+			  GameStateManager::Graphics()->RemoveDrawable(obj2);
+	          obj2->DisconnectFromSystems();
 		  }
 			   		  
    }
@@ -135,7 +126,7 @@ public:
 private:
 	Mesh* quad;
 	Mesh* cylinder;
-	int score;
+	float score;
 	float Time;
 	int PlayTime;
 	int timeOrScore;

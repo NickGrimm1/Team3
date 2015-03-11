@@ -56,7 +56,7 @@ public:
 	PhysicsNode(Quaternion orientation, T3Vector3 position);
 	~PhysicsNode(void);
 
-	T3Vector3		GetPosition() const			{ return m_position;}
+	T3Vector3		GetPosition() 			{ return m_position;}
 	T3Vector3		GetLinearVelocity() const	{ return m_linearVelocity;}
 	
 	float		GetInverseMass() const		{return m_invMass;}

@@ -52,7 +52,6 @@ bool Scoreboard::RetrieveScoreboard() {
 	}
 	if (bytesReceived > 0) {
 		string httpResponse(buffer, buffer + bytesReceived);
-		//cout << httpResponse << endl;
 
 		if (httpResponse.find(HTTP_OK) != string::npos) {
 			stringstream httpStream(httpResponse);
@@ -108,11 +107,8 @@ bool Scoreboard::PostScore(string name, unsigned int score) {
     name.c_str(),
 	score,
 	scoreboardHost.c_str());
-	
-	cout << string(buffer, buffer + strlen(buffer)) << endl;
 
 	if (!scoreboardDB->Send(buffer, strlen(buffer))) {
-		cout << "Could not post score" << endl;	
 		return false;
 	}
 
@@ -122,7 +118,7 @@ bool Scoreboard::PostScore(string name, unsigned int score) {
 	while ((i = scoreboardDB->Receive(buffer + bytesReceived, 1024 - bytesReceived, true)) > 0) {
 		bytesReceived += i;
 	}
-	cout << string(buffer, buffer + strlen(buffer)) << endl;
+
 	delete scoreboardDB;
 	return (bytesReceived > 0 && string(buffer, buffer + bytesReceived).find(HTTP_OK));
 }

@@ -15,6 +15,7 @@ Version: 0.0.6 12/02/2015.</summary>
 #include "DrawableEntity2D.h"
 #include <string>
 #include "Font.h"
+#include <sstream>
 
 using namespace std;
 
@@ -60,6 +61,12 @@ public:
 	<param name='value'>The text.</param>
 	*/
 	void SetText(const string& value) { text = value; }
+	void SetText(float value) 
+	{
+		stringstream s;
+		s << value;
+		text = s.str();
+	}
 protected:
 	Font* font;
 	string text;

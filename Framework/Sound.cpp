@@ -34,7 +34,6 @@
  void Sound :: LoadFromWAV ( string filename ) {
 	ifstream file ( filename.c_str () , ios :: in | ios :: binary );
 	 if (! file ) {
-		cout << "Failed to load WAV file’" << filename <<"’!"<< endl;
 		return;
 	 }
 

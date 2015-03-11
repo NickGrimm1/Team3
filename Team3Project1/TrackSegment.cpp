@@ -104,13 +104,13 @@ void TrackSegment::Draw() {
 }
 
 void TrackSegment::DrawSpline() {
-#if WINDOWS_BUILD
+
 	Spline::Draw();
-#endif
+
 }
 
 T3Vector3 TrackSegment::GetTrackCentreLeft() const {
-#if WINDOWS_BUILD
+
 	if (segments % 2 == 0) {
 		return trackMesh[segments / 2].GetPosition();
 	}
@@ -119,11 +119,11 @@ T3Vector3 TrackSegment::GetTrackCentreLeft() const {
 		unsigned int pos = segments / 2;
 		return (trackMesh[pos].GetPosition() + trackMesh[pos + 1].GetPosition()) / 2.0f;
 	}
-#endif
+
 }
 
 T3Vector3 TrackSegment::GetTrackCentreRight() const {
-	#if WINDOWS_BUILD
+	
 	if (segments % 2 == 0) {
 		return trackMesh[segments + (segments / 2) + 1].GetPosition();
 	}
@@ -133,5 +133,5 @@ T3Vector3 TrackSegment::GetTrackCentreRight() const {
 		return (trackMesh[pos].GetPosition() + trackMesh[pos + 1].GetPosition()) / 2.0f;
 	}
 	
-#endif
+
 }
