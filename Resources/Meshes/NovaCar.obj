@@ -1746,7 +1746,7 @@ vt 0.946905 0.314946
 vt 0.048058 0.108568
 vt 0.744750 0.802554
 vt 0.979551 0.065962
-usemtl Car_Nova_Car_UV.tga
+usemtl Car_Nova_Car_UV.png
 s 1
 f 1/1 2/2 3/3
 f 4/4 5/5 6/6

@@ -451,6 +451,7 @@ void  PhysicsEngine::SortandSweep()
 {
 
 	
+#if WINDOWS_BUILD
 	std::sort(narrowlist.begin(),narrowlist.end(), [](PhysicsNode* xleft, PhysicsNode* xright){return xleft->GetPosition().x < xright->GetPosition().x;});
 
 	for( vector<PhysicsNode*>::iterator i=narrowlist.begin(); i <narrowlist.end(); ++i) 
@@ -463,23 +464,55 @@ void  PhysicsEngine::SortandSweep()
 				    PhysicsNode& first =*(*i);
 				    PhysicsNode& second =*(*j);
 
-					
+					if (first.GetPhysicsVertex() == NULL) continue;
+					if (second.GetPhysicsVertex() == NULL) continue;
 					if(CollisionDetection(first, second))
 			    {
-				//cout << "GJK passed" << endl;
+				
+				if(first.GetIsCollide()==false && second.GetIsCollide ()==true)
+				{
+					//if(second.GetType()=='f'){
+					OnCollision(first,second);
+					//}
+				}
 				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
 				{
-					//cout << "Collision" << endl;
+					
 					first.SetLinearVelocity(T3Vector3(0,0,0));
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
 					second.SetForce(T3Vector3(0,0,0));
 				}
+			
+				if ((first.GetIsCollide()==true && second.GetIsCollide ()==true) && ((first.Getcar_wheel()==true && second.Getcar_wheel()==true)))
+				{
+			
+					/*first.SetLinearVelocity(T3Vector3(0,0,0));
+					first.SetForce(T3Vector3(0,0,0));
+                    second.SetLinearVelocity(T3Vector3(0,0,0));
+					second.SetForce(T3Vector3(0,0,0));*/
+
+					CollisionData* data = new CollisionData();
+					bool succeeded = EPA(first, second, data);
+ 					if (succeeded)
+					{
+						CollisionHelper::AddCollisionImpulse( first, second, *data);
+
+			}
+				}
+
+			
+
+
+			
+				
+
 				}
 
 						}
 				}
 		}
+#endif
 	}
 	
 

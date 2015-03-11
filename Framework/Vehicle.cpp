@@ -311,12 +311,12 @@ void Vehicle::SetPhysics(float size,PhysicsNode * a)
 	car->SetMass(5);
 	car->SetInverseMass(1.0f);
 	car->SetCollisionVolume(new CollisionAABB(T3Vector3(size ,size ,size )));
-	//car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj"));
+	//car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"Carphysics.obj"));
 	car->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,-90,0));
-	car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"CarPhysics.obj"));
-	Quaternion Test=car->GetOrientation();
-	car->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,-90,0));
-	Quaternion Test2=car->GetOrientation();
+	//car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"CarPhysics.obj"));
+	//Quaternion Test=car->GetOrientation();
+	//car->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,-90,0));
+	//Quaternion Test2=car->GetOrientation();
 	car->SetXstart(car->GetPosition().x-3*size);
 	car->SetXend(car->GetPosition().x+3*size);                                                                                         
 	car->SetInverseInertia(InertialMatrixHelper::createCuboidInvInertial(5.0f,size,size,size));
@@ -330,4 +330,8 @@ void Vehicle::SetPhysics(float size,PhysicsNode * a)
     ConnectToSystems(); 
 
 
+}
+
+Quaternion Vehicle::GetRotation() const {
+	return rotation; //Quaternion::FromMatrix(rotation.ToMatrix() * T3Matrix4::Rotation(90, T3Vector3(0,1,0)));
 }
