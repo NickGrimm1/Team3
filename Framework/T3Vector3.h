@@ -491,5 +491,13 @@ public:
 		o << "(" << v.x << ", " << v.y << ", " << v.z << ")";
 		return o;
 	}
+	operator float*() const
+	{
+		float* output = new float[3];
+		output[0] = x;
+		output[1] = y;
+		output[2] = z;
+		return output;
+	}
 };
 

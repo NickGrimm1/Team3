@@ -258,7 +258,7 @@ void RacerGame::Update() {
 		f=f+0.35f;
 	if(f>0)
 	{
-	f=0;
+	  f=0;
 	}
 	 T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
 				   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
@@ -1226,13 +1226,13 @@ case KeyboardEvents::KEYBOARD_7:
 				   f=-90;
 				   }
 				 
-				 T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+           T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
 				   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
 				 
 				   
 				   
-         
 
+			
 
 
 

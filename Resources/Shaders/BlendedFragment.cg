@@ -1,0 +1,25 @@
+void main
+(
+	float4 color_in      : COLOR,
+	float2 texcoord		 : TEXCOORD1,
+	uniform samplerRECT diffuseTex,
+	uniform float4 blendColour,
+		
+	out float4 color_out : COLOR
+)
+{
+	float4 texColor = texRECT(diffuseTex, texcoord);
+	if (texColor.a < 0.2) 
+	{
+		discard;
+	} else if ((texColor.r == 0.0) && (texColor.g == 0.0) && (texColor.b == 1.0)) {
+		discard;
+	}
+	else 
+	{
+		color_out = texColor * blendColour;
+	}
+
+	//color_out = texColor * blendColour;
+	//color_out += blendColour;
+}

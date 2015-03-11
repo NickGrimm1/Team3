@@ -180,7 +180,7 @@ matrix wrong
 void ShaderPart::SetParameter(std::string name, Matrix4 &totranpose) {
 	std::cout << "Transposing: " << name << std::endl;
 	Matrix4 tempMatrix = transpose(totranpose);
-	std::cout << "Shader Part: Transposed Matrix (SCE): " << std::endl;
+	/*std::cout << "Shader Part: Transposed Matrix (SCE): " << std::endl;
 		for (int x = 0; x < 4; ++x)
 		{
 			for (int y = 0; y < 4; ++y)
@@ -188,9 +188,9 @@ void ShaderPart::SetParameter(std::string name, Matrix4 &totranpose) {
 				std::cout << tempMatrix.getElem(x,y) << ",";
 			}
 			std::cout << std::endl;
-		}
+		}*/
 		float* m = (float*)&tempMatrix;
-		std::cout << "Shader Part: Setting " << name << " " << &tempMatrix << std::endl;
+		//std::cout << "Shader Part: Setting " << name << " " << &tempMatrix << std::endl;
 	SetParameter(name, m);
 //	std::cout << "Shader Part: " << name << " Set" << std::endl;
 }
@@ -206,15 +206,15 @@ void ShaderPart::SetDefaultAttributes() {
 	*/
 	CGparameter position_param	= cellGcmCgGetNamedParameter(program, "position");
 	CGparameter normal_param	= cellGcmCgGetNamedParameter(program, "normal");
-	CGparameter tangent_param	= cellGcmCgGetNamedParameter(program, "tangent");
 	CGparameter colour_param	= cellGcmCgGetNamedParameter(program, "color");
 	CGparameter tex_param		= cellGcmCgGetNamedParameter(program, "texCoord");
+	CGparameter tangent_param	= cellGcmCgGetNamedParameter(program, "tangent");
 	
 	//And now save out the actual resources (the name of the input registers they'll use)
 	attributes[VertexAttributes::POSITION]	= (position_param == 0) ? -1 : cellGcmCgGetParameterResource(program, position_param) - CG_ATTR0;
+	attributes[VertexAttributes::NORMAL]	= (normal_param	  == 0) ? -1 : cellGcmCgGetParameterResource(program, normal_param)	  - CG_ATTR0;
 	attributes[VertexAttributes::COLOUR]	= (colour_param	  == 0) ? -1 : cellGcmCgGetParameterResource(program, colour_param)	  - CG_ATTR0;
 	attributes[VertexAttributes::TEXCOORD]  = (tex_param	  == 0) ? -1 : cellGcmCgGetParameterResource(program, tex_param)	  - CG_ATTR0;
-	attributes[VertexAttributes::NORMAL]	= (normal_param	  == 0) ? -1 : cellGcmCgGetParameterResource(program, normal_param)	  - CG_ATTR0;
 	attributes[VertexAttributes::TANGENT]	= (tangent_param  == 0) ? -1 : cellGcmCgGetParameterResource(program, tangent_param)  - CG_ATTR0;
 }
 
@@ -259,11 +259,11 @@ std::ostream& operator<<(std::ostream& o, const Matrix4& m)
 
 void	ShaderPart::UpdateShaderMatrices(Matrix4 &model,Matrix4 &view, Matrix4 &proj) {
 
-	std::cout << "####MODEL MTX:" << model << "\n#####VIEW MTX: " << view << "\n####PROJ MTX: " << proj;
+	//std::cout << "####MODEL MTX:" << model << "\n#####VIEW MTX: " << view << "\n####PROJ MTX: " << proj;
 
-	SetParameter("modelMat", model);
-	SetParameter("viewMat", view);
-	SetParameter("projMat", proj);
+	SetParameter("modelMatrix", model);
+	SetParameter("viewMatrix", view);
+	SetParameter("projMatrix", proj);
 }
 #endif
 #if PS3_BUILD

@@ -52,19 +52,19 @@ void Mesh::Draw(Shader* shader)
 	std::cout << "Texcoord: " << vertexOffsets[VertexAttributes::TEXCOORD] << std::endl;
 	std::cout << "Tangent: " << vertexOffsets[VertexAttributes::TANGENT] << std::endl;
 
-	std::cout << "Position Attribute Index: " << shader->GetVertex()->GetAttributeIndex(VertexAttributes::POSITION) << std::endl;
+	/*std::cout << "Position Attribute Index: " << shader->GetVertex()->GetAttributeIndex(VertexAttributes::POSITION) << std::endl;
 	std::cout << "Normal Attribute Index: " << shader->GetVertex()->GetAttributeIndex(VertexAttributes::NORMAL) << std::endl;
 	std::cout << "Colour Attribute Index: " << shader->GetVertex()->GetAttributeIndex(VertexAttributes::COLOUR) << std::endl;
 	std::cout << "Texcoord Attribute Index: " << shader->GetVertex()->GetAttributeIndex(VertexAttributes::TEXCOORD) << std::endl;
-	std::cout << "Tangent Attribute Index: " << shader->GetVertex()->GetAttributeIndex(VertexAttributes::TANGENT) << std::endl;
+	std::cout << "Tangent Attribute Index: " << shader->GetVertex()->GetAttributeIndex(VertexAttributes::TANGENT) << std::endl;*/
 
 	std::cout << "Vertex Size: " << sizeof(Vertex) << std::endl;
 
-	std::cout << "Set Position: " << a << std::endl;
+	/*std::cout << "Set Position: " << a << std::endl;
 	std::cout << "Set Normal: " << b << std::endl;
 	std::cout << "Set Colour: " << c << std::endl;
 	std::cout << "Set Texcoord: " << d << std::endl;
-	std::cout << "Set Tangent: " << e << std::endl;
+	std::cout << "Set Tangent: " << e << std::endl;*/
 
 	//std::cout << "CELL_OK: " << CELL_OK << std::endl;
 	//std::cout << "CELL_GCM_ERROR_FAILURE: " << CELL_GCM_ERROR_FAILURE << std::endl;

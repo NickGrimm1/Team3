@@ -97,9 +97,9 @@ public:
 		  {
 			  obj1->GetPhysicsNode().SetIsCollide(false);
 			  cout<<"delete = true ok"<<endl;
-			   SettimeOrScore(1);
+			    SettimeOrScore(1);
 			  RacerGame::update=2;
-			   
+			  
 			  
 		  }
 			  if(obj1->GetType()=='p')

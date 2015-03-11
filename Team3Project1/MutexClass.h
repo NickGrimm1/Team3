@@ -2,7 +2,12 @@
 #if WINDOWS_BUILD
 #include <windows.h>
 #endif
-class MutexClass {
+#if PS3_BUILD
+#include <cell/sync/mutex.h>
+#endif
+
+class MutexClass 
+{
 public:
 	MutexClass();
 	virtual ~MutexClass();
@@ -12,5 +17,8 @@ public:
 protected:
 #if WINDOWS_BUILD
 	HANDLE mutex;
+#endif
+#if PS3_BUILD
+	CellSyncMutex mutex;
 #endif
 };
