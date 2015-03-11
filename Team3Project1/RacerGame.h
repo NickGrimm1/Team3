@@ -68,13 +68,13 @@ public:
 	static float g;
 	static float gx;
 	TrackSegment* Strack;
-#if WINDOWS_BUILD	
+#
 	vector<T3Vector3> SplinePoint;
 	vector<DrawableEntity3D*> allEntities;
 	vector<TrackSegment*> TrackSegmentVector;
 	vector<GameEntity*> checkPoint;
 	vector<GameEntity*> pickup;
-#endif 
+
 	 virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
 		 cout<<obj1->GetType();
 		  cout<<" collisionbetween ";
@@ -109,12 +109,16 @@ public:
 			  SetScore(1);
 			 // SoundManager::AddSound(SOUNDSDIR"Tokyo Drift2.wav");
 			 // GameStateManager::Audio()->PlaySoundW(GameStateManager::Audio()->GetSound(SOUNDSDIR"Tokyo Drift2.wav"),SOUNDPRIORITY_ALWAYS);
+#if WINDOWS_BUILD
 			  GameStateManager::Audio()->PlaySoundA(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
+#endif
 			  cout<< "total point ="<<GetScore()<<endl; 
 			  GameStateManager::Graphics()->RemoveDrawable(obj1);
 	          obj1->DisconnectFromSystems();
+
 			  pickup.erase(pickup.begin());
-		  }
+
+			  }
 			   if(obj1->GetType()=='t')
 		  {
 			  obj1->GetPhysicsNode().SetIsCollide(false);
@@ -124,8 +128,10 @@ public:
 			  cout<< "total time ="<<GetTime()<<endl; 
 			  GameStateManager::Graphics()->RemoveDrawable(obj1);
 	          obj1->DisconnectFromSystems();
+
 			  pickup.erase(pickup.begin());
-		  }
+
+		   }
 			   		  
    }
 	//sam

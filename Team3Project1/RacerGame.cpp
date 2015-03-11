@@ -28,7 +28,7 @@ float RacerGame::gx =300.0f;
 
 RacerGame::RacerGame(void)
 {
-#if WINDOWS_BUILD
+
 	//f=5;
 	srand(time(NULL));
 	T3Vector3 sp1= T3Vector3(100,0,0);
@@ -49,22 +49,23 @@ RacerGame::RacerGame(void)
 		 scoreTexture = GameStateManager::Assets()->LoadTexture(this, "score", 0);
 		 timeTexture = GameStateManager::Assets()->LoadTexture(this, "time", 0);
 
-#endif
+
 	//Strack = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2],5,50.f);
 	//TrackSegmentVector.push_back(Strack);
 }
 
 RacerGame::~RacerGame(void)
 {
-#if WINDOWS_BUILD
-	delete quad;
 
+	delete quad;
+#if WINDOWS_BUILD
 	delete light;
 #endif
+
 }
 
 void RacerGame::LoadContent() {
-#if WINDOWS_BUILD	
+	
 	//Mesh* coneMesh = Mesh::GenerateCone(20);
 	quad = GameStateManager::Assets()->LoadCylinder(this, 20);
 	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
@@ -228,12 +229,12 @@ void RacerGame::LoadContent() {
 	camera->SetPosition(T3Vector3(0,10.0f, 80.0f));
 	//camera->SetYaw(180.0f);
 	GameStateManager::Graphics()->SetCamera(chasecamera);
-#endif
+
 	//GameStateManager::Graphics()->SetCamera(chasecamera);
 }
 
 void RacerGame::Update() { 
-	#if WINDOWS_BUILD
+
 	/*if(car->GetCarNode().GetLinearVelocity().Length()>=15)
 	{
 		car->GetCarNode().SetForce(T3Vector3(0,0,0));
@@ -301,7 +302,7 @@ void RacerGame::Update() {
 	//	T3Vector2(0.5f, 0.5f),
 	//	T3Vector4(1.0f,1.0f,1.0f,0.7f)));
 
-#endif
+
 }
 void RacerGame::Start(){
 
