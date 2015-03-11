@@ -46,8 +46,8 @@ RacerGame::RacerGame(void)
 		hud = new HudTestScreen();
 		GameStateManager::Instance()->AddGameScreen(hud);
 
-		 scoreTexture = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"score.jpg", 0);
-		 timeTexture = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"time.jpg", 0);
+		 scoreTexture = GameStateManager::Assets()->LoadTexture(this, "score", 0);
+		 timeTexture = GameStateManager::Assets()->LoadTexture(this, "time", 0);
 
 #endif
 	//Strack = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2],5,50.f);

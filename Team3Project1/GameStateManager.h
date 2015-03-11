@@ -46,10 +46,14 @@ public:
 
 			if (!AssetManager::Initialize(instance->assets))
 				return false;
+			
+			// Want to start rendering immediately
 			if (!GraphicsEngine::Initialize(instance->graphics))
 				return false;	
+			Instance()->graphics->Start("Graphics");
 			if (!GraphicsEngine::LoadContent())
-				return false;	
+				return false;
+
 			if (!PhysicsEngine::Initialize(instance->physics))
 				return false;
 			if (!StorageManager::Initialize(instance->storage))
@@ -71,7 +75,6 @@ public:
 
 	void Start() {
 		// Start Threads
-		Instance()->graphics->Start("Graphics");
 		Instance()->physics->Start("Physics");
 		Instance()->input->Start("Input");
 

@@ -67,6 +67,19 @@ void MainMenu::LoadContent() {
 	soundMute			= GameStateManager::Assets()->LoadTexture(this, "Buttons/sound_mute", 0);
 	soundMuteHover		= GameStateManager::Assets()->LoadTexture(this, "Buttons/sound_mute_selected", 0);
 
+	// Load Scoreboard
+#if WINDOWS_BUILD
+	scoreBoardConn = new Scoreboard();
+	scoreBoardConn->RetrieveScoreboard();
+	for (unsigned int i = 0; i < 10; i++) {
+		scoreBoardConn->GetName(i);
+		scores.push_back(pair<DrawableText2D*, DrawableText2D*>(new DrawableText2D(0.57f, 0.180f + (0.065f * i), 2, 0.12f, 0.065f, scoreBoardConn->GetName(i), font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
+			new DrawableText2D(0.75f, 0.180f + (0.065f * i), 2, 0.12f, 0.065f, scoreBoardConn->GetScore(i), font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false)));
+		AddDrawable(scores.back().first);
+		AddDrawable(scores.back().second);
+	}
+#endif
+
 	float charWidth = 0.200f;
 	float charHeight = 0.08f;
 
@@ -121,19 +134,6 @@ void MainMenu::LoadContent() {
 	Font* startFont = GameStateManager::Assets()->LoadFont(this, "tahoma", 16, 16);
 	pressStart = new DrawableText2D(0.3f, 0.1f, 1, 0.4f, 0.05f, "Player 1 Press Start or A", startFont);
 	AddDrawable(pressStart);
-
-	// Load Scoreboard
-#if WINDOWS_BUILD
-	scoreBoardConn = new Scoreboard();
-	scoreBoardConn->RetrieveScoreboard();
-	for (unsigned int i = 0; i < 10; i++) {
-		scoreBoardConn->GetName(i);
-		scores.push_back(pair<DrawableText2D*, DrawableText2D*>(new DrawableText2D(0.57f, 0.180f + (0.065f * i), 2, 0.12f, 0.065f, scoreBoardConn->GetName(i), font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
-			new DrawableText2D(0.75f, 0.180f + (0.065f * i), 2, 0.12f, 0.065f, scoreBoardConn->GetScore(i), font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false)));
-		AddDrawable(scores.back().first);
-		AddDrawable(scores.back().second);
-	}
-#endif
 
 	//finished loading screen
 	GameStateManager::Graphics()->EnableLoadingIcon(false);
