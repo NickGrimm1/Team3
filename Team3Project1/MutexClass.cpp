@@ -1,5 +1,7 @@
 #include "MutexClass.h"
+#ifdef PS3_BUILD
 #include <cell/sync/mutex.h>
+#endif
 
 MutexClass::MutexClass() 
 {
