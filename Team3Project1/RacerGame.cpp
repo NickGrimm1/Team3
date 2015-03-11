@@ -73,8 +73,8 @@ void RacerGame::LoadContent() {
 	ent = new DrawableEntity3D(
 		quad, 
 		NULL,
-		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.tga", 0), 
-		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"snowflake.png", 0),
+		GameStateManager::Assets()->LoadTexture(this, "Grass_Color", 0), 
+		GameStateManager::Assets()->LoadTexture(this, "snowflake", 0),
 		50.0f, 
 		T3Vector3(0,0,0), 
 		Quaternion::FromMatrix(T3Matrix4::Rotation(90.0f, T3Vector3(1,0,0))),
@@ -105,7 +105,7 @@ void RacerGame::LoadContent() {
 	checkpoint->SetType('g');
 	checkpoint->GetPhysicsNode().SetPGE(checkpoint);
 	AddDrawable(checkpoint);*/
-
+	
 	
 	
 	
@@ -115,7 +115,7 @@ void RacerGame::LoadContent() {
 	
 	//add road
 	
-	Texture* grassTex2 = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"water.jpg", 0);
+	Texture* grassTex2 = GameStateManager::Assets()->LoadTexture(this, "water", 0);
 	GameStateManager::Graphics()->GetRenderContext();
 	TrackSegment* trackr = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5, 50.0);
 	
@@ -1166,36 +1166,36 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 //
 //
 
-case KeyboardEvents::KEYBOARD_W:
+		case KeyboardEvents::KEYBOARD_W:
 		{
 				//camera->AddMovement(T3Vector3(1,0,0));
 
-		
+
 			       f=f+0.4;
 				   if(f>100){
 				   f=100;
-				   }
-				
-			
+		       }
+
+		
 				   T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
 				   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
-				
-			 
-		
-		
+
+			
+
+			
 			 break;
-		}	
+		}
 		case KeyboardEvents::KEYBOARD_S:
 			{//camera->AddMovement(T3Vector3(0,0,1));
-			
+		
 				 b=b+0.2;
 				   if(b>50){
 				   b=50;
-				   }
+		}
            T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
 		  car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*-b);
 
-			
+				
 
 
 
@@ -1203,8 +1203,8 @@ case KeyboardEvents::KEYBOARD_W:
 			break;
 		case KeyboardEvents::KEYBOARD_A:
 			{//camera->AddMovement(T3Vector3(1,0,0));
-			
-			
+
+
 				if(car->GetCarNode().GetLinearVelocity().x>=0){
 				FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 		     FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
@@ -1235,17 +1235,17 @@ case KeyboardEvents::KEYBOARD_W:
 			 BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
 		     BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
 			  car->GetCarNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
-		}
+		      }
 				if(car->GetCarNode().GetLinearVelocity().x<0){
 				FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 		     FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 			 BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 		     BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 			  car->GetCarNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
-				}
-			
-	
+		}			
 
+
+	
 
 
 			}

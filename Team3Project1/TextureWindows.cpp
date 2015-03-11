@@ -5,7 +5,8 @@
 
 Texture::Texture(string filename, unsigned int flags)
 {
-	textureObject = SOIL_load_OGL_texture(filename.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, flags);
+	filename = TEXTUREDIR + filename.append(".png");
+	textureObject = SOIL_load_OGL_texture((filename).c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, flags);
 	if (!textureObject) {
 		textureObject = 0; // make sure GetTexture will return an error
 		return;

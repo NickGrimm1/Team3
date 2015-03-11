@@ -267,9 +267,9 @@ bool Renderer::LoadAssets() {
 	coneMesh = GameStateManager::Assets()->LoadCone(this, 20); // Cone for spotlight rendering
 	skyDome = GameStateManager::Assets()->LoadMesh(this, MESHDIR"dome.obj"); // Skydome
 	quadMesh = GameStateManager::Assets()->LoadQuadAlt(this);
-	nightSkyTex = (GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"night_sky.jpg", 0))->GetTextureName();
+	nightSkyTex = (GameStateManager::Assets()->LoadTexture(this, "night_sky", 0))->GetTextureName();
 	//SetTextureRepeating(nightSkyTex, true);
-	daySkyTex = (GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"day_sky.jpg", 0))->GetTextureName();
+	daySkyTex = (GameStateManager::Assets()->LoadTexture(this, "day_sky", 0))->GetTextureName();
 
 	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh) {
 		cout << "Renderer::LoadAssets() - unable to load rendering assets";
@@ -286,8 +286,8 @@ void Renderer::UnloadAssets() {
 	GameStateManager::Assets()->UnloadCone(this, 20); // Cone for spotlight rendering
 	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"dome.obj"); // Skydome
 	GameStateManager::Assets()->UnloadQuadAlt(this);
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"night_sky.jpg");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"day_sky.jpg");
+	GameStateManager::Assets()->UnloadTexture(this, "night_sky");
+	GameStateManager::Assets()->UnloadTexture(this, "day_sky");
 }
 
 Renderer::~Renderer(void)

@@ -291,12 +291,12 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 		if(i != materials.end()) {
 			if(!i->second.diffuse.empty())	{
 				texture = i->second.diffuseNum;
-				texturePath = string(TEXTUREDIR + i->second.diffuse);
+				texturePath = string(i->second.diffuse);
 			}
 
 			if(!i->second.bump.empty())	{
 				bumpTexture = i->second.bumpNum;
-				bumpPath = string(TEXTUREDIR + i->second.bump);
+				bumpPath = string(i->second.bump);
 			}
 
 			return;
@@ -351,10 +351,10 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 
 			if (!currentMTL.diffuse.empty()) {
 #if WINDOWS_BUILD
-				currentMTL.diffuseNum = GameStateManager::Assets()->LoadTexture(this, string(TEXTUREDIR + currentMTL.diffuse), SOIL_FLAG_INVERT_Y);
+				currentMTL.diffuseNum = GameStateManager::Assets()->LoadTexture(this, string(currentMTL.diffuse + ".png"), SOIL_FLAG_INVERT_Y);
 #endif
 #if PS3_BUILD
-				currentMTL.diffuseNum = GameStateManager::Assets()->LoadTexture(this, string(TEXTUREDIR + currentMTL.diffuse), 0);
+				currentMTL.diffuseNum = GameStateManager::Assets()->LoadTexture(this, string(currentMTL.diffuse + ".gtf"), 0);
 #endif
 			}
 		}
@@ -370,8 +370,14 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 				currentMTL.bump = currentMTL.bump.substr(at+1);
 			}
 
-			if (!currentMTL.bump.empty()) {
-				currentMTL.bumpNum = GameStateManager::Assets()->LoadTexture(this, string(TEXTUREDIR + currentMTL.bump), 0);
+			if (!currentMTL.bump.empty())
+			{
+#if WINDOWS_BUILD
+				currentMTL.bumpNum = GameStateManager::Assets()->LoadTexture(this, string(currentMTL.bump + ".png"), 0);
+#endif
+#if PS3_BUILD
+				currentMTL.bumpNum = GameStateManager::Assets()->LoadTexture(this, string(currentMTL.bump + ".gtf"), 0);
+#endif
 			}
 		}
 	}
@@ -388,14 +394,16 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 	if (materials.size() > 0) {
 		map <string, MTLInfo>::iterator i = materials.find(mtlType);
 		if(i != materials.end()) {
-			if(!i->second.diffuse.empty())	{
+			if(!i->second.diffuse.empty())	
+			{
 				texture = i->second.diffuseNum;
-				texturePath = string(TEXTUREDIR + currentMTL.diffuse);
+				texturePath = string(currentMTL.diffuse);
 			}
 
-			if(!i->second.bump.empty())	{
+			if(!i->second.bump.empty())	
+			{
 				bumpTexture = i->second.bumpNum;
-				bumpPath = string(TEXTUREDIR + currentMTL.bump);
+				bumpPath = string(currentMTL.bump);
 			}
 
 			return;

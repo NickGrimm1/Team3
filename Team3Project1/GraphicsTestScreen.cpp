@@ -31,12 +31,12 @@ void GraphicsTestScreen::LoadContent() {
 	quad = GameStateManager::Assets()->LoadQuad(this);
 	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
 	circle = GameStateManager::Assets()->LoadCircle(this, 20);
+	Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, "Grass_Color", 0);
 #if WINDOWS_BUILD
-	Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.jpg", 0);
-	Texture* calvinTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", SOIL_FLAG_INVERT_Y);
+	Texture* calvinTex = GameStateManager::Assets()->LoadTexture(this, "calvin", SOIL_FLAG_INVERT_Y);
 #endif
 #if PS3_BUILD
-	Texture* nclTex = GameStateManager::Assets()->LoadTexture(this, "/ncl.gtf", 0);
+	Texture* calvinTex = GameStateManager::Assets()->LoadTexture(this, "calvin", 0);
 #endif
 //	Mesh* car = GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaCar.obj");
 
@@ -81,12 +81,7 @@ void GraphicsTestScreen::LoadContent() {
 		GameStateManager::Assets()->LoadQuad(this),
 #endif
 		NULL,
-#if WINDOWS_BUILD
 		grassTex,
-#endif
-#if PS3_BUILD
-		nclTex,
-#endif
 		NULL,
 		800.0f,
 		T3Vector3(),
@@ -116,12 +111,7 @@ void GraphicsTestScreen::LoadContent() {
 	ent = new DrawableEntity3D(
 		cylinder, 
 		NULL,
-#if WINDOWS_BUILD
 		calvinTex,
-#endif
-#if PS3_BUILD
-		nclTex,
-#endif
 		NULL,
 		30.0f, 
 		T3Vector3(35,0,35), 
@@ -134,12 +124,7 @@ void GraphicsTestScreen::LoadContent() {
 	ent = new DrawableEntity3D(
 		circle, 
 		NULL,
-#if WINDOWS_BUILD
 		calvinTex,
-#endif
-#if PS3_BUILD
-		nclTex,
-#endif
 		NULL,
 		30.0f, // needs same bounding radius as cylinder
 		T3Vector3(35,30,35), 
@@ -206,7 +191,7 @@ void GraphicsTestScreen::LoadContent() {
 	DrawableEntity3D* myEnt = new DrawableEntity3D(
 		quad,
 		NULL,
-		GameStateManager::Assets()->LoadTexture(this,TEXTUREDIR"ncl.gtf",0),
+		GameStateManager::Assets()->LoadTexture(this,"ncl",0),
 		NULL,
 		25.0f,
 		T3Vector3(0,5,10),
@@ -240,9 +225,9 @@ void GraphicsTestScreen::UnloadContent()
 	GameStateManager::Assets()->UnloadQuad(this);
 	GameStateManager::Assets()->UnloadCylinder(this, 20);
 	GameStateManager::Assets()->UnloadCircle(this, 20);
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Grass_Color.jpg"),
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"calvin.bmp"),
-	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"NovaCar.obj");
+	GameStateManager::Assets()->UnloadTexture(this, "Grass_Color"),
+	GameStateManager::Assets()->UnloadTexture(this, "calvin"),
+	GameStateManager::Assets()->UnloadMesh(this, "NovaCar");
 }
 
 

@@ -45,5 +45,15 @@ public:
 	float y;
 	float z;
 	float w;
+
+	operator float*() const
+	{
+		float* output = new float[4];
+		output[0] = x;
+		output[1] = y;
+		output[2] = z;
+		output[3] = w;
+		return output;
+	}
 };
 

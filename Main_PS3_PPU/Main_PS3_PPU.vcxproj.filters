@@ -27,24 +27,14 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="duck256.gtf" />
-    <None Include="fragment_asm.txt" />
-    <None Include="gpad_config.txt" />
-    <None Include="ncl.gtf" />
-    <None Include="ncl.tga" />
-    <None Include="fragment.fpo">
+    <None Include="..\Resources\Shaders\TexturedFragment.cg">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="vertex.vpo">
+    <None Include="..\Resources\Shaders\TexturedVertex.cg">
       <Filter>Shaders</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="fragment.cg">
+    <None Include="..\Resources\Shaders\BlendedFragment.cg">
       <Filter>Shaders</Filter>
-    </CustomBuild>
-    <CustomBuild Include="vertex.cg">
-      <Filter>Shaders</Filter>
-    </CustomBuild>
+    </None>
   </ItemGroup>
 </Project>

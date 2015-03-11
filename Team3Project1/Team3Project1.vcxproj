@@ -396,7 +396,6 @@
     <ClCompile Include="GCMRenderer.cpp" />
     <ClCompile Include="Gold_cion.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
-    <ClCompile Include="GraphicsEnginePS3.cpp" />
     <ClCompile Include="GraphicsTestScreen.cpp" />
     <ClCompile Include="HeightMap.cpp" />
     <ClCompile Include="HighScore.cpp" />
@@ -462,43 +461,43 @@
     <None Include="..\Resources\Shaders\TexturedVertex.glsl" />
     <None Include="..\Resources\Shaders\VelocityFragment.glsl" />
     <None Include="..\Resources\Shaders\VelocityVertex.glsl" />
-    <None Include="..\Resources\Textures\button.gtf" />
-    <None Include="..\Resources\Textures\button_clicked.gtf" />
-    <None Include="..\Resources\Textures\button_selected.gtf" />
-    <None Include="..\Resources\Textures\day_sky.gtf" />
-    <None Include="..\Resources\Textures\Grass_Color.gtf" />
-    <None Include="..\Resources\Textures\Grass_Color.tga" />
-    <None Include="..\Resources\Textures\night_sky.gtf" />
-    <None Include="..\Resources\Textures\NovaCarUV.gtf" />
-    <None Include="..\Resources\Textures\NovaCarUV.tga" />
-    <None Include="..\Resources\Textures\pause_screen.gtf" />
-    <None Include="..\Resources\Textures\quadrats.gtf" />
-    <None Include="..\Resources\Textures\quadrats.tga" />
-    <None Include="..\Resources\Textures\raindrop.gtf" />
-    <None Include="..\Resources\Textures\refresh.gtf" />
-    <None Include="..\Resources\Textures\score_board.gtf" />
-    <None Include="..\Resources\Textures\snowflake.gtf" />
-    <None Include="..\Resources\Textures\tahoma.gtf" />
-    <None Include="..\Resources\Textures\tahoma.tga" />
-    <None Include="..\Resources\Textures\TireUV.gtf" />
-    <None Include="..\Resources\Textures\TireUV.tga" />
-    <None Include="..\Resources\Textures\TitleSafeArea.gtf" />
     <None Include="..\Shaders\TechFragment.glsl" />
     <None Include="..\Shaders\TechVertex.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\Resources\Textures\button.png" />
+    <Image Include="..\Resources\Textures\button.png">
+      <DeploymentContent>false</DeploymentContent>
+    </Image>
+    <Image Include="..\Resources\Textures\Buttons\button.png" />
+    <Image Include="..\Resources\Textures\Buttons\button_clicked.png" />
+    <Image Include="..\Resources\Textures\Buttons\button_selected.png" />
+    <Image Include="..\Resources\Textures\Buttons\music_mute.png" />
+    <Image Include="..\Resources\Textures\Buttons\music_mute_clicked.png" />
+    <Image Include="..\Resources\Textures\Buttons\music_mute_selected.png" />
+    <Image Include="..\Resources\Textures\Buttons\music_nomute.png" />
+    <Image Include="..\Resources\Textures\Buttons\music_nomute_clicked.png" />
+    <Image Include="..\Resources\Textures\Buttons\music_nomute_selected.png" />
+    <Image Include="..\Resources\Textures\Buttons\sound_mute.png" />
+    <Image Include="..\Resources\Textures\Buttons\sound_mute_clicked.png" />
+    <Image Include="..\Resources\Textures\Buttons\sound_mute_selected.png" />
+    <Image Include="..\Resources\Textures\Buttons\sound_nomute.png" />
+    <Image Include="..\Resources\Textures\Buttons\sound_nomute_clicked.png" />
+    <Image Include="..\Resources\Textures\Buttons\sound_nomute_selected.png" />
     <Image Include="..\Resources\Textures\button_clicked.png" />
     <Image Include="..\Resources\Textures\button_selected.png" />
-    <Image Include="..\Resources\Textures\calvin.bmp" />
-    <Image Include="..\Resources\Textures\day_sky.jpg" />
-    <Image Include="..\Resources\Textures\Grass_Color.jpg" />
-    <Image Include="..\Resources\Textures\night_sky.jpg" />
+    <Image Include="..\Resources\Textures\calvin.PNG" />
+    <Image Include="..\Resources\Textures\day_sky.png" />
+    <Image Include="..\Resources\Textures\Grass_Color.png" />
+    <Image Include="..\Resources\Textures\night_sky.png" />
+    <Image Include="..\Resources\Textures\NovaCarUV.png" />
     <Image Include="..\Resources\Textures\pause_screen.png" />
+    <Image Include="..\Resources\Textures\quadrats.PNG" />
     <Image Include="..\Resources\Textures\raindrop.png" />
     <Image Include="..\Resources\Textures\refresh.png" />
     <Image Include="..\Resources\Textures\score_board.png" />
     <Image Include="..\Resources\Textures\snowflake.png" />
+    <Image Include="..\Resources\Textures\tahoma.PNG" />
+    <Image Include="..\Resources\Textures\TireUV.PNG" />
     <Image Include="..\Resources\Textures\TitleSafeArea.png" />
   </ItemGroup>
   <ItemGroup>

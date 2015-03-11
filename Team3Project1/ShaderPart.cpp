@@ -180,7 +180,7 @@ matrix wrong
 void ShaderPart::SetParameter(std::string name, Matrix4 &totranpose) {
 	std::cout << "Transposing: " << name << std::endl;
 	Matrix4 tempMatrix = transpose(totranpose);
-	std::cout << "Shader Part: Transposed Matrix (SCE): " << std::endl;
+	/*std::cout << "Shader Part: Transposed Matrix (SCE): " << std::endl;
 		for (int x = 0; x < 4; ++x)
 		{
 			for (int y = 0; y < 4; ++y)
@@ -188,9 +188,9 @@ void ShaderPart::SetParameter(std::string name, Matrix4 &totranpose) {
 				std::cout << tempMatrix.getElem(x,y) << ",";
 			}
 			std::cout << std::endl;
-		}
+		}*/
 		float* m = (float*)&tempMatrix;
-		std::cout << "Shader Part: Setting " << name << " " << &tempMatrix << std::endl;
+		//std::cout << "Shader Part: Setting " << name << " " << &tempMatrix << std::endl;
 	SetParameter(name, m);
 //	std::cout << "Shader Part: " << name << " Set" << std::endl;
 }
@@ -259,11 +259,11 @@ std::ostream& operator<<(std::ostream& o, const Matrix4& m)
 
 void	ShaderPart::UpdateShaderMatrices(Matrix4 &model,Matrix4 &view, Matrix4 &proj) {
 
-	std::cout << "####MODEL MTX:" << model << "\n#####VIEW MTX: " << view << "\n####PROJ MTX: " << proj;
+	//std::cout << "####MODEL MTX:" << model << "\n#####VIEW MTX: " << view << "\n####PROJ MTX: " << proj;
 
-	SetParameter("modelMat", model);
-	SetParameter("viewMat", view);
-	SetParameter("projMat", proj);
+	SetParameter("modelMatrix", model);
+	SetParameter("viewMatrix", view);
+	SetParameter("projMatrix", proj);
 }
 #endif
 #if PS3_BUILD
