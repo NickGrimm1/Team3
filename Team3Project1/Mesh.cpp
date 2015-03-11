@@ -46,28 +46,6 @@ void Mesh::Draw()
 #if PS3_BUILD
 void Mesh::Draw(Shader* shader)
 {
-	std::cout << "Position: " << vertexOffsets[VertexAttributes::POSITION] << std::endl;
-	std::cout << "Normal: " << vertexOffsets[VertexAttributes::NORMAL] << std::endl;
-	std::cout << "Colour: " << vertexOffsets[VertexAttributes::COLOUR] << std::endl;
-	std::cout << "Texcoord: " << vertexOffsets[VertexAttributes::TEXCOORD] << std::endl;
-	std::cout << "Tangent: " << vertexOffsets[VertexAttributes::TANGENT] << std::endl;
-
-	/*std::cout << "Position Attribute Index: " << shader->GetVertex()->GetAttributeIndex(VertexAttributes::POSITION) << std::endl;
-	std::cout << "Normal Attribute Index: " << shader->GetVertex()->GetAttributeIndex(VertexAttributes::NORMAL) << std::endl;
-	std::cout << "Colour Attribute Index: " << shader->GetVertex()->GetAttributeIndex(VertexAttributes::COLOUR) << std::endl;
-	std::cout << "Texcoord Attribute Index: " << shader->GetVertex()->GetAttributeIndex(VertexAttributes::TEXCOORD) << std::endl;
-	std::cout << "Tangent Attribute Index: " << shader->GetVertex()->GetAttributeIndex(VertexAttributes::TANGENT) << std::endl;*/
-
-	std::cout << "Vertex Size: " << sizeof(Vertex) << std::endl;
-
-	/*std::cout << "Set Position: " << a << std::endl;
-	std::cout << "Set Normal: " << b << std::endl;
-	std::cout << "Set Colour: " << c << std::endl;
-	std::cout << "Set Texcoord: " << d << std::endl;
-	std::cout << "Set Tangent: " << e << std::endl;*/
-
-	//std::cout << "CELL_OK: " << CELL_OK << std::endl;
-	//std::cout << "CELL_GCM_ERROR_FAILURE: " << CELL_GCM_ERROR_FAILURE << std::endl;
 	int shader_idx;
 
 	shader_idx = shader->GetVertex()->GetAttributeIndex(VertexAttributes::POSITION);
@@ -81,9 +59,6 @@ void Mesh::Draw(Shader* shader)
 			CELL_GCM_LOCATION_LOCAL, 
 			(uint32_t)vertexOffsets[VertexAttributes::POSITION]
 		);
-		/*std::cout << "Drawing position" << std::endl;
-		for (int i = 0; i < numVertices; ++i)
-			std::cout << "X: " << vertices[i].x << " Y: " << vertices[i].y << " Z: " << vertices[i].z << std::endl;*/
 	}
 
 	if(vertexOffsets[VertexAttributes::NORMAL])
@@ -91,7 +66,6 @@ void Mesh::Draw(Shader* shader)
 		shader_idx = shader->GetVertex()->GetAttributeIndex(VertexAttributes::NORMAL);
 		if (shader_idx > -1)
 		{
-			std::cout << "Drawing normal" << std::endl;
 			cellGcmSetVertexDataArray(shader_idx,
 				0, 
 				sizeof(Vertex), 
@@ -108,7 +82,6 @@ void Mesh::Draw(Shader* shader)
 		shader_idx = shader->GetVertex()->GetAttributeIndex(VertexAttributes::COLOUR);
 		if (shader_idx > -1)
 		{
-			std::cout << "Drawing colour" << std::endl;
 			cellGcmSetVertexDataArray(shader_idx,
 				0, 
 				sizeof(Vertex), 
@@ -125,7 +98,6 @@ void Mesh::Draw(Shader* shader)
 		shader_idx = shader->GetVertex()->GetAttributeIndex(VertexAttributes::TEXCOORD);
 		if (shader_idx > -1)
 		{
-			std::cout << "Drawing texcoord" << std::endl;
 			cellGcmSetVertexDataArray(shader_idx,
 				0, 
 				sizeof(Vertex), 
@@ -142,7 +114,6 @@ void Mesh::Draw(Shader* shader)
 		shader_idx = shader->GetVertex()->GetAttributeIndex(VertexAttributes::TANGENT);
 		if (shader_idx > -1)
 		{
-			std::cout << "Drawing tangent" << std::endl;
 			cellGcmSetVertexDataArray(shader_idx,
 				0, 
 				sizeof(Vertex), 
@@ -159,14 +130,12 @@ void Mesh::Draw(Shader* shader)
 
 		cellGcmSetDrawIndexArray(type, numIndices, CELL_GCM_DRAW_INDEX_ARRAY_TYPE_16,
 			CELL_GCM_LOCATION_LOCAL, vertexOffsets[VertexAttributes::MAX]);
-		std::cout << "Drawing indices: " << numIndices << " of type: " << type << std::endl;
 	}
 	else{
 		//else just draw an ordered list of vertices
 		//type = CELL_GCM_PRIMITIVE_TRIANGLES;
 		//numVertices = 3;
 		cellGcmSetDrawArrays(type, 0, numVertices);
-		std::cout << "Drawing vertices: " << numVertices << " of type: " << type << std::endl;
 	}
 }
 #endif
@@ -204,11 +173,11 @@ void	Mesh::BufferData()
 	glBindVertexArray(0);
 #endif
 #if PS3_BUILD
-	a = cellGcmAddressToOffset(&vertices->x, &vertexOffsets[VertexAttributes::POSITION]);
-	b = cellGcmAddressToOffset(&vertices->nX, &vertexOffsets[VertexAttributes::NORMAL]);
-	c = cellGcmAddressToOffset(&vertices->rgba, &vertexOffsets[VertexAttributes::COLOUR]);
-	d = cellGcmAddressToOffset(&vertices->tX, &vertexOffsets[VertexAttributes::TEXCOORD]);
-	e = cellGcmAddressToOffset(&vertices->tnX, &vertexOffsets[VertexAttributes::TANGENT]);
+	cellGcmAddressToOffset(&vertices->x, &vertexOffsets[VertexAttributes::POSITION]);
+	cellGcmAddressToOffset(&vertices->nX, &vertexOffsets[VertexAttributes::NORMAL]);
+	cellGcmAddressToOffset(&vertices->rgba, &vertexOffsets[VertexAttributes::COLOUR]);
+	cellGcmAddressToOffset(&vertices->tX, &vertexOffsets[VertexAttributes::TEXCOORD]);
+	cellGcmAddressToOffset(&vertices->tnX, &vertexOffsets[VertexAttributes::TANGENT]);
 #endif
 }
 
@@ -306,25 +275,19 @@ void Mesh::AssignVertexMemory()
 {
 #if WINDOWS_BUILD
 	vertices = new Vertex[numVertices];
-	std::cout << "Vertices created on system memory" << std::endl;
 #endif
 #if PS3_BUILD
-	std::cout << "Mesh: Getting Vertex Memory" << std::endl;
 	vertices = (Vertex*)GCMRenderer::localMemoryAlign(128, sizeof(Vertex) * numVertices);
-	std::cout << "Mesh: Vertices created on local memory" << std::endl;
 #endif
 }
 
 void Mesh::AssignIndexMemory(unsigned int indexCount)
 {
-	#if WINDOWS_BUILD
+#if WINDOWS_BUILD
 	indices = new unsigned int[indexCount];
-	std::cout << "Indices created on system memory" << std::endl;
 #endif
 #if PS3_BUILD
-	std::cout << "Mesh: Getting Index Memory" << std::endl;
 	indices = (short*)GCMRenderer::localMemoryAlign(128, sizeof(short) * (indexCount));
-	std::cout << "Mesh: Indices created on local memory" << std::endl;
 #endif
 }
 

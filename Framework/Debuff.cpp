@@ -14,10 +14,6 @@ Debuff::Debuff()
 	SpdBf_pos_z=(rand() % (b-a+1))+ a;
 	InvBuff_pos_x=(rand() % (d-c+1))+ c;
 	InvBuff_pos_z=(rand() % (d-c+1))+ c;
-	cout<<SpdBf_pos_x<<endl;
-	cout<<SpdBf_pos_z<<endl;
-	cout<<InvBuff_pos_x<<endl;
-	cout<<InvBuff_pos_z<<endl;
 	//random the buff position
 	SpeedBuffMesh = new OBJMesh(MESHDIR"gas_tank.obj");
 	InverseleftrightMesh =new OBJMesh(MESHDIR"ico.obj");

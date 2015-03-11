@@ -17,9 +17,7 @@ void PhysicsEngine::Run()
 #if PS3_BUILD
 void PhysicsEngine::Run(uint64_t arg)
 {
-//	std::cout << "Physics Thread Started! " << std::endl;
 	//instance->ThreadRun();
-	//std::cout << "Physics Thread Ended! " << std::endl;
 	sys_ppu_thread_exit(0);
 }
 #endif
@@ -637,7 +635,6 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 			if(CollisionDetection(first, second))
 			{
 				//OnCollision(first,second);
-				//cout << "GJK passed" << endl;
 				if(first.GetIsCollide()==true && second.GetIsCollide ()==true)
 				{
 					OnCollision(first,second);
@@ -651,20 +648,16 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 					//OnCollision(first,second);
 						/*if(check==true)
 					{
-                    cout << "Collision" << endl;
 
 					   if(first.GetType()=='c'||second.GetType()=='c')
 					   {
-						cout<<"c is call";
 						if(first.GetGameEntity()){
-							cout<<"call if"<<endl;
 						RacerGame::update=1;}
 					   }
 
 					   else{
 						if(second.GetGameEntity())
 					      {
-						cout<<"call else"<<endl;
 					RacerGame::update=1;
 						  }
 					    }
@@ -750,7 +743,6 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 
 
 		//							  //count=count+1;
-		//							  // cout<<count<<endl;
 		//							  }
 		//							  continue;
 
@@ -765,7 +757,6 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 		//									//  MyGame::dt=1 ;
 		//							//	  count=false;}
 		//							 // count=count+1;
-		//							 //  cout<<count<<endl;
 		//							  }
 		//							 
 		//								continue;
@@ -786,7 +777,6 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 		//									//  MyGame::dt=1 ;
 		//								//  count=false;}
 		//							 // count=count+1;
-		//							  // cout<<count<<endl;
 		//							  }
 		//							 
 		//								continue;
@@ -1211,7 +1201,6 @@ void PhysicsEngine::OnCollision(PhysicsNode& p1, PhysicsNode& p2)
 {
 	if (gameClass != NULL) {
 	gameClass->CollisionBetween(p1.GetGameEntity(),p2.GetGameEntity());
-	cout<<"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa="<<p2.GetType()<<endl;
 }
 }
 #endif
