@@ -850,8 +850,6 @@ void Renderer::EdgeDetectPass() {
 	glBindTexture(GL_TEXTURE_2D, postProcessingTex[0]);
 
 	glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / (float)width, 1.0f / (float)height);
-	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "zNear"), 0.1f);
-	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "zFar"), 1000.0f);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "depthTex"), GBUFFER_DEPTH_TEXTURE_UNIT);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 
@@ -859,7 +857,6 @@ void Renderer::EdgeDetectPass() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glUseProgram(0);
 }
-
 
 void Renderer::BloomPass()
 {

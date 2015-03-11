@@ -452,6 +452,7 @@ void  PhysicsEngine::SortandSweep()
 
 	
 #if WINDOWS_BUILD
+	//TODO - REMOVE LAMBDA
 	std::sort(narrowlist.begin(),narrowlist.end(), [](PhysicsNode* xleft, PhysicsNode* xright){return xleft->GetPosition().x < xright->GetPosition().x;});
 
 	for( vector<PhysicsNode*>::iterator i=narrowlist.begin(); i <narrowlist.end(); ++i) 

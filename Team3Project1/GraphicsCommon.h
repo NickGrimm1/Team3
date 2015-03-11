@@ -19,11 +19,11 @@
 #define GBUFFER_DSAMPLE_TEXTURE_UNIT_2			13
 #define SHADOW_TEXTURE_UNIT						14
 
-#define DEFAULT_AMBIENT_LIGHT_COLOUR T3Vector4(0.3f, 0.3f, 0.3f, 1.0f);
+#define DEFAULT_AMBIENT_LIGHT_COLOUR T3Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
 #define RENDER_HZ 60
-#define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 720
+#define SCREEN_WIDTH 1920
+#define SCREEN_HEIGHT 1080
 
 #define GAME_TITLE "Team^3 - Endless Racer"
 

@@ -42,7 +42,7 @@ void GamePad::Update(float msec)
 		
 		if (rightStick.x > 0.5f)
 		{
-			if (!previousRightStick.x > 0.5f)
+			if (previousRightStick.x <= 0.5f)
 			{
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, GamepadEvents::RIGHT_STICK_RIGHT);
 			}
@@ -56,7 +56,7 @@ void GamePad::Update(float msec)
 
 		if (rightStick.x < -0.5f)
 		{
-			if (!previousRightStick.x < -0.5f)
+			if (previousRightStick.x >= -0.5f)
 			{
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, GamepadEvents::RIGHT_STICK_LEFT);
 			}
@@ -69,7 +69,7 @@ void GamePad::Update(float msec)
 
 		if (rightStick.y < -0.5f)
 		{
-			if (!previousRightStick.y < -0.5f)
+			if (previousRightStick.y >= -0.5f)
 			{
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, GamepadEvents::RIGHT_STICK_DOWN);
 			}
@@ -82,7 +82,7 @@ void GamePad::Update(float msec)
 
 		if (rightStick.y > 0.5f)
 		{
-			if (!previousRightStick.y > 0.5f)
+			if (previousRightStick.y <= 0.5f)
 			{
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, GamepadEvents::RIGHT_STICK_UP);
 			}
@@ -148,7 +148,7 @@ void GamePad::Update(float msec)
 		
 		if (leftStick.x > 0.5f)
 		{
-			if (!previousLeftStick.x > 0.5f)
+			if (previousLeftStick.x <= 0.5f)
 			{
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, GamepadEvents::LEFT_STICK_RIGHT);
 			}
@@ -161,7 +161,7 @@ void GamePad::Update(float msec)
 
 		if (leftStick.x < -0.5f)
 		{
-			if (!previousLeftStick.x < -0.5f)
+			if (previousLeftStick.x >= -0.5f)
 			{
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, GamepadEvents::LEFT_STICK_LEFT);
 			}
@@ -174,7 +174,7 @@ void GamePad::Update(float msec)
 
 		if (leftStick.y < -0.5f)
 		{
-			if (!previousLeftStick.y < -0.5f)
+			if (previousLeftStick.y >= -0.5f)
 			{
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, GamepadEvents::LEFT_STICK_DOWN);
 			}
@@ -187,7 +187,7 @@ void GamePad::Update(float msec)
 
 		if (leftStick.y > 0.5f)
 		{
-			if (!previousLeftStick.y > 0.5f)
+			if (previousLeftStick.y <= 0.5f)
 			{
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, GamepadEvents::LEFT_STICK_UP);
 			}
@@ -257,7 +257,7 @@ void GamePad::Update(float msec)
 		GameStateManager::Instance()->GamepadAnalogueDisplacement(playerID, GamepadEvents::RIGHT_TRIGGER, rightTrigger);
 		if (rightTrigger > 0.5f)
 		{
-			if (!previousRightTrigger > 0.5f)
+			if (previousRightTrigger <= 0.5f)
 			{
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, GamepadEvents::INPUT_R2_TRIGGER);
 			}
@@ -294,7 +294,7 @@ void GamePad::Update(float msec)
 		GameStateManager::Instance()->GamepadAnalogueDisplacement(playerID, GamepadEvents::LEFT_TRIGGER, leftTrigger);
 		if (leftTrigger > 0.5f)
 		{
-			if (!previousLeftTrigger > 0.5f)
+			if (previousLeftTrigger <= 0.5f)
 			{
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, GamepadEvents::INPUT_L2_TRIGGER);
 			}
