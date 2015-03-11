@@ -32,7 +32,7 @@ void Gold_cion::SetPhysics(float size)
     physicsNode = new PhysicsNode();
     physicsNode->SetUseGravity(false);
 	physicsNode->SetPosition(origin);
-	physicsNode->SetMass(5);
+    physicsNode->SetInverseMass(0);
 	
 
 	physicsNode->SetCollisionVolume(new CollisionAABB(T3Vector3(0.3*size,0.3*size,0.3*size)));
@@ -42,7 +42,6 @@ void Gold_cion::SetPhysics(float size)
 	physicsNode->SetIsCollide(true);
 	physicsNode->Setcar_wheel(true);
 	physicsNode->SetInverseInertia(InertialMatrixHelper::createCuboidInvInertial(5,size,size,size));
-	physicsNode->SetInverseMass(1.0f);
 
 
 
@@ -55,7 +54,7 @@ void Gold_cion::SetPhysics(float size,char type,T3Vector3 position,const Quatern
 	 physicsNode = new PhysicsNode();
     physicsNode->SetUseGravity(false);
 	physicsNode->SetPosition(position);
-	physicsNode->SetMass(5);
+	physicsNode->SetInverseMass(0);
 
 	physicsNode->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj"));
 	physicsNode->SetXstart(physicsNode->GetPosition().x-1*size);

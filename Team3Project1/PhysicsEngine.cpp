@@ -967,7 +967,9 @@ void    PhysicsEngine::DrawDebug() {
 
 void PhysicsEngine::OnCollision(PhysicsNode& p1, PhysicsNode& p2)
 {
-	gameClass->CollisionBetween(p1.GetGameEntity(),p2.GetGameEntity());
-	cout<<"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa="<<p2.GetType()<<endl;
+	if (gameClass != NULL) {
+		gameClass->CollisionBetween(p1.GetGameEntity(),p2.GetGameEntity());
+		cout<<"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa="<<p2.GetType()<<endl;
+	}
 }
 #endif

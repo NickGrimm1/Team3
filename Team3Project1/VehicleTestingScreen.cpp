@@ -246,7 +246,7 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 			{//camera->AddMovement(T3Vector3(1,0,0));
 
 
-				if(car->GetCarNode().GetLinearVelocity().x>0)
+				if(car->GetCarNode().GetLinearVelocity().x>=0)
 				{
 				FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 		     FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
@@ -273,7 +273,7 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 		case KeyboardEvents::KEYBOARD_D:
 			{//camera->AddMovement(T3Vector3(-1,0,0));
 			
-		if(car->GetCarNode().GetLinearVelocity().x>0)
+		if(car->GetCarNode().GetLinearVelocity().x>=0)
 			  {
 			 FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
 		     FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));

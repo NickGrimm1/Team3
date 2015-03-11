@@ -67,7 +67,6 @@ public:
 	void barycentric(const T3Vector3 &p, const T3Vector3 &a, const T3Vector3 &b, const T3Vector3 &c, float *x, float *y, float *z);
 	
 	//sam
-	bool   check;
 	static void SetGame(RacerGame * g) { instance->gameClass = g; }
 	//sam
 
@@ -95,7 +94,7 @@ private:
 		: PHYSICS_TIME(1000.0f / 120)
 	{
 		frameRate = 0;
-		check=true;
+		gameClass = NULL;
 	}
 #endif
 #if PS3_BUILD
@@ -103,6 +102,7 @@ private:
 		: Thread(Run), PHYSICS_TIME(1000.0f / 120)
 	{
 		frameRate = 0;
+		gameClass = NULL;
 	}
 #endif
 
