@@ -39,7 +39,7 @@ void PhysicsEngine::ThreadRun()
 		frameRate = (int)(1000.0f / msec);
 
 #if WINDOWS_BUILD
-		NarrowPhaseCollisions();
+		//NarrowPhaseCollisions();
 
 		narrowlist.clear();
 
@@ -51,7 +51,7 @@ void PhysicsEngine::ThreadRun()
 			(*i)->Update(msec);
 			narrowlist.push_back((*i));
 		}
-		//BroadPhaseCollisions();
+		BroadPhaseCollisions();
 #endif
 	}
 }
@@ -468,21 +468,46 @@ void  PhysicsEngine::SortandSweep()
 					if (second.GetPhysicsVertex() == NULL) continue;
 					if(CollisionDetection(first, second))
 			    {
-				
-				if(first.GetIsCollide()==false && second.GetIsCollide ()==true)
+				//OnCollision(first,second);
+				//cout << "GJK passed" << endl;
+				if(first.GetIsCollide()==true && second.GetIsCollide ()==true)
 				{
-					//if(second.GetType()=='f'){
 					OnCollision(first,second);
+					//if(second.GetType()=='f'){
+					//OnCollision(first,second);
 					//}
 				}
-				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
-				{
+				//if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
+				//{
+					//OnCollision(first,second);
+					//OnCollision(first,second);
+						/*if(check==true)
+					{
+                    cout << "Collision" << endl;
+
+					   if(first.GetType()=='c'||second.GetType()=='c')
+					   {
+						cout<<"c is call";
+						if(first.GetGameEntity()){
+							cout<<"call if"<<endl;
+						RacerGame::update=1;}
+					   }
+
+					   else{
+						if(second.GetGameEntity())
+					      {
+						cout<<"call else"<<endl;
+					RacerGame::update=1;
+						  }
+					    }
 					
-					first.SetLinearVelocity(T3Vector3(0,0,0));
+						check=false;
+					}*/
+					/*first.SetLinearVelocity(T3Vector3(0,0,0));
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
-					second.SetForce(T3Vector3(0,0,0));
-				}
+					second.SetForce(T3Vector3(0,0,0));*/
+			//	}
 			
 				if ((first.GetIsCollide()==true && second.GetIsCollide ()==true) && ((first.Getcar_wheel()==true && second.Getcar_wheel()==true)))
 				{
@@ -496,24 +521,52 @@ void  PhysicsEngine::SortandSweep()
 					bool succeeded = EPA(first, second, data);
  					if (succeeded)
 					{
-						CollisionHelper::AddCollisionImpulse( first, second, *data);
+						CollisionHelper::AddCollisionImpulse(first, second, *data);
+
+
+						if(first.Getplanecollision()==true && second.Getplanecollision()==false)
+
+						{
+							first.SetUseGravity(false);
+							second.SetUseGravity(false);
+							T3Vector3 temp1,temp2;
+							temp1 =  first.GetLinearVelocity();
+							temp1.y = 0;
+							first.SetLinearVelocity(temp1);
+							
+							temp2 =  second.GetLinearVelocity();
+							temp2.y = 0;
+							second.SetLinearVelocity(temp2);
+													
+			                second.SetPosition(second.GetPosition() + T3Vector3(0, 2.0f, 0));
 
 			}
 				}
-
+				}
+			
 			
 
-
-			
-				
 
 				}
+				//	if(CollisionDetection(first, second))
+			 //   {
+				////cout << "GJK passed" << endl;
+				//if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
+				//{
+				//	//cout << "Collision" << endl;
+				//	first.SetLinearVelocity(T3Vector3(0,0,0));
+				//	first.SetForce(T3Vector3(0,0,0));
+    //                second.SetLinearVelocity(T3Vector3(0,0,0));
+				//	second.SetForce(T3Vector3(0,0,0));
+				//}
+				//}
 
 						}
 				}
 		}
-#endif
 	}
+#endif
+	
 	
 
 
@@ -655,8 +708,8 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 													
 			                second.SetPosition(second.GetPosition() + T3Vector3(0, 2.0f, 0));*/
 
-						}
-					}
+			}
+				}
 				}
 			}
 			}
@@ -933,9 +986,9 @@ float Dist(const T3Vector3& a, const T3Vector3& b)
 
 			Triangle_normal= T3Vector3::Cross((a-b),(a-c));
 			Triangle_normal.Normalise();
-		}
+	}
 	};
-	
+
 	std::vector<EPA_Triangle> lst_EPA_Triangle;
 	std::vector<EPA_Edge> lst_EPA_Edge;
 	auto addEdge = [&](const T3Vector3 &a, const T3Vector3 &b) -> void
@@ -953,7 +1006,7 @@ float Dist(const T3Vector3& a, const T3Vector3& b)
 		lst_EPA_Edge.push_back(EPA_Edge(a, b));
 	};
 
-
+	
 bool PhysicsEngine::EPA(PhysicsNode& shape1, PhysicsNode& shape2, CollisionData* data)
 {
 
@@ -997,7 +1050,7 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1, PhysicsNode& shape2, CollisionData*
 	{
 		if(_EXIT_ITERATION_NUM++ >= _EXIT_ITERATION_LIMIT) 
 			break;
-
+	
 		if (lst_EPA_Triangle.size() > 500)
 			break;
 
@@ -1067,7 +1120,7 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1, PhysicsNode& shape2, CollisionData*
 			if(T3Vector3::Dot(it->Triangle_normal, (new_point - it->Point[0].v)) > _EXIT_THRESHOLD)
 			{
 				if (new_point == it->Point[0].v || new_point == it->Point[1].v)
-				{
+			{
 					printf("INVALID TRIANGLE!!");
 					return false;
 				}
@@ -1084,7 +1137,7 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1, PhysicsNode& shape2, CollisionData*
 
 		// add new triangles which contains new point to the list 
 		for(auto it= lst_EPA_Edge.begin(); it!= lst_EPA_Edge.end();it++)
-		{			
+		{
 			lst_EPA_Triangle.emplace_back(new_point, it->Point[0].v, it->Point[1].v);
 		}
 
@@ -1157,8 +1210,8 @@ void    PhysicsEngine::DrawDebug() {
 void PhysicsEngine::OnCollision(PhysicsNode& p1, PhysicsNode& p2)
 {
 	if (gameClass != NULL) {
-		gameClass->CollisionBetween(p1.GetGameEntity(),p2.GetGameEntity());
-		cout<<"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa="<<p2.GetType()<<endl;
-	}
+	gameClass->CollisionBetween(p1.GetGameEntity(),p2.GetGameEntity());
+	cout<<"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa="<<p2.GetType()<<endl;
+}
 }
 #endif

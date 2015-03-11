@@ -75,7 +75,6 @@ public:
 	bool			GetRenderContextForThread();
 	bool			DropRenderContextForThread();
 
-	bool			LoadShaders();
 	bool			LoadAssets();
 	void			UnloadShaders();
 	void			UnloadAssets();
@@ -86,7 +85,7 @@ public:
 
 protected:
 
-	T3Matrix4			cameraMatrix; // Get camera matrix once at start of scene
+	T3Matrix4		cameraMatrix; // Get camera matrix once at start of scene
 
 
 	//Rendering pipeline components.
