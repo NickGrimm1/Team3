@@ -67,7 +67,7 @@ public:
 
 	void			SetSkyBoxTexture(GLuint tex) {skyBoxTex = tex;}
 
-	T3Vector4			GetAmbientColour() const {return ambientLightColour;}
+	T3Vector4		GetAmbientColour() const {return ambientLightColour;}
 	void			SetAmbientColour(T3Vector4& colour) {ambientLightColour = colour;}
 
 	void			SetDayNight(float arg) { dayNight = arg; }
@@ -102,6 +102,7 @@ protected:
 	void			CombineBuffers();
 	void			DrawSkybox();
 	void			BloomPass();
+	void			EdgeDetectPass();
 	void			MotionBlurPass();
 	void			DrawFrameBufferTex(GLuint fboTex); // Draw the texture passed to it to screen
 	
@@ -160,6 +161,7 @@ protected:
 	Shader*			brightPassShader;
 	Shader*			bloomCombShader;
 	Shader*			gaussianShader;
+	Shader*			edgeDetectShader;
 	Shader*			downSampleShader;
 	Shader*			bloomFinalShader;
 	Shader*			velocityShader;

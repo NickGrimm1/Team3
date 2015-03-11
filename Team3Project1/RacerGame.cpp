@@ -43,8 +43,8 @@ RacerGame::RacerGame(void)
 	PlayTime=30;
 	timeOrScore=0;
 
-		hud = new HudTestScreen();
-		GameStateManager::Instance()->AddGameScreen(hud);
+		//hud = new HudTestScreen();
+		//GameStateManager::Instance()->AddGameScreen(hud);
 
 		 scoreTexture = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"score.jpg", 0);
 		 timeTexture = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"time.jpg", 0);
@@ -257,13 +257,13 @@ void RacerGame::Update() {
 
 	update=0;
 	}
-	if((Time-60)==0){
-	cout<<"one sec pass"<<endl;
-	SetPlayTime(-1);
-	Time=0;
-	cout<<"Play Time = "<<GetPlayTime()<<endl;
-	hud->SetScreen(GetScore(),GetPlayTime());
-	}
+	//if((Time-60)==0){
+	//cout<<"one sec pass"<<endl;
+	//SetPlayTime(-1);
+	//Time=0;
+	//cout<<"Play Time = "<<GetPlayTime()<<endl;
+	//hud->SetScreen(GetScore(),GetPlayTime());
+	//}
 	Time+=1;
 
 	//GameScreen2D::AddDrawable(new DrawableText2D(
