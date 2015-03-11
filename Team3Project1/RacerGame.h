@@ -103,6 +103,8 @@ public:
 			  SetScore(1);
 			 // SoundManager::AddSound(SOUNDSDIR"Tokyo Drift2.wav");
 			 // GameStateManager::Audio()->PlaySoundW(GameStateManager::Audio()->GetSound(SOUNDSDIR"Tokyo Drift2.wav"),SOUNDPRIORITY_ALWAYS);
+			  GameStateManager::Audio()->PlaySound(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
+			  cout<< "total point ="<<GetScore()<<endl; 
 			  GameStateManager::Graphics()->RemoveDrawable(obj1);
 	          obj1->DisconnectFromSystems();
 			  pickup.erase(pickup.begin());

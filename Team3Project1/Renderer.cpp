@@ -217,6 +217,7 @@ bool Renderer::LoadAssets()
 	bloomFinalShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BloomFinalFragment.glsl");
 	velocityShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"VelocityVertex.glsl", SHADERDIR"VelocityFragment.glsl");
 	motionBlurShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlurFragment.glsl");
+	edgeDetectShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"FreiChenFragment.glsl");
 	if (!LoadCheck()) return false;
 
 	// Load Meshes required for rendering operations
@@ -233,15 +234,7 @@ bool Renderer::LoadAssets()
 	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh || !quadMesh || !skyDome) {
 		cout << "Renderer::LoadAssets() - unable to load rendering assets";
 		return false;
-	edgeDetectShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"FreiChenFragment.glsl");
-	hudShader		 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl");
-	debugDrawShader  = GameStateManager::Assets()->LoadShader(this, SHADERDIR"debugVertex.glsl", SHADERDIR"debugFragment.glsl");
-	
-	return LoadCheck();
-}
-
-	return true;
-
+	}
 }
 
 bool Renderer::LoadCheck()
@@ -262,8 +255,7 @@ bool Renderer::LoadCheck()
 			velocityShader		!= NULL &&
 			motionBlurShader	!= NULL &&
 			edgeDetectShader	!= NULL &&
-			hudShader			!= NULL &&
-			debugDrawShader		!= NULL);
+			hudShader			!= NULL);
 }
 
 void Renderer::UnloadAssets()
