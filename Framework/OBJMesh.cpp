@@ -351,10 +351,10 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 
 			if (!currentMTL.diffuse.empty()) {
 #if WINDOWS_BUILD
-				currentMTL.diffuseNum = GameStateManager::Assets()->LoadTexture(this, string(currentMTL.diffuse + ".png"), SOIL_FLAG_INVERT_Y);
+				currentMTL.diffuseNum = GameStateManager::Assets()->LoadTexture(this, string(currentMTL.diffuse), SOIL_FLAG_INVERT_Y);
 #endif
 #if PS3_BUILD
-				currentMTL.diffuseNum = GameStateManager::Assets()->LoadTexture(this, string(currentMTL.diffuse + ".gtf"), 0);
+				currentMTL.diffuseNum = GameStateManager::Assets()->LoadTexture(this, string(currentMTL.diffuse"), 0);
 #endif
 			}
 		}
