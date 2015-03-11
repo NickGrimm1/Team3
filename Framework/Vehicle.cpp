@@ -5,7 +5,7 @@
 
 Vehicle::Vehicle(float size) {
 	//mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaCar.obj");
-	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
+	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaCar.obj");
 //	BuffMesh = new OBJMesh(MESHDIR"ico.obj");
 	
 	//TT =  SOIL_load_OGL_texture ("../../Texture/footballpitch.jpg", SOIL_LOAD_AUTO , SOIL_CREATE_NEW_ID , SOIL_FLAG_MIPMAPS);
