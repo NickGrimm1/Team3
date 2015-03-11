@@ -5,24 +5,15 @@
 //Static member variables need initialising!
 uint32_t		GCMRenderer::localHeapStart	= 0;
 
-void my_check_callback(uint32_t* cmd)
-{
-  printf( "### Bad command 0x%X at memory location 0x%x ###\n", *cmd, cmd);
-}
-
-
-
 GCMRenderer::GCMRenderer(void)	{
-	if(cellGcmInit(COMMAND_SIZE, BUFFER_SIZE, memalign(1024*1024, BUFFER_SIZE))!= CELL_OK) {
-		std::cout << "cellGcmInit failed!" << std::endl;	
-	}
+	if(cellGcmInit(COMMAND_SIZE, BUFFER_SIZE, memalign(1024*1024, BUFFER_SIZE))!= CELL_OK) 
+		return;
 
 	camera	= NULL;
 	root	= NULL;
 	shader = NULL;
 	InitDisplay();
 	InitSurfaces();
-	std::cout <<"Got to end of GCMrenderer constructor" << std::endl;
 }
 
 /*
@@ -31,25 +22,18 @@ display up, and also grabs the pointer to the start of graphics
 memory. It'll also reserve enough memory for the front, back, and depth
 buffers. 
 */
-void GCMRenderer::InitDisplay() {
-	std::cout << "Initialising display!" << std::endl;
-
-	if(SetResolution(GCM_RESOLUTION_1080)) {
-		std::cout << "Using 1080p" << std::endl;
-	}
-	else if(SetResolution(GCM_RESOLUTION_720)) {
-		std::cout << "Using 720p" << std::endl;
-	}
-	else if(SetResolution(GCM_RESOLUTION_576)) {
-		std::cout << "Using NTSC" << std::endl;
-	}
-	else if(SetResolution(GCM_RESOLUTION_480)) {
-		std::cout << "Using PAL" << std::endl;
-	}
-	else {
-		std::cout << "No valid resolution available!" << std::endl;
+void GCMRenderer::InitDisplay()
+{
+	if(SetResolution(GCM_RESOLUTION_1080))
+		;
+	else if(SetResolution(GCM_RESOLUTION_720))
+		;
+	else if(SetResolution(GCM_RESOLUTION_576))
+		;
+	else if(SetResolution(GCM_RESOLUTION_480))
+		;
+	else 
 		return;
-	}
 
 	CellVideoOutState			vid_state;
 	CellVideoOutResolution		resolution;
@@ -95,9 +79,8 @@ them a memory offset of 0.
 Note: We set the memory offset for the first colour attachment on line 63, in
 the init_display function.
 */
-void GCMRenderer::InitSurfaces()	{
-	std::cout << "Initialising surfaces!" << std::endl;
-
+void GCMRenderer::InitSurfaces()	
+{
 	//Memory for these buffers has to be 64-byte aligned!
 	depthPitch = screenWidth*4;
 	uint32_t depthSize	= depthPitch*screenHeight;
@@ -228,9 +211,8 @@ void GCMRenderer::setLocalMem(uint32_t to) {
 /*
 Sets up the current viewport
 */
-void GCMRenderer::SetViewport() {
-	std::cout << "GCMRenderer::SetViewport: Setting Viewport" << std::endl;
-	
+void GCMRenderer::SetViewport() 
+{
 	uint16_t x;
 	uint16_t y;
 	uint16_t w;
@@ -283,20 +265,14 @@ void GCMRenderer::SetViewport() {
 
 	//analogous to the glViewport function...but with extra values!
 	cellGcmSetViewport(x, y, w, h, minimum, maximum, scale, offset);
-
-	std::cout << "GCMRenderer::SetViewport: Viewport Set" << std::endl;
 }
 
-void GCMRenderer::SwapBuffers() {
-	std::cout << "GCMRenderer::SwapBuffers: Wait for Flip Status" << std::endl;
-	
+void GCMRenderer::SwapBuffers() 
+{
 	// wait until FlipStatus = 0 so that PPU does not run too ahead of RSX
 	// FlipStatus turns to 0 when the previous flip is finished
-	while (cellGcmGetFlipStatus()!=0){
-		sys_timer_usleep(300);
-	}
-
-	std::cout << "GCMRenderer::SwapBuffers: Finised Wiating for Flip Status" << std::endl;
+	while (cellGcmGetFlipStatus() != 0)
+		sys_timer_usleep(50);
 
 	// reset FlipStatus = 1
 	cellGcmResetFlipStatus();
@@ -354,18 +330,14 @@ must be 'offsettable'.
 */
 void	GCMRenderer::SetCurrentShader(Shader* s) 
 {
-	//std::cout<<"GCMRenderer: setCurrentShader"<<std::endl;
 	cellGcmSetFragmentProgram(s->GetFragment()->GetProgram(), s->GetFragment()->GetOffset());
 	cellGcmSetVertexProgram(s->GetVertex()->GetProgram(), s->GetVertex()->GetuCode());
-	//std::cout<<"GCMRenderer: got to the end of setCurrentShader"<<std::endl;
-
 	shader = s;
 }
 
 //Sets the camera. Can be NULL
 void	GCMRenderer::SetCamera(Camera* c) 
 {
-	std::cout << "GCMRenderer: Set Camera" << c->BuildViewMatrix() << std::endl;
 	camera = c;
 }
 
@@ -392,55 +364,21 @@ refactor SceneNode so it handles it's own drawing after all (via platform
 specific #ifdefs to encapsulate API code). You'll have to think up some way
 of safely setting shaders and textures on a renderer...
 */
-void	GCMRenderer::DrawNode(SceneNode*n)	{
-//	std::cout << "Drawing Node" << std::endl;
-
-	if(n->GetDrawableEntity()) {
-	//	std::cout << "Drawing a mesh: " << std::endl;
-	//	std::cout << n->GetMesh()->GetNumVertices() << std::endl;
+void	GCMRenderer::DrawNode(SceneNode*n)	
+{
+	if(n->GetDrawableEntity()) 
+	{
 		//GCC complains about function returns being used as parameters passed
 		//around, or we'd just use GetWorldTransform as the function param
-		cout << "GCMRenderer: Have drawable entity" << endl;
 		DrawableEntity3D& entity = *n->GetDrawableEntity();
-		cout << "GCMRenderer: initialised entity" << endl;
 		T3Matrix4 transform = n->GetTransform();
-			//Quaternion::EulerAnglesToQuaternion(90, 0, 0).ToMatrix() * T3Matrix4::Scale(T3Vector3(1000,1000,1));
-		cout << "GCMRenderer: set a transform matrix" << endl;
-
-
-		/*std::cout << "GCMRenderer: ViewMatrix (SCE): " << std::endl;
-		for (int x = 0; x < 4; ++x)
-		{
-			for (int y = 0; y < 4; ++y)
-			{
-				std::cout << viewMatrix.getElem(x,y) << ",";
-			}
-			std::cout << std::endl;
-		}
-
-		std::cout << "Transform (T3): " << std::endl;
-		std::cout << n->GetTransform() << std::endl;
-		std::cout << transform << std::endl;*/
 
 		Matrix4 m;
 		for (int x = 0; x < 4; ++x)
 			for (int y = 0; y < 4; ++y)
 				m.setElem(x, y, transform.values[y + x * 4]);
-		
-		cout << "GCMRenderer: turned that matrix into a PS3 matrix " << endl; 
-		
-		std::cout << "Transform (SCE): " << std::endl;
-		for (int x = 0; x < 4; ++x)
-		{
-			for (int y = 0; y < 4; ++y)
-			{
-				std::cout << m.getElem(x,y) << ",";
-			}
-			std::cout << std::endl;
-		}
+
 		//shader = entity.GetShader();
-		shader->GetVertex()->SetParameter("modelMat", m);
-		cout << "GCMRenderer: set the shader" << endl;
 		//shader->GetVertex()->UpdateShaderMatrices(m, viewMatrix, projMatrix);
 
 		/*
@@ -451,23 +389,13 @@ void	GCMRenderer::DrawNode(SceneNode*n)	{
 		*/
 		
 		CellGcmTexture* t = texture->GetTexture();
-		cout << "GCMRenderer: extracted the texture" << endl;
-		/*if (t)
-			std::cout << "Has Texture" << std::endl;
-		else
-			std::cout << "No Has Texture :(" << std::endl;*/
-
 		SetTextureSampler(shader->GetFragment()->GetParameter("texture"), t);
-		cout << "GCMRenderer: Set the texture sampler" << endl;
 
 		/*
 		The GCM Mesh class needs the current vertex shader, fragment
 		shader is just sent for convenience, in case it's needed in future...
 		*/
-		//n->GetMesh()->Draw(shader);
-		cout << "GCMRenderer: about to draw entity" << endl;
 		entity.GetMesh()->Draw(shader);
-		cout << "GCMRenderer: managed to draw the entity" << endl;
 	}
 
 

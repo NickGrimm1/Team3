@@ -170,7 +170,7 @@ Renderer::Renderer(vector<Light*>& lightsVec, vector<SceneNode*>& SceneNodesVec,
 	cellGcmSetCullFace(CELL_GCM_BACK);
 	cellGcmSetFrontFace(CELL_GCM_CCW);
 	cellGcmSetStencilTestEnable(CELL_GCM_FALSE);
-	
+	cellGcmSetBlendEquation(CELL_GCM_FUNC_ADD, CELL_GCM_FUNC_ADD);
 
 	//glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); // cube sampling
 
@@ -264,7 +264,6 @@ bool Renderer::LoadAssets() {
 
 	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh) 
 	{
-		cout << "Renderer::LoadAssets() - unable to load rendering assets";
 		return false;
 	}
 	
@@ -318,9 +317,6 @@ Renderer::~Renderer(void)
 void Renderer::RenderScene() {
 
 	renderMutex.lock_mutex(); // prevent other threads from accessing OpenGL during rendering
-	//if (!wglMakeCurrent(deviceContext, renderContext)) {
-		//cout << "Renderer::RenderScene() - unable to obtain rendering context!!!" << endl;
-	//}
 	SetViewport();
 	ClearBuffer();
 
@@ -385,8 +381,6 @@ void Renderer::ToggleDebug(int arg, bool on)
 
 void Renderer::DrawScene()
 {
-	std::cout << "Draw Scene" << std::endl;
-
 	//glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	// Use stencil buffer to track unaltered pixels. Use to draw skybox later
@@ -394,19 +388,15 @@ void Renderer::DrawScene()
 	cellGcmSetStencilFunc(CELL_GCM_ALWAYS, 0, 0); // Always passes
 	cellGcmSetStencilOp(CELL_GCM_KEEP, CELL_GCM_KEEP, CELL_GCM_REPLACE);
 
-	std::cout << "Clear Buffers" << std::endl;
 	ClearBuffer();
 	
-	std::cout << "Set Shader" << std::endl;
 	//SetCurrentShader(sceneShader);
 	SetCurrentShader(basicShader);
 
-	std::cout << "Bind Shader Variables" << std::endl;
 	// Bind Shader variables
 	viewMatrix = cameraMatrix;
 	projMatrix = perspectiveMatrix;
 	modelMatrix = Matrix4::identity();
-	std::cout << "Update Shader Matrices" << std::endl;
 	shader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
 	//glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &cameraMatrix.GetPositionVector());
 	//glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "nodeColour"), 1, (float*) &T3Vector4(1,1,1,1));
@@ -533,23 +523,19 @@ void Renderer::ShadowPass()
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Renderer::DrawNodes(bool enableTextures) {
+void Renderer::DrawNodes(bool enableTextures)
+{
 	// Draw Scene
-	std::cout << "Drawing Nodes: " << sceneNodes.size() << std::endl;
 	for (unsigned int i = 0; i < sceneNodes.size(); i++)
 	{
 		DrawableEntity3D& entity = *sceneNodes[i]->GetDrawableEntity();
-		std::cout << "Got Entity" << std::endl;
 
 		if (enableTextures)
 		{
-			std::cout << "Textures Enabled" << std::endl;
 			// Handle colour and bump textures
 			if (entity.GetTexture() && entity.GetTexture()->GetTexture()) 
 			{
-				std::cout << "Entity Has Texture" << sceneNodes.size() << std::endl;
 				SetTextureSampler(shader->GetFragment()->GetParameter("texture"), entity.GetTexture()->GetTexture());
-				std::cout << "Texture Set" << sceneNodes.size() << std::endl;
 				//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 1);	
 			}
 			else
@@ -559,7 +545,6 @@ void Renderer::DrawNodes(bool enableTextures) {
 		
 			if (entity.GetBumpTexture() && entity.GetBumpTexture()->GetTexture()) 
 			{
-				std::cout << "Entity Has Bump Texture" << std::endl;
 				//glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_NORMAL_TEXTURE_UNIT);
 				//glBindTexture(GL_TEXTURE_2D, entity.GetBumpTexture()->GetTextureName());
 				//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "normalTex"), MESH_OBJECT_NORMAL_TEXTURE_UNIT);
@@ -577,17 +562,13 @@ void Renderer::DrawNodes(bool enableTextures) {
 		}
 
 		// ignore shader for the minute
-		
-		std::cout << "Getting transform" << std::endl;
+
 		T3Matrix4 m = sceneNodes[i]->GetWorldTransform() * T3Matrix4::Scale(entity.GetScale());
 		for (int x = 0; x < 4; ++x)
 			for (int y = 0; y < 4; ++y)
 				modelMatrix.setElem(x, y, m.values[y + x * 4]);
-		shader->GetVertex()->SetParameter("modelMatrix", modelMatrix);
 		textureMatrix = Matrix4::identity(); // add to texture/drawableentity class
-		shader->GetVertex()->SetParameter("textureMatrix", textureMatrix);
 
-		std::cout << "Drawing" << std::endl;
 		entity.GetMesh()->Draw(shader);
 	}
 }
@@ -629,8 +610,6 @@ void Renderer::DeferredLightPass()
 	//	case SPOTLIGHT_LIGHT_TYPE:
 	//		DrawDeferredSpotLight(lights[i]);
 	//		break;
-	//	default:
-	//		cout << "Renderer::DeferredLightPass() - Unknown Deferred Light type" << endl;
 	//	}
 	//}
 
@@ -1091,35 +1070,25 @@ void Renderer::MotionBlurPass()
 
 void Renderer::Draw2DOverlay() 
 {
-	//std::cout << "Draw 2D: " << overlayElements.size() << std::endl;
-
 	cellGcmSetDepthTestEnable(CELL_GCM_FALSE);
 	cellGcmSetCullFace(CELL_GCM_FRONT);
+	cellGcmSetBlendEnable(CELL_GCM_TRUE);
 
-	std::cout << "Draw 2D: Setting HUD Shader" << std::endl;
 	SetCurrentShader(hudShader);
 	projMatrix = hudMatrix;
 	viewMatrix = Matrix4::identity();
 
+
 	for (unsigned int i = 0; i < overlayTextures.size(); i++) 
 	{
-		std::cout << "Draw 2D: Setting Blend Colour" << std::endl;
-		shader->GetFragment()->SetParameter("blendColour", (float*)T3Vector4(1,1,1,1)/*(overlayTextures[i]->GetColor())*/);
-		
-		if (overlayTextures[i]->GetTransparent())
-			cellGcmSetBlendEnable(CELL_GCM_TRUE);
-		else
-			cellGcmSetBlendEnable(CELL_GCM_FALSE);
-
+		shader->GetFragment()->SetParameter("blendColour", (float*)(overlayTextures[i]->GetColor()));
 		Draw2DTexture(*overlayTextures[i]);
 	}
 	
 	cellGcmSetBlendEnable(CELL_GCM_TRUE);
 	for (unsigned int i = 0; i < overlayTexts.size(); i++) 
 	{
-		std::cout << "Draw 2D: Setting Blend Colour" << std::endl;
-		shader->GetFragment()->SetParameter("blendColour", (float*)T3Vector4(1,1,1,1)/*(float*)(overlayTexts[i]->GetColor())*/);
-
+		shader->GetFragment()->SetParameter("blendColour", (float*)(overlayTexts[i]->GetColor()));
 		Draw2DText(*overlayTexts[i]);
 	}
 
@@ -1130,62 +1099,43 @@ void Renderer::Draw2DOverlay()
 
 void Renderer::Draw2DText(DrawableText2D& text) 
 {
-	std::cout << "Draw 2D Text" << std::endl;
-	std::cout << "Type:" << text.GetType() << std::endl;
 	if (text.GetText() != "")
 	{
-		std::cout << "Draw 2D Text" << std::endl;
 		TextMesh* textMesh = NULL;
 		map<string, TextMesh*>::iterator i = loadedTextMeshes.find(text.GetText());
 		if (i == loadedTextMeshes.end()) 
 		{
-			std::cout << "Creating Text Mesh" << std::endl;
-			std::cout << "Text text:" << text.GetText() << std::endl;
 			// Create a text mesh of appropriate length to display text and store
 			textMesh = new TextMesh(text.GetText(), *text.GetFont());
 			if (textMesh == NULL)
 			{
-				cout << "Renderer::Draw2DText() - Unable to create textmesh - " << text.GetText() << endl;
 				return;
 			}
-			std::cout << "Created Text Mesh" << std::endl;
 			string t = text.GetText();
 			loadedTextMeshes.insert(std::pair<std::string, TextMesh*>(t, textMesh));
-			std::cout << "Stored Text Mesh" << std::endl;
 		}
 		else 
 		{
 			textMesh = (*i).second;
-			std::cout << "Text Mesh loaded from map." << std::endl;
 		}
 
-		std::cout << "Text text:" << text.GetText() << std::endl;
 		T3Vector3 origin = T3Vector3(text.GetOrigin().x * text.width * screenWidth, text.GetOrigin().y * text.height * screenHeight, 0);
 		T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(text.GetRotation(), T3Vector3(0, 0, 1)) * T3Matrix4::Translation(origin * -1.0f);
-		std::cout << "Got Roatation:" << rotation << std::endl;
 		T3Matrix4 m = T3Matrix4::Translation(T3Vector3(text.x * screenWidth, text.y * screenHeight, 0)) * rotation * T3Matrix4::Scale(T3Vector3(screenWidth * text.width / (float) text.GetText().length(), screenHeight * text.height, 1));
-		std::cout << "Model Matrix (T3): " << m << std::endl;
 		for (int x = 0; x < 4; ++x)
 				for (int y = 0; y < 4; ++y)
 					modelMatrix.setElem(x, y, m.values[y + x * 4]);
 		textureMatrix = Matrix4::identity();
-		std::cout << "Setting Matrices" << std::endl;
 		shader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
-		std::cout << "Setting Texture Sampler" << std::endl;
 		SetTextureSampler(shader->GetFragment()->GetParameter("diffuseTex"), text.GetFont()->GetTexture()->GetTexture());
-		std::cout << "Drawing TextMesh" << std::endl;
 		textMesh->Draw(shader);
 	}
-	else
-		std::cout << "Text is NULL" << std::endl;
 }
 
 void Renderer::Draw2DTexture(DrawableTexture2D& texture) 
 {
-	std::cout << "Type:" << texture.GetType() << std::endl;
 	if (texture.GetTexture())
 	{
-		std::cout << "Draw 2D Texture" << std::endl;
 		T3Vector3 origin = T3Vector3(texture.GetOrigin().x * texture.width * screenWidth, texture.GetOrigin().y * texture.height * screenHeight, 0);
 		T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(texture.GetRotation(), T3Vector3(0,0,1)) * T3Matrix4::Translation(-origin);
 		T3Matrix4 m = T3Matrix4::Translation(T3Vector3(texture.x * screenWidth, texture.y * screenHeight, 0)) * rotation * T3Matrix4::Scale(T3Vector3(texture.width * screenWidth, texture.height * screenHeight, 1));
@@ -1200,8 +1150,6 @@ void Renderer::Draw2DTexture(DrawableTexture2D& texture)
 
 		quadMesh->Draw(shader);
 	}
-	else
-		std::cout << "Text is NULL" << std::endl;
 }
 
 //void Renderer::GenerateScreenTexture(GLuint &into, bool depth)
@@ -1358,62 +1306,35 @@ unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char
 	//GLenum x = glGetError();
 	//// Draw for perlin noise.
 	//glGenTextures(1, &texture);
-	//x = glGetError();
 	//glBindTexture(GL_TEXTURE_2D, texture);
-	//x = glGetError();
 	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	//x = glGetError();
 	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	//x = glGetError();
 	//glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, resolution, resolution, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	//x = glGetError();
 	//glGenFramebuffers(1, &FBO);
-	//x = glGetError();
 	//glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-	//x = glGetError();
 
 	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
-	//cout << "binding texture " << texture << endl;
 	//GLenum color = GL_COLOR_ATTACHMENT0;
 	//glDrawBuffers(1, &color);
-	//x = glGetError();
-
-	//GLenum y = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-	//if (y == GL_FRAMEBUFFER_COMPLETE)
-	//	bool a = true;
 
 	//glClear(GL_COLOR_BUFFER_BIT);
-	//x = glGetError();
 	//SetCurrentShader(cloudShader);
-	//x = glGetError();
 	//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), GL_TEXTURE0);
-	//x = glGetError();
 	//glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), 0.0f);
-	//x = glGetError();
 	//glActiveTexture(GL_TEXTURE0);
-	//x = glGetError();
 	//glBindTexture(GL_TEXTURE_2D, staticMap);
-	//x = glGetError();
 	//screenMesh->Draw();
 	//glUseProgram(GL_NONE);
-	//x = glGetError();
 	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
-	//x = glGetError();
 	//glBindFramebuffer(GL_FRAMEBUFFER, GL_NONE);
-	//x = glGetError();
 
 	//// Extract the data from the texture.
 	//float* data = new float[resolution * resolution * 4];
 	//glBindFramebuffer(GL_READ_FRAMEBUFFER, FBO);
 	//glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
-	//y = glCheckFramebufferStatus(GL_READ_FRAMEBUFFER);
-	//x = glGetError();
 	//glReadBuffer(GL_COLOR_ATTACHMENT0);
-	//x = glGetError();
 	//glReadPixels(0, 0, resolution, resolution, GL_RGBA, GL_FLOAT, data);
-	//x = glGetError();
 	//glBindFramebuffer(GL_READ_FRAMEBUFFER, GL_NONE);
-	//x = glGetError();
 
 	//unsigned char* output = new unsigned char[resolution * resolution];
 	//for (int i = 0; i < resolution * resolution; ++i)

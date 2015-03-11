@@ -42,8 +42,8 @@ namespace EntryPoint
 		//HudTestScreen* hud = new HudTestScreen();
 		//GameStateManager::Instance()->AddGameScreen(hud);
 
-		//DebugOverlay* debug = new DebugOverlay();
-		//GameStateManager::Instance()->AddGameScreen(debug);
+		DebugOverlay* debug = new DebugOverlay();
+		GameStateManager::Instance()->AddGameScreen(debug);
 
 		//RacerGame* game = new RacerGame();
 		//GameStateManager::Instance()->AddGameScreen(game);

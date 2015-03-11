@@ -286,6 +286,27 @@ void Renderer::UnloadAssets()
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"FreiChenFragment.glsl");
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl");
 
+bool Renderer::LoadAssets() {
+	// Load Meshes required for rendering operations
+	
+	circleMesh = GameStateManager::Assets()->LoadCircle(this, 20); // Circle for spotlight rendering
+	screenMesh = GameStateManager::Assets()->LoadQuad(this); // Quad for rendering textures to screen
+	sphereMesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
+	coneMesh = GameStateManager::Assets()->LoadCone(this, 20); // Cone for spotlight rendering
+	skyDome = GameStateManager::Assets()->LoadMesh(this, MESHDIR"dome.obj"); // Skydome
+	quadMesh = GameStateManager::Assets()->LoadQuadAlt(this);
+	nightSkyTex = (GameStateManager::Assets()->LoadTexture(this, "night_sky", 0))->GetTextureName();
+	//SetTextureRepeating(nightSkyTex, true);
+	daySkyTex = (GameStateManager::Assets()->LoadTexture(this, "day_sky", 0))->GetTextureName();
+
+	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh) {
+		return false;
+	}
+	
+	return true;
+}
+
+void Renderer::UnloadAssets() {
 	GameStateManager::Assets()->UnloadCircle(this, 20); // Circle for spotlight rendering
 	GameStateManager::Assets()->UnloadQuad(this); // Quad for rendering textures to screen
 	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
@@ -332,9 +353,6 @@ Renderer::~Renderer(void)
 void Renderer::RenderScene() {
 
 	openglMutex.lock_mutex(); // prevent other threads from accessing OpenGL during rendering
-	if (!wglMakeCurrent(deviceContext, renderContext)) {
-		cout << "Renderer::RenderScene() - unable to obtain rendering context!!!" << endl;
-	}
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	if (camera) {
@@ -617,8 +635,6 @@ void Renderer::DeferredLightPass()
 		case SPOTLIGHT_LIGHT_TYPE:
 			DrawDeferredSpotLight(lights[i]);
 			break;
-		default:
-			cout << "Renderer::DeferredLightPass() - Unknown Deferred Light type" << endl;
 		}
 	}
 
@@ -1127,8 +1143,6 @@ void Renderer::Draw2DOverlay() {
 		case DrawableType::Texture:
 			Draw2DTexture((DrawableTexture2D&) *overlayElements[i]);
 			break;
-		default:
-			cout << "Renderer::Draw2DOverlay() - Unidentified 2D element type, " << overlayElements.size() << endl;
 		}
 	}
 
@@ -1146,7 +1160,6 @@ void Renderer::Draw2DText(DrawableText2D& text) {
 		textMesh = new TextMesh(text.GetText(), *text.GetFont());
 		if (textMesh == NULL)
 		{
-			cout << "Renderer::Draw2DText() - Unable to create textmesh - " << text.GetText() << endl;
 			return;
 		}
 		loadedTextMeshes.insert(pair<string, TextMesh*>(text.GetText(), textMesh));
@@ -1340,65 +1353,37 @@ unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char
 
 	CreateStaticMap(&staticMap, 48, minValue, maxValue);
 
-	GLenum x = glGetError();
 	// Draw for perlin noise.
 	glGenTextures(1, &texture);
-	x = glGetError();
 	glBindTexture(GL_TEXTURE_2D, texture);
-	x = glGetError();
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	x = glGetError();
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	x = glGetError();
 	glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, resolution, resolution, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	x = glGetError();
 	glGenFramebuffers(1, &FBO);
-	x = glGetError();
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-	x = glGetError();
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
-	cout << "binding texture " << texture << endl;
 	GLenum color = GL_COLOR_ATTACHMENT0;
 	glDrawBuffers(1, &color);
-	x = glGetError();
-
-	GLenum y = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-	if (y == GL_FRAMEBUFFER_COMPLETE)
-		bool a = true;
 
 	glClear(GL_COLOR_BUFFER_BIT);
-	x = glGetError();
 	SetCurrentShader(cloudShader);
-	x = glGetError();
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), GL_TEXTURE0);
-	x = glGetError();
 	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), 0.0f);
-	x = glGetError();
 	glActiveTexture(GL_TEXTURE0);
-	x = glGetError();
 	glBindTexture(GL_TEXTURE_2D, staticMap);
-	x = glGetError();
 	screenMesh->Draw();
 	glUseProgram(GL_NONE);
-	x = glGetError();
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
-	x = glGetError();
 	glBindFramebuffer(GL_FRAMEBUFFER, GL_NONE);
-	x = glGetError();
 
 	// Extract the data from the texture.
 	float* data = new float[resolution * resolution * 4];
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, FBO);
 	glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
-	y = glCheckFramebufferStatus(GL_READ_FRAMEBUFFER);
-	x = glGetError();
 	glReadBuffer(GL_COLOR_ATTACHMENT0);
-	x = glGetError();
 	glReadPixels(0, 0, resolution, resolution, GL_RGBA, GL_FLOAT, data);
-	x = glGetError();
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, GL_NONE);
-	x = glGetError();
 
 	unsigned char* output = new unsigned char[resolution * resolution];
 	for (int i = 0; i < resolution * resolution; ++i)

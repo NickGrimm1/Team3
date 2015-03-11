@@ -69,7 +69,6 @@ void RacerGame::LoadContent() {
 	//Mesh* coneMesh = Mesh::GenerateCone(20);
 	quad = GameStateManager::Assets()->LoadCylinder(this, 20);
 	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
-	//cout << "Quad Obj = " << quad->GetVertexBuffer() << endl;
 	
 	//ent = new DrawableEntity3D(
 	//	quad, 
@@ -85,10 +84,8 @@ void RacerGame::LoadContent() {
 
 
 	
-	//cout << "Cone Mesh Obj = " << coneMesh->GetVertexBuffer() << endl;
 	//SpotLight::SetConeMesh(coneMesh);
 	//Mesh* circleMesh = Mesh::GenerateCircle(20);
-	//cout << "Circle Mesh Obj = " << circleMesh->GetVertexBuffer() << endl;
 	//SpotLight::SetCircleMesh(Mesh::GenerateCircle(20));
 	//Mesh* sphereMesh = new OBJMesh(MESHDIR"sphere.obj");
 	//PointLight::SetMesh(sphereMesh);
@@ -173,7 +170,6 @@ void RacerGame::LoadContent() {
 	vpn->getBLW()->SetPGE(car);
 	vpn->getBLW()->SetType('m');
 	vpn->SetType('f');
-	cout<<"35"<<vpn->GetGameEntity()->GetType()<<"45"<<endl;
 
 	car->SetPhysics(5, vpn);
 	AddDrawable(car);
@@ -281,12 +277,9 @@ void RacerGame::Update() {
 	update=0;
 	}
 	if((Time-60)==0){
-	//cout<<"one sec pass"<<endl;
 	SetPlayTime(-1);
 	Time=0;
-	//cout<<"\n time: pick up delete ="<<pickup.size()<<" delete  \n";
-	//cout<<"Play Time = "<<GetPlayTime()<<endl;
-	//hud->SetScreen(GetScore(),GetPlayTime());
+	hud->SetScreen(GetScore(),GetPlayTime());
 	}
 	Time+=1;
 
@@ -450,7 +443,6 @@ void RacerGame::Start(){
 	double degc=acos(cosc);
 
 	float anglec=RadToDeg(degc);
-	cout<<anglec<<endl;
 
 
 	if(L.x<R.x)
@@ -458,7 +450,6 @@ void RacerGame::Start(){
 	anglec=-anglec;
 	}
 
-	cout<<"updated"<<endl;
 
 
 
@@ -544,8 +535,6 @@ void RacerGame::DeleteTrack(){
 	TrackSegmentVector.erase(TrackSegmentVector.begin());
 	SplinePoint.erase(SplinePoint.begin());
 	SplinePoint.erase(SplinePoint.begin());
-
-		cout<<"\n delete ="<<allEntities.size()<<" delete  \n";
 }
 
 void RacerGame::CreateTrack(){
@@ -656,7 +645,6 @@ void RacerGame::CreateTrack(){
 	double degc=acos(cosc);
 
 	float anglec=RadToDeg(degc);
-	cout<<anglec<<endl;
 
 
 	if(L.x<R.x)
@@ -675,7 +663,6 @@ void RacerGame::CreateTrack(){
 	}
 	//angle2
 
-	cout<<"updated"<<endl;
 
 	
 	CheckPoint* checkpoint3= new CheckPoint(10);
@@ -762,7 +749,6 @@ float RacerGame::GetCreateAngle(){
 	double degc=acos(cosc);
 
 	float anglec2=RadToDeg(degc);
-	cout<<anglec2<<endl;
 
 
 	if(L.x<R.x)
@@ -880,7 +866,6 @@ float RacerGame::GetCreateAngle(){
 //			 BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
 //		     BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
 //			 car->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
-//			 cout<<car->GetPhysicsNode().GetOrientation().y<<endl;
 //		 
 //		//	 	
 //		//
@@ -989,11 +974,6 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 //		{
 //				//camera->AddMovement(T3Vector3(1,0,0));
 //
-//		
-//				/*cout<<"bRbbbbbbbbbbbbbbbbbbbb"<<R<<endl;
-//				
-//				cout<<"bYbbbbbbbbbbbbbbbbbbbb"<<car->GetCarNode().GetOrientation().y<<endl;
-//				cout<<"bEbbbbbbbbbbbbbbbbbbbb"<<((car->GetCarNode().GetOrientation().y)+R)<<endl;*/
 //
 //				//float E=R+(car->GetCarNode().GetOrientation().y);
 //			   //f=1200;
@@ -1001,16 +981,12 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 //				//  car->GetCarNode().SetForce(T3Vector3(10+f,0,0));
 //			   if(((car->GetCarNode().GetOrientation().y)+R)==0)
 //		       {
-//				   //cout<<"b1bbbbbbbbbbbbbbbbbbbb"<<(car->GetCarNode().GetOrientation().y)+R<<endl;
 //				   car->GetCarNode().SetForce(T3Vector3(f /*+ 100.0f*/,0,0));   
 //					//		    f=f+100;
 //		       }
-//			 // cout<<car->GetCarNode().GetLinearVelocity().Length ()<<endl;
 //
-//			   //cout<<car->GetCarNode().GetLinearVelocity().Length()<<endl;
 //				if(((car->GetCarNode().GetOrientation().y)+R)<0)
 //				{
-//					//cout<<"b2bbbbbbbbbbbbbbbbbbbb"<<car->GetCarNode().GetOrientation().y<<endl;
 //					float angle=-0.5/90*((car->GetCarNode().GetOrientation().y)+R);
 //					float l=  car->GetCarNode().GetLinearVelocity().Length();
 //					float x=l*sin(angle/2/3.14);
@@ -1027,7 +1003,6 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 //
 //				if(((car->GetCarNode().GetOrientation().y)+R)>0)
 //				{
-//					//cout<<"b3bbbbbbbbbbbbbbbbbbbb"<<((car->GetCarNode().GetOrientation().y)+0.707107)<<endl;
 //					float angle=0.5/90*((car->GetCarNode().GetOrientation().y)+R);
 //					float l=  car->GetCarNode().GetLinearVelocity().Length();
 //					float x=-l*sin(angle/2/3.14);
@@ -1138,7 +1113,6 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 //			  car->GetCarNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
 //
 //		
-//			// cout<< car->GetCarNode().GetOrientation().y<<endl;
 //			/* float angle=-0.5/90*FrontRightTire->GetPhysicsNode().GetOrientation().y;
 //
 //		    float l=  car->GetCarNode().GetLinearVelocity().Length();
@@ -1148,7 +1122,6 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 //	       f=f+100;*/
 //		////Player->GetPhysicsNode().SetForce(Vector3(0,0,0.3+f));  
 //		// car->GetCarNode().SetForce(T3Vector3(x+f,0,z+f));
-//		//	 cout<< car->GetCarNode().GetOrientation().y<<endl;
 //			 
 //		
 //		
@@ -1186,7 +1159,6 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 //			 BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 //		     BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 //			  car->GetCarNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
-//			 //cout<< car->GetCarNode().GetOrientation().y<<endl;
 //		}			
 //				/*float angle=0.5/90*FrontRightTire->GetPhysicsNode().GetOrientation().y;
 //

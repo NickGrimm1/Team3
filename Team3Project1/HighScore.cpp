@@ -106,7 +106,6 @@ void HighScore::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 void HighScore::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button) {
 	if (type == GamepadEvents::BUTTON_PRESS && button == GamepadEvents::INPUT_CROSS_A) { // same action as return on keyboard
 		if (currentPos < 3) {
-			cout << "key pressed" << endl;
 			currentPos++;
 		}
 		else {
