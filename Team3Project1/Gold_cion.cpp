@@ -7,11 +7,11 @@ Gold_cion::Gold_cion(float size):
 	carPhysicNode(carPhysicNode) 
 {
 	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj");
-	T3Vector3 position =T3Vector3(100, -2, 0);
+	T3Vector3 position =T3Vector3(100.0f, -2.0f, 0.0f);
 	boundingRadius = size;
 	origin = position;
 	rotation = Quaternion::EulerAnglesToQuaternion(0,0,0);
-	scale = T3Vector3(0.3*size,0.3*size,0.3*size);
+	scale = T3Vector3(0.3f*size,0.3f*size,0.3f*size);
 	texture =NULL;
 	bumpTexture = NULL;
 	shader = NULL;
@@ -35,13 +35,13 @@ void Gold_cion::SetPhysics(float size)
     physicsNode->SetInverseMass(0);
 	
 
-	physicsNode->SetCollisionVolume(new CollisionAABB(T3Vector3(0.3*size,0.3*size,0.3*size)));
+	physicsNode->SetCollisionVolume(new CollisionAABB(T3Vector3(0.3f*size,0.3f*size,0.3f*size)));
 	physicsNode->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj"));
-	physicsNode->SetXstart(physicsNode->GetPosition().x-1*size);
-	physicsNode->SetXend(physicsNode->GetPosition().x+1*size); 
+	physicsNode->SetXstart(physicsNode->GetPosition().x-1.0f*size);
+	physicsNode->SetXend(physicsNode->GetPosition().x+1.0f*size); 
 	physicsNode->SetIsCollide(true);
 	physicsNode->Setcar_wheel(true);
-	physicsNode->SetInverseInertia(InertialMatrixHelper::createCuboidInvInertial(5,size,size,size));
+	physicsNode->SetInverseInertia(InertialMatrixHelper::createCuboidInvInertial(5.0f,size,size,size));
 
 
 
@@ -57,8 +57,8 @@ void Gold_cion::SetPhysics(float size,char type,T3Vector3 position,const Quatern
 	physicsNode->SetInverseMass(0);
 
 	physicsNode->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj"));
-	physicsNode->SetXstart(physicsNode->GetPosition().x-1*size);
-	physicsNode->SetXend(physicsNode->GetPosition().x+1*size); 
+	physicsNode->SetXstart(physicsNode->GetPosition().x-1.0f*size);
+	physicsNode->SetXend(physicsNode->GetPosition().x+1.0f*size); 
 	physicsNode->SetType(type);
 	physicsNode->SetOrientation(rotation);
 	physicsNode->SetCollisionVolume(new CollisionAABB(T3Vector3(size,size,size)));

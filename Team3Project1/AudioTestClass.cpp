@@ -55,7 +55,7 @@ void AudioTestClass::Update() {
 	//GameStateManager::Audio()->PlaySoundW(laser,SOUNDPRIORITY_ALWAYS);
 	//GameStateManager::Audio()->PlaySoundW(GameStateManager::Audio()->GetSound("../Sounds/Tokyo Drift2.wav"),SOUNDPRIORITY_ALWAYS);
 	GameStateManager::Audio()->Update ((1000.0f / ( float ) RENDER_HZ ));
-	CurrentTime=timer.GetMS();
+	CurrentTime=(float)timer.GetMS();
 	/*if(bgm1==false&&CurrentTime>=0&&CurrentTime<=62000){
 		GameStateManager::Audio()-> PlaySound (BGM1,SOUNDPRIORITY_ALWAYS, false);
 		bgm1=true;
@@ -71,45 +71,44 @@ void AudioTestClass::Update() {
 }
 
 void AudioTestClass::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
-	switch (type) {
-	case KeyboardEvents::KEY_HELD:
-		switch(key){
-		//	case KeyboardEvents::KEYBOARD_W:
-		//	GameStateManager::Audio()-> PlaySound (laser1,SOUNDPRIORITY_ALWAYS, false);
-		}
-	case KeyboardEvents::KEY_PRESS:
-		switch(key){
-		//case KeyboardEvents::KEYBOARD_W:
-		//	if(!pressonce2){
-		//	GameStateManager::Audio()-> PlaySound (laser1,SOUNDPRIORTY_LOW , false);
-		//	break;
-		//	pressonce2 = true;
-		//	}
-		//	
-		//case KeyboardEvents::KEYBOARD_SPACE:
-		//	if (!pressonce) {
-		//	GameStateManager::Audio()-> PlaySound (laser3,SOUNDPRIORTY_LOW, false);//SOUNDPRIORTY_LOW);
-		//	break;
-		//	pressonce = true;
-		//	}
-	
-		case KeyboardEvents::KEYBOARD_ESCAPE:
-			GameStateManager::Instance()->Exit();
-			break;
-
-	    /*case KeyboardEvents::KEYBOARD_4:
-			PlaySound(TEXT("../Sounds/36847__ecodtr__laserrocket2.wav"),NULL,SND_ASYNC|SND_LOOP);
-		break;*/
-		}
-	break;
-	
+//	switch (type) {
+//	case KeyboardEvents::KEY_HELD:
+//		switch(key){
+//		//	case KeyboardEvents::KEYBOARD_W:
+//		//	GameStateManager::Audio()-> PlaySound (laser1,SOUNDPRIORITY_ALWAYS, false);
+//		}
 //	case KeyboardEvents::KEY_PRESS:
-//		switch (key) {
+//		switch(key){
+//		//case KeyboardEvents::KEYBOARD_W:
+//		//	if(!pressonce2){
+//		//	GameStateManager::Audio()-> PlaySound (laser1,SOUNDPRIORTY_LOW , false);
+//		//	break;
+//		//	pressonce2 = true;
+//		//	}
+//		//	
+//		//case KeyboardEvents::KEYBOARD_SPACE:
+//		//	if (!pressonce) {
+//		//	GameStateManager::Audio()-> PlaySound (laser3,SOUNDPRIORTY_LOW, false);//SOUNDPRIORTY_LOW);
+//		//	break;
+//		//	pressonce = true;
+//		//	}
+//	
 //		case KeyboardEvents::KEYBOARD_ESCAPE:
 //			GameStateManager::Instance()->Exit();
 //			break;
-//		} 
-	}
+//
+//	    /*case KeyboardEvents::KEYBOARD_4:
+//			PlaySound(TEXT("../Sounds/36847__ecodtr__laserrocket2.wav"),NULL,SND_ASYNC|SND_LOOP);
+//		break;*/
+//		}
+//	break;
+//	
+////	case KeyboardEvents::KEY_PRESS:
+////		switch (key) {
+////		case KeyboardEvents::KEYBOARD_ESCAPE:
+////			GameStateManager::Instance()->Exit();
+////			break;
+////		} 
+//	}
 }
-
 #endif
