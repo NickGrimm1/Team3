@@ -36,7 +36,7 @@ void PhysicsEngine::ThreadRun()
 #endif
 		frameRate = (int)(1000.0f / msec);
 
-#if WINDOWS_BUILD
+
 		//NarrowPhaseCollisions();
 
 		narrowlist.clear();
@@ -50,10 +50,10 @@ void PhysicsEngine::ThreadRun()
 			narrowlist.push_back((*i));
 		}
 		BroadPhaseCollisions();
-#endif
+
 	}
 }
-#if WINDOWS_BUILD
+
 T3Vector3 PhysicsEngine::support(PhysicsNode& shape1,PhysicsNode& shape2, T3Vector3 dir)
 {
 	
@@ -451,7 +451,7 @@ void  PhysicsEngine::SortandSweep()
 	
 #if WINDOWS_BUILD
 	std::sort(narrowlist.begin(),narrowlist.end(), [](PhysicsNode* xleft, PhysicsNode* xright){return xleft->GetPosition().x < xright->GetPosition().x;});
-
+#endif
 	for( vector<PhysicsNode*>::iterator i=narrowlist.begin(); i <narrowlist.end(); ++i) 
 	{
 		for( vector<PhysicsNode*>::iterator j= i +1; j !=narrowlist.end(); ++j) 
@@ -563,7 +563,7 @@ void  PhysicsEngine::SortandSweep()
 				}
 		}
 	}
-#endif
+
 	
 	
 
@@ -879,12 +879,18 @@ void PhysicsEngine::AddCarEdge(PhysicsNode & shape1)
 	//c4 = T3Matrix4::Translation(shape1.GetTarget()->GetOriginPosition()) * shape1.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape1.GetTarget()->GetScale()) * c4;
 	c4.x = c4.x + (shape1.GetTarget()->GetScale().x) *1.5f *0.5f;
 	c4.z = c4.z + (shape1.GetTarget()->GetScale().z) *3.5f *0.5f;
-
+#if PS3_BUILD
+	lst_Car_Edge.push_back(c1);
+	lst_Car_Edge.push_back(c2);
+	lst_Car_Edge.push_back(c3);
+	lst_Car_Edge.push_back(c4);
+#endif
+#if WINDOWS_BUILD
 	lst_Car_Edge.emplace_back(c1,c2);
 	lst_Car_Edge.emplace_back(c2,c3);
 	lst_Car_Edge.emplace_back(c3,c4);
 	lst_Car_Edge.emplace_back(c4,c1);
-
+#endif
 }
 
 // Add the lines of track's left and right 
@@ -1203,4 +1209,3 @@ void PhysicsEngine::OnCollision(PhysicsNode& p1, PhysicsNode& p2)
 	gameClass->CollisionBetween(p1.GetGameEntity(),p2.GetGameEntity());
 }
 }
-#endif

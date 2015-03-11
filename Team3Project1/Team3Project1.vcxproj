@@ -369,7 +369,6 @@
     <ClCompile Include="..\Framework\OGLRenderer.cpp" />
     <ClCompile Include="..\Framework\ParticleEmitter.cpp" />
     <ClCompile Include="..\Framework\PhysicsNode.cpp" />
-    <ClCompile Include="..\Framework\PhysicsSystem.cpp" />
     <ClCompile Include="..\Framework\Plane.cpp" />
     <ClCompile Include="..\Framework\Quaternion.cpp" />
     <ClCompile Include="..\Framework\SceneNode.cpp" />
