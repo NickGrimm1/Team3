@@ -76,7 +76,9 @@ GraphicsEngine::GraphicsEngine()
 		return;
 #endif
 
+#if WINDOWS_BUILD
 	renderer->SetLoadingIcon(loadingIcon);
+#endif
 
 	isInitialised = true; // Graphics Engine has initialised successfully
 }
@@ -266,12 +268,26 @@ void GraphicsEngine::Run() {
 #endif
 			isLoadingDrawing = true;
 		}
-		else if (!isLoading && isLoadingDrawing) {
-			for (unsigned int i = 0; i < overlayElementsList.size(); i++) {
-				if (overlayElementsList[i] == loadingIcon) {
+		else if (!isLoading && isLoadingDrawing) 
+		{
+#if WINDOWS_BUILD
+			for (unsigned int i = 0; i < overlayElementsList.size(); i++) 
+			{
+				if (overlayElementsList[i] == loadingIcon) 
+				{
 					overlayElementsList.erase(overlayElementsList.begin() + i);
 				}
 			}
+#endif
+#if PS3_BUILD
+			for (unsigned int i = 0; i < overlayTexturesList.size(); i++) 
+			{
+				if (overlayTexturesList[i] == loadingIcon) 
+				{
+					overlayTexturesList.erase(overlayTexturesList.begin() + i);
+				}
+			}
+#endif
 		}
 
 //		if (isLoadingDrawing) {

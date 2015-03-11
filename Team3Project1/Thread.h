@@ -10,7 +10,7 @@
 #include<sys/paths.h>
 #include<stdlib.h>
 
-#define PPU_STACK_SIZE 4096
+#define PPU_STACK_SIZE 32768
 #define PPU_PRIORITY 200
 #endif
 using std::vector;

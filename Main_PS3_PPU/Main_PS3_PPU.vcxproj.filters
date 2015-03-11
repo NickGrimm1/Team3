@@ -27,14 +27,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Resources\Shaders\TexturedFragment.cg">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\TexturedVertex.cg">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\BlendedFragment.cg">
-      <Filter>Shaders</Filter>
-    </None>
+    <CustomBuild Include="..\Resources\Shaders\TexturedFragment.cg" />
+    <CustomBuild Include="..\Resources\Shaders\TexturedVertex.cg" />
+    <CustomBuild Include="..\Resources\Shaders\BlendedFragment.cg" />
   </ItemGroup>
 </Project>
