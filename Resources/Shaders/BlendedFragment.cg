@@ -1,7 +1,7 @@
 void main
 (
 	float4 color_in      : COLOR,
-	float2 texcoord		 : TEXCOORD0,
+	float2 texcoord		 : TEXCOORD1,
 	uniform samplerRECT diffuseTex,
 	uniform float4 blendColour,
 		
@@ -19,4 +19,7 @@ void main
 	{
 		color_out = texColor * blendColour;
 	}
+
+	//color_out = texColor * blendColour;
+	//color_out += blendColour;
 }

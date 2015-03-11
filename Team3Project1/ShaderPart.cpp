@@ -206,15 +206,15 @@ void ShaderPart::SetDefaultAttributes() {
 	*/
 	CGparameter position_param	= cellGcmCgGetNamedParameter(program, "position");
 	CGparameter normal_param	= cellGcmCgGetNamedParameter(program, "normal");
-	CGparameter tangent_param	= cellGcmCgGetNamedParameter(program, "tangent");
 	CGparameter colour_param	= cellGcmCgGetNamedParameter(program, "color");
 	CGparameter tex_param		= cellGcmCgGetNamedParameter(program, "texCoord");
+	CGparameter tangent_param	= cellGcmCgGetNamedParameter(program, "tangent");
 	
 	//And now save out the actual resources (the name of the input registers they'll use)
 	attributes[VertexAttributes::POSITION]	= (position_param == 0) ? -1 : cellGcmCgGetParameterResource(program, position_param) - CG_ATTR0;
+	attributes[VertexAttributes::NORMAL]	= (normal_param	  == 0) ? -1 : cellGcmCgGetParameterResource(program, normal_param)	  - CG_ATTR0;
 	attributes[VertexAttributes::COLOUR]	= (colour_param	  == 0) ? -1 : cellGcmCgGetParameterResource(program, colour_param)	  - CG_ATTR0;
 	attributes[VertexAttributes::TEXCOORD]  = (tex_param	  == 0) ? -1 : cellGcmCgGetParameterResource(program, tex_param)	  - CG_ATTR0;
-	attributes[VertexAttributes::NORMAL]	= (normal_param	  == 0) ? -1 : cellGcmCgGetParameterResource(program, normal_param)	  - CG_ATTR0;
 	attributes[VertexAttributes::TANGENT]	= (tangent_param  == 0) ? -1 : cellGcmCgGetParameterResource(program, tangent_param)  - CG_ATTR0;
 }
 

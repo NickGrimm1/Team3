@@ -25,7 +25,7 @@ Renderer::Renderer(vector<Light*>& lightsVec, vector<SceneNode*>& SceneNodesVec,
 	// Setup projection matrices - gonna just keep copies of the matrices rather than keep recreating them
 	perspectiveMatrix = Matrix4::perspective(0.7853982, screenRatio, 1.0f, 10000.0f);
 	orthographicMatrix = Matrix4::orthographic(-1,1,1,-1,1,-1); // for drawing full screen quads
-	hudMatrix = Matrix4::orthographic(-1.0f, 1.0f, 1920, 0.0f, 0.0f, 1080); // For HUD Elements only
+	hudMatrix = Matrix4::orthographic(0.0f, screenWidth, 1080.0f, 0.0f, -10.0f, 10.0f); // For HUD Elements only
 	
 	//Creation of buffers.
 	//GenerateScreenTexture(gbufferNormalTex);
@@ -1103,7 +1103,7 @@ void Renderer::Draw2DOverlay()
 	for (unsigned int i = 0; i < overlayTextures.size(); i++) 
 	{
 		std::cout << "Draw 2D: Setting Blend Colour" << std::endl;
-		shader->GetFragment()->SetParameter("blendColour", (float*)(overlayTextures[i]->GetColor()));
+		shader->GetFragment()->SetParameter("blendColour", (float*)T3Vector4(1,1,1,1)/*(overlayTextures[i]->GetColor())*/);
 		
 		if (overlayTextures[i]->GetTransparent())
 			cellGcmSetBlendEnable(CELL_GCM_TRUE);
@@ -1117,7 +1117,7 @@ void Renderer::Draw2DOverlay()
 	for (unsigned int i = 0; i < overlayTexts.size(); i++) 
 	{
 		std::cout << "Draw 2D: Setting Blend Colour" << std::endl;
-		shader->GetFragment()->SetParameter("blendColour", (float*)(overlayTexts[i]->GetColor()));
+		shader->GetFragment()->SetParameter("blendColour", (float*)T3Vector4(1,1,1,1)/*(float*)(overlayTexts[i]->GetColor())*/);
 
 		Draw2DText(*overlayTexts[i]);
 	}
@@ -1149,7 +1149,7 @@ void Renderer::Draw2DText(DrawableText2D& text)
 			}
 			std::cout << "Created Text Mesh" << std::endl;
 			string t = text.GetText();
-			loadedTextMeshes.insert(pair<string, TextMesh*>(t, textMesh));
+			loadedTextMeshes.insert(std::pair<std::string, TextMesh*>(t, textMesh));
 			std::cout << "Stored Text Mesh" << std::endl;
 		}
 		else 
