@@ -42,9 +42,9 @@ void VehicleTestingScreen::LoadContent() {
 	//AddDrawable(ent);
 	
 
-	T3Vector3 sp1= T3Vector3(100,0,0);
-	T3Vector3 sp2= T3Vector3(200,0,0);
-	T3Vector3 sp3= T3Vector3(300,0,0);
+	T3Vector3 sp1= T3Vector3(-100,0,0);
+	T3Vector3 sp2= T3Vector3(0,0,0);
+	T3Vector3 sp3= T3Vector3(100,0,0);
 	SplinePoint.push_back(sp1);
 	SplinePoint.push_back(sp2);
 	SplinePoint.push_back(sp3);
@@ -61,7 +61,7 @@ void VehicleTestingScreen::LoadContent() {
 		road->SetTexture(grassTex2);
 		road->SetBumpTexture(NULL);
 		road->SetBoundingRadius(800.0f);
-		road->SetOriginPosition(T3Vector3(-200,-20,0));
+		road->SetOriginPosition(T3Vector3(0,-20,0));
 		road->SetRotation(Quaternion::EulerAnglesToQuaternion(0,0,0));
 		road->SetScale(T3Vector3(1,1,1));
 		road->GetPhysicsNode().SetMass(5);
@@ -71,7 +71,7 @@ void VehicleTestingScreen::LoadContent() {
 		road->GetPhysicsNode().SetIsCollide(true);
 	    road->GetPhysicsNode().Setcar_wheel(true);
 		road->GetPhysicsNode().Setplanecollision(true);
-		road->GetPhysicsNode().SetPosition(T3Vector3(-200,-20,0));
+		road->GetPhysicsNode().SetPosition(T3Vector3(0,-20,0));
 		road->GetPhysicsNode().SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
 		road->ConnectToSystems();
 		AddDrawable(road);
@@ -241,7 +241,7 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 			{//camera->AddMovement(T3Vector3(1,0,0));
 
 
-				if(car->GetCarNode().GetLinearVelocity().x>0)
+				if(car->GetCarNode().GetLinearVelocity().x>=0)
 				{
 				FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 		     FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
@@ -268,7 +268,7 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 		case KeyboardEvents::KEYBOARD_D:
 			{//camera->AddMovement(T3Vector3(-1,0,0));
 			
-		if(car->GetCarNode().GetLinearVelocity().x>0)
+		if(car->GetCarNode().GetLinearVelocity().x>=0)
 			  {
 			 FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
 		     FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));

@@ -57,7 +57,7 @@ GraphicsEngine::GraphicsEngine()
 	renderer = new Renderer(Window::GetWindow(), lights, gameEntityList, overlayElementsList);
 	if (!renderer->HasInitialised()) return;
 	
-	GLuint loadingTex = renderer->CreateTexture("refresh", false, false, SOIL_FLAG_INVERT_Y);
+	GLuint loadingTex = renderer->CreateTexture(TEXTUREDIR"refresh.png", false, false, SOIL_FLAG_INVERT_Y);
 
 	isLoading = true;
 	isLoadingDrawing = false;
@@ -247,11 +247,11 @@ void GraphicsEngine::Run()
 			BuildNodeLists(sceneRoot);
 			SortNodeLists();
 		}
-		// Update directional lights with scene bounding box
+		// Update directional lights with scene bounding box - NOT WORKING
 		// Transform bounding volume by camera transform
-#if WINDOWS_BUILD
-		DirectionalLight::UpdateLightVolume(boundingMin, boundingMax);
-#endif
+//#if WINDOWS_BUILD
+//		DirectionalLight::UpdateLightVolume(boundingMin, boundingMax);
+//#endif
 
 		// Sort HUD elements
 #if WINDOWS_BUILD
@@ -298,10 +298,6 @@ void GraphicsEngine::Run()
 			}
 #endif
 		}
-
-//		if (isLoadingDrawing) {
-//			loadingIcon->SetRotation(loadingIcon->GetRotation() + 1.0f);
-//		}
 
 		//Update the day/night float
 		renderer->SetDayNight(DayNightCycle());
@@ -361,19 +357,20 @@ void GraphicsEngine::BuildNodeLists(SceneNode* from) {
 			T3Vector3 dir = from->GetWorldTransform().GetPositionVector() - camera->GetPosition();
 			from->SetCameraDistance(T3Vector3::Dot(dir, dir)); // gonna save ourselves a sqrt and compare distance^2
 
-			T3Vector3 pos = from->GetWorldTransform().GetPositionVector();
+			// Update scene AABB for directional lighting - NOT WORKING
+			/*T3Vector3 pos = from->GetWorldTransform().GetPositionVector();
 			float boundingRadius = from->GetDrawableEntity()->GetBoundingRadius();
 			if (pos.x - boundingRadius < boundingMin.x) boundingMin.x = pos.x - boundingRadius; 
 			if (pos.y - boundingRadius < boundingMin.y) boundingMin.y = pos.y - boundingRadius; 
 			if (pos.z - boundingRadius < boundingMin.z) boundingMin.z = pos.z - boundingRadius;
 			if (pos.x + boundingRadius > boundingMax.x) boundingMax.x = pos.x + boundingRadius; 
 			if (pos.y + boundingRadius > boundingMax.y) boundingMax.y = pos.y + boundingRadius; 
-			if (pos.z + boundingRadius > boundingMax.z) boundingMax.z = pos.z + boundingRadius;
+			if (pos.z + boundingRadius > boundingMax.z) boundingMax.z = pos.z + boundingRadius;*/
 
-			if (from->GetColour().w < 1.0f)
+//			if (from->GetColour().w < 1.0f)	 - 3D TRANSPARENCIES NOT IMPLEMENTED
 				//transparent - add to transparent list
-				transparentGameEntityList.push_back(from);
-			else
+//				transparentGameEntityList.push_back(from);
+//			else
 				gameEntityList.push_back(from);
 #if WINDOWS_BUILD
 		}
@@ -486,13 +483,11 @@ void GraphicsEngine::SetCamera(Camera* cam)
 
 bool GraphicsEngine::LoadContent()
 {
-	return (engine->renderer->LoadShaders() &&
-				engine->renderer->LoadAssets());
+	return engine->renderer->LoadAssets();
 }
 
 void GraphicsEngine::UnloadContent()
 {
-	engine->renderer->UnloadShaders();
 	engine->renderer->UnloadAssets();
 }
 

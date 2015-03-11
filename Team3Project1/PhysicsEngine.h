@@ -63,11 +63,14 @@ public:
 	bool GJK(PhysicsNode& shape1,PhysicsNode& shape2);
 	bool containsOrigin( T3Vector3& dir);
     bool CollisionDetection(PhysicsNode& shape1,PhysicsNode& shape2);
+
 	bool EPA(PhysicsNode& shape1, PhysicsNode& shape2, CollisionData* data);
 	void barycentric(const T3Vector3 &p, const T3Vector3 &a, const T3Vector3 &b, const T3Vector3 &c, float *x, float *y, float *z);
+	void AddCarEdge(PhysicsNode & shape1);
+	void AddTrackEdge(PhysicsNode & shape1);
+	bool TrackDetection();
 	
 	//sam
-	bool   check;
 	static void SetGame(RacerGame * g) { instance->gameClass = g; }
 	//sam
 
@@ -86,7 +89,7 @@ public:
 
 	void	RemoveDebugDraw(DebugDrawer* d);
 
-	void OnCollision(PhysicsNode& p1, PhysicsNode& p2);
+	void    OnCollision(PhysicsNode& p1, PhysicsNode& p2);
 
 	void    DrawDebug();
 private:
@@ -95,7 +98,7 @@ private:
 		: PHYSICS_TIME(1000.0f / 120)
 	{
 		frameRate = 0;
-		check=true;
+		gameClass = NULL;
 	}
 #endif
 #if PS3_BUILD
@@ -103,6 +106,7 @@ private:
 		: Thread(Run), PHYSICS_TIME(1000.0f / 120)
 	{
 		frameRate = 0;
+		gameClass = NULL;
 	}
 #endif
 
@@ -118,6 +122,7 @@ private:
 	float lastFrameTimeStamp;
 	int frameRate;
 
+	bool  isDrop;
 	void ThreadRun();
 	RacerGame* gameClass;
 };

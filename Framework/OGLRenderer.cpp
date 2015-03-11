@@ -179,14 +179,13 @@ your application.
 */
 void OGLRenderer::SwapBuffers() {
 	if(!debugDrawingRenderer) {
-		
 		debugDrawingRenderer = this;	
 	}
 
 	if(debugDrawingRenderer == this) {
-		/*if(!drawnDebugOrtho) {
+		if(!drawnDebugOrtho) {
 			DrawDebugOrtho();
-		}*/
+		}
 		if(!drawnDebugPerspective) {
 			DrawDebugPerspective();
 		}
@@ -293,41 +292,45 @@ void OGLRenderer::DebugCallback(GLuint source, GLuint type,GLuint id, GLuint sev
 #endif
 
 void	OGLRenderer::DrawDebugPerspective(T3Matrix4*matrix)  {
-	glUseProgram(debugDrawShader->GetProgram());
+	if (debugDrawShader != NULL) {
+		glUseProgram(debugDrawShader->GetProgram());
 
-	if(matrix) {
-		glUniformMatrix4fv(glGetUniformLocation(debugDrawShader->GetProgram(), "viewProjMatrix"),	1,false, (float*)matrix);
-	}
-	else{
+		if(matrix) {
+			glUniformMatrix4fv(glGetUniformLocation(debugDrawShader->GetProgram(), "viewProjMatrix"),	1,false, (float*)matrix);
+		}
+		else{
 		
-		T3Matrix4 temp = projMatrix*viewMatrix;
-		glUniformMatrix4fv(glGetUniformLocation(debugDrawShader->GetProgram(), "viewProjMatrix"),	1,false, (float*)&temp);
-	}
+			T3Matrix4 temp = projMatrix*viewMatrix;
+			glUniformMatrix4fv(glGetUniformLocation(debugDrawShader->GetProgram(), "viewProjMatrix"),	1,false, (float*)&temp);
+		}
 
-	perspectiveDebugData->Draw();
+		perspectiveDebugData->Draw();
 	
-	perspectiveDebugData->Clear();
-	drawnDebugPerspective = true;
-	SetCurrentShader(currentShader);
+		perspectiveDebugData->Clear();
+		drawnDebugPerspective = true;
+		SetCurrentShader(currentShader);
+	}
 }
 
 
 void	OGLRenderer::DrawDebugOrtho(T3Matrix4*matrix) {
-	glUseProgram(debugDrawShader->GetProgram());
+	if (debugDrawShader != NULL) {
+		glUseProgram(debugDrawShader->GetProgram());
 
-	if(matrix) {
-		glUniformMatrix4fv(glGetUniformLocation(debugDrawShader->GetProgram(), "viewProjMatrix"),	1,false, (float*)matrix);
+		if(matrix) {
+			glUniformMatrix4fv(glGetUniformLocation(debugDrawShader->GetProgram(), "viewProjMatrix"),	1,false, (float*)matrix);
+		}
+		else{
+			static T3Matrix4 ortho = T3Matrix4::Orthographic(-1,1,720,0,0,480);
+			glUniformMatrix4fv(glGetUniformLocation(debugDrawShader->GetProgram(), "viewProjMatrix"),	1,false, (float*)&ortho);
+		}
+
+		orthoDebugData->Draw();
+
+		orthoDebugData->Clear();
+		drawnDebugOrtho = true;
+		SetCurrentShader(currentShader);
 	}
-	else{
-		static T3Matrix4 ortho = T3Matrix4::Orthographic(-1,1,720,0,0,480);
-		glUniformMatrix4fv(glGetUniformLocation(debugDrawShader->GetProgram(), "viewProjMatrix"),	1,false, (float*)&ortho);
-	}
-
-	//orthoDebugData->Draw();
-
-	orthoDebugData->Clear();
-	drawnDebugOrtho = true;
-	SetCurrentShader(currentShader);
 }
 
 void	OGLRenderer::DrawDebugLine  (DebugDrawMode mode, const T3Vector3 &from,const T3Vector3 &to,const T3Vector3 &fromColour,const T3Vector3 &toColour) {

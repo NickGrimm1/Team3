@@ -12,8 +12,8 @@
 #include "../Team3Project1/RacerGame.h"
 
 
-#define LINEAR_VELOCITY_DAMP 0.92
-#define ANGULAR_VELOCITY_DAMP 0.7
+#define LINEAR_VELOCITY_DAMP 0.988
+#define ANGULAR_VELOCITY_DAMP 0.998
 #define LINEAR_VELOCITY_MIN 0.00001
 
 class VehiclePhysicsNode : public PhysicsNode	
@@ -40,7 +40,7 @@ public:
 		BackRightTire->SetPosition(T3Vector3(car->GetPosition().x-11,car->GetPosition().y-2,car->GetPosition().z+8));
 		BackLeftTire->SetPosition(T3Vector3(car->GetPosition().x-11,car->GetPosition().y-2,car->GetPosition().z-5));*/
 		
-	
+		
 		
 	    PhysicsNode:: Update( msec);
 

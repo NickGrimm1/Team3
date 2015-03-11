@@ -53,6 +53,15 @@ enum GCMResolution {
 	GCM_RESOLUTION_MAX  = 6
 };
 
+enum Buffers
+{
+	GCM_SKYBOX_BUFFER	= 0,
+	GCM_TEXTURE_BUFFER	= 1, 
+	GCM_SHADOW_BUFFER	= 2,
+	GCM_LIGHT_BUFFER	= 3,
+	GCM_MAX_BUFFERS		= 4
+};
+
 
 //typedef struct {
 //	uint32_t Version;
@@ -133,7 +142,8 @@ protected:
 	SceneNode*		root;			//The scenegraph the renderer is drawing
 
 	CellGcmSurface surfaces[2];			//Front and back buffers
-		
+	CellGcmSurface graphicsSurfaces[4]; // graphics buffers	
+
 	unsigned int depthOffset;			//Pointer to our depth buffer
 	unsigned int depthPitch;			//Pitch of our depth buffer
 
