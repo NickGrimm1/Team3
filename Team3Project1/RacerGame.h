@@ -101,8 +101,12 @@ public:
 		  {
 			  obj2->GetPhysicsNode().SetIsCollide(false);
 			  SetScore(1);
+#ifdef WINDOWS_BUILD
 			 // SoundManager::AddSound(SOUNDSDIR"Tokyo Drift2.wav");
 			 // GameStateManager::Audio()->PlaySoundW(GameStateManager::Audio()->GetSound(SOUNDSDIR"Tokyo Drift2.wav"),SOUNDPRIORITY_ALWAYS);
+			  GameStateManager::Audio()->PlaySound(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
+#endif			  
+			  cout<< "total point ="<<GetScore()<<endl; 
 			  GameStateManager::Graphics()->RemoveDrawable(obj1);
 	          obj1->DisconnectFromSystems();
 			  pickup.erase(pickup.begin());
@@ -124,7 +128,7 @@ public:
 private:
 	Mesh* quad;
 	Mesh* cylinder;
-	int score;
+	float score;
 	float Time;
 	int PlayTime;
 	int timeOrScore;

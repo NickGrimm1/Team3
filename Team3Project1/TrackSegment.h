@@ -26,7 +26,14 @@ public:
 
 	void DrawSpline();
 	void DrawTrackBoundaries();
+	
+#ifdef WINDOWS_BUILD
 	virtual void Draw();
+#endif
+
+#ifdef PS3_BUILD
+	virtual void Draw(Shader* s);
+#endif
 
 	T3Vector3 GetTrackCentreLeft() const;
 	T3Vector3 GetTrackCentreRight() const;

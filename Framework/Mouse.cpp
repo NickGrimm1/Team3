@@ -47,8 +47,8 @@ void Mouse::Update(RAWINPUT* raw, float msec)
 		// If the mouse cursor isn't visible, lock to the center of the screen...
 		if (!isCursorVisible)
 		{
-			position.x = Window::GetWindow().GetScreenSize().x / 2;
-			position.y = Window::GetWindow().GetScreenSize().y / 2;
+			position.x = Window::GetWindow().GetScreenSize().x / 2.0f;
+			position.y = Window::GetWindow().GetScreenSize().y / 2.0f;
 			cursorPos.x = position.x;
 			cursorPos.y = position.y;
 			ClientToScreen(Window::GetWindow().GetHandle(), &cursorPos);
@@ -101,7 +101,7 @@ void Mouse::Update(RAWINPUT* raw, float msec)
 					// Mouse Down
 					GameStateManager::Instance()->MouseEvent(MouseEvents::BUTTON_DOWN, (MouseEvents::MouseButtons)i, resIndependentPosition);
 					buttons[i] = true;
-					lastMouseDown[i] = 0;
+					lastMouseDown[i] = 0.0f;
 				}
 				else
 				{
@@ -124,7 +124,7 @@ void Mouse::Update(RAWINPUT* raw, float msec)
 					if (lastClickTime[i] < doubleClickLimit)
 					{
 						GameStateManager::Instance()->MouseEvent(MouseEvents::BUTTON_DOUBLECLICK, (MouseEvents::MouseButtons)i, resIndependentPosition);
-						lastClickTime[i] = 0;
+						lastClickTime[i] = 0.0f;
 					}
 				}
 			}

@@ -9,6 +9,12 @@ TrackSegment::TrackSegment(const T3Vector3& a, const T3Vector3& b, const T3Vecto
 #if WINDOWS_BUILD
 	// Now spline is built, generate mesh around it
 	trackMesh = new Vertex[numVertices * 2]; // left boundary then right boundary
+#endif
+#if PS3_BUILD
+	trackMesh = (Vertex*)GCMRenderer::localMemoryAlign(128, sizeof(Vertex) * (numVertices*2));
+	
+#endif
+	
 	T3Vector3 right;
 	T3Vector3 up = T3Vector3(0,1,0);
 	for (unsigned int i = 0; i < subdivisions; i++) {
@@ -41,7 +47,13 @@ TrackSegment::TrackSegment(const T3Vector3& a, const T3Vector3& b, const T3Vecto
 
 	// Build index VBO
 	numIndices = subdivisions * 6;
+#ifdef WINDOWS_BUILD
 	indices = new unsigned int[numIndices];
+#endif
+#if PS3_BUILD
+	indices = (short*)GCMRenderer::localMemoryAlign(128, sizeof(short) * (numIndices));
+#endif
+
 	unsigned int index = 0;
 	for (unsigned int i = 0; i < subdivisions; i++) {
 		indices[index++] = i;
@@ -53,6 +65,7 @@ TrackSegment::TrackSegment(const T3Vector3& a, const T3Vector3& b, const T3Vecto
 		indices[index++] = i + 1;
 	}
 
+#ifdef WINDOWS_BUILD
 	// Set up VBOs for the track mesh
 	glBindVertexArray(arrayObject); // makes our VAO object associated with the object name in arrayObject, the currently bound/active/operated on VAO
 	glGenBuffers(1, &trackVBO);
@@ -73,12 +86,13 @@ TrackSegment::~TrackSegment(void)
 #if WINDOWS_BUILD
 	// Mesh destructor should handle deletion of indices/texture coords
 	glDeleteBuffers(1, &trackVBO);
-	delete[] trackMesh;
 #endif
-}
+	delete[] trackMesh;
 
-void TrackSegment::Draw() {
+}
 #if WINDOWS_BUILD
+void TrackSegment::Draw() {
+
 	type = GL_TRIANGLES;
 
 	glBindVertexArray(arrayObject); // Make mesh VAO currently bound object
@@ -100,17 +114,34 @@ void TrackSegment::Draw() {
 	glDrawElements(type, numIndices, GL_UNSIGNED_INT, 0); 
 	
 	glBindVertexArray(0); // unbind current VAO
-#endif
+
 }
+#endif
+#if PS3_BUILD
+void TrackSegment::Draw(Shader* s)
+{
+	numVertices = numVertices * 2;
+
+	type = PrimitiveType::LINE_STRIP;
+	cellGcmAddressToOffset(&trackMesh->x, &vertexOffsets[VertexAttributes::POSITION]);
+	cellGcmAddressToOffset(&trackMesh->nX, &vertexOffsets[VertexAttributes::NORMAL]);
+	cellGcmAddressToOffset(&trackMesh->rgba, &vertexOffsets[VertexAttributes::COLOUR]);
+	cellGcmAddressToOffset(&trackMesh->tX, &vertexOffsets[VertexAttributes::TEXCOORD]);
+	cellGcmAddressToOffset(&trackMesh->tnX, &vertexOffsets[VertexAttributes::TANGENT]);
+	Mesh::Draw(s);
+	numVertices = numVertices / 2;
+}
+#endif
 
 void TrackSegment::DrawSpline() {
-#if WINDOWS_BUILD
-	Spline::Draw();
-#endif
+	
+//	Spline::Draw(); TODO
+
+
 }
 
 T3Vector3 TrackSegment::GetTrackCentreLeft() const {
-#if WINDOWS_BUILD
+
 	if (segments % 2 == 0) {
 		return trackMesh[segments / 2].GetPosition();
 	}
@@ -119,11 +150,11 @@ T3Vector3 TrackSegment::GetTrackCentreLeft() const {
 		unsigned int pos = segments / 2;
 		return (trackMesh[pos].GetPosition() + trackMesh[pos + 1].GetPosition()) / 2.0f;
 	}
-#endif
+
 }
 
 T3Vector3 TrackSegment::GetTrackCentreRight() const {
-	#if WINDOWS_BUILD
+	
 	if (segments % 2 == 0) {
 		return trackMesh[segments + (segments / 2) + 1].GetPosition();
 	}
@@ -133,5 +164,5 @@ T3Vector3 TrackSegment::GetTrackCentreRight() const {
 		return (trackMesh[pos].GetPosition() + trackMesh[pos + 1].GetPosition()) / 2.0f;
 	}
 	
-#endif
+
 }

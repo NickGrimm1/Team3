@@ -40,16 +40,16 @@ Vehicle::Vehicle(float size) {
 
 	//ConnectToSystems();
 
-	maxSpeed=T3Vector3(15,15,15);
+	maxSpeed=T3Vector3(15.0f,15.0f,15.0f);
 
 
 
 	Speed_Player = 5;
-	f=0;
-	temp2=T3Vector3(0,0,0);
-	Speed_Rotate = -0.0004;
+	f=0.0f;
+	temp2=T3Vector3(0.0f,0.0f,0.0f);
+	Speed_Rotate = -0.0004f;
 
-	tempPosition = T3Vector3(0,350,-800);
+	tempPosition = T3Vector3(0.0f,350.0f,-800.0f);
 }
 
 Vehicle::~Vehicle(void){
@@ -312,13 +312,13 @@ void Vehicle::SetPhysics(float size,PhysicsNode * a)
 	car->SetInverseMass(1.0f);
 	car->SetCollisionVolume(new CollisionAABB(T3Vector3(size ,size ,size )));
 	//car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"Carphysics.obj"));
-	car->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,-90,0));
+	car->SetOrientation(Quaternion::EulerAnglesToQuaternion(0.0f,-90.0f,0.0f));
 	//car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"CarPhysics.obj"));
 	//Quaternion Test=car->GetOrientation();
 	//car->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,-90,0));
 	//Quaternion Test2=car->GetOrientation();
-	car->SetXstart(car->GetPosition().x-3*size);
-	car->SetXend(car->GetPosition().x+3*size);                                                                                         
+	car->SetXstart(car->GetPosition().x-3.0f*size);
+	car->SetXend(car->GetPosition().x+3.0f*size);                                                                                         
 	car->SetInverseInertia(InertialMatrixHelper::createCuboidInvInertial(5.0f,size,size,size));
 
 	car->SetIsCollide(true);
