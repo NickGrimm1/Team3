@@ -11,7 +11,7 @@ Vehicle::Vehicle(float size) {
 	//TT =  SOIL_load_OGL_texture ("../../Texture/footballpitch.jpg", SOIL_LOAD_AUTO , SOIL_CREATE_NEW_ID , SOIL_FLAG_MIPMAPS);
 //	PlayerPosition=T3Vector3(500,100,-800);
 
-	T3Vector3 position =T3Vector3(0,8, 0);
+	T3Vector3 position =T3Vector3(0, 6, 0);
 	boundingRadius = size;
 	origin = position;
 	rotation = Quaternion::EulerAnglesToQuaternion(0,-90,0);
@@ -308,7 +308,8 @@ void Vehicle::SetPhysics(float size,PhysicsNode * a)
     car=a;
 	car->SetUseGravity(false);
 	car->SetPosition(origin);
-	car->SetMass(50);
+	car->SetMass(5);
+	car->SetInverseMass(1.0f);
 	car->SetCollisionVolume(new CollisionAABB(T3Vector3(size ,size ,size )));
 	//car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"Carphysics.obj"));
 	car->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,-90,0));

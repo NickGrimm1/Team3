@@ -39,14 +39,6 @@ void GraphicsTestScreen::LoadContent() {
 	Texture* calvinTex = GameStateManager::Assets()->LoadTexture(this, "calvin", 0);
 #endif
 //	Mesh* car = GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaCar.obj");
-
-#ifdef WINDOWS_BUILD
-	//cout << "GraphicsTestScreen-Quad: " << quad->GetArrayObject() << ", " << quad->GetBufferObject() << endl;
-	//cout << "GraphicsTestScreen-Cylinder: " << cylinder->GetArrayObject() << ", " << cylinder->GetBufferObject() << endl;
-	//cout << "GraphicsTestScreen-circle: " << circle->GetArrayObject() << ", " << circle->GetBufferObject() << endl;
-	//cout << "GraphicsTestScreen-grass: " << grassTex->GetTextureName() << endl;
-	//cout << "GraphicsTestScreen-calvin: " << calvinTex->GetTextureName() << endl;
-#endif
 	
 	DrawableEntity3D* ent;
 	

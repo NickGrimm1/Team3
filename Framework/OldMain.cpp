@@ -41,7 +41,6 @@ int Quit(bool pause = false, const string &reason = "") {
 //	Renderer::Destroy();
 
 	if(pause) {
-		std::cout << reason << std::endl;
 		system("PAUSE");
 	}
 

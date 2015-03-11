@@ -5,7 +5,6 @@
 Texture::Texture(string filename, unsigned int flags)
 {
 	filename.append(".gtf");
-	std::cout << "Loading GTF File: " << filename << std::endl;
 	textureObject = LoadGTF(filename);
 }
 
@@ -22,13 +21,11 @@ CellGcmTexture* Texture::LoadGTF(std::string filename) {
 	std::string folder = SYS_APP_HOME;
 	folder.append("/").append(filename);
 	//Attempt to open the texture file
-	std::cout << "Loading GTF from(" << folder << ")" << std::endl;
 	file.open(folder.c_str(), std::ios::binary);
 	if(!file.is_open())
 	{
 		//File hasn't loaded! 
 		delete texture;
-		std::cout << "LoadGTF file error" << std::endl;
 		return NULL;
 	}
 
@@ -49,16 +46,13 @@ CellGcmTexture* Texture::LoadGTF(std::string filename) {
 
 		file.seekg(attributes[i].OffsetToTex);
 
-		std::cout << "Texture: Getting Memory" << std::endl;
 		char*rsxdata = (char*)GCMRenderer::localMemoryAlign(128, attributes[i].TextureSize);
 		file.read(rsxdata,attributes[i].TextureSize);
 
 		cellGcmAddressToOffset( rsxdata, &texture->offset );
-		std::cout << "Texture: Got Memory" << std::endl;
 	}
 
-	//memory = (width * height * 4) / 1024.0f / 1024.0f; // Assume all textures are 32 bit for the moment.
-	std::cout << "LoadGTF success!" << std::endl;
+	memory = (texture->width * texture->height * 4) / 1024.0f / 1024.0f; // Assume all textures are 32 bit for the moment.
 
 	delete[] attributes;
 

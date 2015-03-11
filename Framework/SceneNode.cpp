@@ -40,11 +40,9 @@ float SceneNode::GetBoundingRadius()
 void SceneNode::AddChild( SceneNode* s ){
 	children.push_back(s);
 	s->parent = this;
-	cout << "AddChild 1" << endl;
 }
 
 void SceneNode::AddChildToParent(DrawableEntity3D* child, DrawableEntity3D* parent) {
-	cout << "AddChild 2" << endl;
 	if (sceneElement == parent) { // this scene node holds the parent draw entity
 		AddChild(new SceneNode(child));
 	}

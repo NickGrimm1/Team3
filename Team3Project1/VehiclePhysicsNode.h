@@ -29,8 +29,6 @@ public:
 		carMesh=GameStateManager::Assets()->LoadMesh(this, MESHDIR"CarPhysics.obj");
 		tireMesh=GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaTire.obj");
 		collisionVertices = new Vertex[carMesh->GetNumVertices() + 4 * tireMesh->GetNumVertices()];
-	
-		cout << "car: " << carMesh->GetNumVertices() + 4 * tireMesh->GetNumVertices() << endl;
 	}
 
 	~VehiclePhysicsNode(void){}
@@ -45,7 +43,7 @@ public:
 	
 		
 	    PhysicsNode:: Update( msec);
-		
+
 
 		FrontRightTire->SetPosition(BuildTransform()*T3Vector3(size * 1.3f,size * -0.5f,  size * 2.6f));
 		FrontLeftTire->SetPosition(BuildTransform()*T3Vector3(size *- 1.3f,size * -0.5f,size * 2.6f));
@@ -71,7 +69,7 @@ public:
 		Vertex* tireVertices = tireMesh->GetVertices();
 
 		unsigned int i = carMesh->GetNumVertices();
-		
+
 		for (unsigned int j = 0; j < tireMesh->GetNumVertices(); j++) {
 			collisionVertices[i++].SetPosition(T3Matrix4::Translation(T3Vector3(1.3f,-0.5f,2.6f)) * tireVertices[j].GetPosition());
 			collisionVertices[i++].SetPosition(T3Matrix4::Translation(T3Vector3(-1.3f,-0.5f,2.6f)) * tireVertices[j].GetPosition());
@@ -99,7 +97,7 @@ private:
 	Mesh* carMesh;
 	Vertex* collisionVertices;
 	float size;
-	
+
 
 
 };

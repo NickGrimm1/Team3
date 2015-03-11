@@ -11,7 +11,7 @@ _-_-_-_-_-_-_-""  ""
 
 */
 #pragma once
-
+#include <iostream>
 #include "T3Vector3.h"
 
 class T3Vector4	{
@@ -54,6 +54,13 @@ public:
 		output[2] = z;
 		output[3] = w;
 		return output;
+	}
+
+	friend std::ostream& operator<<(std::ostream& o, const T3Vector4& v)
+	{
+
+		o << "(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")";
+		return o;
 	}
 };
 

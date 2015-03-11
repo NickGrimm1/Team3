@@ -15,7 +15,6 @@
 
 
 //TODO - remove
-#include <iostream>
 #include "../Framework/BumpTexture.h"
 
 VehicleTestingScreen::VehicleTestingScreen(void)
@@ -30,7 +29,6 @@ void VehicleTestingScreen::LoadContent() {
 	//Mesh* coneMesh = Mesh::GenerateCone(20);
 	quad = GameStateManager::Assets()->LoadCylinder(this, 20);
 	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
-	//cout << "Quad Obj = " << quad->GetVertexBuffer() << endl;
 	
 	ent = new DrawableEntity3D(
 		quad, 
@@ -83,10 +81,8 @@ void VehicleTestingScreen::LoadContent() {
 
 
 	
-	//cout << "Cone Mesh Obj = " << coneMesh->GetVertexBuffer() << endl;
 	//SpotLight::SetConeMesh(coneMesh);
 	//Mesh* circleMesh = Mesh::GenerateCircle(20);
-	//cout << "Circle Mesh Obj = " << circleMesh->GetVertexBuffer() << endl;
 	//SpotLight::SetCircleMesh(Mesh::GenerateCircle(20));
 	//Mesh* sphereMesh = new OBJMesh(MESHDIR"sphere.obj");
 	//PointLight::SetMesh(sphereMesh);
@@ -213,7 +209,6 @@ void VehicleTestingScreen::Update() {
 
 	
 	
-	//cout<<car->GetCarNode().GetPosition().y<<endl;
 	//T3Matrix4 m = T3Matrix4::Rotation(0.016f, T3Vector3(0,1,0));
 	//ent->AddRotation(Quaternion::FromMatrix(m));
 }

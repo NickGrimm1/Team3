@@ -17,9 +17,7 @@ void PhysicsEngine::Run()
 #if PS3_BUILD
 void PhysicsEngine::Run(uint64_t arg)
 {
-//	std::cout << "Physics Thread Started! " << std::endl;
 	//instance->ThreadRun();
-	//std::cout << "Physics Thread Ended! " << std::endl;
 	sys_ppu_thread_exit(0);
 }
 #endif
@@ -39,7 +37,7 @@ void PhysicsEngine::ThreadRun()
 		frameRate = (int)(1000.0f / msec);
 
 #if WINDOWS_BUILD
-		NarrowPhaseCollisions();
+		//NarrowPhaseCollisions();
 
 		narrowlist.clear();
 
@@ -51,7 +49,7 @@ void PhysicsEngine::ThreadRun()
 			(*i)->Update(msec);
 			narrowlist.push_back((*i));
 		}
-		//BroadPhaseCollisions();
+		BroadPhaseCollisions();
 #endif
 	}
 }
@@ -478,7 +476,7 @@ void  PhysicsEngine::SortandSweep()
 				if(TrackDetection())
 				{
 					if(CollisionDetection(first, second))
-					{
+			    {
 						CollisionData* data = new CollisionData();
 						bool succeeded = EPA(first, second, data);
  						if (succeeded)
@@ -512,18 +510,42 @@ void  PhysicsEngine::SortandSweep()
 				
 				if(first.GetIsCollide()==false && second.GetIsCollide ()==true)
 				{
-					//if(second.GetType()=='f'){
 					OnCollision(first,second);
+					//if(second.GetType()=='f'){
+					//OnCollision(first,second);
 					//}
 				}
-				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
+				//if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
+				//{
+					//OnCollision(first,second);
+					//OnCollision(first,second);
+						/*if(check==true)
 				{
+                    cout << "Collision" << endl;
 					
-					first.SetLinearVelocity(T3Vector3(0,0,0));
+					   if(first.GetType()=='c'||second.GetType()=='c')
+					   {
+						cout<<"c is call";
+						if(first.GetGameEntity()){
+							cout<<"call if"<<endl;
+						RacerGame::update=1;}
+					   }
+
+					   else{
+						if(second.GetGameEntity())
+					      {
+						cout<<"call else"<<endl;
+					RacerGame::update=1;
+						  }
+					    }
+					
+						check=false;
+					}*/
+					/*first.SetLinearVelocity(T3Vector3(0,0,0));
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
-					second.SetForce(T3Vector3(0,0,0));
-				}
+					second.SetForce(T3Vector3(0,0,0));*/
+			//	}
 			
 				if ((first.GetIsCollide()==true && second.GetIsCollide ()==true) && ((first.Getcar_wheel()==true && second.Getcar_wheel()==true)))
 				{
@@ -537,24 +559,52 @@ void  PhysicsEngine::SortandSweep()
 					bool succeeded = EPA(first, second, data);
  					if (succeeded)
 					{
-						CollisionHelper::AddCollisionImpulse( first, second, *data);
+						CollisionHelper::AddCollisionImpulse(first, second, *data);
+
+
+						if(first.Getplanecollision()==true && second.Getplanecollision()==false)
+
+						{
+							first.SetUseGravity(false);
+							second.SetUseGravity(false);
+							T3Vector3 temp1,temp2;
+							temp1 =  first.GetLinearVelocity();
+							temp1.y = 0;
+							first.SetLinearVelocity(temp1);
+
+							temp2 =  second.GetLinearVelocity();
+							temp2.y = 0;
+							second.SetLinearVelocity(temp2);
+			
+			                second.SetPosition(second.GetPosition() + T3Vector3(0, 2.0f, 0));
 
 			}
 				}
-
+				}
 			
-
-					}
 			
 				
 
 				}
+				//	if(CollisionDetection(first, second))
+			 //   {
+				////cout << "GJK passed" << endl;
+				//if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
+				//{
+				//	//cout << "Collision" << endl;
+				//	first.SetLinearVelocity(T3Vector3(0,0,0));
+				//	first.SetForce(T3Vector3(0,0,0));
+    //                second.SetLinearVelocity(T3Vector3(0,0,0));
+				//	second.SetForce(T3Vector3(0,0,0));
+				//}
+				//}
 
 						}
 				}
 		}
-#endif
 	}
+#endif
+	
 	
 
 
@@ -625,7 +675,6 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 			if(CollisionDetection(first, second))
 			{
 				//OnCollision(first,second);
-				//cout << "GJK passed" << endl;
 				if(first.GetIsCollide()==true && second.GetIsCollide ()==true)
 				{
 					OnCollision(first,second);
@@ -639,20 +688,16 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 					//OnCollision(first,second);
 						/*if(check==true)
 					{
-                    cout << "Collision" << endl;
 
 					   if(first.GetType()=='c'||second.GetType()=='c')
 					   {
-						cout<<"c is call";
 						if(first.GetGameEntity()){
-							cout<<"call if"<<endl;
 						RacerGame::update=1;}
 					   }
 
 					   else{
 						if(second.GetGameEntity())
 					      {
-						cout<<"call else"<<endl;
 					RacerGame::update=1;
 						  }
 					    }
@@ -738,7 +783,6 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 
 
 		//							  //count=count+1;
-		//							  // cout<<count<<endl;
 		//							  }
 		//							  continue;
 
@@ -753,7 +797,6 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 		//									//  MyGame::dt=1 ;
 		//							//	  count=false;}
 		//							 // count=count+1;
-		//							 //  cout<<count<<endl;
 		//							  }
 		//							 
 		//								continue;
@@ -774,7 +817,6 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 		//									//  MyGame::dt=1 ;
 		//								//  count=false;}
 		//							 // count=count+1;
-		//							  // cout<<count<<endl;
 		//							  }
 		//							 
 		//								continue;
@@ -1199,7 +1241,6 @@ void PhysicsEngine::OnCollision(PhysicsNode& p1, PhysicsNode& p2)
 {
 	if (gameClass != NULL) {
 		gameClass->CollisionBetween(p1.GetGameEntity(),p2.GetGameEntity());
-		cout<<"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa="<<p2.GetType()<<endl;
 	}
 }
 #endif

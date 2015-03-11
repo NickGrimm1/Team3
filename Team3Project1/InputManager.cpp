@@ -12,9 +12,7 @@ void InputManager::Run()
 #if PS3_BUILD
 void InputManager::Run(uint64_t arg)
 {
-	std::cout << "Input Thread Started" << std::endl;
 	instance->ThreadRun();
-	std::cout << "Input Thread Ended" << std::endl;
 	sys_ppu_thread_exit (0);
 }
 #endif
@@ -30,7 +28,10 @@ void InputManager::ThreadRun()
 		lastFrameTimeStamp = (float) Window::GetWindow().GetTimer()->GetMS();
 #endif
 #if PS3_BUILD
-		float msec = 16.6f; // TODO: Get the timer for this
+		while (GameStateManager::GetTimer()->GetMS() - lastFrameTimeStamp < INPUT_TIME)
+				sys_timer_usleep(100);
+		float msec = (float) GameStateManager::GetTimer()->GetMS() - lastFrameTimeStamp;
+		lastFrameTimeStamp = (float) GameStateManager::GetTimer()->GetMS();
 #endif
 		frameRate = (int)(1000.0f / msec);
 
@@ -74,7 +75,7 @@ void InputManager::ThreadRun()
 GamepadEvents::PlayerIndex InputManager::GetActiveController(GamepadEvents::PlayerIndex playerID)
 {
 	unsigned int freePad;
-
+	cout << "Input Manager: GET ACTIVE CONTROLLER"<<endl;
 	if (playerID != GamepadEvents::PLAYERINDEX_MAX)
 	{
 		// Check this is a valid ID - if it has already been assigned, return error

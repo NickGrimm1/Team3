@@ -12,7 +12,9 @@ void main
 	if (texColor.a < 0.2) 
 	{
 		discard;
-	} else if ((texColor.r == 0.0) && (texColor.g == 0.0) && (texColor.b == 1.0)) {
+	} 
+	else if ((texColor.r == 0.0) && (texColor.g == 0.0) && (texColor.b == 1.0)) 
+	{
 		discard;
 	}
 	else 
@@ -20,6 +22,6 @@ void main
 		color_out = texColor * blendColour;
 	}
 
-	//color_out = texColor * blendColour;
+	color_out = texColor * blendColour;
 	//color_out += blendColour;
 }

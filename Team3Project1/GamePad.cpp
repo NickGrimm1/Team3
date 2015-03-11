@@ -4,6 +4,7 @@
 GamePad::GamePad(GamepadEvents::PlayerIndex playerID)
 	: playerID(playerID)
 {
+
 	for (unsigned int i = 0; i < GamepadEvents::PADBUTTONS_MAX; ++i)
 		buttonHoldTimes[i] = PRESSLIMIT + 20; // We initialise hold times to greater to prevent an accidental press event immediately after the controller is first registered.
 
@@ -16,6 +17,7 @@ GamePad::GamePad(GamepadEvents::PlayerIndex playerID)
 void GamePad::Update(float msec)
 {
 #if PS3_BUILD
+	
 	CellPadData gamePadState;
 	if (cellPadGetData(playerID, &gamePadState) == CELL_PAD_OK)
 	{

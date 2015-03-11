@@ -40,9 +40,8 @@ public:
 		originalRight(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix() * T3Vector3::UnitX()),
 		rotation(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix())
 	{
-		std::cout << "Camera: target: " << originalTarget << std::endl;
 	}
-	~Camera(void){}
+	virtual ~Camera(void){}
 
 	/**
 	<summary>Gets the camera's position in world space.</summary>
