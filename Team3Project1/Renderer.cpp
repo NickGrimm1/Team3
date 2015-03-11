@@ -324,6 +324,7 @@ Renderer::~Renderer(void)
 void Renderer::RenderScene() {
 
 	openglMutex.lock_mutex(); // prevent other threads from accessing OpenGL during rendering
+	wglMakeCurrent(deviceContext, renderContext);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	if (camera) {

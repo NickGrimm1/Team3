@@ -459,95 +459,95 @@ void  PhysicsEngine::SortandSweep()
 			
 			if((*i)->GetXend() > (*j)->GetXstart())
 			{
-			    PhysicsNode& first =*(*i);
-			    PhysicsNode& second =*(*j);
+				    PhysicsNode& first =*(*i);
+				    PhysicsNode& second =*(*j);
 
-				if (first.GetPhysicsVertex() == NULL) continue;
-				if (second.GetPhysicsVertex() == NULL) continue;
+					if (first.GetPhysicsVertex() == NULL) continue;
+					if (second.GetPhysicsVertex() == NULL) continue;
 
-				if(first.Getplanecollision()==true && second.Getplanecollision()==false)
+					if(first.Getplanecollision()==true && second.Getplanecollision()==false)
+			{
+
+				AddCarEdge(second);
+				AddTrackEdge(first);
+
+				//if the vehicle has collision with the track's left or right side
+				if(TrackDetection())
 				{
-
-					AddCarEdge(second);
-					AddTrackEdge(first);
-
-					//if the vehicle has collision with the track's left or right side
-					if(TrackDetection())
-					{
-						if(CollisionDetection(first, second))
-					    {
-							CollisionData* data = new CollisionData();
-							bool succeeded = EPA(first, second, data);
- 							if (succeeded)
-							{
-								CollisionHelper::AddCollisionImpulse(first, second, *data);
-				        	}					
-						}
-						isDrop = true;
-					}
-					// keeping the vehicle on the track!
-					else if(!isDrop)
-					{
-						float floor_y = first.GetPosition().y;
-						float car_y = second.GetPosition().y;
-			
-						if(car_y - floor_y < 5.5f)
+					if(CollisionDetection(first, second))
+			    {
+						CollisionData* data = new CollisionData();
+						bool succeeded = EPA(first, second, data);
+ 						if (succeeded)
 						{
-							float err = abs(car_y - floor_y - 5.f)*2;
-							T3Vector3 t3 = second.GetLinearVelocity();
-							t3.y = 0;
-							t3 =t3	+ T3Vector3(0,1,0) * (1+err);
-							second.SetLinearVelocity(t3);
-						}
+							CollisionHelper::AddCollisionImpulse(first, second, *data);
+			        	}					
+					}
+					isDrop = true;
+				}
+				// keeping the vehicle on the track!
+				else if(!isDrop)
+				{
+					float floor_y = first.GetPosition().y;
+					float car_y = second.GetPosition().y;
+			
+					if(car_y - floor_y < 5.5f)
+					{
+						float err = abs(car_y - floor_y - 5.f)*2;
+						T3Vector3 t3 = second.GetLinearVelocity();
+						t3.y = 0;
+						t3 =t3	+ T3Vector3(0,1,0) * (1+err);
+						second.SetLinearVelocity(t3);
 					}
 				}
-				else{
+			}
+			else{
 					if(CollisionDetection(first, second))
-					{
+			    {
 				
-						if(first.GetIsCollide()==false && second.GetIsCollide ()==true)
-						{
-							OnCollision(first,second);
-							//if(second.GetType()=='f'){
-							//OnCollision(first,second);
-							//}
-						}
-					
-						if ((first.GetIsCollide()==true && second.GetIsCollide ()==true) && ((first.Getcar_wheel()==true && second.Getcar_wheel()==true)))
-						{
-				
-							/*first.SetLinearVelocity(T3Vector3(0,0,0));
-							first.SetForce(T3Vector3(0,0,0));
-							 second.SetLinearVelocity(T3Vector3(0,0,0));
-							second.SetForce(T3Vector3(0,0,0));*/
-
-							CollisionData* data = new CollisionData();
-							bool succeeded = EPA(first, second, data);
- 							if (succeeded)
-							{
-								CollisionHelper::AddCollisionImpulse(first, second, *data);
-
-
-								if(first.Getplanecollision()==true && second.Getplanecollision()==false)
-
-								{
-									first.SetUseGravity(false);
-									second.SetUseGravity(false);
-									T3Vector3 temp1,temp2;
-									temp1 =  first.GetLinearVelocity();
-									temp1.y = 0;
-									first.SetLinearVelocity(temp1);
-
-									temp2 =  second.GetLinearVelocity();
-									temp2.y = 0;
-									second.SetLinearVelocity(temp2);
+				if(first.GetIsCollide()==false && second.GetIsCollide ()==true)
+				{
+					OnCollision(first,second);
+					//if(second.GetType()=='f'){
+					//OnCollision(first,second);
+					//}
+				}
 			
-					                second.SetPosition(second.GetPosition() + T3Vector3(0, 2.0f, 0));
+				if ((first.GetIsCollide()==true && second.GetIsCollide ()==true) && ((first.Getcar_wheel()==true && second.Getcar_wheel()==true)))
+				{
+			
+					/*first.SetLinearVelocity(T3Vector3(0,0,0));
+					first.SetForce(T3Vector3(0,0,0));
+                    second.SetLinearVelocity(T3Vector3(0,0,0));
+					second.SetForce(T3Vector3(0,0,0));*/
 
-								}
-							}
-						}
-					}
+					CollisionData* data = new CollisionData();
+					bool succeeded = EPA(first, second, data);
+ 					if (succeeded)
+					{
+						CollisionHelper::AddCollisionImpulse(first, second, *data);
+
+
+						if(first.Getplanecollision()==true && second.Getplanecollision()==false)
+
+						{
+							first.SetUseGravity(false);
+							second.SetUseGravity(false);
+							T3Vector3 temp1,temp2;
+							temp1 =  first.GetLinearVelocity();
+							temp1.y = 0;
+							first.SetLinearVelocity(temp1);
+
+							temp2 =  second.GetLinearVelocity();
+							temp2.y = 0;
+							second.SetLinearVelocity(temp2);
+			
+			                second.SetPosition(second.GetPosition() + T3Vector3(0, 2.0f, 0));
+
+			}
+				}
+				}
+				}
 				//	if(CollisionDetection(first, second))
 			 //   {
 				////cout << "GJK passed" << endl;
@@ -561,8 +561,8 @@ void  PhysicsEngine::SortandSweep()
 				//}
 				//}
 
+						}
 				}
-			}
 		}
 	}
 #endif
