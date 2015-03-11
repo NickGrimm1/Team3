@@ -145,7 +145,7 @@ void RacerGame::LoadContent() {
 	/*	road =new Road (5);
 		road->SetPhysics(5);*/
 
-	unsigned int size = 5;
+	float size = 5;
 
 	VehiclePhysicsNode* vpn = new VehiclePhysicsNode(size);
 	
@@ -218,6 +218,7 @@ void RacerGame::LoadContent() {
 	f=0;
 	b=0;
 	temp2=T3Vector3(0,0,0);
+	Speed_Rotate = 0.4f;
 	Speed_Rotate = 1.0;
 	tempPosition = T3Vector3(0,350,-800);
 	PlayerPosition=T3Vector3(500,100,-800);

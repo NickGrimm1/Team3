@@ -217,6 +217,7 @@ bool Renderer::LoadAssets()
 	bloomFinalShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BloomFinalFragment.glsl");
 	velocityShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"VelocityVertex.glsl", SHADERDIR"VelocityFragment.glsl");
 	motionBlurShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlurFragment.glsl");
+	edgeDetectShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"FreiChenFragment.glsl");
 	if (!LoadCheck()) return false;
 
 	// Load Meshes required for rendering operations
@@ -233,15 +234,7 @@ bool Renderer::LoadAssets()
 	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh || !quadMesh || !skyDome) {
 		cout << "Renderer::LoadAssets() - unable to load rendering assets";
 		return false;
-	edgeDetectShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"FreiChenFragment.glsl");
-	hudShader		 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl");
-	debugDrawShader  = GameStateManager::Assets()->LoadShader(this, SHADERDIR"debugVertex.glsl", SHADERDIR"debugFragment.glsl");
-	
-	return LoadCheck();
-}
-
-	return true;
-
+	}
 }
 
 bool Renderer::LoadCheck()
@@ -262,8 +255,7 @@ bool Renderer::LoadCheck()
 			velocityShader		!= NULL &&
 			motionBlurShader	!= NULL &&
 			edgeDetectShader	!= NULL &&
-			hudShader			!= NULL &&
-			debugDrawShader		!= NULL);
+			hudShader			!= NULL);
 }
 
 void Renderer::UnloadAssets()
@@ -286,27 +278,6 @@ void Renderer::UnloadAssets()
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"FreiChenFragment.glsl");
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl");
 
-bool Renderer::LoadAssets() {
-	// Load Meshes required for rendering operations
-	
-	circleMesh = GameStateManager::Assets()->LoadCircle(this, 20); // Circle for spotlight rendering
-	screenMesh = GameStateManager::Assets()->LoadQuad(this); // Quad for rendering textures to screen
-	sphereMesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
-	coneMesh = GameStateManager::Assets()->LoadCone(this, 20); // Cone for spotlight rendering
-	skyDome = GameStateManager::Assets()->LoadMesh(this, MESHDIR"dome.obj"); // Skydome
-	quadMesh = GameStateManager::Assets()->LoadQuadAlt(this);
-	nightSkyTex = (GameStateManager::Assets()->LoadTexture(this, "night_sky", 0))->GetTextureName();
-	//SetTextureRepeating(nightSkyTex, true);
-	daySkyTex = (GameStateManager::Assets()->LoadTexture(this, "day_sky", 0))->GetTextureName();
-
-	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh) {
-		return false;
-	}
-	
-	return true;
-}
-
-void Renderer::UnloadAssets() {
 	GameStateManager::Assets()->UnloadCircle(this, 20); // Circle for spotlight rendering
 	GameStateManager::Assets()->UnloadQuad(this); // Quad for rendering textures to screen
 	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
@@ -353,6 +324,7 @@ Renderer::~Renderer(void)
 void Renderer::RenderScene() {
 
 	openglMutex.lock_mutex(); // prevent other threads from accessing OpenGL during rendering
+	wglMakeCurrent(deviceContext, renderContext);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	if (camera) {

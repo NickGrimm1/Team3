@@ -464,49 +464,55 @@ void  PhysicsEngine::SortandSweep()
 
 					if (first.GetPhysicsVertex() == NULL) continue;
 					if (second.GetPhysicsVertex() == NULL) continue;
+
+					if(first.Getplanecollision()==true && second.Getplanecollision()==false)
+			{
+
+				AddCarEdge(second);
+				AddTrackEdge(first);
+
+				//if the vehicle has collision with the track's left or right side
+				if(TrackDetection())
+				{
 					if(CollisionDetection(first, second))
 			    {
-				//OnCollision(first,second);
-				//cout << "GJK passed" << endl;
-				if(first.GetIsCollide()==true && second.GetIsCollide ()==true)
+						CollisionData* data = new CollisionData();
+						bool succeeded = EPA(first, second, data);
+ 						if (succeeded)
 				{
+							CollisionHelper::AddCollisionImpulse(first, second, *data);
+				}
+					}
+					isDrop = true;
+				}
+				// keeping the vehicle on the track!
+				else if(!isDrop)
+					{
+					float floor_y = first.GetPosition().y;
+					float car_y = second.GetPosition().y;
+
+					if(car_y - floor_y < 5.5f)
+					   {
+						float err = abs(car_y - floor_y - 5.f)*2;
+						T3Vector3 t3 = second.GetLinearVelocity();
+						t3.y = 0;
+						t3 =t3	+ T3Vector3(0,1,0) * (1+err);
+						second.SetLinearVelocity(t3);
+					}
+				}
+					   }
+			else{
+					if(CollisionDetection(first, second))
+			    {
+
+				if(first.GetIsCollide()==false && second.GetIsCollide ()==true)
+					      {
 					OnCollision(first,second);
 					//if(second.GetType()=='f'){
 					//OnCollision(first,second);
 					//}
-				}
-				//if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
-				//{
-					//OnCollision(first,second);
-					//OnCollision(first,second);
-						/*if(check==true)
-					{
-                    cout << "Collision" << endl;
-
-					   if(first.GetType()=='c'||second.GetType()=='c')
-					   {
-						cout<<"c is call";
-						if(first.GetGameEntity()){
-							cout<<"call if"<<endl;
-						RacerGame::update=1;}
-					   }
-
-					   else{
-						if(second.GetGameEntity())
-					      {
-						cout<<"call else"<<endl;
-					RacerGame::update=1;
-						  }
 					    }
 					
-						check=false;
-					}*/
-					/*first.SetLinearVelocity(T3Vector3(0,0,0));
-					first.SetForce(T3Vector3(0,0,0));
-                    second.SetLinearVelocity(T3Vector3(0,0,0));
-					second.SetForce(T3Vector3(0,0,0));*/
-			//	}
-			
 				if ((first.GetIsCollide()==true && second.GetIsCollide ()==true) && ((first.Getcar_wheel()==true && second.Getcar_wheel()==true)))
 				{
 			
@@ -541,10 +547,6 @@ void  PhysicsEngine::SortandSweep()
 			}
 				}
 				}
-			
-			
-
-
 				}
 				//	if(CollisionDetection(first, second))
 			 //   {
@@ -563,9 +565,10 @@ void  PhysicsEngine::SortandSweep()
 				}
 		}
 	}
+#endif
+}
+	
 
-	
-	
 
 
 
