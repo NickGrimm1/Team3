@@ -191,12 +191,13 @@ void MainMenu::NewGameClicked(float x, float y) {
 #endif
 	GameStateManager::Instance()->RemoveGameScreen(wallpaper);
 	GameStateManager::Instance()->RemoveGameScreen(this);
-
+#if WINDOWS_BUILD
 	RacerGame* game = new RacerGame();
 //	GraphicsTestScreen* game = new GraphicsTestScreen();
 	GameStateManager::Physics()->SetGame(game);
 	GameStateManager::Instance()->ChangeScreen(game);
 	//GameStateManager::RemoveGameScreen(this);
+#endif
 }
 
 void MainMenu::ControlsClicked(float x, float y) {
