@@ -99,7 +99,7 @@ public:
 	<summary>Gets the rotation of this entity relative to its parent.</summary>
 	<param name='value'>The rotation.</param>
 	*/
-	Quaternion GetRotation() const { return rotation; }
+	virtual Quaternion GetRotation() const { return rotation; }
 	/**
 	<summary>Sets the rotation of this entity relative to its parent.</summary>
 	<param name='value'>The rotation.</param>

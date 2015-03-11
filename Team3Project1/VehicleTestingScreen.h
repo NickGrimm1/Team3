@@ -31,6 +31,7 @@ public:
 	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID){}
 
 	float f;
+	float b;
 	int Speed_Player;
 	float Speed_Rotate;
 	T3Vector3 tempPosition;
@@ -44,6 +45,7 @@ private:
 	FreeCamera* camera;
 	Vehicle* car;
 	Gold_cion * gold_cion;
+	float angular;
 	
 
 	vector<T3Vector3> SplinePoint;

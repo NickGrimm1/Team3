@@ -4,7 +4,7 @@
 
 
 Vehicle::Vehicle(float size) {
-	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj");
+	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
 //	BuffMesh = new OBJMesh(MESHDIR"ico.obj");
 	
 	//TT =  SOIL_load_OGL_texture ("../../Texture/footballpitch.jpg", SOIL_LOAD_AUTO , SOIL_CREATE_NEW_ID , SOIL_FLAG_MIPMAPS);
@@ -18,7 +18,7 @@ Vehicle::Vehicle(float size) {
 	texture = NULL;
 	bumpTexture = NULL;
 	shader = NULL;
-	
+
 	//	PlayerPosition=T3Vector3(-25, 20, 0);
 	//Player = BuildPlayerEntity(20.0f,PlayerPosition);
 
@@ -305,17 +305,17 @@ Makes a Player. Every game has a crate in it somewhere!
 void Vehicle::SetPhysics(float size,PhysicsNode * a)
 {
     car=a;
-	car->SetUseGravity(true);
+	car->SetUseGravity(false);
 	car->SetPosition(origin);
 	car->SetMass(5);
 	car->SetInverseMass(1.0f);
 	car->SetCollisionVolume(new CollisionAABB(T3Vector3(size ,size ,size )));
-	//car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj"));
+	//car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"Carphysics.obj"));
 	car->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,-90,0));
-	car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"CarPhysics.obj"));
-	Quaternion Test=car->GetOrientation();
-	car->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,-90,0));
-	Quaternion Test2=car->GetOrientation();
+	//car->SetMesh(GameStateManager::Assets()->LoadMesh(this, MESHDIR"CarPhysics.obj"));
+	//Quaternion Test=car->GetOrientation();
+	//car->SetOrientation(Quaternion::EulerAnglesToQuaternion(0,-90,0));
+	//Quaternion Test2=car->GetOrientation();
 	car->SetXstart(car->GetPosition().x-3*size);
 	car->SetXend(car->GetPosition().x+3*size);                                                                                         
 	car->SetInverseInertia(InertialMatrixHelper::createCuboidInvInertial(5.0f,size,size,size));
@@ -328,4 +328,8 @@ void Vehicle::SetPhysics(float size,PhysicsNode * a)
     ConnectToSystems(); 
 
 
+}
+
+Quaternion Vehicle::GetRotation() const {
+	return rotation; //Quaternion::FromMatrix(rotation.ToMatrix() * T3Matrix4::Rotation(90, T3Vector3(0,1,0)));
 }

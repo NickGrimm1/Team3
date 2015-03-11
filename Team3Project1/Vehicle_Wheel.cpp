@@ -53,7 +53,7 @@ void Vehicle_Wheel::SetPhysics(float size)
 void Vehicle_Wheel::SetPhysics(float size,PhysicsNode * a)
 {
     physicsNode=a;
-	physicsNode->SetUseGravity(true);
+	physicsNode->SetUseGravity(false);
 	physicsNode->SetPosition(origin);
 	physicsNode->SetMass(5);
 	physicsNode->SetInverseMass(1.0f);
@@ -71,7 +71,9 @@ void Vehicle_Wheel::SetPhysics(float size,PhysicsNode * a)
 
 }
 
-
+Quaternion Vehicle_Wheel::GetRotation() const {
+	return rotation; ///Quaternion::FromMatrix(T3Matrix4::Rotation(90, T3Vector3(0,-1,0)) * rotation.ToMatrix());
+}
 
 
 

@@ -76,7 +76,7 @@ T3Vector3 PhysicsEngine::support(PhysicsNode& shape1,PhysicsNode& shape2, T3Vect
 	for(int i=0;i<number1;i++)
 	{
 		worldpoints1.push_back(T3Matrix4::Translation(shape1.GetTarget()->GetOriginPosition()) * shape1.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape1.GetTarget()->GetScale()) * vertex1[i].GetPosition());
-	}
+	}	
 	shape1.SetWorldPoints(worldpoints1);
 
 	//Vertex * vertex2=shape2.GetTarget()->GetMesh()->GetVertices();
@@ -460,18 +460,49 @@ void  PhysicsEngine::SortandSweep()
 				    PhysicsNode& first =*(*i);
 				    PhysicsNode& second =*(*j);
 
-					
+					if (first.GetPhysicsVertex() == NULL) continue;
+					if (second.GetPhysicsVertex() == NULL) continue;
 					if(CollisionDetection(first, second))
 			    {
-				//cout << "GJK passed" << endl;
+				
+				if(first.GetIsCollide()==false && second.GetIsCollide ()==true)
+				{
+					//if(second.GetType()=='f'){
+					OnCollision(first,second);
+					//}
+				}
 				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
 				{
-					//cout << "Collision" << endl;
+					
 					first.SetLinearVelocity(T3Vector3(0,0,0));
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
 					second.SetForce(T3Vector3(0,0,0));
 				}
+			
+				if ((first.GetIsCollide()==true && second.GetIsCollide ()==true) && ((first.Getcar_wheel()==true && second.Getcar_wheel()==true)))
+				{
+			
+					/*first.SetLinearVelocity(T3Vector3(0,0,0));
+					first.SetForce(T3Vector3(0,0,0));
+                    second.SetLinearVelocity(T3Vector3(0,0,0));
+					second.SetForce(T3Vector3(0,0,0));*/
+
+					CollisionData* data = new CollisionData();
+					bool succeeded = EPA(first, second, data);
+ 					if (succeeded)
+					{
+						CollisionHelper::AddCollisionImpulse( first, second, *data);
+
+			}
+				}
+			
+			
+
+
+			
+				
+
 				}
 
 						}
@@ -545,7 +576,7 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
 					second.SetForce(T3Vector3(0,0,0));
-				//}
+				}
 			
 				if ((first.GetIsCollide()==true && second.GetIsCollide ()==true) && ((first.Getcar_wheel()==true && second.Getcar_wheel()==true)))
 				{
