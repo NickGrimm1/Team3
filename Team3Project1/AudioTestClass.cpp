@@ -35,8 +35,8 @@ void AudioTestClass::LoadContent() {
 	laser1 = GameStateManager::Audio()->GetSound (SOUNDSDIR"56900__syna-max__war.wav");
 	laser2 = GameStateManager::Audio()->GetSound (SOUNDSDIR"vehicle085.wav");
 
-	GameStateManager::Audio()->PlaySoundW(laser, SOUNDPRIORITY_ALWAYS);
-	GameStateManager::Audio()->PlaySoundA(laser1, T3Vector3(0,0,0));
+	//GameStateManager::Audio()->PlaySoundW(laser, SOUNDPRIORITY_ALWAYS);
+	//GameStateManager::Audio()->PlaySoundA(laser1, T3Vector3(0,0,0));
 }
 
 void AudioTestClass::Update() {

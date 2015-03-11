@@ -510,14 +510,16 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 			{
 				//OnCollision(first,second);
 				//cout << "GJK passed" << endl;
-				if(first.GetIsCollide()==false && second.GetIsCollide ()==true)
+				if(first.GetIsCollide()==true && second.GetIsCollide ()==true)
 				{
-					//if(second.GetType()=='f'){
 					OnCollision(first,second);
+					//if(second.GetType()=='f'){
+					//OnCollision(first,second);
 					//}
 				}
 				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
 				{
+					//OnCollision(first,second);
 					//OnCollision(first,second);
 						/*if(check==true)
 					{
@@ -541,15 +543,15 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 					
 						check=false;
 					}*/
-					first.SetLinearVelocity(T3Vector3(0,0,0));
+					/*first.SetLinearVelocity(T3Vector3(0,0,0));
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
-					second.SetForce(T3Vector3(0,0,0));
-				//}
+					second.SetForce(T3Vector3(0,0,0));*/
+				}
 			
 				if ((first.GetIsCollide()==true && second.GetIsCollide ()==true) && ((first.Getcar_wheel()==true && second.Getcar_wheel()==true)))
 				{
-			
+			       
 					/*first.SetLinearVelocity(T3Vector3(0,0,0));
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
