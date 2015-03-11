@@ -339,44 +339,28 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 			getline(f, currentLine); // handle file name with spaces
 			currentMTL.diffuse.append(currentLine);
 
-/*			if(currentMTL.diffuse.find_last_of('/') != string::npos) {
-				int at = currentMTL.diffuse.find_last_of('/');
-				currentMTL.diffuse = currentMTL.diffuse.substr(at+1);
-			}
-			else if(currentMTL.diffuse.find_last_of('\\') != string::npos) {
-				int at = currentMTL.diffuse.find_last_of('\\');
-				currentMTL.diffuse = currentMTL.diffuse.substr(at+1);
-			}
-			*/
-
 			if (!currentMTL.diffuse.empty()) {
 #if WINDOWS_BUILD
 				currentMTL.diffuseNum = GameStateManager::Assets()->LoadTexture(this, string(currentMTL.diffuse), SOIL_FLAG_INVERT_Y);
 #endif
 #if PS3_BUILD
-				currentMTL.diffuseNum = GameStateManager::Assets()->LoadTexture(this, string(currentMTL.diffuse"), 0);
+				currentMTL.diffuseNum = GameStateManager::Assets()->LoadTexture(this, string(currentMTL.diffuse), 0);
 #endif
 			}
 		}
 		else if(currentLine == MTLBUMPMAP || currentLine == MTLBUMPMAPALT) {
 			f >> currentMTL.bump;
-
-			if(currentMTL.bump.find_last_of('/') != string::npos) {
-				int at = currentMTL.bump.find_last_of('/');
-				currentMTL.bump = currentMTL.bump.substr(at+1);
-			}
-			else if(currentMTL.bump.find_last_of('\\') != string::npos) {
-				int at = currentMTL.bump.find_last_of('\\');
-				currentMTL.bump = currentMTL.bump.substr(at+1);
-			}
+			currentLine.clear();
+			getline(f, currentLine); // handle file name with spaces
+			currentMTL.diffuse.append(currentLine);
 
 			if (!currentMTL.bump.empty())
 			{
 #if WINDOWS_BUILD
-				currentMTL.bumpNum = GameStateManager::Assets()->LoadTexture(this, string(currentMTL.bump + ".png"), 0);
+				currentMTL.bumpNum = GameStateManager::Assets()->LoadTexture(this, string(currentMTL.bump), 0);
 #endif
 #if PS3_BUILD
-				currentMTL.bumpNum = GameStateManager::Assets()->LoadTexture(this, string(currentMTL.bump + ".gtf"), 0);
+				currentMTL.bumpNum = GameStateManager::Assets()->LoadTexture(this, string(currentMTL.bump), 0);
 #endif
 			}
 		}
