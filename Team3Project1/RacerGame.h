@@ -130,7 +130,7 @@ public:
 private:
 	Mesh* quad;
 	Mesh* cylinder;
-	int score;
+	float score;
 	float Time;
 	int PlayTime;
 	int timeOrScore;

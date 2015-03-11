@@ -99,6 +99,7 @@ private:
 	{
 		frameRate = 0;
 		gameClass = NULL;
+		isDrop =false;
 	}
 #endif
 #if PS3_BUILD

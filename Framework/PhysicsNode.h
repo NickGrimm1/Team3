@@ -43,7 +43,7 @@ _-_-_-_-_-_-_-""  ""
 //#include "GameEntity.h"
 
 using namespace std;
-#define LINEAR_VELOCITY_DAMP 0.9992
+#define LINEAR_VELOCITY_DAMP 0.92
 #define ANGULAR_VELOCITY_DAMP 0.7
 #define LINEAR_VELOCITY_MIN 0.00001
 

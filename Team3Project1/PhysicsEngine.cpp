@@ -466,6 +466,47 @@ void  PhysicsEngine::SortandSweep()
 
 					if (first.GetPhysicsVertex() == NULL) continue;
 					if (second.GetPhysicsVertex() == NULL) continue;
+
+
+					if(first.Getplanecollision()==true && second.Getplanecollision()==false)
+			{
+
+				AddCarEdge(second);
+				AddTrackEdge(first);
+
+				//if the vehicle has collision with the track's left or right side
+				if(TrackDetection())
+				{
+					if(CollisionDetection(first, second))
+					{
+						CollisionData* data = new CollisionData();
+						bool succeeded = EPA(first, second, data);
+ 						if (succeeded)
+						{
+							CollisionHelper::AddCollisionImpulse(first, second, *data);
+			        	}					
+					}
+
+					isDrop = true;
+				}
+
+				// keeping the vehicle on the track!
+				else if(!isDrop)
+				{
+					float floor_y = first.GetPosition().y;
+					float car_y = second.GetPosition().y;
+			
+					if(car_y - floor_y < 5.5f)
+					{
+						float err = abs(car_y - floor_y - 5.f)*2;
+						T3Vector3 t3 = second.GetLinearVelocity();
+						t3.y = 0;
+						t3 =t3	+ T3Vector3(0,1,0) * (1+err);
+						second.SetLinearVelocity(t3);
+					}
+				}
+			}
+			else{
 					if(CollisionDetection(first, second))
 			    {
 				
@@ -503,7 +544,7 @@ void  PhysicsEngine::SortandSweep()
 
 			
 
-
+					}
 			
 				
 
