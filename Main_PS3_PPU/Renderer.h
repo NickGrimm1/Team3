@@ -44,6 +44,17 @@ public:
 	Renderer::Renderer(vector<Light*>& lightsVec, vector<SceneNode*>& SceneNodesVec, vector<DrawableTexture2D*>& overlayTextureVec, vector<DrawableText2D*>& overlayTextVec);
 	~Renderer(void);
 
+	bool GetRenderContextForThread()
+	{
+		renderMutex.lock_mutex();
+		return true;
+	}
+	bool DropRenderContextForThread()
+	{
+		renderMutex.unlock_mutex();
+		return true;
+	}
+
 	void SetCamera(Camera* cam) {camera = cam;};
 
 	void RenderScene();

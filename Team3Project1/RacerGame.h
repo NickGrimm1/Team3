@@ -68,13 +68,13 @@ public:
 	static float g;
 	static float gx;
 	TrackSegment* Strack;
-#if WINDOWS_BUILD	
+
 	vector<T3Vector3> SplinePoint;
 	vector<DrawableEntity3D*> allEntities;
 	vector<TrackSegment*> TrackSegmentVector;
 	vector<GameEntity*> checkPoint;
 	vector<GameEntity*> pickup;
-#endif 
+
 	 virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
 		  if(obj1->GetType()=='g')
 		  {

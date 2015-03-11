@@ -124,40 +124,40 @@ void GCMRenderer::InitSurfaces()
 		surfaces[i].y 					= 0;
 	}
 	/**Initialise Graphics Buffers**/
-	for(int i = 0; i < 4; ++i) {
-		graphicsSurfaces[i].colorPitch[0] = colourPitch;
-		void*buffer = localMemoryAlign(64, colourSize);	//Allocate enough memory for the buffer
-		cellGcmAddressToOffset(buffer, &graphicsSurfaces[i].colorOffset[0]);	//and calculate the offset
-		//Attach the memory to a surface
-		cellGcmSetDisplayBuffer(i, graphicsSurfaces[i].colorOffset[0], colourPitch, screenWidth, screenHeight);
+	//for(int i = 0; i < 4; ++i) {
+	//	graphicsSurfaces[i].colorPitch[0] = colourPitch;
+	//	void*buffer = localMemoryAlign(64, colourSize);	//Allocate enough memory for the buffer
+	//	cellGcmAddressToOffset(buffer, &graphicsSurfaces[i].colorOffset[0]);	//and calculate the offset
+	//	//Attach the memory to a surface
+	//	cellGcmSetDisplayBuffer(i, graphicsSurfaces[i].colorOffset[0], colourPitch, screenWidth, screenHeight);
 
-		//Disable the other colour attachments for this surface
-		for(int j = 1; j < 4; ++j) {
-			graphicsSurfaces[i].colorLocation[j]	=	CELL_GCM_LOCATION_LOCAL;
-			graphicsSurfaces[i].colorOffset[j]		=	0;
-			graphicsSurfaces[i].colorPitch[j]		=	64;
-		}
+	//	//Disable the other colour attachments for this surface
+	//	for(int j = 1; j < 4; ++j) {
+	//		graphicsSurfaces[i].colorLocation[j]	=	CELL_GCM_LOCATION_LOCAL;
+	//		graphicsSurfaces[i].colorOffset[j]		=	0;
+	//		graphicsSurfaces[i].colorPitch[j]		=	64;
+	//	}
 
-		graphicsSurfaces[i].colorFormat 		= CELL_GCM_SURFACE_A8R8G8B8;
-		graphicsSurfaces[i].colorTarget			= CELL_GCM_SURFACE_TARGET_0;
-		graphicsSurfaces[i].colorLocation[0]	= CELL_GCM_LOCATION_LOCAL;
+	//	graphicsSurfaces[i].colorFormat 		= CELL_GCM_SURFACE_A8R8G8B8;
+	//	graphicsSurfaces[i].colorTarget			= CELL_GCM_SURFACE_TARGET_0;
+	//	graphicsSurfaces[i].colorLocation[0]	= CELL_GCM_LOCATION_LOCAL;
 
-		graphicsSurfaces[i].depthFormat 		= CELL_GCM_SURFACE_Z24S8;
-		graphicsSurfaces[i].depthLocation		= CELL_GCM_LOCATION_LOCAL;
+	//	graphicsSurfaces[i].depthFormat 		= CELL_GCM_SURFACE_Z24S8;
+	//	graphicsSurfaces[i].depthLocation		= CELL_GCM_LOCATION_LOCAL;
 
-		//Both surfaces are sharing the same depth buffer. 
-		//TODO - fix this before it causes ps3 drama
-		graphicsSurfaces[i].depthOffset			= depthOffset;
-		graphicsSurfaces[i].depthPitch 			= depthPitch;
+	//	//Both surfaces are sharing the same depth buffer. 
+	//	//TODO - fix this before it causes ps3 drama
+	//	graphicsSurfaces[i].depthOffset			= depthOffset;
+	//	graphicsSurfaces[i].depthPitch 			= depthPitch;
 
-		graphicsSurfaces[i].type				= CELL_GCM_SURFACE_PITCH;
-		graphicsSurfaces[i].antialias			= CELL_GCM_SURFACE_CENTER_1;
+	//	graphicsSurfaces[i].type				= CELL_GCM_SURFACE_PITCH;
+	//	graphicsSurfaces[i].antialias			= CELL_GCM_SURFACE_CENTER_1;
 
-		graphicsSurfaces[i].width 				= screenWidth;
-		graphicsSurfaces[i].height 				= screenHeight;
-		graphicsSurfaces[i].x 					= 0;
-		graphicsSurfaces[i].y 					= 0;
-	}
+	//	graphicsSurfaces[i].width 				= screenWidth;
+	//	graphicsSurfaces[i].height 				= screenHeight;
+	//	graphicsSurfaces[i].x 					= 0;
+	//	graphicsSurfaces[i].y 					= 0;
+	//}
 
 	//This is how we tell GCM to render into a surface, like we do in OpenGL
 	//using the function glBindFramebuffer.
@@ -272,7 +272,7 @@ void GCMRenderer::SwapBuffers()
 	// wait until FlipStatus = 0 so that PPU does not run too ahead of RSX
 	// FlipStatus turns to 0 when the previous flip is finished
 	while (cellGcmGetFlipStatus() != 0)
-		sys_timer_usleep(50);
+		sys_timer_usleep(200);
 
 	// reset FlipStatus = 1
 	cellGcmResetFlipStatus();
