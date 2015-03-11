@@ -278,27 +278,6 @@ void Renderer::UnloadAssets()
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"FreiChenFragment.glsl");
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl");
 
-bool Renderer::LoadAssets() {
-	// Load Meshes required for rendering operations
-	
-	circleMesh = GameStateManager::Assets()->LoadCircle(this, 20); // Circle for spotlight rendering
-	screenMesh = GameStateManager::Assets()->LoadQuad(this); // Quad for rendering textures to screen
-	sphereMesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
-	coneMesh = GameStateManager::Assets()->LoadCone(this, 20); // Cone for spotlight rendering
-	skyDome = GameStateManager::Assets()->LoadMesh(this, MESHDIR"dome.obj"); // Skydome
-	quadMesh = GameStateManager::Assets()->LoadQuadAlt(this);
-	nightSkyTex = (GameStateManager::Assets()->LoadTexture(this, "night_sky", 0))->GetTextureName();
-	//SetTextureRepeating(nightSkyTex, true);
-	daySkyTex = (GameStateManager::Assets()->LoadTexture(this, "day_sky", 0))->GetTextureName();
-
-	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh) {
-		return false;
-	}
-	
-	return true;
-}
-
-void Renderer::UnloadAssets() {
 	GameStateManager::Assets()->UnloadCircle(this, 20); // Circle for spotlight rendering
 	GameStateManager::Assets()->UnloadQuad(this); // Quad for rendering textures to screen
 	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
