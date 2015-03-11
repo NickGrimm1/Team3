@@ -12,7 +12,7 @@
 #include "../Team3Project1/RacerGame.h"
 
 
-#define LINEAR_VELOCITY_DAMP 0.98
+#define LINEAR_VELOCITY_DAMP 0.988
 #define ANGULAR_VELOCITY_DAMP 0.998
 #define LINEAR_VELOCITY_MIN 0.00001
 

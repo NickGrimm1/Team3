@@ -156,7 +156,7 @@ void RacerGame::LoadContent() {
 	car->SetRotation(Quaternion::EulerAnglesToQuaternion(0,-90,0));
 	car->SetType('u');
 	cout<<car->GetType()<<endl;
-	chasecamera = new ChaseCamera(car,T3Vector3(0,40,130),0,0,0);
+	chasecamera = new ChaseCamera(car,T3Vector3(0,40,130),180,90,0);
 	//chasecamera->AddYaw(500);
 	//chasecamera->AddPitch(90);
 	//car->SetPhysics(5,(vpn->GetCar()));
@@ -220,27 +220,48 @@ void RacerGame::LoadContent() {
 	f=0;
 	b=0;
 	temp2=T3Vector3(0,0,0);
-	Speed_Rotate = 0.4;
+	Speed_Rotate = 1.0;
 	tempPosition = T3Vector3(0,350,-800);
 	PlayerPosition=T3Vector3(500,100,-800);
 
 	camera->SetPosition(T3Vector3(0,10.0f, 80.0f));
 	//camera->SetYaw(180.0f);
-	GameStateManager::Graphics()->SetCamera(camera);
+	GameStateManager::Graphics()->SetCamera(chasecamera);
 #endif
 	//GameStateManager::Graphics()->SetCamera(chasecamera);
 }
 
 void RacerGame::Update() { 
 	#if WINDOWS_BUILD
-	if(car->GetCarNode().GetLinearVelocity().Length()>=15)
+	/*if(car->GetCarNode().GetLinearVelocity().Length()>=15)
 	{
 		car->GetCarNode().SetForce(T3Vector3(0,0,0));
 	
-	}
-	if(car->GetCarNode().GetLinearVelocity()==T3Vector3(0,0,0) && f!=0)
+	}*/
+	//if(((abs(car->GetCarNode().GetLinearVelocity().x)+abs(car->GetCarNode().GetLinearVelocity().z))<0.5)&& f!=0)
+	//	
+	//{
+ // f=0;
+ // //cout<<"reset f"<<endl;
+	//}
+	if(f>0){
+		f=f-0.35f;
+	if(f<0)
 	{
-	  f=0;
+	f=0;
+	}
+	 T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+				   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
+	}
+
+	if(f<0){
+		f=f+0.35f;
+	if(f>0)
+	{
+	f=0;
+	}
+	 T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+				   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
 	}
 	//T3Matrix4 m = T3Matrix4::Rotation(0.016f, T3Vector3(0,1,0));
 	//ent->AddRotation(Quaternion::FromMatrix(m));
@@ -258,10 +279,11 @@ void RacerGame::Update() {
 	update=0;
 	}
 	if((Time-60)==0){
-	cout<<"one sec pass"<<endl;
+	//cout<<"one sec pass"<<endl;
 	SetPlayTime(-1);
 	Time=0;
-	cout<<"Play Time = "<<GetPlayTime()<<endl;
+	//cout<<"\n time: pick up delete ="<<pickup.size()<<" delete  \n";
+	//cout<<"Play Time = "<<GetPlayTime()<<endl;
 	hud->SetScreen(GetScore(),GetPlayTime());
 	}
 	Time+=1;
@@ -298,6 +320,7 @@ void RacerGame::Start(){
 
 
 	AddDrawable(gold_cion);
+	pickup.push_back(gold_cion);
 
 
 
@@ -484,6 +507,12 @@ void RacerGame::DeleteTrack(){
 		allEntities.erase(allEntities.begin());
 		allEntities.erase(allEntities.begin());
 		allEntities.erase(allEntities.begin());*/
+	if(pickup.size()>1){
+		//cout<<"\n pick up delete ="<<pickup.size()<<" delete  \n";
+	GameStateManager::Graphics()->RemoveDrawable(pickup[0]);
+	pickup[0]->DisconnectFromSystems();
+	pickup.erase(pickup.begin());
+	}
 	RemoveDrawable(allEntities[0]);
 	RemoveDrawable(allEntities[1]);
 	allEntities.erase(allEntities.begin());
@@ -519,7 +548,7 @@ void RacerGame::DeleteTrack(){
 
 void RacerGame::CreateTrack(){
 //create a new control point
-		float angle = (rand() % 150) - 75;
+		float angle = (rand() % 120) - 60;
 		//float angle = 0;
 //		g += 100*(sin(RadToDeg(angle)));
 //		gx += 100*(2 * abs(cos(RadToDeg(angle))));
@@ -677,10 +706,10 @@ void RacerGame::CreateTrack(){
 	AddDrawable(checkpoint2);
 	checkPoint.push_back(checkpoint2);
 
-	if(GettimeOrScore()!=2){
+	if(GettimeOrScore()!=3){
 	Gold_cion * gold_cion= new Gold_cion(8);
 
-	gold_cion->SetOriginPosition(SplinePoint[4]);
+	gold_cion->SetOriginPosition(SplinePoint[4]+T3Vector3((rand() % 10)-5,0,(rand() % 10)-5));
 	gold_cion->SetRotation(Quaternion::EulerAnglesToQuaternion(0,0,0));
 
 	gold_cion->SetTexture(scoreTexture);
@@ -691,11 +720,12 @@ void RacerGame::CreateTrack(){
 	gold_cion->GetPhysicsNode().SetPGE(gold_cion);
 
 	AddDrawable(gold_cion);
+	pickup.push_back(gold_cion);
 	}
-	if(GettimeOrScore()==2){
+	if(GettimeOrScore()==3){
 	Gold_cion * gold_cion= new Gold_cion(8);
 
-	gold_cion->SetOriginPosition(SplinePoint[4]);
+	gold_cion->SetOriginPosition(SplinePoint[4]+T3Vector3((rand() % 10)-5,0,(rand() % 10)-5));
 	gold_cion->SetRotation(Quaternion::EulerAnglesToQuaternion(0,0,0));
 
 	gold_cion->SetTexture(timeTexture);
@@ -706,6 +736,9 @@ void RacerGame::CreateTrack(){
 	gold_cion->GetPhysicsNode().SetPGE(gold_cion);
 
 	AddDrawable(gold_cion);
+	 SettimeOrScore(-(GettimeOrScore()));
+
+	 pickup.push_back(gold_cion);
 	}
 
 }
@@ -1166,14 +1199,14 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 //
 //
 
-case KeyboardEvents::KEYBOARD_W:
+case KeyboardEvents::KEYBOARD_7:
 		{
 				//camera->AddMovement(T3Vector3(1,0,0));
-
+			GameStateManager::Audio()->PlaySoundA(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
 		
-			       f=f+0.4;
-				   if(f>100){
-				   f=100;
+			       f=f+1.8;
+				   if(f>350){
+				   f=350;
 				   }
 				
 			
@@ -1185,17 +1218,21 @@ case KeyboardEvents::KEYBOARD_W:
 		
 			 break;
 		}	
-		case KeyboardEvents::KEYBOARD_S:
+		case KeyboardEvents::KEYBOARD_8:
 			{//camera->AddMovement(T3Vector3(0,0,1));
 			
-				 b=b+0.2;
-				   if(b>50){
-				   b=50;
+				 f=f-3.0;
+				    if(f<(-90)){
+				   f=-90;
 				   }
-           T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
-		  car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*-b);
+				 
+				 T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+				   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
+				 
+				   
+				   
+         
 
-			
 
 
 
@@ -1219,6 +1256,9 @@ case KeyboardEvents::KEYBOARD_W:
 		     BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
 			  car->GetCarNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
 				}
+
+				 T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+				   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
 
 
 	//	}		
@@ -1244,7 +1284,8 @@ case KeyboardEvents::KEYBOARD_W:
 			  car->GetCarNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 				}
 			
-	
+	 T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+				   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
 
 
 
