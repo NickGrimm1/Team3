@@ -74,7 +74,7 @@ void InputManager::ThreadRun()
 GamepadEvents::PlayerIndex InputManager::GetActiveController(GamepadEvents::PlayerIndex playerID)
 {
 	unsigned int freePad;
-
+	cout << "Input Manager: GET ACTIVE CONTROLLER"<<endl;
 	if (playerID != GamepadEvents::PLAYERINDEX_MAX)
 	{
 		// Check this is a valid ID - if it has already been assigned, return error

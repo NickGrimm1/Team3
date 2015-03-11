@@ -28,6 +28,7 @@ Renderer::Renderer(vector<Light*>& lightsVec, vector<SceneNode*>& SceneNodesVec,
 	hudMatrix = Matrix4::orthographic(0.0f, screenWidth, 1080.0f, 0.0f, -10.0f, 10.0f); // For HUD Elements only
 	
 	//Creation of buffers.
+
 	//GenerateScreenTexture(gbufferNormalTex);
 	//GenerateScreenTexture(lightEmissiveTex);
 	//GenerateScreenTexture(lightSpecularTex);
