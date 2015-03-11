@@ -998,7 +998,7 @@ void Renderer::BloomPass()
 
 		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 1);
 		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-
+		
 		screenMesh->Draw();
 	}
 

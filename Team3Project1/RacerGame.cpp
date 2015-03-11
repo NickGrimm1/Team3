@@ -43,8 +43,8 @@ RacerGame::RacerGame(void)
 	PlayTime=30;
 	timeOrScore=0;
 
-		hud = new HudTestScreen();
-		GameStateManager::Instance()->AddGameScreen(hud);
+		//hud = new HudTestScreen();
+		//GameStateManager::Instance()->AddGameScreen(hud);
 
 		 scoreTexture = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"score.jpg", 0);
 		 timeTexture = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"time.jpg", 0);
@@ -73,8 +73,8 @@ void RacerGame::LoadContent() {
 	ent = new DrawableEntity3D(
 		quad, 
 		NULL,
-		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.tga", 0), 
-		GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"snowflake.png", 0),
+		GameStateManager::Assets()->LoadTexture(this, "Grass_Color", 0), 
+		GameStateManager::Assets()->LoadTexture(this, "snowflake", 0),
 		50.0f, 
 		T3Vector3(0,0,0), 
 		Quaternion::FromMatrix(T3Matrix4::Rotation(90.0f, T3Vector3(1,0,0))),
@@ -105,7 +105,7 @@ void RacerGame::LoadContent() {
 	checkpoint->SetType('g');
 	checkpoint->GetPhysicsNode().SetPGE(checkpoint);
 	AddDrawable(checkpoint);*/
-
+	
 	
 	
 	
@@ -115,7 +115,8 @@ void RacerGame::LoadContent() {
 	
 	//add road
 	
-	Texture* grassTex2 = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"water.jpg", 0);
+	Texture* grassTex2 = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"trackTex.png", 0);
+	Shader* sh = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
 	GameStateManager::Graphics()->GetRenderContext();
 	TrackSegment* trackr = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5, 50.0);
 	
@@ -125,7 +126,7 @@ void RacerGame::LoadContent() {
 	PhysicsNode* proad = new PhysicsNode();
 	GameEntity* road= new GameEntity(proad);
 		road->SetMesh(trackr);
-		road->SetShader(NULL);
+		road->SetShader(sh);
 		road->SetTexture(grassTex2);
 		road->SetBumpTexture(NULL);
 		road->SetBoundingRadius(800.0f);
@@ -1203,28 +1204,28 @@ case KeyboardEvents::KEYBOARD_7:
 		{
 				//camera->AddMovement(T3Vector3(1,0,0));
 			GameStateManager::Audio()->PlaySoundA(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
-		
+
 			       f=f+1.8;
 				   if(f>350){
 				   f=350;
-				   }
-				
-			
+		       }
+
+		
 				   T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
 				   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
-				
-			 
-		
-		
+
+			
+
+			
 			 break;
-		}	
+		}
 		case KeyboardEvents::KEYBOARD_8:
 			{//camera->AddMovement(T3Vector3(0,0,1));
-			
+		
 				 f=f-3.0;
 				    if(f<(-90)){
 				   f=-90;
-				   }
+		}
 				 
            T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
 				   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
@@ -1232,7 +1233,7 @@ case KeyboardEvents::KEYBOARD_7:
 				   
 				   
 
-			
+				
 
 
 
@@ -1240,8 +1241,8 @@ case KeyboardEvents::KEYBOARD_7:
 			break;
 		case KeyboardEvents::KEYBOARD_A:
 			{//camera->AddMovement(T3Vector3(1,0,0));
-			
-			
+
+
 				if(car->GetCarNode().GetLinearVelocity().x>=0){
 				FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 		     FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
@@ -1275,18 +1276,18 @@ case KeyboardEvents::KEYBOARD_7:
 			 BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
 		     BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
 			  car->GetCarNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
-		}
+		      }
 				if(car->GetCarNode().GetLinearVelocity().x<0){
 				FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 		     FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 			 BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 		     BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 			  car->GetCarNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
-				}
-			
+		}			
+
 	 T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
 				   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
-
+	
 
 
 			}
