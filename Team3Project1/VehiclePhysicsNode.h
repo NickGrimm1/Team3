@@ -27,7 +27,7 @@ public:
 		BackLeftTire = new PhysicsNode();
 		BackRightTire = new PhysicsNode();
 		carMesh=GameStateManager::Assets()->LoadMesh(this, MESHDIR"CarPhysics.obj");
-		tireMesh=GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Tire.obj");
+		tireMesh=GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaTire.obj");
 		collisionVertices = new Vertex[carMesh->GetNumVertices() + 4 * tireMesh->GetNumVertices()];
 		
 		cout << "car: " << carMesh->GetNumVertices() + 4 * tireMesh->GetNumVertices() << endl;
