@@ -1,5 +1,6 @@
 #include "AssetManager.h"
 #include "../Framework/OBJMesh.h"
+#include "PhysicsObjMesh.h"
 #include "../Framework/MD5Mesh.h"
 #include "GameStateManager.h"
 #include "Heightmap.h"
@@ -147,7 +148,7 @@ Mesh* AssetManager::LoadMesh(void* callerID, string filePath)
 		if (filePath.substr(filePath.length() - 3, 3) == "obj")
 		{
 			GameStateManager::Graphics()->GetRenderContext();
-			newMesh = new OBJMesh(filePath);
+			newMesh = new PhysicsObjMesh(filePath);
 			GameStateManager::Graphics()->DropRenderContext();
 		}
 		else if (filePath.substr(filePath.length() - 3, 3) == "md5")

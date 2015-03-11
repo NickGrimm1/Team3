@@ -46,6 +46,7 @@ MainMenu::~MainMenu(void)
 }
 
 void MainMenu::LoadContent() {
+	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	wallpaper = new MenuScreen3D();
 	GameStateManager::AddGameScreen(wallpaper);
 
@@ -134,28 +135,38 @@ void MainMenu::LoadContent() {
 	}
 #endif
 
+	//finished loading screen
+	GameStateManager::Graphics()->EnableLoadingIcon(false);
 }
 
 void MainMenu::UnloadContent() {
-	RemoveClickable(newGame);
-	RemoveClickable(controls);
-	RemoveClickable(quitGame);
-	RemoveClickable(music);
-	RemoveClickable(sounds);
+	RemoveClickable(newGame, true, false);
+	RemoveClickable(controls, true, false);
+	RemoveClickable(quitGame, true, false);
+	RemoveClickable(music, true, false);
+	RemoveClickable(sounds, true, false);
 
-	RemoveDrawable(scoreBoard);
-	RemoveDrawable(pressStart);
+	RemoveDrawable(scoreBoard, false);
+	RemoveDrawable(pressStart, false);
+
+#ifdef WINDOWS_BUILD
+	for (unsigned int i = 0; i < 10; i++) {
+		RemoveDrawable(scores[i].first, false);
+		RemoveDrawable(scores[i].second, false);
+	}
+	scores.clear();
+#endif
 
 	GameStateManager::Assets()->UnloadTexture(this, "Buttons/button");
 	GameStateManager::Assets()->UnloadTexture(this, "Buttons/button_selected");
 	GameStateManager::Assets()->UnloadTexture(this, "Buttons/button_clicked");
 	GameStateManager::Assets()->UnloadTexture(this, "score_board");
-
+								
 	GameStateManager::Assets()->UnloadTexture(this, "Buttons/music_nomute");
 	GameStateManager::Assets()->UnloadTexture(this, "Buttons/music_nomute_selected");
 	GameStateManager::Assets()->UnloadTexture(this, "Buttons/music_mute");
 	GameStateManager::Assets()->UnloadTexture(this, "Buttons/music_mute_selected");
-								
+
 	GameStateManager::Assets()->UnloadTexture(this, "Buttons/sound_nomute");
 	GameStateManager::Assets()->UnloadTexture(this, "Buttons/sound_nomute_selected");
 	GameStateManager::Assets()->UnloadTexture(this, "Buttons/sound_mute");
@@ -173,6 +184,7 @@ void MainMenu::UnloadContent() {
 /*--------------------Clicked Methods--------------------*/
 
 void MainMenu::NewGameClicked(float x, float y) {
+	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	newGame->GetTexture()->SetTexture(buttonTexClicked);
 #if WINDOWS_BUILD
 	GameStateManager::Graphics()->EnableMousePointer(false);
@@ -181,8 +193,10 @@ void MainMenu::NewGameClicked(float x, float y) {
 	GameStateManager::Instance()->RemoveGameScreen(this);
 
 	RacerGame* game = new RacerGame();
+//	GraphicsTestScreen* game = new GraphicsTestScreen();
 	GameStateManager::Physics()->SetGame(game);
 	GameStateManager::Instance()->ChangeScreen(game);
+	//GameStateManager::RemoveGameScreen(this);
 }
 
 void MainMenu::ControlsClicked(float x, float y) {

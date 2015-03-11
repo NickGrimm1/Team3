@@ -348,6 +348,7 @@ void Renderer::RenderScene() {
 	}
 
 	//Draw HUD/Menu overlay
+	loadingIcon->SetRotation(loadingIcon->GetRotation() + 1.0f);
 	Draw2DOverlay();
 
 	if (camera) { //TODO - remove
@@ -1269,7 +1270,9 @@ bool Renderer::GetRenderContextForThread() {
 
 bool Renderer::DropRenderContextForThread() {
 	bool result = (0 != wglMakeCurrent(deviceContext, NULL));
-	openglMutex.unlock_mutex(); 
+	openglMutex.unlock_mutex();
+	float sleep = Window::GetWindow().GetTimer()->GetMS();
+	while (Window::GetWindow().GetTimer()->GetMS() < sleep + 100);
 	return result;
 }
 

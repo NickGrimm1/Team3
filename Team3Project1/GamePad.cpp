@@ -370,69 +370,64 @@ void GamePad::Update(float msec)
 			buttonHoldTimes[i] = 0;
 		}
 
-#if PS3_BUILD
+#ifdef PS3_BUILD
 		if(gamePadState.button[3] & (1 << i))
 #endif
-#if WINDOWS_BUILD
-		if (previousGamePadState.Gamepad.wButtons & (1 << (i + halfInput)))
+#ifdef WINDOWS_BUILD
+		if (gamePadState.Gamepad.wButtons & (1 << (i + halfInput)))
 #endif
 		{
 			GamepadEvents::Button button = (GamepadEvents::Button)(halfInput + i);
 			// Button is down, check for first
-#if PS3_BUILD
-			if (!(previousGamePadState.button[3] & (1 << i)))
-#endif
-#if WINDOWS_BUILD
-			if (!(previousGamePadState.Gamepad.wButtons & (1 << (i + halfInput))))
-#endif
+
+			// Special case - L2 & R2 are analogue
+			if (button == GamepadEvents::INPUT_L2_TRIGGER || button == GamepadEvents::INPUT_R2_TRIGGER)
 			{
-				// Special case - L2 & R2 are analogue
-				if (button == GamepadEvents::INPUT_L2_TRIGGER || button == GamepadEvents::INPUT_R2_TRIGGER)
-				{
-				}
-				else
-				{
-#if PS3_BUILD
-					if (!(previousGamePadState.button[3] & (1 << i)))
-#endif
-#if WINDOWS_BUILD
-					if (!(previousGamePadState.Gamepad.wButtons & (1 << (i + halfInput))))
-#endif
-					{			
-						GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, button);
-					}
-					else
-					{
-						GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_HELD, button);
-					}
-					buttonHoldTimes[halfInput + i] += msec;
-				}
 			}
 			else
 			{
-				// Special case - L2 & R2 are analogue
-				if (button == GamepadEvents::INPUT_L2_TRIGGER || button == GamepadEvents::INPUT_R2_TRIGGER)
-				{
+#ifdef PS3_BUILD
+				if (!(previousGamePadState.button[3] & (1 << i)))
+#endif
+#ifdef WINDOWS_BUILD
+				if (!(previousGamePadState.Gamepad.wButtons & (1 << (i + halfInput))))
+#endif
+				{			
+					GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, button);
 				}
 				else
 				{
-					// button is up, check if it was down
+					GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_HELD, button);
+				}
+				buttonHoldTimes[halfInput + i] += msec;
+			}
+		}
+		else
+		{
+			GamepadEvents::Button button = (GamepadEvents::Button)(halfInput + i);
+
+			// Special case - L2 & R2 are analogue
+			if (button == GamepadEvents::INPUT_L2_TRIGGER || button == GamepadEvents::INPUT_R2_TRIGGER)
+			{
+			}
+			else
+			{
+				// button is up, check if it was down
 #if PS3_BUILD
-					if (previousGamePadState.button[3] & (1 << i))
+				if (previousGamePadState.button[3] & (1 << i))
 #endif
 #if WINDOWS_BUILD
-					if (previousGamePadState.Gamepad.wButtons & (1 << (i + halfInput)))
+				if (previousGamePadState.Gamepad.wButtons & (1 << (i + halfInput)))
 #endif
+				{
+					GamepadEvents::Button button = (GamepadEvents::Button)(halfInput +i);
+					GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_UP, button);
+					if (buttonHoldTimes[halfInput + i] < PRESSLIMIT)
 					{
-						GamepadEvents::Button button = (GamepadEvents::Button)(halfInput +i);
-						GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_UP, button);
-						if (buttonHoldTimes[i] < PRESSLIMIT)
-						{
-							GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_PRESS, button);
-						}
+						GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_PRESS, button);
 					}
-					buttonHoldTimes[halfInput + i] = 0;
 				}
+				buttonHoldTimes[halfInput + i] = 0;
 			}
 		}
 	}

@@ -27,23 +27,6 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 		return false;
 	}
 
-	/*
-	Stores the loaded in vertex attributes
-	*/
-	std::vector<T3Vector2>inputTexCoords;
-	std::vector<T3Vector3>inputVertices;
-	std::vector<T3Vector3>inputNormals;
-
-	/* 
-	Stores the loaded in materials
-	*/
-	map <string, MTLInfo> materials;
-
-	/*
-	SubMeshes temporarily get kept in here
-	*/
-	std::vector<OBJSubMesh*> inputSubMeshes;
-
 	OBJSubMesh* currentMesh = new OBJSubMesh();
 	inputSubMeshes.push_back(currentMesh);	//It's safe to assume our OBJ will have a mesh in it ;)
 
@@ -190,6 +173,14 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 	}
 
 	f.close();
+	return true;
+}
+
+bool OBJMesh::BuildOBJMesh() {
+	/* 
+	Stores the loaded in materials
+	*/
+	map <string, MTLInfo> inputMaterials;
 
 	//We now have all our mesh data loaded in...Now to convert it into OpenGL vertex buffers!
 	for(unsigned int i = 0; i < inputSubMeshes.size(); ) {
@@ -244,7 +235,7 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 
 			m->BufferData();
 
-			m->SetTexturesFromMTL(sm->mtlSrc, sm->mtlType, materials);
+			m->SetTexturesFromMTL(sm->mtlSrc, sm->mtlType, inputMaterials);
 
 			if(i != 0) {
 				AddChild(m);

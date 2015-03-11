@@ -512,14 +512,16 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 			{
 				//OnCollision(first,second);
 				//cout << "GJK passed" << endl;
-				if(first.GetIsCollide()==false && second.GetIsCollide ()==true)
+				if(first.GetIsCollide()==true && second.GetIsCollide ()==true)
 				{
-					//if(second.GetType()=='f'){
 					OnCollision(first,second);
+					//if(second.GetType()=='f'){
+					//OnCollision(first,second);
 					//}
 				}
 				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
 				{
+					//OnCollision(first,second);
 					//OnCollision(first,second);
 						/*if(check==true)
 					{
@@ -543,10 +545,10 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 					
 						check=false;
 					}*/
-					first.SetLinearVelocity(T3Vector3(0,0,0));
+					/*first.SetLinearVelocity(T3Vector3(0,0,0));
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
-					second.SetForce(T3Vector3(0,0,0));
+					second.SetForce(T3Vector3(0,0,0));*/
 				}
 			
 				if ((first.GetIsCollide()==true && second.GetIsCollide ()==true) && ((first.Getcar_wheel()==true && second.Getcar_wheel()==true)))
@@ -580,8 +582,8 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 													
 			                second.SetPosition(second.GetPosition() + T3Vector3(0, 2.0f, 0));
 
-						}
-			        }
+			}
+				}
 				}
 			
 			
@@ -711,7 +713,7 @@ float Dist(const T3Vector3& a, const T3Vector3& b)
 			Triangle_normal.Normalise();
 	}
 	};
-	
+
 	std::vector<EPA_Triangle> lst_EPA_Triangle;
 	std::vector<EPA_Edge> lst_EPA_Edge;
 	auto addEdge = [&](const T3Vector3 &a, const T3Vector3 &b) -> void
@@ -729,7 +731,7 @@ float Dist(const T3Vector3& a, const T3Vector3& b)
 		lst_EPA_Edge.push_back(EPA_Edge(a, b));
 	};
 
-
+	
 bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* data)
 {
 
@@ -774,7 +776,7 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* 
 	{
 		if(_EXIT_ITERATION_NUM++ >= _EXIT_ITERATION_LIMIT) 
 			break;
-
+	
 		if (lst_EPA_Triangle.size() > 500)
 			break;
 
@@ -844,7 +846,7 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1,PhysicsNode& shape2, CollisionData* 
 			if(T3Vector3::Dot(it->Triangle_normal, (new_point - it->Point[0].v)) > _EXIT_THRESHOLD)
 			{
 				if (new_point == it->Point[0].v || new_point == it->Point[1].v)
-				{
+			{
 					printf("INVALID TRIANGLE!!");
 					return false;
 				}

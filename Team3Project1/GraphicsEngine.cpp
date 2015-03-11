@@ -76,6 +76,7 @@ GraphicsEngine::GraphicsEngine()
 		return;
 #endif
 
+	renderer->SetLoadingIcon(loadingIcon);
 
 	isInitialised = true; // Graphics Engine has initialised successfully
 }
@@ -123,41 +124,41 @@ void GraphicsEngine::Run() {
 #endif
 
 		// add/remove requested items from scene lists
-	contentGuard.lock_mutex();
+		contentGuard.lock_mutex();
 
-	// Add/Remove Game objects
-	for (unsigned int i = 0; i < addGameList.size(); i++) {
-		if (addGameList[i].second == NULL) {
-			// if no parent - add drawable as child of sceneRoot
-			sceneRoot->AddChild(new SceneNode(addGameList[i].first));
-		}
-		else
-		{
-			sceneRoot->AddChildToParent(addGameList[i].first, addGameList[i].second);
-		}
-	}
-	addGameList.clear();
-
-	for (unsigned int i = 0; i < removeGameList.size(); i++) {
-		sceneRoot->RemoveChild(removeGameList[i].first, removeGameList[i].second);
-	}
-	removeGameList.clear();
-
-#if WINDOWS_BUILD
-	// Add/Remove HUD elements
-	for (unsigned int i = 0; i < addHudList.size(); i++) {
-		overlayElementsList.push_back(addHudList[i]);
-	}
-	addHudList.clear();
-
-	for (unsigned int i = 0; i < removeHudList.size(); i++) {
-		for (unsigned int j = 0; j < overlayElementsList.size(); ++j) {
-			if (overlayElementsList[j] == removeHudList[i]) {
-				overlayElementsList.erase(overlayElementsList.begin() + j);
+		// Add/Remove Game objects
+		for (unsigned int i = 0; i < addGameList.size(); i++) {
+			if (addGameList[i].second == NULL) {
+				// if no parent - add drawable as child of sceneRoot
+				sceneRoot->AddChild(new SceneNode(addGameList[i].first));
+			}
+			else
+			{
+				sceneRoot->AddChildToParent(addGameList[i].first, addGameList[i].second);
 			}
 		}
-	}
-	removeHudList.clear();
+		addGameList.clear();
+
+		for (unsigned int i = 0; i < removeGameList.size(); i++) {
+			sceneRoot->RemoveChild(removeGameList[i].first, removeGameList[i].second);
+		}
+		removeGameList.clear();
+
+#if WINDOWS_BUILD
+		// Add/Remove HUD elements
+		for (unsigned int i = 0; i < addHudList.size(); i++) {
+			overlayElementsList.push_back(addHudList[i]);
+		}
+		addHudList.clear();
+
+		for (unsigned int i = 0; i < removeHudList.size(); i++) {
+			for (unsigned int j = 0; j < overlayElementsList.size(); ++j) {
+				if (overlayElementsList[j] == removeHudList[i]) {
+					overlayElementsList.erase(overlayElementsList.begin() + j);
+				}
+			}
+		}
+		removeHudList.clear();
 #endif
 #if PS3_BUILD
 	// Add/Remove HUD elements
@@ -191,57 +192,57 @@ void GraphicsEngine::Run() {
 
 	
 
-	for (unsigned int i = 0; i < addLightsList.size(); i++) {
-		lights.push_back(addLightsList[i]);
-	}
-	addLightsList.clear();
+		for (unsigned int i = 0; i < addLightsList.size(); i++) {
+			lights.push_back(addLightsList[i]);
+		}
+		addLightsList.clear();
 
-	// Add/Remove lights
-	for (unsigned int l = 0; l < removeLightsList.size(); l++) {
-		for (unsigned int i = 0; i < lights.size(); ++i) {
-			if (lights[i] == removeLightsList[l]) {
-				unsigned int shadowTex = lights[i]->GetShadowTexture();
+		// Add/Remove lights
+		for (unsigned int l = 0; l < removeLightsList.size(); l++) {
+			for (unsigned int i = 0; i < lights.size(); ++i) {
+				if (lights[i] == removeLightsList[l]) {
+					unsigned int shadowTex = lights[i]->GetShadowTexture();
 #if WINDOWS_BUILD
-				if (shadowTex > 0) 
-					renderer->DestroyTexture(shadowTex);
+					if (shadowTex > 0) 
+						renderer->DestroyTexture(shadowTex);
 #endif
-				lights.erase(lights.begin() + i);
+					lights.erase(lights.begin() + i);
+				}
 			}
 		}
-	}
-	removeLightsList.clear();
+		removeLightsList.clear();
 
 		
 			
-	// Update data in scene nodes
-	sceneRoot->Update(msec); // TODO - sort out proper timestep value - or remove timestep if not needed
+		// Update data in scene nodes
+		sceneRoot->Update(msec); // TODO - sort out proper timestep value - or remove timestep if not needed
 		
-	// Reset scene bounding box volume
-	boundingMax = T3Vector3(0,0,0);
-	boundingMin = T3Vector3(0,0,0);		
+		// Reset scene bounding box volume
+		boundingMax = T3Vector3(0,0,0);
+		boundingMin = T3Vector3(0,0,0);		
 
-	// Update camera
-	if (camera != NULL)
-	{
-		camera->UpdateCamera(); // may need to remove
-		T3Matrix4 viewMatrix = camera->BuildViewMatrix();
-		T3Matrix4 projMatrix = T3Matrix4::Perspective(1.0f, 10000.0f, (float) width / (float) height, 45.0f);
+		// Update camera
+		if (camera != NULL)
+		{
+			camera->UpdateCamera(); // may need to remove
+			T3Matrix4 viewMatrix = camera->BuildViewMatrix();
+			T3Matrix4 projMatrix = T3Matrix4::Perspective(1.0f, 10000.0f, (float) width / (float) height, 45.0f);
 #if WINDOWS_BUILD
-		frameFrustum.FromMatrix(projMatrix * viewMatrix);
+			frameFrustum.FromMatrix(projMatrix * viewMatrix);
 #endif
 		
 
-		// Build Node lists
-		BuildNodeLists(sceneRoot);
-		SortNodeLists();
-	}
-	// Update directional lights with scene bounding box
-	// Transform bounding volume by camera transform
+			// Build Node lists
+			BuildNodeLists(sceneRoot);
+			SortNodeLists();
+		}
+		// Update directional lights with scene bounding box
+		// Transform bounding volume by camera transform
 #if WINDOWS_BUILD
-	DirectionalLight::UpdateLightVolume(boundingMin, boundingMax);
+		DirectionalLight::UpdateLightVolume(boundingMin, boundingMax);
 #endif
 
-	// Sort HUD elements
+		// Sort HUD elements
 #if WINDOWS_BUILD
 	std::sort(overlayElementsList.begin(), overlayElementsList.end(), SortDrawableEntity2D);
 #endif
@@ -251,38 +252,42 @@ void GraphicsEngine::Run() {
 #endif
 	
 #if WINDOWS_BUILD
-	// Sort Point Lights to the front of the lights list
+		// Sort Point Lights to the front of the lights list
 	std::sort(lights.begin(), lights.end(), SortLights);
 #endif
 
 	if (isLoading && !isLoadingDrawing) 
 	{
 #if WINDOWS_BUILD
-		overlayElementsList.push_back(loadingIcon);
+			overlayElementsList.push_back(loadingIcon);
 #endif
 #if PS3_BUILD
 		overlayTexturesList.push_back(loadingIcon);
 #endif
-		isLoadingDrawing = true;
-	}
-//		else if (!isLoading && isLoadingDrawing) {
-//			overlayElementsList
+			isLoadingDrawing = true;
+		}
+		else if (!isLoading && isLoadingDrawing) {
+			for (unsigned int i = 0; i < overlayElementsList.size(); i++) {
+				if (overlayElementsList[i] == loadingIcon) {
+					overlayElementsList.erase(overlayElementsList.begin() + i);
+				}
+			}
+		}
+
+//		if (isLoadingDrawing) {
+//			loadingIcon->SetRotation(loadingIcon->GetRotation() + 1.0f);
 //		}
 
-	if (isLoadingDrawing) {
-		loadingIcon->SetRotation(loadingIcon->GetRotation() + 1.0f);
-	}
+		//Update the day/night float
+		renderer->SetDayNight(DayNightCycle());
 
-	//Update the day/night float
-	renderer->SetDayNight(DayNightCycle());
+		// Render data
+		renderer->RenderScene();
 
-	// Render data
-	renderer->RenderScene();
+		// Clear node lists in preparation for next render cycle
+		ClearNodeLists();
 
-	// Clear node lists in preparation for next render cycle
-	ClearNodeLists();
-
-	contentGuard.unlock_mutex();
+		contentGuard.unlock_mutex();
 	}
 
 #if PS3_BUILD

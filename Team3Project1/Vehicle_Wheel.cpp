@@ -6,7 +6,7 @@
 Vehicle_Wheel::Vehicle_Wheel(float size/*,PhysicsNode * carPhysicNode*/):
 	carPhysicNode(carPhysicNode) 
 {
-	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Tire.obj");
+	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaTire.obj");
 	T3Vector3 position =T3Vector3(-11, -2, 7);
 	boundingRadius = size;
 	origin = position;

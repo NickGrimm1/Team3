@@ -45,7 +45,7 @@ void AudioTestClass::LoadContent() {
 	BGM3 = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm3.wav");
 	laser1 = GameStateManager::Audio()->GetSound (SOUNDSDIR"engine.wav");
 	laser3 = GameStateManager::Audio()->GetSound (SOUNDSDIR"alarm1.wav");
-	
+
 	//GameStateManager::Audio()-> PlaySound (BGM3,SOUNDPRIORITY_ALWAYS, false);//SOUNDPRIORTY_LOW);
 	GameStateManager::Audio()-> PlaySound (laser1,T3Vector3(0,0,0), true);
 	GameStateManager::Audio()-> PlaySound (laser3,T3Vector3(100,0,0), true);
@@ -92,12 +92,12 @@ void AudioTestClass::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvent
 		//	break;
 		//	pressonce = true;
 		//	}
-			
+	
 		case KeyboardEvents::KEYBOARD_ESCAPE:
 			GameStateManager::Instance()->Exit();
 			break;
 
-			/*case KeyboardEvents::KEYBOARD_4:
+	    /*case KeyboardEvents::KEYBOARD_4:
 			PlaySound(TEXT("../Sounds/36847__ecodtr__laserrocket2.wav"),NULL,SND_ASYNC|SND_LOOP);
 		break;*/
 		}

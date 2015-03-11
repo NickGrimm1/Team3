@@ -52,7 +52,7 @@ bool Scoreboard::RetrieveScoreboard() {
 	}
 	if (bytesReceived > 0) {
 		string httpResponse(buffer, buffer + bytesReceived);
-		cout << httpResponse << endl;
+		//cout << httpResponse << endl;
 
 		if (httpResponse.find(HTTP_OK) != string::npos) {
 			stringstream httpStream(httpResponse);

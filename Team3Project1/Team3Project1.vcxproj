@@ -326,6 +326,7 @@
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="PauseScreen.h" />
     <ClInclude Include="PhysicsEngine.h" />
+    <ClInclude Include="PhysicsObjMesh.h" />
     <ClInclude Include="RacerGame.h" />
     <ClInclude Include="Scoreboard.h" />
     <ClInclude Include="SelectableEntity2D.h" />
