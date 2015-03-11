@@ -70,15 +70,15 @@ void RacerGame::LoadContent() {
 	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
 	//cout << "Quad Obj = " << quad->GetVertexBuffer() << endl;
 	
-	ent = new DrawableEntity3D(
-		quad, 
-		NULL,
-		GameStateManager::Assets()->LoadTexture(this, "Grass_Color", 0), 
-		GameStateManager::Assets()->LoadTexture(this, "snowflake", 0),
-		50.0f, 
-		T3Vector3(0,0,0), 
-		Quaternion::FromMatrix(T3Matrix4::Rotation(90.0f, T3Vector3(1,0,0))),
-		T3Vector3(50,50,1));
+	//ent = new DrawableEntity3D(
+	//	quad, 
+	//	NULL,
+	//	GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.png", 0), 
+	//	GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"snowflake.png", 0),
+	//	50.0f, 
+	//	T3Vector3(0,0,0), 
+	//	Quaternion::FromMatrix(T3Matrix4::Rotation(90.0f, T3Vector3(1,0,0))),
+	//	T3Vector3(50,50,1));
 	
 
 
@@ -285,7 +285,7 @@ void RacerGame::Update() {
 	Time=0;
 	//cout<<"\n time: pick up delete ="<<pickup.size()<<" delete  \n";
 	//cout<<"Play Time = "<<GetPlayTime()<<endl;
-	hud->SetScreen(GetScore(),GetPlayTime());
+	//hud->SetScreen(GetScore(),GetPlayTime());
 	}
 	Time+=1;
 
