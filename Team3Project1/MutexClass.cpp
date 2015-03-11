@@ -1,5 +1,5 @@
 #include "MutexClass.h"
-#ifdef PS3_BUILD
+#if PS3_BUILD
 #include <cell/sync/mutex.h>
 #endif
 
@@ -12,7 +12,7 @@ MutexClass::MutexClass()
 		NULL); // unamed mutex
 #endif
 #if PS3_BUILD
-	//cellSyncMutexInitialize(&mutex);
+	cellSyncMutexInitialize(&mutex);
 #endif
 }
 
@@ -32,7 +32,7 @@ void MutexClass::lock_mutex()
 		INFINITE); // no time-out interval
 #endif
 #if PS3_BUILD
-	//cellSyncMutexLock(&mutex);  
+	cellSyncMutexLock(&mutex);  
 #endif
 }
 
@@ -42,6 +42,6 @@ void MutexClass::unlock_mutex()
 	ReleaseMutex(mutex);
 #endif
 #if PS3_BUILD
-	//cellSyncMutexUnlock(&mutex);
+	cellSyncMutexUnlock(&mutex);
 #endif
 }

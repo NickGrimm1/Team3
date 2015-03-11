@@ -233,8 +233,13 @@ bool Renderer::LoadAssets()
 	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh || !quadMesh || !skyDome) {
 		cout << "Renderer::LoadAssets() - unable to load rendering assets";
 		return false;
-	}
+	edgeDetectShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"FreiChenFragment.glsl");
+	hudShader		 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl");
+	debugDrawShader  = GameStateManager::Assets()->LoadShader(this, SHADERDIR"debugVertex.glsl", SHADERDIR"debugFragment.glsl");
 	
+	return LoadCheck();
+}
+
 	return true;
 
 }
@@ -256,7 +261,9 @@ bool Renderer::LoadCheck()
 			bloomFinalShader	!= NULL &&
 			velocityShader		!= NULL &&
 			motionBlurShader	!= NULL &&
-			hudShader			!= NULL);
+			edgeDetectShader	!= NULL &&
+			hudShader			!= NULL &&
+			debugDrawShader		!= NULL);
 }
 
 void Renderer::UnloadAssets()
@@ -276,6 +283,7 @@ void Renderer::UnloadAssets()
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BloomFinalShader.glsl");//Final bloom Shader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"VelocityVertex.glsl", SHADERDIR"VelocityFragment.glsl");//VBuffer Shader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlurFragment.glsl");//Motion blur Shader
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"FreiChenFragment.glsl");
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl");
 
 	GameStateManager::Assets()->UnloadCircle(this, 20); // Circle for spotlight rendering
@@ -339,6 +347,7 @@ void Renderer::RenderScene() {
 		CombineBuffers();
 
 		//Post-Processing
+		EdgeDetectPass();
 		BloomPass();
 		MotionBlurPass();
 
@@ -348,7 +357,7 @@ void Renderer::RenderScene() {
 	//Draw HUD/Menu overlay
 	loadingIcon->SetRotation(loadingIcon->GetRotation() + 1.0f);
 	if (hudShader != NULL && quadMesh != NULL) {
-		Draw2DOverlay();
+	Draw2DOverlay();
 	}
 
 	SwapBuffers();
@@ -821,6 +830,35 @@ void Renderer::DrawSkybox() {
 
 /*--------Post-Processing methods--------*/
 
+void Renderer::EdgeDetectPass() {
+	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[1], 0);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+	SetCurrentShader(edgeDetectShader); //Use the edge-detect shader
+	projMatrix = orthographicMatrix;
+	viewMatrix.ToIdentity();
+	textureMatrix.ToIdentity();
+	modelMatrix.ToIdentity();
+	UpdateShaderMatrices();
+	glActiveTexture(GL_TEXTURE0 + GBUFFER_DEPTH_TEXTURE_UNIT);
+	glBindTexture(GL_TEXTURE_2D, gbufferDepthTex);
+
+	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+	glBindTexture(GL_TEXTURE_2D, postProcessingTex[0]);
+
+	glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / (float)width, 1.0f / (float)height);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "zNear"), 0.1f);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "zFar"), 1000.0f);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "depthTex"), GBUFFER_DEPTH_TEXTURE_UNIT);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+
+	screenMesh->Draw();
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glUseProgram(0);
+}
+
+
 void Renderer::BloomPass()
 {
 /*	
@@ -832,7 +870,7 @@ void Renderer::BloomPass()
 	/*-----------------------------Bright pass filter-----------------------------*/
 
 	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[1], 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[2], 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	SetCurrentShader(brightPassShader);
@@ -843,7 +881,7 @@ void Renderer::BloomPass()
 	UpdateShaderMatrices();
 
 	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-	glBindTexture(GL_TEXTURE_2D, postProcessingTex[0]);
+	glBindTexture(GL_TEXTURE_2D, postProcessingTex[1]);
 
 	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "luminance"), 0.09f);
 	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "middleGrey"), 0.18f);
@@ -858,7 +896,7 @@ void Renderer::BloomPass()
 	UpdateShaderMatrices();
 
 	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-	glBindTexture(GL_TEXTURE_2D, postProcessingTex[1]);
+	glBindTexture(GL_TEXTURE_2D, postProcessingTex[2]);
 
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 
@@ -911,7 +949,7 @@ void Renderer::BloomPass()
 	glViewport(0, 0, width, height);
 
 	/*-------------------Combine the brightpass images together-------------------*/
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[2], 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[0], 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 	SetCurrentShader(bloomCombShader);
@@ -938,11 +976,11 @@ void Renderer::BloomPass()
 	glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / (float)width, 1.0f / (float)height);
 
 	for (int i = 0; i < 2; ++i) {
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[1], 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[2], 0);
 		glClear(GL_COLOR_BUFFER_BIT);
 		
 		glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-		glBindTexture(GL_TEXTURE_2D, postProcessingTex[2]);
+		glBindTexture(GL_TEXTURE_2D, postProcessingTex[0]);
 
 		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 0);
 		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
@@ -950,11 +988,11 @@ void Renderer::BloomPass()
 		screenMesh->Draw();
 
 		//now to swap the colour buffers, and do the second blur Pass
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[2], 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[0], 0);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-		glBindTexture(GL_TEXTURE_2D, postProcessingTex[1]);
+		glBindTexture(GL_TEXTURE_2D, postProcessingTex[2]);
 
 		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 1);
 		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
@@ -964,18 +1002,17 @@ void Renderer::BloomPass()
 
 	/*----------------Combine the bloom image with the scene image----------------*/
 
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[1], 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, postProcessingTex[2], 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	SetCurrentShader(bloomFinalShader);
 	UpdateShaderMatrices();
 
 	glActiveTexture(GL_TEXTURE0 + GBUFFER_COLOUR_TEXTURE_UNIT);
-	glBindTexture(GL_TEXTURE_2D, postProcessingTex[2]);
-	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 	glBindTexture(GL_TEXTURE_2D, postProcessingTex[0]);
+	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
+	glBindTexture(GL_TEXTURE_2D, postProcessingTex[1]);
 	
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "darkTex"), GBUFFER_COLOUR_TEXTURE_UNIT);
-	//glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "mixVal"), 0.7f);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), MESH_OBJECT_COLOUR_TEXTURE_UNIT);
 	
 	screenMesh->Draw();
@@ -1026,7 +1063,7 @@ void Renderer::MotionBlurPass()
 	glActiveTexture(GL_TEXTURE0 + GBUFFER_VELOCITY_UNIT);
 	glBindTexture(GL_TEXTURE_2D, gbufferVelocity);
 	glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_COLOUR_TEXTURE_UNIT);
-	glBindTexture(GL_TEXTURE_2D, postProcessingTex[1]);
+	glBindTexture(GL_TEXTURE_2D, postProcessingTex[2]);
 
 	//TODO: Create a method that does the currFPS/TargetFPS calc
 	currentFPS = GameStateManager::Graphics()->GetFrameRate();
@@ -1062,6 +1099,8 @@ void Renderer::DrawFrameBufferTex(GLuint fboTex) {
 
 	glUseProgram(0);
 }
+
+/*---------------Other methods---------------*/
 
 void Renderer::Draw2DOverlay() {
 	glDisable(GL_DEPTH_TEST);

@@ -145,7 +145,7 @@ void CollisionHelper::AddCollisionImpulse(PhysicsNode& p0, PhysicsNode& p1, Coll
 				T3Vector3::Cross(p1.GetInverseInertia()*T3Vector3::Cross(r1, data.m_normal), r1));
 		float jn = -1*(1+e)*T3Vector3::Dot(dv, data.m_normal)/normDiv;
 
-		jn = jn + (data.m_penetration*1.01f);
+		jn = jn + (data.m_penetration*1.5f);
 
 		T3Vector3 l0 = p0.GetLinearVelocity() + data.m_normal*(jn*p0.GetInverseMass());
 		p0.SetLinearVelocity(l0);

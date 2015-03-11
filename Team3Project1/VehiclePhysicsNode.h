@@ -12,8 +12,8 @@
 #include "../Team3Project1/RacerGame.h"
 
 
-#define LINEAR_VELOCITY_DAMP 0.92
-#define ANGULAR_VELOCITY_DAMP 0.7
+#define LINEAR_VELOCITY_DAMP 0.988
+#define ANGULAR_VELOCITY_DAMP 0.998
 #define LINEAR_VELOCITY_MIN 0.00001
 
 class VehiclePhysicsNode : public PhysicsNode	
@@ -27,7 +27,7 @@ public:
 		BackLeftTire = new PhysicsNode();
 		BackRightTire = new PhysicsNode();
 		carMesh=GameStateManager::Assets()->LoadMesh(this, MESHDIR"CarPhysics.obj");
-		tireMesh=GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Tire.obj");
+		tireMesh=GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaTire.obj");
 		collisionVertices = new Vertex[carMesh->GetNumVertices() + 4 * tireMesh->GetNumVertices()];
 		
 		cout << "car: " << carMesh->GetNumVertices() + 4 * tireMesh->GetNumVertices() << endl;
@@ -42,7 +42,7 @@ public:
 		BackRightTire->SetPosition(T3Vector3(car->GetPosition().x-11,car->GetPosition().y-2,car->GetPosition().z+8));
 		BackLeftTire->SetPosition(T3Vector3(car->GetPosition().x-11,car->GetPosition().y-2,car->GetPosition().z-5));*/
 		
-	
+		
 		
 	    PhysicsNode:: Update( msec);
 
