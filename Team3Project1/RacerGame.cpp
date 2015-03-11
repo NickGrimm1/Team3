@@ -115,7 +115,8 @@ void RacerGame::LoadContent() {
 	
 	//add road
 	
-	Texture* grassTex2 = GameStateManager::Assets()->LoadTexture(this, "water", 0);
+	Texture* grassTex2 = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"trackTex.png", 0);
+	Shader* sh = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
 	GameStateManager::Graphics()->GetRenderContext();
 	TrackSegment* trackr = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5, 50.0);
 	
@@ -125,7 +126,7 @@ void RacerGame::LoadContent() {
 	PhysicsNode* proad = new PhysicsNode();
 	GameEntity* road= new GameEntity(proad);
 		road->SetMesh(trackr);
-		road->SetShader(NULL);
+		road->SetShader(sh);
 		road->SetTexture(grassTex2);
 		road->SetBumpTexture(NULL);
 		road->SetBoundingRadius(800.0f);
