@@ -32,6 +32,9 @@ namespace EntryPoint
 		//MainMenu* main = new MainMenu();
 		//GameStateManager::Instance()->AddGameScreen(main);
 
+		//MainMenu* main = new MainMenu();
+		//GameStateManager::Instance()->AddGameScreen(main);
+
 		/*PauseScreen* pause = new PauseScreen();
 		GameStateManager::Instance()->AddGameScreen(pause);*/
 
