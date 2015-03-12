@@ -5,6 +5,7 @@
 #include "../Framework/MyGame.h"
 #include "FreeCamera.h"
 #include "ChaseCamera.h"
+
 #include "Vehicle_Wheel.h"
 #include "VehiclePhysicsNode.h"
 #include "CheckPoint.h"
@@ -12,11 +13,10 @@
 #include "Gold_cion.h"
 #if WINDOWS_BUILD
 #include "HudTestScreen.h"
-#include "AudioTestClass.h"
 #endif
 #include "GameStateManager.h"
 //#include "../Framework/SoundManager.h"
-
+class Vehicle;
 class RacerGame : public GameScreen3D
 {
 public:
@@ -35,8 +35,9 @@ public:
 	virtual void MouseScrolled(T3Vector2& position, int amount) {};
 	virtual void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key);
 #endif
-	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button) {};
-	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) {};
+	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button);
+	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount);
+
 	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID){}
 
 	void SetScore(int value){score+=value;}
@@ -79,7 +80,7 @@ public:
 	vector<DrawableEntity3D*> allEntities;
 	vector<TrackSegment*> TrackSegmentVector;
 	vector<GameEntity*> checkPoint;
-	vector<GameEntity*> pickup;
+	vector<Gold_cion*> pickup;
 
 	 virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
 		  if(obj1->GetType()=='g')

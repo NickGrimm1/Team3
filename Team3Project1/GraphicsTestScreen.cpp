@@ -42,7 +42,7 @@ void GraphicsTestScreen::LoadContent() {
 	
 	DrawableEntity3D* ent;
 	
-	/*for (unsigned int i = 0; i < 8; i++) {
+	for (unsigned int i = 0; i < 8; i++) {
 		for (unsigned int j = 0; j < 8; j++) {
 			ent = new DrawableEntity3D(
 				quad,
@@ -56,32 +56,31 @@ void GraphicsTestScreen::LoadContent() {
 			gameEntities.push_back(ent);
 			AddDrawable(ent);
 		}
-	}*/
+	}
 	
 #if WINDOWS_BUILD
 	GameStateManager::Graphics()->GetRenderContext();
 #endif
-
 	track = new TrackSegment(T3Vector3(-400, 0, 0), T3Vector3(0,0,-400), T3Vector3(400,0,0), 10, 50.0);
-
 #if WINDOWS_BUILD
 	GameStateManager::Graphics()->DropRenderContext();
 #endif
-	ent = new DrawableEntity3D(
-#if WINDOWS_BUILD
-		GameStateManager::Assets()->LoadHeightmap(0, 15, true),
-#endif
-#if PS3_BUILD //TODO : PS3 Needs to draw a heightmap instead of a quad, change when heightmap fixed
-		GameStateManager::Assets()->LoadQuad(this),
-#endif
-		NULL,
-		grassTex,
-		NULL,
-		800.0f,
-		T3Vector3(),
-		Quaternion::EulerAnglesToQuaternion(0,0,0),
-		T3Vector3(1,1,1));
-	AddDrawable(ent);
+
+//	ent = new DrawableEntity3D(
+//#if WINDOWS_BUILD
+//		GameStateManager::Assets()->LoadHeightmap(0, 15, true),
+//#endif
+//#if PS3_BUILD //TODO : PS3 Needs to draw a heightmap instead of a quad, change when heightmap fixed
+//		GameStateManager::Assets()->LoadQuad(this),
+//#endif
+//		NULL,
+//		grassTex,
+//		NULL,
+//		800.0f,
+//		T3Vector3(-500,-100,-500),
+//		Quaternion::EulerAnglesToQuaternion(0,0,0),
+//		T3Vector3(1,1,1));
+//	AddDrawable(ent);
 
 	ent = new DrawableEntity3D(
 		track,
@@ -167,8 +166,8 @@ void GraphicsTestScreen::LoadContent() {
 	//gameEntities.push_back(ent);
 	//AddDrawable(ent);
 	
-	//bool enableShadows = false;
-	//AddSpotLight(T3Vector3(-10, 40, -10), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 45.0f, T3Vector4(1,0,0,1), T3Vector4(0,0,1,1), enableShadows);
+	bool enableShadows = true;
+	AddSpotLight(T3Vector3(-10, 40, -10), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 45.0f, T3Vector4(1,0,0,1), T3Vector4(0,0,1,1), enableShadows);
 	//AddSpotLight(T3Vector3(50, 40, 50), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 90.0f, T3Vector4(0.5,0.5,0.5,1), T3Vector4(0,0,1,1), enableShadows);
 	//AddPointLight(T3Vector3(-50,60,-50), 500, T3Vector4(1,0,1,1), T3Vector4(0,0.5,0,1), enableShadows); 
 	//AddPointLight(T3Vector3(50,60,50), 500, T3Vector4(0,1,0,1), T3Vector4(0,0.5,0,1), enableShadows); 
@@ -233,22 +232,22 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 		switch (key) {
 
 		case KeyboardEvents::KEYBOARD_W:
-			GetPlayer()->Move(T3Vector3(0,0,-1));
+			camera->AddMovement(T3Vector3(0,0,-1));
 			break;
 		case KeyboardEvents::KEYBOARD_S:
-			GetPlayer()->Move(T3Vector3(0,0,1));
+			camera->AddMovement(T3Vector3(0,0,1));
 			break;
 		case KeyboardEvents::KEYBOARD_A:
-			GetPlayer()->Move(T3Vector3(-1,0,0));
+			camera->AddMovement(T3Vector3(-1,0,0));
 			break;
 		case KeyboardEvents::KEYBOARD_D:
-			GetPlayer()->Move(T3Vector3(1,0,0));
+			camera->AddMovement(T3Vector3(1,0,0));
 			break;
 		case KeyboardEvents::KEYBOARD_SHIFT:
-			GetPlayer()->Move(T3Vector3(0,1,0));
+			camera->AddMovement(T3Vector3(0,1,0));
 			break;
 		case KeyboardEvents::KEYBOARD_SPACE:
-			GetPlayer()->Move(T3Vector3(0,-1,0));
+			camera->AddMovement(T3Vector3(0,-1,0));
 			break;
 		case KeyboardEvents::KEYBOARD_LEFT:
 			camera->AddYaw(1);
@@ -283,7 +282,7 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 }
 	
 void GraphicsTestScreen::MouseMoved(T3Vector2& start, T3Vector2& finish) {
-	camera->AddPitch(-finish.y);
-	camera->AddYaw(-finish.x);
+	camera->AddPitch(4 * (start.y - finish.y));
+	camera->AddYaw(4 * (start.x -finish.x));
 }
 #endif

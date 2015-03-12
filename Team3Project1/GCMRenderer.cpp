@@ -1,3 +1,5 @@
+
+
 #if PS3_BUILD
 
 #include "GCMRenderer.h"
@@ -371,7 +373,7 @@ void	GCMRenderer::DrawNode(SceneNode*n)
 		//GCC complains about function returns being used as parameters passed
 		//around, or we'd just use GetWorldTransform as the function param
 		DrawableEntity3D& entity = *n->GetDrawableEntity();
-		T3Matrix4 transform = n->GetTransform();
+		T3Matrix4 transform = n->GetWorldTransform() * T3Matrix4::Scale(n->GetModelScale());
 
 		Matrix4 m;
 		for (int x = 0; x < 4; ++x)
@@ -388,7 +390,7 @@ void	GCMRenderer::DrawNode(SceneNode*n)
 		make it more intuitive to place it here, instead.
 		*/
 		
-		CellGcmTexture* t = texture->GetTexture();
+		CellGcmTexture* t = n->GetDrawableEntity()->GetTexture()->GetTexture(); //texture->GetTexture();
 		SetTextureSampler(shader->GetFragment()->GetParameter("texture"), t);
 
 		/*

@@ -35,9 +35,16 @@ static inline double DegToRad(const double rad)	{
 #define maximum(a,b)    (((a) > (b)) ? (a) : (b))
 #define minimum(a,b)    (((a) < (b)) ? (a) : (b))
 //#endif
+#if WINDOWS_BUILD
 #define SHADERDIR	"../Resources/Shaders/"
 #define MESHDIR		"../Resources/Meshes/"
 #define TEXTUREDIR  "../Resources/Textures/"
+#endif
+#if PS3_BUILD
+#define SHADERDIR	SYS_APP_HOME"/"
+#define MESHDIR		SYS_APP_HOME"/"
+#define TEXTUREDIR  SYS_APP_HOME"/"
+#endif
 #if WINDOWS_BUILD
 #define SOUNDSDIR	"../Resources/Sounds/"
 #endif

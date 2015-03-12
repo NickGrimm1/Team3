@@ -288,9 +288,6 @@
     <ClInclude Include="..\Framework\InertialMatrixHelper.h">
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Framework\Spring.h">
-      <Filter>Framework\Physics\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Framework\ParticleEmitter.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
@@ -424,9 +421,6 @@
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\PhysicsNode.h">
-      <Filter>Framework\Physics\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\PhysicsSystem.h">
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\Vehicle.h">
@@ -583,9 +577,6 @@
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\Spring.cpp">
-      <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Framework\ParticleEmitter.cpp">
       <Filter>Engine\Source Files</Filter>

@@ -33,7 +33,7 @@ HeightMap::HeightMap(string name, bool useTextureWeights, unsigned char minHeigh
 		for(int z = 0; z < RAW_HEIGHT; ++z)
 		{
 			int offset = (x * RAW_WIDTH) + z;
-			vertices[offset].SetPosition(T3Vector3(x * HEIGHTMAP_X, data[offset] * HEIGHTMAP_Y, z * HEIGHTMAP_Z));
+			vertices[offset].SetPosition(T3Vector3(x * HEIGHTMAP_X, data[offset] , z * HEIGHTMAP_Z));
 			vertices[offset].SetTexCoord(T3Vector2(x * HEIGHTMAP_TEX_X, z * HEIGHTMAP_TEX_Z));
 			if (useTextureWeights)
 			{

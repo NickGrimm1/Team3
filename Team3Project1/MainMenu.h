@@ -65,11 +65,13 @@ private:
 	UIButton*	music;
 
 	DrawableTexture2D*	scoreBoard;
+	DrawableTexture2D*	titleArt;
 
 	Texture* buttonTex;
 	Texture* buttonTexHover;
 	Texture* buttonTexClicked;
 	Texture* scoreBoardTex;
+	Texture* titleArtTex;
 
 	Texture* musicNoMute;
 	Texture* musicNoMuteHover;
