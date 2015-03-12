@@ -57,12 +57,12 @@ namespace EntryPoint
 		//NetworkTest* network = new NetworkTest();
 		//GameStateManager::Instance()->AddGameScreen(network);
 
-		/*RacerGame* game = new RacerGame();
+		RacerGame* game = new RacerGame();
 		GameStateManager::Instance()->AddGameScreen(game);
-		PhysicsEngine::SetGame(game);*/
+		PhysicsEngine::SetGame(game);
 
-		VehicleTestingScreen* physicsgame = new VehicleTestingScreen();
-		GameStateManager::Instance()->AddGameScreen(physicsgame);
+		//VehicleTestingScreen* physicsgame = new VehicleTestingScreen();
+		//GameStateManager::Instance()->AddGameScreen(physicsgame);
 
 		GameStateManager::Instance()->Start();
 	}
