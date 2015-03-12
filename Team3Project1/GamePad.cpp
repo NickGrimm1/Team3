@@ -200,8 +200,8 @@ void GamePad::Update(float msec)
 #endif
 	if (leftStick > T3Vector2(DEADZONE, DEADZONE))
 	{
-		std::cout << leftStick << std::endl;
-		std::cout << gamePadState.button[6] << ", " << gamePadState.button[7] << std::endl;
+//		std::cout << leftStick << std::endl;
+//		std::cout << gamePadState.button[6] << ", " << gamePadState.button[7] << std::endl;
 		GameStateManager::Instance()->GamepadAnalogueDisplacement(playerID, GamepadEvents::LEFT_STICK, leftStick);
 		
 		if (leftStick.x > 0.5f)

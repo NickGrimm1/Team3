@@ -157,7 +157,9 @@ GamepadEvents::PlayerIndex InputManager::GetActiveController(GamepadEvents::Play
 						return playerID;
 					}
 				}
+#if PS3_BUILD
 			}
+#endif
 		}
 	}
 
