@@ -1,5 +1,7 @@
 #include "Mesh.h"
 #include "../Main_PS3_PPU/Renderer.h"
+#include "../Team3Project1/Renderer.h"
+
 Mesh::Mesh()	
 {
 #if WINDOWS_BUILD
@@ -33,7 +35,7 @@ Mesh::~Mesh(void)
 #if WINDOWS_BUILD
 void Mesh::Draw()	
 {
-	
+	Renderer::count++;
 	glBindVertexArray(arrayObject);
 	if(numIndices > 0)
 		glDrawElements(type, numIndices, GL_UNSIGNED_INT, 0);

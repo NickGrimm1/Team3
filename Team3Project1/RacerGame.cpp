@@ -109,7 +109,7 @@ void RacerGame::LoadContent() {
 	
 	Texture* grassTex2 = GameStateManager::Assets()->LoadTexture(this, "trackTex", 0);
 	GameStateManager::Graphics()->GetRenderContext();
-	TrackSegment* trackr = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5, 50.0f);
+	TrackSegment* trackr = new TrackSegment(T3Vector3(-100.0f,0.0f,0.0f),T3Vector3(0.0f,0.0f,0.0f),T3Vector3(100.0f,0.0f,0.0f), 5, 50.0f);
 	
 	//push back track
 	//TrackSegmentVector.push_back(trackr);
@@ -121,16 +121,19 @@ void RacerGame::LoadContent() {
 		road->SetTexture(grassTex2);
 		road->SetBumpTexture(NULL);
 		road->SetBoundingRadius(800.0f);
-		road->SetOriginPosition(T3Vector3(-200.0f,-20.0f,0.0f));
+		road->SetOriginPosition(T3Vector3(0.0f,-20.0f,0.0f));
 		road->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
 		road->SetScale(T3Vector3(1.0f,1.0f,1.0f));
 		road->GetPhysicsNode().SetMass(5.0f);
 		road->GetPhysicsNode().SetMesh(trackr);
 		road->GetPhysicsNode().SetInverseMass(0.0f);
 		road->GetPhysicsNode().SetUseGravity(false);
+		road->GetPhysicsNode().SetXstart(road->GetPhysicsNode().GetPosition().x-200);
+		road->GetPhysicsNode().SetXend(road->GetPhysicsNode().GetPosition().x+200);
 		road->GetPhysicsNode().SetIsCollide(true);
 	    road->GetPhysicsNode().Setcar_wheel(true);
-		road->GetPhysicsNode().SetPosition(T3Vector3(-200.0f,-20.0f,0.0f));
+		road->GetPhysicsNode().Setplanecollision(true);
+		road->GetPhysicsNode().SetPosition(T3Vector3(0.0f,-20.0f,0.0f));
 		road->GetPhysicsNode().SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
 		road->ConnectToSystems();
 		AddDrawable(road);

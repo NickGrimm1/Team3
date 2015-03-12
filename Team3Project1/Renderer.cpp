@@ -4,6 +4,8 @@
 #include "DrawableEntity3D.h"
 #include "GameStateManager.h"
 
+int Renderer::count = 0;
+
 // Structures required for point light shadows
 struct CameraDirection {
 	GLenum cubeFace;
@@ -323,9 +325,15 @@ void Renderer::RenderScene() {
 	if (camera) {
 		cameraMatrix = camera->BuildViewMatrix();
 
+
 		//Main Render
 		ShadowPass();
 		DrawScene();
+
+		cout << "Meshes Last Frame: " << count << endl;
+
+		count = 0;
+
 		DeferredLightPass();
 		CombineBuffers();
 
