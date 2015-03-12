@@ -278,6 +278,7 @@ void RacerGame::Update() {
 
 	update=0;
 	}
+
 	if((Time-60)==0){
 	SetPlayTime(-1);
 	Time=0;
@@ -474,7 +475,7 @@ void RacerGame::Start(){
 	//T3Vector4* color= new T3Vector4(0.5f,0.5f,0.5f,0.2f);
 	//checkpoint3->GetMesh()->SetColour(color);
 	//checkpoint2->GetPhysicsNode().SetPGE(checkpoint2);
-	//AddDrawable(checkpoint3);
+	AddDrawable(checkpoint3);
 	checkPoint.push_back(checkpoint3);
 
 	CheckPoint* checkpoint2= new CheckPoint(10.0f);
@@ -486,7 +487,7 @@ void RacerGame::Start(){
 	checkpoint2->SetType('d');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 	checkpoint2->GetPhysicsNode().SetPGE(checkpoint2);
 	//checkpoint2->GetPhysicsNode().SetPGE(checkpoint2);
-	//AddDrawable(checkpoint2);
+	AddDrawable(checkpoint2);
 	checkPoint.push_back(checkpoint2);
 	//starting track
 }
@@ -510,14 +511,16 @@ void RacerGame::DeleteTrack(){
 	pickup[0]->DisconnectFromSystems();
 	pickup.erase(pickup.begin());
 	}
+
 	RemoveDrawable(allEntities[0]);
 	RemoveDrawable(allEntities[1]);
 	allEntities.erase(allEntities.begin());
 	allEntities.erase(allEntities.begin());
 	GameStateManager::Graphics()->RemoveDrawable(checkPoint[0]);
 	checkPoint[0]->DisconnectFromSystems();
-	GameStateManager::Graphics()->RemoveDrawable(checkPoint[1]);
-	checkPoint[1]->DisconnectFromSystems();
+	checkPoint.erase(checkPoint.begin());
+	//GameStateManager::Graphics()->RemoveDrawable(checkPoint[1]);
+	//checkPoint[1]->DisconnectFromSystems();
 	//PhysicsNode*  n =checkPoint[0]->GetPhysicsNode();
 	//GameStateManager::Physics()->RemoveNode(n);
 	//checkPoint[0]->DisconnectFromSystems();
@@ -527,9 +530,9 @@ void RacerGame::DeleteTrack(){
 	//RemoveDrawable(allEntities[0]);
 
 	//delete checkPoint[0];
-	checkPoint.erase(checkPoint.begin());
+	
 	//delete checkPoint[0];
-	checkPoint.erase(checkPoint.begin());
+	//checkPoint.erase(checkPoint.begin());
 
 	//RemoveDrawable(allEntities[2]);
 	
@@ -678,7 +681,7 @@ void RacerGame::CreateTrack(){
 	checkpoint3->SetType('g');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 	checkpoint3->GetPhysicsNode().SetPGE(checkpoint3);
 	//checkpoint2->GetPhysicsNode().SetPGE(checkpoint2);
-	//AddDrawable(checkpoint3);
+	AddDrawable(checkpoint3);
 	checkPoint.push_back(checkpoint3);
 
 	/*checkpoint= new CheckPoint(10);
@@ -696,7 +699,7 @@ void RacerGame::CreateTrack(){
 	checkpoint2->SetType('d');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 	checkpoint2->GetPhysicsNode().SetPGE(checkpoint2);
 	//checkpoint2->GetPhysicsNode().SetPGE(checkpoint2);
-	//AddDrawable(checkpoint2);
+	AddDrawable(checkpoint2);
 	checkPoint.push_back(checkpoint2);
 
 	if(GettimeOrScore()!=3){

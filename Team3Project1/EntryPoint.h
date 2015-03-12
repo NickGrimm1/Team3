@@ -30,14 +30,15 @@ namespace EntryPoint
 		//LoadingScreen* loadingScreen = new LoadingScreen();
 		//GameStateManager::Instance()->AddGameScreen(loadingScreen);
 
-		MainMenu* main = new MainMenu();
-		GameStateManager::Instance()->AddGameScreen(main);
+		//MainMenu* main = new MainMenu();
+		//GameStateManager::Instance()->AddGameScreen(main);
 
 		//GraphicsTestScreen* graphics = new GraphicsTestScreen();
 		//GameStateManager::AddGameScreen(graphics);
 
-		//RacerGame* game = new RacerGame();
-		//GameStateManager::Instance()->AddGameScreen(game);
+		RacerGame* game = new RacerGame();
+		GameStateManager::Physics()->SetGame(game);
+		GameStateManager::Instance()->AddGameScreen(game);
 
 		GameStateManager::Instance()->Start();
 	}
