@@ -92,6 +92,7 @@ protected:
 
 	//Rendering pipeline components.
 	void			DrawScene();
+	void			GBufferPass();
 	void			ShadowPass();
 	void			DrawNodes(bool enableTextures);
 

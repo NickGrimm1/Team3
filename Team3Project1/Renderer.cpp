@@ -124,12 +124,8 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	
 
 	glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufferColourTex, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gbufferNormalTex, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, gbufferDepthTex, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, gbufferDepthTex, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gbufferVelocity, 0);
-	glDrawBuffers(3, buffers);
 
 	//Check FBO attachment success with this command
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE || !gbufferDepthTex || !gbufferColourTex || !gbufferNormalTex || !gbufferVelocity) {
@@ -335,6 +331,7 @@ void Renderer::RenderScene() {
 
 		//Main Render
 		ShadowPass();
+		GBufferPass(); // Split into separate pass from draw
 		DrawScene();
 		DeferredLightPass();
 		CombineBuffers();
@@ -387,21 +384,16 @@ void Renderer::ToggleDebug(int arg, bool on)
 	}
 }
 
-//Draws Scene to buffer object
-void Renderer::DrawScene()
+//Get scene normal + shadow data
+void Renderer::GBufferPass()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	// Use stencil buffer to track unaltered pixels. Use to draw skybox later
-	glEnable(GL_STENCIL_TEST);
-	glStencilFunc(GL_ALWAYS, 1, 1); // Always passes
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufferNormalTex, 0);
 
 	glClearColor(0.2f, 0.2f, 0.2f, 0.2f);
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	
 	SetCurrentShader(sceneShader);
-//	SetCurrentShader(basicShader);
 
 	// Bind Shader variables
 	viewMatrix = cameraMatrix;
@@ -466,9 +458,34 @@ void Renderer::DrawScene()
 
 	glUseProgram(0);
 
-	// TODO - handle particle systems
-	//if (weatherOn)
-	//	DrawParticles();
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//	DrawFrameBufferTex(gbufferNormalTex);
+}
+
+//Draws Scene to buffer object
+void Renderer::DrawScene()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufferColourTex, 0);
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	// Use stencil buffer to track unaltered pixels. Use to draw skybox later
+	glEnable(GL_STENCIL_TEST);
+	glStencilFunc(GL_ALWAYS, 1, 1); // Always passes
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+	glClearColor(0.2f, 0.2f, 0.2f, 0.2f);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	
+	SetCurrentShader(basicShader);
+
+	// Bind Shader variables
+	viewMatrix = cameraMatrix;
+	projMatrix = perspectiveMatrix;
+	UpdateShaderMatrices();
+	
+	DrawNodes(true);
+
+	glUseProgram(0);
 	
 	glDisable(GL_STENCIL_TEST); // Believe can disable here
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
