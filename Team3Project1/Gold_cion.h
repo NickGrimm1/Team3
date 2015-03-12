@@ -15,10 +15,12 @@ public:
 	void SetPhysics(float size,char type,T3Vector3 position,const Quaternion& rotation);
 
 
+	bool GetUpDown() { return upDown; }
+	void FlipUpDown() { upDown = !upDown; }
 protected:
 
+	Texture*		pickupTex;
+	PhysicsNode*	carPhysicNode;
 
-	PhysicsNode * carPhysicNode;
-
-
+	bool upDown;
 };

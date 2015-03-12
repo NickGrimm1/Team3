@@ -77,7 +77,7 @@ public:
 	vector<DrawableEntity3D*> allEntities;
 	vector<TrackSegment*> TrackSegmentVector;
 	vector<GameEntity*> checkPoint;
-	vector<GameEntity*> pickup;
+	vector<Gold_cion*> pickup;
 
 	 virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
 		  if(obj1->GetType()=='g')
@@ -115,7 +115,7 @@ public:
 #ifdef WINDOWS_BUILD
 			 // SoundManager::AddSound(SOUNDSDIR"Tokyo Drift2.wav");
 			 // GameStateManager::Audio()->PlaySoundW(GameStateManager::Audio()->GetSound(SOUNDSDIR"Tokyo Drift2.wav"),SOUNDPRIORITY_ALWAYS);
-			  GameStateManager::Audio()->PlaySound(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
+			 // GameStateManager::Audio()->PlaySound(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
 #endif			  
 			  cout<< "total point ="<<GetScore()<<endl; 
 			  GameStateManager::Graphics()->RemoveDrawable(obj1);
