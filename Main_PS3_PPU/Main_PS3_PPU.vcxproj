@@ -34,15 +34,23 @@
     <ClInclude Include="Renderer.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="duck256.gtf" />
-    <None Include="fragment.cg" />
-    <None Include="fragment.fpo" />
-    <None Include="fragment_asm.txt" />
-    <None Include="gpad_config.txt" />
-    <None Include="ncl.gtf" />
-    <None Include="ncl.tga" />
-    <None Include="vertex.cg" />
-    <None Include="vertex.vpo" />
+    <CustomBuild Include="..\Resources\Shaders\TexturedFragment.cg">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">%(RelativeDir)sce-cgc -profile sce_fp_rsx -o ”%(Filename).fpo” "%(FullPath)"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">%(Filename).fpo;%(Filename)_asm.txt</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\Resources\Shaders\TexturedVertex.cg">
+      <Command Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">%(RelativeDir)sce-cgc -profile sce_vp_rsx -o ”%(Filename).vpo” "%(FullPath)"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">%(Filename).vpo;%(Filename)_asm.txt</Outputs>
+      <FileType>Document</FileType>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\Resources\Shaders\BlendedFragment.cg">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">%(RelativeDir)sce-cgc -profile sce_fp_rsx -o ”%(Filename).fpo” "%(FullPath)"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">%(Filename).fpo;%(Filename)_asm.txt</Outputs>
+    </CustomBuild>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCTargetsPath Condition="'$(VCTargetsPath11)' != '' and '$(VSVersion)' == '' and '$(VisualStudioVersion)' == ''">$(VCTargetsPath11)</VCTargetsPath>
@@ -109,6 +117,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">
     <LibraryPath>..\PS3_PS3_DEBUG</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|PS3'">
     <ClCompile>
@@ -124,7 +133,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Team3Project1.a;libsn.a;libm.a;libio_stub.a;libfs_stub.a;libsn.a;libm.a;libio_stub.a;libfs_stub.a;libcgc.a;-lgcm_cmd;-lgcm_sys_stub;-lio_stub;-lsysutil_stub;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Team3Project1.a;libsn.a;libm.a;libio_stub.a;libfs_stub.a;libcgc.a;-lgcm_cmd;-lgcm_sys_stub;-lio_stub;-lsysutil_stub;libsync_stub.a;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='WINDOWS_DEBUG|PS3'">

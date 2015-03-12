@@ -42,7 +42,7 @@ MyGame::MyGame()	{
 	cube	= new OBJMesh(MESHDIR"cube.obj");
 	quad	= Mesh::GenerateQuad();
 	sphere	= new OBJMesh(MESHDIR"ico.obj");
-	newCar= new OBJMesh(MESHDIR"Nova Car.obj");
+	newCar= new OBJMesh(MESHDIR"NovaCar.obj");
 
 	/*
 	A more 'robust' system would check the entities vector for duplicates so as
@@ -143,7 +143,6 @@ void MyGame::UpdateGame(float msec) {
 	//	allEntities.erase(allEntities.begin());
 	//	allEntities.erase(allEntities.begin());
 	//	allEntities.erase(allEntities.begin());
-	//	//cout<<"\n a2aaaa="<<allEntities.size()<<"a2aaaa \n";
 	//	/*GT3(g*2000.f);
 	//	GT2(g*2000.f);
 	//	g=g+1;*/
@@ -154,7 +153,6 @@ void MyGame::UpdateGame(float msec) {
 	//if (st==1)
 	//{
 	//	
-	//	//cout<<"\n a3aaaa="<<allEntities.size()<<"a3aaaa \n";
 	//	st = 0;
 	//}
 
@@ -217,7 +215,6 @@ void MyGame::GT(float y){
 
 	gt->GetPhysicsNode().SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
 	allEntities.push_back(gt);
-	cout<<"\n aaaa="<<allEntities.size()<<"aaaa \n";
 	//GameEntity* cube=BuildCubeEntity(500.f);
 }
 
@@ -231,7 +228,6 @@ void MyGame::GT3(float y){
 
 	gt->GetPhysicsNode().SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
 	allEntities.push_back(gt);
-	cout<<"\n aaaa="<<allEntities.size()<<"aaaa \n";
 	//GameEntity* cube=BuildCubeEntity(500.f);
 }
 
@@ -241,7 +237,6 @@ void MyGame::GT2(float y){
 	GameEntity* quadEntity = BuildQuadEntity(1000.0f);
 	quadEntity->GetPhysicsNode().SetPosition(T3Vector3(1000,0,y));
 	allEntities.push_back(quadEntity);
-	cout<<"\n aaaa="<<allEntities.size()<<"aaaa \n";
 }
 
 //t
@@ -348,12 +343,7 @@ GameEntity* MyGame::BuildQuadEntity(float size) {
 			ent = new DrawableEntity3D(
 				quad,
 				NULL,
-#if WINDOWS_BUILD
-				GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.tga", SOIL_FLAG_MIPMAPS),
-#endif
-#if PS3_BUILD
-				GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.tga", 0),
-#endif
+				GameStateManager::Assets()->LoadTexture(this, "Grass_Color", SOIL_FLAG_MIPMAPS),
 				NULL,
 				size,
 				T3Vector3(-350.0f + i * 100.0f,0,-350.0f + j * 100.0f),

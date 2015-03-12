@@ -21,6 +21,7 @@ public:
 	//void UpdatePlayer2(float msec);
 
 	//T3Vector3 tempPosition;
+	virtual Quaternion GetRotation() const;
 protected:
 
 

@@ -8,9 +8,9 @@ class CheckPoint : public GameEntity {
 public:
 	CheckPoint(float size);
 	~CheckPoint(void);
-
-	
 	void SetPhysics(float size,char type);
+	
+	void SetPhysics(float size,char type,T3Vector3 position,const Quaternion& rotation);
 	
 
 

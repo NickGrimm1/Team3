@@ -296,6 +296,7 @@
     <ClInclude Include="Gold_cion.h" />
     <ClInclude Include="GraphicsTestScreen.h" />
     <ClInclude Include="Heightmap.h" />
+    <ClInclude Include="HighScore.h" />
     <ClInclude Include="HudTestScreen.h" />
     <ClInclude Include="LoadedFont.h" />
     <ClInclude Include="LoadedMesh.h" />
@@ -325,6 +326,7 @@
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="PauseScreen.h" />
     <ClInclude Include="PhysicsEngine.h" />
+    <ClInclude Include="PhysicsObjMesh.h" />
     <ClInclude Include="RacerGame.h" />
     <ClInclude Include="Scoreboard.h" />
     <ClInclude Include="SelectableEntity2D.h" />
@@ -367,7 +369,6 @@
     <ClCompile Include="..\Framework\OGLRenderer.cpp" />
     <ClCompile Include="..\Framework\ParticleEmitter.cpp" />
     <ClCompile Include="..\Framework\PhysicsNode.cpp" />
-    <ClCompile Include="..\Framework\PhysicsSystem.cpp" />
     <ClCompile Include="..\Framework\Plane.cpp" />
     <ClCompile Include="..\Framework\Quaternion.cpp" />
     <ClCompile Include="..\Framework\SceneNode.cpp" />
@@ -394,9 +395,9 @@
     <ClCompile Include="GCMRenderer.cpp" />
     <ClCompile Include="Gold_cion.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
-    <ClCompile Include="GraphicsEnginePS3.cpp" />
     <ClCompile Include="GraphicsTestScreen.cpp" />
     <ClCompile Include="HeightMap.cpp" />
+    <ClCompile Include="HighScore.cpp" />
     <ClCompile Include="HudTestScreen.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LoadingScreen.cpp" />
@@ -461,6 +462,45 @@
     <None Include="..\Resources\Shaders\VelocityVertex.glsl" />
     <None Include="..\Shaders\TechFragment.glsl" />
     <None Include="..\Shaders\TechVertex.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Resources\Textures\button.png">
+      <DeploymentContent>false</DeploymentContent>
+    </Image>
+    <Image Include="..\Resources\Textures\Buttons\button.png" />
+    <Image Include="..\Resources\Textures\Buttons\button_clicked.png" />
+    <Image Include="..\Resources\Textures\Buttons\button_selected.png" />
+    <Image Include="..\Resources\Textures\Buttons\music_mute.png" />
+    <Image Include="..\Resources\Textures\Buttons\music_mute_clicked.png" />
+    <Image Include="..\Resources\Textures\Buttons\music_mute_selected.png" />
+    <Image Include="..\Resources\Textures\Buttons\music_nomute.png" />
+    <Image Include="..\Resources\Textures\Buttons\music_nomute_clicked.png" />
+    <Image Include="..\Resources\Textures\Buttons\music_nomute_selected.png" />
+    <Image Include="..\Resources\Textures\Buttons\sound_mute.png" />
+    <Image Include="..\Resources\Textures\Buttons\sound_mute_clicked.png" />
+    <Image Include="..\Resources\Textures\Buttons\sound_mute_selected.png" />
+    <Image Include="..\Resources\Textures\Buttons\sound_nomute.png" />
+    <Image Include="..\Resources\Textures\Buttons\sound_nomute_clicked.png" />
+    <Image Include="..\Resources\Textures\Buttons\sound_nomute_selected.png" />
+    <Image Include="..\Resources\Textures\button_clicked.png" />
+    <Image Include="..\Resources\Textures\button_selected.png" />
+    <Image Include="..\Resources\Textures\calvin.PNG" />
+    <Image Include="..\Resources\Textures\day_sky.png" />
+    <Image Include="..\Resources\Textures\Grass_Color.png" />
+    <Image Include="..\Resources\Textures\night_sky.png" />
+    <Image Include="..\Resources\Textures\NovaCarUV.png" />
+    <Image Include="..\Resources\Textures\pause_screen.png" />
+    <Image Include="..\Resources\Textures\quadrats.PNG" />
+    <Image Include="..\Resources\Textures\raindrop.png" />
+    <Image Include="..\Resources\Textures\refresh.png" />
+    <Image Include="..\Resources\Textures\score_board.png" />
+    <Image Include="..\Resources\Textures\snowflake.png" />
+    <Image Include="..\Resources\Textures\tahoma.PNG" />
+    <Image Include="..\Resources\Textures\TireUV.PNG" />
+    <Image Include="..\Resources\Textures\TitleSafeArea.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\Resources\Sounds\bgm2_42sec.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

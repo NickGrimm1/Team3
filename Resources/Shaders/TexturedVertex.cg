@@ -1,0 +1,26 @@
+
+struct output {
+	float4 position : POSITION;
+	float2 texCoord : TEXCOORD1;
+};
+	
+output main
+(
+	float4 position	: POSITION,
+	float2 texCoord	: TEXCOORD1,
+
+    uniform float4x4 modelMatrix,// : C0,
+	uniform float4x4 viewMatrix,//  : C4,
+	uniform float4x4 projMatrix,//  : C8,
+	uniform float4x4 textureMatrix//  : C12,
+)
+{	
+	output OUT;
+
+	float4x4 mvp = mul(projMatrix, mul(viewMatrix, modelMatrix));
+	
+	OUT.position 	 = mul(mvp, position);
+	OUT.texCoord	 = /*mul(textureMatrix, float4(*/texCoord/*, 0.0, 1.0)).xy*/;
+	
+	return OUT;
+}

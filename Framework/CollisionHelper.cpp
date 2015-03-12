@@ -13,7 +13,8 @@ bool CollisionHelper::SphereSphereCollision(PhysicsNode& p0, PhysicsNode& p1, Co
 			data->m_penetration = sumRadius - sqrtf(distSq);
 			normal.Normalise();
 			data->m_normal = normal;
-			data->m_point = p0.GetPosition() - normal*(s0.GetRadius() - data->m_penetration*0.5f);
+			data->m_point1 = p0.GetPosition() - normal*(s0.GetRadius() - data->m_penetration*0.5f);
+			data->m_point2 = data->m_point1;
 		}
 		return true;
 	}
@@ -33,7 +34,8 @@ bool CollisionHelper::PlaneSphereCollision(PhysicsNode& p0, PhysicsNode& p1, Col
 		data->m_penetration = sphere.GetRadius() - separation;
 	
 		data->m_normal = plane.GetNormal()* -1.0f;
-		data->m_point = p1.GetPosition() - plane.GetNormal()*separation;
+			data->m_point1 =  p1.GetPosition() - plane.GetNormal()*separation;
+			data->m_point2 = data->m_point1;
 	}
 
 	return true;
@@ -89,7 +91,8 @@ bool CollisionHelper::BBAACollision(PhysicsNode& p0, PhysicsNode& p1,CollisionDa
 	}
 	return false;
 }
-//bool CollisionHelper::AABBPlaneCollision(PhysicsNode& p0, PhysicsNode& p1,CollisionData* data) {
+
+//bool CollisionHelper::AABBPlaneCollision(PhysicsNode& p0, PhysicsNode& p1, CollisionData* data) {
 //	CollisionAABB& aabb0 = *(CollisionAABB*)p0.GetCollisionVolume();
 //	CollisionAABB& aabb1 = *(CollisionAABB*)p1.GetCollisionVolume();
 //	
@@ -118,12 +121,13 @@ bool CollisionHelper::BBAACollision(PhysicsNode& p0, PhysicsNode& p1,CollisionDa
 //	}
 //	return false;
 //}
+
 void CollisionHelper::AddCollisionImpulse(PhysicsNode& p0, PhysicsNode& p1, CollisionData& data) {
 	
 	if (p0.GetInverseMass() + p1.GetInverseMass() == 0.0f) return;
 	
-	T3Vector3 r0 = data.m_point;// - p0.GetPosition();
-	T3Vector3 r1 = -data.m_point;// - p1.GetPosition();
+	T3Vector3 r0 = data.m_point1 - p0.GetPosition();
+	T3Vector3 r1 = -data.m_point2 - p1.GetPosition();
 
 	T3Vector3 v0 = p0.GetLinearVelocity() + T3Vector3::Cross(p0.GetAngularVelocity(), r0);
 	T3Vector3 v1 = p1.GetLinearVelocity() + T3Vector3::Cross(p1.GetAngularVelocity(), r1);
@@ -131,17 +135,17 @@ void CollisionHelper::AddCollisionImpulse(PhysicsNode& p0, PhysicsNode& p1, Coll
 	T3Vector3 dv = v0 - v1;
 
 	float relMov = -T3Vector3::Dot(dv, data.m_normal);
-	if (relMov < -0.01f) return;
+	//if (relMov < -0.01f) return;
 
 	{
-		float e = 0.9f;
+		float e = 0.7f;
 		float normDiv = (p0.GetInverseMass() + p1.GetInverseMass()) +
 			T3Vector3::Dot(data.m_normal,
 				T3Vector3::Cross(p0.GetInverseInertia()*T3Vector3::Cross(r0, data.m_normal), r0) +
 				T3Vector3::Cross(p1.GetInverseInertia()*T3Vector3::Cross(r1, data.m_normal), r1));
 		float jn = -1*(1+e)*T3Vector3::Dot(dv, data.m_normal)/normDiv;
 
-		jn = jn + (data.m_penetration*0.01f);
+		jn = jn + (data.m_penetration*1.5f);
 
 		T3Vector3 l0 = p0.GetLinearVelocity() + data.m_normal*(jn*p0.GetInverseMass());
 		p0.SetLinearVelocity(l0);

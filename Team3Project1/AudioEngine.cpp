@@ -26,20 +26,11 @@
 
 	 masterVolume = 1.0f ;
 
-	 cout << " Creating AudioEngine !" << endl ;
-
-	 cout << " Found the following devices : "
-		  << alcGetString ( NULL , ALC_DEVICE_SPECIFIER ) << endl ;
-
 	 device = alcOpenDevice ( NULL ); // Open the ’best ’ device
 
 	 if (! device ) {
-		 cout << " AudioEngine creation failed ! No valid device !" << endl ;
 		 return ;
 	 }
-
-	 cout << " AudioEngine created with device : "
-		  << alcGetString ( device , ALC_DEVICE_SPECIFIER ) << endl ;
 
 	 context = alcCreateContext ( device , NULL );
 	 alcMakeContextCurrent ( context );
@@ -56,14 +47,11 @@
 
 		 if( error == AL_NO_ERROR ) {
 			sources.push_back (new OALSource ( source ));
-			//cout << "Source " << i << ": " << source << endl;
 		 }
 		 else {
 			 break ;
 		 }
 	 }
-	 cout << " AudioEngine has " << sources.size ()
-		  << " channels available !" << endl ;
 
 	 //camera = NULL;
 	// alcMakeContextCurrent(NULL);

@@ -3,7 +3,11 @@
 #include "../Framework/T3Vector2.h"
 #include "../Framework/T3Vector4.h"
 #include <algorithm>
-#if WINDOWS_BUILD
+#include "GameStateManager.h"
+#if PS3_BUILD
+#include <sys/timer.h>
+#endif
+
 GraphicsEngine* GraphicsEngine::engine = NULL;
 
 bool GraphicsEngine::Initialize(GraphicsEngine*& out) {
@@ -30,15 +34,22 @@ bool GraphicsEngine::Destroy() {
 	return true;
 }
 
+#if WINDOWS_BUILD
 GraphicsEngine::GraphicsEngine() 
-	: RENDER_TIME(1000.0f / 60)
+	: RENDER_TIME(1000.0f / RENDER_HZ)
+#endif
+#if PS3_BUILD
+GraphicsEngine::GraphicsEngine()
+	: Thread(&GraphicsEngine::threadExecution), RENDER_TIME(1000.0f / RENDER_HZ)
+#endif
 {
 	isInitialised = false;
 	width = SCREEN_WIDTH;
 	height = SCREEN_HEIGHT;
 	frameRate = 0;
 
-	if (!Window::Initialise(GAME_TITLE, width, height, false)) return;
+#if WINDOWS_BUILD
+	if (!Window::Initialise(GAME_TITLE, width, height, true)) return;
 	
 	Window::GetWindow().LockMouseToWindow(true);
 	Window::GetWindow().ShowOSPointer(false);
@@ -47,6 +58,7 @@ GraphicsEngine::GraphicsEngine()
 	if (!renderer->HasInitialised()) return;
 	
 	GLuint loadingTex = renderer->CreateTexture(TEXTUREDIR"refresh.png", false, false, SOIL_FLAG_INVERT_Y);
+
 	isLoading = true;
 	isLoadingDrawing = false;
 	loadingTexture = new Texture(loadingTex);
@@ -61,6 +73,16 @@ GraphicsEngine::GraphicsEngine()
 		0,
 		T3Vector2(0.5f, 0.5f),
 		T3Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+#endif
+#if PS3_BUILD
+	renderer = new Renderer(lights, gameEntityList, overlayTexturesList, overlayTextsList);
+	if(!renderer)
+		return;
+#endif
+
+#if WINDOWS_BUILD
+	renderer->SetLoadingIcon(loadingIcon);
+#endif
 
 	isInitialised = true; // Graphics Engine has initialised successfully
 }
@@ -70,26 +92,47 @@ GraphicsEngine::~GraphicsEngine() {
 	// Delete local array data - if not handled elsewhere
 
 	// Fin
+#if WINDOWS_BUILD
 	renderer->DestroyTexture(loadingTexture->GetTextureName());
+	Window::Destroy();
 	delete loadingTexture;
 	delete loadingIcon;
+#endif
 	delete renderer;
 	delete sceneRoot;
-	Window::Destroy();
+	
 }
 
-void GraphicsEngine::Run() {
+#if PS3_BUILD
+void GraphicsEngine::threadExecution(uint64_t arg)
+{
+	GraphicsEngine* myArg = (GraphicsEngine*)arg;
+	myArg->Run();
+}
+#endif
+
+void GraphicsEngine::Run() 
+{
 	isRunning = true;
 	
 	time = 0;
 	inc = true;
 
-	while (isRunning) {
-
+	while (isRunning)
+	{
+#if WINDOWS_BUILD
 		while (Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp < RENDER_TIME) { ; } // Fix the timestep
 		float msec = (float) Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp;
 		lastFrameTimeStamp = (float) Window::GetWindow().GetTimer()->GetMS();
 		frameRate = (int)(1000.0f / msec);
+#endif
+#if PS3_BUILD
+		while (GameStateManager::GetTimer()->GetMS() - lastFrameTimeStamp < RENDER_TIME)
+			sys_timer_usleep(100);
+ 		float msec = (float)GameStateManager::GetTimer()->GetMS() - lastFrameTimeStamp;
+		lastFrameTimeStamp = (float)GameStateManager::GetTimer()->GetMS();
+		frameRate = (int)(1000.0f / msec);
+#endif
 
 		// add/remove requested items from scene lists
 		contentGuard.lock_mutex();
@@ -112,6 +155,7 @@ void GraphicsEngine::Run() {
 		}
 		removeGameList.clear();
 
+#if WINDOWS_BUILD
 		// Add/Remove HUD elements
 		for (unsigned int i = 0; i < addHudList.size(); i++) {
 			overlayElementsList.push_back(addHudList[i]);
@@ -126,6 +170,48 @@ void GraphicsEngine::Run() {
 			}
 		}
 		removeHudList.clear();
+#endif
+#if PS3_BUILD
+	// Add/Remove HUD elements
+	for (unsigned int i = 0; i < addHudTextureList.size(); i++) 
+	{
+		//addHudTextureList[i]->SetDepth(-addHudTextureList[i]->GetDepth());
+		overlayTexturesList.push_back(addHudTextureList[i]);
+	}
+	addHudTextureList.clear();
+	// Add/Remove HUD elements
+	for (unsigned int i = 0; i < addHudTextList.size(); i++) 
+	{
+		//addHudTextList[i]->SetDepth(-addHudTextList[i]->GetDepth());
+		overlayTextsList.push_back(addHudTextList[i]);
+	}
+	addHudTextList.clear();
+
+	for (unsigned int i = 0; i < removeHudTextureList.size(); i++) 
+	{
+		for (unsigned int j = 0; j < overlayTexturesList.size(); ++j) 
+		{
+			if (overlayTexturesList[j] == removeHudTextureList[i]) 
+			{
+				overlayTexturesList.erase(overlayTexturesList.begin() + j);
+			}
+		}
+	}
+	removeHudTextureList.clear();
+	for (unsigned int i = 0; i < removeHudTextList.size(); i++) 
+	{
+		for (unsigned int j = 0; j < overlayTextsList.size(); ++j) 
+		{
+			if (overlayTextsList[j] == removeHudTextList[i]) 
+			{
+				overlayTextsList.erase(overlayTextsList.begin() + j);
+			}
+		}
+	}
+	removeHudTextList.clear();
+#endif
+
+	
 
 		for (unsigned int i = 0; i < addLightsList.size(); i++) {
 			lights.push_back(addLightsList[i]);
@@ -137,8 +223,10 @@ void GraphicsEngine::Run() {
 			for (unsigned int i = 0; i < lights.size(); ++i) {
 				if (lights[i] == removeLightsList[l]) {
 					unsigned int shadowTex = lights[i]->GetShadowTexture();
+#if WINDOWS_BUILD
 					if (shadowTex > 0) 
 						renderer->DestroyTexture(shadowTex);
+#endif
 					lights.erase(lights.begin() + i);
 				}
 			}
@@ -160,40 +248,66 @@ void GraphicsEngine::Run() {
 			camera->UpdateCamera(); // may need to remove
 			T3Matrix4 viewMatrix = camera->BuildViewMatrix();
 			T3Matrix4 projMatrix = T3Matrix4::Perspective(1.0f, 10000.0f, (float) width / (float) height, 45.0f);
+#if WINDOWS_BUILD
 			frameFrustum.FromMatrix(projMatrix * viewMatrix);
+#endif
 		
 
 			// Build Node lists
 			BuildNodeLists(sceneRoot);
 			SortNodeLists();
 		}
-		// Update directional lights with scene bounding box
+		// Update directional lights with scene bounding box - NOT WORKING
 		// Transform bounding volume by camera transform
-		DirectionalLight::UpdateLightVolume(boundingMin, boundingMax);
+//#if WINDOWS_BUILD
+//		DirectionalLight::UpdateLightVolume(boundingMin, boundingMax);
+//#endif
 
 		// Sort HUD elements
-		std::sort(overlayElementsList.begin(), overlayElementsList.end(), 
-			[] (const void* a, const void* b) {
-				return (((DrawableEntity2D*) a)->GetDepth() < ((DrawableEntity2D*) b)->GetDepth());
-		});
+#if WINDOWS_BUILD
+	std::sort(overlayElementsList.begin(), overlayElementsList.end(), SortDrawableEntity2D);
+#endif
+#if PS3_BUILD
+	std::sort(overlayTexturesList.begin(), overlayTexturesList.end(), SortDrawableEntity2D);
+	std::sort(overlayTextsList.begin(), overlayTextsList.end(), SortDrawableEntity2D);
+#endif
 	
+#if WINDOWS_BUILD
 		// Sort Point Lights to the front of the lights list
-		std::sort(lights.begin(), lights.end(), 
-			[] (const void* a, const void* b) {
-				return (((Light*) a)->GetType() < ((Light*) b)->GetType());
-		});
+	std::sort(lights.begin(), lights.end(), SortLights);
+#endif
 
-		if (isLoading && !isLoadingDrawing) {
-			overlayElementsList.push_back(loadingIcon);
-			isLoadingDrawing = true;
+	if (isLoading && !isLoadingDrawing) 
+	{
+#if WINDOWS_BUILD
+		overlayElementsList.push_back(loadingIcon);
+#endif
+#if PS3_BUILD
+		overlayTexturesList.push_back(loadingIcon);
+#endif
+		isLoadingDrawing = true;
+	}
+	else if (!isLoading && isLoadingDrawing) 
+	{
+#if WINDOWS_BUILD
+		for (unsigned int i = 0; i < overlayElementsList.size(); i++) 
+		{
+			if (overlayElementsList[i] == loadingIcon) 
+			{
+				overlayElementsList.erase(overlayElementsList.begin() + i);
+			}
 		}
-//		else if (!isLoading && isLoadingDrawing) {
-//			overlayElementsList
-//		}
-
-		if (isLoadingDrawing) {
-			loadingIcon->SetRotation(loadingIcon->GetRotation() + 1.0f);
+#endif
+#if PS3_BUILD
+		for (unsigned int i = 0; i < overlayTexturesList.size(); i++) 
+		{
+			if (overlayTexturesList[i] == loadingIcon) 
+			{
+				overlayTexturesList.erase(overlayTexturesList.begin() + i);
+			}
 		}
+#endif
+	}
 
 		//Update the day/night float
 		renderer->SetDayNight(DayNightCycle());
@@ -206,52 +320,71 @@ void GraphicsEngine::Run() {
 
 		contentGuard.unlock_mutex();
 	}
+
+#if PS3_BUILD
+	sys_ppu_thread_exit (0);
+#endif
 }
 
-PointLight* GraphicsEngine::AddPointLight(T3Vector3 lightPosition, float lightRadius, T3Vector4 diffuseColour, T3Vector4 specularColour, bool castsShadow) {
+PointLight* GraphicsEngine::AddPointLight(T3Vector3 lightPosition, float lightRadius, T3Vector4 diffuseColour, T3Vector4 specularColour, bool castsShadow) 
+{
+#if WINDOWS_BUILD
 	unsigned int shadowTex = castsShadow ? renderer->CreateShadowCube() : 0;
 	PointLight* l = new PointLight(lightPosition, diffuseColour, specularColour, lightRadius, shadowTex);
 	lights.push_back(l);
 	return l;
+#endif
 }
 
-DirectionalLight* GraphicsEngine::AddDirectionalLight(T3Vector3 lightDirection, T3Vector4 diffuseColour, T3Vector4 specularColour) {
+DirectionalLight* GraphicsEngine::AddDirectionalLight(T3Vector3 lightDirection, T3Vector4 diffuseColour, T3Vector4 specularColour)
+{
+#if WINDOWS_BUILD
 	//unsigned int shadowTex = castsShadow ? renderer->CreateShadowTexture() : 0;
 	DirectionalLight* l = new DirectionalLight(lightDirection, diffuseColour, specularColour, 0);
 	lights.push_back(l);
 	return l;
+#endif
 }
 
-SpotLight* GraphicsEngine::AddSpotLight(T3Vector3 lightPosition, T3Vector3 lightTarget, T3Vector3 upVector, float lightRadius, float lightAngle, T3Vector4 diffuseColour, T3Vector4 specularColour, bool castsShadow) {
+SpotLight* GraphicsEngine::AddSpotLight(T3Vector3 lightPosition, T3Vector3 lightTarget, T3Vector3 upVector, float lightRadius, float lightAngle, T3Vector4 diffuseColour, T3Vector4 specularColour, bool castsShadow)
+{
+#if WINDOWS_BUILD
 	unsigned int shadowTex = castsShadow ? renderer->CreateShadowTexture() : 0;
 	SpotLight* l = new SpotLight(lightPosition, lightTarget, upVector, diffuseColour, specularColour, lightRadius, lightAngle, shadowTex);
 	lights.push_back(l);
 	return l;
+#endif
 }
 
 void GraphicsEngine::BuildNodeLists(SceneNode* from) {
 	if (from->GetDrawableEntity() != NULL) {
 	
-		if (frameFrustum.InsideFrustum(*from)) {
+#if WINDOWS_BUILD
+		if (frameFrustum.InsideFrustum(*from)) 
+		{
+#endif
 			// Get distance from camera
 			T3Vector3 dir = from->GetWorldTransform().GetPositionVector() - camera->GetPosition();
 			from->SetCameraDistance(T3Vector3::Dot(dir, dir)); // gonna save ourselves a sqrt and compare distance^2
 
-			T3Vector3 pos = from->GetWorldTransform().GetPositionVector();
+			// Update scene AABB for directional lighting - NOT WORKING
+			/*T3Vector3 pos = from->GetWorldTransform().GetPositionVector();
 			float boundingRadius = from->GetDrawableEntity()->GetBoundingRadius();
 			if (pos.x - boundingRadius < boundingMin.x) boundingMin.x = pos.x - boundingRadius; 
 			if (pos.y - boundingRadius < boundingMin.y) boundingMin.y = pos.y - boundingRadius; 
 			if (pos.z - boundingRadius < boundingMin.z) boundingMin.z = pos.z - boundingRadius;
 			if (pos.x + boundingRadius > boundingMax.x) boundingMax.x = pos.x + boundingRadius; 
 			if (pos.y + boundingRadius > boundingMax.y) boundingMax.y = pos.y + boundingRadius; 
-			if (pos.z + boundingRadius > boundingMax.z) boundingMax.z = pos.z + boundingRadius;
+			if (pos.z + boundingRadius > boundingMax.z) boundingMax.z = pos.z + boundingRadius;*/
 
-			if (from->GetColour().w < 1.0f)
+//			if (from->GetColour().w < 1.0f)	 - 3D TRANSPARENCIES NOT IMPLEMENTED
 				//transparent - add to transparent list
-				transparentGameEntityList.push_back(from);
-			else
+//				transparentGameEntityList.push_back(from);
+//			else
 				gameEntityList.push_back(from);
+#if WINDOWS_BUILD
 		}
+#endif
 	}
 
 	// Note - gonna check children regardless - cause an arm might be inside the plane
@@ -295,26 +428,46 @@ void GraphicsEngine::RemoveDrawable(DrawableEntity3D* drawable, bool removeChild
 void GraphicsEngine::AddTextureToScene(DrawableTexture2D* drawableTexture) {
 	// TODO - is it worth checking already in list
 	contentGuard.lock_mutex();
+#if WINDOWS_BUILD
 	addHudList.push_back(drawableTexture);
+#endif
+#if PS3_BUILD
+	addHudTextureList.push_back(drawableTexture);
+#endif
 	contentGuard.unlock_mutex();
 }
 
 void GraphicsEngine::RemoveTextureFromScene(DrawableTexture2D* drawableTexture) {
 	contentGuard.lock_mutex();
+#if WINDOWS_BUILD
 	removeHudList.push_back(drawableTexture);
+#endif
+#if PS3_BUILD
+	removeHudTextureList.push_back(drawableTexture);
+#endif
 	contentGuard.unlock_mutex();
 }
 
 void GraphicsEngine::AddDrawableTextToScene(DrawableText2D* drawableText) {
 	// TODO - is it worth checking already in list
 	contentGuard.lock_mutex();
+#if WINDOWS_BUILD
 	addHudList.push_back(drawableText);
+#endif
+#if PS3_BUILD
+	addHudTextList.push_back(drawableText);
+#endif
 	contentGuard.unlock_mutex();
 }
 
 void GraphicsEngine::RemoveDrawableTextFromScene(DrawableText2D* drawableText) {
 	contentGuard.lock_mutex();
+#if WINDOWS_BUILD
 	removeHudList.push_back(drawableText);
+#endif
+#if PS3_BUILD
+	removeHudTextList.push_back(drawableText);
+#endif
 	contentGuard.unlock_mutex();
 }
 
@@ -340,13 +493,11 @@ void GraphicsEngine::SetCamera(Camera* cam)
 
 bool GraphicsEngine::LoadContent()
 {
-	return (engine->renderer->LoadShaders() &&
-				engine->renderer->LoadAssets());
+	return engine->renderer->LoadAssets();
 }
 
 void GraphicsEngine::UnloadContent()
 {
-	engine->renderer->UnloadShaders();
 	engine->renderer->UnloadAssets();
 }
 
@@ -387,8 +538,5 @@ float GraphicsEngine::DayNightCycle() {
 			time--;
 	}
 
-//	cout << time << ", "  << out << endl;
 	return out;	
 }
-
-#endif

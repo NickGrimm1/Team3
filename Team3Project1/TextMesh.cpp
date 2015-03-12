@@ -18,7 +18,7 @@ TextMesh::TextMesh(const std::string &text, const Font &font) :  font(font)	{
 	//Each character has 4 vertices...
 	numVertices = text.length()*4;
 
-	vertices = new Vertex[numVertices];
+	AssignVertexMemory();
 
 	unsigned int xCount = font.GetXCount();
 	unsigned int yCount = font.GetYCount();

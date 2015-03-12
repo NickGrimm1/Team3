@@ -27,23 +27,6 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 		return false;
 	}
 
-	/*
-	Stores the loaded in vertex attributes
-	*/
-	std::vector<T3Vector2>inputTexCoords;
-	std::vector<T3Vector3>inputVertices;
-	std::vector<T3Vector3>inputNormals;
-
-	/* 
-	Stores the loaded in materials
-	*/
-	map <string, MTLInfo> materials;
-
-	/*
-	SubMeshes temporarily get kept in here
-	*/
-	std::vector<OBJSubMesh*> inputSubMeshes;
-
 	OBJSubMesh* currentMesh = new OBJSubMesh();
 	inputSubMeshes.push_back(currentMesh);	//It's safe to assume our OBJ will have a mesh in it ;)
 
@@ -190,6 +173,14 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 	}
 
 	f.close();
+	return true;
+}
+
+bool OBJMesh::BuildOBJMesh() {
+	/* 
+	Stores the loaded in materials
+	*/
+	map <string, MTLInfo> inputMaterials;
 
 	//We now have all our mesh data loaded in...Now to convert it into OpenGL vertex buffers!
 	for(unsigned int i = 0; i < inputSubMeshes.size(); ) {
@@ -244,7 +235,7 @@ bool	OBJMesh::LoadOBJMesh(std::string filename)	{
 
 			m->BufferData();
 
-			m->SetTexturesFromMTL(sm->mtlSrc, sm->mtlType, materials);
+			m->SetTexturesFromMTL(sm->mtlSrc, sm->mtlType, inputMaterials);
 
 			if(i != 0) {
 				AddChild(m);
@@ -300,12 +291,12 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 		if(i != materials.end()) {
 			if(!i->second.diffuse.empty())	{
 				texture = i->second.diffuseNum;
-				texturePath = string(TEXTUREDIR + i->second.diffuse);
+				texturePath = string(i->second.diffuse);
 			}
 
 			if(!i->second.bump.empty())	{
 				bumpTexture = i->second.bumpNum;
-				bumpPath = string(TEXTUREDIR + i->second.bump);
+				bumpPath = string(i->second.bump);
 			}
 
 			return;
@@ -348,39 +339,29 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 			getline(f, currentLine); // handle file name with spaces
 			currentMTL.diffuse.append(currentLine);
 
-/*			if(currentMTL.diffuse.find_last_of('/') != string::npos) {
-				int at = currentMTL.diffuse.find_last_of('/');
-				currentMTL.diffuse = currentMTL.diffuse.substr(at+1);
-			}
-			else if(currentMTL.diffuse.find_last_of('\\') != string::npos) {
-				int at = currentMTL.diffuse.find_last_of('\\');
-				currentMTL.diffuse = currentMTL.diffuse.substr(at+1);
-			}
-			*/
-
 			if (!currentMTL.diffuse.empty()) {
 #if WINDOWS_BUILD
-				currentMTL.diffuseNum = GameStateManager::Assets()->LoadTexture(this, string(TEXTUREDIR + currentMTL.diffuse), SOIL_FLAG_INVERT_Y);
+				currentMTL.diffuseNum = GameStateManager::Assets()->LoadTexture(this, string(currentMTL.diffuse), SOIL_FLAG_INVERT_Y);
 #endif
 #if PS3_BUILD
-				currentMTL.diffuseNum = GameStateManager::Assets()->LoadTexture(this, string(TEXTUREDIR + currentMTL.diffuse), 0);
+				currentMTL.diffuseNum = GameStateManager::Assets()->LoadTexture(this, string(currentMTL.diffuse), 0);
 #endif
 			}
 		}
 		else if(currentLine == MTLBUMPMAP || currentLine == MTLBUMPMAPALT) {
 			f >> currentMTL.bump;
+			currentLine.clear();
+			getline(f, currentLine); // handle file name with spaces
+			currentMTL.diffuse.append(currentLine);
 
-			if(currentMTL.bump.find_last_of('/') != string::npos) {
-				int at = currentMTL.bump.find_last_of('/');
-				currentMTL.bump = currentMTL.bump.substr(at+1);
-			}
-			else if(currentMTL.bump.find_last_of('\\') != string::npos) {
-				int at = currentMTL.bump.find_last_of('\\');
-				currentMTL.bump = currentMTL.bump.substr(at+1);
-			}
-
-			if (!currentMTL.bump.empty()) {
-				currentMTL.bumpNum = GameStateManager::Assets()->LoadTexture(this, string(TEXTUREDIR + currentMTL.bump), 0);
+			if (!currentMTL.bump.empty())
+			{
+#if WINDOWS_BUILD
+				currentMTL.bumpNum = GameStateManager::Assets()->LoadTexture(this, string(currentMTL.bump), 0);
+#endif
+#if PS3_BUILD
+				currentMTL.bumpNum = GameStateManager::Assets()->LoadTexture(this, string(currentMTL.bump), 0);
+#endif
 			}
 		}
 	}
@@ -397,14 +378,16 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 	if (materials.size() > 0) {
 		map <string, MTLInfo>::iterator i = materials.find(mtlType);
 		if(i != materials.end()) {
-			if(!i->second.diffuse.empty())	{
+			if(!i->second.diffuse.empty())	
+			{
 				texture = i->second.diffuseNum;
-				texturePath = string(TEXTUREDIR + currentMTL.diffuse);
+				texturePath = string(currentMTL.diffuse);
 			}
 
-			if(!i->second.bump.empty())	{
+			if(!i->second.bump.empty())	
+			{
 				bumpTexture = i->second.bumpNum;
-				bumpPath = string(TEXTUREDIR + currentMTL.bump);
+				bumpPath = string(currentMTL.bump);
 			}
 
 			return;

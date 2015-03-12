@@ -31,24 +31,16 @@ void GraphicsTestScreen::LoadContent() {
 	quad = GameStateManager::Assets()->LoadQuad(this);
 	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
 	circle = GameStateManager::Assets()->LoadCircle(this, 20);
+	Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, "Grass_Color", 0);
 #if WINDOWS_BUILD
-	Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.jpg", 0);
-	Texture* calvinTex = GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"calvin.bmp", SOIL_FLAG_INVERT_Y);
+	Texture* calvinTex = GameStateManager::Assets()->LoadTexture(this, "calvin", SOIL_FLAG_INVERT_Y);
 #endif
 #if PS3_BUILD
-	Texture* nclTex = GameStateManager::Assets()->LoadTexture(this, "/ncl.gtf", 0);
+	Texture* calvinTex = GameStateManager::Assets()->LoadTexture(this, "calvin", 0);
 #endif
-	//Mesh* car = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
-
-#ifdef WINDOWS_BUILD
-	//cout << "GraphicsTestScreen-Quad: " << quad->GetArrayObject() << ", " << quad->GetBufferObject() << endl;
-	//cout << "GraphicsTestScreen-Cylinder: " << cylinder->GetArrayObject() << ", " << cylinder->GetBufferObject() << endl;
-	//cout << "GraphicsTestScreen-circle: " << circle->GetArrayObject() << ", " << circle->GetBufferObject() << endl;
-	//cout << "GraphicsTestScreen-grass: " << grassTex->GetTextureName() << endl;
-	//cout << "GraphicsTestScreen-calvin: " << calvinTex->GetTextureName() << endl;
-#endif
+//	Mesh* car = GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaCar.obj");
 	
-	//DrawableEntity3D* ent;
+	DrawableEntity3D* ent;
 	
 	/*for (unsigned int i = 0; i < 8; i++) {
 		for (unsigned int j = 0; j < 8; j++) {
@@ -66,147 +58,127 @@ void GraphicsTestScreen::LoadContent() {
 		}
 	}*/
 	
+#if WINDOWS_BUILD
+	GameStateManager::Graphics()->GetRenderContext();
+#endif
 
-//	GameStateManager::Graphics()->GetRenderContext();
-//#if WINDOWS_BUILD
-//	track = new TrackSegment(T3Vector3(-400, 0, 400), T3Vector3(-400,0,0), T3Vector3(0,0,-400), 10, 50.0);
-//#endif
-//	GameStateManager::Graphics()->DropRenderContext();
+	track = new TrackSegment(T3Vector3(-400, 0, 0), T3Vector3(0,0,-400), T3Vector3(400,0,0), 10, 50.0);
+
+#if WINDOWS_BUILD
+	GameStateManager::Graphics()->DropRenderContext();
+#endif
+	ent = new DrawableEntity3D(
+#if WINDOWS_BUILD
+		GameStateManager::Assets()->LoadHeightmap(0, 15, true),
+#endif
+#if PS3_BUILD //TODO : PS3 Needs to draw a heightmap instead of a quad, change when heightmap fixed
+		GameStateManager::Assets()->LoadQuad(this),
+#endif
+		NULL,
+		grassTex,
+		NULL,
+		800.0f,
+		T3Vector3(),
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(1,1,1));
+	AddDrawable(ent);
+
+	ent = new DrawableEntity3D(
+		track,
+		NULL,
+		grassTex,
+		NULL,
+		800.0f,
+		T3Vector3(0,0,0),
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(1,1,1));
+	gameEntities.push_back(ent);
+	AddDrawable(ent);
+
+	ent = new DrawableEntity3D(
+		cylinder, 
+		NULL,
+		calvinTex,
+		NULL,
+		30.0f, 
+		T3Vector3(35,0,35), 
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(15,30,15));
+	gameEntities.push_back(ent);
+	AddDrawable(ent);
 	
-//	ent = new DrawableEntity3D(
-//#if WINDOWS_BUILD
-//		GameStateManager::Assets()->LoadHeightmap(0, 15, true),
-//#endif
-//#if PS3_BUILD //TODO : PS3 Needs to draw a heightmap instead of a quad, change when heightmap fixed
-//		GameStateManager::Assets()->LoadQuad(this),
-//#endif
-//		NULL,
-//#if WINDOWS_BUILD
-//		grassTex,
-//#endif
-//#if PS3_BUILD
-//		nclTex,
-//#endif
-//		NULL,
-//		800.0f,
-//		T3Vector3(),
-//		Quaternion::EulerAnglesToQuaternion(0,0,0),
-//		T3Vector3(1,1,1));
-//	AddDrawable(ent);
 
-//#if WINDOWS_BUILD
-//	ent = new DrawableEntity3D(
-//		track,
-//		NULL,
-//#if WINDOWS_BUILD
-//		grassTex,
-//#endif
-//#if PS3_BUILD
-//		nclTex,
-//#endif
-//		NULL,
-//		800.0f,
-//		T3Vector3(0,0,0),
-//		Quaternion::EulerAnglesToQuaternion(0,0,0),
-//		T3Vector3(1,1,1));
-//	gameEntities.push_back(ent);
-//	AddDrawable(ent);
-//#endif
-//
-//	ent = new DrawableEntity3D(
-//		cylinder, 
-//		NULL,
-//#if WINDOWS_BUILD
-//		calvinTex,
-//#endif
-//#if PS3_BUILD
-//		nclTex,
-//#endif
-//		NULL,
-//		30.0f, 
-//		T3Vector3(35,0,35), 
-//		Quaternion::EulerAnglesToQuaternion(0,0,0),
-//		T3Vector3(15,30,15));
-//	gameEntities.push_back(ent);
-//	AddDrawable(ent);
-//	
-//
-//	ent = new DrawableEntity3D(
-//		circle, 
-//		NULL,
-//#if WINDOWS_BUILD
-//		calvinTex,
-//#endif
-//#if PS3_BUILD
-//		nclTex,
-//#endif
-//		NULL,
-//		30.0f, // needs same bounding radius as cylinder
-//		T3Vector3(35,30,35), 
-//		Quaternion::EulerAnglesToQuaternion(0,0,0),
-//		T3Vector3(15,1,15));
-//	gameEntities.push_back(ent);
-//	AddDrawable(ent);
-//
-//#if WINDOWS_BUILD
-//	ent = new DrawableEntity3D(
-//		cylinder, 
-//		NULL,
-//#if WINDOWS_BUILD
-//		calvinTex,
-//#endif
-//#if PS3_BUILD
-//		nclTex,
-//#endif
-//		NULL,
-//		30.0f, // needs same bounding radius as cylinder
-//		track->GetTrackCentreLeft(),
-//		Quaternion::EulerAnglesToQuaternion(0,0,0),
-//		T3Vector3(5,15,5));
-//	gameEntities.push_back(ent);
-//	AddDrawable(ent);
-//
-//	ent = new DrawableEntity3D(
-//		cylinder, 
-//		NULL,
-//#if WINDOWS_BUILD
-//		calvinTex,
-//#endif
-//#if PS3_BUILD
-//		nclTex,
-//#endif
-//		NULL,
-//		30.0f, // needs same bounding radius as cylinder
-//		track->GetTrackCentreRight(),
-//		Quaternion::EulerAnglesToQuaternion(0,0,0),
-//		T3Vector3(5,15,5));
-//	gameEntities.push_back(ent);
-//	AddDrawable(ent);
-//#endif
-//	ent = new DrawableEntity3D(
-//		car,
-//		NULL,
-//		NULL,
-//		NULL,
-//		25.0f,
-//		T3Vector3(-25, 20, 0),
-//		Quaternion::EulerAnglesToQuaternion(0,0,0),
-//		T3Vector3(5,5,5));
-//	gameEntities.push_back(ent);
-//	AddDrawable(ent);
-//	
-//	bool enableShadows = false;
+	ent = new DrawableEntity3D(
+		circle, 
+		NULL,
+		calvinTex,
+		NULL,
+		30.0f, // needs same bounding radius as cylinder
+		T3Vector3(35,30,35), 
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(15,1,15));
+	gameEntities.push_back(ent);
+	AddDrawable(ent);
+
+#if WINDOWS_BUILD
+	ent = new DrawableEntity3D(
+		cylinder, 
+		NULL,
+#if WINDOWS_BUILD
+		calvinTex,
+#endif
+#if PS3_BUILD
+		nclTex,
+#endif
+		NULL,
+		30.0f, // needs same bounding radius as cylinder
+		track->GetTrackCentreLeft(),
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(5,15,5));
+	gameEntities.push_back(ent);
+	AddDrawable(ent);
+
+	ent = new DrawableEntity3D(
+		cylinder, 
+		NULL,
+#if WINDOWS_BUILD
+		calvinTex,
+#endif
+#if PS3_BUILD
+		nclTex,
+#endif
+		NULL,
+		30.0f, // needs same bounding radius as cylinder
+		track->GetTrackCentreRight(),
+		Quaternion::EulerAnglesToQuaternion(0,0,0),
+		T3Vector3(5,15,5));
+	gameEntities.push_back(ent);
+	AddDrawable(ent);
+#endif
+	//ent = new DrawableEntity3D(
+	//	car,
+	//	NULL,
+	//	NULL,
+	//	NULL,
+	//	25.0f,
+	//	T3Vector3(-25, 20, 0),
+	//	Quaternion::EulerAnglesToQuaternion(0,0,0),
+	//	T3Vector3(5,5,5));
+	//gameEntities.push_back(ent);
+	//AddDrawable(ent);
+	
+	//bool enableShadows = false;
 	//AddSpotLight(T3Vector3(-10, 40, -10), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 45.0f, T3Vector4(1,0,0,1), T3Vector4(0,0,1,1), enableShadows);
 	//AddSpotLight(T3Vector3(50, 40, 50), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 90.0f, T3Vector4(0.5,0.5,0.5,1), T3Vector4(0,0,1,1), enableShadows);
 	//AddPointLight(T3Vector3(-50,60,-50), 500, T3Vector4(1,0,1,1), T3Vector4(0,0.5,0,1), enableShadows); 
 	//AddPointLight(T3Vector3(50,60,50), 500, T3Vector4(0,1,0,1), T3Vector4(0,0.5,0,1), enableShadows); 
-	
-//	directionalLight = GameStateManager::Graphics()->AddDirectionalLight(T3Vector3(-1, -1, -1), T3Vector4(1,1,1,1), T3Vector4(0,0,0,1));
+	//
+	//directionalLight = GameStateManager::Graphics()->AddDirectionalLight(T3Vector3(-1, -1, -1), T3Vector4(1,1,1,1), T3Vector4(0,0,0,1));
 
 	DrawableEntity3D* myEnt = new DrawableEntity3D(
 		quad,
 		NULL,
-		GameStateManager::Assets()->LoadTexture(this,TEXTUREDIR"ncl.gtf",0),
+		GameStateManager::Assets()->LoadTexture(this,"ncl",0),
 		NULL,
 		25.0f,
 		T3Vector3(0,5,10),
@@ -240,9 +212,9 @@ void GraphicsTestScreen::UnloadContent()
 	GameStateManager::Assets()->UnloadQuad(this);
 	GameStateManager::Assets()->UnloadCylinder(this, 20);
 	GameStateManager::Assets()->UnloadCircle(this, 20);
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Grass_Color.jpg"),
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"calvin.bmp"),
-	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"Nova Car.obj");
+	GameStateManager::Assets()->UnloadTexture(this, "Grass_Color"),
+	GameStateManager::Assets()->UnloadTexture(this, "calvin"),
+	GameStateManager::Assets()->UnloadMesh(this, "NovaCar");
 }
 
 

@@ -25,7 +25,9 @@ Version: 1.0.0 03/02/2015.</summary>
 #include "../Framework/Keyboard.h"
 #include "../Framework/Mouse.h"
 #endif
-#include <iostream>
+#if PS3_BUILD
+#include <sys/timer.h>
+#endif
 
 using namespace std;
 class GraphicsEngine;
@@ -46,10 +48,16 @@ public:
 
 			if (!AssetManager::Initialize(instance->assets))
 				return false;
+			
+			// Want to start rendering immediately
 			if (!GraphicsEngine::Initialize(instance->graphics))
 				return false;	
+#if WINDOWS_BUILD
+			Instance()->graphics->Start("Graphics");
+#endif
 			if (!GraphicsEngine::LoadContent())
 				return false;	
+
 			if (!PhysicsEngine::Initialize(instance->physics))
 				return false;
 			if (!StorageManager::Initialize(instance->storage))
@@ -71,7 +79,9 @@ public:
 
 	void Start() {
 		// Start Threads
+#if PS3_BUILD
 		Instance()->graphics->Start("Graphics");
+#endif
 		Instance()->physics->Start("Physics");
 		Instance()->input->Start("Input");
 		Instance()->audio->Start("Audio");
@@ -81,6 +91,12 @@ public:
 			while (Window::GetWindow().GetTimer()->GetMS() - instance->lastUpdate < GAME_FRAME_TIME) { ; }
 			instance->lastUpdate = (float) Window::GetWindow().GetTimer()->GetMS();
 			Window::GetWindow().UpdateWindow();
+#endif
+#if PS3_BUILD
+			while (GameStateManager::GetTimer()->GetMS() - instance->lastUpdate < GAME_FRAME_TIME)
+				sys_timer_usleep(100);
+ 			float msec = (float)GameStateManager::GetTimer()->GetMS() - instance->lastUpdate;
+			instance->lastUpdate = (float)GameStateManager::GetTimer()->GetMS();
 #endif
 			for (unsigned int i = 0; i < gameScreens.size(); i++) {
 				gameScreens[i]->Update();
@@ -104,40 +120,27 @@ public:
 			input->Terminate();
 			audio->Terminate();
 
-			std::cout << "Threads terminated" << std::endl;
-
 			// Clean up
 			graphics->Join();
 			physics->Join();
 			input->Join();
 		    audio->Join();
 
-			std::cout << "Threads joined" << std::endl;
-
 			vector<GameScreen*>::iterator i = instance->gameScreens.begin();
 			while (i != instance->gameScreens.end())
 			{
-				std::cout << "A Gamescreen is about to be killed" << std::endl;
 				(*i)->UnloadContent();
 				delete *i;
 				i = instance->gameScreens.erase(i);
-				std::cout << "A Gamescreen has been killed." << std::endl;
 			}
-
-			std::cout << "Gamescreens Killed" << std::endl;
 
 			// Unload Engine Assets
 			GraphicsEngine::UnloadContent();
-			std::cout << "Graphics Engine Content Unloaded" << std::endl;
 			// Destroy everything
 			AssetManager::Destroy(); // Do not destroy before graphics in Windows Build - requires OpenGL context
-			std::cout << "AssetManager Killed" << std::endl;
 			GraphicsEngine::Destroy();
-			std::cout << "Graphics Engine Killed" << std::endl;
 			PhysicsEngine::Destroy();
-			std::cout << "Physics Engine Killed" << std::endl;
 			StorageManager::Destroy();
-			std::cout << "Storage Manager Killed" << std::endl;
 			InputManager::Destroy();
 			std::cout << "Input Manager Killed" << std::endl;
 			
@@ -146,17 +149,16 @@ public:
 			NetworkManager::Destroy();
 #endif
 			DebugManager::Destroy();
-			std::cout << "Debug Manager Killed" << std::endl;
 
 			delete instance;
 			instance = NULL;
-
-			std::cout << "GameStateManager Killed" << std::endl;
 		}
 	}
 	~GameStateManager()
 	{
-		
+#if PS3_BUILD
+	delete timer;
+#endif
 	}
 #pragma region Framework Abstractions
 	/**
@@ -350,12 +352,20 @@ public:
 	{
 		return instance;
 	}
+#if PS3_BUILD
+	static GameTimer* GetTimer() { return instance->timer; }
+#endif
 private:
 #pragma region Contructors
 	/**
 	<summary>Constructor.</summary>
 	*/
-	GameStateManager() { }
+	GameStateManager() 
+	{
+#if PS3_BUILD
+	timer = new GameTimer();
+#endif
+	}
 	/**
 	<summary>Copy Constructor. Private & not implemented. We don't want multiples of this class.</summary>
 	*/
@@ -384,4 +394,7 @@ private:
 	vector<GameScreen*> gameScreens;
 	bool isRunning;
 	float lastUpdate;
+#if PS3_BUILD
+	GameTimer* timer;
+#endif
 };

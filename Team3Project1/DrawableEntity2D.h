@@ -19,6 +19,7 @@ namespace DrawableType
 {
 	enum Type
 	{
+		Unknown,
 		Texture,
 		Text,
 	};
@@ -36,7 +37,9 @@ public:
 	<param name='height'>The height of the entity.</param>
 	<param name='blendColor'>The colour. Default is White (1,1,1,1).</param>
 	*/
-	DrawableEntity2D(float x, float y, int depth, float width, float height, DrawableType::Type type, T3Vector4 blendColor = T3Vector4(1.0f, 1.0f, 1.0f ,1.0f), bool trans = true) : T3Rectangle(x, y, width, height), blendColor(blendColor), type(type), depth(depth), transparent(trans)
+	DrawableEntity2D(float x, float y, int depth, float width, float height, DrawableType::Type type, float rotation = 0, T3Vector2 origin = T3Vector2(0.5f, 0.5f), T3Vector4 blendColor = T3Vector4(1.0f, 1.0f, 1.0f ,1.0f), bool trans = true) 
+		: T3Rectangle(x, y, width, height),
+		blendColor(blendColor), type(type), depth(depth), transparent(trans), origin(origin), rotation(rotation)
 	{ }
 
 	virtual ~DrawableEntity2D() {}
@@ -58,6 +61,7 @@ public:
 	<summary>Gets the drawable entitys depth on screen. Allows it to be drawn behind/in front off other entities.</summary>
 	*/
 	int GetDepth() const {return depth;}
+	void SetDepth(int value) { depth = value; }
 	/**
 	<summary>Sets the drawable entitys depth on screen.</summary>
 	<param name='value'>The depth.</param>
@@ -68,9 +72,49 @@ public:
 
 	bool GetTransparent() { return transparent; }
 
+	/**
+	<summary>Gets the rotation.</summary>
+	*/
+	float GetRotation() const { return rotation; }
+	/**
+	<summary>Sets the rotation.</summary>
+	<param name='value'>The rotation in degrees from up. Default is 0.</param>
+	*/
+	void SetRotation(const float value) {
+		if (rotation > 360.0f) {
+			rotation -= 360.0f;
+		}
+		else if (rotation < -360.0f) {
+			rotation += 360.0f;
+		}
+		else rotation = value;
+	}
+	/**
+	<summary>Gets the origin of rotation.</summary>
+	*/
+	T3Vector2 GetOrigin() const { return origin; }
+	/**
+	<summary>Sets the origin of rotation.</summary>
+	<param name='value'>The origin around which this object will rotate, relative to the object's draw area. Default is the center (0.5, 0.5).</param>
+	*/
+	void SetOrigin(const T3Vector2& value) { origin = value; }
+
+	friend std::ostream& operator<<(std::ostream& o, const DrawableEntity2D& v)
+	{
+		
+		o << "DrawableEntity2D:" << std::endl;
+		o << "  transparent: " << v.transparent << std::endl;
+		o << "  depth: " << v.depth << std::endl;
+		o << "  blendColor: " << v.blendColor << std::endl;
+		o << "  type: " << v.type << std::endl;
+		return o;
+	}
+
 protected:
 	bool transparent;
 	int depth;
 	T3Vector4 blendColor;
 	DrawableType::Type type;
+	float rotation;
+	T3Vector2 origin;
 };

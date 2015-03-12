@@ -19,23 +19,23 @@ void PauseScreen::Update() {
 }
 
 void PauseScreen::LoadContent() {
-	Font* font = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"quadrats.tga", 16, 16);
+	Font* font = GameStateManager::Assets()->LoadFont(this, "quadrats", 16, 16);
 
-	buttonTex			= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/button.png", 0);
-	buttonTexHover		= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/button_selected.png", 0);
-	buttonTexClicked	= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/button_clicked.png", 0);
+	buttonTex			= GameStateManager::Assets()->LoadTexture(this, "Buttons/button", 0);
+	buttonTexHover		= GameStateManager::Assets()->LoadTexture(this, "Buttons/button_selected", 0);
+	buttonTexClicked	= GameStateManager::Assets()->LoadTexture(this, "Buttons/button_clicked", 0);
 
-	musicNoMute			= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/music_nomute.png", 0);
-	musicNoMuteHover	= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/music_nomute_selected.png", 0);
-	musicMute			= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/music_mute.png", 0);
-	musicMuteHover		= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/music_mute_selected.png", 0);
+	musicNoMute			= GameStateManager::Assets()->LoadTexture(this, "Buttons/music_nomute", 0);
+	musicNoMuteHover	= GameStateManager::Assets()->LoadTexture(this, "Buttons/music_nomute_selected", 0);
+	musicMute			= GameStateManager::Assets()->LoadTexture(this, "Buttons/music_mute", 0);
+	musicMuteHover		= GameStateManager::Assets()->LoadTexture(this, "Buttons/music_mute_selected", 0);
 
-	soundNoMute			= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/sound_nomute.png", 0);
-	soundNoMuteHover	= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/sound_nomute_selected.png", 0);
-	soundMute			= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/sound_mute.png", 0);
-	soundMuteHover		= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/sound_mute_selected.png", 0);
+	soundNoMute			= GameStateManager::Assets()->LoadTexture(this, "Buttons/sound_nomute", 0);
+	soundNoMuteHover	= GameStateManager::Assets()->LoadTexture(this, "Buttons/sound_nomute_selected", 0);
+	soundMute			= GameStateManager::Assets()->LoadTexture(this, "Buttons/sound_mute", 0);
+	soundMuteHover		= GameStateManager::Assets()->LoadTexture(this, "Buttons/sound_mute_selected", 0);
 
-	pauseTex			= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"pause_screen.png", 0);
+	pauseTex			= GameStateManager::Assets()->LoadTexture(this, "pause_screen", 0);
 
 	float charWidth = 0.16f;
 	float charHeight = 0.08f;
@@ -90,23 +90,23 @@ void PauseScreen::UnloadContent() {
 
 	RemoveDrawable(pauseLogo);
 
-	GameStateManager::Assets()->UnloadFont(this, TEXTUREDIR"quadrats.tga");
+	GameStateManager::Assets()->UnloadFont(this, "quadrats");
 
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/button.png");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/button_selected.png");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/button_clicked.png");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/button");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/button_selected");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/button_clicked");
 								
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/music_nomute.png");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/music_nomute_selected.png");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/music_mute.png");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/music_mute_selected.png");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/music_nomute");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/music_nomute_selected");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/music_mute");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/music_mute_selected");
 								
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/sound_nomute.png");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/sound_nomute_selected.png");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/sound_mute.png");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/sound_mute_selected.png");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/sound_nomute");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/sound_nomute_selected");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/sound_mute");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/sound_mute_selected");
 
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"pause_screen.png");
+	GameStateManager::Assets()->UnloadTexture(this, "pause_screen");
 }
 
 void PauseScreen::ResumeClicked(float x, float y) {

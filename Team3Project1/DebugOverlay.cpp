@@ -11,9 +11,9 @@ DebugOverlay::~DebugOverlay()
 }
 void DebugOverlay::LoadContent()
 {
-	Font* font = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"tahoma.tga", 16, 16);
+	Font* font = GameStateManager::Assets()->LoadFont(this, "tahoma", 16, 16);
 	
-	AddDrawable(new DrawableTexture2D(0, 0, -1, 1, 1, GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"TitleSafeArea.png", 0), 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1.0f, 0.0f, 0.0f, 0.25f)));
+	AddDrawable(new DrawableTexture2D(0, 0, -1, 1, 1, GameStateManager::Assets()->LoadTexture(this, "TitleSafeArea", 0), 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1.0f, 0.0f, 0.0f, 0.25f)));
 	
 	float charWidth = 0.0125f;
 	float charHeight = 0.03f;
@@ -37,14 +37,14 @@ void DebugOverlay::LoadContent()
 
 	totalMemory = new DrawableText2D(23 * charWidth, 0.15f, 1, 3 * charWidth, charHeight, "0", font);
 	textureMemory = new DrawableText2D(12 * charWidth, 0.18f, 1, 3 * charWidth, charHeight, "0", font);
-	meshMemory = new DrawableText2D(10 * charWidth, 0.21f, 1, 3 * charWidth, charHeight, "0", font);
+	meshMemory = new DrawableText2D(10 * charWidth, 0.21f, 1, 4 * charWidth, charHeight, "0", font);
 	AddDrawable(totalMemory);
 	AddDrawable(textureMemory);
 	AddDrawable(meshMemory);
 
 	AddDrawable(new DrawableText2D(26 * charWidth, 0.16f, 1, 2 * charWidth, 0.02f, "MB", font));
 	AddDrawable(new DrawableText2D(15 * charWidth, 0.19f, 1, 2 * charWidth, 0.02f, "MB", font));
-	AddDrawable(new DrawableText2D(13 * charWidth, 0.22f, 1, 2 * charWidth, 0.02f, "MB", font));
+	AddDrawable(new DrawableText2D(14 * charWidth, 0.22f, 1, 2 * charWidth, 0.02f, "KB", font));
 
 	mouseX = new DrawableText2D(9 * charWidth, 0.24f, 1, 8 * charWidth, charHeight, "0", font);
 	mouseY = new DrawableText2D(9 * charWidth, 0.27f, 1, 8 * charWidth, charHeight, "0", font);
@@ -53,19 +53,17 @@ void DebugOverlay::LoadContent()
 }
 void DebugOverlay::Update()
 {
-#if WINDOWS_BUILD
-	renderFrameRate->SetText(to_string(GameStateManager::Graphics()->GetFrameRate()));
-	physicsFrameRate->SetText(to_string(GameStateManager::Physics()->GetFrameRate()));
-	inputFrameRate->SetText(to_string(GameStateManager::Input()->GetFrameRate()));
-	totalMemory->SetText(to_string(GameStateManager::Assets()->GetTotalMemory()));
-	textureMemory->SetText(to_string(GameStateManager::Assets()->GetTextureMemory()));
-	meshMemory->SetText(to_string(GameStateManager::Assets()->GetMeshMemory()));
-#endif
+	renderFrameRate->SetText(GameStateManager::Graphics()->GetFrameRate());
+	physicsFrameRate->SetText(GameStateManager::Physics()->GetFrameRate());
+	inputFrameRate->SetText(GameStateManager::Input()->GetFrameRate());
+	totalMemory->SetText(GameStateManager::Assets()->GetTotalMemory());
+	textureMemory->SetText(GameStateManager::Assets()->GetTextureMemory());
+	meshMemory->SetText(GameStateManager::Assets()->GetMeshMemory());
 }
 void DebugOverlay::UnloadContent()
 {
-	GameStateManager::Assets()->UnloadFont(this, TEXTUREDIR"tahoma.tga");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"TitleSafeArea.png");
+	GameStateManager::Assets()->UnloadFont(this, "tahoma");
+	GameStateManager::Assets()->UnloadTexture(this, "TitleSafeArea");
 }
 #if WINDOWS_BUILD
 void DebugOverlay::MouseMoved(T3Vector2& start, T3Vector2& finish)

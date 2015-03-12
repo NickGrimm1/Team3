@@ -142,18 +142,20 @@ struct MTLInfo {
 
 class OBJMesh : public Mesh, public ChildMeshInterface	{
 public:
-	OBJMesh(void){};
-	OBJMesh(std::string filename) : texture(NULL), bumpTexture(NULL) {LoadOBJMesh(filename);};
+	OBJMesh(void){texture = NULL; bumpTexture = NULL;};
+	OBJMesh(std::string filename) : texture(NULL), bumpTexture(NULL) {LoadOBJMesh(filename); BuildOBJMesh();};
 	~OBJMesh(void)
 	{
 		GameStateManager::Assets()->UnloadTexture(this, texturePath);
 		GameStateManager::Assets()->UnloadTexture(this, bumpPath);
 	};
-	bool	LoadOBJMesh(std::string filename);
 
 	virtual void Draw();
 
 protected:
+	bool	LoadOBJMesh(std::string filename);
+	bool	BuildOBJMesh();
+
 	void	SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, MTLInfo>& materials);
 
 	void	FixTextures(MTLInfo &info);
@@ -162,6 +164,17 @@ protected:
 	string bumpPath;
 	Texture* texture;
 	Texture* bumpTexture;
+
+	/*
+	SubMeshes temporarily get kept in here
+	*/
+	std::vector<OBJSubMesh*> inputSubMeshes;
+		/*
+	Stores the loaded in vertex attributes
+	*/
+	std::vector<T3Vector2>inputTexCoords;
+	std::vector<T3Vector3>inputVertices;
+	std::vector<T3Vector3>inputNormals;
 };
 
 #endif

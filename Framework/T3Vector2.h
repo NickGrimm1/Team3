@@ -14,6 +14,7 @@ Version: 1.0.0 05/02/2015.</summary>
 #pragma once
 #include "common.h"
 #include <math.h>
+#include <iostream>
 
 class T3Vector2
 {
@@ -418,5 +419,10 @@ public:
 		return T3Vector2(0.0f, 1.0f);
 	}
 #pragma endregion
+	friend std::ostream& operator<<(std::ostream& o, const T3Vector2& v)
+	{
+		o << "(" << v.x << ", " << v.y << ", " << ")";
+		return o;
+	}
 };
 

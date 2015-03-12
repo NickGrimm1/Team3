@@ -32,7 +32,9 @@ public:
 	<param name='origin'>The origin around which this object will rotate, relative to the object's draw area. Default is the center (0.5, 0.5).</param>
 	<param name='blendColor'>The colour. Default is White (1,1,1,1).</param>	
 	*/
-	DrawableTexture2D(float x, float y, int depth, float width, float height, Texture* texture, float rotation = 0, T3Vector2 origin = T3Vector2(0.5f, 0.5f), T3Vector4 blendColor = T3Vector4(1.0f, 1.0f, 1.0f ,1.0f), bool transparent = true) : DrawableEntity2D(x, y, depth, width, height, DrawableType::Texture, blendColor, transparent), texture(texture), rotation(rotation), origin(origin)
+	DrawableTexture2D(float x, float y, int depth, float width, float height, Texture* texture, float rotation = 0, T3Vector2 origin = T3Vector2(0.5f, 0.5f), T3Vector4 blendColor = T3Vector4(1.0f, 1.0f, 1.0f ,1.0f), bool transparent = true)
+		: DrawableEntity2D(x, y, depth, width, height, DrawableType::Texture, rotation, origin, blendColor, transparent), 
+		texture(texture)
 	{ }
 
 	/**
@@ -44,34 +46,14 @@ public:
 	<param name='value'>The texture.</param>
 	*/
 	void SetTexture(Texture* value) { texture = value; }
-	/**
-	<summary>Gets the rotation.</summary>
-	*/
-	float GetRotation() const { return rotation; }
-	/**
-	<summary>Sets the rotation.</summary>
-	<param name='value'>The rotation in degrees from up. Default is 0.</param>
-	*/
-	void SetRotation(const float value) {
-		if (rotation > 360.0f) {
-			rotation -= 360.0f;
-		}
-		else if (rotation < -360.0f) {
-			rotation += 360.0f;
-		}
-		else rotation = value;
+
+	friend std::ostream& operator<<(std::ostream& o, const DrawableTexture2D& v)
+	{
+		//DrawableEntity2D::operator<<(o, v);
+		o << "DrawableTexture2D:" << std::endl;
+		o << "  texture: " << v.texture << std::endl;
+		return o;
 	}
-	/**
-	<summary>Gets the origin of rotation.</summary>
-	*/
-	T3Vector2 GetOrigin() const { return origin; }
-	/**
-	<summary>Sets the origin of rotation.</summary>
-	<param name='value'>The origin around which this object will rotate, relative to the object's draw area. Default is the center (0.5, 0.5).</param>
-	*/
-	void SetOrigin(const T3Vector2& value) { origin = value; }
 protected:
 	Texture* texture;
-	float rotation;
-	T3Vector2 origin;
 };

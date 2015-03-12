@@ -14,15 +14,11 @@ Debuff::Debuff()
 	SpdBf_pos_z=(rand() % (b-a+1))+ a;
 	InvBuff_pos_x=(rand() % (d-c+1))+ c;
 	InvBuff_pos_z=(rand() % (d-c+1))+ c;
-	cout<<SpdBf_pos_x<<endl;
-	cout<<SpdBf_pos_z<<endl;
-	cout<<InvBuff_pos_x<<endl;
-	cout<<InvBuff_pos_z<<endl;
 	//random the buff position
 	SpeedBuffMesh = new OBJMesh(MESHDIR"gas_tank.obj");
 	InverseleftrightMesh =new OBJMesh(MESHDIR"ico.obj");
-	SpdBf_pos = T3Vector3(SpdBf_pos_x,100,SpdBf_pos_z);
-	RtBf_pos=T3Vector3(InvBuff_pos_x,100,InvBuff_pos_z);
+	SpdBf_pos = T3Vector3((float)SpdBf_pos_x,100.0f,(float)SpdBf_pos_z);
+	RtBf_pos=T3Vector3((float)InvBuff_pos_x,100.0f,(float)InvBuff_pos_z);
 	size = 20.0f;
 	SpeedUp= BuildSpeedBuffEntity(size,SpdBf_pos);
 	Inverse= BuildInvLeftAndRightEntity(size,RtBf_pos);
@@ -81,24 +77,24 @@ void Debuff::UpdateDebuff(Vehicle *car, float msec){
 	T3Vector3 RtBf_pos=Inverse->GetPhysicsNode().GetPosition();
 	T3Vector3 Dist= Car_pos-SpeedUp_pos;
 	T3Vector3 Dist2=Car_pos-RtBf_pos;
-	if(Dist.Length()<=20)
+	if(Dist.Length()<=20.0f)
 	{
-		SpeedUp->GetPhysicsNode().SetPosition(T3Vector3(0,10000,0));//make entity disappeared
+		SpeedUp->GetPhysicsNode().SetPosition(T3Vector3(0.0f,10000.0f,0.0f));//make entity disappeared
 		/*car->GetPlayer()->GetPhysicsNode().SetLinearVelocity(T3Vector3(0,0,50));*/
 		car->SetSpeed_Player(8);
 	}
 	if(car->GetSpeed_Player()==8){
 		speeduptime -= msec;
 	}
-	if (speeduptime<=0)
+	if (speeduptime<=0.0f)
 	{
-		speeduptime=5000;
+		speeduptime=5000.0f;
 		LR=true;
 		car->SetSpeed_Player(1);
 	}
-	if(Dist2.Length()<=20)
+	if(Dist2.Length()<=20.0f)
 	{
-		Inverse->GetPhysicsNode().SetPosition(T3Vector3(0,10000,0));//make entity disappeared
+		Inverse->GetPhysicsNode().SetPosition(T3Vector3(0.0f,10000.0f,0.0f));//make entity disappeared
 		car->SetSpeed_Player(2);
 		LR=false;
 	}
@@ -108,7 +104,7 @@ void Debuff::UpdateDebuff(Vehicle *car, float msec){
 	}
 	if(speeduptime<=0)
 	{
-		speeduptime=5000;
+		speeduptime=5000.0f;
 		LR=true;
 		car->SetSpeed_Player(1);
 	}

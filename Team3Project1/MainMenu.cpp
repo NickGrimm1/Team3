@@ -9,6 +9,9 @@ MainMenu::MainMenu(void)
 	musicMuted = false;
 	soundMuted = false;
 	playerOne = GamepadEvents::PLAYERINDEX_MAX;
+
+	connectionTime = 0.0;
+	inputEnabled = true;
 }
 
 void MainMenu::Update(void) 
@@ -23,9 +26,11 @@ void MainMenu::Update(void)
 			GameStateManager::Graphics()->EnableMousePointer(false);
 #endif
 			SetCurrentSelected(0);
-
+			connectionTime = 500;
 		}
 	}
+	else
+		connectionTime < 0 ? connectionTime = 0 : connectionTime -= 5.0; // Slightly hacky way of not triggering input as soon as we first get a controller.
 }
 
 MainMenu::~MainMenu(void)
@@ -46,25 +51,39 @@ MainMenu::~MainMenu(void)
 }
 
 void MainMenu::LoadContent() {
+	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	wallpaper = new MenuScreen3D();
 	GameStateManager::AddGameScreen(wallpaper);
 
-	Font* font = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"quadrats.tga", 16, 16);
+	Font* font = GameStateManager::Assets()->LoadFont(this, "quadrats", 16, 16);
 
-	buttonTex			= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/button.png", 0);
-	buttonTexHover		= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/button_selected.png", 0);
-	buttonTexClicked	= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/button_clicked.png", 0);
-	scoreBoardTex		= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"score_board.png", 0);
+	buttonTex			= GameStateManager::Assets()->LoadTexture(this, "Buttons/button", 0);
+	buttonTexHover		= GameStateManager::Assets()->LoadTexture(this, "Buttons/button_selected", 0);
+	buttonTexClicked	= GameStateManager::Assets()->LoadTexture(this, "Buttons/button_clicked", 0);
+	scoreBoardTex		= GameStateManager::Assets()->LoadTexture(this, "score_board", 0);
 
-	musicNoMute			= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/music_nomute.png", 0);
-	musicNoMuteHover	= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/music_nomute_selected.png", 0);
-	musicMute			= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/music_mute.png", 0);
-	musicMuteHover		= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/music_mute_selected.png", 0);
+	musicNoMute			= GameStateManager::Assets()->LoadTexture(this, "Buttons/music_nomute", 0);
+	musicNoMuteHover	= GameStateManager::Assets()->LoadTexture(this, "Buttons/music_nomute_selected", 0);
+	musicMute			= GameStateManager::Assets()->LoadTexture(this, "Buttons/music_mute", 0);
+	musicMuteHover		= GameStateManager::Assets()->LoadTexture(this, "Buttons/music_mute_selected", 0);
 
-	soundNoMute			= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/sound_nomute.png", 0);
-	soundNoMuteHover	= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/sound_nomute_selected.png", 0);
-	soundMute			= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/sound_mute.png", 0);
-	soundMuteHover		= GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Buttons/sound_mute_selected.png", 0);
+	soundNoMute			= GameStateManager::Assets()->LoadTexture(this, "Buttons/sound_nomute", 0);
+	soundNoMuteHover	= GameStateManager::Assets()->LoadTexture(this, "Buttons/sound_nomute_selected", 0);
+	soundMute			= GameStateManager::Assets()->LoadTexture(this, "Buttons/sound_mute", 0);
+	soundMuteHover		= GameStateManager::Assets()->LoadTexture(this, "Buttons/sound_mute_selected", 0);
+
+	// Load Scoreboard
+#if WINDOWS_BUILD
+	scoreBoardConn = new Scoreboard();
+	scoreBoardConn->RetrieveScoreboard();
+	for (unsigned int i = 0; i < 10; i++) {
+		scoreBoardConn->GetName(i);
+		scores.push_back(pair<DrawableText2D*, DrawableText2D*>(new DrawableText2D(0.57f, 0.180f + (0.065f * i), 2, 0.12f, 0.065f, scoreBoardConn->GetName(i), font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
+			new DrawableText2D(0.75f, 0.180f + (0.065f * i), 2, 0.12f, 0.065f, scoreBoardConn->GetScore(i), font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false)));
+		AddDrawable(scores.back().first);
+		AddDrawable(scores.back().second);
+	}
+#endif
 
 	float charWidth = 0.200f;
 	float charHeight = 0.08f;
@@ -117,69 +136,75 @@ void MainMenu::LoadContent() {
 	AddClickable(music);
 	AddClickable(sounds);
 
-	Font* startFont = GameStateManager::Assets()->LoadFont(this, TEXTUREDIR"tahoma.tga", 16, 16);
+	Font* startFont = GameStateManager::Assets()->LoadFont(this, "tahoma", 16, 16);
 	pressStart = new DrawableText2D(0.3f, 0.1f, 1, 0.4f, 0.05f, "Player 1 Press Start or A", startFont);
 	AddDrawable(pressStart);
 
-	// Load Scoreboard
-#if WINDOWS_BUILD
-	scoreBoardConn = new Scoreboard();
-	scoreBoardConn->RetrieveScoreboard();
-	for (unsigned int i = 0; i < 10; i++) {
-		scoreBoardConn->GetName(i);
-		scores.push_back(pair<DrawableText2D*, DrawableText2D*>(new DrawableText2D(0.57f, 0.180f + (0.065f * i), 2, 0.12f, 0.065f, scoreBoardConn->GetName(i), font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
-			new DrawableText2D(0.75f, 0.180f + (0.065f * i), 2, 0.12f, 0.065f, scoreBoardConn->GetScore(i), font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false)));
-		AddDrawable(scores.back().first);
-		AddDrawable(scores.back().second);
-	}
-#endif
-
+	//finished loading screen
+	GameStateManager::Graphics()->EnableLoadingIcon(false);
 }
 
 void MainMenu::UnloadContent() {
-	RemoveClickable(newGame);
-	RemoveClickable(controls);
-	RemoveClickable(quitGame);
-	RemoveClickable(music);
-	RemoveClickable(sounds);
+	RemoveClickable(newGame, true, false);
+	RemoveClickable(controls, true, false);
+	RemoveClickable(quitGame, true, false);
+	RemoveClickable(music, true, false);
+	RemoveClickable(sounds, true, false);
 
-	RemoveDrawable(scoreBoard);
-	RemoveDrawable(pressStart);
+	RemoveDrawable(scoreBoard, false);
+	RemoveDrawable(pressStart, false);
 
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/button.png");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/button_selected.png");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/button_clicked.png");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"score_board.png");
+#ifdef WINDOWS_BUILD
+	for (unsigned int i = 0; i < 10; i++) {
+		RemoveDrawable(scores[i].first, false);
+		RemoveDrawable(scores[i].second, false);
+	}
+	scores.clear();
+#endif
 
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/music_nomute.png");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/music_nomute_selected.png");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/music_mute.png");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/music_mute_selected.png");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/button");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/button_selected");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/button_clicked");
+	GameStateManager::Assets()->UnloadTexture(this, "score_board");
 								
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/sound_nomute.png");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/sound_nomute_selected.png");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/sound_mute.png");
-	GameStateManager::Assets()->UnloadTexture(this, TEXTUREDIR"Buttons/sound_mute_selected.png");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/music_nomute");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/music_nomute_selected");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/music_mute");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/music_mute_selected");
 
-	GameStateManager::Assets()->UnloadFont(this, TEXTUREDIR"quadrats.tga");
-	GameStateManager::Assets()->UnloadFont(this, TEXTUREDIR"tahoma.tga");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/sound_nomute");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/sound_nomute_selected");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/sound_mute");
+	GameStateManager::Assets()->UnloadTexture(this, "Buttons/sound_mute_selected");
+
+	GameStateManager::Assets()->UnloadFont(this, "quadrats");
+	GameStateManager::Assets()->UnloadFont(this, "tahoma");
+#if WINDOWS_BUILD
+	delete scoreBoardConn;
+#endif
 }
 
 
 
 /*--------------------Clicked Methods--------------------*/
 
-void MainMenu::NewGameClicked(float x, float y) {
+void MainMenu::NewGameClicked(float x, float y) 
+{
+	std::cout << "New Game Clicked" << std::endl;
+	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	newGame->GetTexture()->SetTexture(buttonTexClicked);
 #if WINDOWS_BUILD
 	GameStateManager::Graphics()->EnableMousePointer(false);
 #endif
 	GameStateManager::Instance()->RemoveGameScreen(wallpaper);
 	GameStateManager::Instance()->RemoveGameScreen(this);
-
+#if WINDOWS_BUILD
 	RacerGame* game = new RacerGame();
+//	GraphicsTestScreen* game = new GraphicsTestScreen();
 	GameStateManager::Physics()->SetGame(game);
 	GameStateManager::Instance()->ChangeScreen(game);
+	//GameStateManager::RemoveGameScreen(this);
+#endif
 }
 
 void MainMenu::ControlsClicked(float x, float y) {
@@ -290,6 +315,13 @@ void MainMenu::GamepadDisconnect(GamepadEvents::PlayerIndex playerID)
 #endif
 		ClearSelection();
 }
+void MainMenu::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button)
+{
+	std::cout <<"MainMenu:GPEvent"<<std::endl;
+	if (connectionTime < 200.0)
+		GameScreen2D::GamepadEvent(playerID, type, button);
+}
+
 #if WINDOWS_BUILD
 void MainMenu::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position)
 {

@@ -1,8 +1,10 @@
 #include "AssetManager.h"
 #include "../Framework/OBJMesh.h"
+#include "PhysicsObjMesh.h"
 #include "../Framework/MD5Mesh.h"
 #include "GameStateManager.h"
 #include "Heightmap.h"
+#include "TrackSegment.h"
 
 AssetManager* AssetManager::instance = NULL;
 
@@ -147,7 +149,7 @@ Mesh* AssetManager::LoadMesh(void* callerID, string filePath)
 		if (filePath.substr(filePath.length() - 3, 3) == "obj")
 		{
 			GameStateManager::Graphics()->GetRenderContext();
-			newMesh = new OBJMesh(filePath);
+			newMesh = new PhysicsObjMesh(filePath);
 			GameStateManager::Graphics()->DropRenderContext();
 		}
 		else if (filePath.substr(filePath.length() - 3, 3) == "md5")
@@ -918,6 +920,7 @@ void AssetManager::UnloadHeightmap(Mesh* heightmap)
 	{
 		if (*i == heightmap)
 		{
+			meshMemory -= (*i)->GetMemoryUsage();
 			GameStateManager::Graphics()->GetRenderContext();
 			delete *i;
 			GameStateManager::Graphics()->DropRenderContext();
@@ -925,4 +928,41 @@ void AssetManager::UnloadHeightmap(Mesh* heightmap)
 			break;
 		}
 	}
+}
+
+Mesh* AssetManager::LoadTrackSegment(T3Vector3 ctrlPoint1, T3Vector3 ctrlPoint2, T3Vector3 ctrlPoint3, unsigned int segments, float trackWidth) {
+	GameStateManager::Graphics()->GetRenderContext();
+	Mesh* mesh = new TrackSegment(ctrlPoint1, ctrlPoint2, ctrlPoint3, segments, trackWidth);
+	GameStateManager::Graphics()->DropRenderContext();
+	generatedTracks.push_back(mesh);
+	meshMemory += mesh->GetMemoryUsage();
+	return mesh;
+}
+
+void AssetManager::UnloadTrackSegment(Mesh* track) {
+	// check if track in list, then delete
+	for (vector<Mesh*>::iterator i = generatedTracks.begin(); i != generatedTracks.end(); i++)
+	{
+		if (*i == track)
+		{
+			meshMemory -= (*i)->GetMemoryUsage();
+			GameStateManager::Graphics()->GetRenderContext();
+			delete *i;
+			GameStateManager::Graphics()->DropRenderContext();
+			i = generatedHeightmaps.erase(i);
+			break;
+		}
+	}
+}
+
+int AssetManager::GetTotalMemory() { 
+	return (int)(textureMemory + GetMeshMemory() / 1024); 
+}
+
+int AssetManager::GetTextureMemory() { 
+	return (int)textureMemory; 
+}
+
+int AssetManager::GetMeshMemory() { 
+	return (int)meshMemory + GameStateManager::Graphics()->GetTextMeshMemory(); 
 }

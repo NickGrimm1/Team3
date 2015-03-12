@@ -111,14 +111,25 @@ void AudioTestClass::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvent
 		break;*/
 		}
 	break;
-	
+	}
 //	case KeyboardEvents::KEY_PRESS:
 //		switch (key) {
 //		case KeyboardEvents::KEYBOARD_ESCAPE:
 //			GameStateManager::Instance()->Exit();
 //			break;
+//
+//	    /*case KeyboardEvents::KEYBOARD_4:
+//			PlaySound(TEXT("../Sounds/36847__ecodtr__laserrocket2.wav"),NULL,SND_ASYNC|SND_LOOP);
+//		break;*/
 //		} 
-	}
+//	break;
+//	
+////	case KeyboardEvents::KEY_PRESS:
+////		switch (key) {
+////		case KeyboardEvents::KEYBOARD_ESCAPE:
+////			GameStateManager::Instance()->Exit();
+////			break;
+////		} 
+//	}
 }
-
 #endif

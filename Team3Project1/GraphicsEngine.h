@@ -46,23 +46,15 @@ class GraphicsEngine : public Thread
 public:
 	bool GetRenderContext() 
 	{
-#if WINDOWS_BUILD
 		return renderer->GetRenderContextForThread();
-#endif
-#if PS3_BUILD
-		return true;
-#endif
 	}
 	bool DropRenderContext() 
 	{
-#if WINDOWS_BUILD
 		return renderer->DropRenderContextForThread();
-#endif
-#if PS3_BUILD
-		return true;
-#endif
 	}
 	int GetFrameRate() { return frameRate; }
+
+	unsigned int GetTextMeshMemory() const {return renderer->GetTextMeshMemory();}
 #pragma region Entry/Exit
 	/**
 	<summary>Initializes a graphics engine.</summary>
@@ -84,12 +76,8 @@ public:
 	<summary>Gets whether the graphics engine has initialized and is ready to render.</summary>
 	*/
 	bool HasInitialised() { return isInitialised; }
-#if WINDOWS_BUILD
+
 	void Run();
-#endif
-#if PS3_BUILD
-	 void Run();
-#endif
 #pragma endregion
 #pragma region TwoD
 	/**
@@ -188,15 +176,29 @@ private:
 	// Scene Elements
 	SceneNode* sceneRoot; // Scene heirarchy
 	vector<Light*> lights; // Scene lighting
+#if WINDOWS_BUILD
 	vector<DrawableEntity2D*> overlayElementsList; // HUD/Menu overlay items
+#endif
+#if PS3_BUILD
+	vector<DrawableTexture2D*> overlayTexturesList; // HUD/Menu overlay items
+	vector<DrawableText2D*> overlayTextsList; // HUD/Menu overlay items
+#endif
 	vector<SceneNode*> transparentGameEntityList; // list of transparent game elements sorted by distance from camera
 	vector<SceneNode*> gameEntityList; // list of opaque game elements sorted by distance from camera
 
 	MutexClass contentGuard;
 	vector<Light*> addLightsList; // lights to be added during next update
 	vector<Light*> removeLightsList; // lights to be removed during next update
+#if WINDOWS_BUILD
 	vector<DrawableEntity2D*> addHudList; // HUD elements to be added at next update
 	vector<DrawableEntity2D*> removeHudList; // HUD elements to be removed at next update
+#endif
+#if PS3_BUILD
+	vector<DrawableTexture2D*> addHudTextureList; // HUD elements to be added at next update
+	vector<DrawableTexture2D*> removeHudTextureList; // HUD elements to be removed at next update
+	vector<DrawableText2D*> addHudTextList; // HUD elements to be added at next update
+	vector<DrawableText2D*> removeHudTextList; // HUD elements to be removed at next update
+#endif
 	vector<pair<DrawableEntity3D*, DrawableEntity3D*> > addGameList; // Game elements to be added at next update
 	vector<pair<DrawableEntity3D*, bool> > removeGameList; // Game elements to be removed at next update
 
@@ -217,4 +219,14 @@ private:
 	int frameRate;
 	int time;
 	bool inc;
+
+	static bool SortDrawableEntity2D(const void* a, const void* b)
+	{
+		return (((DrawableEntity2D*) a)->GetDepth() < ((DrawableEntity2D*) b)->GetDepth());
+	}
+
+	static bool SortLights(const void* a, const void* b)
+	{
+		return (((Light*) a)->GetType() < ((Light*) b)->GetType());
+	}
 };

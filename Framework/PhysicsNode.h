@@ -43,7 +43,8 @@ _-_-_-_-_-_-_-""  ""
 //#include "GameEntity.h"
 
 using namespace std;
-#define LINEAR_VELOCITY_DAMP 0.92
+//#define LINEAR_VELOCITY_DAMP 0.988
+#define LINEAR_VELOCITY_DAMP 1
 #define ANGULAR_VELOCITY_DAMP 0.7
 #define LINEAR_VELOCITY_MIN 0.00001
 
@@ -55,7 +56,7 @@ public:
 	PhysicsNode(Quaternion orientation, T3Vector3 position);
 	~PhysicsNode(void);
 
-	T3Vector3		GetPosition() const			{ return m_position;}
+	T3Vector3		GetPosition() 			{ return m_position;}
 	T3Vector3		GetLinearVelocity() const	{ return m_linearVelocity;}
 	
 	float		GetInverseMass() const		{return m_invMass;}
@@ -87,6 +88,9 @@ public:
 	DrawableEntity3D* GetTarget() {return target;}
 	void	SetUseGravity(bool value) { useGravity = value; }
 	void	SetCollisionVolume(CollisionVolume* vol) { this->vol = vol; }
+
+	bool Getplanecollision(){return planecollision;};
+	void Setplanecollision(bool Planecollision){planecollision =Planecollision;};
 
 	T3Vector3 GetFriction() {return m_friction;}
 	void    SetFriction(T3Vector3 friction)  {m_friction=friction;}
@@ -143,6 +147,7 @@ public:
 	bool useGravity;
 	bool isCollide;
 	bool car_wheel;
+	bool planecollision;
 
 	Mesh* physicsMesh;
 

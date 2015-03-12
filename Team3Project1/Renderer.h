@@ -54,6 +54,8 @@ public:
 
 	void			SetCamera(Camera* cam) {camera = cam;};
 
+	void			SetLoadingIcon(DrawableTexture2D* icon) {loadingIcon = icon;}
+
 	void			RenderScene();
 	void			ToggleDebug(int arg, bool onOff);
 
@@ -65,7 +67,7 @@ public:
 
 	void			SetSkyBoxTexture(GLuint tex) {skyBoxTex = tex;}
 
-	T3Vector4			GetAmbientColour() const {return ambientLightColour;}
+	T3Vector4		GetAmbientColour() const {return ambientLightColour;}
 	void			SetAmbientColour(T3Vector4& colour) {ambientLightColour = colour;}
 
 	void			SetDayNight(float arg) { dayNight = arg; }
@@ -73,7 +75,6 @@ public:
 	bool			GetRenderContextForThread();
 	bool			DropRenderContextForThread();
 
-	bool			LoadShaders();
 	bool			LoadAssets();
 	void			UnloadShaders();
 	void			UnloadAssets();
@@ -82,9 +83,10 @@ public:
 
 	unsigned char* GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue);
 
+	unsigned int	GetTextMeshMemory() {return textMeshMemory / 1024;} //KB
 protected:
 
-	T3Matrix4			cameraMatrix; // Get camera matrix once at start of scene
+	T3Matrix4		cameraMatrix; // Get camera matrix once at start of scene
 
 
 	//Rendering pipeline components.
@@ -100,6 +102,7 @@ protected:
 	void			CombineBuffers();
 	void			DrawSkybox();
 	void			BloomPass();
+	void			EdgeDetectPass();
 	void			MotionBlurPass();
 	void			DrawFrameBufferTex(GLuint fboTex); // Draw the texture passed to it to screen
 	
@@ -158,6 +161,7 @@ protected:
 	Shader*			brightPassShader;
 	Shader*			bloomCombShader;
 	Shader*			gaussianShader;
+	Shader*			edgeDetectShader;
 	Shader*			downSampleShader;
 	Shader*			bloomFinalShader;
 	Shader*			velocityShader;
@@ -195,5 +199,8 @@ protected:
 	float			dayNight;
 
 	map<string, TextMesh*> loadedTextMeshes;
+	unsigned int textMeshMemory;
+
+	DrawableTexture2D* loadingIcon;
 };
 #endif

@@ -9,6 +9,13 @@
 #include "VehiclePhysicsNode.h"
 #include "CheckPoint.h"
 #include "TrackSegment.h"
+#include "Gold_cion.h"
+#if WINDOWS_BUILD
+#include "HudTestScreen.h"
+#endif
+#include "GameStateManager.h"
+//#include "../Framework/SoundManager.h"
+
 class RacerGame : public GameScreen3D
 {
 public:
@@ -31,39 +38,104 @@ public:
 	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) {};
 	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID){}
 
+	void SetScore(int value){score+=value;}
+	float GetScore(){return score;}
+	void SetTime(int value){Time+=value;}
+	float GetTime(){return Time;}
+	
+	void SetPlayTime(int value){PlayTime+=value;}
+	int GetPlayTime(){return PlayTime;}
+
+	void SettimeOrScore(int value){timeOrScore+=value;}
+	int GettimeOrScore(){return timeOrScore;}
+
+	void CreateTrack();
+	void DeleteTrack();
+	void Start();
+	float GetCreateAngle();
 	float f;
+	float b;
 	int Speed_Player;
 	float Speed_Rotate;
 	T3Vector3 tempPosition;
 	T3Vector3 temp,temp1,temp2;
 	T3Vector3 PlayerPosition;
 
+
+
 	//sam
+	Texture* scoreTexture;
+	Texture* timeTexture;
+#if WINDOWS_BUILD
+	HudTestScreen* hud;
+#endif
 	static float g;
 	static float gx;
 	TrackSegment* Strack;
-#if WINDOWS_BUILD	
-	vector<T3Vector3> SplinePoint;
 
+	vector<T3Vector3> SplinePoint;
+	vector<DrawableEntity3D*> allEntities;
 	vector<TrackSegment*> TrackSegmentVector;
-#endif 
+	vector<GameEntity*> checkPoint;
+	vector<GameEntity*> pickup;
+
 	 virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
-		 cout<<obj1->GetType();
-		  cout<<" collisionbetween ";
-		  cout<<obj2->GetType()<<endl;
 		  if(obj1->GetType()=='g')
 		  {
-			  obj1->GetPhysicsNode().SetIsCollide(true);
-			  cout<<"set = true ok"<<endl;
+			  obj1->GetPhysicsNode().SetIsCollide(false);
 			  RacerGame::update=1;
 		  }
+		    if(obj2->GetType()=='g')
+		  {
+			  obj2->GetPhysicsNode().SetIsCollide(false);
+			
+			  RacerGame::update=1;
+			  
+		  }
+			 if(obj1->GetType()=='d')
+		  {
+			  obj2->GetPhysicsNode().SetIsCollide(false);
+			  RacerGame::update=2;
+			    SettimeOrScore(1);
+			  RacerGame::update=2;
+			  
+			  
+		  }
+			  if(obj1->GetType()=='p')
+		  {
+			  obj2->GetPhysicsNode().SetIsCollide(false);
+			  SetScore(1);
+#ifdef WINDOWS_BUILD
+			 // SoundManager::AddSound(SOUNDSDIR"Tokyo Drift2.wav");
+			 // GameStateManager::Audio()->PlaySoundW(GameStateManager::Audio()->GetSound(SOUNDSDIR"Tokyo Drift2.wav"),SOUNDPRIORITY_ALWAYS);
+			  GameStateManager::Audio()->PlaySound(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
+#endif			  
+			  cout<< "total point ="<<GetScore()<<endl; 
+			  GameStateManager::Graphics()->RemoveDrawable(obj1);
+	          obj1->DisconnectFromSystems();
+			  pickup.erase(pickup.begin());
+		  }
+			   if(obj1->GetType()=='t')
+		  {
+			  obj2->GetPhysicsNode().SetIsCollide(false);
+			  SettimeOrScore(-(GettimeOrScore()));
+			  SetPlayTime(30);
+			  GameStateManager::Graphics()->RemoveDrawable(obj2);
+	          obj2->DisconnectFromSystems();
+		  }
+			   		  
    }
 	//sam
+
 
 
 private:
 	Mesh* quad;
 	Mesh* cylinder;
+	float score;
+	float Time;
+	int PlayTime;
+	int timeOrScore;
 	#if WINDOWS_BUILD
 
 	SpotLight* light;

@@ -15,6 +15,7 @@ Version: 0.0.6 12/02/2015.</summary>
 #include "DrawableEntity2D.h"
 #include <string>
 #include "Font.h"
+#include <sstream>
 
 using namespace std;
 
@@ -34,7 +35,9 @@ public:
 	<param name='origin'>The origin around which this object will rotate, relative to the object's draw area. Default is the center (0.5, 0.5).</param>
 	<param name='blendColor'>The colour. Default is White (1,1,1,1).</param>	
 	*/
-	DrawableText2D(float x, float y, int depth, float width, float height, const string& text, Font* font, float rotation = 0, T3Vector2 origin = T3Vector2(0.5f, 0.5f), T3Vector4 blendColor = T3Vector4(1.0f, 1.0f, 1.0f ,1.0f), bool transparent = true) : DrawableEntity2D(x, y, depth, width, height, DrawableType::Text, blendColor, transparent), font(font), text(text), rotation(rotation), origin(origin)
+	DrawableText2D(float x, float y, int depth, float width, float height, const string& text, Font* font, float rotation = 0, T3Vector2 origin = T3Vector2(0.5f, 0.5f), T3Vector4 blendColor = T3Vector4(1.0f, 1.0f, 1.0f ,1.0f), bool transparent = true) 
+		: DrawableEntity2D(x, y, depth, width, height, DrawableType::Text, rotation, origin, blendColor, transparent),
+		font(font), text(text)
 	{ }
 
 	virtual ~DrawableText2D() {
@@ -58,27 +61,13 @@ public:
 	<param name='value'>The text.</param>
 	*/
 	void SetText(const string& value) { text = value; }
-	/**
-	<summary>Gets the rotation.</summary>
-	*/
-	float GetRotation() const { return rotation; }
-	/**
-	<summary>Sets the rotation.</summary>
-	<param name='value'>The rotation in degrees from up. Default is 0.</param>
-	*/
-	void SetRotation(const float value) { rotation = value; }
-	/**
-	<summary>Gets the origin of rotation.</summary>
-	*/
-	T3Vector2 GetOrigin() const { return origin; }
-	/**
-	<summary>Sets the origin of rotation.</summary>
-	<param name='value'>The origin around which this object will rotate, relative to the object's draw area. Default is the center (0.5, 0.5).</param>
-	*/
-	void SetOrigin(const T3Vector2& value) { origin = value; }
+	void SetText(float value) 
+	{
+		stringstream s;
+		s << value;
+		text = s.str();
+	}
 protected:
 	Font* font;
 	string text;
-	float rotation;
-	T3Vector2 origin;
 };

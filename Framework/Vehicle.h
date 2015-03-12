@@ -59,6 +59,7 @@ public:
 		car->SetLinearVelocity(temp2);
 	}
 
+	virtual Quaternion GetRotation() const;
 
 
 protected:
