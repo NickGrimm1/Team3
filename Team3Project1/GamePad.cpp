@@ -19,6 +19,9 @@ GamePad::GamePad(GamepadEvents::PlayerIndex playerID)
 	previousGamePadState.button[5] = 128;
 	previousGamePadState.button[6] = 128;
 	previousGamePadState.button[7] = 128;
+
+	// Oh and of course we have to specifically enable the triggers. Not like they don't come as standard. Muppets.
+	cellPadSetPortSetting(playerID, CELL_PAD_SETTING_PRESS_ON);
 #endif
 }
 
