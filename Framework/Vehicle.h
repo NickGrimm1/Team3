@@ -4,8 +4,8 @@
 #include "../Team3Project1/DrawableEntity3D.h"
 #include "../Framework/GameEntity.h"
 #include "../Team3Project1/GameStateManager.h"
-
-
+#include "../Team3Project1/Vehicle_Wheel.h"
+#include "../Team3Project1/VehiclePhysicsNode.h"
 
 
 class Vehicle : public GameEntity {
@@ -38,37 +38,47 @@ public:
 
 	}
 
-	float GetX() {return car->GetLinearVelocity().x;}
-	void SetX(float x) {
-		T3Vector3 temp = car->GetLinearVelocity();
-		temp.x = x;
-		car->SetLinearVelocity(temp);
-	}
 
-	float GetY() {return car->GetLinearVelocity().y;}
-	void SetY(float y) {
-		T3Vector3 temp1 = car->GetLinearVelocity();
-		temp1.y = y;
-		car->SetLinearVelocity(temp1);
-	}
+	//float GetX() {return car->GetLinearVelocity().x;}
+	//void SetX(float x) {
+	//	T3Vector3 temp = car->GetLinearVelocity();
+	//	temp.x = x;
+	//	car->SetLinearVelocity(temp);
+	//}
 
-	float GetZ() {return car->GetLinearVelocity().z;}
-	void SetZ(float z) {
-		T3Vector3 temp2 = car->GetLinearVelocity();
-		temp2.z = z;
-		car->SetLinearVelocity(temp2);
-	}
+	//float GetY() {return car->GetLinearVelocity().y;}
+	//void SetY(float y) {
+	//	T3Vector3 temp1 = car->GetLinearVelocity();
+	//	temp1.y = y;
+	//	car->SetLinearVelocity(temp1);
+	//}
+
+	//float GetZ() {return car->GetLinearVelocity().z;}
+	//void SetZ(float z) {
+	//	T3Vector3 temp2 = car->GetLinearVelocity();
+	//	temp2.z = z;
+	//	car->SetLinearVelocity(temp2);
+	//}
 
 	virtual Quaternion GetRotation() const;
+	Vehicle_Wheel* GetFrontRightTire() {return FrontRightTire;}
+	Vehicle_Wheel* GetFrontLeftTire() {return FrontLeftTire;}
+	Vehicle_Wheel* GetBackRightTire() {return BackRightTire;}
+	Vehicle_Wheel* GetBackLeftTire() {return BackLeftTire;}
 
-
+	VehiclePhysicsNode * GetVehiclePhysicsNode(){ return vpn;}
+	
 protected:
 	T3Vector3 maxSpeed;
 
 
-
 	PhysicsNode* car;
 
+	VehiclePhysicsNode* vpn;
+    Vehicle_Wheel *FrontRightTire;
+	Vehicle_Wheel *FrontLeftTire;
+	Vehicle_Wheel *BackRightTire;
+	Vehicle_Wheel *BackLeftTire;
 
 	T3Vector3 PlayerPosition;
 	T3Vector3 temp,temp1,temp2;
