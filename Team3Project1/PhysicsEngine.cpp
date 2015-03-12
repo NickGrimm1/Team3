@@ -484,10 +484,10 @@ void  PhysicsEngine::SortandSweep()
 							CollisionHelper::AddCollisionImpulse(first, second, *data);
 				}
 					}
-					isDrop = true;
+					second.isDrop = true;
 				}
 				// keeping the vehicle on the track!
-				else if(!isDrop)
+				else if(!second.GetIsDrop())
 					{
 					float floor_y = first.GetPosition().y;
 					float car_y = second.GetPosition().y;
@@ -615,11 +615,11 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 			        	}					
 					}
 
-					isDrop = true;
+					second.isDrop = true;
 				}
 
 				// keeping the vehicle on the track!
-				else if(!isDrop)
+				else if(!second.GetIsDrop())
 				{
 					float floor_y = first.GetPosition().y;
 					float car_y = second.GetPosition().y;
