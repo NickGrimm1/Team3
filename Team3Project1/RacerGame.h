@@ -5,6 +5,7 @@
 #include "../Framework/MyGame.h"
 #include "FreeCamera.h"
 #include "ChaseCamera.h"
+
 #include "Vehicle_Wheel.h"
 #include "VehiclePhysicsNode.h"
 #include "CheckPoint.h"
@@ -13,7 +14,7 @@
 #include "HudTestScreen.h"
 #include "GameStateManager.h"
 //#include "../Framework/SoundManager.h"
-
+class Vehicle;
 class RacerGame : public GameScreen3D
 {
 public:
@@ -33,7 +34,10 @@ public:
 	virtual void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key);
 #endif
 	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button) {};
-	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) {};
+	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount)
+	{
+		camera->AddMovement(T3Vector3(amount.x,0,amount.y));
+	};
 	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID){}
 
 	void SetScore(int value){score+=value;}
@@ -51,7 +55,7 @@ public:
 	void DeleteTrack();
 	void Start();
 	float GetCreateAngle();
-	float f;
+	//float f;
 	float b;
 	int Speed_Player;
 	float Speed_Rotate;
