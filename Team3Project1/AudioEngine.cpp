@@ -3,19 +3,23 @@
 #include  "AudioEngine.h"
 #include "../FrameWork/SoundManager.h"
 #include "../FrameWork/SoundEmitter.h"
+//#include "AudioTestClass.h"
 #define RENDER_HZ  60.0f
  //AudioEngine* AudioEngine::instance = NULL;
 
  AudioEngine * AudioEngine :: instance = NULL ;// make sure only one AudioEngine is created
 
- //void AudioEngine::Run()
- //{
-	//isRunning = true;
-	//while (isRunning)
-	//{
-	//	Update((1000.0f / ( float ) RENDER_HZ ));
-	//}
- //}
+ void AudioEngine::Run()
+ {
+	isRunning = true;
+	while (isRunning)
+	{
+		while (Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp <(1000.0f/(float) RENDER_HZ )){ ; } // Fix the timestep
+		float msec = (float) Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp;
+		lastFrameTimeStamp = (float) Window::GetWindow().GetTimer()->GetMS();
+		Update (msec);
+	}
+ }
 
  AudioEngine :: AudioEngine ( unsigned int channels ) {
 	 listener = new DrawableEntity3D() ;
@@ -82,6 +86,7 @@
 	 masterVolume = value ;
 	 alListenerf ( AL_GAIN , masterVolume );
  }
+
 
  void AudioEngine :: UpdateListener () {
 	 if( listener ) {
@@ -190,13 +195,15 @@
 	 }
 	 // alcMakeContextCurrent(NULL);
  }
-
- void AudioEngine :: PlaySound ( Sound * s , SoundPriority p, bool isLooping) {
-	 //alcMakeContextCurrent(context);
+ void AudioEngine::PlaySound(Sound* s,SoundPriority p, bool isBGM,  bool isLooping )
+ {
 	 SoundEmitter * n = new SoundEmitter ();
 	 n -> SetLooping ( isLooping );
 	 n -> SetSound ( s );
-	 n -> SetIsGlobal ( true );
+	 if(isBGM){
+		 n -> SetIsGlobal ( true );}
+	 else{
+		 n -> SetIsGlobal (false);}
 	 n -> SetPriority ( p );
 	 //n -> SetVolume(1.0f);
 	 //n -> SetRadius(0.0f);
@@ -206,8 +213,24 @@
 	 else {
 		    temporaryEmitters.push_back(n);
 	 }
-		// alcMakeContextCurrent(NULL);
  }
+ //void AudioEngine :: PlaySound ( Sound * s, bool isLooping , SoundPriority p) {
+	// //alcMakeContextCurrent(context);
+	// SoundEmitter * n = new SoundEmitter ();
+	// n -> SetLooping ( isLooping );
+	// n -> SetSound ( s );
+	// n -> SetIsGlobal ( true );
+	// n -> SetPriority ( p );
+	// //n -> SetVolume(1.0f);
+	// //n -> SetRadius(0.0f);
+ //	 if (isLooping) {
+	//		emitters.push_back ( n );
+	// }
+	// else {
+	//	    temporaryEmitters.push_back(n);
+	// }
+	//	// alcMakeContextCurrent(NULL);
+ //}
 
 
  void	AudioEngine::CullNodes() {

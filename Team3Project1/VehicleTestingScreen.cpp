@@ -98,14 +98,14 @@ void VehicleTestingScreen::LoadContent() {
 	camera = new FreeCamera();
 
 
-	gold_cion= new Gold_cion(5);
-	gold_cion->SetPhysics(5);
-	AddDrawable(gold_cion);
+	//gold_cion= new Gold_cion(5);
+	//gold_cion->SetPhysics(5);
+	//AddDrawable(gold_cion);
 
 
-	checkpoint= new CheckPoint(10);
-	checkpoint->SetPhysics(10,'c');
-	AddDrawable(checkpoint);
+	//checkpoint= new CheckPoint(10);
+	//checkpoint->SetPhysics(10,'c');
+	//AddDrawable(checkpoint);
 	
 	unsigned int size = 5;
 	VehiclePhysicsNode* vpn = new VehiclePhysicsNode(size);
@@ -217,10 +217,10 @@ void VehicleTestingScreen::Update() {
 	
 	car->GetCarNode().SetXstart(car->GetCarNode().GetPosition().x-3*5 +10);
 	car->GetCarNode().SetXend(car->GetCarNode().GetPosition().x+3*5+10);
-	checkpoint->GetPhysicsNode().SetXstart(checkpoint->GetPhysicsNode().GetPosition().x-1*10);
-	checkpoint->GetPhysicsNode().SetXend(checkpoint->GetPhysicsNode().GetPosition().x+1*10);
-	gold_cion->GetPhysicsNode().SetXstart(gold_cion->GetPhysicsNode().GetPosition().x-1*10+10);
-	gold_cion->GetPhysicsNode().SetXend(gold_cion->GetPhysicsNode().GetPosition().x+1*10+10);
+	//checkpoint->GetPhysicsNode().SetXstart(checkpoint->GetPhysicsNode().GetPosition().x-1*10);
+	//checkpoint->GetPhysicsNode().SetXend(checkpoint->GetPhysicsNode().GetPosition().x+1*10);
+	//gold_cion->GetPhysicsNode().SetXstart(gold_cion->GetPhysicsNode().GetPosition().x-1*10+10);
+	//gold_cion->GetPhysicsNode().SetXend(gold_cion->GetPhysicsNode().GetPosition().x+1*10+10);
 	FrontRightTire->GetPhysicsNode().SetXstart(FrontRightTire->GetPhysicsNode().GetPosition().x-1*5);
 	FrontRightTire->GetPhysicsNode().SetXend(FrontRightTire->GetPhysicsNode().GetPosition().x+1*5);
 

@@ -74,6 +74,7 @@ public:
 		Instance()->graphics->Start("Graphics");
 		Instance()->physics->Start("Physics");
 		Instance()->input->Start("Input");
+		Instance()->audio->Start("Audio");
 
 		while (instance->isRunning) {
 #ifdef WINDOWS_BUILD
@@ -101,6 +102,7 @@ public:
 			graphics->Terminate();
 			physics->Terminate();
 			input->Terminate();
+			audio->Terminate();
 
 			std::cout << "Threads terminated" << std::endl;
 
@@ -108,6 +110,7 @@ public:
 			graphics->Join();
 			physics->Join();
 			input->Join();
+		    audio->Join();
 
 			std::cout << "Threads joined" << std::endl;
 
@@ -137,6 +140,7 @@ public:
 			std::cout << "Storage Manager Killed" << std::endl;
 			InputManager::Destroy();
 			std::cout << "Input Manager Killed" << std::endl;
+			
 #if WINDOWS_BUILD
 			AudioEngine::Destroy();
 			NetworkManager::Destroy();

@@ -4,7 +4,7 @@
 
 
 Vehicle::Vehicle(float size) {
-	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj");
+	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"Nova Car.obj");
 //	BuffMesh = new OBJMesh(MESHDIR"ico.obj");
 	
 	//TT =  SOIL_load_OGL_texture ("../../Texture/footballpitch.jpg", SOIL_LOAD_AUTO , SOIL_CREATE_NEW_ID , SOIL_FLAG_MIPMAPS);
@@ -305,7 +305,7 @@ Makes a Player. Every game has a crate in it somewhere!
 void Vehicle::SetPhysics(float size,PhysicsNode * a)
 {
     car=a;
-	car->SetUseGravity(true);
+	car->SetUseGravity(false);
 	car->SetPosition(origin);
 	car->SetMass(5);
 	car->SetInverseMass(1.0f);
