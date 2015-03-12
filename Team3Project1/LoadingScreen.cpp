@@ -44,3 +44,18 @@ void LoadingScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents
 	}
 }
 #endif
+void LoadingScreen::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button) 
+{
+	if (type == GamepadEvents::BUTTON_PRESS)
+	{
+		if(button == GamepadEvents::INPUT_START)
+		{
+			// Pause
+		}
+		else if (button == GamepadEvents::INPUT_SELECT)
+		{
+			debugEnabled == !debugEnabled;
+			GameStateManager::Debug()->EnableDebugOverlay(debugEnabled);
+		}
+	}
+}

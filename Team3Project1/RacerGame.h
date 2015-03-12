@@ -10,9 +10,7 @@
 #include "CheckPoint.h"
 #include "TrackSegment.h"
 #include "Gold_cion.h"
-#if WINDOWS_BUILD
 #include "HudTestScreen.h"
-#endif
 #include "GameStateManager.h"
 //#include "../Framework/SoundManager.h"
 
@@ -66,9 +64,8 @@ public:
 	//sam
 	Texture* scoreTexture;
 	Texture* timeTexture;
-#if WINDOWS_BUILD
 	HudTestScreen* hud;
-#endif
+
 	static float g;
 	static float gx;
 	TrackSegment* Strack;

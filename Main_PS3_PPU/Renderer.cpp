@@ -5,7 +5,7 @@
 #include "../Team3Project1/ShaderPart.h"
 #include "../Team3Project1/GameStateManager.h"
 #include <cell/gcm.h>
-
+int Renderer::count = 0;
 /**********************************************************************************************/
 //TODO : pass a reference to the graphics engines scenenodes into ps3 as seen in PC Renderer //
 /*********************************************************************************************/
@@ -317,7 +317,7 @@ Renderer::~Renderer(void)
 
 void Renderer::RenderScene() 
 {
-
+	cout << "Render Scene!" << endl;
 	renderMutex.lock_mutex(); // prevent other threads from accessing OpenGL during rendering
 	SetViewport();
 	ClearBuffer();
@@ -333,6 +333,9 @@ void Renderer::RenderScene()
 
 		//Main Render
 		//ShadowPass();
+		cout << "Meshes Last Frame: " << count << endl;
+
+		count = 0;
 		DrawScene();
 		//DeferredLightPass();
 		//CombineBuffers();
@@ -345,7 +348,11 @@ void Renderer::RenderScene()
 	}
 
 	//Draw HUD/Menu overlay
+	loadingIcon->SetRotation(loadingIcon->GetRotation() + 1.0f);
+	if (hudShader != NULL && quadMesh != NULL) 
+	{
 	Draw2DOverlay();
+	}
 
 	SwapBuffers();
 	//wglMakeCurrent(deviceContext, NULL);
@@ -1075,8 +1082,10 @@ void Renderer::MotionBlurPass()
 
 void Renderer::Draw2DOverlay() 
 {
+
 	if (hudShader)
 	{
+	}else{
 		cellGcmSetDepthTestEnable(CELL_GCM_TRUE);
 		cellGcmSetCullFace(CELL_GCM_FRONT);
 		cellGcmSetAlphaTestEnable(CELL_GCM_TRUE);

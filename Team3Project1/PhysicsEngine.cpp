@@ -476,25 +476,25 @@ void  PhysicsEngine::SortandSweep()
 				if(TrackDetection())
 				{
 					if(CollisionDetection(first, second))
-					{
+			    {
 						CollisionData* data = new CollisionData();
 						bool succeeded = EPA(first, second, data);
  						if (succeeded)
-						{
+				{
 							CollisionHelper::AddCollisionImpulse(first, second, *data);
-			        	}					
+				}
 					}
-					isDrop = true;
+					second.isDrop = true;
 				}
 
 				// keeping the vehicle on the track!
-				else if(!isDrop)
-				{
+				else if(!second.GetIsDrop())
+					{
 					float floor_y = first.GetPosition().y;
 					float car_y = second.GetPosition().y;
-			
+
 					if(car_y - floor_y < 5.5f)
-					{
+					   {
 						float err = abs(car_y - floor_y - 5.f)*2;
 						T3Vector3 t3 = second.GetLinearVelocity();
 						t3.y = 0;
@@ -502,26 +502,26 @@ void  PhysicsEngine::SortandSweep()
 						second.SetLinearVelocity(t3);
 					}
 				}
-			}
+					   }
 			else{
 			
-			if(CollisionDetection(first, second))
-			{
+					if(CollisionDetection(first, second))
+			    {
 				//OnCollision(first,second);
 				if(first.GetIsCollide()==false && second.GetIsCollide ()==true)
-				{
+					      {
 					OnCollision(first,second);
 					//if(second.GetType()=='f'){
 					//OnCollision(first,second);
 					//}
-				}
+					    }
 				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
 				{
 					//OnCollision(first,second);
 					//OnCollision(first,second);
 						/*if(check==true)
 					{
-
+					
 					   if(first.GetType()=='c'||second.GetType()=='c')
 					   {
 						if(first.GetGameEntity()){
@@ -577,13 +577,13 @@ void  PhysicsEngine::SortandSweep()
 			}
 				}
 				}
-			}
+				}
 			}
 				
 
+						}
 				}
 		}
-	}
 
 }
 	
@@ -633,11 +633,11 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 			        	}					
 					}
 
-					isDrop = true;
+					second.isDrop = true;
 				}
 
 				// keeping the vehicle on the track!
-				else if(!isDrop)
+				else if(!second.GetIsDrop())
 				{
 					float floor_y = first.GetPosition().y;
 					float car_y = second.GetPosition().y;

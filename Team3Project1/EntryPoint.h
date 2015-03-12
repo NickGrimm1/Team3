@@ -3,8 +3,9 @@
 Called buy the GSM once the framework has initialised.
 Not to be with main() which starts the framework.
 
-Author: Nick Grimm
-Version: 0.0.3 06/02/2015.</summary>
+Initial Author: Nick Grimm
+Main Contributors: Derek Kelly, Sherif Salem
+Version: 1.0.0 06/02/2015.</summary>
 */
 
 #include "GraphicsCommon.h"
@@ -26,9 +27,11 @@ namespace EntryPoint
 {
 	void StartGame()
 	{
-		// TODO: Get a new gameScreen up for splash/menu etc.
-		//LoadingScreen* loadingScreen = new LoadingScreen();
-		//GameStateManager::Instance()->AddGameScreen(loadingScreen);
+	//	LoadingScreen* loadingScreen = new LoadingScreen();
+	//	GameStateManager::Instance()->AddGameScreen(loadingScreen);
+
+		//MainMenu* main = new MainMenu();
+		//GameStateManager::Instance()->AddGameScreen(main);
 
 		//MainMenu* main = new MainMenu();
 		//GameStateManager::Instance()->AddGameScreen(main);
@@ -42,21 +45,27 @@ namespace EntryPoint
 		/*DebugOverlay* debug = new DebugOverlay();
 		GameStateManager::Instance()->AddGameScreen(debug);*/
 
-		/*RacerGame* game = new RacerGame();
-		GameStateManager::Instance()->AddGameScreen(game);
-		GameStateManager::Instance()->Start();*/
+		//RacerGame* game = new RacerGame();
+		//GameStateManager::Instance()->AddGameScreen(game);
+		//GameStateManager::Instance()->Start();
 
 
 		//AudioTestClass* audio = new AudioTestClass();
 		//GameStateManager::Instance()->AddGameScreen(audio);
 
-
+		//GraphicsTestScreen* game = new GraphicsTestScreen();
+	//	GameStateManager::Instance()->AddGameScreen(game);
+		
 		//NetworkTest* network = new NetworkTest();
 		//GameStateManager::Instance()->AddGameScreen(network);
-
+		cout << "Entry Point: Let's Start The Game!" << endl;
 		RacerGame* game = new RacerGame();
-		GameStateManager::Instance()->AddGameScreen(game);
+		cout << "Entry Point: Racer Game Initialised" << endl;
 		PhysicsEngine::SetGame(game);
+		GameStateManager::Instance()->AddGameScreen(game);
+		cout << "Entry Point: Added Game to GameStateManager" << endl;
+		
+		cout << "Entry Point: Set Physics for the Game" << endl;
 
 		//RacerGame* game = new RacerGame();
 		//GameStateManager::Instance()->AddGameScreen(game);

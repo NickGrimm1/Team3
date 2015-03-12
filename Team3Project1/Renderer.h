@@ -12,10 +12,11 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "../Framework/Frustum.h"
 #include "../Framework/SceneNode.h"
 #include "../Framework/Light.h"
-#include "Texture.h"
 #include "../Framework/OGLRenderer.h"
 #include "../Framework/Weather.h"
 #include "../Framework/Camera.h"
+#include "../Framework/ParticleEmitter.h"
+#include "Texture.h"
 #include "Mesh.h"
 #include "DrawableEntity2D.h"
 #include "DrawableText2D.h"
@@ -27,28 +28,12 @@ Version: 0.0.1 03/02/2015.</summary>
 #include <map>
 
 #define SAMPLENUM 3
-#define SHADOWSIZE 2048 //* 8 ?
-
-/*
-struct LightData {
-	T3Vector4*	lightColour;
-	T3Vector4*	lightSpecColour;
-
-
-
-	T3Vector3*	lightPos;
-	T3Vector3*	lightDir;
-	T3Vector3*	cameraPos;
-
-	float		lightRadius;
-	float		lightAngle;
-	int			lightType;
-};
-*/
+#define SHADOWSIZE 2048
 
 class Renderer : public OGLRenderer
 {
 public:
+	static int count;
 	Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>& sceneNodesVec, vector<DrawableEntity2D*>& overlayVec);
 	~Renderer(void);
 
@@ -81,13 +66,12 @@ public:
 
 	void			DrawDeferredLights(bool on) {drawDeferredLights = on;}
 
-	unsigned char* GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue);
+	unsigned char*	GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue);
 
 	unsigned int	GetTextMeshMemory() {return textMeshMemory / 1024;} //KB
 protected:
 
 	T3Matrix4		cameraMatrix; // Get camera matrix once at start of scene
-
 
 	//Rendering pipeline components.
 	void			DrawScene();
@@ -143,12 +127,6 @@ protected:
 	Camera*			camera;
 
 	Frustum			frameFrustum;
-
-	/*
-	Weather*		snow; 
-	Weather*		rain; 
-	Weather*		sandstorm;
-	*/
 
 	Shader*			basicShader;
 	Shader*			shadowShader;

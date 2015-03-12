@@ -288,9 +288,6 @@
     <ClInclude Include="..\Framework\InertialMatrixHelper.h">
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Framework\Spring.h">
-      <Filter>Framework\Physics\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Framework\ParticleEmitter.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
@@ -350,6 +347,9 @@
     </ClInclude>
     <ClInclude Include="..\Framework\Light.h">
       <Filter>Framework\Graphics\Common\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsCommon.h">
+      <Filter>Engine\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ChaseCamera.h">
       <Filter>Framework\Graphics\Common\Header</Filter>
@@ -421,9 +421,6 @@
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\PhysicsNode.h">
-      <Filter>Framework\Physics\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\PhysicsSystem.h">
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\Vehicle.h">
@@ -537,9 +534,6 @@
     <ClInclude Include="PhysicsObjMesh.h">
       <Filter>Framework\Resource Manager</Filter>
     </ClInclude>
-    <ClInclude Include="GraphicsCommon.h">
-      <Filter>Framework\Graphics\Common\Header</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">
@@ -583,9 +577,6 @@
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\Spring.cpp">
-      <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Framework\ParticleEmitter.cpp">
       <Filter>Engine\Source Files</Filter>
