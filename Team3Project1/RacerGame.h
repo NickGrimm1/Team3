@@ -82,28 +82,35 @@ public:
 	 virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
 		  if(obj1->GetType()=='g')
 		  {
+			  if(obj1->GetPhysicsNode().GetIsCollide()==false){
+			   CreateTrack();
+			   	GameStateManager::Graphics()->RemoveDrawable(checkPoint[0]);
+	            checkPoint[0]->DisconnectFromSystems();
+	            checkPoint.erase(checkPoint.begin());
+			  }
 			  obj1->GetPhysicsNode().SetIsCollide(false);
-			  RacerGame::update=1;
+			//  RacerGame::update=1;
+		 
 		  }
-		    if(obj2->GetType()=='g')
+		 /*   if(obj2->GetType()=='g')
 		  {
 			  obj2->GetPhysicsNode().SetIsCollide(false);
 			
 			  RacerGame::update=1;
 			  
-		  }
+		  }*/
 			 if(obj1->GetType()=='d')
 		  {
-			  obj2->GetPhysicsNode().SetIsCollide(false);
-			  RacerGame::update=2;
+			  obj1->GetPhysicsNode().SetIsCollide(false);
+			  //RacerGame::update=2;
 			    SettimeOrScore(1);
-			  RacerGame::update=2;
-			  
+			  //RacerGame::update=2;
+			  DeleteTrack();
 			  
 		  }
 			  if(obj1->GetType()=='p')
 		  {
-			  obj2->GetPhysicsNode().SetIsCollide(false);
+			  obj1->GetPhysicsNode().SetIsCollide(false);
 			  SetScore(1);
 #ifdef WINDOWS_BUILD
 			 // SoundManager::AddSound(SOUNDSDIR"Tokyo Drift2.wav");
@@ -117,11 +124,11 @@ public:
 		  }
 			   if(obj1->GetType()=='t')
 		  {
-			  obj2->GetPhysicsNode().SetIsCollide(false);
+			  obj1->GetPhysicsNode().SetIsCollide(false);
 			  SettimeOrScore(-(GettimeOrScore()));
 			  SetPlayTime(30);
-			  GameStateManager::Graphics()->RemoveDrawable(obj2);
-	          obj2->DisconnectFromSystems();
+			  GameStateManager::Graphics()->RemoveDrawable(obj1);
+	          obj1->DisconnectFromSystems();
 		  }
 			   		  
    }

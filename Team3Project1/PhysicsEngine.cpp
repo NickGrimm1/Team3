@@ -641,7 +641,7 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 				//OnCollision(first,second);
 				if(first.GetIsCollide()==true && second.GetIsCollide ()==true)
 				{
-					OnCollision(first,second);
+					//OnCollision(first,second);
 					//if(second.GetType()=='f'){
 					//OnCollision(first,second);
 					//}

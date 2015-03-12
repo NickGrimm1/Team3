@@ -65,7 +65,7 @@ void Gold_cion::SetPhysics(float size,char type,T3Vector3 position,const Quatern
 //	physicsNode->SetCollisionVolume(new CollisionAABB(T3Vector3(0.1*size,size,10*size)));
 	physicsNode->SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
 
-	physicsNode->SetIsCollide(true);
+	physicsNode->SetIsCollide(false);
 	physicsNode->Setcar_wheel(true);
 
     ConnectToSystems(); 
