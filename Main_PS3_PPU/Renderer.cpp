@@ -550,7 +550,7 @@ void Renderer::DrawNodes(bool enableTextures)
 				CellGcmTexture* t = entity.GetTexture()->GetTexture(); //texture->GetTexture();
 				SetTextureSampler(shader->GetFragment()->GetParameter("texture"), t);
 				//SetTextureSampler(shader->GetFragment()->GetParameter("texture"), entity.GetTexture()->GetTexture());
-				//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 1);	
+				
 			}
 		}
 		//	else
