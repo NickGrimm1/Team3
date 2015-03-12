@@ -62,10 +62,9 @@ RacerGame::~RacerGame(void)
 
 void RacerGame::LoadContent() {
 	
-	//Mesh* coneMesh = Mesh::GenerateCone(20);
 	quad = GameStateManager::Assets()->LoadCylinder(this, 20);
 	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
-
+	
 	hud = new HudTestScreen();
 	GameStateManager::Instance()->AddGameScreen(hud);
 	
@@ -100,23 +99,15 @@ void RacerGame::LoadContent() {
 
 	camera = new FreeCamera();
 
-	/*checkpoint= new CheckPoint(10);
-	checkpoint->SetPhysics(10,'c');
-	checkpoint->SetType('g');
-	checkpoint->GetPhysicsNode().SetPGE(checkpoint);
-	AddDrawable(checkpoint);*/
-	
-	
-	
-	
-	
-	
-
+	//checkpoint= new CheckPoint(10);
+	//checkpoint->SetPhysics(10,'c');
+	//checkpoint->SetType('g');
+	//checkpoint->GetPhysicsNode().SetPGE(checkpoint);
+	//AddDrawable(checkpoint);
 	
 	//add road
 	
 	Texture* grassTex2 = GameStateManager::Assets()->LoadTexture(this, "trackTex", 0);
-	Shader* sh = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
 	GameStateManager::Graphics()->GetRenderContext();
 	TrackSegment* trackr = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5, 50.0f);
 	
@@ -126,7 +117,7 @@ void RacerGame::LoadContent() {
 	PhysicsNode* proad = new PhysicsNode();
 	GameEntity* road= new GameEntity(proad);
 		road->SetMesh(trackr);
-		road->SetShader(sh);
+		road->SetShader(0);
 		road->SetTexture(grassTex2);
 		road->SetBumpTexture(NULL);
 		road->SetBoundingRadius(800.0f);
@@ -287,20 +278,6 @@ void RacerGame::Update() {
 #endif
 	}
 	Time+=1;
-
-	//GameScreen2D::AddDrawable(new DrawableText2D(
-	//	0.0f, 
-	//	0.0f, 
-	//	0, 
-	//	0.5f, 
-	//	0.1f, 
-	//	"HELLO WORLD!!!!!!!!!", 
-	//	f,
-	//	0,
-	//	T3Vector2(0.5f, 0.5f),
-	//	T3Vector4(1.0f,1.0f,1.0f,0.7f)));
-
-
 }
 void RacerGame::Start(){
 
@@ -593,7 +570,7 @@ void RacerGame::CreateTrack(){
 		//GameStateManager::Graphics()->DropRenderContext();
 		//create end
 
-		Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, "trackTex", 0);
+			Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, "trackTex", 0);
 		/*GameStateManager::Graphics()->GetRenderContext();*/
 	
 

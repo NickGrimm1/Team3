@@ -27,19 +27,18 @@ public:
 private:
 	Sound* BGM1;
 	Sound* BGM2;
-	Sound* BGM3;
-	Sound* laser;
-	Sound* laser1;
-	Sound* laser2;
-	Sound* laser3;
+	Sound* Coins;
+	Sound* Engine_start;
+	Sound* Ready;
+	Sound* Over;
 	GameTimer timer;
 	float CurrentTime;
 	bool bgm1;
 	bool bgm2;
-	bool bgm3;
+	bool ready;
+	bool coins;
 	bool pressonce;
 	bool pressonce2;
-	bool pressonce3;
 };
 #endif
 

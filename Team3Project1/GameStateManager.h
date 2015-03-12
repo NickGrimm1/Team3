@@ -56,7 +56,7 @@ public:
 			Instance()->graphics->Start("Graphics");
 #endif
 			if (!GraphicsEngine::LoadContent())
-				return false;
+				return false;	
 
 			if (!PhysicsEngine::Initialize(instance->physics))
 				return false;
@@ -84,6 +84,7 @@ public:
 #endif
 		Instance()->physics->Start("Physics");
 		Instance()->input->Start("Input");
+		Instance()->audio->Start("Audio");
 
 		while (instance->isRunning) {
 #ifdef WINDOWS_BUILD
@@ -117,11 +118,13 @@ public:
 			graphics->Terminate();
 			physics->Terminate();
 			input->Terminate();
+			audio->Terminate();
 
 			// Clean up
 			graphics->Join();
 			physics->Join();
 			input->Join();
+		    audio->Join();
 
 			vector<GameScreen*>::iterator i = instance->gameScreens.begin();
 			while (i != instance->gameScreens.end())
@@ -139,6 +142,8 @@ public:
 			PhysicsEngine::Destroy();
 			StorageManager::Destroy();
 			InputManager::Destroy();
+			std::cout << "Input Manager Killed" << std::endl;
+			
 #if WINDOWS_BUILD
 			AudioEngine::Destroy();
 			NetworkManager::Destroy();

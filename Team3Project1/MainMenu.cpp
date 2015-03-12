@@ -220,24 +220,33 @@ void MainMenu::MusicClicked(float x, float y) {
 	if (musicMuted) {
 		music->GetTexture()->SetTexture(musicNoMuteHover);
 #if WINDOWS_BUILD
-		GameStateManager::Audio()->SetMasterVolume(1.0f);
+		GameStateManager::Audio()->EnableGlobalSounds(true);
+		GameStateManager::Audio()->EnableLocalSounds(true);
 #endif
 	}
 	else {
 		music->GetTexture()->SetTexture(musicMuteHover);
 #if WINDOWS_BUILD
-		GameStateManager::Audio()->SetMasterVolume(0.0f);
+		GameStateManager::Audio()->EnableGlobalSounds(false);
+		GameStateManager::Audio()->EnableLocalSounds(true);
 #endif
 	}
 	musicMuted = !musicMuted;
 }
 
 void MainMenu::SoundClicked(float x, float y) {
-	if (soundMuted)
+	if (soundMuted){
 		sounds->GetTexture()->SetTexture(soundNoMuteHover);
-	else
+#if WINDOWS_BUILD
+		GameStateManager::Audio()->SetMasterVolume(1.0f);
+#endif		
+	}
+	else{
 		sounds->GetTexture()->SetTexture(soundMuteHover);
-
+#if WINDOWS_BUILD
+		GameStateManager::Audio()->SetMasterVolume(0.0f);
+#endif	
+	}
 	soundMuted = !soundMuted;
 }
 

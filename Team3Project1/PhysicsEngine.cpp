@@ -566,6 +566,7 @@ void  PhysicsEngine::SortandSweep()
 				}
 		}
 	}
+
 }
 	
 
@@ -963,13 +964,13 @@ float Dist(const T3Vector3& a, const T3Vector3& b)
 	return (a-b).Length();
 }
 
-const unsigned _EXIT_ITERATION_LIMIT =50;
-const float _EXIT_THRESHOLD = 0.0001f;
-struct EPA_Point
-{
-	T3Vector3 v;
+	const unsigned _EXIT_ITERATION_LIMIT =50;
+	const float _EXIT_THRESHOLD = 0.0001f;
+	struct EPA_Point
+	{
+		T3Vector3 v;
 	bool operator==(const EPA_Point &a) const { return v == a.v; }
-};
+	};
 
 	//the edge to store points of triangle
 	struct EPA_Edge

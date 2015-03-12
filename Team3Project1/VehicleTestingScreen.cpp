@@ -95,9 +95,9 @@ void VehicleTestingScreen::LoadContent() {
 	camera = new FreeCamera();
 
 
-	gold_cion= new Gold_cion(5);
-	gold_cion->SetPhysics(5);
-	AddDrawable(gold_cion);
+	//gold_cion= new Gold_cion(5);
+	//gold_cion->SetPhysics(5);
+	//AddDrawable(gold_cion);
 
 
 	//checkpoint= new CheckPoint(10);
@@ -166,7 +166,7 @@ void VehicleTestingScreen::Update() {
 	{
 	  f=0;
 	}
-
+	
 
 	if(car->GetCarNode().GetLinearVelocity().x>0)
 	{
@@ -201,14 +201,22 @@ void VehicleTestingScreen::Update() {
 
 	//FrontLeftTire->GetPhysicsNode().SetXstart(FrontLeftTire->GetPhysicsNode().GetPosition().x-1*5);
 	//FrontLeftTire->GetPhysicsNode().SetXend(FrontLeftTire->GetPhysicsNode().GetPosition().x+1*5);
-
+	
 	//BackRightTire->GetPhysicsNode().SetXstart(BackRightTire->GetPhysicsNode().GetPosition().x-1*5);
 	//BackRightTire->GetPhysicsNode().SetXend(BackRightTire->GetPhysicsNode().GetPosition().x+1*5);
 	//BackLeftTire->GetPhysicsNode().SetXstart(BackLeftTire->GetPhysicsNode().GetPosition().x-1*5);
 	//BackLeftTire->GetPhysicsNode().SetXend(BackLeftTire->GetPhysicsNode().GetPosition().x+1*5);
+	
+	car->GetCarNode().SetXstart(car->GetCarNode().GetPosition().x-3*5 +10);
+	car->GetCarNode().SetXend(car->GetCarNode().GetPosition().x+3*5+10);
+	//checkpoint->GetPhysicsNode().SetXstart(checkpoint->GetPhysicsNode().GetPosition().x-1*10);
+	//checkpoint->GetPhysicsNode().SetXend(checkpoint->GetPhysicsNode().GetPosition().x+1*10);
+	//gold_cion->GetPhysicsNode().SetXstart(gold_cion->GetPhysicsNode().GetPosition().x-1*10+10);
+	//gold_cion->GetPhysicsNode().SetXend(gold_cion->GetPhysicsNode().GetPosition().x+1*10+10);
+	FrontRightTire->GetPhysicsNode().SetXstart(FrontRightTire->GetPhysicsNode().GetPosition().x-1*5);
+	FrontRightTire->GetPhysicsNode().SetXend(FrontRightTire->GetPhysicsNode().GetPosition().x+1*5);
 
-	
-	
+
 	//T3Matrix4 m = T3Matrix4::Rotation(0.016f, T3Vector3(0,1,0));
 	//ent->AddRotation(Quaternion::FromMatrix(m));
 }
@@ -238,13 +246,13 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 				   car->GetCarNode().SetLinearVelocity( m4 * T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
 			
 				   //FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(4,0,0));
-				
+
 			
 			 break;
-		}	
+		}
 		case KeyboardEvents::KEYBOARD_S:
 			{//camera->AddMovement(T3Vector3(0,0,1));
-
+		
 				 b=b+0.2f;
 				   if(b>50){
 				   b=50;
@@ -261,7 +269,7 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 		case KeyboardEvents::KEYBOARD_A:
 			{//camera->AddMovement(T3Vector3(1,0,0));
 
-
+		
 //				if(car->GetCarNode().GetLinearVelocity().x>=0)
 //				{
 
@@ -273,9 +281,9 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 
 				//FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(-car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0) );
 		        //FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(-car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
-		        
-
-				
+			 
+		
+		
 //		}
 //				else
 //			{
@@ -284,7 +292,7 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 		     ///FrontRightTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 			 //BackLeftTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 		    // BackRightTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
-			
+			 	
 	//			}
 		
 
@@ -296,7 +304,7 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 			break;
 		case KeyboardEvents::KEYBOARD_D:
 			{//camera->AddMovement(T3Vector3(-1,0,0));
-			
+
 //		if(car->GetCarNode().GetLinearVelocity().x>=0)
 //			  {
 //			 FrontLeftTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
@@ -307,13 +315,13 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 //		      }
 //		else
 //		{
-		
+
 //		FrontLeftTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 //		     FrontRightTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 //			 BackLeftTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 //		     BackRightTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 			 // car->GetCarNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
-
+		
 
 		//}			
 
