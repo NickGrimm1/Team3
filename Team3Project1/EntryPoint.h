@@ -3,8 +3,9 @@
 Called buy the GSM once the framework has initialised.
 Not to be with main() which starts the framework.
 
-Author: Nick Grimm
-Version: 0.0.3 06/02/2015.</summary>
+Initial Author: Nick Grimm
+Main Contributors: Derek Kelly, Sherif Salem
+Version: 1.0.0 06/02/2015.</summary>
 */
 
 #include "GraphicsCommon.h"
