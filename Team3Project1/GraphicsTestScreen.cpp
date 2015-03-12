@@ -58,13 +58,15 @@ void GraphicsTestScreen::LoadContent() {
 		}
 	}*/
 	
-
-	GameStateManager::Graphics()->GetRenderContext();
 #if WINDOWS_BUILD
-	track = new TrackSegment(T3Vector3(-400, 0, 400), T3Vector3(-400,0,0), T3Vector3(0,0,-400), 10, 50.0);
+	GameStateManager::Graphics()->GetRenderContext();
 #endif
+
+	track = new TrackSegment(T3Vector3(-400, 0, 0), T3Vector3(0,0,-400), T3Vector3(400,0,0), 10, 50.0);
+
+#if WINDOWS_BUILD
 	GameStateManager::Graphics()->DropRenderContext();
-	
+#endif
 	ent = new DrawableEntity3D(
 #if WINDOWS_BUILD
 		GameStateManager::Assets()->LoadHeightmap(0, 15, true),
@@ -81,16 +83,10 @@ void GraphicsTestScreen::LoadContent() {
 		T3Vector3(1,1,1));
 	AddDrawable(ent);
 
-#if WINDOWS_BUILD
 	ent = new DrawableEntity3D(
 		track,
 		NULL,
-#if WINDOWS_BUILD
 		grassTex,
-#endif
-#if PS3_BUILD
-		nclTex,
-#endif
 		NULL,
 		800.0f,
 		T3Vector3(0,0,0),
@@ -98,7 +94,6 @@ void GraphicsTestScreen::LoadContent() {
 		T3Vector3(1,1,1));
 	gameEntities.push_back(ent);
 	AddDrawable(ent);
-#endif
 
 	ent = new DrawableEntity3D(
 		cylinder, 

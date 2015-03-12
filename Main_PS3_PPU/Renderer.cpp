@@ -1350,3 +1350,6 @@ unsigned char* Renderer::GeneratePerlinNoise(const int resolution, unsigned char
 	//return output;
 }
 #endif
+
+
+unsigned int Renderer::GetTextMeshMemory(){}//TODO this, but properly

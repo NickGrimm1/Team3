@@ -1,6 +1,3 @@
-
-
-
 #include "RacerGame.h"
 #include "Mesh.h"
 #include "../Framework/Light.h"
@@ -20,8 +17,9 @@
 
 //#include "DrawableText2D.h"
 //#include "GameScreen2D.h"
+#if WINDOWS_BUILD
 #include "HudTestScreen.h"
-
+#endif
 int RacerGame::update =0;
 float RacerGame::g=0.0f;
 float RacerGame::gx =300.0f;
@@ -279,7 +277,9 @@ void RacerGame::Update() {
 	if((Time-60)==0){
 	SetPlayTime(-1);
 	Time=0;
+#if WINDOWS_BUILD
 	hud->SetScreen(GetScore(),GetPlayTime());
+#endif
 	}
 	Time+=1;
 
@@ -586,7 +586,7 @@ void RacerGame::CreateTrack(){
 		//GameStateManager::Graphics()->DropRenderContext();
 		//create end
 
-			Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, "trackTex", 0);
+		Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, "trackTex", 0);
 		/*GameStateManager::Graphics()->GetRenderContext();*/
 	
 
