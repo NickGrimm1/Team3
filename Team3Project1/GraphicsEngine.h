@@ -63,6 +63,7 @@ public:
 #endif
 	}
 	int GetFrameRate() { return frameRate; }
+	unsigned int GetTextMeshMemory() const {return renderer->GetTextMeshMemory();}
 #pragma region Entry/Exit
 	/**
 	<summary>Initializes a graphics engine.</summary>

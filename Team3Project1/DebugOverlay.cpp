@@ -37,14 +37,14 @@ void DebugOverlay::LoadContent()
 
 	totalMemory = new DrawableText2D(23 * charWidth, 0.15f, 1, 3 * charWidth, charHeight, "0", font);
 	textureMemory = new DrawableText2D(12 * charWidth, 0.18f, 1, 3 * charWidth, charHeight, "0", font);
-	meshMemory = new DrawableText2D(10 * charWidth, 0.21f, 1, 3 * charWidth, charHeight, "0", font);
+	meshMemory = new DrawableText2D(10 * charWidth, 0.21f, 1, 4 * charWidth, charHeight, "0", font);
 	AddDrawable(totalMemory);
 	AddDrawable(textureMemory);
 	AddDrawable(meshMemory);
 
 	AddDrawable(new DrawableText2D(26 * charWidth, 0.16f, 1, 2 * charWidth, 0.02f, "MB", font));
 	AddDrawable(new DrawableText2D(15 * charWidth, 0.19f, 1, 2 * charWidth, 0.02f, "MB", font));
-	AddDrawable(new DrawableText2D(13 * charWidth, 0.22f, 1, 2 * charWidth, 0.02f, "MB", font));
+	AddDrawable(new DrawableText2D(14 * charWidth, 0.22f, 1, 2 * charWidth, 0.02f, "KB", font));
 
 	mouseX = new DrawableText2D(9 * charWidth, 0.24f, 1, 8 * charWidth, charHeight, "0", font);
 	mouseY = new DrawableText2D(9 * charWidth, 0.27f, 1, 8 * charWidth, charHeight, "0", font);

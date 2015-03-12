@@ -63,7 +63,7 @@ public:
 			output += numIndices * 4;
 
 		output /= 1024.0f;
-		output /= 1024.0f;
+		//output /= 1024.0f;
 
 		return output;
 	}

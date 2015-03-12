@@ -21,6 +21,8 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "LoadedMesh.h"
 #include "LoadedShaderPart.h"
 
+class GameStateManager;
+
 using namespace std;
 
 class AssetManager
@@ -75,11 +77,15 @@ public:
 	Mesh* LoadHeightmap(unsigned char minHeight = 0, unsigned char maxHeight = 255, bool useTextureWeights = true);
 	void UnloadHeightmap(void* callerID, string filename);
 	void UnloadHeightmap(Mesh* heightmap);
+	
+	Mesh* LoadTrackSegment(T3Vector3 ctrlPoint1, T3Vector3 ctrlPoint2, T3Vector3 ctrlPoint3, unsigned int segments, float trackWidth);
+	void UnloadTrackSegment(Mesh* track);
+	
 	// Load audio
 
-	int GetTotalMemory() { return (int)(textureMemory + meshMemory); }
-	int GetTextureMemory() { return (int)textureMemory; }
-	int GetMeshMemory() { return (int)meshMemory; }
+	int GetTotalMemory();
+	int GetTextureMemory();
+	int GetMeshMemory();
 private:
 	AssetManager()
 	{
@@ -113,6 +119,7 @@ private:
 	vector<void*> quadCentralUsers;
 	vector<void*> quadTexCoordColUsers;
 	vector<Mesh*> generatedHeightmaps;
+	vector<Mesh*> generatedTracks;
 	
 	map<unsigned int, LoadedMesh> circleUsers;
 	map<unsigned int, LoadedMesh> coneUsers;

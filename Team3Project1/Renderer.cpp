@@ -235,6 +235,8 @@ bool Renderer::LoadAssets()
 		cout << "Renderer::LoadAssets() - unable to load rendering assets";
 		return false;
 	}
+
+	textMeshMemory = 0;
 }
 
 bool Renderer::LoadCheck()
@@ -1135,6 +1137,7 @@ void Renderer::Draw2DText(DrawableText2D& text) {
 			return;
 		}
 		loadedTextMeshes.insert(pair<string, TextMesh*>(text.GetText(), textMesh));
+		textMeshMemory += textMesh->GetMemoryUsage();
 	}
 	else {
 		textMesh = (*i).second;
