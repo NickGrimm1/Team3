@@ -4,6 +4,8 @@
 #include "DrawableEntity3D.h"
 #include "GameStateManager.h"
 
+int Renderer::count = 0;
+
 // Structures required for point light shadows
 struct CameraDirection {
 	GLenum cubeFace;
@@ -36,7 +38,6 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	perspectiveMatrix = T3Matrix4::Perspective(1.0f, 10000.0f, (float) width / (float) height, 45.0f);
 	orthographicMatrix = T3Matrix4::Orthographic(-1,1,1,-1,1,-1); // for drawing full screen quads
 	hudMatrix = T3Matrix4::Orthographic(-1.0f,1.0f,(float)width, 0.0f, 0.0f, (float)height); // For HUD Elements only
-	//hudMatrix = T3Matrix4::Orthographic(-1.0f,1.0f,(float)width, 0.0f, (float)height, 0.0f); // For HUD Elements only
 	
 	//Creation of buffers.
 	GenerateScreenTexture(gbufferNormalTex);
@@ -82,7 +83,6 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	samples[0] = 1.5f;
 	samples[1] = 2.0f;
 	samples[2] = 3.0f;
-	//samples[3] = 4.0f;
 
 	int z = 0;
 	for (int i = 0; i < SAMPLENUM * 2; i += 2) {
@@ -111,7 +111,7 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glGenFramebuffers(1, &postProcessingFBO);	//PP in this.
 	glGenFramebuffers(1, &shadowFBO);			//Shadow pre-render in this one.
 	glGenFramebuffers(1, &deferredLightingFBO);	//Deferred lighting in this FBO.
-	glGenFramebuffers(1, &skyBufferFBO);
+	glGenFramebuffers(1, &skyBufferFBO);		//Clouds into this one.
 
 	GLenum buffers[3];
 	buffers[0] = GL_COLOR_ATTACHMENT0;
@@ -179,7 +179,6 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); // cube sampling
 
 	CreateStaticMap(&cloudMap, 128, 0, 255);
-	//CreateStaticMap(&cloudMap, 128, 1, 1000);
 
 	glClearColor(0, 0, 0, 1);
 	SwapBuffers();
@@ -224,7 +223,6 @@ bool Renderer::LoadAssets()
 	skyDome = GameStateManager::Assets()->LoadMesh(this, MESHDIR"dome.obj"); // Skydome
 	
 	nightSkyTex = (GameStateManager::Assets()->LoadTexture(this, "night_sky", 0))->GetTextureName();
-	//SetTextureRepeating(nightSkyTex, true);
 	daySkyTex = (GameStateManager::Assets()->LoadTexture(this, "day_sky", 0))->GetTextureName();
 
 	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh || !quadMesh || !skyDome) {
@@ -274,7 +272,7 @@ void Renderer::UnloadAssets()
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BloomFinalShader.glsl");//Final bloom Shader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"VelocityVertex.glsl", SHADERDIR"VelocityFragment.glsl");//VBuffer Shader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlurFragment.glsl");//Motion blur Shader
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"FreiChenFragment.glsl");
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"FreiChenFragment.glsl");//Toon Shader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BlendedFragment.glsl");
 
 	GameStateManager::Assets()->UnloadCircle(this, 20); // Circle for spotlight rendering
@@ -289,12 +287,6 @@ void Renderer::UnloadAssets()
 
 Renderer::~Renderer(void)
 {
-	/*
-	delete snow;
-	delete rain;
-	delete sandstorm;
-	*/
-
 	for (map<string, TextMesh*>::iterator i = loadedTextMeshes.begin(); i != loadedTextMeshes.end(); i++) {
 		delete (*i).second;
 	}
@@ -329,10 +321,16 @@ void Renderer::RenderScene() {
 	if (camera) {
 		cameraMatrix = camera->BuildViewMatrix();
 
+
 		//Main Render
 		ShadowPass();
 		GBufferPass(); // Split into separate pass from draw
 		DrawScene();
+
+		cout << "Meshes Last Frame: " << count << endl;
+
+		count = 0;
+
 		DeferredLightPass();
 		CombineBuffers();
 
@@ -341,6 +339,7 @@ void Renderer::RenderScene() {
 		BloomPass();
 		MotionBlurPass();
 
+		//Draw to screen
 		DrawFrameBufferTex(postProcessingTex[0]);
 	}
 
@@ -489,7 +488,6 @@ void Renderer::DrawScene()
 	
 	glDisable(GL_STENCIL_TEST); // Believe can disable here
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-//	DrawFrameBufferTex(gbufferColourTex);
 }
 
 void Renderer::ShadowPass()

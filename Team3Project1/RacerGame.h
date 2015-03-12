@@ -5,17 +5,16 @@
 #include "../Framework/MyGame.h"
 #include "FreeCamera.h"
 #include "ChaseCamera.h"
+
 #include "Vehicle_Wheel.h"
 #include "VehiclePhysicsNode.h"
 #include "CheckPoint.h"
 #include "TrackSegment.h"
 #include "Gold_cion.h"
-#if WINDOWS_BUILD
 #include "HudTestScreen.h"
-#endif
 #include "GameStateManager.h"
 //#include "../Framework/SoundManager.h"
-
+class Vehicle;
 class RacerGame : public GameScreen3D
 {
 public:
@@ -35,7 +34,10 @@ public:
 	virtual void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key);
 #endif
 	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button) {};
-	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) {};
+	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount)
+	{
+		camera->AddMovement(T3Vector3(amount.x,0,amount.y));
+	};
 	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID){}
 
 	void SetScore(int value){score+=value;}
@@ -53,7 +55,7 @@ public:
 	void DeleteTrack();
 	void Start();
 	float GetCreateAngle();
-	float f;
+	//float f;
 	float b;
 	int Speed_Player;
 	float Speed_Rotate;
@@ -66,9 +68,8 @@ public:
 	//sam
 	Texture* scoreTexture;
 	Texture* timeTexture;
-#if WINDOWS_BUILD
 	HudTestScreen* hud;
-#endif
+
 	static float g;
 	static float gx;
 	TrackSegment* Strack;
@@ -77,7 +78,7 @@ public:
 	vector<DrawableEntity3D*> allEntities;
 	vector<TrackSegment*> TrackSegmentVector;
 	vector<GameEntity*> checkPoint;
-	vector<GameEntity*> pickup;
+	vector<Gold_cion*> pickup;
 
 	 virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
 		  if(obj1->GetType()=='g')
@@ -115,7 +116,7 @@ public:
 #ifdef WINDOWS_BUILD
 			 // SoundManager::AddSound(SOUNDSDIR"Tokyo Drift2.wav");
 			 // GameStateManager::Audio()->PlaySoundW(GameStateManager::Audio()->GetSound(SOUNDSDIR"Tokyo Drift2.wav"),SOUNDPRIORITY_ALWAYS);
-			  GameStateManager::Audio()->PlaySound(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
+			 // GameStateManager::Audio()->PlaySound(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
 #endif			  
 			  cout<< "total point ="<<GetScore()<<endl; 
 			  GameStateManager::Graphics()->RemoveDrawable(obj1);

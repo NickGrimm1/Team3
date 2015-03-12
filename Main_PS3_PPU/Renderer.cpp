@@ -5,7 +5,7 @@
 #include "../Team3Project1/ShaderPart.h"
 #include "../Team3Project1/GameStateManager.h"
 #include <cell/gcm.h>
-
+int Renderer::count = 0;
 /**********************************************************************************************/
 //TODO : pass a reference to the graphics engines scenenodes into ps3 as seen in PC Renderer //
 /*********************************************************************************************/
@@ -164,11 +164,11 @@ Renderer::Renderer(vector<Light*>& lightsVec, vector<SceneNode*>& SceneNodesVec,
 
 	drawDeferredLights = false;*/
 
-	cellGcmSetDepthTestEnable(CELL_GCM_TRUE);
-	cellGcmSetDepthFunc(CELL_GCM_LESS);
-	cellGcmSetCullFaceEnable(CELL_GCM_TRUE);
-	cellGcmSetCullFace(CELL_GCM_BACK);
-	cellGcmSetFrontFace(CELL_GCM_CCW);
+//	cellGcmSetDepthTestEnable(CELL_GCM_TRUE);
+//	cellGcmSetDepthFunc(CELL_GCM_LESS);
+//	cellGcmSetCullFaceEnable(CELL_GCM_TRUE);
+//	cellGcmSetCullFace(CELL_GCM_BACK);
+//	cellGcmSetFrontFace(CELL_GCM_CCW);
 	cellGcmSetStencilTestEnable(CELL_GCM_FALSE);
 
 	//glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); // cube sampling
@@ -317,7 +317,7 @@ Renderer::~Renderer(void)
 
 void Renderer::RenderScene() 
 {
-
+	cout << "Render Scene!" << endl;
 	renderMutex.lock_mutex(); // prevent other threads from accessing OpenGL during rendering
 	SetViewport();
 	ClearBuffer();
@@ -333,6 +333,9 @@ void Renderer::RenderScene()
 
 		//Main Render
 		//ShadowPass();
+		cout << "Meshes Last Frame: " << count << endl;
+
+		count = 0;
 		DrawScene();
 		//DeferredLightPass();
 		//CombineBuffers();
@@ -345,7 +348,11 @@ void Renderer::RenderScene()
 	}
 
 	//Draw HUD/Menu overlay
+	loadingIcon->SetRotation(loadingIcon->GetRotation() + 1.0f);
+	if (hudShader != NULL && quadMesh != NULL) 
+	{
 	Draw2DOverlay();
+	}
 
 	SwapBuffers();
 	//wglMakeCurrent(deviceContext, NULL);
@@ -540,31 +547,34 @@ void Renderer::DrawNodes(bool enableTextures)
 			// Handle colour and bump textures
 			if (entity.GetTexture() && entity.GetTexture()->GetTexture()) 
 			{
-				SetTextureSampler(shader->GetFragment()->GetParameter("texture"), entity.GetTexture()->GetTexture());
+				CellGcmTexture* t = entity.GetTexture()->GetTexture(); //texture->GetTexture();
+				SetTextureSampler(shader->GetFragment()->GetParameter("texture"), t);
+				//SetTextureSampler(shader->GetFragment()->GetParameter("texture"), entity.GetTexture()->GetTexture());
 				//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 1);	
 			}
-			else
-			{
-				//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 0);	
-			}
-		
-			if (entity.GetBumpTexture() && entity.GetBumpTexture()->GetTexture()) 
-			{
-				//glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_NORMAL_TEXTURE_UNIT);
-				//glBindTexture(GL_TEXTURE_2D, entity.GetBumpTexture()->GetTextureName());
-				//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "normalTex"), MESH_OBJECT_NORMAL_TEXTURE_UNIT);
-				//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 1);	
-			}
-			else
-			{
-				//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
-			}
 		}
-		else 
-		{
-			//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 0);	
-			//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
-		}
+		//	else
+		//	{
+		//		//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 0);	
+		//	}
+		//
+		//	if (entity.GetBumpTexture() && entity.GetBumpTexture()->GetTexture()) 
+		//	{
+		//		//glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_NORMAL_TEXTURE_UNIT);
+		//		//glBindTexture(GL_TEXTURE_2D, entity.GetBumpTexture()->GetTextureName());
+		//		//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "normalTex"), MESH_OBJECT_NORMAL_TEXTURE_UNIT);
+		//		//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 1);	
+		//	}
+		//	else
+		//	{
+		//		//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
+		//	}
+		//}
+		//else 
+		//{
+		//	//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 0);	
+		//	//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
+		//}
 
 		// ignore shader for the minute
 
@@ -1075,8 +1085,10 @@ void Renderer::MotionBlurPass()
 
 void Renderer::Draw2DOverlay() 
 {
+
 	if (hudShader)
 	{
+	
 		cellGcmSetDepthTestEnable(CELL_GCM_TRUE);
 		cellGcmSetCullFace(CELL_GCM_FRONT);
 		cellGcmSetAlphaTestEnable(CELL_GCM_TRUE);
