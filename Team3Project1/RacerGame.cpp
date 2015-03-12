@@ -30,7 +30,7 @@ RacerGame::RacerGame(void)
 	//f=5;
 	srand(time(NULL));
 	T3Vector3 sp1= T3Vector3(100.0f,0.0f,0.0f);
-	T3Vector3 sp2= T3Vector3(200.0f,0.0f,0.0f);
+	T3Vector3 sp2= T3Vector3(200.0f,0.0f,200.0f);
 	T3Vector3 sp3= T3Vector3(300.0f,0.0f,0.0f);
 
 	SplinePoint.push_back(sp1);
@@ -68,7 +68,7 @@ void RacerGame::LoadContent() {
 	hud = new HudTestScreen();
 	GameStateManager::Instance()->AddGameScreen(hud);
 	
-	scoreTexture = GameStateManager::Assets()->LoadTexture(this, "score", 0);
+	scoreTexture = GameStateManager::Assets()->LoadTexture(this, "NovaCarUV", 0);
 	timeTexture = GameStateManager::Assets()->LoadTexture(this, "time", 0);
 
 	//ent = new DrawableEntity3D(
@@ -98,7 +98,7 @@ void RacerGame::LoadContent() {
 
 
 	camera = new FreeCamera();
-	camera->SetPosition(T3Vector3(10,50,400));
+	camera->SetPosition(T3Vector3(40,50,1200));
 	//checkpoint= new CheckPoint(10);
 	//checkpoint->SetPhysics(10,'c');
 	//checkpoint->SetType('g');
@@ -217,12 +217,16 @@ void RacerGame::LoadContent() {
 
 	//camera->SetPosition(T3Vector3(0.0f,10.0f, 80.0f));
 	//camera->SetYaw(180.0f);
-	GameStateManager::Graphics()->SetCamera(camera);
+	GameStateManager::Graphics()->SetCamera(chasecamera);
 
 	//GameStateManager::Graphics()->SetCamera(chasecamera);
 }
 
 void RacerGame::Update() { 
+
+	GameStateManager::Input()->GetActiveController();
+	
+
 	if(car->GetCarNode().GetLinearVelocity().x>0)
 	{
 		FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(-car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0) );
@@ -297,7 +301,7 @@ void RacerGame::Start(){
 	cout << "RacerGame: Start()" << endl;
 	Gold_cion * gold_cion= new Gold_cion(8.0f);
 	cout << "RacerGame: Made a Gold_cion " << endl;
-	gold_cion->SetOriginPosition(T3Vector3(50.0f,0.0f,0.0f));
+	gold_cion->SetOriginPosition(T3Vector3(50.0f,50.0f,0.0f));
 	gold_cion->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
 	gold_cion->SetTexture(scoreTexture);
 

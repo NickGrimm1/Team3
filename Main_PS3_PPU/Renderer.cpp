@@ -164,11 +164,11 @@ Renderer::Renderer(vector<Light*>& lightsVec, vector<SceneNode*>& SceneNodesVec,
 
 	drawDeferredLights = false;*/
 
-	cellGcmSetDepthTestEnable(CELL_GCM_TRUE);
-	cellGcmSetDepthFunc(CELL_GCM_LESS);
-	cellGcmSetCullFaceEnable(CELL_GCM_TRUE);
-	cellGcmSetCullFace(CELL_GCM_BACK);
-	cellGcmSetFrontFace(CELL_GCM_CCW);
+//	cellGcmSetDepthTestEnable(CELL_GCM_TRUE);
+//	cellGcmSetDepthFunc(CELL_GCM_LESS);
+//	cellGcmSetCullFaceEnable(CELL_GCM_TRUE);
+//	cellGcmSetCullFace(CELL_GCM_BACK);
+//	cellGcmSetFrontFace(CELL_GCM_CCW);
 	cellGcmSetStencilTestEnable(CELL_GCM_FALSE);
 
 	//glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); // cube sampling
@@ -1085,7 +1085,7 @@ void Renderer::Draw2DOverlay()
 
 	if (hudShader)
 	{
-	}else{
+	
 		cellGcmSetDepthTestEnable(CELL_GCM_TRUE);
 		cellGcmSetCullFace(CELL_GCM_FRONT);
 		cellGcmSetAlphaTestEnable(CELL_GCM_TRUE);

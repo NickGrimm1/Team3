@@ -3,7 +3,7 @@
 
 HudTestScreen::HudTestScreen(void)
 {
-	
+	inputEnabled=false;
 	time=30;
 	score=0;
 }
