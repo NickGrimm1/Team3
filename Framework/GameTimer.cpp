@@ -27,7 +27,7 @@ double GameTimer::GetMS()
 #if WINDOWS_BUILD
 	LARGE_INTEGER t;	
 	QueryPerformanceCounter(&t);
-	return (float)((t.QuadPart  - start.QuadPart) * 1000.0 / frequency.QuadPart);
+	return (float)((t.QuadPart  - start.QuadPart) * 1000.0f / frequency.QuadPart);
 #endif
 #if PS3_BUILD
 	return GetTime()/((double)sys_time_get_timebase_frequency()/100000.0);
@@ -36,8 +36,8 @@ double GameTimer::GetMS()
 
 double	 GameTimer::GetTimedMS() 
 {
-	float a		= GetMS();
-	float b		= a-lastTime;
-	lastTime	= a;
+	float a		= (float)GetMS();
+	float b		= (float)a-lastTime;
+	lastTime	= (double)a;
 	return b;
 }

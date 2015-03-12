@@ -52,7 +52,9 @@ public:
 			// Want to start rendering immediately
 			if (!GraphicsEngine::Initialize(instance->graphics))
 				return false;	
+#if WINDOWS_BUILD
 			Instance()->graphics->Start("Graphics");
+#endif
 			if (!GraphicsEngine::LoadContent())
 				return false;
 
@@ -77,6 +79,9 @@ public:
 
 	void Start() {
 		// Start Threads
+#if PS3_BUILD
+		Instance()->graphics->Start("Graphics");
+#endif
 		Instance()->physics->Start("Physics");
 		Instance()->input->Start("Input");
 

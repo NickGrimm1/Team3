@@ -30,38 +30,15 @@ namespace EntryPoint
 		//LoadingScreen* loadingScreen = new LoadingScreen();
 		//GameStateManager::Instance()->AddGameScreen(loadingScreen);
 
-		//GraphicsTestScreen* game = new GraphicsTestScreen();
-		//GameStateManager::Instance()->AddGameScreen(game);
+		//MainMenu* main = new MainMenu();
+		//GameStateManager::Instance()->AddGameScreen(main);
 
-		MainMenu* main = new MainMenu();
-		GameStateManager::Instance()->AddGameScreen(main);
+		//GraphicsTestScreen* graphics = new GraphicsTestScreen();
+		//GameStateManager::AddGameScreen(graphics);
 
-		//PauseScreen* pause = new PauseScreen();
-		//GameStateManager::Instance()->AddGameScreen(pause);
+		RacerGame* game = new RacerGame();
+		GameStateManager::Instance()->AddGameScreen(game);
 
-		//HudTestScreen* hud = new HudTestScreen();
-		//GameStateManager::Instance()->AddGameScreen(hud);
-
-		//DebugOverlay* debug = new DebugOverlay();
-		//GameStateManager::Instance()->AddGameScreen(debug);
-
-		//RacerGame* game = new RacerGame();
-		//GameStateManager::Instance()->AddGameScreen(game);
-		//GameStateManager::Instance()->Start();
-
-
-		//AudioTestClass* audio = new AudioTestClass();
-		//GameStateManager::Instance()->AddGameScreen(audio);
-
-
-		//NetworkTest* network = new NetworkTest();
-		//GameStateManager::Instance()->AddGameScreen(network);
-
-		//RacerGame* game = new RacerGame();
-		//GameStateManager::Instance()->AddGameScreen(game);
-		//PhysicsEngine::SetGame(game);
-		//VehicleTestingScreen* physicsgame = new VehicleTestingScreen();
-		//GameStateManager::Instance()->AddGameScreen(physicsgame);
 		GameStateManager::Instance()->Start();
 	}
 }

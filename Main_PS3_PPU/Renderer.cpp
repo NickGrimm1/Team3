@@ -170,7 +170,6 @@ Renderer::Renderer(vector<Light*>& lightsVec, vector<SceneNode*>& SceneNodesVec,
 	cellGcmSetCullFace(CELL_GCM_BACK);
 	cellGcmSetFrontFace(CELL_GCM_CCW);
 	cellGcmSetStencilTestEnable(CELL_GCM_FALSE);
-	cellGcmSetBlendEquation(CELL_GCM_FUNC_ADD, CELL_GCM_FUNC_ADD);
 
 	//glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); // cube sampling
 
@@ -251,7 +250,9 @@ void Renderer::UnloadShaders()
 
 bool Renderer::LoadAssets() {
 	// Load Meshes required for rendering operations
-	
+	if (!LoadShaders())
+		return false;
+
 	circleMesh = GameStateManager::Assets()->LoadCircle(this, 20); // Circle for spotlight rendering
 	screenMesh = GameStateManager::Assets()->LoadQuad(this); // Quad for rendering textures to screen
 	sphereMesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"sphere.obj"); // Sphere for point light rendering
@@ -314,7 +315,8 @@ Renderer::~Renderer(void)
 	glDeleteFramebuffers(1, &shadowFBO);*/
 }
 
-void Renderer::RenderScene() {
+void Renderer::RenderScene() 
+{
 
 	renderMutex.lock_mutex(); // prevent other threads from accessing OpenGL during rendering
 	SetViewport();
@@ -381,89 +383,92 @@ void Renderer::ToggleDebug(int arg, bool on)
 
 void Renderer::DrawScene()
 {
-	//glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	// Use stencil buffer to track unaltered pixels. Use to draw skybox later
-	cellGcmSetStencilTestEnable(CELL_GCM_TRUE);
-	cellGcmSetStencilFunc(CELL_GCM_ALWAYS, 0, 0); // Always passes
-	cellGcmSetStencilOp(CELL_GCM_KEEP, CELL_GCM_KEEP, CELL_GCM_REPLACE);
+	if (basicShader)
+	{
+		//glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
+		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		// Use stencil buffer to track unaltered pixels. Use to draw skybox later
+		cellGcmSetStencilTestEnable(CELL_GCM_TRUE);
+		cellGcmSetStencilFunc(CELL_GCM_ALWAYS, 0, 0); // Always passes
+		cellGcmSetStencilOp(CELL_GCM_KEEP, CELL_GCM_KEEP, CELL_GCM_REPLACE);
 
-	ClearBuffer();
+		ClearBuffer();
 	
-	//SetCurrentShader(sceneShader);
-	SetCurrentShader(basicShader);
+		//SetCurrentShader(sceneShader);
+		SetCurrentShader(basicShader);
 
-	// Bind Shader variables
-	viewMatrix = cameraMatrix;
-	projMatrix = perspectiveMatrix;
-	modelMatrix = Matrix4::identity();
-	shader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
-	//glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &cameraMatrix.GetPositionVector());
-	//glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "nodeColour"), 1, (float*) &T3Vector4(1,1,1,1));
+		// Bind Shader variables
+		viewMatrix = cameraMatrix;
+		projMatrix = perspectiveMatrix;
+		modelMatrix = Matrix4::identity();
+		shader->GetVertex()->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
+		//glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &cameraMatrix.GetPositionVector());
+		//glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "nodeColour"), 1, (float*) &T3Vector4(1,1,1,1));
 
-	// Pass any light/shadow data for any lights which generate shadows into the renderer
-	//unsigned int shadowCount = 0;
-	//char buffer[20];
-	//for (unsigned int i = 0; i < lights.size(); i++) {
-	//	if (lights[i]->GetShadowTexture() > 0) { // Shadow depth texture exists for light, so use
-	//		// Calculate the view projection matrix for the light so can sample shadow map
-	//		T3Matrix4 shadowMatrix = biasMatrix * lights[i]->GetProjectionMatrix() * lights[i]->GetViewMatrix(T3Vector3(cameraMatrix.GetPositionVector()));
-	//		
-	//		sprintf_s(buffer, 20, "shadowProjMatrix[%d]", i);
-	//		glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), buffer), 1, false, (float*) &shadowMatrix);
-	//		
-	//		// Bind shadow texture
-	//		if (lights[i]->GetType() != POINT_LIGHT_TYPE) {
-	//			sprintf_s(buffer, 20, "shadowTex[%d]", i);
-	//			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), buffer), SHADOW_TEXTURE_UNIT + shadowCount);
-	//			glActiveTexture(GL_TEXTURE0 + SHADOW_TEXTURE_UNIT + shadowCount);
-	//			glBindTexture(GL_TEXTURE_2D, lights[i]->GetShadowTexture());
-	//		}
-	//		else {
-	//			sprintf_s(buffer, 20, "shadowCube[%d]", i);
-	//			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), buffer), SHADOW_TEXTURE_UNIT + shadowCount);
-	//			glActiveTexture(GL_TEXTURE0 + SHADOW_TEXTURE_UNIT + shadowCount);
-	//			glBindTexture(GL_TEXTURE_CUBE_MAP, lights[i]->GetShadowTexture());
-	//		}
+		// Pass any light/shadow data for any lights which generate shadows into the renderer
+		//unsigned int shadowCount = 0;
+		//char buffer[20];
+		//for (unsigned int i = 0; i < lights.size(); i++) {
+		//	if (lights[i]->GetShadowTexture() > 0) { // Shadow depth texture exists for light, so use
+		//		// Calculate the view projection matrix for the light so can sample shadow map
+		//		T3Matrix4 shadowMatrix = biasMatrix * lights[i]->GetProjectionMatrix() * lights[i]->GetViewMatrix(T3Vector3(cameraMatrix.GetPositionVector()));
+		//		
+		//		sprintf_s(buffer, 20, "shadowProjMatrix[%d]", i);
+		//		glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), buffer), 1, false, (float*) &shadowMatrix);
+		//		
+		//		// Bind shadow texture
+		//		if (lights[i]->GetType() != POINT_LIGHT_TYPE) {
+		//			sprintf_s(buffer, 20, "shadowTex[%d]", i);
+		//			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), buffer), SHADOW_TEXTURE_UNIT + shadowCount);
+		//			glActiveTexture(GL_TEXTURE0 + SHADOW_TEXTURE_UNIT + shadowCount);
+		//			glBindTexture(GL_TEXTURE_2D, lights[i]->GetShadowTexture());
+		//		}
+		//		else {
+		//			sprintf_s(buffer, 20, "shadowCube[%d]", i);
+		//			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), buffer), SHADOW_TEXTURE_UNIT + shadowCount);
+		//			glActiveTexture(GL_TEXTURE0 + SHADOW_TEXTURE_UNIT + shadowCount);
+		//			glBindTexture(GL_TEXTURE_CUBE_MAP, lights[i]->GetShadowTexture());
+		//		}
 
-	//		// Bind light data
-	//		lights[i]->BindLight(shadowCount);
+		//		// Bind light data
+		//		lights[i]->BindLight(shadowCount);
 
-	//		shadowCount++;
-	//	}
-	//}
+		//		shadowCount++;
+		//	}
+		//}
 
-	//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "numShadows"), shadowCount);
+		//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "numShadows"), shadowCount);
 			
-	DrawNodes(true);
+		DrawNodes(true);
 
-	//if (drawDeferredLights) {
-	//	// Draw Deferred lights
-	//	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
-	//	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 0);
-	//	for (unsigned int i = 0; i < lights.size(); i++) {
-	//		modelMatrix = lights[i]->GetModelMatrix();
-	//		UpdateShaderMatrices();
-	//		switch (lights[i]->GetType()) {
-	//		case POINT_LIGHT_TYPE:
-	//			sphereMesh->Draw();
-	//			break;
-	//		case SPOTLIGHT_LIGHT_TYPE:
-	//			coneMesh->Draw();
-	//			break;
-	//		}
-	//	}
-	//}
+		//if (drawDeferredLights) {
+		//	// Draw Deferred lights
+		//	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
+		//	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 0);
+		//	for (unsigned int i = 0; i < lights.size(); i++) {
+		//		modelMatrix = lights[i]->GetModelMatrix();
+		//		UpdateShaderMatrices();
+		//		switch (lights[i]->GetType()) {
+		//		case POINT_LIGHT_TYPE:
+		//			sphereMesh->Draw();
+		//			break;
+		//		case SPOTLIGHT_LIGHT_TYPE:
+		//			coneMesh->Draw();
+		//			break;
+		//		}
+		//	}
+		//}
 
-	//glUseProgram(0);
+		//glUseProgram(0);
 
-	// TODO - handle particle systems
-	//if (weatherOn)
-	//	DrawParticles();
+		// TODO - handle particle systems
+		//if (weatherOn)
+		//	DrawParticles();
 	
-	cellGcmSetStencilTestEnable(CELL_GCM_FALSE);
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	//DrawFrameBufferTex(gbufferColourTex);
+		cellGcmSetStencilTestEnable(CELL_GCM_FALSE);
+		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		//DrawFrameBufferTex(gbufferColourTex);
+	}
 }
 
 void Renderer::ShadowPass()
@@ -1070,31 +1075,33 @@ void Renderer::MotionBlurPass()
 
 void Renderer::Draw2DOverlay() 
 {
-	cellGcmSetDepthTestEnable(CELL_GCM_FALSE);
-	cellGcmSetCullFace(CELL_GCM_FRONT);
-	cellGcmSetBlendEnable(CELL_GCM_TRUE);
-
-	SetCurrentShader(hudShader);
-	projMatrix = hudMatrix;
-	viewMatrix = Matrix4::identity();
-
-
-	for (unsigned int i = 0; i < overlayTextures.size(); i++) 
+	if (hudShader)
 	{
-		shader->GetFragment()->SetParameter("blendColour", (float*)(overlayTextures[i]->GetColor()));
-		Draw2DTexture(*overlayTextures[i]);
-	}
-	
-	cellGcmSetBlendEnable(CELL_GCM_TRUE);
-	for (unsigned int i = 0; i < overlayTexts.size(); i++) 
-	{
-		shader->GetFragment()->SetParameter("blendColour", (float*)(overlayTexts[i]->GetColor()));
-		Draw2DText(*overlayTexts[i]);
-	}
+		cellGcmSetDepthTestEnable(CELL_GCM_TRUE);
+		cellGcmSetCullFace(CELL_GCM_FRONT);
+		cellGcmSetAlphaTestEnable(CELL_GCM_TRUE);
+		//cellGcmSetAlphaFunc(CELL_GCM_GREATER, 0);
 
-	cellGcmSetDepthTestEnable(CELL_GCM_TRUE);
-	cellGcmSetBlendEnable(CELL_GCM_FALSE);
-	cellGcmSetCullFace(CELL_GCM_BACK);
+		SetCurrentShader(hudShader);
+		projMatrix = hudMatrix;
+		viewMatrix = Matrix4::identity();
+
+		for (unsigned int i = 0; i < overlayTexts.size(); ++i) 
+		{
+			shader->GetFragment()->SetParameter("blendColour", (float*)(overlayTexts[i]->GetColor()));
+			Draw2DText(*overlayTexts[i]);
+		}
+
+		for (unsigned int i = 0; i < overlayTextures.size(); ++i) 
+		{
+			shader->GetFragment()->SetParameter("blendColour", (float*)(overlayTextures[i]->GetColor()));
+			Draw2DTexture(*overlayTextures[i]);
+		}
+		
+		cellGcmSetAlphaTestEnable(CELL_GCM_FALSE);
+		cellGcmSetDepthTestEnable(CELL_GCM_FALSE);
+		cellGcmSetCullFace(CELL_GCM_BACK);
+	}
 }
 
 void Renderer::Draw2DText(DrawableText2D& text) 
@@ -1121,7 +1128,7 @@ void Renderer::Draw2DText(DrawableText2D& text)
 
 		T3Vector3 origin = T3Vector3(text.GetOrigin().x * text.width * screenWidth, text.GetOrigin().y * text.height * screenHeight, 0);
 		T3Matrix4 rotation = T3Matrix4::Translation(origin) * T3Matrix4::Rotation(text.GetRotation(), T3Vector3(0, 0, 1)) * T3Matrix4::Translation(origin * -1.0f);
-		T3Matrix4 m = T3Matrix4::Translation(T3Vector3(text.x * screenWidth, text.y * screenHeight, 0)) * rotation * T3Matrix4::Scale(T3Vector3(screenWidth * text.width / (float) text.GetText().length(), screenHeight * text.height, 1));
+		T3Matrix4 m = T3Matrix4::Translation(T3Vector3(text.x * screenWidth, text.y * screenHeight, 1)) * rotation * T3Matrix4::Scale(T3Vector3(screenWidth * text.width / (float) text.GetText().length(), screenHeight * text.height, 1));
 		for (int x = 0; x < 4; ++x)
 				for (int y = 0; y < 4; ++y)
 					modelMatrix.setElem(x, y, m.values[y + x * 4]);

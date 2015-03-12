@@ -9,6 +9,8 @@ MainMenu::MainMenu(void)
 	musicMuted = false;
 	soundMuted = false;
 	playerOne = GamepadEvents::PLAYERINDEX_MAX;
+
+	connectionTime = 0.0;
 }
 
 void MainMenu::Update(void) 
@@ -23,9 +25,11 @@ void MainMenu::Update(void)
 			GameStateManager::Graphics()->EnableMousePointer(false);
 #endif
 			SetCurrentSelected(0);
-
+			connectionTime = 0;
 		}
 	}
+	else
+		connectionTime += 8;
 }
 
 MainMenu::~MainMenu(void)
@@ -299,6 +303,12 @@ void MainMenu::GamepadDisconnect(GamepadEvents::PlayerIndex playerID)
 #endif
 		ClearSelection();
 }
+void MainMenu::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button)
+{
+	if (connectionTime > 500.0)
+		GameScreen2D::GamepadEvent(playerID, type, button);
+}
+
 #if WINDOWS_BUILD
 void MainMenu::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position)
 {

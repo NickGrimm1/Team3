@@ -46,21 +46,11 @@ class GraphicsEngine : public Thread
 public:
 	bool GetRenderContext() 
 	{
-#if WINDOWS_BUILD
 		return renderer->GetRenderContextForThread();
-#endif
-#if PS3_BUILD
-		return true;
-#endif
 	}
 	bool DropRenderContext() 
 	{
-#if WINDOWS_BUILD
 		return renderer->DropRenderContextForThread();
-#endif
-#if PS3_BUILD
-		return true;
-#endif
 	}
 	int GetFrameRate() { return frameRate; }
 	unsigned int GetTextMeshMemory() const {return renderer->GetTextMeshMemory();}

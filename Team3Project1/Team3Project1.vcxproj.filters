@@ -683,9 +683,6 @@
     <ClCompile Include="..\Framework\PhysicsNode.cpp">
       <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Framework\PhysicsSystem.cpp">
-      <Filter>Framework\Physics\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Framework\SpringDemo.cpp">
       <Filter>Framework\Physics\Source Files</Filter>
     </ClCompile>

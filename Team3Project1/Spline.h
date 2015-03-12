@@ -16,6 +16,10 @@ Version: 0.0.1 16/02/2015</summary>
 #include "Mesh.h"
 #include "../Framework/T3Vector3.h"
 
+#ifdef PS3_BUILD
+class Shader;
+#endif
+
 class Spline : public Mesh {
 public:
 	Spline(const T3Vector3& a, const T3Vector3& b, const T3Vector3& c, unsigned int subdivisions);
@@ -23,8 +27,13 @@ public:
 
 	T3Vector3 GetAvgPosition() {return (ctrlPoints[0] + ctrlPoints[1] + ctrlPoints[2]) / 3.0f;}
 
-	void DrawControlPoints();
+#ifdef WINDOWS_BUILD
 	virtual void Draw();
+#endif
+
+#ifdef PS3_BUILD
+	virtual void Draw(Shader* s);
+#endif
 
 	unsigned int GetSegments() const {return segments;}
 protected:

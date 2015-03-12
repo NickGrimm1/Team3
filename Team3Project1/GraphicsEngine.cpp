@@ -49,7 +49,7 @@ GraphicsEngine::GraphicsEngine()
 	frameRate = 0;
 
 #if WINDOWS_BUILD
-	if (!Window::Initialise(GAME_TITLE, width, height, false)) return;
+	if (!Window::Initialise(GAME_TITLE, width, height, true)) return;
 	
 	Window::GetWindow().LockMouseToWindow(true);
 	Window::GetWindow().ShowOSPointer(false);
@@ -173,27 +173,37 @@ void GraphicsEngine::Run()
 #endif
 #if PS3_BUILD
 	// Add/Remove HUD elements
-	for (unsigned int i = 0; i < addHudTextureList.size(); i++) {
+	for (unsigned int i = 0; i < addHudTextureList.size(); i++) 
+	{
+		//addHudTextureList[i]->SetDepth(-addHudTextureList[i]->GetDepth());
 		overlayTexturesList.push_back(addHudTextureList[i]);
 	}
 	addHudTextureList.clear();
 	// Add/Remove HUD elements
-	for (unsigned int i = 0; i < addHudTextList.size(); i++) {
+	for (unsigned int i = 0; i < addHudTextList.size(); i++) 
+	{
+		//addHudTextList[i]->SetDepth(-addHudTextList[i]->GetDepth());
 		overlayTextsList.push_back(addHudTextList[i]);
 	}
 	addHudTextList.clear();
 
-	for (unsigned int i = 0; i < removeHudTextureList.size(); i++) {
-		for (unsigned int j = 0; j < overlayTexturesList.size(); ++j) {
-			if (overlayTexturesList[j] == removeHudTextureList[i]) {
+	for (unsigned int i = 0; i < removeHudTextureList.size(); i++) 
+	{
+		for (unsigned int j = 0; j < overlayTexturesList.size(); ++j) 
+		{
+			if (overlayTexturesList[j] == removeHudTextureList[i]) 
+			{
 				overlayTexturesList.erase(overlayTexturesList.begin() + j);
 			}
 		}
 	}
 	removeHudTextureList.clear();
-	for (unsigned int i = 0; i < removeHudTextList.size(); i++) {
-		for (unsigned int j = 0; j < overlayTextsList.size(); ++j) {
-			if (overlayTextsList[j] == removeHudTextList[i]) {
+	for (unsigned int i = 0; i < removeHudTextList.size(); i++) 
+	{
+		for (unsigned int j = 0; j < overlayTextsList.size(); ++j) 
+		{
+			if (overlayTextsList[j] == removeHudTextList[i]) 
+			{
 				overlayTextsList.erase(overlayTextsList.begin() + j);
 			}
 		}
@@ -270,34 +280,34 @@ void GraphicsEngine::Run()
 	if (isLoading && !isLoadingDrawing) 
 	{
 #if WINDOWS_BUILD
-			overlayElementsList.push_back(loadingIcon);
+		overlayElementsList.push_back(loadingIcon);
 #endif
 #if PS3_BUILD
 		overlayTexturesList.push_back(loadingIcon);
 #endif
-			isLoadingDrawing = true;
-		}
-		else if (!isLoading && isLoadingDrawing) 
-		{
+		isLoadingDrawing = true;
+	}
+	else if (!isLoading && isLoadingDrawing) 
+	{
 #if WINDOWS_BUILD
-			for (unsigned int i = 0; i < overlayElementsList.size(); i++) 
+		for (unsigned int i = 0; i < overlayElementsList.size(); i++) 
+		{
+			if (overlayElementsList[i] == loadingIcon) 
 			{
-				if (overlayElementsList[i] == loadingIcon) 
-				{
-					overlayElementsList.erase(overlayElementsList.begin() + i);
-				}
+				overlayElementsList.erase(overlayElementsList.begin() + i);
 			}
+		}
 #endif
 #if PS3_BUILD
-			for (unsigned int i = 0; i < overlayTexturesList.size(); i++) 
+		for (unsigned int i = 0; i < overlayTexturesList.size(); i++) 
+		{
+			if (overlayTexturesList[i] == loadingIcon) 
 			{
-				if (overlayTexturesList[i] == loadingIcon) 
-				{
-					overlayTexturesList.erase(overlayTexturesList.begin() + i);
-				}
+				overlayTexturesList.erase(overlayTexturesList.begin() + i);
 			}
-#endif
 		}
+#endif
+	}
 
 		//Update the day/night float
 		renderer->SetDayNight(DayNightCycle());

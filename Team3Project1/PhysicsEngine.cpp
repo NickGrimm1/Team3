@@ -36,7 +36,7 @@ void PhysicsEngine::ThreadRun()
 #endif
 		frameRate = (int)(1000.0f / msec);
 
-#if WINDOWS_BUILD
+
 		//NarrowPhaseCollisions();
 
 		narrowlist.clear();
@@ -50,10 +50,10 @@ void PhysicsEngine::ThreadRun()
 			narrowlist.push_back((*i));
 		}
 		BroadPhaseCollisions();
-#endif
+
 	}
 }
-#if WINDOWS_BUILD
+
 T3Vector3 PhysicsEngine::support(PhysicsNode& shape1,PhysicsNode& shape2, T3Vector3 dir)
 {
 	
@@ -450,8 +450,9 @@ void  PhysicsEngine::SortandSweep()
 
 	
 #if WINDOWS_BUILD
+	//TODO - REMOVE LAMBDA
 	std::sort(narrowlist.begin(),narrowlist.end(), [](PhysicsNode* xleft, PhysicsNode* xright){return xleft->GetPosition().x < xright->GetPosition().x;});
-
+#endif
 	for( vector<PhysicsNode*>::iterator i=narrowlist.begin(); i <narrowlist.end(); ++i) 
 	{
 		for( vector<PhysicsNode*>::iterator j= i +1; j !=narrowlist.end(); ++j) 
@@ -464,7 +465,6 @@ void  PhysicsEngine::SortandSweep()
 
 					if (first.GetPhysicsVertex() == NULL) continue;
 					if (second.GetPhysicsVertex() == NULL) continue;
-
 
 					if(first.Getplanecollision()==true && second.Getplanecollision()==false)
 			{
@@ -480,22 +480,20 @@ void  PhysicsEngine::SortandSweep()
 						CollisionData* data = new CollisionData();
 						bool succeeded = EPA(first, second, data);
  						if (succeeded)
-						{
+				{
 							CollisionHelper::AddCollisionImpulse(first, second, *data);
-			        	}					
+				}
 					}
-
 					isDrop = true;
 				}
-
 				// keeping the vehicle on the track!
 				else if(!isDrop)
-				{
+					{
 					float floor_y = first.GetPosition().y;
 					float car_y = second.GetPosition().y;
-			
+
 					if(car_y - floor_y < 5.5f)
-					{
+					   {
 						float err = abs(car_y - floor_y - 5.f)*2;
 						T3Vector3 t3 = second.GetLinearVelocity();
 						t3.y = 0;
@@ -503,50 +501,19 @@ void  PhysicsEngine::SortandSweep()
 						second.SetLinearVelocity(t3);
 					}
 				}
-			}
+					   }
 			else{
 					if(CollisionDetection(first, second))
 			    {
-				
+
 				if(first.GetIsCollide()==false && second.GetIsCollide ()==true)
-				{
+					      {
 					OnCollision(first,second);
 					//if(second.GetType()=='f'){
 					//OnCollision(first,second);
 					//}
-				}
-				//if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
-				//{
-					//OnCollision(first,second);
-					//OnCollision(first,second);
-						/*if(check==true)
-				{
-                    cout << "Collision" << endl;
-					
-					   if(first.GetType()=='c'||second.GetType()=='c')
-					   {
-						cout<<"c is call";
-						if(first.GetGameEntity()){
-							cout<<"call if"<<endl;
-						RacerGame::update=1;}
-					   }
-
-					   else{
-						if(second.GetGameEntity())
-					      {
-						cout<<"call else"<<endl;
-					RacerGame::update=1;
-						  }
 					    }
 					
-						check=false;
-					}*/
-					/*first.SetLinearVelocity(T3Vector3(0,0,0));
-					first.SetForce(T3Vector3(0,0,0));
-                    second.SetLinearVelocity(T3Vector3(0,0,0));
-					second.SetForce(T3Vector3(0,0,0));*/
-			//	}
-			
 				if ((first.GetIsCollide()==true && second.GetIsCollide ()==true) && ((first.Getcar_wheel()==true && second.Getcar_wheel()==true)))
 				{
 			
@@ -571,20 +538,16 @@ void  PhysicsEngine::SortandSweep()
 							temp1 =  first.GetLinearVelocity();
 							temp1.y = 0;
 							first.SetLinearVelocity(temp1);
-
+							
 							temp2 =  second.GetLinearVelocity();
 							temp2.y = 0;
 							second.SetLinearVelocity(temp2);
-			
+													
 			                second.SetPosition(second.GetPosition() + T3Vector3(0, 2.0f, 0));
 
 			}
 				}
 				}
-			
-			
-				
-
 				}
 				//	if(CollisionDetection(first, second))
 			 //   {
@@ -603,9 +566,9 @@ void  PhysicsEngine::SortandSweep()
 				}
 		}
 	}
-#endif
 }
 	
+
 
 
 
@@ -741,8 +704,8 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 													
 			                second.SetPosition(second.GetPosition() + T3Vector3(0, 2.0f, 0));*/
 
-						}
-					}
+			}
+				}
 				}
 			}
 			}
@@ -919,12 +882,18 @@ void PhysicsEngine::AddCarEdge(PhysicsNode & shape1)
 	//c4 = T3Matrix4::Translation(shape1.GetTarget()->GetOriginPosition()) * shape1.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape1.GetTarget()->GetScale()) * c4;
 	c4.x = c4.x + (shape1.GetTarget()->GetScale().x) *1.5f *0.5f;
 	c4.z = c4.z + (shape1.GetTarget()->GetScale().z) *3.5f *0.5f;
-
+#if PS3_BUILD
+	lst_Car_Edge.push_back(Line(c1,c2));
+	lst_Car_Edge.push_back(Line(c2,c3));
+	lst_Car_Edge.push_back(Line(c3,c4));
+	lst_Car_Edge.push_back(Line(c4,c1));
+#endif
+#if WINDOWS_BUILD
 	lst_Car_Edge.emplace_back(c1,c2);
 	lst_Car_Edge.emplace_back(c2,c3);
 	lst_Car_Edge.emplace_back(c3,c4);
 	lst_Car_Edge.emplace_back(c4,c1);
-
+#endif
 }
 
 // Add the lines of track's left and right 
@@ -942,13 +911,23 @@ void PhysicsEngine::AddTrackEdge(PhysicsNode & shape1)
 	//Add the lines of track's left
 	for(int i = 0; i<(tn/2)-1;i++ )
 	{
+#ifdef WINDOWS_BUILD
 		lst_Track_Edge.emplace_back(vertex_l[i].GetPosition(), vertex_l[i+1].GetPosition());
+#endif
+#ifdef PS3_BUILD
+		lst_Track_Edge.push_back(Line(vertex_l[i].GetPosition(), vertex_l[i+1].GetPosition()));
+#endif
 	}
 
 	//Add the lines of track's right
 	for(int j = tn/2; j<tn-1;j++)
 	{
+#ifdef WINDOWS_BUILD
 		lst_Track_Edge.emplace_back(vertex_l[j].GetPosition(), vertex_l[j+1].GetPosition());
+#endif
+#ifdef PS3_BUILD
+		lst_Track_Edge.push_back(Line(vertex_l[j].GetPosition(), vertex_l[j+1].GetPosition()));
+#endif
 	}
 
 }
@@ -959,9 +938,9 @@ bool PhysicsEngine::TrackDetection()
 {
 	int LineCollisionNumber = 0;
 
-	for(auto it1=lst_Car_Edge.begin();it1!=lst_Car_Edge.end();it1++)
+	for(vector<Line>::iterator it1=lst_Car_Edge.begin();it1!=lst_Car_Edge.end();it1++)
 	{
-		for(auto it2=lst_Track_Edge.begin();it2!=lst_Track_Edge.end();it2++)
+		for(vector<Line>::iterator it2=lst_Track_Edge.begin();it2!=lst_Track_Edge.end();it2++)
 		{
 			if(LineLineIntersection(*it1,*it2))
 			{
@@ -984,13 +963,13 @@ float Dist(const T3Vector3& a, const T3Vector3& b)
 	return (a-b).Length();
 }
 
-	const unsigned _EXIT_ITERATION_LIMIT =50;
-	const float _EXIT_THRESHOLD = 0.0001f;
-	struct EPA_Point
-	{
-		T3Vector3 v;
-		BOOL operator==(const EPA_Point &a) const { return v == a.v; }
-	};
+const unsigned _EXIT_ITERATION_LIMIT =50;
+const float _EXIT_THRESHOLD = 0.0001f;
+struct EPA_Point
+{
+	T3Vector3 v;
+	bool operator==(const EPA_Point &a) const { return v == a.v; }
+};
 
 	//the edge to store points of triangle
 	struct EPA_Edge
@@ -1016,11 +995,13 @@ float Dist(const T3Vector3& a, const T3Vector3& b)
 
 			Triangle_normal= T3Vector3::Cross((a-b),(a-c));
 			Triangle_normal.Normalise();
-		}
+	}
 	};
-	
+
 	std::vector<EPA_Triangle> lst_EPA_Triangle;
 	std::vector<EPA_Edge> lst_EPA_Edge;
+#ifdef WINDOWS_BUILD
+	// TODO - KYLE - convert to basic c++ for PS3 compatability
 	auto addEdge = [&](const T3Vector3 &a, const T3Vector3 &b) -> void
 	{
 		for(auto it = lst_EPA_Edge.begin(); it != lst_EPA_Edge.end();it++)
@@ -1035,8 +1016,9 @@ float Dist(const T3Vector3& a, const T3Vector3& b)
 		}
 		lst_EPA_Edge.push_back(EPA_Edge(a, b));
 	};
+#endif
 
-
+	
 bool PhysicsEngine::EPA(PhysicsNode& shape1, PhysicsNode& shape2, CollisionData* data)
 {
 
@@ -1054,10 +1036,18 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1, PhysicsNode& shape2, CollisionData*
 	return false;
 
 	// add the triangles from GJK to the list
+#ifdef WINDOWS_BUILD
 	lst_EPA_Triangle.emplace_back(a,b,c);
 	lst_EPA_Triangle.emplace_back(a,c,d);
 	lst_EPA_Triangle.emplace_back(b,c,d);
 	lst_EPA_Triangle.emplace_back(a,b,d);
+#endif
+#ifdef PS3_BUILD
+	lst_EPA_Triangle.push_back(EPA_Triangle(a,b,c));
+	lst_EPA_Triangle.push_back(EPA_Triangle(a,c,d));
+	lst_EPA_Triangle.push_back(EPA_Triangle(b,c,d));
+	lst_EPA_Triangle.push_back(EPA_Triangle(a,b,d));
+#endif
 
 
 	// Fix Triangle winding order
@@ -1080,7 +1070,7 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1, PhysicsNode& shape2, CollisionData*
 	{
 		if(_EXIT_ITERATION_NUM++ >= _EXIT_ITERATION_LIMIT) 
 			break;
-
+	
 		if (lst_EPA_Triangle.size() > 500)
 			break;
 
@@ -1089,7 +1079,7 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1, PhysicsNode& shape2, CollisionData*
 		std::vector<EPA_Triangle>::iterator closest_triangle = lst_EPA_Triangle.begin();
 
 		// find the initial closest triangle to origin
-		for(auto it = lst_EPA_Triangle.begin(); it != lst_EPA_Triangle.end(); it++)
+		for(vector<EPA_Triangle>::iterator it = lst_EPA_Triangle.begin(); it != lst_EPA_Triangle.end(); it++)
 		{
 			float distance = fabs(T3Vector3::Dot (it->Triangle_normal, it->Point[0].v));
 
@@ -1144,21 +1134,21 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1, PhysicsNode& shape2, CollisionData*
 		}
 
 		// remove the triangles which can be seen by the new point
-		for(auto it= lst_EPA_Triangle.begin(); it!= lst_EPA_Triangle.end();)
+		for(vector<EPA_Triangle>::iterator it= lst_EPA_Triangle.begin(); it!= lst_EPA_Triangle.end();)
 		{
 			//can 'it' be seen from the new point?
 			if(T3Vector3::Dot(it->Triangle_normal, (new_point - it->Point[0].v)) > _EXIT_THRESHOLD)
 			{
 				if (new_point == it->Point[0].v || new_point == it->Point[1].v)
-				{
+			{
 					printf("INVALID TRIANGLE!!");
 					return false;
 				}
-
+#ifdef WINDOWS_BUILD
 				addEdge(it->Point[0].v, it->Point[1].v);
 				addEdge(it->Point[1].v, it->Point[2].v);
 				addEdge(it->Point[2].v, it->Point[0].v);
-
+#endif
 				it = lst_EPA_Triangle.erase(it);
 				continue;
 			}
@@ -1166,9 +1156,14 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1, PhysicsNode& shape2, CollisionData*
 		}
 
 		// add new triangles which contains new point to the list 
-		for(auto it= lst_EPA_Edge.begin(); it!= lst_EPA_Edge.end();it++)
-		{			
+		for(vector<EPA_Edge>::iterator it= lst_EPA_Edge.begin(); it!= lst_EPA_Edge.end();it++)
+		{
+#ifdef WINDOWS_BUILD
 			lst_EPA_Triangle.emplace_back(new_point, it->Point[0].v, it->Point[1].v);
+#endif
+#ifdef PS3_BUILD
+			lst_EPA_Triangle.push_back(EPA_Triangle(new_point, it->Point[0].v, it->Point[1].v));
+#endif
 		}
 
 		lst_EPA_Edge.clear();
@@ -1240,7 +1235,6 @@ void    PhysicsEngine::DrawDebug() {
 void PhysicsEngine::OnCollision(PhysicsNode& p1, PhysicsNode& p2)
 {
 	if (gameClass != NULL) {
-		gameClass->CollisionBetween(p1.GetGameEntity(),p2.GetGameEntity());
-	}
+	gameClass->CollisionBetween(p1.GetGameEntity(),p2.GetGameEntity());
 }
-#endif
+}
