@@ -122,7 +122,7 @@ void TrackSegment::Draw(Shader* s)
 {
 	numVertices = numVertices * 2;
 
-	type = PrimitiveType::LINE_STRIP;
+	type = PrimitiveType::TRIANGLE_STRIP;
 	cellGcmAddressToOffset(&trackMesh->x, &vertexOffsets[VertexAttributes::POSITION]);
 	cellGcmAddressToOffset(&trackMesh->nX, &vertexOffsets[VertexAttributes::NORMAL]);
 	cellGcmAddressToOffset(&trackMesh->rgba, &vertexOffsets[VertexAttributes::COLOUR]);
