@@ -242,7 +242,7 @@ void RacerGame::Update() {
 	GameStateManager::Input()->GetActiveController();
 	
 
-	if(car->GetCarNode().GetLinearVelocity().x>0)
+	/*if(car->GetCarNode().GetLinearVelocity().x>0)
 	{
 		FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(-car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0) );
 		FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(-car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
@@ -256,7 +256,7 @@ void RacerGame::Update() {
 		BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
 		BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
 	
-	}
+	}*/
 
 	for (unsigned int i = 0; i < pickup.size(); i++) {
 		//PhysicsNode pn = pickup[i]->GetPhysicsNode();
