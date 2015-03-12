@@ -73,6 +73,8 @@ public:
 	void UnloadShaders();
 	void UnloadAssets();
 
+	unsigned int GetTextMeshMemory();
+
 	void DrawDeferredLights(bool on) {drawDeferredLights = on;}
 
 	unsigned char* GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue);

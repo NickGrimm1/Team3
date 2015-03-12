@@ -28,7 +28,7 @@ void LoadingScreen::Update() {
 		isLoading = false;
 	}
 }
-
+#if WINDOWS_BUILD
 void LoadingScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
 	if (!isLoading) {
 		switch (type) {
@@ -43,3 +43,4 @@ void LoadingScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents
 		}
 	}
 }
+#endif

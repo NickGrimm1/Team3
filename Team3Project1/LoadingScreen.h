@@ -14,9 +14,9 @@ public:
 	virtual void LoadContent();
 	virtual void Update();
 	virtual void UnloadContent() {}
-
+#if WINDOWS_BUILD
 	virtual void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key);
-
+#endif
 	// Input Listener methods - not implementing
 #if WINDOWS_BUILD
 	virtual void MouseMoved(T3Vector2& finish) {}

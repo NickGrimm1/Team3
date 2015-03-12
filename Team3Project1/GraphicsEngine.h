@@ -53,6 +53,7 @@ public:
 		return renderer->DropRenderContextForThread();
 	}
 	int GetFrameRate() { return frameRate; }
+
 	unsigned int GetTextMeshMemory() const {return renderer->GetTextMeshMemory();}
 #pragma region Entry/Exit
 	/**
