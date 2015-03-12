@@ -50,6 +50,7 @@ struct LightData {
 class Renderer : public OGLRenderer
 {
 public:
+	static int count;
 	Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>& sceneNodesVec, vector<DrawableEntity2D*>& overlayVec);
 	~Renderer(void);
 
