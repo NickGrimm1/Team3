@@ -144,6 +144,8 @@ public:
 
 #if PS3_BUILD
 	static void threadExecution(uint64_t arg);
+	Renderer* renderer;
+	Renderer* GetRenderer(){return renderer;}
 #endif
 
 private:
@@ -167,8 +169,9 @@ private:
 	*/
 	void AddLight(Light* light);
 
-	Renderer* renderer;
+	
 #if WINDOWS_BUILD
+	Renderer* renderer;
 	Frustum frameFrustum;
 #endif
 	Camera* camera;

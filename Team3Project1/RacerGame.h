@@ -33,7 +33,10 @@ public:
 	virtual void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key);
 #endif
 	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button) {};
-	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) {};
+	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount)
+	{
+		camera->AddMovement(T3Vector3(amount.x,0,amount.y));
+	};
 	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID){}
 
 	void SetScore(int value){score+=value;}

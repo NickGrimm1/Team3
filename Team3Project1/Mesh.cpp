@@ -52,6 +52,11 @@ void Mesh::Draw(Shader* shader)
 	if(numVertices == 0)
 		return;
 
+	if(numVertices > 500)
+	{
+		bool a = true;
+	}
+
 	cout << "Drawing Mesh" <<numVertices <<endl;
 	int shader_idx;
 

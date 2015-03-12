@@ -68,7 +68,7 @@ void RacerGame::LoadContent() {
 	hud = new HudTestScreen();
 	GameStateManager::Instance()->AddGameScreen(hud);
 	
-	scoreTexture = GameStateManager::Assets()->LoadTexture(this, "score", 0);
+	scoreTexture = GameStateManager::Assets()->LoadTexture(this, "NovaCarUV", 0);
 	timeTexture = GameStateManager::Assets()->LoadTexture(this, "time", 0);
 
 	//ent = new DrawableEntity3D(
@@ -98,7 +98,7 @@ void RacerGame::LoadContent() {
 
 
 	camera = new FreeCamera();
-	camera->SetPosition(T3Vector3(10,50,400));
+	camera->SetPosition(T3Vector3(40,50,1200));
 	//checkpoint= new CheckPoint(10);
 	//checkpoint->SetPhysics(10,'c');
 	//checkpoint->SetType('g');
@@ -238,7 +238,11 @@ void RacerGame::LoadContent() {
 }
 
 void RacerGame::Update() { 
-	/*if(car->GetCarNode().GetLinearVelocity().x>0)
+
+	GameStateManager::Input()->GetActiveController();
+	
+
+	if(car->GetCarNode().GetLinearVelocity().x>0)
 	{
 		FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(-car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0) );
 		FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(-car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
@@ -252,7 +256,7 @@ void RacerGame::Update() {
 		BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
 		BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
 	
-	}*/
+	}
 
 	for (unsigned int i = 0; i < pickup.size(); i++) {
 		//PhysicsNode pn = pickup[i]->GetPhysicsNode();
@@ -326,7 +330,7 @@ void RacerGame::Start(){
 	cout << "RacerGame: Start()" << endl;
 	Gold_cion * gold_cion= new Gold_cion(20.0f);
 	cout << "RacerGame: Made a Gold_cion " << endl;
-	gold_cion->SetOriginPosition(T3Vector3(50.0f,0.0f,0.0f));
+	gold_cion->SetOriginPosition(T3Vector3(50.0f,50.0f,0.0f));
 	gold_cion->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
 
 	gold_cion->SetPhysics(8.0f,'p',T3Vector3(50.0f,0.0f,0.0f),Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
@@ -1221,14 +1225,14 @@ case KeyboardEvents::KEYBOARD_7:
 
 
 				if(car->GetCarNode().GetLinearVelocity().x>=0){
-				car->GetCarNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
+			  car->GetCarNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 				car->GetFrontLeftTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 				car->GetFrontRightTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 				car->GetBackLeftTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 				car->GetBackRightTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 				}
 				if(car->GetCarNode().GetLinearVelocity().x<0){
-				 car->GetCarNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
+			  car->GetCarNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
 					 car->GetFrontLeftTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 					 car->GetFrontRightTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 					 car->GetBackLeftTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
@@ -1259,7 +1263,7 @@ case KeyboardEvents::KEYBOARD_7:
 		    car->GetFrontRightTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 			car->GetBackLeftTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 		    car->GetBackRightTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
-			car->GetCarNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
+			  car->GetCarNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 		}			
 
 	 T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
