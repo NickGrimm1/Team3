@@ -5,6 +5,7 @@
 #include "../Framework/MyGame.h"
 #include "FreeCamera.h"
 #include "ChaseCamera.h"
+
 #include "Vehicle_Wheel.h"
 #include "VehiclePhysicsNode.h"
 #include "CheckPoint.h"
@@ -13,7 +14,7 @@
 #include "HudTestScreen.h"
 #include "GameStateManager.h"
 //#include "../Framework/SoundManager.h"
-
+class Vehicle;
 class RacerGame : public GameScreen3D
 {
 public:
