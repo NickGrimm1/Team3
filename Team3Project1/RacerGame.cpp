@@ -41,9 +41,8 @@ RacerGame::RacerGame(void)
 	PlayTime=30;
 	timeOrScore=0;
 
-
-
-		
+	DebugOverlay* debug = new DebugOverlay();
+	GameStateManager::Instance()->AddGameScreen(debug);
 
 
 	//Strack = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2],5,50.f);
