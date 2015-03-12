@@ -484,10 +484,11 @@ void  PhysicsEngine::SortandSweep()
 							CollisionHelper::AddCollisionImpulse(first, second, *data);
 				}
 					}
-					isDrop = true;
+					second.isDrop = true;
 				}
+
 				// keeping the vehicle on the track!
-				else if(!isDrop)
+				else if(!second.GetIsDrop())
 					{
 					float floor_y = first.GetPosition().y;
 					float car_y = second.GetPosition().y;
@@ -503,9 +504,10 @@ void  PhysicsEngine::SortandSweep()
 				}
 					   }
 			else{
+			
 					if(CollisionDetection(first, second))
 			    {
-
+				//OnCollision(first,second);
 				if(first.GetIsCollide()==false && second.GetIsCollide ()==true)
 					      {
 					OnCollision(first,second);
@@ -513,7 +515,34 @@ void  PhysicsEngine::SortandSweep()
 					//OnCollision(first,second);
 					//}
 					    }
+				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
+				{
+					//OnCollision(first,second);
+					//OnCollision(first,second);
+						/*if(check==true)
+					{
 					
+					   if(first.GetType()=='c'||second.GetType()=='c')
+					   {
+						if(first.GetGameEntity()){
+						RacerGame::update=1;}
+					   }
+
+					   else{
+						if(second.GetGameEntity())
+					      {
+					RacerGame::update=1;
+						  }
+					    }
+					
+						check=false;
+					}*/
+					/*first.SetLinearVelocity(T3Vector3(0,0,0));
+					first.SetForce(T3Vector3(0,0,0));
+                    second.SetLinearVelocity(T3Vector3(0,0,0));
+					second.SetForce(T3Vector3(0,0,0));*/
+				}
+			
 				if ((first.GetIsCollide()==true && second.GetIsCollide ()==true) && ((first.Getcar_wheel()==true && second.Getcar_wheel()==true)))
 				{
 			
@@ -532,7 +561,7 @@ void  PhysicsEngine::SortandSweep()
 						if(first.Getplanecollision()==true && second.Getplanecollision()==false)
 
 						{
-							first.SetUseGravity(false);
+							/*first.SetUseGravity(false);
 							second.SetUseGravity(false);
 							T3Vector3 temp1,temp2;
 							temp1 =  first.GetLinearVelocity();
@@ -543,29 +572,19 @@ void  PhysicsEngine::SortandSweep()
 							temp2.y = 0;
 							second.SetLinearVelocity(temp2);
 													
-			                second.SetPosition(second.GetPosition() + T3Vector3(0, 2.0f, 0));
+			                second.SetPosition(second.GetPosition() + T3Vector3(0, 2.0f, 0));*/
 
 			}
 				}
 				}
 				}
-				//	if(CollisionDetection(first, second))
-			 //   {
-				////cout << "GJK passed" << endl;
-				//if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
-				//{
-				//	//cout << "Collision" << endl;
-				//	first.SetLinearVelocity(T3Vector3(0,0,0));
-				//	first.SetForce(T3Vector3(0,0,0));
-    //                second.SetLinearVelocity(T3Vector3(0,0,0));
-				//	second.SetForce(T3Vector3(0,0,0));
-				//}
-				//}
+			}
+				
 
 						}
 				}
 		}
-	}
+
 }
 	
 
@@ -614,11 +633,11 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 			        	}					
 					}
 
-					isDrop = true;
+					second.isDrop = true;
 				}
 
 				// keeping the vehicle on the track!
-				else if(!isDrop)
+				else if(!second.GetIsDrop())
 				{
 					float floor_y = first.GetPosition().y;
 					float car_y = second.GetPosition().y;
@@ -640,7 +659,7 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 				//OnCollision(first,second);
 				if(first.GetIsCollide()==true && second.GetIsCollide ()==true)
 				{
-					OnCollision(first,second);
+					//OnCollision(first,second);
 					//if(second.GetType()=='f'){
 					//OnCollision(first,second);
 					//}
@@ -871,17 +890,17 @@ void PhysicsEngine::AddCarEdge(PhysicsNode & shape1)
 	c4= shape1.GetPosition();
 
 	//c1 = T3Matrix4::Translation(shape1.GetTarget()->GetOriginPosition()) * shape1.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape1.GetTarget()->GetScale()) * c1;
-	c1.x = c1.x + (shape1.GetTarget()->GetScale().x) *1.5f *0.5f;
-	c1.z = c1.z + (shape1.GetTarget()->GetScale().z) *3.5f *0.5f;
+	c1.x = c1.x + (shape1.GetTarget()->GetScale().x) *1.5f;
+	c1.z = c1.z + (shape1.GetTarget()->GetScale().z) *3.5f;
 	//c2 = T3Matrix4::Translation(shape1.GetTarget()->GetOriginPosition()) * shape1.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape1.GetTarget()->GetScale()) * c2;
-	c2.x = c2.x - (shape1.GetTarget()->GetScale().x) *1.5f *0.5f;
-	c2.z = c2.z + (shape1.GetTarget()->GetScale().z) *3.5f *0.5f;
+	c2.x = c2.x - (shape1.GetTarget()->GetScale().x) *1.5f;
+	c2.z = c2.z + (shape1.GetTarget()->GetScale().z) *3.5f;
 	//c3 = T3Matrix4::Translation(shape1.GetTarget()->GetOriginPosition()) * shape1.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape1.GetTarget()->GetScale()) * c3;
-	c3.x = c3.x - (shape1.GetTarget()->GetScale().x) *1.5f *0.5f;
-	c3.z = c3.z - (shape1.GetTarget()->GetScale().z) *3.5f *0.5f;
+	c3.x = c3.x - (shape1.GetTarget()->GetScale().x) *1.5f;
+	c3.z = c3.z - (shape1.GetTarget()->GetScale().z) *3.5f;
 	//c4 = T3Matrix4::Translation(shape1.GetTarget()->GetOriginPosition()) * shape1.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape1.GetTarget()->GetScale()) * c4;
-	c4.x = c4.x + (shape1.GetTarget()->GetScale().x) *1.5f *0.5f;
-	c4.z = c4.z + (shape1.GetTarget()->GetScale().z) *3.5f *0.5f;
+	c4.x = c4.x + (shape1.GetTarget()->GetScale().x) *1.5f;
+	c4.z = c4.z + (shape1.GetTarget()->GetScale().z) *3.5f;
 #if PS3_BUILD
 	lst_Car_Edge.push_back(Line(c1,c2));
 	lst_Car_Edge.push_back(Line(c2,c3));
@@ -963,13 +982,13 @@ float Dist(const T3Vector3& a, const T3Vector3& b)
 	return (a-b).Length();
 }
 
-const unsigned _EXIT_ITERATION_LIMIT =50;
-const float _EXIT_THRESHOLD = 0.0001f;
-struct EPA_Point
-{
-	T3Vector3 v;
+	const unsigned _EXIT_ITERATION_LIMIT =50;
+	const float _EXIT_THRESHOLD = 0.0001f;
+	struct EPA_Point
+	{
+		T3Vector3 v;
 	bool operator==(const EPA_Point &a) const { return v == a.v; }
-};
+	};
 
 	//the edge to store points of triangle
 	struct EPA_Edge

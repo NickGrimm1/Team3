@@ -95,9 +95,9 @@ void VehicleTestingScreen::LoadContent() {
 	camera = new FreeCamera();
 
 
-	gold_cion= new Gold_cion(5);
-	gold_cion->SetPhysics(5);
-	AddDrawable(gold_cion);
+	//gold_cion= new Gold_cion(5);
+	//gold_cion->SetPhysics(5);
+	//AddDrawable(gold_cion);
 
 
 	//checkpoint= new CheckPoint(10);
@@ -135,10 +135,10 @@ void VehicleTestingScreen::LoadContent() {
 
 void VehicleTestingScreen::Update() { 
 
-	
 
 
 	
+
 
 //	FrontLeftTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 //	FrontRightTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
@@ -181,13 +181,13 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 		case KeyboardEvents::KEYBOARD_W:
 		{
 				//camera->AddMovement(T3Vector3(1,0,0));
-			
+
 			car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF() +0.4f);
             if(car->GetVehiclePhysicsNode()->GetF()>100)
 			{
 			  car->GetVehiclePhysicsNode()->SetF(100);
 			}
-
+		
 			/*f=f+0.4f;
 				   if(f>100){
 				   f=100;
@@ -232,9 +232,9 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 				car->GetBackLeftTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 				car->GetBackRightTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 
-			
 
-				
+		        
+
 		}
 				else
 			{
@@ -243,14 +243,14 @@ void VehicleTestingScreen::KeyboardEvent(KeyboardEvents::EventType type, Keyboar
 					 car->GetFrontRightTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 					 car->GetBackLeftTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 				     car->GetBackRightTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
-			
+				
 				}
+			
 		
-
 
 		}		
+
 		
-			
 			
 			break;
 		case KeyboardEvents::KEYBOARD_D:

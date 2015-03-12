@@ -66,7 +66,7 @@ void CheckPoint::SetPhysics(float size,char type,T3Vector3 position,const Quater
 	physicsNode->SetCollisionVolume(new CollisionAABB(T3Vector3(0.15f*size,size,10.0f*size)));
 	physicsNode->SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
 
-	physicsNode->SetIsCollide(true);
+	physicsNode->SetIsCollide(false);
 	physicsNode->Setcar_wheel(true);
 
     ConnectToSystems(); 

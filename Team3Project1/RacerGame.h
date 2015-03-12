@@ -10,9 +10,7 @@
 #include "CheckPoint.h"
 #include "TrackSegment.h"
 #include "Gold_cion.h"
-#if WINDOWS_BUILD
 #include "HudTestScreen.h"
-#endif
 #include "GameStateManager.h"
 //#include "../Framework/SoundManager.h"
 
@@ -66,9 +64,8 @@ public:
 	//sam
 	Texture* scoreTexture;
 	Texture* timeTexture;
-#if WINDOWS_BUILD
 	HudTestScreen* hud;
-#endif
+
 	static float g;
 	static float gx;
 	TrackSegment* Strack;
@@ -77,38 +74,45 @@ public:
 	vector<DrawableEntity3D*> allEntities;
 	vector<TrackSegment*> TrackSegmentVector;
 	vector<GameEntity*> checkPoint;
-	vector<GameEntity*> pickup;
+	vector<Gold_cion*> pickup;
 
 	 virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
 		  if(obj1->GetType()=='g')
 		  {
+			  if(obj1->GetPhysicsNode().GetIsCollide()==false){
+			   CreateTrack();
+			   	GameStateManager::Graphics()->RemoveDrawable(checkPoint[0]);
+	            checkPoint[0]->DisconnectFromSystems();
+	            checkPoint.erase(checkPoint.begin());
+			  }
 			  obj1->GetPhysicsNode().SetIsCollide(false);
-			  RacerGame::update=1;
+			//  RacerGame::update=1;
+		 
 		  }
-		    if(obj2->GetType()=='g')
+		 /*   if(obj2->GetType()=='g')
 		  {
 			  obj2->GetPhysicsNode().SetIsCollide(false);
 			
 			  RacerGame::update=1;
 			  
-		  }
+		  }*/
 			 if(obj1->GetType()=='d')
 		  {
-			  obj2->GetPhysicsNode().SetIsCollide(false);
-			  RacerGame::update=2;
+			  obj1->GetPhysicsNode().SetIsCollide(false);
+			  //RacerGame::update=2;
 			    SettimeOrScore(1);
-			  RacerGame::update=2;
-			  
+			  //RacerGame::update=2;
+			  DeleteTrack();
 			  
 		  }
 			  if(obj1->GetType()=='p')
 		  {
-			  obj2->GetPhysicsNode().SetIsCollide(false);
+			  obj1->GetPhysicsNode().SetIsCollide(false);
 			  SetScore(1);
 #ifdef WINDOWS_BUILD
 			 // SoundManager::AddSound(SOUNDSDIR"Tokyo Drift2.wav");
 			 // GameStateManager::Audio()->PlaySoundW(GameStateManager::Audio()->GetSound(SOUNDSDIR"Tokyo Drift2.wav"),SOUNDPRIORITY_ALWAYS);
-			  GameStateManager::Audio()->PlaySound(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
+			 // GameStateManager::Audio()->PlaySound(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
 #endif			  
 			  cout<< "total point ="<<GetScore()<<endl; 
 			  GameStateManager::Graphics()->RemoveDrawable(obj1);
@@ -117,11 +121,11 @@ public:
 		  }
 			   if(obj1->GetType()=='t')
 		  {
-			  obj2->GetPhysicsNode().SetIsCollide(false);
+			  obj1->GetPhysicsNode().SetIsCollide(false);
 			  SettimeOrScore(-(GettimeOrScore()));
 			  SetPlayTime(30);
-			  GameStateManager::Graphics()->RemoveDrawable(obj2);
-	          obj2->DisconnectFromSystems();
+			  GameStateManager::Graphics()->RemoveDrawable(obj1);
+	          obj1->DisconnectFromSystems();
 		  }
 			   		  
    }

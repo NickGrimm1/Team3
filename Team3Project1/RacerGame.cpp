@@ -62,10 +62,9 @@ RacerGame::~RacerGame(void)
 
 void RacerGame::LoadContent() {
 	
-	//Mesh* coneMesh = Mesh::GenerateCone(20);
 	quad = GameStateManager::Assets()->LoadCylinder(this, 20);
 	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
-
+	
 	hud = new HudTestScreen();
 	GameStateManager::Instance()->AddGameScreen(hud);
 	
@@ -99,26 +98,18 @@ void RacerGame::LoadContent() {
 
 
 	camera = new FreeCamera();
-
-	/*checkpoint= new CheckPoint(10);
-	checkpoint->SetPhysics(10,'c');
-	checkpoint->SetType('g');
-	checkpoint->GetPhysicsNode().SetPGE(checkpoint);
-	AddDrawable(checkpoint);*/
-	
-	
-	
-	
-	
-	
-
+	camera->SetPosition(T3Vector3(10,50,400));
+	//checkpoint= new CheckPoint(10);
+	//checkpoint->SetPhysics(10,'c');
+	//checkpoint->SetType('g');
+	//checkpoint->GetPhysicsNode().SetPGE(checkpoint);
+	//AddDrawable(checkpoint);
 	
 	//add road
 	
 	Texture* grassTex2 = GameStateManager::Assets()->LoadTexture(this, "trackTex", 0);
-	Shader* sh = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
 	GameStateManager::Graphics()->GetRenderContext();
-	TrackSegment* trackr = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5, 50.0f);
+	TrackSegment* trackr = new TrackSegment(T3Vector3(-100.0f,0.0f,0.0f),T3Vector3(0.0f,0.0f,0.0f),T3Vector3(100.0f,0.0f,0.0f), 5, 50.0f);
 	
 	//push back track
 	//TrackSegmentVector.push_back(trackr);
@@ -126,20 +117,23 @@ void RacerGame::LoadContent() {
 	PhysicsNode* proad = new PhysicsNode();
 	GameEntity* road= new GameEntity(proad);
 		road->SetMesh(trackr);
-		road->SetShader(sh);
+		road->SetShader(0);
 		road->SetTexture(grassTex2);
 		road->SetBumpTexture(NULL);
 		road->SetBoundingRadius(800.0f);
-		road->SetOriginPosition(T3Vector3(-200.0f,-20.0f,0.0f));
+		road->SetOriginPosition(T3Vector3(0.0f,-20.0f,0.0f));
 		road->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
 		road->SetScale(T3Vector3(1.0f,1.0f,1.0f));
 		road->GetPhysicsNode().SetMass(5.0f);
 		road->GetPhysicsNode().SetMesh(trackr);
 		road->GetPhysicsNode().SetInverseMass(0.0f);
 		road->GetPhysicsNode().SetUseGravity(false);
+		road->GetPhysicsNode().SetXstart(road->GetPhysicsNode().GetPosition().x-200);
+		road->GetPhysicsNode().SetXend(road->GetPhysicsNode().GetPosition().x+200);
 		road->GetPhysicsNode().SetIsCollide(true);
 	    road->GetPhysicsNode().Setcar_wheel(true);
-		road->GetPhysicsNode().SetPosition(T3Vector3(-200.0f,-20.0f,0.0f));
+		road->GetPhysicsNode().Setplanecollision(true);
+		road->GetPhysicsNode().SetPosition(T3Vector3(0.0f,-20.0f,0.0f));
 		road->GetPhysicsNode().SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
 		road->ConnectToSystems();
 		AddDrawable(road);
@@ -161,7 +155,7 @@ void RacerGame::LoadContent() {
 	//chasecamera->AddYaw(500);
 	//chasecamera->AddPitch(90);
 	//car->SetPhysics(5,(vpn->GetCar()));
-
+	
 	vpn->SetPGE(car);
 	vpn->getRFW()->SetPGE(car);
 	vpn->getRFW()->SetType('z');
@@ -224,26 +218,52 @@ void RacerGame::LoadContent() {
 	tempPosition = T3Vector3(0.0f,350.0f,-800.0f);
 	PlayerPosition=T3Vector3(500.0f,100.0f,-800.0f);
 
-	camera->SetPosition(T3Vector3(0.0f,10.0f, 80.0f));
+	//camera->SetPosition(T3Vector3(0.0f,10.0f, 80.0f));
 	//camera->SetYaw(180.0f);
-	GameStateManager::Graphics()->SetCamera(chasecamera);
+	//GameStateManager::Graphics()->SetCamera(camera);
 
-	//GameStateManager::Graphics()->SetCamera(chasecamera);
+	GameStateManager::Graphics()->SetCamera(chasecamera);
 }
 
 void RacerGame::Update() { 
-
-	/*if(car->GetCarNode().GetLinearVelocity().Length()>=15)
+	if(car->GetCarNode().GetLinearVelocity().x>0)
 	{
-		car->GetCarNode().SetForce(T3Vector3(0,0,0));
+		FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(-car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0) );
+		FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(-car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
+		BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(-car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
+		BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(-car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
+	}
+	if(car->GetCarNode().GetLinearVelocity().x<0)
+	{
+	    FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
+		FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
+		BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
+		BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
 	
-	}*/
-	//if(((abs(car->GetCarNode().GetLinearVelocity().x)+abs(car->GetCarNode().GetLinearVelocity().z))<0.5)&& f!=0)
-	//	
-	//{
- // f=0;
- // //cout<<"reset f"<<endl;
-	//}
+	}
+
+	for (unsigned int i = 0; i < pickup.size(); i++) {
+		//PhysicsNode pn = pickup[i]->GetPhysicsNode();
+		pickup[i]->GetPhysicsNode().SetOrientation(Quaternion::AxisAngleToQuaterion(T3Vector3(0.0f, 1.0f, 0.0f), 0.5f) * pickup[i]->GetPhysicsNode().GetOrientation());
+		
+		if (pickup[i]->GetUpDown()) {
+			if (pickup[i]->GetPhysicsNode().GetPosition().y < 8.0f)
+				pickup[i]->GetPhysicsNode().SetPosition(pickup[i]->GetPhysicsNode().GetPosition() + T3Vector3(0.0f, 0.05f, 0.0f));
+			else {
+				pickup[i]->FlipUpDown();
+				//pn.SetPosition(pn.GetPosition + T3Vector3(0.0f, -1.0f, 0.0f));
+			}
+		}
+		else {
+			if (pickup[i]->GetPhysicsNode().GetPosition().y > 3.0f)
+				pickup[i]->GetPhysicsNode().SetPosition(pickup[i]->GetPhysicsNode().GetPosition() + T3Vector3(0.0f, -0.05f, 0.0f));
+			else {
+				pickup[i]->FlipUpDown();
+				//pn.SetPosition(pn.GetPosition + T3Vector3(0.0f, 1.0f, 0.0f));
+			}
+		}
+	}
+
 	if(f>0){
 		f=f-0.35f;
 	if(f<0)
@@ -278,6 +298,7 @@ void RacerGame::Update() {
 
 	update=0;
 	}
+
 	if((Time-60)==0){
 	SetPlayTime(-1);
 	Time=0;
@@ -286,43 +307,24 @@ void RacerGame::Update() {
 #endif
 	}
 	Time+=1;
-
-	//GameScreen2D::AddDrawable(new DrawableText2D(
-	//	0.0f, 
-	//	0.0f, 
-	//	0, 
-	//	0.5f, 
-	//	0.1f, 
-	//	"HELLO WORLD!!!!!!!!!", 
-	//	f,
-	//	0,
-	//	T3Vector2(0.5f, 0.5f),
-	//	T3Vector4(1.0f,1.0f,1.0f,0.7f)));
-
-
 }
 void RacerGame::Start(){
-
-	Gold_cion * gold_cion= new Gold_cion(8.0f);
-
+	cout << "RacerGame: Start()" << endl;
+	Gold_cion * gold_cion= new Gold_cion(20.0f);
+	cout << "RacerGame: Made a Gold_cion " << endl;
 	gold_cion->SetOriginPosition(T3Vector3(50.0f,0.0f,0.0f));
 	gold_cion->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
-	gold_cion->SetTexture(scoreTexture);
 
 	gold_cion->SetPhysics(8.0f,'p',T3Vector3(50.0f,0.0f,0.0f),Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
 	
 	gold_cion->SetType('p');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 	gold_cion->GetPhysicsNode().SetPGE(gold_cion);
-
-	//T3Vector4 color(1.f,1.f,1.f,0.f);
-	//gold_cion->GetMesh()->SetColour(color);
-
+	cout << "RacerGame: Set Gold_cion params" << endl;
 
 	AddDrawable(gold_cion);
+	cout << "RacerGame: Added Gold_cion to drawables" << endl;
 	pickup.push_back(gold_cion);
-
-
-
+	cout << "RacerGame: Pushed Gold_cion to back of pickup vector" << endl;
 
 	//starting track
 	float angle =0.0f;
@@ -474,7 +476,7 @@ void RacerGame::Start(){
 	//T3Vector4* color= new T3Vector4(0.5f,0.5f,0.5f,0.2f);
 	//checkpoint3->GetMesh()->SetColour(color);
 	//checkpoint2->GetPhysicsNode().SetPGE(checkpoint2);
-	//AddDrawable(checkpoint3);
+	AddDrawable(checkpoint3);
 	checkPoint.push_back(checkpoint3);
 
 	CheckPoint* checkpoint2= new CheckPoint(10.0f);
@@ -486,7 +488,7 @@ void RacerGame::Start(){
 	checkpoint2->SetType('d');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 	checkpoint2->GetPhysicsNode().SetPGE(checkpoint2);
 	//checkpoint2->GetPhysicsNode().SetPGE(checkpoint2);
-	//AddDrawable(checkpoint2);
+	AddDrawable(checkpoint2);
 	checkPoint.push_back(checkpoint2);
 	//starting track
 }
@@ -510,14 +512,16 @@ void RacerGame::DeleteTrack(){
 	pickup[0]->DisconnectFromSystems();
 	pickup.erase(pickup.begin());
 	}
+
 	RemoveDrawable(allEntities[0]);
 	RemoveDrawable(allEntities[1]);
 	allEntities.erase(allEntities.begin());
 	allEntities.erase(allEntities.begin());
 	GameStateManager::Graphics()->RemoveDrawable(checkPoint[0]);
 	checkPoint[0]->DisconnectFromSystems();
-	GameStateManager::Graphics()->RemoveDrawable(checkPoint[1]);
-	checkPoint[1]->DisconnectFromSystems();
+	checkPoint.erase(checkPoint.begin());
+	//GameStateManager::Graphics()->RemoveDrawable(checkPoint[1]);
+	//checkPoint[1]->DisconnectFromSystems();
 	//PhysicsNode*  n =checkPoint[0]->GetPhysicsNode();
 	//GameStateManager::Physics()->RemoveNode(n);
 	//checkPoint[0]->DisconnectFromSystems();
@@ -527,9 +531,9 @@ void RacerGame::DeleteTrack(){
 	//RemoveDrawable(allEntities[0]);
 
 	//delete checkPoint[0];
-	checkPoint.erase(checkPoint.begin());
+	
 	//delete checkPoint[0];
-	checkPoint.erase(checkPoint.begin());
+	//checkPoint.erase(checkPoint.begin());
 
 	//RemoveDrawable(allEntities[2]);
 	
@@ -590,7 +594,7 @@ void RacerGame::CreateTrack(){
 		//GameStateManager::Graphics()->DropRenderContext();
 		//create end
 
-		Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, "trackTex", 0);
+			Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, "trackTex", 0);
 		/*GameStateManager::Graphics()->GetRenderContext();*/
 	
 
@@ -678,7 +682,7 @@ void RacerGame::CreateTrack(){
 	checkpoint3->SetType('g');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 	checkpoint3->GetPhysicsNode().SetPGE(checkpoint3);
 	//checkpoint2->GetPhysicsNode().SetPGE(checkpoint2);
-	//AddDrawable(checkpoint3);
+	AddDrawable(checkpoint3);
 	checkPoint.push_back(checkpoint3);
 
 	/*checkpoint= new CheckPoint(10);
@@ -696,16 +700,14 @@ void RacerGame::CreateTrack(){
 	checkpoint2->SetType('d');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 	checkpoint2->GetPhysicsNode().SetPGE(checkpoint2);
 	//checkpoint2->GetPhysicsNode().SetPGE(checkpoint2);
-	//AddDrawable(checkpoint2);
+	AddDrawable(checkpoint2);
 	checkPoint.push_back(checkpoint2);
 
 	if(GettimeOrScore()!=3){
-	Gold_cion * gold_cion= new Gold_cion(8.0f);
+	Gold_cion * gold_cion= new Gold_cion(20.0f);
 
 	gold_cion->SetOriginPosition(SplinePoint[4]+T3Vector3((rand() % 10)-5.0f,0.0f,(rand() % 10)-5.0f));
 	gold_cion->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
-
-	gold_cion->SetTexture(scoreTexture);
 
 	gold_cion->SetPhysics(8.0f,'p',SplinePoint[4],Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
 	
@@ -716,12 +718,10 @@ void RacerGame::CreateTrack(){
 	pickup.push_back(gold_cion);
 	}
 	if(GettimeOrScore()==3){
-	Gold_cion * gold_cion= new Gold_cion(8.0f);
+	Gold_cion * gold_cion= new Gold_cion(20.0f);
 
 	gold_cion->SetOriginPosition(SplinePoint[4]+T3Vector3((rand() % 10)-5.0f,0.0f,(rand() % 10)-5.0f));
 	gold_cion->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
-
-	gold_cion->SetTexture(timeTexture);
 
 	gold_cion->SetPhysics(8.0f,'p',SplinePoint[4],Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
 	

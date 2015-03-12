@@ -49,7 +49,7 @@ void main (void) {
 	float S = (cnv[4] + cnv[5]) + (cnv[6] + cnv[7]) + (cnv[8] + M);
 		
 	//If this produces black, make line black, otherwise use normal colour. vec4(sqrt(M/S));
-	float weight = 0.03;
+	float weight = 0.02;
 	bvec4 stepVec = greaterThan(vec4(weight, weight, weight, weight), vec4(sqrt(M/S)));
 	
 	if (stepVec.r && stepVec.g && stepVec.b && stepVec.a) {

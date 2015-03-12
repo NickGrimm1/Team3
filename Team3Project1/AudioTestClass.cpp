@@ -21,10 +21,11 @@ AudioTestClass::AudioTestClass(void)
 	//PlaySound(TEXT("../Sounds/Tokyo Drift2.wav"),NULL,SND_ASYNC|SND_LOOP);
 	bgm1=false;
 	bgm2=false;
-	bgm3=false;
+	ready=false;
+	coins=false;
 	pressonce = false;
 	pressonce2 = false;
-	pressonce3 = false;
+
 }
 
 
@@ -35,64 +36,84 @@ AudioTestClass::~AudioTestClass(void)
 
 void AudioTestClass::LoadContent() {
 
-	SoundManager::AddSound(SOUNDSDIR"alarm1.wav");
-	SoundManager::AddSound(SOUNDSDIR"engine.wav");
-	SoundManager::AddSound(SOUNDSDIR"bgm1_60sec.wav");
-	SoundManager::AddSound(SOUNDSDIR"bgm2_42sec.wav");
-	SoundManager::AddSound(SOUNDSDIR"bgm3.wav");
-	BGM1 = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm1_60sec.wav");
-	BGM2 = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm2_42sec.wav");
-	BGM3 = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm3.wav");
-	laser1 = GameStateManager::Audio()->GetSound (SOUNDSDIR"engine.wav");
-	laser3 = GameStateManager::Audio()->GetSound (SOUNDSDIR"alarm1.wav");
-
-	//GameStateManager::Audio()-> PlaySound (BGM3,SOUNDPRIORITY_ALWAYS, false);//SOUNDPRIORTY_LOW);
-	GameStateManager::Audio()-> PlaySound (laser1,T3Vector3(0,0,0), true);
-	GameStateManager::Audio()-> PlaySound (laser3,T3Vector3(100,0,0), true);
+	SoundManager::AddSound(SOUNDSDIR"1.33sec.wav");
+	SoundManager::AddSound(SOUNDSDIR"bgm1_101sec.wav");
+	SoundManager::AddSound(SOUNDSDIR"bgm2_60sec.wav");
+	SoundManager::AddSound(SOUNDSDIR"getready3sec.wav");
+	SoundManager::AddSound(SOUNDSDIR"gameover2.6sec.wav");
+	SoundManager::AddSound(SOUNDSDIR"coins.wav");
+	SoundManager::AddSound(SOUNDSDIR"engine_start.wav");
+	BGM1 = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm1_101sec.wav");
+	BGM2 = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm2_60sec.wav");
+	Coins = GameStateManager::Audio()->GetSound(SOUNDSDIR"coins.wav");
+	Engine_start = GameStateManager::Audio()->GetSound(SOUNDSDIR"engine_start.wav");
+	Ready = GameStateManager::Audio()->GetSound (SOUNDSDIR"getready3sec.wav");
+	Over = GameStateManager::Audio()->GetSound (SOUNDSDIR"gameover2.6sec.wav");
+	//GameStateManager::Audio()->PlaySound (BGM1,SOUNDPRIORITY_ALWAYS,false, true);
+	//GameStateManager::Audio()-> PlaySound (BGM3, false,SOUNDPRIORITY_ALWAYS);//SOUNDPRIORTY_LOW);
+	/*GameStateManager::Audio()-> PlaySound (ready,T3Vector3(0,0,0), false);
+	GameStateManager::Audio()-> PlaySound (over,T3Vector3(100,0,0), false);*/
 }
 
 void AudioTestClass::Update() {
 	//GameStateManager::Audio()->PlaySoundW(laser,SOUNDPRIORITY_ALWAYS);
 	//GameStateManager::Audio()->PlaySoundW(GameStateManager::Audio()->GetSound("../Sounds/Tokyo Drift2.wav"),SOUNDPRIORITY_ALWAYS);
-	GameStateManager::Audio()->Update ((1000.0f / ( float ) RENDER_HZ ));
-	CurrentTime=(float)timer.GetMS();
-	/*if(bgm1==false&&CurrentTime>=0&&CurrentTime<=62000){
-		GameStateManager::Audio()-> PlaySound (BGM1,SOUNDPRIORITY_ALWAYS, false);
+	//GameStateManager::Audio()->Update ((1000.0f / ( float ) RENDER_HZ ))
+	CurrentTime=timer.GetMS();
+	if(coins==false){
+		GameStateManager::Audio()-> PlaySound (Coins,T3Vector3(100,0,0), true);
+		coins=true;
+	}
+	if(ready==false){
+		GameStateManager::Audio()-> PlaySound (Ready,T3Vector3(0,0,0), true);
+		ready=true;
+	}
+
+	if(bgm1==false&&CurrentTime>=0&&CurrentTime<=102000){
+		GameStateManager::Audio()-> PlaySound (BGM1,SOUNDPRIORITY_ALWAYS,true, false);
 		bgm1=true;
 	}
-	if(bgm2==false&&CurrentTime>62000&&CurrentTime<=104000){
-		GameStateManager::Audio()-> PlaySound (BGM2,SOUNDPRIORITY_ALWAYS, false);
+	if(bgm2==false&&CurrentTime>102000){
+		GameStateManager::Audio()-> PlaySound (BGM2,SOUNDPRIORITY_ALWAYS,true, true);
 		bgm2=true;
 	}
-	if(bgm3==false&&CurrentTime>104000){
-		GameStateManager::Audio()-> PlaySound (BGM3,SOUNDPRIORITY_ALWAYS, true);
-		bgm3=true;
-	}*/
 }
 
 void AudioTestClass::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
-//	switch (type) {
-//	case KeyboardEvents::KEY_HELD:
-//		switch(key){
-//		//	case KeyboardEvents::KEYBOARD_W:
-//		//	GameStateManager::Audio()-> PlaySound (laser1,SOUNDPRIORITY_ALWAYS, false);
-//		}
+	switch (type) {
+	case KeyboardEvents::KEY_HELD:
+		switch(key){
+		//	case KeyboardEvents::KEYBOARD_W:
+		//	GameStateManager::Audio()-> PlaySound (laser1,SOUNDPRIORITY_ALWAYS, false);
+		}
+	case KeyboardEvents::KEY_PRESS:
+		switch(key){
+		case KeyboardEvents::KEYBOARD_W:
+			if(!pressonce2){
+			pressonce2 = true;
+			GameStateManager::Audio()-> PlaySound (Coins,SOUNDPRIORTY_LOW ,false, false);
+			
+			}
+			break;
+		case KeyboardEvents::KEYBOARD_SPACE:
+			if (!pressonce) {
+			pressonce = true;
+			GameStateManager::Audio()-> PlaySound (Engine_start,SOUNDPRIORTY_LOW, false, false);//SOUNDPRIORTY_LOW);
+			
+			}
+			break;
+		case KeyboardEvents::KEYBOARD_ESCAPE:
+			GameStateManager::Instance()->Exit();
+			break;
+
+			/*case KeyboardEvents::KEYBOARD_4:
+			PlaySound(TEXT("../Sounds/36847__ecodtr__laserrocket2.wav"),NULL,SND_ASYNC|SND_LOOP);
+		break;*/
+		}
+	break;
+	}
 //	case KeyboardEvents::KEY_PRESS:
-//		switch(key){
-//		//case KeyboardEvents::KEYBOARD_W:
-//		//	if(!pressonce2){
-//		//	GameStateManager::Audio()-> PlaySound (laser1,SOUNDPRIORTY_LOW , false);
-//		//	break;
-//		//	pressonce2 = true;
-//		//	}
-//		//	
-//		//case KeyboardEvents::KEYBOARD_SPACE:
-//		//	if (!pressonce) {
-//		//	GameStateManager::Audio()-> PlaySound (laser3,SOUNDPRIORTY_LOW, false);//SOUNDPRIORTY_LOW);
-//		//	break;
-//		//	pressonce = true;
-//		//	}
-//	
+//		switch (key) {
 //		case KeyboardEvents::KEYBOARD_ESCAPE:
 //			GameStateManager::Instance()->Exit();
 //			break;

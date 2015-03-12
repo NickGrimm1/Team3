@@ -230,6 +230,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">
     <ClCompile>
       <PreprocessorDefinitions>CELL_GCM_DEBUG;PS3_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -262,7 +263,6 @@
     <ClInclude Include="..\Framework\OGLRenderer.h" />
     <ClInclude Include="..\Framework\ParticleEmitter.h" />
     <ClInclude Include="..\Framework\PhysicsNode.h" />
-    <ClInclude Include="..\Framework\PhysicsSystem.h" />
     <ClInclude Include="..\Framework\Plane.h" />
     <ClInclude Include="..\Framework\Quaternion.h" />
     <ClInclude Include="..\Framework\SceneNode.h" />
@@ -270,7 +270,6 @@
     <ClInclude Include="..\Framework\Sound.h" />
     <ClInclude Include="..\Framework\SoundEmitter.h" />
     <ClInclude Include="..\Framework\SoundManager.h" />
-    <ClInclude Include="..\Framework\Spring.h" />
     <ClInclude Include="..\Framework\SpringDemo.h" />
     <ClInclude Include="..\Framework\T3Vector2.h" />
     <ClInclude Include="..\Framework\T3Vector3.h" />
@@ -376,7 +375,6 @@
     <ClCompile Include="..\Framework\Sound.cpp" />
     <ClCompile Include="..\Framework\SoundEmitter.cpp" />
     <ClCompile Include="..\Framework\SoundManager.cpp" />
-    <ClCompile Include="..\Framework\Spring.cpp" />
     <ClCompile Include="..\Framework\SpringDemo.cpp" />
     <ClCompile Include="..\Framework\Vehicle.cpp" />
     <ClCompile Include="..\Framework\Weather.cpp" />

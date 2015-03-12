@@ -77,6 +77,7 @@ void Vehicle::SetPhysics(float size,PhysicsNode * a)
 	car->SetInverseInertia(InertialMatrixHelper::createCuboidInvInertial(5.0f,size,size,size));
 
 	car->SetIsCollide(true);
+	car->SetIsDrop(false);
 	car->Setcar_wheel(true);
 	car->Setplanecollision(false);
 

@@ -1,5 +1,6 @@
 #if WINDOWS_BUILD
 #include "SoundEmitter.h"
+#include "../Team3Project1/GameStateManager.h"
 
 
  SoundEmitter :: SoundEmitter ( void ) {
@@ -163,7 +164,14 @@
 			 alSourcei ( currentSource -> source , AL_LOOPING , isLooping ? 1 : 0);
 		 }
 
-		 alSourcef ( currentSource -> source , AL_GAIN , volume1 );
+		 float vol = volume1;
+		 if (GetIsGlobal() && !GameStateManager::Audio()->GlobalSoundsEnabled()) {
+			 vol = 0;
+		 }
+		 else if (!GetIsGlobal() && !GameStateManager::Audio()->LocalSoundsEnabled()) {
+			 vol = 0;
+		 }
+		 alSourcef ( currentSource -> source , AL_GAIN , vol );
 		 alSourcei ( currentSource -> source , AL_LOOPING , isLooping ? 1 : 0);
 		 alSourcef (currentSource->source	,AL_PITCH	,pitch);
 		 alSourcef ( currentSource -> source , AL_MAX_DISTANCE , radius );

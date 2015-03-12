@@ -1,4 +1,6 @@
 #include "Mesh.h"
+#include "../Main_PS3_PPU/Renderer.h"
+#include "../Team3Project1/Renderer.h"
 
 Mesh::Mesh()	
 {
@@ -33,7 +35,7 @@ Mesh::~Mesh(void)
 #if WINDOWS_BUILD
 void Mesh::Draw()	
 {
-	
+	Renderer::count++;
 	glBindVertexArray(arrayObject);
 	if(numIndices > 0)
 		glDrawElements(type, numIndices, GL_UNSIGNED_INT, 0);
@@ -46,6 +48,11 @@ void Mesh::Draw()
 #if PS3_BUILD
 void Mesh::Draw(Shader* shader)
 {
+	Renderer::count++;
+	if(numVertices == 0)
+		return;
+
+	cout << "Drawing Mesh" <<numVertices <<endl;
 	int shader_idx;
 
 	shader_idx = shader->GetVertex()->GetAttributeIndex(VertexAttributes::POSITION);

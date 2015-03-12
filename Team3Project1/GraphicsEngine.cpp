@@ -43,6 +43,7 @@ GraphicsEngine::GraphicsEngine()
 	: Thread(&GraphicsEngine::threadExecution), RENDER_TIME(1000.0f / RENDER_HZ)
 #endif
 {
+	std::cout << "New Graphics Engine" << std::endl;
 	isInitialised = false;
 	width = SCREEN_WIDTH;
 	height = SCREEN_HEIGHT;
@@ -58,10 +59,24 @@ GraphicsEngine::GraphicsEngine()
 	if (!renderer->HasInitialised()) return;
 	
 	GLuint loadingTex = renderer->CreateTexture(TEXTUREDIR"refresh.png", false, false, SOIL_FLAG_INVERT_Y);
+	loadingTexture = new Texture(loadingTex);
+#endif
+#if PS3_BUILD
+	std::cout << "Renderer starting" << std::endl;
+	renderer = new Renderer(lights, gameEntityList, overlayTexturesList, overlayTextsList);
+	if(!renderer)
+	{
+		std::cout << "Renderer failed to load" << std::endl;
+		return;
+	}
+	std::cout << "Renderer started" << std::endl;
+
+	loadingTexture = new Texture("refresh", 0);
+#endif
 
 	isLoading = true;
 	isLoadingDrawing = false;
-	loadingTexture = new Texture(loadingTex);
+	
 	float aspect = (float) width / (float) height;
 	loadingIcon = new DrawableTexture2D(
 		0.95f,
@@ -73,16 +88,8 @@ GraphicsEngine::GraphicsEngine()
 		0,
 		T3Vector2(0.5f, 0.5f),
 		T3Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-#endif
-#if PS3_BUILD
-	renderer = new Renderer(lights, gameEntityList, overlayTexturesList, overlayTextsList);
-	if(!renderer)
-		return;
-#endif
 
-#if WINDOWS_BUILD
 	renderer->SetLoadingIcon(loadingIcon);
-#endif
 
 	isInitialised = true; // Graphics Engine has initialised successfully
 }
@@ -95,9 +102,9 @@ GraphicsEngine::~GraphicsEngine() {
 #if WINDOWS_BUILD
 	renderer->DestroyTexture(loadingTexture->GetTextureName());
 	Window::Destroy();
+#endif
 	delete loadingTexture;
 	delete loadingIcon;
-#endif
 	delete renderer;
 	delete sceneRoot;
 	
@@ -106,6 +113,7 @@ GraphicsEngine::~GraphicsEngine() {
 #if PS3_BUILD
 void GraphicsEngine::threadExecution(uint64_t arg)
 {
+	std::cout << "Graphics Thread starting" << std::endl;
 	GraphicsEngine* myArg = (GraphicsEngine*)arg;
 	myArg->Run();
 }
@@ -280,34 +288,34 @@ void GraphicsEngine::Run()
 	if (isLoading && !isLoadingDrawing) 
 	{
 #if WINDOWS_BUILD
-		overlayElementsList.push_back(loadingIcon);
+			overlayElementsList.push_back(loadingIcon);
 #endif
 #if PS3_BUILD
 		overlayTexturesList.push_back(loadingIcon);
 #endif
-		isLoadingDrawing = true;
-	}
-	else if (!isLoading && isLoadingDrawing) 
-	{
-#if WINDOWS_BUILD
-		for (unsigned int i = 0; i < overlayElementsList.size(); i++) 
-		{
-			if (overlayElementsList[i] == loadingIcon) 
-			{
-				overlayElementsList.erase(overlayElementsList.begin() + i);
-			}
+			isLoadingDrawing = true;
 		}
+		else if (!isLoading && isLoadingDrawing) 
+		{
+#if WINDOWS_BUILD
+			for (unsigned int i = 0; i < overlayElementsList.size(); i++) 
+			{
+				if (overlayElementsList[i] == loadingIcon) 
+				{
+					overlayElementsList.erase(overlayElementsList.begin() + i);
+				}
+			}
 #endif
 #if PS3_BUILD
-		for (unsigned int i = 0; i < overlayTexturesList.size(); i++) 
-		{
-			if (overlayTexturesList[i] == loadingIcon) 
+			for (unsigned int i = 0; i < overlayTexturesList.size(); i++) 
 			{
-				overlayTexturesList.erase(overlayTexturesList.begin() + i);
+				if (overlayTexturesList[i] == loadingIcon) 
+				{
+					overlayTexturesList.erase(overlayTexturesList.begin() + i);
+				}
 			}
-		}
 #endif
-	}
+		}
 
 		//Update the day/night float
 		renderer->SetDayNight(DayNightCycle());

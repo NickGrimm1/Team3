@@ -22,7 +22,7 @@
 	 SoundEmitter ( Sound * s );
 	 ~ SoundEmitter ( void );
 
-	 void Reset ();//As we have multiple constructors, we’re going to keep the initialisation common to both of them in another function - Reset
+	void Reset ();//As we have multiple constructors, we’re going to keep the initialisation common to both of them in another function - Reset
 	 
 	 void SetSound ( Sound * s );
 	 inline Sound * GetSound () { return sound;}
