@@ -1,3 +1,5 @@
+#pragma once
+
 #include "GameScreen2D.h"
 #include "DrawableText2D.h"
 

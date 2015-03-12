@@ -10,7 +10,9 @@
 #include "CheckPoint.h"
 #include "TrackSegment.h"
 #include "Gold_cion.h"
-//#include "HudTestScreen.h"
+#if WINDOWS_BUILD
+#include "HudTestScreen.h"
+#endif
 #include "GameStateManager.h"
 //#include "../Framework/SoundManager.h"
 
@@ -64,7 +66,9 @@ public:
 	//sam
 	Texture* scoreTexture;
 	Texture* timeTexture;
-	//HudTestScreen* hud;
+#if WINDOWS_BUILD
+	HudTestScreen* hud;
+#endif
 	static float g;
 	static float gx;
 	TrackSegment* Strack;
@@ -101,9 +105,11 @@ public:
 		  {
 			  obj2->GetPhysicsNode().SetIsCollide(false);
 			  SetScore(1);
+#ifdef WINDOWS_BUILD
 			 // SoundManager::AddSound(SOUNDSDIR"Tokyo Drift2.wav");
 			 // GameStateManager::Audio()->PlaySoundW(GameStateManager::Audio()->GetSound(SOUNDSDIR"Tokyo Drift2.wav"),SOUNDPRIORITY_ALWAYS);
 			  GameStateManager::Audio()->PlaySound(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
+#endif			  
 			  cout<< "total point ="<<GetScore()<<endl; 
 			  GameStateManager::Graphics()->RemoveDrawable(obj1);
 	          obj1->DisconnectFromSystems();

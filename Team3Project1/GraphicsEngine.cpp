@@ -173,27 +173,37 @@ void GraphicsEngine::Run()
 #endif
 #if PS3_BUILD
 	// Add/Remove HUD elements
-	for (unsigned int i = 0; i < addHudTextureList.size(); i++) {
+	for (unsigned int i = 0; i < addHudTextureList.size(); i++) 
+	{
+		//addHudTextureList[i]->SetDepth(-addHudTextureList[i]->GetDepth());
 		overlayTexturesList.push_back(addHudTextureList[i]);
 	}
 	addHudTextureList.clear();
 	// Add/Remove HUD elements
-	for (unsigned int i = 0; i < addHudTextList.size(); i++) {
+	for (unsigned int i = 0; i < addHudTextList.size(); i++) 
+	{
+		//addHudTextList[i]->SetDepth(-addHudTextList[i]->GetDepth());
 		overlayTextsList.push_back(addHudTextList[i]);
 	}
 	addHudTextList.clear();
 
-	for (unsigned int i = 0; i < removeHudTextureList.size(); i++) {
-		for (unsigned int j = 0; j < overlayTexturesList.size(); ++j) {
-			if (overlayTexturesList[j] == removeHudTextureList[i]) {
+	for (unsigned int i = 0; i < removeHudTextureList.size(); i++) 
+	{
+		for (unsigned int j = 0; j < overlayTexturesList.size(); ++j) 
+		{
+			if (overlayTexturesList[j] == removeHudTextureList[i]) 
+			{
 				overlayTexturesList.erase(overlayTexturesList.begin() + j);
 			}
 		}
 	}
 	removeHudTextureList.clear();
-	for (unsigned int i = 0; i < removeHudTextList.size(); i++) {
-		for (unsigned int j = 0; j < overlayTextsList.size(); ++j) {
-			if (overlayTextsList[j] == removeHudTextList[i]) {
+	for (unsigned int i = 0; i < removeHudTextList.size(); i++) 
+	{
+		for (unsigned int j = 0; j < overlayTextsList.size(); ++j) 
+		{
+			if (overlayTextsList[j] == removeHudTextList[i]) 
+			{
 				overlayTextsList.erase(overlayTextsList.begin() + j);
 			}
 		}

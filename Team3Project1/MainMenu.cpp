@@ -9,6 +9,9 @@ MainMenu::MainMenu(void)
 	musicMuted = false;
 	soundMuted = false;
 	playerOne = GamepadEvents::PLAYERINDEX_MAX;
+
+	connectionTime = 0.0;
+	inputEnabled = true;
 }
 
 void MainMenu::Update(void) 
@@ -23,9 +26,11 @@ void MainMenu::Update(void)
 			GameStateManager::Graphics()->EnableMousePointer(false);
 #endif
 			SetCurrentSelected(0);
-
+			connectionTime = 500;
 		}
 	}
+	else
+		connectionTime < 0 ? connectionTime = 0 : connectionTime -= 5.0; // Slightly hacky way of not triggering input as soon as we first get a controller.
 }
 
 MainMenu::~MainMenu(void)
@@ -183,7 +188,9 @@ void MainMenu::UnloadContent() {
 
 /*--------------------Clicked Methods--------------------*/
 
-void MainMenu::NewGameClicked(float x, float y) {
+void MainMenu::NewGameClicked(float x, float y) 
+{
+	std::cout << "New Game Clicked" << std::endl;
 	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	newGame->GetTexture()->SetTexture(buttonTexClicked);
 #if WINDOWS_BUILD
@@ -213,24 +220,33 @@ void MainMenu::MusicClicked(float x, float y) {
 	if (musicMuted) {
 		music->GetTexture()->SetTexture(musicNoMuteHover);
 #if WINDOWS_BUILD
-		GameStateManager::Audio()->SetMasterVolume(1.0f);
+		GameStateManager::Audio()->EnableGlobalSounds(true);
+		GameStateManager::Audio()->EnableLocalSounds(true);
 #endif
 	}
 	else {
 		music->GetTexture()->SetTexture(musicMuteHover);
 #if WINDOWS_BUILD
-		GameStateManager::Audio()->SetMasterVolume(0.0f);
+		GameStateManager::Audio()->EnableGlobalSounds(false);
+		GameStateManager::Audio()->EnableLocalSounds(true);
 #endif
 	}
 	musicMuted = !musicMuted;
 }
 
 void MainMenu::SoundClicked(float x, float y) {
-	if (soundMuted)
+	if (soundMuted){
 		sounds->GetTexture()->SetTexture(soundNoMuteHover);
-	else
+#if WINDOWS_BUILD
+		GameStateManager::Audio()->SetMasterVolume(1.0f);
+#endif		
+	}
+	else{
 		sounds->GetTexture()->SetTexture(soundMuteHover);
-
+#if WINDOWS_BUILD
+		GameStateManager::Audio()->SetMasterVolume(0.0f);
+#endif	
+	}
 	soundMuted = !soundMuted;
 }
 
@@ -299,6 +315,13 @@ void MainMenu::GamepadDisconnect(GamepadEvents::PlayerIndex playerID)
 #endif
 		ClearSelection();
 }
+void MainMenu::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button)
+{
+	std::cout <<"MainMenu:GPEvent"<<std::endl;
+	if (connectionTime < 200.0)
+		GameScreen2D::GamepadEvent(playerID, type, button);
+}
+
 #if WINDOWS_BUILD
 void MainMenu::MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position)
 {

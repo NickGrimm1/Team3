@@ -3,47 +3,9 @@
 
 HudTestScreen::HudTestScreen(void)
 {
-	f = GameStateManager::Assets()->LoadFont(this, "tahoma", 16, 16);
 	
 	time=30;
 	score=0;
-	    std::stringstream ss;
-		std::string str;
-		ss<<time;
-		ss>>str;
-
-		std::stringstream ss2;
-		std::string str2;
-		ss2<<score;
-		ss2>>str2;
-
-		Playtime=	new DrawableText2D(
-		0.7f, 
-		0.7f, 
-		0, 
-		0.2f, 
-		0.1f, 
-		"Time = "+str, 
-		f,
-		0,
-		T3Vector2(0.5f, 0.5f),
-		T3Vector4(1.0f,1.0f,1.0f,0.7f));
-	
-	AddDrawable(Playtime);
-
-		Score=	new DrawableText2D(
-		0.7f, 
-		0.8f, 
-		0, 
-		0.2f, 
-		0.1f, 
-		"Score = "+str2, 
-		f,
-		0,
-		T3Vector2(0.5f, 0.5f),
-		T3Vector4(1.0f,1.0f,1.0f,0.7f));
-
-	 AddDrawable(Score);
 }
 
 
@@ -65,6 +27,42 @@ void HudTestScreen::LoadContent() {
 #endif
 	Texture* calvinTex = GameStateManager::Assets()->LoadTexture(this, "calvin", 0);
 
+	std::stringstream ss;
+		std::string str;
+		ss<<time;
+		ss>>str;
+
+		std::stringstream ss2;
+		std::string str2;
+		ss2<<score;
+		ss2>>str2;
+
+		Playtime=	new DrawableText2D(
+		0.7f, 
+		0.7f, 
+		0, 
+		0.2f, 
+		0.1f, 
+		"Time = "+str, 
+		f,
+		0,
+		T3Vector2(0.5f, 0.5f),
+		T3Vector4(1.0f,1.0f,1.0f,0.7f));
+	
+		Score=	new DrawableText2D(
+		0.7f, 
+		0.8f, 
+		0, 
+		0.2f, 
+		0.1f, 
+		"Score = "+str2, 
+		f,
+		0,
+		T3Vector2(0.5f, 0.5f),
+		T3Vector4(1.0f,1.0f,1.0f,0.7f));
+
+	AddDrawable(Playtime);
+	AddDrawable(Score);
 
 	//string Stime="time";
 

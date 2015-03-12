@@ -34,6 +34,7 @@ public:
 	virtual void MouseMoved(T3Vector2& start, T3Vector2& finish);
 #endif
 	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID);
+	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button);
 private:
 
 	void NewGameClicked(float x, float y);
@@ -86,9 +87,9 @@ private:
 	DrawableText2D* pressStart;
 	GamepadEvents::PlayerIndex playerOne;
 
+	double connectionTime;
 #if WINDOWS_BUILD
 	Scoreboard* scoreBoardConn;
 	vector<pair<DrawableText2D*, DrawableText2D*>> scores;
-
 #endif
 };

@@ -25,12 +25,22 @@ void LoadingScreen::Update() {
 		GameStateManager::Instance()->AddGameScreen(menu);
 	
 		GameStateManager::Graphics()->EnableLoadingIcon(false);
-
-		//GameStateManager::RemoveGameScreen(this);
 		isLoading = false;
 	}
 }
-
-void LoadingScreen::UnloadContent() {
-
+#if WINDOWS_BUILD
+void LoadingScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
+	if (!isLoading) {
+		switch (type) {
+		case KeyboardEvents::KEY_PRESS:
+			switch (key) {
+			case KeyboardEvents::KEYBOARD_PERIOD:
+				debugEnabled = !debugEnabled;
+				GameStateManager::Debug()->EnableDebugOverlay(debugEnabled);
+				break;
+			}
+			break;
+		}
+	}
 }
+#endif

@@ -52,9 +52,11 @@ public:
 			// Want to start rendering immediately
 			if (!GraphicsEngine::Initialize(instance->graphics))
 				return false;	
+#if WINDOWS_BUILD
 			Instance()->graphics->Start("Graphics");
+#endif
 			if (!GraphicsEngine::LoadContent())
-				return false;
+				return false;	
 
 			if (!PhysicsEngine::Initialize(instance->physics))
 				return false;
@@ -77,8 +79,12 @@ public:
 
 	void Start() {
 		// Start Threads
+#if PS3_BUILD
+		Instance()->graphics->Start("Graphics");
+#endif
 		Instance()->physics->Start("Physics");
 		Instance()->input->Start("Input");
+		Instance()->audio->Start("Audio");
 
 		while (instance->isRunning) {
 #ifdef WINDOWS_BUILD
@@ -112,11 +118,13 @@ public:
 			graphics->Terminate();
 			physics->Terminate();
 			input->Terminate();
+			audio->Terminate();
 
 			// Clean up
 			graphics->Join();
 			physics->Join();
 			input->Join();
+		    audio->Join();
 
 			vector<GameScreen*>::iterator i = instance->gameScreens.begin();
 			while (i != instance->gameScreens.end())
@@ -134,6 +142,8 @@ public:
 			PhysicsEngine::Destroy();
 			StorageManager::Destroy();
 			InputManager::Destroy();
+			std::cout << "Input Manager Killed" << std::endl;
+			
 #if WINDOWS_BUILD
 			AudioEngine::Destroy();
 			NetworkManager::Destroy();
@@ -296,7 +306,6 @@ public:
 	*/
 	static void ChangeScreen(GameScreen* gameScreen)
 	{
-		gameScreen->LoadContent();
 		vector<GameScreen*>::iterator i = instance->gameScreens.begin();
 		while (i != instance->gameScreens.end())
 		{
@@ -304,7 +313,7 @@ public:
 			delete *i;
 			i = instance->gameScreens.erase(i);
 		}
-
+		gameScreen->LoadContent();
 		Instance()->gameScreens.push_back(gameScreen);
 	}
 	/**

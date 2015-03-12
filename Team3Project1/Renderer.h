@@ -83,6 +83,7 @@ public:
 
 	unsigned char* GeneratePerlinNoise(const int resolution, unsigned char minValue, unsigned char maxValue);
 
+	unsigned int	GetTextMeshMemory() {return textMeshMemory / 1024;} //KB
 protected:
 
 	T3Matrix4		cameraMatrix; // Get camera matrix once at start of scene
@@ -198,6 +199,7 @@ protected:
 	float			dayNight;
 
 	map<string, TextMesh*> loadedTextMeshes;
+	unsigned int textMeshMemory;
 
 	DrawableTexture2D* loadingIcon;
 };

@@ -143,9 +143,11 @@ void GameScreen2D::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents:
 */
 void GameScreen2D::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button)
 {
+	std::cout << "GameScreen2D:GPEvent"<<std::endl;
 	// Check if input is being accepted
 	if (inputEnabled)
 	{
+		std::cout << "GameScreen2D:InputEnabled"<<std::endl;
 		// Check for select actions
 		if (type == GamepadEvents::BUTTON_PRESS)
 		{

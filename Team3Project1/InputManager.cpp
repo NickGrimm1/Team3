@@ -75,7 +75,7 @@ void InputManager::ThreadRun()
 GamepadEvents::PlayerIndex InputManager::GetActiveController(GamepadEvents::PlayerIndex playerID)
 {
 	unsigned int freePad;
-	cout << "Input Manager: GET ACTIVE CONTROLLER"<<endl;
+
 	if (playerID != GamepadEvents::PLAYERINDEX_MAX)
 	{
 		// Check this is a valid ID - if it has already been assigned, return error
@@ -123,36 +123,43 @@ GamepadEvents::PlayerIndex InputManager::GetActiveController(GamepadEvents::Play
 		if (!gamePads[i]) // NULL pads are not in use.
 		{
 #if PS3_BUILD
-			CellPadData gamePadState;
-			if (cellPadGetData(i, &gamePadState) == CELL_PAD_OK);
-#endif
-#if WINDOWS_BUILD
-			XINPUT_STATE gamePadState;
-			ZeroMemory(&gamePadState, sizeof(XINPUT_STATE));
-			if (XInputGetState(i, &gamePadState) == ERROR_SUCCESS)
-#endif
+			CellPadInfo2 info;
+			cellPadGetInfo2(&info);
+			if (info.port_status[i] & 0x1) // Check if there is a controller on this port since appararently Sony isn't capable of it.
 			{
-#if PS3_BUILD
-				if(gamePadState.button[2] & (1 << 3)) // Start
+				CellPadData gamePadState;
+				if (cellPadGetData(i, &gamePadState) == CELL_PAD_OK);
 #endif
 #if WINDOWS_BUILD
-				if(gamePadState.Gamepad.wButtons & (1 << GamepadEvents::INPUT_START))
+				XINPUT_STATE gamePadState;
+				ZeroMemory(&gamePadState, sizeof(XINPUT_STATE));
+				if (XInputGetState(i, &gamePadState) == ERROR_SUCCESS)
 #endif
 				{
-					gamePads[i] = new GamePad(playerID);
-					return playerID;
-				}
 #if PS3_BUILD
-				if(gamePadState.button[3] & (1 << 6)) // X
+					if(gamePadState.button[2] & (1 << 3)) // Start
 #endif
 #if WINDOWS_BUILD
-				if(gamePadState.Gamepad.wButtons & (1 << GamepadEvents::INPUT_CROSS_A))
+					if(gamePadState.Gamepad.wButtons & (1 << GamepadEvents::INPUT_START))
 #endif
-				{
-					gamePads[i] = new GamePad(playerID);
-					return playerID;
+					{
+						gamePads[i] = new GamePad(playerID);
+						return playerID;
+					}
+#if PS3_BUILD
+					if(gamePadState.button[3] & (1 << 6)) // X
+#endif
+#if WINDOWS_BUILD
+					if(gamePadState.Gamepad.wButtons & (1 << GamepadEvents::INPUT_CROSS_A))
+#endif	
+					{
+						gamePads[i] = new GamePad(playerID);
+						return playerID;
+					}
 				}
+#if PS3_BUILD
 			}
+#endif
 		}
 	}
 

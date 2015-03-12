@@ -49,7 +49,7 @@ Version: 0.0.1 03/02/2015.</summary>
 };
 
 
-class AudioEngine/*: public Thread*/
+class AudioEngine: public Thread
 {
 	// TODO: Implement Audio Engine.
 public:
@@ -83,14 +83,21 @@ public:
 
 	void PlaySound ( Sound * s , T3Vector3 position, bool isLooping = false );
 	void PlaySound ( Sound * s , DrawableEntity3D* entity , bool isLooping = false);
-	void PlaySound ( Sound * s , SoundPriority p = SOUNDPRIORTY_LOW, bool isLooping = false);
+	//void PlaySound ( Sound * s , bool isLooping = false, SoundPriority p = SOUNDPRIORTY_LOW);
+	void PlaySound ( Sound * s , SoundPriority p = SOUNDPRIORTY_LOW, bool isBGM=false, bool isLooping=false );
 
 	Sound * GetSound ( string name );
 
-	/*void Run();
-	void Terminate() { isRunning = false; }*/
+	void Run();
+	/*void Terminate() { isRunning = false; }*/
 	/*void AddSound(string filePath);
 	void RemoveSound(string filePath);*/
+
+	bool GlobalSoundsEnabled(){return isGlobal;}
+	void EnableGlobalSounds(bool enable){isGlobal=enable;}
+
+	bool LocalSoundsEnabled(){return isLocal;}
+	void EnableLocalSounds(bool enable){isLocal=enable;}
 
 private:
 	AudioEngine(unsigned int channels = 32) ;
@@ -108,6 +115,10 @@ private:
 
 	T3Matrix4 listenerTransform ;
 	float masterVolume ;
+	bool isGlobal;
+	bool isLocal;
+	//const float RENDER_TIME;
+	float lastFrameTimeStamp;
 	ALCcontext * context ;
 	ALCdevice * device ;
 	DrawableEntity3D *listener;

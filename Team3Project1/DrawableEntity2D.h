@@ -61,6 +61,7 @@ public:
 	<summary>Gets the drawable entitys depth on screen. Allows it to be drawn behind/in front off other entities.</summary>
 	*/
 	int GetDepth() const {return depth;}
+	void SetDepth(int value) { depth = value; }
 	/**
 	<summary>Sets the drawable entitys depth on screen.</summary>
 	<param name='value'>The depth.</param>
