@@ -53,6 +53,29 @@ public:
 	}
 
 
+		if(f>0){
+		f=f-0.35;
+	if(f<0)
+	{
+	f=0;
+	}
+	 T3Matrix4 m4 = this->GetOrientation().ToMatrix();
+				   this->SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
+	}
+
+	if(f<0){
+		f=f+0.35;
+	if(f>0)
+	{
+	 f=0;
+	}
+	 T3Matrix4 m4 = this->GetOrientation().ToMatrix();
+				  this->SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
+	}
+
+
+
+
 		if(this->GetLinearVelocity().x>0)
 	{
 		FrontRightTire->SetAngularVelocity(T3Vector3(-this->GetLinearVelocity().Length()*0.5f,0,0) );

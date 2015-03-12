@@ -51,7 +51,7 @@ public:
 	void DeleteTrack();
 	void Start();
 	float GetCreateAngle();
-	float f;
+	//float f;
 	float b;
 	int Speed_Player;
 	float Speed_Rotate;
