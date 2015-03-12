@@ -34,7 +34,7 @@ AudioTestClass::~AudioTestClass(void)
 }
 
 void AudioTestClass::LoadContent() {
-
+	
 	SoundManager::AddSound(SOUNDSDIR"alarm1.wav");
 	SoundManager::AddSound(SOUNDSDIR"engine.wav");
 	SoundManager::AddSound(SOUNDSDIR"bgm1_60sec.wav");

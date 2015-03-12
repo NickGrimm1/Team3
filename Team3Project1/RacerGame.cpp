@@ -42,12 +42,8 @@ RacerGame::RacerGame(void)
 	Time=60.0f;
 	PlayTime=30;
 	timeOrScore=0;
-
-		//hud = new HudTestScreen();
-		//GameStateManager::Instance()->AddGameScreen(hud);
-
-		 scoreTexture = GameStateManager::Assets()->LoadTexture(this, "score", 0);
-		 timeTexture = GameStateManager::Assets()->LoadTexture(this, "time", 0);
+	scoreTexture = GameStateManager::Assets()->LoadTexture(this, "score", 0);
+	timeTexture = GameStateManager::Assets()->LoadTexture(this, "time", 0);
 
 
 	//Strack = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2],5,50.f);
@@ -66,55 +62,20 @@ RacerGame::~RacerGame(void)
 
 void RacerGame::LoadContent() {
 	
-	//Mesh* coneMesh = Mesh::GenerateCone(20);
 	quad = GameStateManager::Assets()->LoadCylinder(this, 20);
 	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
 	
-	//ent = new DrawableEntity3D(
-	//	quad, 
-	//	NULL,
-	//	GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"Grass_Color.png", 0), 
-	//	GameStateManager::Assets()->LoadTexture(this, TEXTUREDIR"snowflake.png", 0),
-	//	50.0f, 
-	//	T3Vector3(0,0,0), 
-	//	Quaternion::FromMatrix(T3Matrix4::Rotation(90.0f, T3Vector3(1,0,0))),
-	//	T3Vector3(50,50,1));
-	
-
-
-
-	
-	//SpotLight::SetConeMesh(coneMesh);
-	//Mesh* circleMesh = Mesh::GenerateCircle(20);
-	//SpotLight::SetCircleMesh(Mesh::GenerateCircle(20));
-	//Mesh* sphereMesh = new OBJMesh(MESHDIR"sphere.obj");
-	//PointLight::SetMesh(sphereMesh);
-
-	
-	//light = GameStateManager::Graphics()->AddSpotLight(T3Vector3(0, 0, 0), T3Vector3(0,1,0), T3Vector3(1,0,0), 1.0f, 45.0f, T3Vector4(1,1,1,1), T3Vector4(1,1,1,1), false);
-	
-	//PointLight* l = GameStateManager::Graphics()->AddPointLight(T3Vector3(0,5,0), 10, T3Vector4(1,1,1,1), T3Vector4(1,1,1,1), false); 
-
-
 	camera = new FreeCamera();
 
-	/*checkpoint= new CheckPoint(10);
-	checkpoint->SetPhysics(10,'c');
-	checkpoint->SetType('g');
-	checkpoint->GetPhysicsNode().SetPGE(checkpoint);
-	AddDrawable(checkpoint);*/
-	
-	
-	
-	
-	
-	
+	//checkpoint= new CheckPoint(10);
+	//checkpoint->SetPhysics(10,'c');
+	//checkpoint->SetType('g');
+	//checkpoint->GetPhysicsNode().SetPGE(checkpoint);
+	//AddDrawable(checkpoint);
 
-	
 	//add road
 	
 	Texture* grassTex2 = GameStateManager::Assets()->LoadTexture(this, "trackTex", 0);
-	Shader* sh = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
 	GameStateManager::Graphics()->GetRenderContext();
 	TrackSegment* trackr = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5, 50.0f);
 	
@@ -124,7 +85,7 @@ void RacerGame::LoadContent() {
 	PhysicsNode* proad = new PhysicsNode();
 	GameEntity* road= new GameEntity(proad);
 		road->SetMesh(trackr);
-		road->SetShader(sh);
+		road->SetShader(0);
 		road->SetTexture(grassTex2);
 		road->SetBumpTexture(NULL);
 		road->SetBoundingRadius(800.0f);
@@ -279,23 +240,8 @@ void RacerGame::Update() {
 	if((Time-60)==0){
 	SetPlayTime(-1);
 	Time=0;
-	hud->SetScreen(GetScore(),GetPlayTime());
 	}
 	Time+=1;
-
-	//GameScreen2D::AddDrawable(new DrawableText2D(
-	//	0.0f, 
-	//	0.0f, 
-	//	0, 
-	//	0.5f, 
-	//	0.1f, 
-	//	"HELLO WORLD!!!!!!!!!", 
-	//	f,
-	//	0,
-	//	T3Vector2(0.5f, 0.5f),
-	//	T3Vector4(1.0f,1.0f,1.0f,0.7f)));
-
-
 }
 void RacerGame::Start(){
 

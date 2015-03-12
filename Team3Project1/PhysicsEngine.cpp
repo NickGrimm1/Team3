@@ -566,7 +566,7 @@ void  PhysicsEngine::SortandSweep()
 				}
 		}
 	}
-#endif
+
 }
 	
 
