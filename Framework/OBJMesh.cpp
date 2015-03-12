@@ -207,7 +207,6 @@ bool OBJMesh::BuildOBJMesh() {
 
 			m->numVertices	= sm->vertIndices.size();
 
-			
 			m->AssignVertexMemory();
 			for(unsigned int j = 0; j < sm->vertIndices.size(); ++j)
 			{

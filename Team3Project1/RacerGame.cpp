@@ -41,8 +41,8 @@ RacerGame::RacerGame(void)
 	PlayTime=30;
 	timeOrScore=0;
 
-	DebugOverlay* debug = new DebugOverlay();
-	GameStateManager::Instance()->AddGameScreen(debug);
+	//DebugOverlay* debug = new DebugOverlay();
+	//GameStateManager::Instance()->AddGameScreen(debug);
 
 
 	//Strack = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2],5,50.f);
@@ -67,7 +67,7 @@ void RacerGame::LoadContent() {
 	hud = new HudTestScreen();
 	GameStateManager::Instance()->AddGameScreen(hud);
 	
-	scoreTexture = GameStateManager::Assets()->LoadTexture(this, "NovaCarUV", 0);
+	scoreTexture = GameStateManager::Assets()->LoadTexture(this, "score", 0);
 	timeTexture = GameStateManager::Assets()->LoadTexture(this, "time", 0);
 
 	//ent = new DrawableEntity3D(
@@ -231,9 +231,9 @@ void RacerGame::LoadContent() {
 
 	//camera->SetPosition(T3Vector3(0.0f,10.0f, 80.0f));
 	//camera->SetYaw(180.0f);
-	//GameStateManager::Graphics()->SetCamera(camera);
+	GameStateManager::Graphics()->SetCamera(camera);
 
-	GameStateManager::Graphics()->SetCamera(chasecamera);
+	//GameStateManager::Graphics()->SetCamera(chasecamera);
 }
 
 void RacerGame::Update() { 
