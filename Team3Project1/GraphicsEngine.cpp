@@ -280,34 +280,34 @@ void GraphicsEngine::Run()
 	if (isLoading && !isLoadingDrawing) 
 	{
 #if WINDOWS_BUILD
-		overlayElementsList.push_back(loadingIcon);
+			overlayElementsList.push_back(loadingIcon);
 #endif
 #if PS3_BUILD
 		overlayTexturesList.push_back(loadingIcon);
 #endif
-		isLoadingDrawing = true;
-	}
-	else if (!isLoading && isLoadingDrawing) 
-	{
-#if WINDOWS_BUILD
-		for (unsigned int i = 0; i < overlayElementsList.size(); i++) 
-		{
-			if (overlayElementsList[i] == loadingIcon) 
-			{
-				overlayElementsList.erase(overlayElementsList.begin() + i);
-			}
+			isLoadingDrawing = true;
 		}
+		else if (!isLoading && isLoadingDrawing) 
+		{
+#if WINDOWS_BUILD
+			for (unsigned int i = 0; i < overlayElementsList.size(); i++) 
+			{
+				if (overlayElementsList[i] == loadingIcon) 
+				{
+					overlayElementsList.erase(overlayElementsList.begin() + i);
+				}
+			}
 #endif
 #if PS3_BUILD
-		for (unsigned int i = 0; i < overlayTexturesList.size(); i++) 
-		{
-			if (overlayTexturesList[i] == loadingIcon) 
+			for (unsigned int i = 0; i < overlayTexturesList.size(); i++) 
 			{
-				overlayTexturesList.erase(overlayTexturesList.begin() + i);
+				if (overlayTexturesList[i] == loadingIcon) 
+				{
+					overlayTexturesList.erase(overlayTexturesList.begin() + i);
+				}
 			}
-		}
 #endif
-	}
+		}
 
 		//Update the day/night float
 		renderer->SetDayNight(DayNightCycle());
