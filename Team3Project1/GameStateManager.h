@@ -90,6 +90,7 @@ public:
 #if WINDOWS_BUILD
 		Instance()->audio->Start("Audio");
 #endif
+
 		while (instance->isRunning) {
 #ifdef WINDOWS_BUILD
 			while (Window::GetWindow().GetTimer()->GetMS() - instance->lastUpdate < GAME_FRAME_TIME) { ; }
@@ -130,8 +131,9 @@ public:
 			physics->Join();
 			input->Join();
 #if WINDOWS_BUILD
-			audio->Join();
+		    audio->Join();
 #endif
+
 			vector<GameScreen*>::iterator i = instance->gameScreens.begin();
 			while (i != instance->gameScreens.end())
 			{

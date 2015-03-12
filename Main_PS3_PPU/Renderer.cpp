@@ -348,7 +348,11 @@ void Renderer::RenderScene()
 	}
 
 	//Draw HUD/Menu overlay
+	loadingIcon->SetRotation(loadingIcon->GetRotation() + 1.0f);
+	if (hudShader != NULL && quadMesh != NULL) 
+	{
 	Draw2DOverlay();
+	}
 
 	SwapBuffers();
 	//wglMakeCurrent(deviceContext, NULL);

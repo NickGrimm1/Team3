@@ -60,6 +60,7 @@ public:
 
 	void RenderScene();
 	void ToggleDebug(int arg, bool onOff);
+	void SetLoadingIcon(DrawableTexture2D* icon) {loadingIcon = icon;}
 
 	T3Vector4 GetAmbientColour() const {return ambientLightColour;}
 	void SetAmbientColour(T3Vector4& colour) {ambientLightColour = colour;}
@@ -199,5 +200,6 @@ protected:
 	float dayNight;
 
 	std::map<string, TextMesh*> loadedTextMeshes;
+	DrawableTexture2D* loadingIcon;
 };
 #endif

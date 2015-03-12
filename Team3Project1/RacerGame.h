@@ -10,9 +10,7 @@
 #include "CheckPoint.h"
 #include "TrackSegment.h"
 #include "Gold_cion.h"
-
 #include "HudTestScreen.h"
-
 #include "GameStateManager.h"
 //#include "../Framework/SoundManager.h"
 
@@ -66,7 +64,6 @@ public:
 	//sam
 	Texture* scoreTexture;
 	Texture* timeTexture;
-
 	HudTestScreen* hud;
 
 	static float g;
