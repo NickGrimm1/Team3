@@ -1002,11 +1002,11 @@ struct EPA_Point
 	std::vector<EPA_Edge> lst_EPA_Edge;
 #ifdef WINDOWS_BUILD
 	// TODO - KYLE - convert to basic c++ for PS3 compatability
-	auto addEdge = [&](const T3Vector3 &a, const T3Vector3 &b) -> void
+	void addEdge(const T3Vector3 &a, const T3Vector3 &b)
 	{
-		for(auto it = lst_EPA_Edge.begin(); it != lst_EPA_Edge.end();it++)
+		for(vector<EPA_Edge>::iterator it = lst_EPA_Edge.begin(); it != lst_EPA_Edge.end();it++)
 		{
-			//if the adge already exsists, delete it and do not add the new one
+			//if the edge already exsists, delete it and do not add the new one
 			if((it->Point[0].v - b).Length() < _EXIT_THRESHOLD && (it->Point[1].v - a).Length() < _EXIT_THRESHOLD)
 			{
 				it = lst_EPA_Edge.erase(it);
