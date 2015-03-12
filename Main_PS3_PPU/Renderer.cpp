@@ -317,7 +317,6 @@ Renderer::~Renderer(void)
 
 void Renderer::RenderScene() 
 {
-
 	renderMutex.lock_mutex(); // prevent other threads from accessing OpenGL during rendering
 	SetViewport();
 	ClearBuffer();
@@ -345,7 +344,11 @@ void Renderer::RenderScene()
 	}
 
 	//Draw HUD/Menu overlay
-	Draw2DOverlay();
+	loadingIcon->SetRotation(loadingIcon->GetRotation() + 1.0f);
+	if (hudShader != NULL && quadMesh != NULL) 
+	{
+		Draw2DOverlay();
+	}
 
 	SwapBuffers();
 	//wglMakeCurrent(deviceContext, NULL);

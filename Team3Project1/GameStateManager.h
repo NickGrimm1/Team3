@@ -84,7 +84,9 @@ public:
 #endif
 		Instance()->physics->Start("Physics");
 		Instance()->input->Start("Input");
+#if WINDOWS_BUILD
 		Instance()->audio->Start("Audio");
+#endif
 
 		while (instance->isRunning) {
 #ifdef WINDOWS_BUILD
@@ -118,13 +120,16 @@ public:
 			graphics->Terminate();
 			physics->Terminate();
 			input->Terminate();
+#if WINDOWS_BUILD
 			audio->Terminate();
-
+#endif
 			// Clean up
 			graphics->Join();
 			physics->Join();
 			input->Join();
+#if WINDOWS_BUILD
 		    audio->Join();
+#endif
 
 			vector<GameScreen*>::iterator i = instance->gameScreens.begin();
 			while (i != instance->gameScreens.end())
