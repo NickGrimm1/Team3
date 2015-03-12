@@ -26,7 +26,6 @@ namespace EntryPoint
 {
 	void StartGame()
 	{
-		// TODO: Get a new gameScreen up for splash/menu etc.
 		LoadingScreen* loadingScreen = new LoadingScreen();
 		GameStateManager::Instance()->AddGameScreen(loadingScreen);
 
