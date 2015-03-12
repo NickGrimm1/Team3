@@ -137,7 +137,6 @@ GamepadEvents::PlayerIndex InputManager::GetActiveController(GamepadEvents::Play
 #endif
 				{
 #if PS3_BUILD
-					std::cout << "Got Pad Data?" << std::endl;
 					if(gamePadState.button[2] & (1 << 3)) // Start
 #endif
 #if WINDOWS_BUILD

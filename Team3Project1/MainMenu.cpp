@@ -11,6 +11,7 @@ MainMenu::MainMenu(void)
 	playerOne = GamepadEvents::PLAYERINDEX_MAX;
 
 	connectionTime = 0.0;
+	inputEnabled = true;
 }
 
 void MainMenu::Update(void) 
@@ -25,11 +26,11 @@ void MainMenu::Update(void)
 			GameStateManager::Graphics()->EnableMousePointer(false);
 #endif
 			SetCurrentSelected(0);
-			connectionTime = 0;
+			connectionTime = 500;
 		}
 	}
 	else
-		connectionTime += 8;
+		connectionTime < 0 ? connectionTime = 0 : connectionTime -= 5.0; // Slightly hacky way of not triggering input as soon as we first get a controller.
 }
 
 MainMenu::~MainMenu(void)
@@ -187,7 +188,9 @@ void MainMenu::UnloadContent() {
 
 /*--------------------Clicked Methods--------------------*/
 
-void MainMenu::NewGameClicked(float x, float y) {
+void MainMenu::NewGameClicked(float x, float y) 
+{
+	std::cout << "New Game Clicked" << std::endl;
 	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	newGame->GetTexture()->SetTexture(buttonTexClicked);
 #if WINDOWS_BUILD
@@ -305,7 +308,8 @@ void MainMenu::GamepadDisconnect(GamepadEvents::PlayerIndex playerID)
 }
 void MainMenu::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button)
 {
-	if (connectionTime > 500.0)
+	std::cout <<"MainMenu:GPEvent"<<std::endl;
+	if (connectionTime < 200.0)
 		GameScreen2D::GamepadEvent(playerID, type, button);
 }
 
