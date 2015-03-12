@@ -47,8 +47,8 @@ namespace EntryPoint
 		GameStateManager::Instance()->Start();*/
 
 
-		AudioTestClass* audio = new AudioTestClass();
-		GameStateManager::Instance()->AddGameScreen(audio);
+		//AudioTestClass* audio = new AudioTestClass();
+		//GameStateManager::Instance()->AddGameScreen(audio);
 
 
 		//NetworkTest* network = new NetworkTest();
