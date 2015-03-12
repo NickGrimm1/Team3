@@ -1291,8 +1291,8 @@ bool Renderer::DropRenderContextForThread() {
 	bool result = (0 != wglMakeCurrent(deviceContext, NULL));
 	openglMutex.unlock_mutex();
 #ifdef WINDOWS_BUILD
-	float sleep = Window::GetWindow().GetTimer()->GetMS();
-	while (Window::GetWindow().GetTimer()->GetMS() < sleep + 100);
+	//float sleep = Window::GetWindow().GetTimer()->GetMS();
+	//while (Window::GetWindow().GetTimer()->GetMS() < sleep + 50);
 #endif
 	return result;
 }
