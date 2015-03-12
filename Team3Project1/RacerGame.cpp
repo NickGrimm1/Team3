@@ -17,9 +17,9 @@
 
 //#include "DrawableText2D.h"
 //#include "GameScreen2D.h"
-#if WINDOWS_BUILD
+
 #include "HudTestScreen.h"
-#endif
+
 int RacerGame::update =0;
 float RacerGame::g=0.0f;
 float RacerGame::gx =300.0f;
@@ -41,11 +41,9 @@ RacerGame::RacerGame(void)
 	PlayTime=30;
 	timeOrScore=0;
 
-		//hud = new HudTestScreen();
-		//GameStateManager::Instance()->AddGameScreen(hud);
 
-		 scoreTexture = GameStateManager::Assets()->LoadTexture(this, "score", 0);
-		 timeTexture = GameStateManager::Assets()->LoadTexture(this, "time", 0);
+
+		
 
 
 	//Strack = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2],5,50.f);
@@ -67,7 +65,13 @@ void RacerGame::LoadContent() {
 	//Mesh* coneMesh = Mesh::GenerateCone(20);
 	quad = GameStateManager::Assets()->LoadCylinder(this, 20);
 	cylinder = GameStateManager::Assets()->LoadCylinder(this, 20);
+
+	hud = new HudTestScreen();
+	GameStateManager::Instance()->AddGameScreen(hud);
 	
+	scoreTexture = GameStateManager::Assets()->LoadTexture(this, "score", 0);
+	timeTexture = GameStateManager::Assets()->LoadTexture(this, "time", 0);
+
 	//ent = new DrawableEntity3D(
 	//	quad, 
 	//	NULL,

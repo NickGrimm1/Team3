@@ -237,6 +237,7 @@ bool Renderer::LoadAssets()
 	}
 
 	textMeshMemory = 0;
+	return true;
 }
 
 bool Renderer::LoadCheck()
