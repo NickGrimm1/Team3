@@ -74,7 +74,7 @@ public:
 	vector<DrawableEntity3D*> allEntities;
 	vector<TrackSegment*> TrackSegmentVector;
 	vector<GameEntity*> checkPoint;
-	vector<GameEntity*> pickup;
+	vector<Gold_cion*> pickup;
 
 	 virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
 		  if(obj1->GetType()=='g')

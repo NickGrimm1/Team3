@@ -217,9 +217,9 @@ void RacerGame::LoadContent() {
 
 	//camera->SetPosition(T3Vector3(0.0f,10.0f, 80.0f));
 	//camera->SetYaw(180.0f);
-	GameStateManager::Graphics()->SetCamera(camera);
+	//GameStateManager::Graphics()->SetCamera(camera);
 
-	//GameStateManager::Graphics()->SetCamera(chasecamera);
+	GameStateManager::Graphics()->SetCamera(chasecamera);
 }
 
 void RacerGame::Update() { 
@@ -238,17 +238,29 @@ void RacerGame::Update() {
 		BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
 	
 	}
-	/*if(car->GetCarNode().GetLinearVelocity().Length()>=15)
-	{
-		car->GetCarNode().SetForce(T3Vector3(0,0,0));
-	
-	}*/
-	//if(((abs(car->GetCarNode().GetLinearVelocity().x)+abs(car->GetCarNode().GetLinearVelocity().z))<0.5)&& f!=0)
-	//	
-	//{
- // f=0;
- // //cout<<"reset f"<<endl;
-	//}
+
+	for (unsigned int i = 0; i < pickup.size(); i++) {
+		//PhysicsNode pn = pickup[i]->GetPhysicsNode();
+		pickup[i]->GetPhysicsNode().SetOrientation(Quaternion::AxisAngleToQuaterion(T3Vector3(0.0f, 1.0f, 0.0f), 0.5f) * pickup[i]->GetPhysicsNode().GetOrientation());
+		
+		if (pickup[i]->GetUpDown()) {
+			if (pickup[i]->GetPhysicsNode().GetPosition().y < 8.0f)
+				pickup[i]->GetPhysicsNode().SetPosition(pickup[i]->GetPhysicsNode().GetPosition() + T3Vector3(0.0f, 0.05f, 0.0f));
+			else {
+				pickup[i]->FlipUpDown();
+				//pn.SetPosition(pn.GetPosition + T3Vector3(0.0f, -1.0f, 0.0f));
+			}
+		}
+		else {
+			if (pickup[i]->GetPhysicsNode().GetPosition().y > 3.0f)
+				pickup[i]->GetPhysicsNode().SetPosition(pickup[i]->GetPhysicsNode().GetPosition() + T3Vector3(0.0f, -0.05f, 0.0f));
+			else {
+				pickup[i]->FlipUpDown();
+				//pn.SetPosition(pn.GetPosition + T3Vector3(0.0f, 1.0f, 0.0f));
+			}
+		}
+	}
+
 	if(f>0){
 		f=f-0.35f;
 	if(f<0)
@@ -295,27 +307,21 @@ void RacerGame::Update() {
 }
 void RacerGame::Start(){
 	cout << "RacerGame: Start()" << endl;
-	Gold_cion * gold_cion= new Gold_cion(8.0f);
+	Gold_cion * gold_cion= new Gold_cion(20.0f);
 	cout << "RacerGame: Made a Gold_cion " << endl;
 	gold_cion->SetOriginPosition(T3Vector3(50.0f,0.0f,0.0f));
 	gold_cion->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
-	gold_cion->SetTexture(scoreTexture);
 
 	gold_cion->SetPhysics(8.0f,'p',T3Vector3(50.0f,0.0f,0.0f),Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
 	
 	gold_cion->SetType('p');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 	gold_cion->GetPhysicsNode().SetPGE(gold_cion);
 	cout << "RacerGame: Set Gold_cion params" << endl;
-	//T3Vector4 color(1.f,1.f,1.f,0.f);
-	//gold_cion->GetMesh()->SetColour(color);
-
 
 	AddDrawable(gold_cion);
 	cout << "RacerGame: Added Gold_cion to drawables" << endl;
 	pickup.push_back(gold_cion);
 	cout << "RacerGame: Pushed Gold_cion to back of pickup vector" << endl;
-
-
 
 	//starting track
 	float angle =0.0f;
@@ -695,12 +701,10 @@ void RacerGame::CreateTrack(){
 	checkPoint.push_back(checkpoint2);
 
 	if(GettimeOrScore()!=3){
-	Gold_cion * gold_cion= new Gold_cion(8.0f);
+	Gold_cion * gold_cion= new Gold_cion(20.0f);
 
 	gold_cion->SetOriginPosition(SplinePoint[4]+T3Vector3((rand() % 10)-5.0f,0.0f,(rand() % 10)-5.0f));
 	gold_cion->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
-
-	gold_cion->SetTexture(scoreTexture);
 
 	gold_cion->SetPhysics(8.0f,'p',SplinePoint[4],Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
 	
@@ -711,12 +715,10 @@ void RacerGame::CreateTrack(){
 	pickup.push_back(gold_cion);
 	}
 	if(GettimeOrScore()==3){
-	Gold_cion * gold_cion= new Gold_cion(8.0f);
+	Gold_cion * gold_cion= new Gold_cion(20.0f);
 
 	gold_cion->SetOriginPosition(SplinePoint[4]+T3Vector3((rand() % 10)-5.0f,0.0f,(rand() % 10)-5.0f));
 	gold_cion->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
-
-	gold_cion->SetTexture(timeTexture);
 
 	gold_cion->SetPhysics(8.0f,'p',SplinePoint[4],Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
 	
