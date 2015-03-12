@@ -223,7 +223,21 @@ void RacerGame::LoadContent() {
 }
 
 void RacerGame::Update() { 
-
+	if(car->GetCarNode().GetLinearVelocity().x>0)
+	{
+		FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(-car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0) );
+		FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(-car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
+		BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(-car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
+		BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(-car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
+	}
+	if(car->GetCarNode().GetLinearVelocity().x<0)
+	{
+	    FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
+		FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
+		BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
+		BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(car->GetCarNode().GetLinearVelocity().Length()*0.5f,0,0));
+	
+	}
 	/*if(car->GetCarNode().GetLinearVelocity().Length()>=15)
 	{
 		car->GetCarNode().SetForce(T3Vector3(0,0,0));
