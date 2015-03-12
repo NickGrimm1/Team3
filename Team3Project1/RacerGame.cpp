@@ -98,7 +98,7 @@ void RacerGame::LoadContent() {
 
 
 	camera = new FreeCamera();
-
+	camera->SetPosition(T3Vector3(10,50,400));
 	//checkpoint= new CheckPoint(10);
 	//checkpoint->SetPhysics(10,'c');
 	//checkpoint->SetType('g');
@@ -152,7 +152,7 @@ void RacerGame::LoadContent() {
 	//chasecamera->AddYaw(500);
 	//chasecamera->AddPitch(90);
 	//car->SetPhysics(5,(vpn->GetCar()));
-
+	
 	vpn->SetPGE(car);
 	vpn->getRFW()->SetPGE(car);
 	vpn->getRFW()->SetType('z');
@@ -215,9 +215,9 @@ void RacerGame::LoadContent() {
 	tempPosition = T3Vector3(0.0f,350.0f,-800.0f);
 	PlayerPosition=T3Vector3(500.0f,100.0f,-800.0f);
 
-	camera->SetPosition(T3Vector3(0.0f,10.0f, 80.0f));
+	//camera->SetPosition(T3Vector3(0.0f,10.0f, 80.0f));
 	//camera->SetYaw(180.0f);
-	GameStateManager::Graphics()->SetCamera(chasecamera);
+	GameStateManager::Graphics()->SetCamera(camera);
 
 	//GameStateManager::Graphics()->SetCamera(chasecamera);
 }
@@ -294,9 +294,9 @@ void RacerGame::Update() {
 	Time+=1;
 }
 void RacerGame::Start(){
-
+	cout << "RacerGame: Start()" << endl;
 	Gold_cion * gold_cion= new Gold_cion(8.0f);
-
+	cout << "RacerGame: Made a Gold_cion " << endl;
 	gold_cion->SetOriginPosition(T3Vector3(50.0f,0.0f,0.0f));
 	gold_cion->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
 	gold_cion->SetTexture(scoreTexture);
@@ -305,14 +305,15 @@ void RacerGame::Start(){
 	
 	gold_cion->SetType('p');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 	gold_cion->GetPhysicsNode().SetPGE(gold_cion);
-
+	cout << "RacerGame: Set Gold_cion params" << endl;
 	//T3Vector4 color(1.f,1.f,1.f,0.f);
 	//gold_cion->GetMesh()->SetColour(color);
 
 
 	AddDrawable(gold_cion);
+	cout << "RacerGame: Added Gold_cion to drawables" << endl;
 	pickup.push_back(gold_cion);
-
+	cout << "RacerGame: Pushed Gold_cion to back of pickup vector" << endl;
 
 
 

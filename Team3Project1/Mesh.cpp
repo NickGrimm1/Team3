@@ -1,5 +1,5 @@
 #include "Mesh.h"
-
+#include "../Main_PS3_PPU/Renderer.h"
 Mesh::Mesh()	
 {
 #if WINDOWS_BUILD
@@ -46,6 +46,11 @@ void Mesh::Draw()
 #if PS3_BUILD
 void Mesh::Draw(Shader* shader)
 {
+	Renderer::count++;
+	if(numVertices == 0)
+		return;
+
+	cout << "Drawing Mesh" <<numVertices <<endl;
 	int shader_idx;
 
 	shader_idx = shader->GetVertex()->GetAttributeIndex(VertexAttributes::POSITION);

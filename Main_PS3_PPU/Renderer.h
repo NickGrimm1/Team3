@@ -41,6 +41,7 @@ using namespace std;
 class Renderer : public GCMRenderer	
 {
 public:
+	static int count;
 	Renderer::Renderer(vector<Light*>& lightsVec, vector<SceneNode*>& SceneNodesVec, vector<DrawableTexture2D*>& overlayTextureVec, vector<DrawableText2D*>& overlayTextVec);
 	~Renderer(void);
 

@@ -80,12 +80,16 @@ public:
 	void Start() {
 		// Start Threads
 #if PS3_BUILD
+		cout << "GameStateManager: About to initialise graphics thread " << endl;
 		Instance()->graphics->Start("Graphics");
+//	sys_timer_usleep(1000);
+		cout << "GameStateManager: Graphics Thread Started" << endl;
 #endif
 		Instance()->physics->Start("Physics");
 		Instance()->input->Start("Input");
+#if WINDOWS_BUILD
 		Instance()->audio->Start("Audio");
-
+#endif
 		while (instance->isRunning) {
 #ifdef WINDOWS_BUILD
 			while (Window::GetWindow().GetTimer()->GetMS() - instance->lastUpdate < GAME_FRAME_TIME) { ; }
@@ -118,14 +122,16 @@ public:
 			graphics->Terminate();
 			physics->Terminate();
 			input->Terminate();
+#if WINDOWS_BUILD
 			audio->Terminate();
-
+#endif
 			// Clean up
 			graphics->Join();
 			physics->Join();
 			input->Join();
-		    audio->Join();
-
+#if WINDOWS_BUILD
+			audio->Join();
+#endif
 			vector<GameScreen*>::iterator i = instance->gameScreens.begin();
 			while (i != instance->gameScreens.end())
 			{

@@ -230,6 +230,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">
     <ClCompile>
       <PreprocessorDefinitions>CELL_GCM_DEBUG;PS3_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
