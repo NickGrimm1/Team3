@@ -78,7 +78,7 @@ void GraphicsTestScreen::LoadContent() {
 		grassTex,
 		NULL,
 		800.0f,
-		T3Vector3(),
+		T3Vector3(-500,-100,-500),
 		Quaternion::EulerAnglesToQuaternion(0,0,0),
 		T3Vector3(1,1,1));
 	AddDrawable(ent);
@@ -233,22 +233,22 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 		switch (key) {
 
 		case KeyboardEvents::KEYBOARD_W:
-			GetPlayer()->Move(T3Vector3(0,0,-1));
+			camera->AddMovement(T3Vector3(0,0,-1));
 			break;
 		case KeyboardEvents::KEYBOARD_S:
-			GetPlayer()->Move(T3Vector3(0,0,1));
+			camera->AddMovement(T3Vector3(0,0,1));
 			break;
 		case KeyboardEvents::KEYBOARD_A:
-			GetPlayer()->Move(T3Vector3(-1,0,0));
+			camera->AddMovement(T3Vector3(-1,0,0));
 			break;
 		case KeyboardEvents::KEYBOARD_D:
-			GetPlayer()->Move(T3Vector3(1,0,0));
+			camera->AddMovement(T3Vector3(1,0,0));
 			break;
 		case KeyboardEvents::KEYBOARD_SHIFT:
-			GetPlayer()->Move(T3Vector3(0,1,0));
+			camera->AddMovement(T3Vector3(0,1,0));
 			break;
 		case KeyboardEvents::KEYBOARD_SPACE:
-			GetPlayer()->Move(T3Vector3(0,-1,0));
+			camera->AddMovement(T3Vector3(0,-1,0));
 			break;
 		case KeyboardEvents::KEYBOARD_LEFT:
 			camera->AddYaw(1);
@@ -283,7 +283,7 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 }
 	
 void GraphicsTestScreen::MouseMoved(T3Vector2& start, T3Vector2& finish) {
-	camera->AddPitch(-finish.y);
-	camera->AddYaw(-finish.x);
+	camera->AddPitch(4 * (start.y - finish.y));
+	camera->AddYaw(4 * (start.x -finish.x));
 }
 #endif
