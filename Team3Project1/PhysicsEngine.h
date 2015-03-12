@@ -99,7 +99,6 @@ private:
 	{
 		frameRate = 0;
 		gameClass = NULL;
-		isDrop =false;
 	}
 #endif
 #if PS3_BUILD
@@ -123,7 +122,6 @@ private:
 	float lastFrameTimeStamp;
 	int frameRate;
 
-	bool  isDrop;
 	void ThreadRun();
 	RacerGame* gameClass;
 };
