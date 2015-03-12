@@ -351,9 +351,6 @@
     <ClInclude Include="..\Framework\Light.h">
       <Filter>Framework\Graphics\Common\Header</Filter>
     </ClInclude>
-    <ClInclude Include="GraphicsCommon.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ChaseCamera.h">
       <Filter>Framework\Graphics\Common\Header</Filter>
     </ClInclude>
@@ -539,6 +536,9 @@
     </ClInclude>
     <ClInclude Include="PhysicsObjMesh.h">
       <Filter>Framework\Resource Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsCommon.h">
+      <Filter>Framework\Graphics\Common\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

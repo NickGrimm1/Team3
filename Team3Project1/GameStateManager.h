@@ -306,7 +306,6 @@ public:
 	*/
 	static void ChangeScreen(GameScreen* gameScreen)
 	{
-		gameScreen->LoadContent();
 		vector<GameScreen*>::iterator i = instance->gameScreens.begin();
 		while (i != instance->gameScreens.end())
 		{
@@ -314,7 +313,7 @@ public:
 			delete *i;
 			i = instance->gameScreens.erase(i);
 		}
-
+		gameScreen->LoadContent();
 		Instance()->gameScreens.push_back(gameScreen);
 	}
 	/**
