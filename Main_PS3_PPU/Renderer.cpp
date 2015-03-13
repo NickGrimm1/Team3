@@ -317,7 +317,7 @@ Renderer::~Renderer(void)
 
 void Renderer::RenderScene() 
 {
-	cout << "Render Scene!" << endl;
+	//cout << "Render Scene!" << endl;
 	renderMutex.lock_mutex(); // prevent other threads from accessing OpenGL during rendering
 	SetViewport();
 	ClearBuffer();
@@ -333,7 +333,7 @@ void Renderer::RenderScene()
 
 		//Main Render
 		//ShadowPass();
-		cout << "Meshes Last Frame: " << count << endl;
+		//cout << "Meshes Last Frame: " << count << endl;
 
 		count = 0;
 		DrawScene();

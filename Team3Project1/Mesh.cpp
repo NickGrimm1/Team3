@@ -62,7 +62,7 @@ void Mesh::Draw(Shader* shader)
 		bool a = true;
 	}
 
-	cout << "Drawing Mesh" <<numVertices <<endl;
+	//cout << "Drawing Mesh" <<numVertices <<endl;
 	int shader_idx;
 
 	shader_idx = shader->GetVertex()->GetAttributeIndex(VertexAttributes::POSITION);

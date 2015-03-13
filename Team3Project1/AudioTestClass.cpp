@@ -11,7 +11,6 @@
 #pragma comment(lib, "winmm.lib")
 
 
-#define RENDER_HZ 60.0f
 
 AudioTestClass::AudioTestClass(void)
 {

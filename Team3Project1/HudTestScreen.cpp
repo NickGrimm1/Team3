@@ -6,6 +6,7 @@ HudTestScreen::HudTestScreen(void)
 	inputEnabled=false;
 	time=30;
 	score=0;
+	speed=0.0f;
 }
 
 
@@ -37,6 +38,11 @@ void HudTestScreen::LoadContent() {
 		ss2<<score;
 		ss2>>str2;
 
+		std::stringstream ss3;
+		std::string str3;
+		ss3<<speed;
+		ss3>>str3;
+
 		Playtime=	new DrawableText2D(
 		0.7f, 
 		0.7f, 
@@ -64,6 +70,21 @@ void HudTestScreen::LoadContent() {
 	AddDrawable(Playtime);
 	AddDrawable(Score);
 
+	Speed=	new DrawableText2D(
+		0.7f, 
+		0.6f, 
+		0, 
+		0.2f, 
+		0.1f, 
+		"Speed = "+str3, 
+		f,
+		0,
+		T3Vector2(0.5f, 0.5f),
+		T3Vector4(1.0f,1.0f,1.0f,0.7f));
+
+	AddDrawable(Speed);
+	
+
 	//string Stime="time";
 
 }
@@ -77,7 +98,7 @@ void HudTestScreen::UnloadContent()
 
 
 
-void HudTestScreen::SetScreen(int point,int time){
+void HudTestScreen::SetScreen(int point,int time,float speed){
 	
 	//SetTime(time);
 	//SetTime(time);
@@ -92,7 +113,12 @@ void HudTestScreen::SetScreen(int point,int time){
 		ss4<<point;
 		ss4>>str4;
 
+		std::stringstream ss5;
+		std::string str5;
+		ss5<<speed;
+		ss5>>str5;
+
 	Playtime->SetText("Time = "+str3);
 	Score->SetText("Score = "+str4);
-	
+	Speed->SetText("Speed = "+str5);
 }
