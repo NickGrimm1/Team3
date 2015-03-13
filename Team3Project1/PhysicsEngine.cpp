@@ -928,6 +928,7 @@ void	PhysicsEngine::RemoveNode(PhysicsNode* n) {
 	for(vector<PhysicsNode*>::iterator i = allNodes.begin(); i != allNodes.end(); ++i) {
 		if((*i) == n) {
 			allNodes.erase(i);
+			ListGuard.unlock_mutex();
 			return;
 		}
 	}
@@ -945,6 +946,7 @@ void	PhysicsEngine::RemoveConstraint(Constraint* c) {
 	for(vector<Constraint*>::iterator i = allSprings.begin(); i != allSprings.end(); ++i) {
 		if((*i) == c) {
 			allSprings.erase(i);
+			ListGuard.unlock_mutex();
 			return;
 		}
 	}
@@ -962,6 +964,7 @@ void	PhysicsEngine::RemoveDebugDraw(DebugDrawer* d) {
 	for(vector<DebugDrawer*>::iterator i = allDebug.begin(); i != allDebug.end(); ++i) {
 		if((*i) == d) {
 			allDebug.erase(i);
+			ListGuard.unlock_mutex();
 			return;
 		}
 	}
@@ -981,5 +984,5 @@ void PhysicsEngine::OnCollision(PhysicsNode& p1, PhysicsNode& p2)
 {
 	if (gameClass != NULL) {
 	gameClass->CollisionBetween(p1.GetGameEntity(),p2.GetGameEntity());
-}
+	}
 }
