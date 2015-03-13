@@ -82,7 +82,7 @@ GraphicsEngine::GraphicsEngine()
 	loadingIcon = new DrawableTexture2D(
 		0.95f,
 		1.0f - 0.05f * aspect,
-		1,
+		INT_MAX,
 		0.05f,
 		0.05f * aspect,
 		loadingTexture,
@@ -291,46 +291,47 @@ void GraphicsEngine::Run()
 	if (isLoading && !isLoadingDrawing) 
 	{
 #if WINDOWS_BUILD
-			overlayElementsList.push_back(loadingIcon);
+		overlayElementsList.push_back(loadingIcon);
 #endif
 #if PS3_BUILD
 		overlayTexturesList.push_back(loadingIcon);
 #endif
-			isLoadingDrawing = true;
-		}
-		else if (!isLoading && isLoadingDrawing) 
-		{
+		isLoadingDrawing = true;
+	}
+	else if (!isLoading && isLoadingDrawing) 
+	{
+		isLoadingDrawing = false;
 #if WINDOWS_BUILD
-			for (unsigned int i = 0; i < overlayElementsList.size(); i++) 
+		for (unsigned int i = 0; i < overlayElementsList.size(); i++) 
+		{
+			if (overlayElementsList[i] == loadingIcon) 
 			{
-				if (overlayElementsList[i] == loadingIcon) 
-				{
-					overlayElementsList.erase(overlayElementsList.begin() + i);
-				}
+				overlayElementsList.erase(overlayElementsList.begin() + i);
 			}
+		}
 #endif
 #if PS3_BUILD
-			for (unsigned int i = 0; i < overlayTexturesList.size(); i++) 
+		for (unsigned int i = 0; i < overlayTexturesList.size(); i++) 
+		{
+			if (overlayTexturesList[i] == loadingIcon) 
 			{
-				if (overlayTexturesList[i] == loadingIcon) 
-				{
-					overlayTexturesList.erase(overlayTexturesList.begin() + i);
-				}
+				overlayTexturesList.erase(overlayTexturesList.begin() + i);
 			}
-#endif
 		}
-
-		//Update the day/night float
-		renderer->SetDayNight(DayNightCycle());
-
-		// Render data
-		renderer->RenderScene();
-
-		// Clear node lists in preparation for next render cycle
-		ClearNodeLists();
-
-		contentGuard.unlock_mutex();
+#endif
 	}
+
+	//Update the day/night float
+	renderer->SetDayNight(DayNightCycle());
+
+	// Render data
+	renderer->RenderScene();
+
+	// Clear node lists in preparation for next render cycle
+	ClearNodeLists();
+
+	contentGuard.unlock_mutex();
+}
 
 #if PS3_BUILD
 	sys_ppu_thread_exit (0);

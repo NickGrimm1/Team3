@@ -8,6 +8,7 @@
 #include "TrackSegment.h"
 #include "../Framework/InertialMatrixHelper.h"
 #include "PauseScreen.h"
+#include "HighScore.h"
 
 #if WINDOWS_BUILD
 #include "AudioTestClass.h"
@@ -35,6 +36,7 @@ RacerGame::RacerGame(void)
 {
 
 	//f=5;
+	gameOver = false;
 	srand(time(NULL));
 	T3Vector3 sp1= T3Vector3(100.0f,0.0f,0.0f);
 	T3Vector3 sp2= T3Vector3(200.0f,0.0f,0.0f);
@@ -257,6 +259,7 @@ void RacerGame::LoadContent() {
 }
 
 void RacerGame::Update() { 
+	if (gameOver) return; // Game over - don't update
 
 	GameStateManager::Input()->GetActiveController();
 	
@@ -1259,7 +1262,6 @@ void RacerGame::Pause() {
 	GameStateManager::Physics()->Pause();
 	inputEnabled = false;
 	GameStateManager::AddGameScreen(new PauseScreen(this, hud));
-	
 }
 
 void RacerGame::Resume() {
@@ -1272,4 +1274,13 @@ void RacerGame::UnloadContent() {
 	GameStateManager::Audio()->SetListener(NULL);
 
 
+}
+
+void RacerGame::GameOver() {
+	gameOver = true;
+	inputEnabled = false;
+	GameStateManager::Physics()->Pause();
+	HighScore* scoreboard = new HighScore(score, this, hud);
+	GameStateManager::AddGameScreen(scoreboard);	
+	GameStateManager::Physics()->Resume();
 }

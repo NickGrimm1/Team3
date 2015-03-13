@@ -61,7 +61,7 @@ public:
 	void SetMinSpeed(float value);
 	float GetMinSpeed(){return minSpeed;}
 
-	void GameOver(){}
+	void GameOver();
 
 	void CreateTrack();
 	void DeleteTrack();
@@ -180,7 +180,7 @@ public:
 private:
 	Mesh* quad;
 	Mesh* cylinder;
-	float score;
+	unsigned int score;
 	float Time;
 	int PlayTime;
 	int timeOrScore;
@@ -204,6 +204,7 @@ private:
 	bool isplaymidspdegine;
 	bool moveenginesound;
 	bool carspeediszero;
+	bool gameOver;
 #if WINDOWS_BUILD
 	SoundEmitter* Engine0;
 	SoundEmitter* Engine1;
