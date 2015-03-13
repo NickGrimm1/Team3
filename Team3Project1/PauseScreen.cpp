@@ -5,6 +5,9 @@ PauseScreen::PauseScreen(GameScreen3D* mainGame, GameScreen2D* hud) {
 #if WINDOWS_BUILD
 	GameStateManager::Graphics()->EnableMousePointer(true);
 #endif
+//	#if WINDOWS_BUILD
+//	AudioTestClass* audio;
+//#endif
 	//Set these to reflect the current state of the audio engine.
 	musicMuted = false;
 	soundMuted = false;
@@ -13,11 +16,11 @@ PauseScreen::PauseScreen(GameScreen3D* mainGame, GameScreen2D* hud) {
 }
 
 PauseScreen::~PauseScreen(void) {
-
+	
 }
 
 void PauseScreen::Update() {
-
+	//CurrentTime=timer.GetMS();
 }
 
 void PauseScreen::LoadContent() {
@@ -82,6 +85,12 @@ void PauseScreen::LoadContent() {
 	AddClickable(sounds);
 
 	AddDrawable(pauseLogo);
+
+	SoundManager::AddSound(SOUNDSDIR"MenuMusic.wav");
+	Mainmenu_BGM = GameStateManager::Audio()->GetSound(SOUNDSDIR"MenuMusic.wav");
+	mainmusic=GameStateManager::Audio()-> PlaySound (Mainmenu_BGM,SOUNDPRIORITY_ALWAYS,true, true);
+
+
 }
 
 void PauseScreen::UnloadContent() {
@@ -109,6 +118,7 @@ void PauseScreen::UnloadContent() {
 	GameStateManager::Assets()->UnloadTexture(this, "Buttons/sound_mute_selected");
 
 	GameStateManager::Assets()->UnloadTexture(this, "pause_screen");
+	GameStateManager::Audio()->StopSound(mainmusic);
 }
 
 void PauseScreen::ResumeClicked(float x, float y) {
@@ -125,28 +135,46 @@ void PauseScreen::MainMenuClicked(float x, float y) {
 	GameStateManager::RemoveGameScreen(this);
 	MainMenu* menu = new MainMenu();
 	GameStateManager::AddGameScreen(menu);
+	
 }
 
 void PauseScreen::SoundsClicked(float x, float y) {
-	if (soundMuted)
+	if (soundMuted){
 		sounds->GetTexture()->SetTexture(soundNoMuteHover);
-	else
+#if WINDOWS_BUILD
+		GameStateManager::Audio()->SetMasterVolume(1.0f);
+#endif	
+	}
+	else{
 		sounds->GetTexture()->SetTexture(soundMuteHover);
-
+#if WINDOWS_BUILD
+		GameStateManager::Audio()->SetMasterVolume(0.0f);
+#endif	
+	}	
 	soundMuted = !soundMuted;
 }
 
 void PauseScreen::MusicClicked(float x, float y) {
-	if (musicMuted) 
+	if (musicMuted){ 
 		music->GetTexture()->SetTexture(musicNoMuteHover);
-	else
+#if WINDOWS_BUILD
+		GameStateManager::Audio()->EnableGlobalSounds(true);
+		GameStateManager::Audio()->EnableLocalSounds(true);
+#endif
+	}	
+	else{
 		music->GetTexture()->SetTexture(musicMuteHover);
-
+#if WINDOWS_BUILD
+		GameStateManager::Audio()->EnableGlobalSounds(false);
+		GameStateManager::Audio()->EnableLocalSounds(true);
+#endif
+	}
 	musicMuted = !musicMuted;
 }
 
 void PauseScreen::ResumeSelected() {
 	resumeGame->GetTexture()->SetTexture(buttonTexHover);
+	//GameStateManager::Audio()->SetMasterVolume(1.0);
 }
 
 void PauseScreen::ResumeDeselected() {
