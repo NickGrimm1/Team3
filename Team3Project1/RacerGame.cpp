@@ -27,6 +27,7 @@ RacerGame::RacerGame(unsigned int lowestScore)
 	//f=5;
 	lowScore = lowestScore;
 	gameOver = false;
+	isPaused = false;
 	srand(time(NULL));
 	T3Vector3 sp1= T3Vector3(100.0f,0.0f,0.0f);
 	T3Vector3 sp2= T3Vector3(200.0f,0.0f,0.0f);
@@ -108,6 +109,8 @@ void RacerGame::LoadContent() {
 }
 void RacerGame::Update() { 
 	if (gameOver) return; // Game over - don't update
+	if (isPaused) return;
+
 
 	GameStateManager::Input()->GetActiveController();
 	for (unsigned int i = 0; i < pickup.size(); i++) {
@@ -798,6 +801,7 @@ void RacerGame::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID,
 
 void RacerGame::Pause() {
 	camera->Pause();
+	isPaused = true;
 	GameStateManager::Physics()->Pause();
 	inputEnabled = false;
 	GameStateManager::AddGameScreen(new PauseScreen(this, hud));
@@ -810,6 +814,7 @@ void RacerGame::Resume() {
 	GameStateManager::Physics()->Resume();
 	inputEnabled = true;
 	isplaylowspdegine=false;
+	isPaused = false;
 	//if(car->GetCarNode().GetLinearVelocity().Length()<170)
 	//{
 	//	Sound* engine0=GameStateManager::Audio()->GetSound(SOUNDSDIR"lowspeedengine.wav");

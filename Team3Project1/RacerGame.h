@@ -160,6 +160,7 @@ private:
 	bool moveenginesound;
 	bool carspeediszero;
 	bool gameOver;
+	bool isPaused;
 	unsigned int lowScore;
 #if WINDOWS_BUILD
 	SoundEmitter* Engine0;
