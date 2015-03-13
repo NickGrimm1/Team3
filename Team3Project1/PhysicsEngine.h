@@ -116,6 +116,7 @@ private:
 	{
 		frameRate = 0;
 		gameClass = NULL;
+		paused = false;
 	}
 #endif
 
@@ -131,10 +132,6 @@ private:
 		}
 		for(int  i =0; i <allDebug.size(); ++i) {
 			delete allDebug[i];
-			
-		}
-		for(int  i =0; i <narrowlist.size(); ++i) {
-			delete narrowlist[i];
 			
 		}
 	
