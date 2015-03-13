@@ -11,9 +11,7 @@
 #include "CheckPoint.h"
 #include "TrackSegment.h"
 #include "Gold_cion.h"
-#if WINDOWS_BUILD
 #include "HudTestScreen.h"
-#endif
 #include "GameStateManager.h"
 //#include "../Framework/SoundManager.h"
 class Vehicle;
@@ -68,8 +66,8 @@ public:
 	//sam
 	Texture* scoreTexture;
 	Texture* timeTexture;
-#if WINDOWS_BUILD
 	HudTestScreen* hud;
+#if WINDOWS_BUILD
 	AudioTestClass* audio;
 #endif
 	static float g;
@@ -130,6 +128,7 @@ public:
 		  }
 			   if(obj1->GetType()=='t')
 		  {
+#if WINDOWS_BUILD
 			  Sound* time;
 			  time=GameStateManager::Audio()->GetSound(SOUNDSDIR"time.wav");
 			  GameStateManager::Audio()->PlaySoundA(time, obj1->GetOriginPosition(), false);
@@ -138,6 +137,7 @@ public:
 			  SetPlayTime(30);
 			  GameStateManager::Graphics()->RemoveDrawable(obj1);
 	          obj1->DisconnectFromSystems();
+#endif
 		  }
 			   		  
    }
@@ -152,8 +152,7 @@ private:
 	float Time;
 	int PlayTime;
 	int timeOrScore;
-	#if WINDOWS_BUILD
-
+#if WINDOWS_BUILD
 	SpotLight* light;
 #endif
 	FreeCamera* camera;
@@ -173,6 +172,8 @@ private:
 	bool isplayrunningegine;
 	bool moveenginesound;
 	bool carspeediszero;
+#if WINDOWS_BUILD
 	SoundEmitter* Engine;
+#endif
 };
 

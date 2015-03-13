@@ -29,6 +29,7 @@ _-_-_-_-_-_-_-""  ""
 #include "../Framework/Light.h"
 #include "../Team3Project1/TextMesh.h"
 #include "../Team3Project1/MutexClass.h"
+#include "../Team3Project1/Texture.h"
 
 #include <map>
 #include <vector>
@@ -115,7 +116,7 @@ protected:
 	bool LoadCheck();
 	bool ActiveTex();
 
-	//void CreateStaticMap(GLuint* target, const int resolution, unsigned char minValue, unsigned char maxValue); // Generate a static noise map that can be turned into Perlin noise.
+	void CreateStaticMap(char* data, const int resolution, unsigned char minValue, unsigned char maxValue); // Generate a static noise map that can be turned into Perlin noise.
 
 	//Member variables.
 	bool activeTex;
@@ -176,9 +177,9 @@ protected:
 	//GLuint			skyColourBuffer[2]; //The buffer for holding the cloud texture.
 	//GLuint			skyBufferFBO;
 	//
-	//GLuint			daySkyTex;
-	//GLuint			nightSkyTex;
-	//GLuint			cloudMap;	// The texture for holding the static map the clouds are generated from.
+	Texture*	daySkyTex;
+	Texture*	nightSkyTex;
+	CellGcmTexture*	cloudMap;	// The texture for holding the static map the clouds are generated from.
 	//GLuint			gbufferColourTex;
 	//GLuint			gbufferDepthTex;
 	//GLuint			gbufferNormalTex;

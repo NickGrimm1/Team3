@@ -131,7 +131,7 @@ void GCMRenderer::InitSurfaces()
 	//	void*buffer = localMemoryAlign(64, colourSize);	//Allocate enough memory for the buffer
 	//	cellGcmAddressToOffset(buffer, &graphicsSurfaces[i].colorOffset[0]);	//and calculate the offset
 	//	//Attach the memory to a surface
-	//	cellGcmSetDisplayBuffer(i, graphicsSurfaces[i].colorOffset[0], colourPitch, screenWidth, screenHeight);
+	//	cellGcmSetDisplayBuffer(i + 2, graphicsSurfaces[i].colorOffset[0], colourPitch, screenWidth, screenHeight);
 
 	//	//Disable the other colour attachments for this surface
 	//	for(int j = 1; j < 4; ++j) {
