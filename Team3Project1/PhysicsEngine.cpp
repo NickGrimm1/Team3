@@ -577,9 +577,11 @@ void  PhysicsEngine::SortandSweep()
 					if(CollisionDetection(first, second))
 			    {
 				//OnCollision(first,second);
-				if(first.GetIsCollide()==false && second.GetIsCollide ()==true)
-					      {
-					OnCollision(first,second);
+				if(first.GetIsCollide()==false && second.GetIsCollide ()==true){
+					    /*  {*/
+							  if(second.GetType()=='q'){
+								/*  if(second.GetGameEntity()->GetType()=='u'){*/
+									  OnCollision(first,second);}
 					//if(second.GetType()=='f'){
 					//OnCollision(first,second);
 					//}
