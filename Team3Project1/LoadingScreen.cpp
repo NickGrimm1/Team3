@@ -21,12 +21,12 @@ void LoadingScreen::Update() {
 //		GameStateManager::Graphics()->EnableLoadingIcon(false);
 //		isLoading = false;
 	
-		MainMenu* menu = new MainMenu();
-		GameStateManager::Instance()->AddGameScreen(menu);
+		//MainMenu* menu = new MainMenu();
+		//GameStateManager::Instance()->AddGameScreen(menu);
 
-//		RacerGame* game = new RacerGame();
-		//PhysicsEngine::SetGame(game);
-		//		GameStateManager::Instance()->AddGameScreen(game);
+		RacerGame* game = new RacerGame();
+		PhysicsEngine::SetGame(game);
+		GameStateManager::Instance()->AddGameScreen(game);
 
 		GameStateManager::Graphics()->EnableLoadingIcon(false);
 		isLoading = false;

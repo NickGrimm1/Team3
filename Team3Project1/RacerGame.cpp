@@ -998,23 +998,28 @@ void RacerGame::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents:
 	cout << "RacerGame: Button Pressed" << endl;
 	if(type == GamepadEvents::BUTTON_PRESS && button == GamepadEvents::INPUT_DPAD_UP)
 	{
+
 		car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()+1.8);
-		if(car->GetVehiclePhysicsNode()->GetF()>350) 
+		if(car->GetVehiclePhysicsNode()->GetF()>GetMaxSpeed())
 		{
-		   car->GetVehiclePhysicsNode()->SetF(350);
+			car->GetVehiclePhysicsNode()->SetF(GetMaxSpeed());
 		}
 		T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
 		car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
+			
+		cout<<"Current Velocity: " << car->GetCarNode().GetLinearVelocity() << endl << endl << endl;
 	}
 	if(type == GamepadEvents::BUTTON_DOWN && button == GamepadEvents::INPUT_DPAD_UP)
 	{
 		car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()+1.8);
-		if(car->GetVehiclePhysicsNode()->GetF()>350) 
+		if(car->GetVehiclePhysicsNode()->GetF()>GetMaxSpeed())
 		{
-		   car->GetVehiclePhysicsNode()->SetF(350);
+			car->GetVehiclePhysicsNode()->SetF(GetMaxSpeed());
 		}
 		T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
 		car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
+			
+		cout<<"Current Velocity: " << car->GetCarNode().GetLinearVelocity() << endl << endl << endl;
 	}
 };
 	
@@ -1026,13 +1031,14 @@ void RacerGame::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID,
 		//if(abs(amount.y) > DEADZONE )
 		//{
 			car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()+1.8);
-			if(car->GetVehiclePhysicsNode()->GetF()>350) 
-			{
-			   car->GetVehiclePhysicsNode()->SetF(350);
-		    }
-			   T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
-			   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
-			   
+		if(car->GetVehiclePhysicsNode()->GetF()>GetMaxSpeed())
+		{
+			car->GetVehiclePhysicsNode()->SetF(GetMaxSpeed());
+		}
+		T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+		car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
+			
+		cout<<"Current Velocity: " << car->GetCarNode().GetLinearVelocity() << endl << endl << endl;
 			 /*T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
 			 car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*(abs(amount.y)));*/
 		//} 
@@ -1040,13 +1046,14 @@ void RacerGame::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID,
 	if(analogueControl == GamepadEvents::RIGHT_STICK)
 	{
 		car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()+1.8);
-		if(car->GetVehiclePhysicsNode()->GetF()>350) 
+		if(car->GetVehiclePhysicsNode()->GetF()>GetMaxSpeed())
 		{
-		   car->GetVehiclePhysicsNode()->SetF(350);
+			car->GetVehiclePhysicsNode()->SetF(GetMaxSpeed());
 		}
 		T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
 		car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
-
+			
+		cout<<"Current Velocity: " << car->GetCarNode().GetLinearVelocity() << endl << endl << endl;
 		//if(abs(amount.y) > DEADZONE)
 		//{
 		//	 T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
