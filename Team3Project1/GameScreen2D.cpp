@@ -147,7 +147,7 @@ void GameScreen2D::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEven
 	// Check if input is being accepted
 	if (inputEnabled)
 	{
-	//	std::cout << "GameScreen2D:InputEnabled"<<std::endl;
+		//	std::cout << "GameScreen2D:InputEnabled"<<std::endl;
 		// Check for select actions
 		if (type == GamepadEvents::BUTTON_PRESS)
 		{
@@ -157,7 +157,9 @@ void GameScreen2D::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEven
 				for (unsigned int i = 0; i < clickables.size(); i++)
 				{
 					if (clickables[i] == selectables[currentSelected])
+					{
 						clickables[i]->Click(0.0f, 0.0f);
+					}
 				}
 			}
 			else

@@ -25,12 +25,9 @@ void LoadingScreen::Update() {
 		MainMenu* menu = new MainMenu();
 		GameStateManager::Instance()->AddGameScreen(menu);
 
-		//RacerGame* game = new RacerGame();
-		//PhysicsEngine::SetGame(game);
-		//GameStateManager::Instance()->AddGameScreen(game);
-
 		GameStateManager::Graphics()->EnableLoadingIcon(false);
 		isLoading = false;
+		paused = false;
 	}
 }
 #if WINDOWS_BUILD
@@ -55,7 +52,13 @@ void LoadingScreen::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEve
 	{
 		if(button == GamepadEvents::INPUT_START)
 		{
-			// Pause
+			if (paused) {
+				GameStateManager::Resume();
+			}
+			else {
+				GameStateManager::Pause();
+			}
+			paused = !paused;
 		}
 		else if (button == GamepadEvents::INPUT_SELECT)
 		{

@@ -109,6 +109,7 @@
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">
     <PlatformToolset>SNC</PlatformToolset>
     <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ExceptionsAndRtti>WithExceptsWithRtti</ExceptionsAndRtti>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='PS3_RELEASE|PS3'">
     <PlatformToolset>SNC</PlatformToolset>
@@ -294,6 +295,7 @@
     <ClInclude Include="DrawableText2D.h" />
     <ClInclude Include="DrawableTexture2D.h" />
     <ClInclude Include="EntryPoint.h" />
+    <ClInclude Include="GameOver.h" />
     <ClInclude Include="GCMRenderer.h" />
     <ClInclude Include="Gold_cion.h" />
     <ClInclude Include="GraphicsTestScreen.h" />
@@ -388,6 +390,7 @@
     <ClCompile Include="CheckPoint.cpp" />
     <ClCompile Include="DebugManager.cpp" />
     <ClCompile Include="DebugOverlay.cpp" />
+    <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="GamePad.cpp" />
     <ClCompile Include="GameScreen2D.cpp" />
     <ClCompile Include="GameScreen3D.cpp" />

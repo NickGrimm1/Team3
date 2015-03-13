@@ -129,11 +129,11 @@ void PauseScreen::ResumeClicked(float x, float y) {
 void PauseScreen::MainMenuClicked(float x, float y) {
 	mainMenu->GetTexture()->SetTexture(buttonTexClicked);
 	
-	MainMenu* menu = new MainMenu();
 	//GameStateManager::ChangeScreen(menu);
-	GameStateManager::RemoveGameScreen(hudScreen);
 	GameStateManager::RemoveGameScreen(racerScreen);
+	GameStateManager::RemoveGameScreen(hudScreen);
 	GameStateManager::RemoveGameScreen(this);
+	MainMenu* menu = new MainMenu();
 	GameStateManager::AddGameScreen(menu);
 	
 }

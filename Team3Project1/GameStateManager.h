@@ -246,7 +246,7 @@ public:
 	void MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position)
 	{
 		for (unsigned int i = 0; i < instance->gameScreens.size(); i++)
-			instance->gameScreens[i]->MouseEvent(type, button, position);
+				instance->gameScreens[i]->MouseEvent(type, button, position);
 	}
 	/**
 	<summary>Notifies all screens in the stack that the mouse has moved.</summary>
@@ -256,7 +256,7 @@ public:
 	void MouseMoved(T3Vector2& start, T3Vector2& finish)
 	{
 		for (unsigned int i = 0; i < instance->gameScreens.size(); i++)
-			instance->gameScreens[i]->MouseMoved(start, finish);
+				instance->gameScreens[i]->MouseMoved(start, finish);
 	}
 	/**
 	<summary>Notifies all screens in the stack that the mouse scroll wheel has moved.</summary>
@@ -265,7 +265,7 @@ public:
 	void MouseScrolled(T3Vector2& position, int amount)
 	{
 		for (unsigned int i = 0; i < instance->gameScreens.size(); i++)
-			instance->gameScreens[i]->MouseScrolled(position, amount);
+				instance->gameScreens[i]->MouseScrolled(position, amount);
 	}
 	/**
 	<summary>Notifies all screens in the stack of a keyboard event.</summary>
@@ -275,7 +275,7 @@ public:
 	void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key)
 	{
 		for (unsigned int i = 0; i < gameScreens.size(); i++)
-			gameScreens[i]->KeyboardEvent(type, key);
+				gameScreens[i]->KeyboardEvent(type, key);
 	}
 	/**
 	<summary>Notifies all screens in the stack of a gamepad event.</summary>
@@ -287,7 +287,7 @@ public:
 	void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button)
 	{
 		for (unsigned int i = 0; i < gameScreens.size(); i++)
-			gameScreens[i]->GamepadEvent(playerID, type, button);
+				gameScreens[i]->GamepadEvent(playerID, type, button);
 	}
 	/**
 	<summary>Notifies all screens in the stack that an analogue control is displaced.</summary>
@@ -298,12 +298,12 @@ public:
 	void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount)
 	{
 		for (unsigned int i = 0; i < gameScreens.size(); i++)
-			gameScreens[i]->GamepadAnalogueDisplacement(playerID, analogueControl, amount);
+				gameScreens[i]->GamepadAnalogueDisplacement(playerID, analogueControl, amount);
 	}
 	void GamepadDisconnect(GamepadEvents::PlayerIndex playerID)
 	{
 		for (unsigned int i = 0; i < gameScreens.size(); i++)
-			gameScreens[i]->GamepadDisconnect(playerID);
+				gameScreens[i]->GamepadDisconnect(playerID);
 	}
 #pragma endregion
 #pragma region Screen Changes

@@ -1,45 +1,23 @@
-#version 150 core
+void main 
+(
+float2 texCoord		 : TEXCOORD1,
+float4 worldPos      : TEXCOORD0,
 
-uniform sampler2D diffuseTex;
-uniform sampler2D daySkyTex;
-uniform sampler2D nightSkyTex;
-uniform float dayNightMix;
-uniform int clipBelow;
-uniform float clipHeight;
+uniform samplerRECT diffuseTex,
+uniform samplerRECT daySkyTex,
+uniform samplerRECT nightSkyTex,
 
-in Vertex 
+uniform float dayNightMix,
+uniform float clipHeight,
+
+out float4 color_out : COLOR
+)
 {
-	vec2 texCoord;
-	vec4 worldPos;
-} IN;
+	float4 topColor = lerp(texRECT(daySkyTex, texCoord), texRECT(nightSkyTex, texCoord), dayNightMix);
+	float4 bottomColor = float4(0, 0, 0, 1);
 
-out vec4 gl_FragColor;
-
-void main (void)
-{
-	bool clip = false;
-	if (clipHeight > 0)
-	{
-		if (clipBelow == 0)
-		{
-			clip = true;
-			gl_FragColor = vec4(0, 0, 0, 0);
-		}
-	}
-
-	if (!clip)
-	{
-
-		vec4 topColor = mix(texture2D(daySkyTex, IN.texCoord), texture2D(nightSkyTex, IN.texCoord), dayNightMix);
-
-		//vec4 topColor = texture2D(skyTex, IN.texCoord);
-			//vec4(0.3f, 0.3f, 0.8f, 1);
-		vec4 bottomColor = vec4(0, 0, 0, 1);
-			//vec4 (1,1,1,1);
-
-		vec4 baseColor = mix(bottomColor, topColor, clamp(IN.worldPos.y / 0.4f, 0.0f, 1.0f));
-		vec4 cloudValue = texture(diffuseTex, IN.texCoord);
+	float4 baseColor = lerp(bottomColor, topColor, clamp(worldPos.y / 0.4f, 0.0f, 1.0f));
+	float4 cloudValue = texRECT(diffuseTex, texCoord);
 		
-		gl_FragColor = mix(baseColor, vec4(1, 1, 1, 1), cloudValue);
-	}
+	color_out = baseColor; //lerp(baseColor, float4(1, 1, 1, 1), cloudValue);
 }

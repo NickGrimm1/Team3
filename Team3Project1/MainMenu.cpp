@@ -1,6 +1,5 @@
 #include "MainMenu.h"
 
-
 MainMenu::MainMenu(void)
 {
 #if WINDOWS_BUILD
@@ -59,6 +58,7 @@ void MainMenu::LoadContent() {
 	SoundManager::AddSound(SOUNDSDIR"MenuMusic.wav");
 	Mainmenu_BGM = GameStateManager::Audio()->GetSound(SOUNDSDIR"MenuMusic.wav");
 	mainmusic=GameStateManager::Audio()-> PlaySound (Mainmenu_BGM,SOUNDPRIORITY_ALWAYS,true, true);
+	GameStateManager::Graphics()->EnableMousePointer(true);
 #endif
 
 	
@@ -209,21 +209,25 @@ void MainMenu::UnloadContent() {
 void MainMenu::NewGameClicked(float x, float y) 
 {
 	std::cout << "New Game Clicked" << std::endl;
+	inputEnabled = false;
 	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	newGame->GetTexture()->SetTexture(buttonTexClicked);
+	unsigned int score = 0;
 #if WINDOWS_BUILD
+	score = scoreBoardConn->GetLowestScore();
 	GameStateManager::Audio()->StopSound(mainmusic);
 	GameStateManager::Graphics()->EnableMousePointer(false);
 #endif
+	inputEnabled = false;
 	GameStateManager::Instance()->RemoveGameScreen(wallpaper);
-	GameStateManager::Instance()->RemoveGameScreen(this);
+	
 
-	RacerGame* game = new RacerGame();
-//	GraphicsTestScreen* game = new GraphicsTestScreen();
+	RacerGame* game = new RacerGame(score);
 	GameStateManager::Physics()->SetGame(game);
 	GameStateManager::Instance()->AddGameScreen(game);
+	GameStateManager::Instance()->RemoveGameScreen(this);
+
 	GameStateManager::Graphics()->EnableLoadingIcon(false);
-	GameStateManager::RemoveGameScreen(this);
 }
 
 void MainMenu::ControlsClicked(float x, float y) {
@@ -336,9 +340,12 @@ void MainMenu::GamepadDisconnect(GamepadEvents::PlayerIndex playerID)
 }
 void MainMenu::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button)
 {
-	std::cout <<"MainMenu:GPEvent"<<std::endl;
-	if (connectionTime < 200.0)
-		GameScreen2D::GamepadEvent(playerID, type, button);
+	if (inputEnabled)
+	{
+		std::cout <<"MainMenu:GPEvent"<<std::endl;
+		if (connectionTime < 200.0)
+			GameScreen2D::GamepadEvent(playerID, type, button);
+	}
 }
 
 #if WINDOWS_BUILD

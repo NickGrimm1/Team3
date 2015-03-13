@@ -1,8 +1,9 @@
 #include "HighScore.h"
+#include "MainMenu.h"
 #include "GameStateManager.h"
 #include <sstream>
 
-HighScore::HighScore(unsigned int score)
+HighScore::HighScore(unsigned int score, GameScreen3D* mainGame, GameScreen2D* hud)
 {
 	name = "AAA";
 	currentPos = 0;
@@ -11,6 +12,9 @@ HighScore::HighScore(unsigned int score)
 	lastUp = (float) timer.GetMS();
 	lastLeft = (float) timer.GetMS();
 	lastRight = (float) timer.GetMS();
+
+	gameScreen = mainGame;
+	gameHud = hud;
 }
 
 
@@ -31,6 +35,7 @@ void HighScore::LoadContent() {
 	ostringstream convert;
 	convert << highScore;
 	string score = convert.str();
+	while (score.length() < 3) score = "0" + score;
 
 	AddDrawable(new DrawableText2D(0.25f, 0.2f, 6, 0.5f, 0.1f, "NEW HIGH SCORE!!!", font, 0, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false));
 	AddDrawable(new DrawableText2D(0.3f, 0.35f, 6, 0.4f, 0.1f, score, font, 0, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false));
@@ -69,13 +74,18 @@ void HighScore::UnloadContent() {
 }
 
 bool HighScore::SubmitScore() {
-#if WINDOWS_BUILD
-	return false;
-#endif
 
-#ifdef PS3_BUILD
-	return false;
+	inputEnabled = false;
+	GameStateManager::Graphics()->EnableLoadingIcon(true);
+#if WINDOWS_BUILD
+	scoreboard->PostScore(string(name), highScore);
 #endif
+	GameStateManager::RemoveGameScreen(this);
+	GameStateManager::RemoveGameScreen(gameHud);
+	GameStateManager::RemoveGameScreen(gameScreen);
+	GameStateManager::AddGameScreen(new MainMenu);
+	GameStateManager::Graphics()->EnableLoadingIcon(false);
+	return false;
 }
 
 #if WINDOWS_BUILD
@@ -88,6 +98,7 @@ void HighScore::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 		else {
 			// Submit score
 			SubmitScore();
+			return;
 		}
 	}
 
@@ -111,6 +122,7 @@ void HighScore::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents:
 		else {
 			// Submit score
 			SubmitScore();
+			return;
 		}
 	}
 

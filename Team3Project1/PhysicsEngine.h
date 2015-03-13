@@ -12,6 +12,7 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "../Framework/DebugDrawer.h"
 #include "../Team3Project1/DrawableEntity3D.h"
 
+#include "MutexClass.h"
 #include <vector>
 #include <algorithm> 
 
@@ -107,18 +108,37 @@ private:
 		paused = false;
 	}
 #endif
+	
+	
 #if PS3_BUILD
 	PhysicsEngine()
 		: Thread(Run), PHYSICS_TIME(1000.0f / 120)
 	{
 		frameRate = 0;
 		gameClass = NULL;
+		paused = false;
 	}
 #endif
 
-	~PhysicsEngine() { }
-	static PhysicsEngine* instance;
+	~PhysicsEngine() { 
+	
+		for(int  i =0; i <allNodes.size(); ++i) {
+			delete allNodes[i];
+			
+		}
+		for(int  i =0; i <allSprings.size(); ++i) {
+			delete allSprings[i];
+			
+		}
+		for(int  i =0; i <allDebug.size(); ++i) {
+			delete allDebug[i];
+			
+		}
+	
 
+	}
+	static PhysicsEngine* instance;
+	MutexClass ListGuard;
 	vector<PhysicsNode*> allNodes;
 	vector<Constraint*> allSprings;
 	vector<DebugDrawer*> allDebug;

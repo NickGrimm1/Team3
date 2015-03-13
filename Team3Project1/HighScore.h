@@ -4,11 +4,12 @@
 #include "GameScreen2D.h"
 #include "DrawableText2D.h"
 #include "../Framework/GameTimer.h"
+#include "GameScreen3D.h"
 
 class HighScore : public GameScreen2D
 {
 public:
-	HighScore(unsigned int highScore);
+	HighScore(unsigned int highScore, GameScreen3D* mainGame, GameScreen2D* hud);
 	virtual ~HighScore(void);
 
 	virtual void LoadContent();
@@ -45,5 +46,7 @@ protected:
 	float lastUp;
 	float lastDown;
 	GameTimer timer;
+	GameScreen3D* gameScreen;
+	GameScreen2D* gameHud;
 };
 

@@ -53,8 +53,16 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Resources\Shaders\SkyDomeFragment.cg" />
-    <None Include="..\Resources\Shaders\SkyDomeVertex.cg" />
+    <CustomBuild Include="..\Resources\Shaders\SkyDomeFragment.cg">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">%(RelativeDir)sce-cgc -profile sce_fp_rsx -o ”%(Filename).fpo” "%(FullPath)"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">%(Filename).vpo;%(Filename)_asm.txt</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\Resources\Shaders\SkyDomeVertex.cg">
+      <FileType>Document</FileType>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">%(Filename).vpo;%(Filename)_asm.txt</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">%(RelativeDir)sce-cgc -profile sce_vp_rsx -o ”%(Filename).vpo” "%(FullPath)"</Command>
+    </CustomBuild>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCTargetsPath Condition="'$(VCTargetsPath11)' != '' and '$(VSVersion)' == '' and '$(VisualStudioVersion)' == ''">$(VCTargetsPath11)</VCTargetsPath>
