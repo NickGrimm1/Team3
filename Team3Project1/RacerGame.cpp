@@ -38,7 +38,7 @@ RacerGame::RacerGame(unsigned int lowestScore)
 	Time=60.0f;
 	PlayTime=25;
 	timeOrScore=0;
-	start=4;
+	start=5;
 	isplaystartegine=false;
 	isplaylowspdegine=false;
 	isplaymidspdegine=false;
@@ -171,6 +171,9 @@ void RacerGame::Update() {
 	if((Time-60)==0){
 		if(start>=0)
 	{
+		if(start==5){
+			hud->SetStart("Ready");
+		}
 		if(start==4){
 			hud->SetStart("3");
 		}
@@ -190,11 +193,13 @@ void RacerGame::Update() {
 	}
 	SetPlayTime(-1);
 	Time=0;
-	if(GetPlayTime()<0){
-		GameOver();
-		cout<<"game over"<<endl;
-	}
+	
 	hud->SetScreen(GetScore(),GetPlayTime(),car->GetVehiclePhysicsNode()->GetF());
+	if(GetPlayTime()<0){
+		cout<<"game over"<<endl;
+		GameOver();
+		
+	}
 	}
 	Time+=1;
 	

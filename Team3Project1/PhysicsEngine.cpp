@@ -434,12 +434,12 @@ void  PhysicsEngine::SortandSweep()
 					   }
 				     }
 
-				/*if(second.GetPosition().y < -10.0f&& second.GetPosition().y > -16.0f)
+				if(second.GetPosition().y < -5.0f&& second.GetPosition().y > -8.0f)
 				{
 				if (gameClass != NULL) {
 						gameClass->carFall();
 					}
-				}*/
+				}
 				
 			}
 
@@ -483,12 +483,12 @@ void  PhysicsEngine::SortandSweep()
 					   }
 				     }
 
-			/*if(first.GetPosition().y < -10.0f&& first.GetPosition().y > -16.0f)
+			if(first.GetPosition().y < -5.0f&& first.GetPosition().y > -8.0f)
 				{
 				if (gameClass != NULL) {
 						gameClass->carFall();
 					}
-				}*/
+				}
 			}
 			}
 
