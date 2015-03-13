@@ -46,11 +46,13 @@ RacerGame::RacerGame(void)
 	PlayTime=20;
 	timeOrScore=0;
 	isplaystartegine=false;
-	isplayrunningegine=false;
+	isplaylowspdegine=false;
+	isplaymidspdegine=false;
 	moveenginesound=false;
 	carspeediszero=true;
 #if WINDOWS_BUILD
-	Engine = new SoundEmitter();
+	Engine0 = new SoundEmitter();
+	Engine1 = new SoundEmitter();
 #endif
 
 	//DebugOverlay* debug = new DebugOverlay();
@@ -315,18 +317,28 @@ void RacerGame::Update() {
 		isplaystartegine=true;
 	}
 
-	if(isplayrunningegine==false&&car->GetCarNode().GetLinearVelocity()!=T3Vector3(0,0,0))
+	if(isplaylowspdegine==false&&car->GetCarNode().GetLinearVelocity().Length()<170&&car->GetCarNode().GetLinearVelocity()!=T3Vector3(0,0,0))
 	{
 #if WINDOWS_BUILD
-		Sound* engine=GameStateManager::Audio()->GetSound(SOUNDSDIR"lowspeedengine.wav");
-		Engine=GameStateManager::Audio()->PlaySoundA (engine,SOUNDPRIORITY_ALWAYS,true, true);
+		Sound* engine0=GameStateManager::Audio()->GetSound(SOUNDSDIR"lowspeedengine.wav");
+		Engine0=GameStateManager::Audio()->PlaySoundA (engine0,SOUNDPRIORITY_ALWAYS,true, true);
 #endif
-		isplayrunningegine=true;
+		isplaylowspdegine=true;
 	}
+	if(isplaymidspdegine==false&&car->GetCarNode().GetLinearVelocity().Length()>=170)
+	{
+#if WINDOWS_BUILD
+		GameStateManager::Audio()->StopSound(Engine0);
+		Sound* engine1=GameStateManager::Audio()->GetSound(SOUNDSDIR"midspeed.wav");
+		Engine1=GameStateManager::Audio()->PlaySoundA (engine1,SOUNDPRIORITY_ALWAYS,true, true);
+#endif
+		isplaymidspdegine=true;
+	}
+
 	if(carspeediszero==false&&moveenginesound==false&&car->GetCarNode().GetLinearVelocity()==T3Vector3(0,0,0))
 	{
 #if WINDOWS_BUILD
-		GameStateManager::Audio()->StopSound(Engine);
+		GameStateManager::Audio()->StopSound(Engine1);
 #endif
 		moveenginesound=true;
 	}

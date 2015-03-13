@@ -19,6 +19,7 @@ AudioTestClass::AudioTestClass(void)
 	//PlaySound(TEXT("../Sounds/Tokyo Drift2.wav"),NULL,SND_ASYNC|SND_LOOP);
 	bgm1=false;
 	bgm2=false;
+	bgm3=false;
 	ready=false;
 	coins=false;
 	engine_start=false;
@@ -38,17 +39,19 @@ AudioTestClass::~AudioTestClass(void)
 
 void AudioTestClass::LoadContent() {
 
-	SoundManager::AddSound(SOUNDSDIR"1.33sec.wav");
-	SoundManager::AddSound(SOUNDSDIR"bgm1_101sec.wav");
+	SoundManager::AddSound(SOUNDSDIR"bgm1_56sec.wav");
 	SoundManager::AddSound(SOUNDSDIR"bgm2_60sec.wav");
+	SoundManager::AddSound(SOUNDSDIR"bgm3.wav");
 	SoundManager::AddSound(SOUNDSDIR"getready3sec.wav");
 	SoundManager::AddSound(SOUNDSDIR"gameover2.6sec.wav");
 	SoundManager::AddSound(SOUNDSDIR"coins.wav");
 	SoundManager::AddSound(SOUNDSDIR"engine_start.wav");
 	SoundManager::AddSound(SOUNDSDIR"lowspeedengine.wav");
+	SoundManager::AddSound(SOUNDSDIR"midspeed.wav");
 	SoundManager::AddSound(SOUNDSDIR"time.wav");
-	BGM1 = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm1_101sec.wav");
+	BGM1 = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm1_56sec.wav");
 	BGM2 = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm2_60sec.wav");
+	BGM3 = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm3.wav");
 	Coins = GameStateManager::Audio()->GetSound(SOUNDSDIR"coins.wav");
 	Engine_start = GameStateManager::Audio()->GetSound(SOUNDSDIR"engine_start.wav");
 	Ready = GameStateManager::Audio()->GetSound (SOUNDSDIR"getready3sec.wav");
@@ -77,16 +80,20 @@ void AudioTestClass::Update() {
 		a=GameStateManager::Audio()-> PlaySound (Engine_start,T3Vector3(0,0,0), true);
 		engine_start=true;
 	}
-	if(bgm1==false&&CurrentTime>=0&&CurrentTime<=102000){
+	if(bgm1==false&&CurrentTime>=0&&CurrentTime<=56000){
 
 		GameStateManager::Audio()-> PlaySoundA (BGM1,SOUNDPRIORITY_ALWAYS,true, false);
 		bgm1=true;
 	}
-	if(bgm2==false&&CurrentTime>102000){
+	if(bgm2==false&&CurrentTime>57000&&CurrentTime<116000){
 		//GameStateManager::Audio()->StopSound(a);
 		//GameStateManager::Audio()->StopSound(BGM2);
-		GameStateManager::Audio()-> PlaySoundA (BGM2,SOUNDPRIORITY_ALWAYS,true, true);
+		GameStateManager::Audio()-> PlaySoundA (BGM2,SOUNDPRIORITY_ALWAYS,true, false);
 		bgm2=true;
+	}
+	if(bgm3==false&&CurrentTime>117000){
+		GameStateManager::Audio()->PlaySoundA(BGM3,SOUNDPRIORITY_ALWAYS,true, true);
+		bgm3=true;
 	}
 }
 

@@ -190,10 +190,15 @@
 	 SoundEmitter * n = new SoundEmitter ();
 	 n -> SetLooping ( isLooping );
 	 n -> SetSound ( s );
-	 if(isBGM){
-		 n -> SetIsGlobal ( true );}
-	 else{
-		 n -> SetIsGlobal (false);}
+	 if(isBGM)
+	 {
+		 n -> SetIsGlobal ( true );
+		 n->SetVolume(0.5);
+	 }
+	 else
+	 {
+		 n -> SetIsGlobal (false);
+	 }
 	 n -> SetPriority ( p );
 	 //n -> SetVolume(1.0f);
 	 //n -> SetRadius(0.0f);
