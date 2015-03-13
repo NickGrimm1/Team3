@@ -21,10 +21,11 @@ int RacerGame::update =0;
 float RacerGame::g=0.0f;
 float RacerGame::gx =300.0f;
 
-RacerGame::RacerGame(void)
+RacerGame::RacerGame(unsigned int lowestScore)
 {
 
 	//f=5;
+	lowScore = lowestScore;
 	gameOver = false;
 	srand(time(NULL));
 	T3Vector3 sp1= T3Vector3(100.0f,0.0f,0.0f);
@@ -62,7 +63,7 @@ void RacerGame::LoadContent() {
 #if WINDOWS_BUILD
 	audio= new AudioTestClass();
 	GameStateManager::Instance()->AddGameScreen(audio);
-#endif
+#endif	
 	scoreTexture = GameStateManager::Assets()->LoadTexture(this, "score", 0);
 	timeTexture = GameStateManager::Assets()->LoadTexture(this, "time", 0);
 	camera = new FreeCamera();
@@ -357,7 +358,7 @@ void RacerGame::CreateTrack(){
 		TrackSegment* Strackn2 = (TrackSegment*) GameStateManager::Assets()->LoadTrackSegment(SplinePoint[4] - avg2,SplinePoint[5] - avg2,SplinePoint[6] - avg2, 5.0f, 50.0f);
 		TrackSegmentVector.push_back(Strackn2);
 			Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, "trackTex", 0);
-
+	
 	PhysicsNode* proad2 = new PhysicsNode();
 	GameEntity* road2= new GameEntity(proad2);
 		road2->SetMesh(Strackn);
@@ -382,7 +383,7 @@ void RacerGame::CreateTrack(){
 		road2->ConnectToSystems();
 		AddDrawable(road2);
 		allEntities.push_back(road2);
-
+	
 	PhysicsNode* proad3 = new PhysicsNode();
 	GameEntity* road3= new GameEntity(proad3);
 		road3->SetMesh(Strackn2);
@@ -730,10 +731,18 @@ void RacerGame::UnloadContent() {
 }
 
 void RacerGame::GameOver() {
+	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	gameOver = true;
 	inputEnabled = false;
 	GameStateManager::Physics()->Pause();
+	if (score > lowScore) {
 	HighScore* scoreboard = new HighScore(score, this, hud);
 	GameStateManager::AddGameScreen(scoreboard);	
-	GameStateManager::Physics()->Resume();
+	}
+	else {
+		GameStateManager::RemoveGameScreen(this);
+		GameStateManager::RemoveGameScreen(hud);
+		GameStateManager::AddGameScreen(new MainMenu);
+	}
+	GameStateManager::Graphics()->EnableLoadingIcon(false);
 }

@@ -211,19 +211,21 @@ void MainMenu::NewGameClicked(float x, float y)
 	std::cout << "New Game Clicked" << std::endl;
 	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	newGame->GetTexture()->SetTexture(buttonTexClicked);
+	unsigned int score = 0;
 #if WINDOWS_BUILD
+	score = scoreBoardConn->GetLowestScore();
 	GameStateManager::Audio()->StopSound(mainmusic);
 	GameStateManager::Graphics()->EnableMousePointer(false);
 #endif
 	GameStateManager::Instance()->RemoveGameScreen(wallpaper);
 	GameStateManager::Instance()->RemoveGameScreen(this);
 
-	RacerGame* game = new RacerGame();
+	RacerGame* game = new RacerGame(score);
 //	GraphicsTestScreen* game = new GraphicsTestScreen();
 	GameStateManager::Physics()->SetGame(game);
 	GameStateManager::Instance()->AddGameScreen(game);
-	//GameStateManager::RemoveGameScreen(this);
-
+	
+	GameStateManager::Graphics()->EnableLoadingIcon(false);
 }
 
 void MainMenu::ControlsClicked(float x, float y) {

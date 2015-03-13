@@ -81,8 +81,8 @@ bool HighScore::SubmitScore() {
 	scoreboard->PostScore(string(name), highScore);
 #endif
 	GameStateManager::RemoveGameScreen(this);
-	GameStateManager::RemoveGameScreen(gameScreen);
 	GameStateManager::RemoveGameScreen(gameHud);
+	GameStateManager::RemoveGameScreen(gameScreen);
 	GameStateManager::AddGameScreen(new MainMenu);
 	GameStateManager::Graphics()->EnableLoadingIcon(false);
 	return false;
