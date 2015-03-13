@@ -36,7 +36,7 @@ RacerGame::RacerGame(unsigned int lowestScore)
 	SplinePoint.push_back(sp3);
 	score=0;
 	Time=60.0f;
-	PlayTime=20;
+	PlayTime=25;
 	timeOrScore=0;
 	start=4;
 	isplaystartegine=false;
