@@ -271,6 +271,7 @@ void OBJMesh::Draw() {
 		glUniform1i(glGetUniformLocation(prog, "useDiffuseTex"), 1);
 	}
 #endif
+
 #if WINDOWS_BUILD
 	Mesh::Draw();
 #endif//TODO fix for ps3

@@ -583,7 +583,7 @@ void Renderer::DrawNodes(bool enableTextures)
 			for (int y = 0; y < 4; ++y)
 				modelMatrix.setElem(x, y, m.values[y + x * 4]);
 		textureMatrix = Matrix4::identity(); // add to texture/drawableentity class
-
+		shader->GetVertex()->UpdateShaderMatrices(modelMatrix,viewMatrix,projMatrix);
 		entity.GetMesh()->Draw(shader);
 	}
 }
