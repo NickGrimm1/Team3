@@ -574,7 +574,7 @@ void  PhysicsEngine::SortandSweep()
 
 			else{
 			
-					if(CollisionDetection(first, second))
+				if(CollisionDetection(first, second))
 			    {
 				//OnCollision(first,second);
 				if(first.GetIsCollide()==false && second.GetIsCollide ()==true){
@@ -728,9 +728,8 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 					RacerGame::update=1;
 						  }
 					    }
-					
-						check=false;
-					}*/
+					//	check=false;
+					//}*/
 					/*first.SetLinearVelocity(T3Vector3(0,0,0));
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
