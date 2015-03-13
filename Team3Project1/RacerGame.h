@@ -82,24 +82,24 @@ public:
 					  SetPlayTime(4);
 					  SetMinSpeed(10);
 					  SetMaxSpeed(10);
-						      			}
-			   CreateTrack();			  
+			}
+			   CreateTrack();
 	            checkPoint[0]->DisconnectFromSystems();
 	delete checkPoint[0];
 	checkPoint.erase(checkPoint.begin());
-			  }		 
+			  }
 		  }
 			 if(obj1->GetType()=='d')
 		  {
 			   DeleteTrack();
 			   checkPoint[0]->DisconnectFromSystems();
-				delete checkPoint[0];
-				checkPoint.erase(checkPoint.begin());
-			    SettimeOrScore(1);			  
+	delete checkPoint[0];
+	checkPoint.erase(checkPoint.begin());
+			    SettimeOrScore(1);
 		  }
 			 if(obj1->GetType()=='p')
-		  {	
-#ifdef WINDOWS_BUILD			
+		  {
+#ifdef WINDOWS_BUILD
 			  Sound* coins;
 			  coins=GameStateManager::Audio()->GetSound(SOUNDSDIR"coins.wav");
 			  GameStateManager::Audio()->PlaySoundA(coins, obj1->GetOriginPosition(), false);
@@ -127,8 +127,8 @@ public:
 			  }
 			  GameStateManager::Graphics()->RemoveDrawable(obj1);
 	          obj1->DisconnectFromSystems();
-			  	  }
-			   		    }
+		  }
+   }
 private:
 	Mesh* quad;
 	Mesh* cylinder;

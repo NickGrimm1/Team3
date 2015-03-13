@@ -51,6 +51,7 @@ void PhysicsEngine::ThreadRun()
 
 
 		//NarrowPhaseCollisions();
+		ListGuard.lock_mutex();
 
 		narrowlist.clear();
 		//	cout << "PhysicsEngine: Narrow List clear" << endl;
@@ -65,6 +66,7 @@ void PhysicsEngine::ThreadRun()
 		//	cout << "PhysicsEngine: Physics Updated" << endl;
 		BroadPhaseCollisions();
 
+		ListGuard.unlock_mutex();
 
 	}
 		//cout << "PhysicsEngine: End of Physics Loop" << endl;

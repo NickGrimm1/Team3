@@ -222,8 +222,8 @@ void MainMenu::NewGameClicked(float x, float y)
 //	GraphicsTestScreen* game = new GraphicsTestScreen();
 	GameStateManager::Physics()->SetGame(game);
 	GameStateManager::Instance()->AddGameScreen(game);
-	GameStateManager::Graphics()->EnableLoadingIcon(false);
-	GameStateManager::RemoveGameScreen(this);
+	//GameStateManager::RemoveGameScreen(this);
+
 }
 
 void MainMenu::ControlsClicked(float x, float y) {

@@ -217,7 +217,7 @@ bool Renderer::LoadShaders()
 	//sceneShader		 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl");
 	//shadowShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl");
 	//lightingShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl");
-	//skyBoxShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"SkyDomeVertex.glsl", SHADERDIR"SkyDomeFragment.glsl");
+	skyBoxShader	 = GameStateManager::Assets()->LoadShader(this, "/SkyDomeVertex.vpo", "/SkyDomeFragment.fpo");
 	//cloudShader		 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"PassThroughVertex.glsl", SHADERDIR"PerlinFragment.glsl");
 	//combineShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
 	//particleShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
@@ -241,7 +241,9 @@ bool Renderer::LoadCheck()
 			//sceneShader			!= NULL	&&
 			//shadowShader		!= NULL	&&
 			//lightingShader		!= NULL	&&
-			//skyBoxShader		!= NULL	&&
+			skyBoxShader		!= NULL	&&
+				skyBoxShader->GetVertex() != NULL &&
+				skyBoxShader->GetFragment() != NULL &&
 			//cloudShader			!= NULL &&
 			//combineShader		!= NULL	&&
 			//particleShader		!= NULL	&&
@@ -263,7 +265,7 @@ void Renderer::UnloadShaders()
 	//GameStateManager::Assets()->UnloadShader(this, SHADERDIR"MainVertShader.glsl", SHADERDIR"MainFragShader.glsl");
 	//GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFragment.glsl");
 	//GameStateManager::Assets()->UnloadShader(this, SHADERDIR"DeferredPassVertex.glsl", SHADERDIR"DeferredPassFragment.glsl");
-	//GameStateManager::Assets()->UnloadShader(this, SHADERDIR"SkyDomeVertex.glsl", SHADERDIR"SkyDomeFragment.glsl");
+	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"SkyDomeVertex.glsl", SHADERDIR"SkyDomeFragment.glsl");
 	//GameStateManager::Assets()->UnloadShader(this, SHADERDIR"PassThroughVertex.glsl", SHADERDIR"PerlinFragment.glsl");
 	//GameStateManager::Assets()->UnloadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
 	//GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
@@ -374,6 +376,8 @@ void Renderer::RenderScene()
 		//MotionBlurPass();
 
 		//DrawFrameBufferTex(postProcessingTex[0]);
+
+		DrawSkybox();
 	}
 
 	//Draw HUD/Menu overlay
@@ -840,31 +844,24 @@ void Renderer::DrawSkybox()
 	//glDisable(GL_CULL_FACE);
 	//
 	//glBindFramebuffer(GL_FRAMEBUFFER, postProcessingFBO);
-	//SetCurrentShader(skyBoxShader);
 
-	//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), GL_TEXTURE0);
-	//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "nightSkyTex"), SKYBOX_TEXTURE_UNIT0);
-	//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "daySkyTex"), SKYBOX_TEXTURE_UNIT1);
-	//glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "dayNightMix"), dayNight); 
-	//
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D, skyColourBuffer[0]);
+	cellGcmSetCullFaceEnable(CELL_GCM_FALSE);
+	cellGcmSetDepthTestEnable(CELL_GCM_FALSE);
+	SetCurrentShader(skyBoxShader);
+	SetTextureSampler(shader->GetFragment()->GetParameter("nightSkyTex"), nightSkyTex->GetTexture());
+	SetTextureSampler(shader->GetFragment()->GetParameter("daySkyTex"), daySkyTex->GetTexture());
+	//SetTextureSampler(shader->GetFragment()->GetParameter("diffuseTex"), cloudMap);
+	shader->GetFragment()->SetParameter("dayNightMix", &dayNight);
+	shader->GetVertex()->SetParameter("worldPos", (float*)T3Vector3(0,0,0));
 
-	//glActiveTexture(GL_TEXTURE0 + SKYBOX_TEXTURE_UNIT0);
-	//glBindTexture(GL_TEXTURE_2D, nightSkyTex);
-	//
-	//glActiveTexture(GL_TEXTURE0 + SKYBOX_TEXTURE_UNIT1);
-	//glBindTexture(GL_TEXTURE_2D, daySkyTex);
-
-	//skyDome->Draw();
-	//
-	//glEnable(GL_CULL_FACE);
-	//
-	//// Bind shader variables
-	//viewMatrix = cameraMatrix;
-	//projMatrix = perspectiveMatrix;
-	//modelMatrix = T3Matrix4::Translation(T3Vector3(camera->GetPosition().x, camera->GetPosition().y - 25, camera->GetPosition().z)) * T3Matrix4::Scale(T3Vector3(100, 100, 100));
-	//UpdateShaderMatrices();
+	viewMatrix = cameraMatrix;
+	projMatrix = perspectiveMatrix;
+	T3Matrix4 m = T3Matrix4::Translation(T3Vector3(camera->GetPosition().x, camera->GetPosition().y - 25, camera->GetPosition().z)) * T3Matrix4::Scale(T3Vector3(100, 100, 100));
+	for (int x = 0; x < 4; ++x)
+		for (int y = 0; y < 4; ++y)
+			modelMatrix.setElem(x, y, m.values[y + x * 4]);
+	shader->GetVertex()->UpdateShaderMatrices(modelMatrix,viewMatrix,projMatrix);
+	skyDome->Draw(shader);
 
 
 	//glUseProgram(0);
