@@ -133,10 +133,6 @@ private:
 			delete allDebug[i];
 			
 		}
-		for(int  i =0; i <narrowlist.size(); ++i) {
-			delete narrowlist[i];
-			
-		}
 	
 
 	}
