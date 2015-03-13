@@ -12,7 +12,7 @@ CheckPoint::CheckPoint(float size):
 	boundingRadius = size;
 	origin = position;
 	rotation = Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f);
-	scale = T3Vector3(0.15f*size,size,10.0f*size);
+	scale = T3Vector3(size,size,10.0f*size);
 	texture =NULL;
 	bumpTexture = NULL;
 	shader = NULL;
