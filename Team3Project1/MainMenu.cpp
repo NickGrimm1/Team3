@@ -56,8 +56,8 @@ MainMenu::~MainMenu(void)
 
 void MainMenu::LoadContent() {
 #if WINDOWS_BUILD
-	SoundManager::AddSound(SOUNDSDIR"bgm1_101sec.wav");
-	Mainmenu_BGM = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm1_101sec.wav");
+	SoundManager::AddSound(SOUNDSDIR"MenuMusic.wav");
+	Mainmenu_BGM = GameStateManager::Audio()->GetSound(SOUNDSDIR"MenuMusic.wav");
 	mainmusic=GameStateManager::Audio()-> PlaySound (Mainmenu_BGM,SOUNDPRIORITY_ALWAYS,true, true);
 #endif
 
@@ -213,7 +213,6 @@ void MainMenu::NewGameClicked(float x, float y)
 	newGame->GetTexture()->SetTexture(buttonTexClicked);
 #if WINDOWS_BUILD
 	GameStateManager::Audio()->StopSound(mainmusic);
-
 	GameStateManager::Graphics()->EnableMousePointer(false);
 #endif
 	GameStateManager::Instance()->RemoveGameScreen(wallpaper);

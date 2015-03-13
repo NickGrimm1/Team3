@@ -52,6 +52,10 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">%(Filename).fpo;%(Filename)_asm.txt</Outputs>
     </CustomBuild>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Resources\Shaders\SkyDomeFragment.cg" />
+    <None Include="..\Resources\Shaders\SkyDomeVertex.cg" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCTargetsPath Condition="'$(VCTargetsPath11)' != '' and '$(VSVersion)' == '' and '$(VisualStudioVersion)' == ''">$(VCTargetsPath11)</VCTargetsPath>
     <ProjectGuid>{4D395DA3-E2E4-45F0-8C36-CD2A7641728D}</ProjectGuid>

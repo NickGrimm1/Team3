@@ -43,7 +43,7 @@ GraphicsEngine::GraphicsEngine()
 	: Thread(&GraphicsEngine::threadExecution), RENDER_TIME(1000.0f / RENDER_HZ)
 #endif
 {
-	std::cout << "New Graphics Engine" << std::endl;
+	//std::cout << "New Graphics Engine" << std::endl;
 	isInitialised = false;
 	width = SCREEN_WIDTH;
 	height = SCREEN_HEIGHT;
@@ -62,18 +62,19 @@ GraphicsEngine::GraphicsEngine()
 	loadingTexture = new Texture(loadingTex);
 #endif
 #if PS3_BUILD
-	std::cout << "Renderer starting" << std::endl;
+	
 	renderer = new Renderer(lights, gameEntityList, overlayTexturesList, overlayTextsList);
 	if(!renderer)
 	{
 		std::cout << "Renderer failed to load" << std::endl;
 		return;
 	}
-	std::cout << "Renderer started" << std::endl;
+	
 
 	loadingTexture = new Texture("refresh", 0);
 #endif
 
+//	cout << "Loading Texture loaded" << endl;
 	isLoading = true;
 	isLoadingDrawing = false;
 	
@@ -91,6 +92,8 @@ GraphicsEngine::GraphicsEngine()
 
 	renderer->SetLoadingIcon(loadingIcon);
 
+
+	//cout << "Graphics Engine initialized" << endl;
 	isInitialised = true; // Graphics Engine has initialised successfully
 }
 
@@ -113,7 +116,7 @@ GraphicsEngine::~GraphicsEngine() {
 #if PS3_BUILD
 void GraphicsEngine::threadExecution(uint64_t arg)
 {
-	std::cout << "Graphics Thread starting" << std::endl;
+	
 	GraphicsEngine* myArg = (GraphicsEngine*)arg;
 	myArg->Run();
 }

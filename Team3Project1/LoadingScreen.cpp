@@ -22,11 +22,13 @@ void LoadingScreen::Update() {
 //		GameStateManager::Graphics()->EnableLoadingIcon(false);
 //		isLoading = false;
 	
-		//PauseScreen* menu = new PauseScreen();
 		MainMenu* menu = new MainMenu();
 		GameStateManager::Instance()->AddGameScreen(menu);
-//		RacerGame* game = new RacerGame();
-//		GameStateManager::Instance()->AddGameScreen(game);
+
+		//RacerGame* game = new RacerGame();
+		//PhysicsEngine::SetGame(game);
+		//GameStateManager::Instance()->AddGameScreen(game);
+
 		GameStateManager::Graphics()->EnableLoadingIcon(false);
 		isLoading = false;
 	}
@@ -57,7 +59,7 @@ void LoadingScreen::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEve
 		}
 		else if (button == GamepadEvents::INPUT_SELECT)
 		{
-			debugEnabled == !debugEnabled;
+			debugEnabled = !debugEnabled;
 			GameStateManager::Debug()->EnableDebugOverlay(debugEnabled);
 		}
 	}
