@@ -52,7 +52,6 @@ RacerGame::RacerGame(unsigned int lowestScore)
 RacerGame::~RacerGame(void)
 {
 	delete quad;
-
 }
 
 void RacerGame::LoadContent() {
