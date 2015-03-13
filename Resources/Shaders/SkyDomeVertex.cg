@@ -1,23 +1,27 @@
-#version 150 core
+struct output {
+	float4 position : POSITION;
+	float4 worldPos : TEXCOORD0;
+	float2 texCoord : TEXCOORD1;
+};
 
-uniform mat4 modelMatrix;
-uniform mat4 viewMatrix;
-uniform mat4 projMatrix;
-uniform mat4 textureMatrix;
+output main
+(
+	float3 position : POSITION,
+	float2 texCoord : TEXCOORD1,
 
-in vec3 position;
-in vec2 texCoord;
-
-out Vertex 
+	uniform float4x4 modelMatrix,// : C0,
+	uniform float4x4 viewMatrix,//  : C4,
+	uniform float4x4 projMatrix,//  : C8,
+	uniform float4x4 textureMatrix//  : C12,
+) 
 {
-	vec2 texCoord;
-	vec4 worldPos;
-} OUT;
+	output OUT;
 
-void main(void) 
-{
-	mat4 mvp = projMatrix * viewMatrix * modelMatrix;
-	gl_Position = mvp * vec4(position, 1.0);
-	OUT.texCoord = (textureMatrix * vec4(texCoord, 0.0, 1.0)).xy;
-	OUT.worldPos = vec4(position, 1.0);
+	float4x4 mvp = mul(projMatrix, mul(viewMatrix, modelMatrix));
+
+	OUT.position = mul(mvp, position);
+	OUT.texCoord = texCoord;
+	OUT.worldPos = float4(position, 1.0);
+
+	return OUT;
 }

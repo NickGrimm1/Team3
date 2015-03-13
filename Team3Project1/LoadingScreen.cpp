@@ -54,7 +54,7 @@ void LoadingScreen::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEve
 		}
 		else if (button == GamepadEvents::INPUT_SELECT)
 		{
-			debugEnabled == !debugEnabled;
+			debugEnabled = !debugEnabled;
 			GameStateManager::Debug()->EnableDebugOverlay(debugEnabled);
 		}
 	}

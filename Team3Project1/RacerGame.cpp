@@ -81,7 +81,7 @@ void RacerGame::LoadContent() {
 	audio= new AudioTestClass();
 	GameStateManager::Instance()->AddGameScreen(audio);
 #endif
-	
+#if WINDOWS_BUILD
 	GameStateManager::Instance()->AddGameScreen(audio);
 #endif	
 	scoreTexture = GameStateManager::Assets()->LoadTexture(this, "score", 0);
@@ -317,7 +317,6 @@ void RacerGame::Update() {
 		GameStateManager::Audio()->StopSound(audio->Getsoundemitter());
 #endif
 		isplaystartegine=true;
-#endif
 	}
 
 	if(isplaylowspdegine==false&&car->GetCarNode().GetLinearVelocity().Length()<170&&car->GetCarNode().GetLinearVelocity()!=T3Vector3(0,0,0))
@@ -344,7 +343,6 @@ void RacerGame::Update() {
 		GameStateManager::Audio()->StopSound(Engine1);
 #endif
 		moveenginesound=true;
-#endif
 	}
 
 	/*if(car->GetVehiclePhysicsNode()->GetF()>0){

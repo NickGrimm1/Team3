@@ -166,7 +166,6 @@ public:
 			  }
 			  GameStateManager::Graphics()->RemoveDrawable(obj1);
 	          obj1->DisconnectFromSystems();
-#endif
 		  }
 			   		  
    }
