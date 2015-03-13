@@ -21,10 +21,11 @@ int RacerGame::update =0;
 float RacerGame::g=0.0f;
 float RacerGame::gx =300.0f;
 
-RacerGame::RacerGame(void)
+RacerGame::RacerGame(unsigned int lowestScore)
 {
 
 	//f=5;
+	lowScore = lowestScore;
 	gameOver = false;
 	srand(time(NULL));
 	T3Vector3 sp1= T3Vector3(100.0f,0.0f,0.0f);
@@ -700,10 +701,18 @@ void RacerGame::UnloadContent() {
 }
 
 void RacerGame::GameOver() {
+	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	gameOver = true;
 	inputEnabled = false;
 	GameStateManager::Physics()->Pause();
-	HighScore* scoreboard = new HighScore(score, this, hud);
-	GameStateManager::AddGameScreen(scoreboard);	
-	GameStateManager::Physics()->Resume();
+	if (score > lowScore) {
+		HighScore* scoreboard = new HighScore(score, this, hud);
+		GameStateManager::AddGameScreen(scoreboard);	
+	}
+	else {
+		GameStateManager::RemoveGameScreen(this);
+		GameStateManager::RemoveGameScreen(hud);
+		GameStateManager::AddGameScreen(new MainMenu);
+	}
+	GameStateManager::Graphics()->EnableLoadingIcon(false);
 }

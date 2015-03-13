@@ -20,7 +20,7 @@ public:
 	#if WINDOWS_BUILD
 	AudioTestClass* audio;
 #endif
-	RacerGame(void);
+	RacerGame(unsigned int lowestScore);
 	virtual ~RacerGame(void);
 	virtual void LoadContent();
 	virtual void UnloadContent();
@@ -158,6 +158,7 @@ private:
 	bool moveenginesound;
 	bool carspeediszero;
 	bool gameOver;
+	unsigned int lowScore;
 #if WINDOWS_BUILD
 	SoundEmitter* Engine0;
 	SoundEmitter* Engine1;
