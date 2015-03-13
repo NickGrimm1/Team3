@@ -51,6 +51,7 @@ void PhysicsEngine::ThreadRun()
 
 
 		//NarrowPhaseCollisions();
+		ListGuard.lock_mutex();
 
 		narrowlist.clear();
 		//	cout << "PhysicsEngine: Narrow List clear" << endl;
@@ -65,6 +66,7 @@ void PhysicsEngine::ThreadRun()
 		//	cout << "PhysicsEngine: Physics Updated" << endl;
 		BroadPhaseCollisions();
 
+		ListGuard.unlock_mutex();
 
 	}
 		//cout << "PhysicsEngine: End of Physics Loop" << endl;
@@ -529,6 +531,7 @@ void  PhysicsEngine::SortandSweep()
 						second.SetLinearVelocity(t3);
 					   }
 				     }
+				cout<<second.GetPosition().y;
 			}
 
 			if(second.Getplanecollision()==true && first.Getplanecollision()==false)
@@ -570,12 +573,13 @@ void  PhysicsEngine::SortandSweep()
 						first.SetLinearVelocity(t3);
 					   }
 				     }
+				cout<<first.GetPosition().y;
 			}
 			}
 
 			else{
 			
-					if(CollisionDetection(first, second))
+				if(CollisionDetection(first, second))
 			    {
 				//OnCollision(first,second);
 				if(first.GetIsCollide()==false && second.GetIsCollide ()==true){
@@ -729,9 +733,8 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 					RacerGame::update=1;
 						  }
 					    }
-					
-						check=false;
-					}*/
+					//	check=false;
+					//}*/
 					/*first.SetLinearVelocity(T3Vector3(0,0,0));
 					first.SetForce(T3Vector3(0,0,0));
                     second.SetLinearVelocity(T3Vector3(0,0,0));
