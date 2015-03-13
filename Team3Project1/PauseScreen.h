@@ -15,10 +15,11 @@ Version: 0.0.1 02/03/2015.</summary>
 #include "GameStateManager.h"
 #include "GraphicsTestScreen.h"
 #include "MainMenu.h"
-
+//class AudioTestClass;
 class PauseScreen :	public GameScreen2D
 {
 public:
+
 	PauseScreen(GameScreen3D* mainGame, GameScreen2D* hud);
 	~PauseScreen(void);
 
@@ -82,5 +83,14 @@ private:
 
 	GameScreen3D* racerScreen;
 	GameScreen2D* hudScreen;
+#if WINDOWS_BUILD
+	Sound* Mainmenu_BGM;
+	SoundEmitter* mainmusic;
+#endif
+//	GameTimer timer;
+//	float CurrentTime;
+//#if WINDOWS_BUILD
+//	AudioTestClass* audio;
+//#endif
 };
 

@@ -16,6 +16,8 @@ public:
 	virtual void LoadContent();
 	virtual void Update();
 	virtual void UnloadContent() {}
+	virtual void Pause();
+	virtual void Resume();
 	float GetCurrentTimer(){return CurrentTime;}
 
 	// Input Listener methods - implemented
@@ -29,6 +31,7 @@ public:
 	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) {};
 	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID){}
 	SoundEmitter* Getsoundemitter(){return a;}
+	SoundEmitter* Getsoundemitterb(){return b;}
 private:
 	Sound* BGM1;
 	Sound* BGM2;
@@ -38,17 +41,22 @@ private:
 	Sound* Ready;
 	Sound* Over;
 	SoundEmitter* a;
+	SoundEmitter* b;
 	GameTimer timer;
 	float CurrentTime;
 	bool bgm1;
 	bool bgm2;
 	bool bgm3;
+	bool main;
 	bool ready;
 	bool coins;
 	bool engine_start;
 	bool pressonce;
 	bool pressonce2;
 	Vehicle* car;
+	Sound* Mainmenu_BGM;
+	SoundEmitter* mainmusic;
+
 };
 #endif
 

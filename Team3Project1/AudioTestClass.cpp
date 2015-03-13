@@ -20,6 +20,7 @@ AudioTestClass::AudioTestClass(void)
 	bgm1=false;
 	bgm2=false;
 	bgm3=false;
+	main=false;
 	ready=false;
 	coins=false;
 	engine_start=false;
@@ -27,6 +28,7 @@ AudioTestClass::AudioTestClass(void)
 	pressonce2 = false;
 	/*car= new Vehicle();*/
 	a = new SoundEmitter();
+	b = new SoundEmitter();
 
 
 }
@@ -49,6 +51,7 @@ void AudioTestClass::LoadContent() {
 	SoundManager::AddSound(SOUNDSDIR"lowspeedengine.wav");
 	SoundManager::AddSound(SOUNDSDIR"midspeed.wav");
 	SoundManager::AddSound(SOUNDSDIR"time.wav");
+	SoundManager::AddSound(SOUNDSDIR"MenuMusic.wav");
 	BGM1 = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm1_56sec.wav");
 	BGM2 = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm2_60sec.wav");
 	BGM3 = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm3.wav");
@@ -56,6 +59,7 @@ void AudioTestClass::LoadContent() {
 	Engine_start = GameStateManager::Audio()->GetSound(SOUNDSDIR"engine_start.wav");
 	Ready = GameStateManager::Audio()->GetSound (SOUNDSDIR"getready3sec.wav");
 	Over = GameStateManager::Audio()->GetSound (SOUNDSDIR"gameover2.6sec.wav");
+	Mainmenu_BGM = GameStateManager::Audio()->GetSound(SOUNDSDIR"MenuMusic.wav");
 	//GameStateManager::Audio()->PlaySound (BGM1,SOUNDPRIORITY_ALWAYS,false, true);
 	//GameStateManager::Audio()-> PlaySound (BGM3, false,SOUNDPRIORITY_ALWAYS);//SOUNDPRIORTY_LOW);
 	/*GameStateManager::Audio()-> PlaySound (ready,T3Vector3(0,0,0), false);
@@ -80,21 +84,39 @@ void AudioTestClass::Update() {
 		a=GameStateManager::Audio()-> PlaySound (Engine_start,T3Vector3(0,0,0), true);
 		engine_start=true;
 	}
-	if(bgm1==false&&CurrentTime>=0&&CurrentTime<=56000){
+	if(bgm1==false/*&&CurrentTime>=0&&CurrentTime<=56000*/){
 
-		GameStateManager::Audio()-> PlaySoundA (BGM1,SOUNDPRIORITY_ALWAYS,true, false);
+		b=GameStateManager::Audio()-> PlaySoundA (BGM2,SOUNDPRIORITY_ALWAYS,true, true);
 		bgm1=true;
 	}
-	if(bgm2==false&&CurrentTime>57000&&CurrentTime<116000){
-		//GameStateManager::Audio()->StopSound(a);
-		//GameStateManager::Audio()->StopSound(BGM2);
-		GameStateManager::Audio()-> PlaySoundA (BGM2,SOUNDPRIORITY_ALWAYS,true, false);
-		bgm2=true;
+	if(main==true)
+	{
+		mainmusic=GameStateManager::Audio()-> PlaySound (Mainmenu_BGM,SOUNDPRIORITY_ALWAYS,true, true);
+		main=false;
 	}
-	if(bgm3==false&&CurrentTime>117000){
-		GameStateManager::Audio()->PlaySoundA(BGM3,SOUNDPRIORITY_ALWAYS,true, true);
-		bgm3=true;
-	}
+	//if(bgm2==false&&CurrentTime>57000&&CurrentTime<116000){
+	//	//GameStateManager::Audio()->StopSound(a);
+	//	//GameStateManager::Audio()->StopSound(BGM2);
+	//	GameStateManager::Audio()-> PlaySoundA (BGM2,SOUNDPRIORITY_ALWAYS,true, false);
+	//	bgm2=true;
+	//}
+	//if(bgm3==false&&CurrentTime>117000){
+	//	GameStateManager::Audio()->PlaySoundA(BGM3,SOUNDPRIORITY_ALWAYS,true, true);
+	//	bgm3=true;
+	//}
+}
+
+void AudioTestClass::Pause() 
+{
+	GameStateManager::Audio()->StopSound(b);
+	//main=true;
+	
+}	
+void AudioTestClass::Resume()
+{
+	//main=false;
+	//GameStateManager::Audio()->StopSound(mainmusic);
+	bgm1=false;
 }
 
 void AudioTestClass::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
