@@ -1266,8 +1266,9 @@ void RacerGame::Resume() {
 	inputEnabled = true;
 }
 
-void RacerGame::UnloadContent() {
+void RacerGame::UnloadContent() 
+{
+#if WINDOWS_BUILD
 	GameStateManager::Audio()->SetListener(NULL);
-
-
+#endif
 }
