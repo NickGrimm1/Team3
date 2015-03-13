@@ -50,7 +50,7 @@ void AudioTestClass::LoadContent() {
 	SoundManager::AddSound(SOUNDSDIR"engine_start.wav");
 	SoundManager::AddSound(SOUNDSDIR"lowspeedengine.wav");
 	SoundManager::AddSound(SOUNDSDIR"midspeed.wav");
-	SoundManager::AddSound(SOUNDSDIR"time.wav");
+	SoundManager::AddSound(SOUNDSDIR"time1.wav");
 	SoundManager::AddSound(SOUNDSDIR"MenuMusic.wav");
 	BGM1 = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm1_56sec.wav");
 	BGM2 = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm2_60sec.wav");

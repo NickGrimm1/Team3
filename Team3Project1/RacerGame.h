@@ -128,7 +128,7 @@ public:
 		  {
 #if WINDOWS_BUILD
 			  Sound* time;
-			  time=GameStateManager::Audio()->GetSound(SOUNDSDIR"time.wav");
+			  time=GameStateManager::Audio()->GetSound(SOUNDSDIR"time1.wav");
 			  GameStateManager::Audio()->PlaySoundA(time, obj1->GetOriginPosition(), false);
 #endif
 			  obj1->GetPhysicsNode().SetIsCollide(false);
