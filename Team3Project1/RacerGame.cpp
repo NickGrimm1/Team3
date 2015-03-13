@@ -679,8 +679,9 @@ void RacerGame::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents:
 	case GamepadEvents::BUTTON_HELD:
 	case GamepadEvents::BUTTON_DOWN:
 		if (button == GamepadEvents::INPUT_R2_TRIGGER) {
-		
+#if WINDOWS_BUILD
 			GameStateManager::Audio()->PlaySoundA(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
+#endif
 			car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()+1.8);
 			if(car->GetVehiclePhysicsNode()->GetF()>GetMaxSpeed()) {
 				car->GetVehiclePhysicsNode()->SetF(GetMaxSpeed());
@@ -813,9 +814,8 @@ void RacerGame::Pause() {
 	GameStateManager::AddGameScreen(new PauseScreen(this, hud, isControllerControlled && playerController == GamepadEvents::PLAYERINDEX_MAX));
 #ifdef WINDOWS_BUILD
 	GameStateManager::Graphics()->EnableMousePointer(true);
-#endif
-	GameStateManager::AddGameScreen(new PauseScreen(this, hud));
 	GameStateManager::Audio()->StopSound(Engine0);
+#endif
 	//GameStateManager::Audio()->StopSound(Engine1);
 }
 
@@ -869,9 +869,12 @@ void RacerGame::UnloadContent() {
 
 }
 
-void RacerGame::GameOver() {
+void RacerGame::GameOver() 
+{
+#if WINDOWS_BUILD
 	Sound* over=GameStateManager::Audio()->GetSound(SOUNDSDIR"gameover2.6sec.wav");
 	GameStateManager::Audio()->PlaySoundA (over,SOUNDPRIORITY_ALWAYS,true, false);
+#endif
 	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	gameOver = true;
 	inputEnabled = false;
