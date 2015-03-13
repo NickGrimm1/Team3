@@ -106,11 +106,12 @@ public:
 			      
 			}
 			   CreateTrack();
-			   	GameStateManager::Graphics()->RemoveDrawable(checkPoint[0]);
+			  
 	            checkPoint[0]->DisconnectFromSystems();
-	            checkPoint.erase(checkPoint.begin());
+	delete checkPoint[0];
+	checkPoint.erase(checkPoint.begin());
 			  }
-			  obj1->GetPhysicsNode().SetIsCollide(false);
+			 // obj1->GetPhysicsNode().SetIsCollide(false);
 			//  RacerGame::update=1;
 		 
 		  }
@@ -124,17 +125,17 @@ public:
 			 if(obj1->GetType()=='d')
 		  {
 			   DeleteTrack();
-			   GameStateManager::Graphics()->RemoveDrawable(checkPoint[0]);
-	checkPoint[0]->DisconnectFromSystems();
+			   checkPoint[0]->DisconnectFromSystems();
+	delete checkPoint[0];
 	checkPoint.erase(checkPoint.begin());
-			  obj1->GetPhysicsNode().SetIsCollide(false);
+			  //obj1->GetPhysicsNode().SetIsCollide(false);
 			  //RacerGame::update=2;
 			    SettimeOrScore(1);
 			  //RacerGame::update=2;
 			 
 			  
 		  }
-			  if(obj1->GetType()=='p')
+			 if(obj1->GetType()=='p')
 		  {
 	
 #ifdef WINDOWS_BUILD
@@ -151,7 +152,7 @@ public:
 	          obj1->DisconnectFromSystems();
 			  pickup.erase(pickup.begin());
 		  }
-			   if(obj1->GetType()=='t')
+			 if(obj1->GetType()=='t')
 		  {
 #if WINDOWS_BUILD
 			  Sound* time;
