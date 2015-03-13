@@ -33,7 +33,7 @@ public:
 
 private:
 	DebugManager() {debugOverlay = NULL; }
-	virtual ~DebugManager() {if (debugOverlay != NULL) delete debugOverlay;}
+	virtual ~DebugManager() { }
 	static DebugManager* instance;
 
 	DebugOverlay* debugOverlay;
