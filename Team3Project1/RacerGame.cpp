@@ -196,7 +196,7 @@ void RacerGame::LoadContent() {
 
 #if WINDOWS_BUILD
 	GameStateManager::Audio()->SetListener(car);
-
+#endif
 	//FrontRightTire = new Vehicle_Wheel(5.0f);
 	//FrontRightTire->SetOriginPosition(T3Vector3(10.0f, -2.0f, 8.0f));
 	//FrontRightTire->SetPhysics(5.0f, (vpn->getRFW()));
@@ -282,7 +282,7 @@ void RacerGame::Update() {
 			else {
 				pickup[i]->FlipUpDown();
 				//pn.SetPosition(pn.GetPosition + T3Vector3(0.0f, -1.0f, 0.0f));
-	}
+			}
 		}
 		else {
 			if (pickup[i]->GetPhysicsNode().GetPosition().y > 3.0f)
@@ -294,7 +294,7 @@ void RacerGame::Update() {
 		}
 	}
 	
-	}*/
+
 	//if(((abs(car->GetCarNode().GetLinearVelocity().x)+abs(car->GetCarNode().GetLinearVelocity().z))<0.5)&& f!=0)
 	//	
 	//{
@@ -328,9 +328,7 @@ void RacerGame::Update() {
 #endif
 		moveenginesound=true;
 	}
-	if(f>0){
-		f=f-0.35f;
-	if(f<0)
+
 	/*if(car->GetVehiclePhysicsNode()->GetF()>0){
 		car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()-0.35);
 	if(car->GetVehiclePhysicsNode()->GetF()<0)
@@ -358,25 +356,24 @@ void RacerGame::Update() {
 	{
 		CreateTrack();
 
-	update=0;
+		update=0;
 	}
 
 	if(update==2)
 	{
 		DeleteTrack();
 
-	update=0;
+		update=0;
 	}
 
 	if((Time-60)==0){
-	SetPlayTime(-1);
-	Time=0;
-#if WINDOWS_BUILD
-	hud->SetScreen(GetScore(),GetPlayTime());
-#endif
+		SetPlayTime(-1);
+		Time=0;
+		hud->SetScreen(GetScore(),GetPlayTime());
 	}
 	Time+=1;
 }
+
 void RacerGame::Start(){
 	cout << "RacerGame: Start()" << endl;
 	Gold_cion * gold_cion= new Gold_cion(20.0f);
