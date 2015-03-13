@@ -246,7 +246,6 @@ public:
 	void MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position)
 	{
 		for (unsigned int i = 0; i < instance->gameScreens.size(); i++)
-			if (instance->gameScreens[i]->IsInputEnabled()) 
 				instance->gameScreens[i]->MouseEvent(type, button, position);
 	}
 	/**
@@ -257,7 +256,6 @@ public:
 	void MouseMoved(T3Vector2& start, T3Vector2& finish)
 	{
 		for (unsigned int i = 0; i < instance->gameScreens.size(); i++)
-			if (instance->gameScreens[i]->IsInputEnabled()) 
 				instance->gameScreens[i]->MouseMoved(start, finish);
 	}
 	/**
@@ -267,7 +265,6 @@ public:
 	void MouseScrolled(T3Vector2& position, int amount)
 	{
 		for (unsigned int i = 0; i < instance->gameScreens.size(); i++)
-			if (instance->gameScreens[i]->IsInputEnabled()) 
 				instance->gameScreens[i]->MouseScrolled(position, amount);
 	}
 	/**
@@ -278,7 +275,6 @@ public:
 	void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key)
 	{
 		for (unsigned int i = 0; i < gameScreens.size(); i++)
-			if (instance->gameScreens[i]->IsInputEnabled()) 
 				gameScreens[i]->KeyboardEvent(type, key);
 	}
 	/**
@@ -291,7 +287,6 @@ public:
 	void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button)
 	{
 		for (unsigned int i = 0; i < gameScreens.size(); i++)
-			if (instance->gameScreens[i]->IsInputEnabled()) 
 				gameScreens[i]->GamepadEvent(playerID, type, button);
 	}
 	/**
@@ -303,13 +298,11 @@ public:
 	void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount)
 	{
 		for (unsigned int i = 0; i < gameScreens.size(); i++)
-			if (instance->gameScreens[i]->IsInputEnabled()) 
 				gameScreens[i]->GamepadAnalogueDisplacement(playerID, analogueControl, amount);
 	}
 	void GamepadDisconnect(GamepadEvents::PlayerIndex playerID)
 	{
 		for (unsigned int i = 0; i < gameScreens.size(); i++)
-			if (instance->gameScreens[i]->IsInputEnabled()) 
 				gameScreens[i]->GamepadDisconnect(playerID);
 	}
 #pragma endregion

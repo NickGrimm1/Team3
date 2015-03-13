@@ -969,5 +969,5 @@ void PhysicsEngine::OnCollision(PhysicsNode& p1, PhysicsNode& p2)
 {
 	if (gameClass != NULL) {
 	gameClass->CollisionBetween(p1.GetGameEntity(),p2.GetGameEntity());
-}
+	}
 }

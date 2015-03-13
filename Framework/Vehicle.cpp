@@ -11,7 +11,7 @@ Vehicle::Vehicle(float size) {
 	//TT =  SOIL_load_OGL_texture ("../../Texture/footballpitch.jpg", SOIL_LOAD_AUTO , SOIL_CREATE_NEW_ID , SOIL_FLAG_MIPMAPS);
 //	PlayerPosition=T3Vector3(500,100,-800);
 
-	T3Vector3 position =T3Vector3(150, 6, 0);
+	T3Vector3 position =T3Vector3(0, 6, 0);
 	boundingRadius = size;
 	origin = position;
 	rotation = Quaternion::EulerAnglesToQuaternion(0,-90,0);

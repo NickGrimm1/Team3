@@ -85,6 +85,20 @@ void HudTestScreen::LoadContent() {
 	AddDrawable(Speed);
 	
 
+
+		Start=	new DrawableText2D(
+		0.2f, 
+		0.2f, 
+		0, 
+		0.6f, 
+		0.6f, 
+		"Ready", 
+		f,
+		0,
+		T3Vector2(0.5f, 0.5f),
+		T3Vector4(1.0f,0.0f,0.0f,1.0f));
+
+		AddDrawable(Start);
 	//string Stime="time";
 
 }
@@ -126,4 +140,10 @@ void HudTestScreen::SetScreen(int point,int time,float speed){
 	Playtime->SetText("Time = "+str3);
 	Score->SetText("Score = "+str4);
 	Speed->SetText("Speed = "+str5);
+}
+
+void HudTestScreen::SetStart(string value){
+
+	Start->SetText(value);
+
 }
