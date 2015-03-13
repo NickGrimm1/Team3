@@ -850,6 +850,8 @@ void RacerGame::UnloadContent() {
 }
 
 void RacerGame::GameOver() {
+	Sound* over=GameStateManager::Audio()->GetSound(SOUNDSDIR"gameover2.6sec.wav");
+	GameStateManager::Audio()->PlaySoundA (over,SOUNDPRIORITY_ALWAYS,true, false);
 	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	gameOver = true;
 	inputEnabled = false;
