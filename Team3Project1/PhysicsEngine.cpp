@@ -410,7 +410,7 @@ void  PhysicsEngine::SortandSweep()
 						// if EPA
  						if (succeeded)
 				       {
-							CollisionHelper::AddCollisionImpulse(first, second, *data);								
+							CollisionHelper::AddCollisionImpulse(first, second, *data);	
 				       }
 				   }
 					// the vehicle is going to drop 
