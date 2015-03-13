@@ -21,8 +21,10 @@ int RacerGame::update =0;
 float RacerGame::g=0.0f;
 float RacerGame::gx =300.0f;
 
-RacerGame::RacerGame(unsigned int lowestScore)
+RacerGame::RacerGame(unsigned int lowestScore, GamepadEvents::PlayerIndex playerController)
+	: playerController(playerController)
 {
+	playerController != GamepadEvents::PLAYERINDEX_MAX ? isControllerControlled = true : isControllerControlled = false; 
 
 	//f=5;
 	lowScore = lowestScore;
@@ -106,7 +108,11 @@ void RacerGame::LoadContent() {
 	PlayerPosition=T3Vector3(500.0f,100.0f,-800.0f);
 	GameStateManager::Graphics()->SetCamera(chasecamera);
 }
-void RacerGame::Update() { 
+void RacerGame::Update() 
+{
+	if (isControllerControlled && playerController == GamepadEvents::PLAYERINDEX_MAX)
+		playerController = GameStateManager::Input()->GetActiveController();
+
 	if (gameOver) return; // Game over - don't update
 
 	GameStateManager::Input()->GetActiveController();
@@ -779,7 +785,7 @@ void RacerGame::Pause() {
 	camera->Pause();
 	GameStateManager::Physics()->Pause();
 	inputEnabled = false;
-	GameStateManager::AddGameScreen(new PauseScreen(this, hud));
+	GameStateManager::AddGameScreen(new PauseScreen(this, hud, isControllerControlled && playerController == GamepadEvents::PLAYERINDEX_MAX));
 #ifdef WINDOWS_BUILD
 	GameStateManager::Graphics()->EnableMousePointer(true);
 #endif

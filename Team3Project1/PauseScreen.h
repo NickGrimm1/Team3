@@ -19,7 +19,7 @@ Version: 0.0.1 02/03/2015.</summary>
 class PauseScreen :	public GameScreen2D
 {
 public:
-	PauseScreen(GameScreen3D* mainGame, GameScreen2D* hud);
+	PauseScreen(GameScreen3D* mainGame, GameScreen2D* hud, bool controllerDisconnected);
 	~PauseScreen(void);
 
 	virtual void LoadContent();
@@ -82,5 +82,9 @@ private:
 
 	GameScreen3D* racerScreen;
 	GameScreen2D* hudScreen;
+
+	bool controllerDisconnected;
+
+	DrawableText2D* pressStart;
 };
 

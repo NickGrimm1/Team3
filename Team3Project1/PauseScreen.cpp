@@ -1,9 +1,12 @@
 #include "PauseScreen.h"
 
 
-PauseScreen::PauseScreen(GameScreen3D* mainGame, GameScreen2D* hud) {
+PauseScreen::PauseScreen(GameScreen3D* mainGame, GameScreen2D* hud, bool controllerDisconnected)
+	: controllerDisconnected(controllerDisconnected)
+{
 #if WINDOWS_BUILD
-	GameStateManager::Graphics()->EnableMousePointer(true);
+	if (!controllerDisconnected)
+		GameStateManager::Graphics()->EnableMousePointer(true);
 #endif
 	//Set these to reflect the current state of the audio engine.
 	musicMuted = false;
@@ -16,8 +19,8 @@ PauseScreen::~PauseScreen(void) {
 
 }
 
-void PauseScreen::Update() {
-
+void PauseScreen::Update() 
+{
 }
 
 void PauseScreen::LoadContent() {
@@ -38,6 +41,13 @@ void PauseScreen::LoadContent() {
 	soundMuteHover		= GameStateManager::Assets()->LoadTexture(this, "Buttons/sound_mute_selected", 0);
 
 	pauseTex			= GameStateManager::Assets()->LoadTexture(this, "pause_screen", 0);
+
+	if (controllerDisconnected)
+	{
+		Font* startFont = GameStateManager::Assets()->LoadFont(this, "tahoma", 16, 16);
+		pressStart = new DrawableText2D(0.3f, 0.1f, 1.0f, 0.4f, 0.05f, "Player 1 Press Start or A", startFont);
+		AddDrawable(pressStart);
+	}
 
 	float charWidth = 0.16f;
 	float charHeight = 0.08f;
@@ -109,6 +119,8 @@ void PauseScreen::UnloadContent() {
 	GameStateManager::Assets()->UnloadTexture(this, "Buttons/sound_mute_selected");
 
 	GameStateManager::Assets()->UnloadTexture(this, "pause_screen");
+	if (controllerDisconnected)
+		GameStateManager::Assets()->UnloadFont(this, "tahoma");
 }
 
 void PauseScreen::ResumeClicked(float x, float y) {
