@@ -220,7 +220,7 @@ void RacerGame::LoadContent() {
 
 	//camera->SetPosition(T3Vector3(0.0f,10.0f, 80.0f));
 	//camera->SetYaw(180.0f);
-	GameStateManager::Graphics()->SetCamera(camera);
+	GameStateManager::Graphics()->SetCamera(chasecamera);
 
 	//GameStateManager::Graphics()->SetCamera(chasecamera);
 }
@@ -282,7 +282,7 @@ void RacerGame::Update() {
 
 	if(update==2)
 	{
-		DeleteTrack();
+		//DeleteTrack();
 
 	update=0;
 	}
@@ -380,7 +380,7 @@ void RacerGame::Start(){
 	GameStateManager::Graphics()->DropRenderContext();
 
 
-	DrawableEntity3D* ent = new DrawableEntity3D(
+	/*DrawableEntity3D* ent = new DrawableEntity3D(
 		track,
 		NULL,
 		grassTex,
@@ -391,10 +391,52 @@ void RacerGame::Start(){
 		T3Vector3(1.0f,1.0f,1.0f));
 	//gameEntities.push_back(ent);
 	AddDrawable(ent);
-	allEntities.push_back(ent);
+	allEntities.push_back(ent);*/
+
+
+	//test road physics
+	PhysicsNode* proad = new PhysicsNode();
+	GameEntity* road= new GameEntity(proad);
+		road->SetMesh(track);
+		road->SetShader(0);
+		road->SetTexture(grassTex);
+		road->SetBumpTexture(NULL);
+		road->SetBoundingRadius(800.0f);
+		road->SetOriginPosition(T3Vector3(0.0f,0.0f,0.0f));
+		road->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
+		road->SetScale(T3Vector3(1.0f,1.0f,1.0f));
+		road->GetPhysicsNode().SetMass(5.0f);
+		road->GetPhysicsNode().SetMesh(track);
+		road->GetPhysicsNode().SetInverseMass(0.0f);
+		road->GetPhysicsNode().SetUseGravity(false);
+		road->GetPhysicsNode().SetXstart(road->GetPhysicsNode().GetPosition().x-200);
+		road->GetPhysicsNode().SetXend(road->GetPhysicsNode().GetPosition().x+200);
+		road->GetPhysicsNode().SetIsCollide(true);
+	    road->GetPhysicsNode().Setcar_wheel(true);
+		road->GetPhysicsNode().Setplanecollision(true);
+		road->GetPhysicsNode().SetPosition(T3Vector3(0.0f,0.0f,0.0f));
+		road->GetPhysicsNode().SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
+		road->ConnectToSystems();
+		AddDrawable(road);
+		allEntities.push_back(road);
+	//test end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	//add new track to draw
-	DrawableEntity3D* ent2 = new DrawableEntity3D(
+	/*DrawableEntity3D* ent2 = new DrawableEntity3D(
 		Strackn,
 		NULL,
 		grassTex,
@@ -406,25 +448,80 @@ void RacerGame::Start(){
 		T3Vector3(1,1,1));
 	//gameEntities.push_back(ent);
 	AddDrawable(ent2);
-	allEntities.push_back(ent2);
+	allEntities.push_back(ent2);*/
 	//add end
+
+	//test road physics
+	PhysicsNode* proad2 = new PhysicsNode();
+	GameEntity* road2= new GameEntity(proad2);
+		road2->SetMesh(Strackn);
+		road2->SetShader(0);
+		road2->SetTexture(grassTex);
+		road2->SetBumpTexture(NULL);
+		road2->SetBoundingRadius(800.0f);
+		road2->SetOriginPosition(avg);
+		road2->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
+		road2->SetScale(T3Vector3(1.0f,1.0f,1.0f));
+		road2->GetPhysicsNode().SetMass(5.0f);
+		road2->GetPhysicsNode().SetMesh(Strackn);
+		road2->GetPhysicsNode().SetInverseMass(0.0f);
+		road2->GetPhysicsNode().SetUseGravity(false);
+		road2->GetPhysicsNode().SetXstart(road2->GetPhysicsNode().GetPosition().x-200);
+		road2->GetPhysicsNode().SetXend(road2->GetPhysicsNode().GetPosition().x+200);
+		road2->GetPhysicsNode().SetIsCollide(true);
+	    road2->GetPhysicsNode().Setcar_wheel(true);
+		road2->GetPhysicsNode().Setplanecollision(true);
+		road2->GetPhysicsNode().SetPosition(avg);
+		road2->GetPhysicsNode().SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
+		road2->ConnectToSystems();
+		AddDrawable(road2);
+		allEntities.push_back(road2);
+	//test end
 
 
 	//add3
-	DrawableEntity3D* ent3 = new DrawableEntity3D(
+	/*DrawableEntity3D* ent3 = new DrawableEntity3D(
 		Strackn2,
 		NULL,
 		grassTex,
 		NULL,
 		800.0f,
-		/*T3Vector3(0,0,0),*/
+		//T3Vector3(0,0,0),
 		avg2,
 		Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f),
 		T3Vector3(1,1,1));
 	//gameEntities.push_back(ent);
 	AddDrawable(ent3);
-	allEntities.push_back(ent3);
+	allEntities.push_back(ent3);*/
 	//add 3 end
+	//test road physics
+	PhysicsNode* proad3 = new PhysicsNode();
+	GameEntity* road3= new GameEntity(proad3);
+		road3->SetMesh(Strackn2);
+		road3->SetShader(0);
+		road3->SetTexture(grassTex);
+		road3->SetBumpTexture(NULL);
+		road3->SetBoundingRadius(800.0f);
+		road3->SetOriginPosition(avg2);
+		road3->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
+		road3->SetScale(T3Vector3(1.0f,1.0f,1.0f));
+		road3->GetPhysicsNode().SetMass(5.0f);
+		road3->GetPhysicsNode().SetMesh(Strackn2);
+		road3->GetPhysicsNode().SetInverseMass(0.0f);
+		road3->GetPhysicsNode().SetUseGravity(false);
+		road3->GetPhysicsNode().SetXstart(road3->GetPhysicsNode().GetPosition().x-200);
+		road3->GetPhysicsNode().SetXend(road3->GetPhysicsNode().GetPosition().x+200);
+		road3->GetPhysicsNode().SetIsCollide(true);
+	    road3->GetPhysicsNode().Setcar_wheel(true);
+		road3->GetPhysicsNode().Setplanecollision(true);
+		road3->GetPhysicsNode().SetPosition(avg2);
+		road3->GetPhysicsNode().SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
+		road3->ConnectToSystems();
+		AddDrawable(road3);
+		allEntities.push_back(road3);
+	//test end
+
+
 
 
 	T3Vector3 L =  Strackn2->GetTrackCentreLeft();
@@ -461,7 +558,7 @@ void RacerGame::Start(){
 
 	CheckPoint* checkpoint3= new CheckPoint(10.0f);
 	//checkpoint2->SetPhysics(10,'c');
-	checkpoint3->SetOriginPosition(SplinePoint[1]);
+	checkpoint3->SetOriginPosition(SplinePoint[1]+T3Vector3(0,1,0));
 	checkpoint3->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
 
 	checkpoint3->SetPhysics(10.0f,'c',SplinePoint[1],Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
@@ -475,7 +572,7 @@ void RacerGame::Start(){
 
 	CheckPoint* checkpoint2= new CheckPoint(10.0f);
 	//checkpoint2->SetPhysics(10,'c');
-	checkpoint2->SetOriginPosition(SplinePoint[3]);
+	checkpoint2->SetOriginPosition(SplinePoint[3]+T3Vector3(0,1,0));
 	checkpoint2->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,-(anglec),0.0f));
 
 	checkpoint2->SetPhysics(10.0f,'c',SplinePoint[3],Quaternion::EulerAnglesToQuaternion(0.0f,-(anglec),0.0f));
@@ -507,13 +604,21 @@ void RacerGame::DeleteTrack(){
 	pickup.erase(pickup.begin());
 	}
 
-	RemoveDrawable(allEntities[0]);
+	GameStateManager::Graphics()->RemoveDrawable(allEntities[0]);
+	allEntities[0]->DisconnectFromSystems();
+
+	GameStateManager::Graphics()->RemoveDrawable(allEntities[1]);
+	allEntities[1]->DisconnectFromSystems();
+
+
+	allEntities.erase(allEntities.begin());
+	allEntities.erase(allEntities.begin());
+
+	/*RemoveDrawable(allEntities[0]);
 	RemoveDrawable(allEntities[1]);
 	allEntities.erase(allEntities.begin());
-	allEntities.erase(allEntities.begin());
-	GameStateManager::Graphics()->RemoveDrawable(checkPoint[0]);
-	checkPoint[0]->DisconnectFromSystems();
-	checkPoint.erase(checkPoint.begin());
+	allEntities.erase(allEntities.begin());*/
+	
 	//GameStateManager::Graphics()->RemoveDrawable(checkPoint[1]);
 	//checkPoint[1]->DisconnectFromSystems();
 	//PhysicsNode*  n =checkPoint[0]->GetPhysicsNode();
@@ -595,8 +700,79 @@ void RacerGame::CreateTrack(){
 	GameStateManager::Graphics()->DropRenderContext();
 
 
-	
 
+	//test road physics
+	PhysicsNode* proad2 = new PhysicsNode();
+	GameEntity* road2= new GameEntity(proad2);
+		road2->SetMesh(Strackn);
+		road2->SetShader(0);
+		road2->SetTexture(grassTex);
+		road2->SetBumpTexture(NULL);
+		road2->SetBoundingRadius(800.0f);
+		road2->SetOriginPosition(avg);
+		road2->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
+		road2->SetScale(T3Vector3(1.0f,1.0f,1.0f));
+		road2->GetPhysicsNode().SetMass(5.0f);
+		road2->GetPhysicsNode().SetMesh(Strackn);
+		road2->GetPhysicsNode().SetInverseMass(0.0f);
+		road2->GetPhysicsNode().SetUseGravity(false);
+		road2->GetPhysicsNode().SetXstart(road2->GetPhysicsNode().GetPosition().x-200);
+		road2->GetPhysicsNode().SetXend(road2->GetPhysicsNode().GetPosition().x+200);
+		road2->GetPhysicsNode().SetIsCollide(true);
+	    road2->GetPhysicsNode().Setcar_wheel(true);
+		road2->GetPhysicsNode().Setplanecollision(true);
+		road2->GetPhysicsNode().SetPosition(avg);
+		road2->GetPhysicsNode().SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
+		road2->ConnectToSystems();
+		AddDrawable(road2);
+		allEntities.push_back(road2);
+	//test end
+
+
+	//add3
+	/*DrawableEntity3D* ent3 = new DrawableEntity3D(
+		Strackn2,
+		NULL,
+		grassTex,
+		NULL,
+		800.0f,
+		//T3Vector3(0,0,0),
+		avg2,
+		Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f),
+		T3Vector3(1,1,1));
+	//gameEntities.push_back(ent);
+	AddDrawable(ent3);
+	allEntities.push_back(ent3);*/
+	//add 3 end
+	//test road physics
+	PhysicsNode* proad3 = new PhysicsNode();
+	GameEntity* road3= new GameEntity(proad3);
+		road3->SetMesh(Strackn2);
+		road3->SetShader(0);
+		road3->SetTexture(grassTex);
+		road3->SetBumpTexture(NULL);
+		road3->SetBoundingRadius(800.0f);
+		road3->SetOriginPosition(avg2);
+		road3->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
+		road3->SetScale(T3Vector3(1.0f,1.0f,1.0f));
+		road3->GetPhysicsNode().SetMass(5.0f);
+		road3->GetPhysicsNode().SetMesh(Strackn2);
+		road3->GetPhysicsNode().SetInverseMass(0.0f);
+		road3->GetPhysicsNode().SetUseGravity(false);
+		road3->GetPhysicsNode().SetXstart(road3->GetPhysicsNode().GetPosition().x-200);
+		road3->GetPhysicsNode().SetXend(road3->GetPhysicsNode().GetPosition().x+200);
+		road3->GetPhysicsNode().SetIsCollide(true);
+	    road3->GetPhysicsNode().Setcar_wheel(true);
+		road3->GetPhysicsNode().Setplanecollision(true);
+		road3->GetPhysicsNode().SetPosition(avg2);
+		road3->GetPhysicsNode().SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
+		road3->ConnectToSystems();
+		AddDrawable(road3);
+		allEntities.push_back(road3);
+	//test end
+
+	
+	/*
 	//add new track to draw
 	DrawableEntity3D* ent2 = new DrawableEntity3D(
 		Strackn,
@@ -612,8 +788,7 @@ void RacerGame::CreateTrack(){
 	AddDrawable(ent2);
 	allEntities.push_back(ent2);
 	//add end
-
-
+		
 	//add3
 	DrawableEntity3D* ent3 = new DrawableEntity3D(
 		Strackn2,
@@ -621,14 +796,14 @@ void RacerGame::CreateTrack(){
 		grassTex,
 		NULL,
 		800.0f,
-		/*T3Vector3(0,0,0),*/
+		//T3Vector3(0,0,0),
 		avg2,
 		Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f),
 		T3Vector3(1.0f,1.0f,1.0f));
 	//gameEntities.push_back(ent);
 	AddDrawable(ent3);
 	allEntities.push_back(ent3);
-	//add 3 end
+	//add 3 end*/
 
 
 	T3Vector3 L =  Strackn2->GetTrackCentreLeft();
@@ -669,10 +844,10 @@ void RacerGame::CreateTrack(){
 	
 	CheckPoint* checkpoint3= new CheckPoint(10.0f);
 	//checkpoint2->SetPhysics(10,'c');
-	checkpoint3->SetOriginPosition(SplinePoint[3]+T3Vector3(33.0f,0.0f,move));
+	checkpoint3->SetOriginPosition(SplinePoint[3]+T3Vector3(33.0f,1.0f,move));
 	checkpoint3->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,-(angleCreate),0.0f));
 
-	checkpoint3->SetPhysics(10.0f,'c',SplinePoint[3]+T3Vector3(33.0f,0.0f,move),Quaternion::EulerAnglesToQuaternion(0.0f,-(angleCreate),0.0f));
+	checkpoint3->SetPhysics(10.0f,'c',SplinePoint[3]+T3Vector3(33.0f,1.0f,move),Quaternion::EulerAnglesToQuaternion(0.0f,-(angleCreate),0.0f));
 	checkpoint3->SetType('g');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 	checkpoint3->GetPhysicsNode().SetPGE(checkpoint3);
 	//checkpoint2->GetPhysicsNode().SetPGE(checkpoint2);
@@ -687,10 +862,10 @@ void RacerGame::CreateTrack(){
 
 	CheckPoint* checkpoint2= new CheckPoint(10.0f);
 	//checkpoint2->SetPhysics(10,'c');
-	checkpoint2->SetOriginPosition(SplinePoint[5]);
+	checkpoint2->SetOriginPosition(SplinePoint[5]+T3Vector3(0,1,0));
 	checkpoint2->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,-(anglec),0.0f));
 
-	checkpoint2->SetPhysics(10.0f,'c',SplinePoint[5],Quaternion::EulerAnglesToQuaternion(0.0f,-(anglec),0.0f));
+	checkpoint2->SetPhysics(10.0f,'c',SplinePoint[5]+T3Vector3(0,1,0),Quaternion::EulerAnglesToQuaternion(0.0f,-(anglec),0.0f));
 	checkpoint2->SetType('d');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 	checkpoint2->GetPhysicsNode().SetPGE(checkpoint2);
 	//checkpoint2->GetPhysicsNode().SetPGE(checkpoint2);
@@ -1203,22 +1378,27 @@ case KeyboardEvents::KEYBOARD_7:
 
 
 				if(car->GetCarNode().GetLinearVelocity().x>=0){
-				FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
+
+					FrontLeftTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
+		        FrontRightTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
+			    BackLeftTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
+		        BackRightTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
+				/*FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 		     FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 			 BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
-		     BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
+		     BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));*/
 			  car->GetCarNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 				}
 				if(car->GetCarNode().GetLinearVelocity().x<0){
-				FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
-		     FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
-			 BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
-		     BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
+				FrontLeftTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
+		        FrontRightTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
+			    BackLeftTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
+		        BackRightTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 			  car->GetCarNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
 				}
 
-				 T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
-				   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
+				// T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+				   //car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
 
 
 	//	}		
@@ -1230,22 +1410,22 @@ case KeyboardEvents::KEYBOARD_7:
 			{//camera->AddMovement(T3Vector3(-1,0,0));
 			
 		if(car->GetCarNode().GetLinearVelocity().x>=0){
-			 FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
-		     FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
-			 BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
-		     BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
+				FrontLeftTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
+		        FrontRightTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
+			    BackLeftTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
+		        BackRightTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 			  car->GetCarNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
 		      }
 				if(car->GetCarNode().GetLinearVelocity().x<0){
-				FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
-		     FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
-			 BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
-		     BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
+				FrontLeftTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
+		        FrontRightTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
+			    BackLeftTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
+		        BackRightTire->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 			  car->GetCarNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
 		}			
 
-	 T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
-				   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
+	// T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+				//   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
 	
 
 

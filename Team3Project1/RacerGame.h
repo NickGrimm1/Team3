@@ -71,7 +71,7 @@ public:
 	TrackSegment* Strack;
 
 	vector<T3Vector3> SplinePoint;
-	vector<DrawableEntity3D*> allEntities;
+	vector<GameEntity*> allEntities;
 	vector<TrackSegment*> TrackSegmentVector;
 	vector<GameEntity*> checkPoint;
 	vector<GameEntity*> pickup;
@@ -98,11 +98,15 @@ public:
 		  }*/
 			 if(obj1->GetType()=='d')
 		  {
+			   DeleteTrack();
+			   GameStateManager::Graphics()->RemoveDrawable(checkPoint[0]);
+	checkPoint[0]->DisconnectFromSystems();
+	checkPoint.erase(checkPoint.begin());
 			  obj1->GetPhysicsNode().SetIsCollide(false);
 			  //RacerGame::update=2;
 			    SettimeOrScore(1);
 			  //RacerGame::update=2;
-			  DeleteTrack();
+			 
 			  
 		  }
 			  if(obj1->GetType()=='p')
