@@ -50,7 +50,7 @@ GraphicsEngine::GraphicsEngine()
 	frameRate = 0;
 
 #if WINDOWS_BUILD
-	if (!Window::Initialise(GAME_TITLE, width, height, true)) return;
+	if (!Window::Initialise(GAME_TITLE, width, height, FULL_SCREEN)) return;
 	
 	Window::GetWindow().LockMouseToWindow(true);
 	Window::GetWindow().ShowOSPointer(false);

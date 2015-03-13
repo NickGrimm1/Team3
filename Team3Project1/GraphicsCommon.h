@@ -22,8 +22,9 @@
 #define DEFAULT_AMBIENT_LIGHT_COLOUR T3Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
 #define RENDER_HZ 60
-#define SCREEN_WIDTH 1920
-#define SCREEN_HEIGHT 1080
+#define SCREEN_WIDTH 1920 //1600
+#define SCREEN_HEIGHT 1080 //900
+#define FULL_SCREEN true //false
 
 #define GAME_TITLE "Team^3 - Endless Racer"
 

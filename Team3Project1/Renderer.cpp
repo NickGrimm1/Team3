@@ -246,7 +246,6 @@ bool Renderer::LoadCheck()
 			skyBoxShader		!= NULL	&&
 			cloudShader			!= NULL &&
 			combineShader		!= NULL	&&
-			particleShader		!= NULL	&&
 			brightPassShader	!= NULL &&
 			bloomCombShader		!= NULL &&
 			gaussianShader		!= NULL &&

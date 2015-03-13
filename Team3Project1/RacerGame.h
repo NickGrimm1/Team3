@@ -12,6 +12,8 @@
 #include "Gold_cion.h"
 #include "HudTestScreen.h"
 #include "GameStateManager.h"
+#include "GameOver.h"
+
 class AudioTestClass;
 class Vehicle;
 class RacerGame : public GameScreen3D
@@ -58,7 +60,7 @@ public:
 	void SetMinSpeed(float value);
 	float GetMinSpeed(){return minSpeed;}
 
-	void GameOver();
+	void GameOverEvent();
 
 	void CreateTrack();
 	void DeleteTrack();
@@ -126,7 +128,7 @@ public:
 		  {
 #if WINDOWS_BUILD
 			  Sound* time;
-			  time=GameStateManager::Audio()->GetSound(SOUNDSDIR"time.wav");
+			  time=GameStateManager::Audio()->GetSound(SOUNDSDIR"time1.wav");
 			  GameStateManager::Audio()->PlaySoundA(time, obj1->GetOriginPosition(), false);
 #endif
 			  obj1->GetPhysicsNode().SetIsCollide(false);
