@@ -82,9 +82,10 @@ private:
 	Texture* soundNoMuteHover;
 	Texture* soundMute;
 	Texture* soundMuteHover;
-
+#if WINDOWS_BUILD
 	Sound* Mainmenu_BGM;
 	SoundEmitter* mainmusic;
+#endif
 	bool musicMuted;
 	bool soundMuted;
 	bool mainmenu_bgm;
