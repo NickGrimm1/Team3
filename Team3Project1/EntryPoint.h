@@ -23,6 +23,7 @@ Version: 1.0.0 06/02/2015.</summary>
 #include "PauseScreen.h"
 #include "RacerGame.h"
 #include "VehicleTestingScreen.h"
+#include "GameOver.h"
 namespace EntryPoint
 {
 	void StartGame()
@@ -39,8 +40,8 @@ namespace EntryPoint
 		/*PauseScreen* pause = new PauseScreen();
 		GameStateManager::Instance()->AddGameScreen(pause);*/
 
-		/*HudTestScreen* hud = new HudTestScreen();
-		GameStateManager::Instance()->AddGameScreen(hud);*/
+		//HudTestScreen* hud = new HudTestScreen();
+		/*GameStateManager::Instance()->AddGameScreen(hud);*/
 
 		/*DebugOverlay* debug = new DebugOverlay();
 		GameStateManager::Instance()->AddGameScreen(debug);*/
@@ -49,6 +50,7 @@ namespace EntryPoint
 		//GameStateManager::Instance()->AddGameScreen(game);
 		//GameStateManager::Instance()->Start();
 
+		
 
 		//AudioTestClass* audio = new AudioTestClass();
 		//GameStateManager::Instance()->AddGameScreen(audio);
@@ -67,8 +69,11 @@ namespace EntryPoint
 		
 		//cout << "Entry Point: Set Physics for the Game" << endl;
 
-		//RacerGame* game = new RacerGame();
+		//RacerGame* game = new RacerGame(10);
 		//GameStateManager::Instance()->AddGameScreen(game);
+
+		//GameOver* gg = new GameOver(game, hud);
+		//GameStateManager::Instance()->AddGameScreen(gg);
 
 		GameStateManager::Instance()->Start();
 	}

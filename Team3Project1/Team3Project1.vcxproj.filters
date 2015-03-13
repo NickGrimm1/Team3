@@ -531,6 +531,9 @@
     <ClInclude Include="..\Framework\Window.h">
       <Filter>Framework\Graphics\Windows\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameOver.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">
@@ -769,6 +772,9 @@
     </ClCompile>
     <ClCompile Include="..\Framework\Window.cpp">
       <Filter>Framework\Graphics\Windows\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOver.cpp">
+      <Filter>Engine\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
