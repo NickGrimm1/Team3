@@ -410,11 +410,11 @@ void  PhysicsEngine::SortandSweep()
 						// if EPA
  						if (succeeded)
 				       {
-							CollisionHelper::AddCollisionImpulse(first, second, *data);
+							CollisionHelper::AddCollisionImpulse(first, second, *data);								
 				       }
 				   }
 					// the vehicle is going to drop 
-					second.SetIsDrop(true);					
+					second.SetIsDrop(true);	
 					
 				}
 
@@ -433,6 +433,14 @@ void  PhysicsEngine::SortandSweep()
 						second.SetLinearVelocity(t3);
 					   }
 				     }
+
+				/*if(second.GetPosition().y < -10.0f&& second.GetPosition().y > -16.0f)
+				{
+				if (gameClass != NULL) {
+						gameClass->carFall();
+					}
+				}*/
+				
 			}
 
 			if(second.Getplanecollision()==true && first.Getplanecollision()==false)
@@ -456,7 +464,7 @@ void  PhysicsEngine::SortandSweep()
 				       }
 				   }
 					// the vehicle is going to drop 
-					first.SetIsDrop(true);										
+					first.SetIsDrop(true);				
 				}
 
 				// keeping the vehicle on the track!
@@ -474,6 +482,13 @@ void  PhysicsEngine::SortandSweep()
 						first.SetLinearVelocity(t3);
 					   }
 				     }
+
+			/*if(first.GetPosition().y < -10.0f&& first.GetPosition().y > -16.0f)
+				{
+				if (gameClass != NULL) {
+						gameClass->carFall();
+					}
+				}*/
 			}
 			}
 
