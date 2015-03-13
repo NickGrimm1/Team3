@@ -109,6 +109,7 @@
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='PS3_DEBUG|PS3'">
     <PlatformToolset>SNC</PlatformToolset>
     <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ExceptionsAndRtti>WithExceptsWithRtti</ExceptionsAndRtti>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='PS3_RELEASE|PS3'">
     <PlatformToolset>SNC</PlatformToolset>

@@ -1,6 +1,5 @@
 #include "MainMenu.h"
 
-
 MainMenu::MainMenu(void)
 {
 #if WINDOWS_BUILD
@@ -217,14 +216,15 @@ void MainMenu::NewGameClicked(float x, float y)
 	GameStateManager::Audio()->StopSound(mainmusic);
 	GameStateManager::Graphics()->EnableMousePointer(false);
 #endif
+	inputEnabled = false;
 	GameStateManager::Instance()->RemoveGameScreen(wallpaper);
-	GameStateManager::Instance()->RemoveGameScreen(this);
+	
 
 	RacerGame* game = new RacerGame(score);
-//	GraphicsTestScreen* game = new GraphicsTestScreen();
 	GameStateManager::Physics()->SetGame(game);
 	GameStateManager::Instance()->AddGameScreen(game);
-	
+	GameStateManager::Instance()->RemoveGameScreen(this);
+
 	GameStateManager::Graphics()->EnableLoadingIcon(false);
 }
 
@@ -338,9 +338,12 @@ void MainMenu::GamepadDisconnect(GamepadEvents::PlayerIndex playerID)
 }
 void MainMenu::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button)
 {
-	std::cout <<"MainMenu:GPEvent"<<std::endl;
-	if (connectionTime < 200.0)
-		GameScreen2D::GamepadEvent(playerID, type, button);
+	if (inputEnabled)
+	{
+		std::cout <<"MainMenu:GPEvent"<<std::endl;
+		if (connectionTime < 200.0)
+			GameScreen2D::GamepadEvent(playerID, type, button);
+	}
 }
 
 #if WINDOWS_BUILD
