@@ -952,7 +952,7 @@ void AssetManager::UnloadTrackSegment(Mesh* track) {
 			GameStateManager::Graphics()->GetRenderContext();
 			delete *i;
 			GameStateManager::Graphics()->DropRenderContext();
-			i = generatedHeightmaps.erase(i);
+			i = generatedTracks.erase(i);
 			break;
 		}
 	}

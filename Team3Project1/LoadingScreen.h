@@ -31,4 +31,5 @@ protected:
 	DrawableTexture2D* refreshIcon;
 	bool isLoading;
 	bool debugEnabled;
+	bool paused;
 };

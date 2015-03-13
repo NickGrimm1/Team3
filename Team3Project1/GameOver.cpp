@@ -1,26 +1,22 @@
-#include "PauseScreen.h"
+#include "GameOver.h"
 
 
-PauseScreen::PauseScreen(GameScreen3D* mainGame, GameScreen2D* hud) {
+GameOver::GameOver(GameScreen3D* mainGame, GameScreen2D* hud) {
 #if WINDOWS_BUILD
 	GameStateManager::Graphics()->EnableMousePointer(true);
 #endif
-	//Set these to reflect the current state of the audio engine.
 	musicMuted = false;
 	soundMuted = false;
+
 	racerScreen = mainGame;
 	hudScreen = hud;
 }
 
-PauseScreen::~PauseScreen(void) {
+GameOver::~GameOver(void) {
 
 }
 
-void PauseScreen::Update() {
-
-}
-
-void PauseScreen::LoadContent() {
+void GameOver::LoadContent() {
 	Font* font = GameStateManager::Assets()->LoadFont(this, "quadrats", 16, 16);
 
 	buttonTex			= GameStateManager::Assets()->LoadTexture(this, "Buttons/button", 0);
@@ -37,7 +33,7 @@ void PauseScreen::LoadContent() {
 	soundMute			= GameStateManager::Assets()->LoadTexture(this, "Buttons/sound_mute", 0);
 	soundMuteHover		= GameStateManager::Assets()->LoadTexture(this, "Buttons/sound_mute_selected", 0);
 
-	pauseTex			= GameStateManager::Assets()->LoadTexture(this, "pause_screen", 0);
+	gameOverTex			= GameStateManager::Assets()->LoadTexture(this, "gameOver", 0);
 
 	float charWidth = 0.16f;
 	float charHeight = 0.08f;
@@ -52,13 +48,13 @@ void PauseScreen::LoadContent() {
 	float btnX = 0.4f;
 	float btnY = 0.5f;
 
-	resumeGame	= new UIButton(btnX, btnY, btnScaleX, btnScaleY, (void (GameScreen2D::*)()) &PauseScreen::ResumeSelected, (void (GameScreen2D::*)(float, float)) &PauseScreen::ResumeClicked, 
+	mainMenu = new UIButton(btnX, btnY, btnScaleX, btnScaleY, (void (GameScreen2D::*)()) &GameOver::MainMenuSelected, (void (GameScreen2D::*)(float, float)) &GameOver::MainMenuClicked, 
 				new DrawableTexture2D(btnX, btnY, 1, btnScaleX, btnScaleY, buttonTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
-				new DrawableText2D(btnX + btnOffsetX, btnY + btnOffsetY, 2.0f, charWidth, charHeight, "RESUME GAME", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &PauseScreen::ResumeDeselected, this);
+				new DrawableText2D(btnX + btnOffsetX, btnY + btnOffsetY, 2.0f, charWidth, charHeight, "MAIN MENU", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &GameOver::MainMenuDeselected, this);
 	
-	mainMenu = new UIButton(btnX, btnY + 0.17f, btnScaleX, btnScaleY, (void (GameScreen2D::*)()) &PauseScreen::MainMenuSelected, (void (GameScreen2D::*)(float, float)) &PauseScreen::MainMenuClicked, 
+	quitGame = new UIButton(btnX, btnY + 0.17f, btnScaleX, btnScaleY, (void (GameScreen2D::*)()) &GameOver::QuitGameSelected, (void (GameScreen2D::*)(float, float)) &GameOver::QuitGameClicked, 
 				new DrawableTexture2D(btnX, btnY + 0.17f, 1, btnScaleX, btnScaleY, buttonTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
-				new DrawableText2D(btnX + btnOffsetX, btnY + 0.17f + btnOffsetY, 2.0f, charWidth, charHeight, "MAIN MENU", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &PauseScreen::MainMenuDeselected, this);
+				new DrawableText2D(btnX + btnOffsetX, btnY + 0.17f + btnOffsetY, 2.0f, charWidth, charHeight, "QUIT GAME", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &GameOver::QuitGameDeselected, this);
 	
 	float musicBtnWidth = 0.045f;
 	float musicBtnHeight = 0.089f;
@@ -66,31 +62,35 @@ void PauseScreen::LoadContent() {
 	float musicBtnX = 0.095f;
 	float musicBtnY = 0.70f;
 
-	music = new UIButton(musicBtnX, musicBtnY, musicBtnWidth, musicBtnHeight, (void (GameScreen2D::*)()) &PauseScreen::MusicSelected, (void (GameScreen2D::*)(float, float)) &PauseScreen::MusicClicked, 
+	music = new UIButton(musicBtnX, musicBtnY, musicBtnWidth, musicBtnHeight, (void (GameScreen2D::*)()) &GameOver::MusicSelected, (void (GameScreen2D::*)(float, float)) &GameOver::MusicClicked, 
 				new DrawableTexture2D(musicBtnX, musicBtnY, 1, musicBtnWidth, musicBtnHeight, musicNoMute, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
-				new DrawableText2D(musicBtnX, musicBtnY, 0.0f, 0.0f, 0.0f, "", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &PauseScreen::MusicDeselected, this);
+				new DrawableText2D(musicBtnX, musicBtnY, 0.0f, 0.0f, 0.0f, "", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &GameOver::MusicDeselected, this);
 	
-	sounds = new UIButton(musicBtnX + musicBtnWidth, musicBtnY, musicBtnWidth, musicBtnHeight, (void (GameScreen2D::*)()) &PauseScreen::SoundsSelected, (void (GameScreen2D::*)(float, float)) &PauseScreen::SoundsClicked, 
+	sounds = new UIButton(musicBtnX + musicBtnWidth, musicBtnY, musicBtnWidth, musicBtnHeight, (void (GameScreen2D::*)()) &GameOver::SoundsSelected, (void (GameScreen2D::*)(float, float)) &GameOver::SoundsClicked, 
 				new DrawableTexture2D(musicBtnX + musicBtnWidth, musicBtnY, 1, musicBtnWidth, musicBtnHeight, soundNoMute, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false),
-				new DrawableText2D(musicBtnX + musicBtnWidth, musicBtnY, 0.0f, 0.0f, 0.0f, "", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &PauseScreen::SoundsDeselected, this);
+				new DrawableText2D(musicBtnX + musicBtnWidth, musicBtnY, 0.0f, 0.0f, 0.0f, "", font, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false), (void (GameScreen2D::*)()) &GameOver::SoundsDeselected, this);
 
-	pauseLogo = new DrawableTexture2D(0.25f, 0.1f, 1, 0.5f, 0.3f, pauseTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false);
+	gameOver = new DrawableTexture2D(0.25f, 0.1f, 1, 0.5f, 0.3f, gameOverTex, 0.0f, T3Vector2(0.5f, 0.5f), T3Vector4(1,1,1,1), false);
 
-	AddClickable(resumeGame);
 	AddClickable(mainMenu);
+	AddClickable(quitGame);
 	AddClickable(music);
 	AddClickable(sounds);
 
-	AddDrawable(pauseLogo);
+	AddDrawable(gameOver);
 }
 
-void PauseScreen::UnloadContent() {
-	RemoveClickable(resumeGame);
-	RemoveClickable(mainMenu);
-	RemoveClickable(music);
-	RemoveClickable(sounds);
+void GameOver::Update() {
 
-	RemoveDrawable(pauseLogo);
+}
+
+void GameOver::UnloadContent() {
+	RemoveClickable(mainMenu, true, false);
+	RemoveClickable(quitGame, true, false);
+	RemoveClickable(music, true, false);
+	RemoveClickable(sounds, true, false);
+
+	RemoveDrawable(gameOver, false);
 
 	GameStateManager::Assets()->UnloadFont(this, "quadrats");
 
@@ -107,27 +107,25 @@ void PauseScreen::UnloadContent() {
 	GameStateManager::Assets()->UnloadTexture(this, "Buttons/sound_nomute_selected");
 	GameStateManager::Assets()->UnloadTexture(this, "Buttons/sound_mute");
 	GameStateManager::Assets()->UnloadTexture(this, "Buttons/sound_mute_selected");
-
-	GameStateManager::Assets()->UnloadTexture(this, "pause_screen");
+	GameStateManager::Assets()->UnloadTexture(this, "gameOver");
 }
 
-void PauseScreen::ResumeClicked(float x, float y) {
-	resumeGame->GetTexture()->SetTexture(buttonTexClicked);
-	GameStateManager::Resume();
-}
-
-void PauseScreen::MainMenuClicked(float x, float y) {
+void GameOver::MainMenuClicked(float x, float y) {
 	mainMenu->GetTexture()->SetTexture(buttonTexClicked);
-	
-	//GameStateManager::ChangeScreen(menu);
-	GameStateManager::RemoveGameScreen(racerScreen);
-	GameStateManager::RemoveGameScreen(hudScreen);
-	GameStateManager::RemoveGameScreen(this);
+
 	MainMenu* menu = new MainMenu();
+	GameStateManager::RemoveGameScreen(hudScreen);
+	GameStateManager::RemoveGameScreen(racerScreen);
+	GameStateManager::RemoveGameScreen(this);
 	GameStateManager::AddGameScreen(menu);
 }
 
-void PauseScreen::SoundsClicked(float x, float y) {
+void GameOver::QuitGameClicked(float x, float y) {
+	quitGame->GetTexture()->SetTexture(buttonTexClicked);
+	GameStateManager::Instance()->Exit();
+}
+
+void GameOver::SoundsClicked(float x, float y) {
 	if (soundMuted)
 		sounds->GetTexture()->SetTexture(soundNoMuteHover);
 	else
@@ -136,7 +134,7 @@ void PauseScreen::SoundsClicked(float x, float y) {
 	soundMuted = !soundMuted;
 }
 
-void PauseScreen::MusicClicked(float x, float y) {
+void GameOver::MusicClicked(float x, float y) {
 	if (musicMuted) 
 		music->GetTexture()->SetTexture(musicNoMuteHover);
 	else
@@ -145,44 +143,44 @@ void PauseScreen::MusicClicked(float x, float y) {
 	musicMuted = !musicMuted;
 }
 
-void PauseScreen::ResumeSelected() {
-	resumeGame->GetTexture()->SetTexture(buttonTexHover);
-}
-
-void PauseScreen::ResumeDeselected() {
-	resumeGame->GetTexture()->SetTexture(buttonTex);
-}
-
-void PauseScreen::MainMenuSelected() {
+void GameOver::MainMenuSelected() {
 	mainMenu->GetTexture()->SetTexture(buttonTexHover);
 }
 
-void PauseScreen::MainMenuDeselected() {
+void GameOver::MainMenuDeselected() {
 	mainMenu->GetTexture()->SetTexture(buttonTex);
 }
 
-void PauseScreen::SoundsSelected() {
+void GameOver::QuitGameSelected() {
+	quitGame->GetTexture()->SetTexture(buttonTexHover);
+}
+
+void GameOver::QuitGameDeselected() {
+	quitGame->GetTexture()->SetTexture(buttonTex);
+}
+
+void GameOver::SoundsSelected() {
 	if (soundMuted)
 		sounds->GetTexture()->SetTexture(soundMuteHover);
 	else
 		sounds->GetTexture()->SetTexture(soundNoMuteHover);
 }
 
-void PauseScreen::SoundsDeselected() {
+void GameOver::SoundsDeselected() {
 	if (soundMuted) 
 		sounds->GetTexture()->SetTexture(soundMute);
 	else
 		sounds->GetTexture()->SetTexture(soundNoMute);
 }
 
-void PauseScreen::MusicSelected() {
+void GameOver::MusicSelected() {
 	if (musicMuted)
 		music->GetTexture()->SetTexture(musicMuteHover);
 	else
 		music->GetTexture()->SetTexture(musicNoMuteHover);
 }
 
-void PauseScreen::MusicDeselected() {
+void GameOver::MusicDeselected() {
 	if (musicMuted)
 		music->GetTexture()->SetTexture(musicMute);
 	else

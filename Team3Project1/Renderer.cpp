@@ -589,6 +589,7 @@ void Renderer::DrawNodes(bool enableTextures) {
 		
 		textureMatrix.ToIdentity(); // add to texture/drawableentity class
 		UpdateShaderMatrices();
+
 		entity.GetMesh()->Draw();
 	}
 }

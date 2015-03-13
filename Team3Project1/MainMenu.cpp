@@ -58,6 +58,7 @@ void MainMenu::LoadContent() {
 	SoundManager::AddSound(SOUNDSDIR"MenuMusic.wav");
 	Mainmenu_BGM = GameStateManager::Audio()->GetSound(SOUNDSDIR"MenuMusic.wav");
 	mainmusic=GameStateManager::Audio()-> PlaySound (Mainmenu_BGM,SOUNDPRIORITY_ALWAYS,true, true);
+	GameStateManager::Graphics()->EnableMousePointer(true);
 #endif
 
 	
@@ -208,6 +209,7 @@ void MainMenu::UnloadContent() {
 void MainMenu::NewGameClicked(float x, float y) 
 {
 	std::cout << "New Game Clicked" << std::endl;
+	inputEnabled = false;
 	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	newGame->GetTexture()->SetTexture(buttonTexClicked);
 	unsigned int score = 0;

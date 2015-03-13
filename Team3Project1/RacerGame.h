@@ -59,6 +59,7 @@ public:
 	float GetCreateAngle();
 	float f;
 	float b;
+	int start;
 	float maxSpeed;
 	float minSpeed;
 	int Speed_Player;
