@@ -814,7 +814,7 @@ void RacerGame::Pause() {
 #ifdef WINDOWS_BUILD
 	GameStateManager::Graphics()->EnableMousePointer(true);
 #endif
-	GameStateManager::AddGameScreen(new PauseScreen(this, hud));
+	GameStateManager::AddGameScreen(new PauseScreen(this, hud,true));
 	GameStateManager::Audio()->StopSound(Engine0);
 	//GameStateManager::Audio()->StopSound(Engine1);
 }
