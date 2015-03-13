@@ -84,6 +84,7 @@ public:
 	vector<TrackSegment*> TrackSegmentVector;
 	vector<GameEntity*> checkPoint;
 	vector<Gold_cion*> pickup;
+	virtual void carFall() {SetPlayTime(-GetPlayTime()-1);}
 	 virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
 		  if(obj1->GetType()=='g')
 		  {
@@ -166,6 +167,7 @@ private:
 	bool moveenginesound;
 	bool carspeediszero;
 	bool gameOver;
+	bool isPaused;
 	unsigned int lowScore;
 #if WINDOWS_BUILD
 	SoundEmitter* Engine0;

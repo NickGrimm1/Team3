@@ -29,6 +29,7 @@ RacerGame::RacerGame(unsigned int lowestScore, GamepadEvents::PlayerIndex player
 	//f=5;
 	lowScore = lowestScore;
 	gameOver = false;
+	isPaused = false;
 	srand(time(NULL));
 	T3Vector3 sp1= T3Vector3(100.0f,0.0f,0.0f);
 	T3Vector3 sp2= T3Vector3(200.0f,0.0f,0.0f);
@@ -40,7 +41,7 @@ RacerGame::RacerGame(unsigned int lowestScore, GamepadEvents::PlayerIndex player
 	Time=60.0f;
 	PlayTime=25;
 	timeOrScore=0;
-	start=4;
+	start=5;
 	isplaystartegine=false;
 	isplaylowspdegine=false;
 	isplaymidspdegine=false;
@@ -114,6 +115,8 @@ void RacerGame::Update()
 		playerController = GameStateManager::Input()->GetActiveController();
 
 	if (gameOver) return; // Game over - don't update
+	if (isPaused) return;
+
 
 	GameStateManager::Input()->GetActiveController();
 	for (unsigned int i = 0; i < pickup.size(); i++) {
@@ -148,7 +151,23 @@ void RacerGame::Update()
 #endif
 		isplaystartegine=true;
 	}
-	if(isplaylowspdegine==false&&car->GetCarNode().GetLinearVelocity().Length()<170&&car->GetCarNode().GetLinearVelocity()!=T3Vector3(0,0,0))
+	if(isplaylowspdegine==false/*&&car->GetCarNode().GetLinearVelocity().Length()<170*/&&car->GetCarNode().GetLinearVelocity()!=T3Vector3(0,0,0))
+	{
+#if WINDOWS_BUILD
+		Sound* engine0=GameStateManager::Audio()->GetSound(SOUNDSDIR"midspeed.wav");
+		Engine0=GameStateManager::Audio()->PlaySoundA (engine0,SOUNDPRIORITY_ALWAYS,true, true);
+#endif
+		isplaylowspdegine=true;
+	}
+//	if(isplaylowspdegine==false&&car->GetCarNode().GetLinearVelocity().Length()>50&&car->GetCarNode().GetLinearVelocity()!=T3Vector3(0,0,0))
+//	{
+//#if WINDOWS_BUILD
+//		Sound* engine0=GameStateManager::Audio()->GetSound(SOUNDSDIR"lowspeedengine.wav");
+//		Engine0 = GameStateManager::Audio()->PlaySoundA (engine0,SOUNDPRIORITY_ALWAYS,true, true);
+//#endif		
+//		isplaylowspdegine==true;
+//	}
+	/*if(isplaylowspdegine==false&&car->GetCarNode().GetLinearVelocity().Length()<170&&car->GetCarNode().GetLinearVelocity()!=T3Vector3(0,0,0))
 	{
 #if WINDOWS_BUILD
 		Sound* engine0=GameStateManager::Audio()->GetSound(SOUNDSDIR"lowspeedengine.wav");
@@ -164,7 +183,7 @@ void RacerGame::Update()
 		Engine1=GameStateManager::Audio()->PlaySoundA (engine1,SOUNDPRIORITY_ALWAYS,true, true);
 #endif
 		isplaymidspdegine=true;
-	}
+	}*/
 
 	if(carspeediszero==false&&moveenginesound==false&&car->GetCarNode().GetLinearVelocity()==T3Vector3(0,0,0))
 	{
@@ -177,6 +196,9 @@ void RacerGame::Update()
 	if((Time-60)==0){
 		if(start>=0)
 	{
+		if(start==5){
+			hud->SetStart("Ready");
+		}
 		if(start==4){
 			hud->SetStart("3");
 		}
@@ -196,11 +218,13 @@ void RacerGame::Update()
 	}
 	SetPlayTime(-1);
 	Time=0;
-	if(GetPlayTime()<0){
-		GameOver();
-		cout<<"game over"<<endl;
-	}
+	
 	hud->SetScreen(GetScore(),GetPlayTime(),car->GetVehiclePhysicsNode()->GetF());
+	if(GetPlayTime()<0){
+		cout<<"game over"<<endl;
+		GameOver();
+		
+	}
 	}
 	Time+=1;
 	
@@ -783,21 +807,34 @@ void RacerGame::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID,
 
 void RacerGame::Pause() {
 	camera->Pause();
+	isPaused = true;
 	GameStateManager::Physics()->Pause();
 	inputEnabled = false;
 	GameStateManager::AddGameScreen(new PauseScreen(this, hud, isControllerControlled && playerController == GamepadEvents::PLAYERINDEX_MAX));
 #ifdef WINDOWS_BUILD
 	GameStateManager::Graphics()->EnableMousePointer(true);
 #endif
+	GameStateManager::AddGameScreen(new PauseScreen(this, hud));
+	GameStateManager::Audio()->StopSound(Engine0);
+	//GameStateManager::Audio()->StopSound(Engine1);
 }
 
 void RacerGame::Resume() {
 	camera->Resume();
 	GameStateManager::Physics()->Resume();
 	inputEnabled = true;
-#ifdef WINDOWS_BUILD
-	GameStateManager::Graphics()->EnableMousePointer(false);
-#endif
+	isplaylowspdegine=false;
+	isPaused = false;
+	//if(car->GetCarNode().GetLinearVelocity().Length()<170)
+	//{
+	//	Sound* engine0=GameStateManager::Audio()->GetSound(SOUNDSDIR"lowspeedengine.wav");
+	//}
+	//if(car->GetCarNode().GetLinearVelocity().Length()>=170)
+	//{
+	//	Sound* engine1=GameStateManager::Audio()->GetSound(SOUNDSDIR"midspeed.wav");
+	//	Engine1=GameStateManager::Audio()->PlaySoundA (engine1,SOUNDPRIORITY_ALWAYS,true, true);;
+	//}
+
 }
 
 void RacerGame::UnloadContent() {
@@ -833,6 +870,8 @@ void RacerGame::UnloadContent() {
 }
 
 void RacerGame::GameOver() {
+	Sound* over=GameStateManager::Audio()->GetSound(SOUNDSDIR"gameover2.6sec.wav");
+	GameStateManager::Audio()->PlaySoundA (over,SOUNDPRIORITY_ALWAYS,true, false);
 	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	gameOver = true;
 	inputEnabled = false;

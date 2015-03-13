@@ -124,8 +124,12 @@ Renderer::Renderer(Window &parent, vector<Light*>& lightsVec, vector<SceneNode*>
 	
 
 	glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufferColourTex, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gbufferNormalTex, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, gbufferDepthTex, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, gbufferDepthTex, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gbufferVelocity, 0);
+	glDrawBuffers(3, buffers);
 
 	//Check FBO attachment success with this command
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE || !gbufferDepthTex || !gbufferColourTex || !gbufferNormalTex || !gbufferVelocity) {
@@ -322,7 +326,6 @@ void Renderer::RenderScene() {
 
 		//Main Render
 		ShadowPass();
-		GBufferPass(); // Split into separate pass from draw
 		DrawScene();
 
 		//cout << "Meshes Last Frame: " << count << endl;
@@ -381,24 +384,30 @@ void Renderer::ToggleDebug(int arg, bool on)
 	}
 }
 
-//Get scene normal + shadow data
-void Renderer::GBufferPass()
-{
+//Draws Scene to buffer object
+void Renderer::DrawScene() {
 	glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufferNormalTex, 0);
-
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	
+	// Use stencil buffer to track unaltered pixels. Use to draw skybox later
+	glEnable(GL_STENCIL_TEST);
+	glStencilFunc(GL_ALWAYS, 1, 1); // Always passes
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	
 	glClearColor(0.2f, 0.2f, 0.2f, 0.2f);
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	
 	SetCurrentShader(sceneShader);
-
+	// SetCurrentShader(basicShader);
+	
 	// Bind Shader variables
 	viewMatrix = cameraMatrix;
 	projMatrix = perspectiveMatrix;
 	UpdateShaderMatrices();
+	
 	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*) &cameraMatrix.GetPositionVector());
 	glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "nodeColour"), 1, (float*) &T3Vector4(1,1,1,1));
-
+	
 	// Pass any light/shadow data for any lights which generate shadows into the renderer
 	unsigned int shadowCount = 0;
 	char buffer[20];
@@ -406,10 +415,8 @@ void Renderer::GBufferPass()
 		if (lights[i]->GetShadowTexture() > 0) { // Shadow depth texture exists for light, so use
 			// Calculate the view projection matrix for the light so can sample shadow map
 			T3Matrix4 shadowMatrix = biasMatrix * lights[i]->GetProjectionMatrix() * lights[i]->GetViewMatrix(T3Vector3(cameraMatrix.GetPositionVector()));
-			
 			sprintf_s(buffer, 20, "shadowProjMatrix[%d]", i);
 			glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), buffer), 1, false, (float*) &shadowMatrix);
-			
 			// Bind shadow texture
 			if (lights[i]->GetType() != POINT_LIGHT_TYPE) {
 				sprintf_s(buffer, 20, "shadowTex[%d]", i);
@@ -423,16 +430,14 @@ void Renderer::GBufferPass()
 				glActiveTexture(GL_TEXTURE0 + SHADOW_TEXTURE_UNIT + shadowCount);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, lights[i]->GetShadowTexture());
 			}
-
+		
 			// Bind light data
 			lights[i]->BindLight(shadowCount);
-
 			shadowCount++;
 		}
 	}
-
+	
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "numShadows"), shadowCount);
-			
 	DrawNodes(true);
 
 	if (drawDeferredLights) {
@@ -454,38 +459,9 @@ void Renderer::GBufferPass()
 	}
 
 	glUseProgram(0);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-//	DrawFrameBufferTex(gbufferNormalTex);
-}
-
-//Draws Scene to buffer object
-void Renderer::DrawScene()
-{
-	glBindFramebuffer(GL_FRAMEBUFFER, gbufferFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufferColourTex, 0);
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	// Use stencil buffer to track unaltered pixels. Use to draw skybox later
-	glEnable(GL_STENCIL_TEST);
-	glStencilFunc(GL_ALWAYS, 1, 1); // Always passes
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-
-	glClearColor(0.2f, 0.2f, 0.2f, 0.2f);
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	
-	//SetCurrentShader(basicShader);
-
-	// Bind Shader variables
-	viewMatrix = cameraMatrix;
-	projMatrix = perspectiveMatrix;
-	//UpdateShaderMatrices();
-	
-	DrawNodes(true);
-
-	glUseProgram(0);
-	
 	glDisable(GL_STENCIL_TEST); // Believe can disable here
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	// DrawFrameBufferTex(gbufferColourTex);
 }
 
 void Renderer::ShadowPass()
@@ -549,13 +525,6 @@ void Renderer::DrawNodes(bool enableTextures) {
 	// Draw Scene
 	for (unsigned int i = 0; i < sceneNodes.size(); i++) {
 		DrawableEntity3D& entity = *sceneNodes[i]->GetDrawableEntity();
-
-		if (entity.GetShader() == NULL) {
-			SetCurrentShader(basicShader);
-		}
-		else {
-			SetCurrentShader(entity.GetShader());
-		}
 
 		if (enableTextures) {
 			// Handle colour and bump textures
