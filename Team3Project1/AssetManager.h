@@ -20,6 +20,7 @@ Version: 0.0.1 03/02/2015.</summary>
 #include "LoadedTexture.h"
 #include "LoadedMesh.h"
 #include "LoadedShaderPart.h"
+#include "Heightmap.h"
 
 class GameStateManager;
 
@@ -73,8 +74,8 @@ public:
 	Shader* LoadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath = "");
 	void UnloadShader(void* callerID, string vertexShaderFilePath, string fragmentShaderFilePath, string geometryShaderFilePath = "");
 
-	Mesh* LoadHeightmap(void* callerID, string filename, bool useTextureWeights = true);
-	Mesh* LoadHeightmap(unsigned char minHeight = 0, unsigned char maxHeight = 255, bool useTextureWeights = true);
+	Mesh* LoadHeightmap(void* callerID, string filename, bool useTextureWeights = true, HeightMap* tileTo = NULL, unsigned int tileSide = Side::NONE);
+	Mesh* LoadHeightmap(unsigned char minHeight = 0, unsigned char maxHeight = 255, bool useTextureWeights = true, HeightMap* tileTo = NULL, unsigned int tileSide = Side::NONE);
 	void UnloadHeightmap(void* callerID, string filename);
 	void UnloadHeightmap(Mesh* heightmap);
 	

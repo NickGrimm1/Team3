@@ -5,10 +5,13 @@
 #include <sysutil/sysutil_sysparam.h>	
 #include <cell/gcm.h>
 #include "GCMRenderer.h"
+#include "Texture.h"
 #endif
 #include "Vertex.h"
 #include "../Framework/Shader.h"
 #include "../Framework/T3Vector2.h"
+class Texture;
+
 namespace PrimitiveType
 {
 	enum Type
@@ -95,7 +98,10 @@ public:
 	unsigned int GetArrayObject() {return arrayObject;}
 	unsigned int GetBufferObject() {return bufferObject[0];}
 #endif
-
+#if PS3_BUILD
+	Texture* GetBumpTex(){return bumpTex;}
+	Texture* GetNormTex(){return normTex;}
+#endif
 protected:
 	//Generates normals for all facets. Assumes geometry type is GL_TRIANGLES...
 	void GenerateNormals();
@@ -114,7 +120,10 @@ protected:
 
 	// Primitive type for this mesh (GL_TRIANGLES...etc)
 	unsigned int type;
-	
+#if PS3_BUILD
+	Texture* bumpTex;
+	Texture* normTex;
+#endif
 	//Buffers all VBO data into graphics memory. Required before drawing!
 	void BufferData();
 	void AssignVertexMemory();

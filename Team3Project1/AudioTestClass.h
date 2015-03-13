@@ -1,8 +1,12 @@
-#if WINDOWS_BUILD
 #pragma once
+#if WINDOWS_BUILD
+
 #include "../Framework/SoundManager.h"
+#include "../Framework/SoundEmitter.h"
+#include "../Framework/Vehicle.h"
 #include "GameScreen3D.h"
 #include "GameScreen2D.h"
+
 class AudioTestClass: public GameScreen3D
 {
 public:
@@ -24,6 +28,7 @@ public:
 	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button) {};
 	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) {};
 	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID){}
+	SoundEmitter* Getsoundemitter(){return a;}
 private:
 	Sound* BGM1;
 	Sound* BGM2;
@@ -31,14 +36,17 @@ private:
 	Sound* Engine_start;
 	Sound* Ready;
 	Sound* Over;
+	SoundEmitter* a;
 	GameTimer timer;
 	float CurrentTime;
 	bool bgm1;
 	bool bgm2;
 	bool ready;
 	bool coins;
+	bool engine_start;
 	bool pressonce;
 	bool pressonce2;
+	Vehicle* car;
 };
 #endif
 

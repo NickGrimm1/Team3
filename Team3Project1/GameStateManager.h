@@ -80,10 +80,9 @@ public:
 	void Start() {
 		// Start Threads
 #if PS3_BUILD
-		cout << "GameStateManager: About to initialise graphics thread " << endl;
+		
 		Instance()->graphics->Start("Graphics");
-//	sys_timer_usleep(1000);
-		cout << "GameStateManager: Graphics Thread Started" << endl;
+
 #endif
 		Instance()->physics->Start("Physics");
 		Instance()->input->Start("Input");

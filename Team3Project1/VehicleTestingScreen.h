@@ -31,7 +31,7 @@ public:
 	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID){}
 	
 
-	float f;
+	//float f;
 	float b;
 	int Speed_Player;
 	float Speed_Rotate;

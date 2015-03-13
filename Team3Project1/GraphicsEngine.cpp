@@ -62,14 +62,14 @@ GraphicsEngine::GraphicsEngine()
 	loadingTexture = new Texture(loadingTex);
 #endif
 #if PS3_BUILD
-	std::cout << "Renderer starting" << std::endl;
+	
 	renderer = new Renderer(lights, gameEntityList, overlayTexturesList, overlayTextsList);
 	if(!renderer)
 	{
 		std::cout << "Renderer failed to load" << std::endl;
 		return;
 	}
-	std::cout << "Renderer started" << std::endl;
+	
 
 	loadingTexture = new Texture("refresh", 0);
 #endif
@@ -113,7 +113,7 @@ GraphicsEngine::~GraphicsEngine() {
 #if PS3_BUILD
 void GraphicsEngine::threadExecution(uint64_t arg)
 {
-	std::cout << "Graphics Thread starting" << std::endl;
+	
 	GraphicsEngine* myArg = (GraphicsEngine*)arg;
 	myArg->Run();
 }

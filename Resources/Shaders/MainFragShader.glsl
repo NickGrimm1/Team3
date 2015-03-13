@@ -33,7 +33,7 @@ in Vertex {
 	vec3 shadowPos;
 } IN;
 
-out vec4 gl_FragColor[2];
+out vec4 gl_FragColor;
 
 /* Spot lights - emits a cone of light angle of alpha
 A fragment will be lit if
@@ -55,12 +55,10 @@ bool inSpotlight(unsigned int i) {
 
 void main(void)	{
 
-	gl_FragColor[0] = IN.colour;
 	// Sample the colour texture
 	if (useDiffuseTex > 0) {
 		vec4 diffuse = texture2D(diffuseTex, IN.texCoord);
 		if (diffuse.a < 0.0001) discard; // transparent fragment - ignore
-		gl_FragColor[0] = diffuse;
 	}
 
 	// Setup our surface normal depending on whether a normal map has been supplied or not
@@ -97,7 +95,7 @@ void main(void)	{
 
 	if (shadowData)
 		// passing shadow data in the w coord of the normal through to combine shader.
-		gl_FragColor[1] = vec4(normal.xyz * 0.5 + 0.5, shadow / float(numShadows));  // [-0.5,0.5] -> [0.0, 1] tex coords
+		gl_FragColor = vec4(normal.xyz * 0.5 + 0.5, shadow / float(numShadows));  // [-0.5,0.5] -> [0.0, 1] tex coords
 	else
-		gl_FragColor[1] = vec4(normal.xyz * 0.5 + 0.5, 1);  // [-0.5,0.5] -> [0.0, 1] tex coords
+		gl_FragColor = vec4(normal.xyz * 0.5 + 0.5, 1);  // [-0.5,0.5] -> [0.0, 1] tex coords
 }

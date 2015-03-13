@@ -21,7 +21,7 @@ class VehiclePhysicsNode : public PhysicsNode
 public:
 
 	VehiclePhysicsNode(float size) : size(size){
-		//car = new PhysicsNode();
+	  //  car = new VehiclePhysicsNode(size);
 		FrontLeftTire = new PhysicsNode();
 		FrontRightTire = new PhysicsNode();
 		BackLeftTire = new PhysicsNode();
@@ -29,33 +29,69 @@ public:
 		carMesh=GameStateManager::Assets()->LoadMesh(this, MESHDIR"CarPhysics.obj");
 		tireMesh=GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaTire.obj");
 		collisionVertices = new Vertex[carMesh->GetNumVertices() + 4 * tireMesh->GetNumVertices()];
+		f=160.0f;
+		minSpeed=160.0f;
 	}
 
 	~VehiclePhysicsNode(void){}
-
+	void SetMinSpeed(float value){minSpeed=value;}
+	float GetMinSpeed(){return minSpeed;}
 	virtual void		Update(float msec) {
 		
-		/*FrontRightTire->SetPosition(car->BuildTransform()*T3Vector3(10,-2,8));
-		FrontLeftTire->SetPosition(T3Vector3(car->GetPosition().x+10,car->GetPosition().y-2,car->GetPosition().z-5));
-		BackRightTire->SetPosition(T3Vector3(car->GetPosition().x-11,car->GetPosition().y-2,car->GetPosition().z+8));
-		BackLeftTire->SetPosition(T3Vector3(car->GetPosition().x-11,car->GetPosition().y-2,car->GetPosition().z-5));*/
-		
-		
-		
-	    PhysicsNode:: Update( msec);
 
+	    PhysicsNode:: Update( msec);
 
 		FrontRightTire->SetPosition(BuildTransform()*T3Vector3(size * 1.3f,size * -0.5f,  size * 2.6f));
 		FrontLeftTire->SetPosition(BuildTransform()*T3Vector3(size *- 1.3f,size * -0.5f,size * 2.6f));
 		BackRightTire->SetPosition(BuildTransform()*T3Vector3(size * 1.3f,size * -0.5f,size * -1.7f));
 		BackLeftTire->SetPosition(BuildTransform()*T3Vector3(size * -1.3f,size * -0.5f,size * -1.7f));
-		//FrontRightTire->SetPosition(/*Transform(temp)*/BuildTransform()*T3Vector3(size * 1.7,size * -0.5,  size * 1.3));
-		//FrontLeftTire->SetPosition(BuildTransform()*T3Vector3(size *1.7,size * -0.5,size * -1.3));
-		//BackRightTire->SetPosition(BuildTransform()*T3Vector3(size *-2.6,size * -0.5,size * 1.3));
-		//BackLeftTire->SetPosition(BuildTransform()*T3Vector3(size * -2.6,size * -0.5,size * -1.3));
+	
 		UpdatePhysicsMesh();
+
+
+	
+
+
+		if(f>=GetMinSpeed()){
+		f=f-0.35;
+	if(f<GetMinSpeed())
+	{
+	f=GetMinSpeed();
+	}
+	 T3Matrix4 m4 = this->GetOrientation().ToMatrix();
+				   this->SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
+	}
+		if(f<GetMinSpeed()){
+		f=GetMinSpeed();
+		}
+
+
+
+
+
+		if(this->GetLinearVelocity().x>0)
+	{
+		FrontRightTire->SetAngularVelocity(T3Vector3(-this->GetLinearVelocity().Length()*0.5f,0,0) );
+		FrontLeftTire->SetAngularVelocity(T3Vector3(-this->GetLinearVelocity().Length()*0.5f,0,0));
+		BackRightTire->SetAngularVelocity(T3Vector3(-this->GetLinearVelocity().Length()*0.5f,0,0));
+		BackLeftTire->SetAngularVelocity(T3Vector3(-this->GetLinearVelocity().Length()*0.5f,0,0));
+	}
+	if(this->GetLinearVelocity().x<0)
+	{
+	    FrontRightTire->SetAngularVelocity(T3Vector3(this->GetLinearVelocity().Length()*0.5f,0,0));
+		FrontLeftTire->SetAngularVelocity(T3Vector3(this->GetLinearVelocity().Length()*0.5f,0,0));
+		BackRightTire->SetAngularVelocity(T3Vector3(this->GetLinearVelocity().Length()*0.5f,0,0));
+		BackLeftTire->SetAngularVelocity(T3Vector3(this->GetLinearVelocity().Length()*0.5f,0,0));
+	
+	}
+
+
 	};
-	PhysicsNode* GetCar(){return car;}
+	
+
+	void SetF(float F) {f=F;}
+	float GetF()  {return f;}
+
 	PhysicsNode* getLFW(){return FrontLeftTire;}
 	PhysicsNode* getRFW(){return FrontRightTire;}
 	PhysicsNode* getBLW(){return BackLeftTire;}
@@ -88,7 +124,7 @@ public:
 //	virtual Vertex* GetPhysicsVertex() {return carMesh->GetVertices();}
 //	virtual int GetNunmberVertex() {return carMesh->GetNumVertices();}
 private:
-	PhysicsNode * car;
+
 	PhysicsNode * FrontRightTire;
 	PhysicsNode * FrontLeftTire;
     PhysicsNode * BackRightTire;
@@ -97,7 +133,8 @@ private:
 	Mesh* carMesh;
 	Vertex* collisionVertices;
 	float size;
-
+	float f;
+	float minSpeed;
 
 
 };
