@@ -175,11 +175,13 @@ private:
 	DrawableEntity3D* ent;
 	DrawableEntity3D* ent2;
 	bool isplaystartegine;
-	bool isplayrunningegine;
+	bool isplaylowspdegine;
+	bool isplaymidspdegine;
 	bool moveenginesound;
 	bool carspeediszero;
 #if WINDOWS_BUILD
-	SoundEmitter* Engine;
+	SoundEmitter* Engine0;
+	SoundEmitter* Engine1;
 #endif
 };
 
