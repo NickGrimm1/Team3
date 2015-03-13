@@ -96,10 +96,11 @@ void PauseScreen::LoadContent() {
 
 	AddDrawable(pauseLogo);
 
+#if WINDOWS_BUILD
 	SoundManager::AddSound(SOUNDSDIR"MenuMusic.wav");
 	Mainmenu_BGM = GameStateManager::Audio()->GetSound(SOUNDSDIR"MenuMusic.wav");
 	mainmusic=GameStateManager::Audio()-> PlaySound (Mainmenu_BGM,SOUNDPRIORITY_ALWAYS,true, true);
-
+#endif
 
 }
 
@@ -130,7 +131,9 @@ void PauseScreen::UnloadContent() {
 	GameStateManager::Assets()->UnloadTexture(this, "pause_screen");
 	if (controllerDisconnected)
 		GameStateManager::Assets()->UnloadFont(this, "tahoma");
+#if WINDOWS_BUILD
 	GameStateManager::Audio()->StopSound(mainmusic);
+#endif
 }
 
 void PauseScreen::ResumeClicked(float x, float y) {
