@@ -433,15 +433,15 @@ void RacerGame::Start(){
 		T3Vector3 avg = (SplinePoint[1] + SplinePoint[2] + SplinePoint[3]) / 3.0f;
 		T3Vector3 avg2 = (SplinePoint[2] + SplinePoint[3] + SplinePoint[4]) / 3.0f;
 
-		GameStateManager::Graphics()->GetRenderContext();
-
-			TrackSegment* track = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5.0f, 50.0f);
+		TrackSegment* track = (TrackSegment*) GameStateManager::Assets()->LoadTrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5.0f, 50.0f);
+		//	TrackSegment* track = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5.0f, 50.0f);
 	//push back track
 
 	TrackSegmentVector.push_back(track);
+			
 
-		TrackSegment* Strackn = new TrackSegment(SplinePoint[1] - avg,SplinePoint[2] - avg,SplinePoint[3] - avg,5.0f,50.f);
-
+		//TrackSegment* Strackn = new TrackSegment(SplinePoint[1] - avg,SplinePoint[2] - avg,SplinePoint[3] - avg,5.0f,50.f);
+		TrackSegment* Strackn = (TrackSegment*) GameStateManager::Assets()->LoadTrackSegment(SplinePoint[1] - avg,SplinePoint[2] - avg,SplinePoint[3] - avg, 5.0f, 50.0f);
 		TrackSegmentVector.push_back(Strackn);
 		
 		/*TrackSegment* Strackn = new TrackSegment(SplinePoint[1],SplinePoint[2],T3Vector3(400,0,0),5,50.f);
@@ -449,8 +449,8 @@ void RacerGame::Start(){
 	/*	GameStateManager::Graphics()->DropRenderContext();
 
 		GameStateManager::Graphics()->GetRenderContext();*/
-		TrackSegment* Strackn2 = new TrackSegment(SplinePoint[2] - avg2,SplinePoint[3] - avg2,SplinePoint[4] - avg2,5.0f,50.f);
-
+		//TrackSegment* Strackn2 = new TrackSegment(SplinePoint[2] - avg2,SplinePoint[3] - avg2,SplinePoint[4] - avg2,5.0f,50.f);
+		TrackSegment* Strackn2 = (TrackSegment*) GameStateManager::Assets()->LoadTrackSegment(SplinePoint[2] - avg2,SplinePoint[3] - avg2,SplinePoint[4] - avg2, 5.0f, 50.0f);
 		TrackSegmentVector.push_back(Strackn2);
 		
 		/*TrackSegment* Strackn = new TrackSegment(SplinePoint[1],SplinePoint[2],T3Vector3(400,0,0),5,50.f);
@@ -462,7 +462,7 @@ void RacerGame::Start(){
 		/*GameStateManager::Graphics()->GetRenderContext();*/
 
 
-	GameStateManager::Graphics()->DropRenderContext();
+	
 
 
 	DrawableEntity3D* ent = new DrawableEntity3D(
@@ -654,9 +654,9 @@ void RacerGame::CreateTrack(){
 		T3Vector3 avg = (SplinePoint[3] + SplinePoint[4] + SplinePoint[5]) / 3.0f;
 		T3Vector3 avg2 = (SplinePoint[4] + SplinePoint[5] + SplinePoint[6]) / 3.0f;
 
-		GameStateManager::Graphics()->GetRenderContext();
-		TrackSegment* Strackn = new TrackSegment(SplinePoint[3] - avg,SplinePoint[4] - avg,SplinePoint[5] - avg,5.0f,50.f);
-
+		
+		//TrackSegment* Strackn = new TrackSegment(SplinePoint[3] - avg,SplinePoint[4] - avg,SplinePoint[5] - avg,5.0f,50.f);
+		TrackSegment* Strackn = (TrackSegment*) GameStateManager::Assets()->LoadTrackSegment(SplinePoint[3] - avg,SplinePoint[4] - avg,SplinePoint[5] - avg, 5.0f, 50.0f);
 		TrackSegmentVector.push_back(Strackn);
 		
 		/*TrackSegment* Strackn = new TrackSegment(SplinePoint[1],SplinePoint[2],T3Vector3(400,0,0),5,50.f);
@@ -664,8 +664,8 @@ void RacerGame::CreateTrack(){
 	/*	GameStateManager::Graphics()->DropRenderContext();
 
 		GameStateManager::Graphics()->GetRenderContext();*/
-		TrackSegment* Strackn2 = new TrackSegment(SplinePoint[4] - avg2,SplinePoint[5] - avg2,SplinePoint[6] - avg2,5.0f,50.f);
-
+		//TrackSegment* Strackn2 = new TrackSegment(SplinePoint[4] - avg2,SplinePoint[5] - avg2,SplinePoint[6] - avg2,5.0f,50.f);
+		TrackSegment* Strackn2 = (TrackSegment*) GameStateManager::Assets()->LoadTrackSegment(SplinePoint[4] - avg2,SplinePoint[5] - avg2,SplinePoint[6] - avg2, 5.0f, 50.0f);
 		TrackSegmentVector.push_back(Strackn2);
 		
 		/*TrackSegment* Strackn = new TrackSegment(SplinePoint[1],SplinePoint[2],T3Vector3(400,0,0),5,50.f);
@@ -677,7 +677,7 @@ void RacerGame::CreateTrack(){
 		/*GameStateManager::Graphics()->GetRenderContext();*/
 	
 
-	GameStateManager::Graphics()->DropRenderContext();
+	
 
 
 	
