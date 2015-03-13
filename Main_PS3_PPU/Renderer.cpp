@@ -550,9 +550,14 @@ void Renderer::DrawNodes(bool enableTextures)
 				CellGcmTexture* t = entity.GetTexture()->GetTexture(); //texture->GetTexture();
 				SetTextureSampler(shader->GetFragment()->GetParameter("texture"), t);
 				//SetTextureSampler(shader->GetFragment()->GetParameter("texture"), entity.GetTexture()->GetTexture());
-				//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 1);	
+				
+			}else if(entity.GetMesh()->GetNormTex() && entity.GetMesh()->GetNormTex()->GetTexture())
+			{
+				CellGcmTexture* t = entity.GetMesh()->GetNormTex()->GetTexture(); //texture->GetTexture();
+				SetTextureSampler(shader->GetFragment()->GetParameter("texture"), t);
 			}
 		}
+		
 		//	else
 		//	{
 		//		//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 0);	
@@ -583,7 +588,7 @@ void Renderer::DrawNodes(bool enableTextures)
 			for (int y = 0; y < 4; ++y)
 				modelMatrix.setElem(x, y, m.values[y + x * 4]);
 		textureMatrix = Matrix4::identity(); // add to texture/drawableentity class
-
+		shader->GetVertex()->UpdateShaderMatrices(modelMatrix,viewMatrix,projMatrix);
 		entity.GetMesh()->Draw(shader);
 	}
 }

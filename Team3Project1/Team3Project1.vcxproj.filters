@@ -474,9 +474,6 @@
     <ClInclude Include="..\Framework\T3Matrix4.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioTestClass.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CheckPoint.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
@@ -533,6 +530,9 @@
     </ClInclude>
     <ClInclude Include="PhysicsObjMesh.h">
       <Filter>Framework\Resource Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioTestClass.h">
+      <Filter>Game\MainGame\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -719,9 +719,6 @@
     <ClCompile Include="GCMRenderer.cpp">
       <Filter>Framework\Graphics\PS3\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AudioTestClass.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="HeightMap.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
@@ -775,6 +772,9 @@
     </ClCompile>
     <ClCompile Include="Scoreboard.cpp">
       <Filter>Game\Menus\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioTestClass.cpp">
+      <Filter>Game\MainGame\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

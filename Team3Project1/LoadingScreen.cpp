@@ -14,12 +14,6 @@ void LoadingScreen::Update() {
 	if (isLoading) {
 //		GraphicsTestScreen* game = new GraphicsTestScreen();
 //		GameStateManager::Instance()->AddGameScreen(game);
-
-//		HudTestScreen* hud = new HudTestScreen();
-//		GameStateManager::Instance()->AddGameScreen(hud);
-		
-//		GameStateManager::Graphics()->EnableLoadingIcon(false);
-//		isLoading = false;
 	
 		MainMenu* menu = new MainMenu();
 		GameStateManager::Instance()->AddGameScreen(menu);

@@ -151,6 +151,7 @@ public:
 	};
 
 	virtual void Draw();
+	
 
 protected:
 	bool	LoadOBJMesh(std::string filename);

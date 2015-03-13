@@ -27,8 +27,8 @@ namespace EntryPoint
 {
 	void StartGame()
 	{
-	//	LoadingScreen* loadingScreen = new LoadingScreen();
-	//	GameStateManager::Instance()->AddGameScreen(loadingScreen);
+		LoadingScreen* loadingScreen = new LoadingScreen();
+		GameStateManager::Instance()->AddGameScreen(loadingScreen);
 
 		//MainMenu* main = new MainMenu();
 		//GameStateManager::Instance()->AddGameScreen(main);
@@ -58,14 +58,14 @@ namespace EntryPoint
 		
 		//NetworkTest* network = new NetworkTest();
 		//GameStateManager::Instance()->AddGameScreen(network);
-		cout << "Entry Point: Let's Start The Game!" << endl;
-		RacerGame* game = new RacerGame();
-		cout << "Entry Point: Racer Game Initialised" << endl;
-		PhysicsEngine::SetGame(game);
-		GameStateManager::Instance()->AddGameScreen(game);
-		cout << "Entry Point: Added Game to GameStateManager" << endl;
+		//cout << "Entry Point: Let's Start The Game!" << endl;
+		//RacerGame* game = new RacerGame();
+		//cout << "Entry Point: Racer Game Initialised" << endl;
+		//PhysicsEngine::SetGame(game);
+		//GameStateManager::Instance()->AddGameScreen(game);
+		//cout << "Entry Point: Added Game to GameStateManager" << endl;
 		
-		cout << "Entry Point: Set Physics for the Game" << endl;
+		//cout << "Entry Point: Set Physics for the Game" << endl;
 
 		//RacerGame* game = new RacerGame();
 		//GameStateManager::Instance()->AddGameScreen(game);

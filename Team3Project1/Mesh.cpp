@@ -10,6 +10,9 @@ Mesh::Mesh()
 #if PS3_BUILD
 	for(int i = 0; i < VertexAttributes::MAX + 1; ++i)
 		vertexOffsets[i] = 0;
+
+	bumpTex = NULL;
+	normTex = NULL;
 #endif
 
 	type = PrimitiveType::TRIANGLES;
@@ -19,6 +22,8 @@ Mesh::Mesh()
 	indices = NULL;
 
 	transformCoords = true;
+
+
 }
 
 Mesh::~Mesh(void)	

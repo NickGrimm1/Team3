@@ -11,13 +11,20 @@
 #include "CheckPoint.h"
 #include "TrackSegment.h"
 #include "Gold_cion.h"
+
 #include "HudTestScreen.h"
+
 #include "GameStateManager.h"
-//#include "../Framework/SoundManager.h"
+
+class AudioTestClass;
+
 class Vehicle;
 class RacerGame : public GameScreen3D
 {
 public:
+	#if WINDOWS_BUILD
+	AudioTestClass* audio;
+#endif
 	RacerGame(void);
 	virtual ~RacerGame(void);
 	virtual void LoadContent();
@@ -33,11 +40,9 @@ public:
 	virtual void MouseScrolled(T3Vector2& position, int amount) {};
 	virtual void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key);
 #endif
-	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button) {};
-	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount)
-	{
-		camera->AddMovement(T3Vector3(amount.x,0,amount.y));
-	};
+	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button);
+	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount);
+
 	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID){}
 
 	void SetScore(int value){score+=value;}
@@ -55,7 +60,7 @@ public:
 	void DeleteTrack();
 	void Start();
 	float GetCreateAngle();
-	//float f;
+	float f;
 	float b;
 	int Speed_Player;
 	float Speed_Rotate;
@@ -68,7 +73,6 @@ public:
 	//sam
 	Texture* scoreTexture;
 	Texture* timeTexture;
-	HudTestScreen* hud;
 
 	static float g;
 	static float gx;
@@ -111,13 +115,16 @@ public:
 		  }
 			  if(obj1->GetType()=='p')
 		  {
-			  obj1->GetPhysicsNode().SetIsCollide(false);
-			  SetScore(1);
+	
 #ifdef WINDOWS_BUILD
 			 // SoundManager::AddSound(SOUNDSDIR"Tokyo Drift2.wav");
-			 // GameStateManager::Audio()->PlaySoundW(GameStateManager::Audio()->GetSound(SOUNDSDIR"Tokyo Drift2.wav"),SOUNDPRIORITY_ALWAYS);
-			 // GameStateManager::Audio()->PlaySound(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
+			  Sound* coins;
+			  coins=GameStateManager::Audio()->GetSound(SOUNDSDIR"coins.wav");
+			  GameStateManager::Audio()->PlaySoundA(coins, obj1->GetOriginPosition(), false);
+//			  GameStateManager::Audio()->PlaySound(coins,SOUNDPRIORITY_ALWAYS,false,false);
 #endif			  
+	  		  obj1->GetPhysicsNode().SetIsCollide(false);
+			  SetScore(1);
 			  cout<< "total point ="<<GetScore()<<endl; 
 			  GameStateManager::Graphics()->RemoveDrawable(obj1);
 	          obj1->DisconnectFromSystems();
@@ -125,6 +132,12 @@ public:
 		  }
 			   if(obj1->GetType()=='t')
 		  {
+#if WINDOWS_BUILD
+			  Sound* time;
+
+			  time=GameStateManager::Audio()->GetSound(SOUNDSDIR"time.wav");
+			  GameStateManager::Audio()->PlaySoundA(time, obj1->GetOriginPosition(), false);
+#endif
 			  obj1->GetPhysicsNode().SetIsCollide(false);
 			  SettimeOrScore(-(GettimeOrScore()));
 			  SetPlayTime(30);
@@ -158,8 +171,15 @@ private:
 	Vehicle_Wheel * FrontLeftTire;
 	Vehicle_Wheel * BackRightTire;
 	Vehicle_Wheel * BackLeftTire;
-	
+	HudTestScreen* hud; 
 	DrawableEntity3D* ent;
 	DrawableEntity3D* ent2;
+	bool isplaystartegine;
+	bool isplayrunningegine;
+	bool moveenginesound;
+	bool carspeediszero;
+#if WINDOWS_BUILD
+	SoundEmitter* Engine;
+#endif
 };
 

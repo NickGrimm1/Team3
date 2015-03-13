@@ -82,9 +82,9 @@
 		 T3Vector3 worldPos = listener->GetOriginPosition();
 		 T3Vector3 dirup [2];
 		 // forward
-		 dirup [0].x = - listenerTransform.values [2];
-		 dirup [0].y = - listenerTransform.values [6];
-		 dirup [0].z = - listenerTransform.values [10];
+		 dirup [0].x = listenerTransform.values [2];
+		 dirup [0].y = listenerTransform.values [6];
+		 dirup [0].z = listenerTransform.values [10];
 		 // Up
 		 dirup [1].x = listenerTransform.values [1];
 		 dirup [1].y = listenerTransform.values [5];
@@ -141,8 +141,8 @@
 	 }
  }
 
-  void AudioEngine :: PlaySound ( Sound * s , T3Vector3 position , bool isLooping) {
-	// alcMakeContextCurrent(context);
+  SoundEmitter* AudioEngine :: PlaySound ( Sound * s , T3Vector3 position , bool isLooping) {
+	 alcMakeContextCurrent(context);
 	 SoundEmitter * n = new SoundEmitter ();
 	 T3Matrix4 tempmatrix = T3Matrix4();
 	 tempmatrix.ToIdentity();
@@ -151,7 +151,7 @@
 	 n -> SetLooping ( isLooping );
 	 n -> SetIsGlobal( false );
 	 n -> SetSound ( s ); 
-	 n -> SetRadius(50.0f);
+	 n -> SetRadius(2000.0f);
 
 	 if (isLooping) {
 		 emitters.push_back(n);
@@ -159,11 +159,12 @@
 	 else {
 		 temporaryEmitters.push_back ( n );
 	 }
+	 return n;
 	 // alcMakeContextCurrent(NULL);
  }
 
  void AudioEngine :: PlaySound ( Sound * s , DrawableEntity3D* entity , bool isLooping) {
-	// alcMakeContextCurrent(context);
+	 alcMakeContextCurrent(context);
 	 SoundEmitter * n = new SoundEmitter ();
 	 T3Matrix4 tempmatrix = T3Matrix4();
 	 tempmatrix.ToIdentity();
@@ -172,7 +173,7 @@
 	 n -> SetLooping ( isLooping );
 	 n -> SetIsGlobal( false );
 	 n -> SetSound ( s ); 
-	 n -> SetRadius(10.0f);
+	 n -> SetRadius(2000.0f);
 	 n -> SetTarget(entity);
 
 	 if (isLooping) {
@@ -183,8 +184,9 @@
 	 }
 	 // alcMakeContextCurrent(NULL);
  }
- void AudioEngine::PlaySound(Sound* s,SoundPriority p, bool isBGM,  bool isLooping )
+ SoundEmitter* AudioEngine::PlaySound(Sound* s,SoundPriority p, bool isBGM,  bool isLooping )
  {
+	 alcMakeContextCurrent(context);
 	 SoundEmitter * n = new SoundEmitter ();
 	 n -> SetLooping ( isLooping );
 	 n -> SetSound ( s );
@@ -201,6 +203,32 @@
 	 else {
 		    temporaryEmitters.push_back(n);
 	 }
+	 return n;
+ }
+
+ void AudioEngine::StopSound(SoundEmitter* sound)
+ {
+	 for (unsigned int i = 0; i < temporaryEmitters.size();) {
+		 if (temporaryEmitters[i] == sound) {
+			 sound->DetachSource();
+			 temporaryEmitters.erase(temporaryEmitters.begin() + i);
+		 }
+		 else {
+			i++;
+		 }
+	 }
+
+	 for (unsigned int i = 0; i <emitters.size();) {
+		 if (emitters[i] == sound) {
+			 sound->DetachSource();
+			 emitters.erase(emitters.begin() + i);
+		 }
+		 else {
+			i++;
+		 }
+	 }
+
+	 delete sound;
  }
  //void AudioEngine :: PlaySound ( Sound * s, bool isLooping , SoundPriority p) {
 	// //alcMakeContextCurrent(context);
