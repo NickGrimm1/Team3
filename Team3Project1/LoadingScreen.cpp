@@ -4,6 +4,7 @@
 #include "GraphicsTestScreen.h"
 #include "HudTestScreen.h"
 #include "MainMenu.h"
+#include "PauseScreen.h"
 
 void LoadingScreen::LoadContent() {
 	isLoading = true;

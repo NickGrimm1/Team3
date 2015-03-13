@@ -7,6 +7,8 @@
 #include "../Framework/ObjMesh.h"
 #include "TrackSegment.h"
 #include "../Framework/InertialMatrixHelper.h"
+#include "PauseScreen.h"
+
 #if WINDOWS_BUILD
 #include "AudioTestClass.h"
 #endif
@@ -1166,6 +1168,14 @@ case KeyboardEvents::KEYBOARD_7:
 			//sam
 
 		}
+
+		case KeyboardEvents::KEY_PRESS:
+			switch (key) {
+			case KeyboardEvents::KEYBOARD_ESCAPE:
+				GameStateManager::Pause();
+				break;
+
+			}
 		
 	}
 
@@ -1243,3 +1253,23 @@ void RacerGame::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID,
 	}
 	
 };
+
+void RacerGame::Pause() {
+	camera->Pause();
+	GameStateManager::Physics()->Pause();
+	inputEnabled = false;
+	GameStateManager::AddGameScreen(new PauseScreen(this, hud));
+	
+}
+
+void RacerGame::Resume() {
+	camera->Resume();
+	GameStateManager::Physics()->Resume();
+	inputEnabled = true;
+}
+
+void RacerGame::UnloadContent() {
+	GameStateManager::Audio()->SetListener(NULL);
+
+
+}

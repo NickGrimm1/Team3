@@ -221,9 +221,9 @@ void MainMenu::NewGameClicked(float x, float y)
 	RacerGame* game = new RacerGame();
 //	GraphicsTestScreen* game = new GraphicsTestScreen();
 	GameStateManager::Physics()->SetGame(game);
-	GameStateManager::Instance()->ChangeScreen(game);
-	//GameStateManager::RemoveGameScreen(this);
-
+	GameStateManager::Instance()->AddGameScreen(game);
+	GameStateManager::Graphics()->EnableLoadingIcon(false);
+	GameStateManager::RemoveGameScreen(this);
 }
 
 void MainMenu::ControlsClicked(float x, float y) {

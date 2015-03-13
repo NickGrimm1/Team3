@@ -46,6 +46,7 @@ void PhysicsEngine::ThreadRun()
 		lastFrameTimeStamp = (float)GameStateManager::GetTimer()->GetMS();
 		//	cout << "PhysicsEngine: Timer Established" << endl;
 #endif
+		if (paused) continue;
 		frameRate = (int)(1000.0f / msec);
 
 
