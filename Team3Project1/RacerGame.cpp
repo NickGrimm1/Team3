@@ -43,7 +43,7 @@ RacerGame::RacerGame(void)
 	SplinePoint.push_back(sp3);
 	score=0;
 	Time=60.0f;
-	PlayTime=30;
+	PlayTime=20;
 	timeOrScore=0;
 	isplaystartegine=false;
 	isplayrunningegine=false;
@@ -167,7 +167,7 @@ void RacerGame::LoadContent() {
 	//chasecamera->AddYaw(500);
 	//chasecamera->AddPitch(90);
 	//car->SetPhysics(5,(vpn->GetCar()));
-
+	
 
 
 	car->GetVehiclePhysicsNode()->SetPGE(car);
@@ -239,6 +239,8 @@ void RacerGame::LoadContent() {
 	Speed_Player = 2;
 	//f=0.0f;
 	b=0.0f;
+	maxSpeed=300.0f;
+	minSpeed=160.0f;
 	temp2=T3Vector3(0.0f,0.0f,0.0f);
 	Speed_Rotate = 1.0f;
 	tempPosition = T3Vector3(0.0f,350.0f,-800.0f);
@@ -293,7 +295,7 @@ void RacerGame::Update() {
 			}
 		}
 	}
-	
+
 
 	//if(((abs(car->GetCarNode().GetLinearVelocity().x)+abs(car->GetCarNode().GetLinearVelocity().z))<0.5)&& f!=0)
 	//	
@@ -356,22 +358,33 @@ void RacerGame::Update() {
 	{
 		CreateTrack();
 
-		update=0;
+	update=0;
 	}
 
 	if(update==2)
 	{
 		DeleteTrack();
 
-		update=0;
+	update=0;
 	}
 
 	if((Time-60)==0){
-		SetPlayTime(-1);
-		Time=0;
-		hud->SetScreen(GetScore(),GetPlayTime());
+	SetPlayTime(-1);
+	Time=0;
+	if(GetPlayTime()<0){
+		GameOver();
+		cout<<"game over"<<endl;
+	}
+
+	hud->SetScreen(GetScore(),GetPlayTime(),car->GetVehiclePhysicsNode()->GetF());
+
+
 	}
 	Time+=1;
+}
+void RacerGame::SetMinSpeed(float value){
+minSpeed+=value;
+	car->GetVehiclePhysicsNode()->SetMinSpeed(GetMinSpeed());	
 }
 
 void RacerGame::Start(){
@@ -414,15 +427,15 @@ void RacerGame::Start(){
 		T3Vector3 avg = (SplinePoint[1] + SplinePoint[2] + SplinePoint[3]) / 3.0f;
 		T3Vector3 avg2 = (SplinePoint[2] + SplinePoint[3] + SplinePoint[4]) / 3.0f;
 
-		GameStateManager::Graphics()->GetRenderContext();
-
-			TrackSegment* track = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5.0f, 50.0f);
+		TrackSegment* track = (TrackSegment*) GameStateManager::Assets()->LoadTrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5.0f, 50.0f);
+		//	TrackSegment* track = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2], 5.0f, 50.0f);
 	//push back track
 
 	TrackSegmentVector.push_back(track);
+			
 
-		TrackSegment* Strackn = new TrackSegment(SplinePoint[1] - avg,SplinePoint[2] - avg,SplinePoint[3] - avg,5.0f,50.f);
-
+		//TrackSegment* Strackn = new TrackSegment(SplinePoint[1] - avg,SplinePoint[2] - avg,SplinePoint[3] - avg,5.0f,50.f);
+		TrackSegment* Strackn = (TrackSegment*) GameStateManager::Assets()->LoadTrackSegment(SplinePoint[1] - avg,SplinePoint[2] - avg,SplinePoint[3] - avg, 5.0f, 50.0f);
 		TrackSegmentVector.push_back(Strackn);
 		
 		/*TrackSegment* Strackn = new TrackSegment(SplinePoint[1],SplinePoint[2],T3Vector3(400,0,0),5,50.f);
@@ -430,8 +443,8 @@ void RacerGame::Start(){
 	/*	GameStateManager::Graphics()->DropRenderContext();
 
 		GameStateManager::Graphics()->GetRenderContext();*/
-		TrackSegment* Strackn2 = new TrackSegment(SplinePoint[2] - avg2,SplinePoint[3] - avg2,SplinePoint[4] - avg2,5.0f,50.f);
-
+		//TrackSegment* Strackn2 = new TrackSegment(SplinePoint[2] - avg2,SplinePoint[3] - avg2,SplinePoint[4] - avg2,5.0f,50.f);
+		TrackSegment* Strackn2 = (TrackSegment*) GameStateManager::Assets()->LoadTrackSegment(SplinePoint[2] - avg2,SplinePoint[3] - avg2,SplinePoint[4] - avg2, 5.0f, 50.0f);
 		TrackSegmentVector.push_back(Strackn2);
 		
 		/*TrackSegment* Strackn = new TrackSegment(SplinePoint[1],SplinePoint[2],T3Vector3(400,0,0),5,50.f);
@@ -443,7 +456,7 @@ void RacerGame::Start(){
 		/*GameStateManager::Graphics()->GetRenderContext();*/
 
 
-	GameStateManager::Graphics()->DropRenderContext();
+	
 
 
 	DrawableEntity3D* ent = new DrawableEntity3D(
@@ -635,9 +648,9 @@ void RacerGame::CreateTrack(){
 		T3Vector3 avg = (SplinePoint[3] + SplinePoint[4] + SplinePoint[5]) / 3.0f;
 		T3Vector3 avg2 = (SplinePoint[4] + SplinePoint[5] + SplinePoint[6]) / 3.0f;
 
-		GameStateManager::Graphics()->GetRenderContext();
-		TrackSegment* Strackn = new TrackSegment(SplinePoint[3] - avg,SplinePoint[4] - avg,SplinePoint[5] - avg,5.0f,50.f);
-
+		
+		//TrackSegment* Strackn = new TrackSegment(SplinePoint[3] - avg,SplinePoint[4] - avg,SplinePoint[5] - avg,5.0f,50.f);
+		TrackSegment* Strackn = (TrackSegment*) GameStateManager::Assets()->LoadTrackSegment(SplinePoint[3] - avg,SplinePoint[4] - avg,SplinePoint[5] - avg, 5.0f, 50.0f);
 		TrackSegmentVector.push_back(Strackn);
 		
 		/*TrackSegment* Strackn = new TrackSegment(SplinePoint[1],SplinePoint[2],T3Vector3(400,0,0),5,50.f);
@@ -645,8 +658,8 @@ void RacerGame::CreateTrack(){
 	/*	GameStateManager::Graphics()->DropRenderContext();
 
 		GameStateManager::Graphics()->GetRenderContext();*/
-		TrackSegment* Strackn2 = new TrackSegment(SplinePoint[4] - avg2,SplinePoint[5] - avg2,SplinePoint[6] - avg2,5.0f,50.f);
-
+		//TrackSegment* Strackn2 = new TrackSegment(SplinePoint[4] - avg2,SplinePoint[5] - avg2,SplinePoint[6] - avg2,5.0f,50.f);
+		TrackSegment* Strackn2 = (TrackSegment*) GameStateManager::Assets()->LoadTrackSegment(SplinePoint[4] - avg2,SplinePoint[5] - avg2,SplinePoint[6] - avg2, 5.0f, 50.0f);
 		TrackSegmentVector.push_back(Strackn2);
 		
 		/*TrackSegment* Strackn = new TrackSegment(SplinePoint[1],SplinePoint[2],T3Vector3(400,0,0),5,50.f);
@@ -658,7 +671,7 @@ void RacerGame::CreateTrack(){
 		/*GameStateManager::Graphics()->GetRenderContext();*/
 	
 
-	GameStateManager::Graphics()->DropRenderContext();
+	
 
 
 	
@@ -763,7 +776,7 @@ void RacerGame::CreateTrack(){
 	AddDrawable(checkpoint2);
 	checkPoint.push_back(checkpoint2);
 
-	if(GettimeOrScore()!=3){
+	if(GettimeOrScore()!=4){
 	Gold_cion * gold_cion= new Gold_cion(20.0f);
 
 	gold_cion->SetOriginPosition(SplinePoint[4]+T3Vector3((rand() % 10)-5.0f,0.0f,(rand() % 10)-5.0f));
@@ -777,7 +790,7 @@ void RacerGame::CreateTrack(){
 	AddDrawable(gold_cion);
 	pickup.push_back(gold_cion);
 	}
-	if(GettimeOrScore()==3){
+	if(GettimeOrScore()==4){
 	Gold_cion * gold_cion= new Gold_cion(20.0f);
 
 	gold_cion->SetOriginPosition(SplinePoint[4]+T3Vector3((rand() % 10)-5.0f,0.0f,(rand() % 10)-5.0f));
@@ -841,8 +854,8 @@ case KeyboardEvents::KEYBOARD_7:
 
 			      // f=f+1.8;
 			car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()+1.8);
-				if(car->GetVehiclePhysicsNode()->GetF()>350) {
-				   car->GetVehiclePhysicsNode()->SetF(350);
+			if(car->GetVehiclePhysicsNode()->GetF()>GetMaxSpeed()) {
+				car->GetVehiclePhysicsNode()->SetF(GetMaxSpeed());
 		       }
 				   T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
 				   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
@@ -852,8 +865,8 @@ case KeyboardEvents::KEYBOARD_7:
 			{//camera->AddMovement(T3Vector3(0,0,1));
 				// f=f-3.0;
 				car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()-3.0);
-				if(car->GetVehiclePhysicsNode()->GetF() < (-90)) {
-					car->GetVehiclePhysicsNode()->SetF(-90);
+				if(car->GetVehiclePhysicsNode()->GetF() < (GetMinSpeed())) {
+					car->GetVehiclePhysicsNode()->SetF(GetMinSpeed());
 		}
            T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
 				   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
