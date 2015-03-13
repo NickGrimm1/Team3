@@ -11,7 +11,9 @@
 #include "CheckPoint.h"
 #include "TrackSegment.h"
 #include "Gold_cion.h"
+
 #include "HudTestScreen.h"
+
 #include "GameStateManager.h"
 
 class AudioTestClass;
@@ -132,9 +134,12 @@ public:
 		  }
 			   if(obj1->GetType()=='t')
 		  {
+#if WINDOWS_BUILD
 			  Sound* time;
+
 			  time=GameStateManager::Audio()->GetSound(SOUNDSDIR"time.wav");
 			  GameStateManager::Audio()->PlaySoundA(time, obj1->GetOriginPosition(), false);
+#endif
 			  obj1->GetPhysicsNode().SetIsCollide(false);
 			  SettimeOrScore(-(GettimeOrScore()));
 			  SetPlayTime(30);
@@ -168,13 +173,15 @@ private:
 	Vehicle_Wheel * FrontLeftTire;
 	Vehicle_Wheel * BackRightTire;
 	Vehicle_Wheel * BackLeftTire;
-	
+	HudTestScreen* hud; 
 	DrawableEntity3D* ent;
 	DrawableEntity3D* ent2;
 	bool isplaystartegine;
 	bool isplayrunningegine;
 	bool moveenginesound;
 	bool carspeediszero;
+#if WINDOWS_BUILD
 	SoundEmitter* Engine;
+#endif
 };
 

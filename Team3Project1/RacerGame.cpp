@@ -27,6 +27,8 @@ int RacerGame::update =0;
 float RacerGame::g=0.0f;
 float RacerGame::gx =300.0f;
 
+
+
 RacerGame::RacerGame(void)
 {
 
@@ -47,10 +49,11 @@ RacerGame::RacerGame(void)
 	isplayrunningegine=false;
 	moveenginesound=false;
 	carspeediszero=true;
+#if WINDOWS_BUILD
 	Engine = new SoundEmitter();
+#endif
 
 		
-
 
 	//Strack = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2],5,50.f);
 	//TrackSegmentVector.push_back(Strack);
@@ -70,10 +73,11 @@ void RacerGame::LoadContent() {
 	
 	hud = new HudTestScreen();
 	GameStateManager::Instance()->AddGameScreen(hud);
-
+#if WINDOWS_BUILD
 	audio= new AudioTestClass();
+
 	GameStateManager::Instance()->AddGameScreen(audio);
-	
+#endif	
 	scoreTexture = GameStateManager::Assets()->LoadTexture(this, "score", 0);
 	timeTexture = GameStateManager::Assets()->LoadTexture(this, "time", 0);
 
@@ -264,19 +268,25 @@ void RacerGame::Update() {
 	}
 	if(isplaystartegine==false&&car->GetCarNode().GetLinearVelocity()!=T3Vector3(0,0,0))
 	{
+#if WINDOWS_BUILD
 		GameStateManager::Audio()->StopSound(audio->Getsoundemitter());
+#endif
 		isplaystartegine=true;
 	}
 
 	if(isplayrunningegine==false&&car->GetCarNode().GetLinearVelocity()!=T3Vector3(0,0,0))
 	{
+#if WINDOWS_BUILD
 		Sound* engine=GameStateManager::Audio()->GetSound(SOUNDSDIR"lowspeedengine.wav");
 		Engine=GameStateManager::Audio()->PlaySoundA (engine,SOUNDPRIORITY_ALWAYS,true, true);
+#endif
 		isplayrunningegine=true;
 	}
 	if(carspeediszero==false&&moveenginesound==false&&car->GetCarNode().GetLinearVelocity()==T3Vector3(0,0,0))
 	{
+#if WINDOWS_BUILD
 		GameStateManager::Audio()->StopSound(Engine);
+#endif
 		moveenginesound=true;
 	}
 	if(f>0){

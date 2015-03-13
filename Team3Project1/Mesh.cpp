@@ -19,6 +19,9 @@ Mesh::Mesh()
 	indices = NULL;
 
 	transformCoords = true;
+
+	bumpTex = NULL;
+	normTex = NULL;
 }
 
 Mesh::~Mesh(void)	

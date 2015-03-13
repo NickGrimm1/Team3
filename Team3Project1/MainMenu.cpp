@@ -9,7 +9,9 @@ MainMenu::MainMenu(void)
 	musicMuted = false;
 	soundMuted = false;
 	mainmenu_bgm = false;
+#if WINDOWS_BUILD
 	mainmusic = new SoundEmitter();
+#endif
 	playerOne = GamepadEvents::PLAYERINDEX_MAX;
 
 	connectionTime = 0.0;
@@ -53,11 +55,11 @@ MainMenu::~MainMenu(void)
 }
 
 void MainMenu::LoadContent() {
-
+#if WINDOWS_BUILD
 	SoundManager::AddSound(SOUNDSDIR"bgm1_101sec.wav");
 	Mainmenu_BGM = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm1_101sec.wav");
 	mainmusic=GameStateManager::Audio()-> PlaySound (Mainmenu_BGM,SOUNDPRIORITY_ALWAYS,true, true);
-
+#endif
 
 	
 
@@ -209,8 +211,9 @@ void MainMenu::NewGameClicked(float x, float y)
 	std::cout << "New Game Clicked" << std::endl;
 	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	newGame->GetTexture()->SetTexture(buttonTexClicked);
-	GameStateManager::Audio()->StopSound(mainmusic);
 #if WINDOWS_BUILD
+	GameStateManager::Audio()->StopSound(mainmusic);
+
 	GameStateManager::Graphics()->EnableMousePointer(false);
 #endif
 	GameStateManager::Instance()->RemoveGameScreen(wallpaper);
