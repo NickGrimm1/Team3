@@ -960,7 +960,22 @@ void RacerGame::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents:
 	
 void RacerGame::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount)
 {
-	
+	if(analogueControl == GamepadEvents::LEFT_STICK)
+	{
+		if(abs(amount.y) > DEADZONE )
+		{
+			 T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+			 car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*(abs(amount.y)));
+		} 
+	}
+	if(analogueControl == GamepadEvents::RIGHT_STICK)
+	{
+		if(abs(amount.y) > DEADZONE)
+		{
+			 T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+			 car->GetCarNode().SetLinearVelocity(T3Vector3(10,10,10));//( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*(abs(amount.y)));
+		} 
+	}
 	
 	
 	//camera->AddMovement(T3Vector3(amount.x,0,amount.y));
