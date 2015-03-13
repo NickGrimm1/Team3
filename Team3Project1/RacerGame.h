@@ -119,7 +119,6 @@ public:
 #endif			  
 	  		  obj1->GetPhysicsNode().SetIsCollide(false);
 			  SetScore(1);
-			  cout<< "total point ="<<GetScore()<<endl; 
 			  GameStateManager::Graphics()->RemoveDrawable(obj1);
 	          obj1->DisconnectFromSystems();
 			  pickup.erase(pickup.begin());

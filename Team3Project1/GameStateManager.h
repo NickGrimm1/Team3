@@ -149,7 +149,6 @@ public:
 			PhysicsEngine::Destroy();
 			StorageManager::Destroy();
 			InputManager::Destroy();
-			std::cout << "Input Manager Killed" << std::endl;
 			
 #if WINDOWS_BUILD
 			AudioEngine::Destroy();

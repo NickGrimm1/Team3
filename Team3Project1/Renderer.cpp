@@ -229,7 +229,6 @@ bool Renderer::LoadAssets()
 	daySkyTex = (GameStateManager::Assets()->LoadTexture(this, "day_sky", 0))->GetTextureName();
 
 	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh || !quadMesh || !skyDome) {
-		cout << "Renderer::LoadAssets() - unable to load rendering assets";
 		return false;
 	}
 
@@ -326,8 +325,6 @@ void Renderer::RenderScene() {
 		//Main Render
 		ShadowPass();
 		DrawScene();
-
-		//cout << "Meshes Last Frame: " << count << endl;
 
 		count = 0;
 

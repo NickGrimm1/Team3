@@ -208,7 +208,6 @@ void MainMenu::UnloadContent() {
 
 void MainMenu::NewGameClicked(float x, float y) 
 {
-	std::cout << "New Game Clicked" << std::endl;
 	inputEnabled = false;
 	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	newGame->GetTexture()->SetTexture(buttonTexClicked);
@@ -342,7 +341,6 @@ void MainMenu::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::
 {
 	if (inputEnabled)
 	{
-		std::cout <<"MainMenu:GPEvent"<<std::endl;
 		if (connectionTime < 200.0)
 			GameScreen2D::GamepadEvent(playerID, type, button);
 	}

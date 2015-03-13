@@ -17,10 +17,8 @@ void PhysicsEngine::Run()
 #if PS3_BUILD
 void PhysicsEngine::Run(uint64_t arg)
 {
-	//cout << "PhysicsEngine: Start Thread" << endl;
 	PhysicsEngine* myArg = (PhysicsEngine*)arg;
 	myArg->ThreadRun();
-//	cout << "PhysicsEngine: Thread Running" << endl;
 	//instance->ThreadRun();
 	//sys_ppu_thread_exit(0);
 }
@@ -29,22 +27,18 @@ void PhysicsEngine::Run(uint64_t arg)
 void PhysicsEngine::ThreadRun()
 {
 	isRunning = true;
-	//	cout << "PhysicsEngine: Outside Thread Loop" << endl;
 	while (isRunning)
 	{
-	//	cout << "PhysicsEngine: Inside Loop" << endl;
 #if WINDOWS_BUILD
 		while (Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp < PHYSICS_TIME) { ; } // Fix the timestep
 		float msec = Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp;
 		lastFrameTimeStamp = Window::GetWindow().GetTimer()->GetMS();
 #endif
 #if PS3_BUILD
-	//	cout << "PhysicsEngine: Establish Game Timer" << endl;
 		while (GameStateManager::GetTimer()->GetMS() - lastFrameTimeStamp < PHYSICS_TIME)
 			sys_timer_usleep(100);
  		float msec = (float)GameStateManager::GetTimer()->GetMS() - lastFrameTimeStamp;
 		lastFrameTimeStamp = (float)GameStateManager::GetTimer()->GetMS();
-		//	cout << "PhysicsEngine: Timer Established" << endl;
 #endif
 		if (paused) continue;
 		frameRate = (int)(1000.0f / msec);
@@ -54,22 +48,18 @@ void PhysicsEngine::ThreadRun()
 		ListGuard.lock_mutex();
 
 		narrowlist.clear();
-		//	cout << "PhysicsEngine: Narrow List clear" << endl;
 		for(vector<Constraint*>::iterator i = allSprings.begin(); i != allSprings.end(); ++i) {
 			(*i)->Update(msec);
 		}
-		//	cout << "PhysicsEngine: Constraints Updated" << endl;
 		for(vector<PhysicsNode*>::iterator i = allNodes.begin(); i != allNodes.end(); ++i) {
 			(*i)->Update(msec);
 			narrowlist.push_back((*i));
 		}
-		//	cout << "PhysicsEngine: Physics Updated" << endl;
 		BroadPhaseCollisions();
 
 		ListGuard.unlock_mutex();
 
 	}
-		//cout << "PhysicsEngine: End of Physics Loop" << endl;
 }
 
 T3Vector3 PhysicsEngine::support(PhysicsNode& shape1,PhysicsNode& shape2, T3Vector3 dir)

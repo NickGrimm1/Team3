@@ -83,12 +83,10 @@ void GamePad::Update(float msec)
 		{
 			if (previousRightStick.x <= 0.5f)
 			{
-			//	std::cout << "Sending GP Event: RS R D" << std::endl;
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, GamepadEvents::RIGHT_STICK_RIGHT);
 			}
 			else
 			{
-			//	std::cout << "Sending GP Event: RS R H" << std::endl;
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_HELD, GamepadEvents::RIGHT_STICK_RIGHT);
 			}
 			buttonHoldTimes[GamepadEvents::RIGHT_STICK_RIGHT] += msec;
@@ -99,12 +97,10 @@ void GamePad::Update(float msec)
 		{
 			if (previousRightStick.x >= -0.5f)
 			{
-			//	std::cout << "Sending GP Event: RS L D" << std::endl;
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, GamepadEvents::RIGHT_STICK_LEFT);
 			}
 			else
 			{
-			//	std::cout << "Sending GP Event: RS L H" << std::endl;
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_HELD, GamepadEvents::RIGHT_STICK_LEFT);
 			}
 			buttonHoldTimes[GamepadEvents::RIGHT_STICK_LEFT] += msec;
@@ -114,13 +110,11 @@ void GamePad::Update(float msec)
 		{
 			if (previousRightStick.y >= -0.5f)
 			{
-			//	std::cout << "Sending GP Event: RS R D" << std::endl;
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, GamepadEvents::RIGHT_STICK_DOWN);
 			}
 			else
 			{
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_HELD, GamepadEvents::RIGHT_STICK_DOWN);
-			//	std::cout << "Sending GP Event: RS R H" << std::endl;
 			}
 			buttonHoldTimes[GamepadEvents::RIGHT_STICK_DOWN] += msec;
 		}
@@ -129,12 +123,10 @@ void GamePad::Update(float msec)
 		{
 			if (previousRightStick.y <= 0.5f)
 			{
-			//	std::cout << "Sending GP Event: RS U D" << std::endl;
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, GamepadEvents::RIGHT_STICK_UP);
 			}
 			else
 			{
-			//	std::cout << "Sending GP Event: RS U H" << std::endl;
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_HELD, GamepadEvents::RIGHT_STICK_UP);
 			}
 			buttonHoldTimes[GamepadEvents::RIGHT_STICK_UP] += msec;
@@ -143,48 +135,40 @@ void GamePad::Update(float msec)
 
 	if (previousRightStick.x > 0.5f && rightStick.x < 0.5f)
 	{
-	//	std::cout << "Sending GP Event: RS R U" << std::endl;
 		GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_UP, GamepadEvents::RIGHT_STICK_RIGHT);
 				
 		if (buttonHoldTimes[GamepadEvents::RIGHT_STICK_RIGHT] < PRESSLIMIT)
 		{
-		//	std::cout << "Sending GP Event: RS R P" << std::endl;
 			GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_PRESS, GamepadEvents::RIGHT_STICK_RIGHT);
 		}
 		buttonHoldTimes[GamepadEvents::RIGHT_STICK_RIGHT] = 0;
 	}
 	if (previousRightStick.y > 0.5f && rightStick.y < 0.5f)
 	{
-	//	std::cout << "Sending GP Event: RS U U" << std::endl;
 		GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_UP, GamepadEvents::RIGHT_STICK_UP);
 				
 		if (buttonHoldTimes[GamepadEvents::RIGHT_STICK_UP] < PRESSLIMIT)
 		{
-		//	std::cout << "Sending GP Event: RS U P" << std::endl;
 			GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_PRESS, GamepadEvents::RIGHT_STICK_UP);
 		}
 		buttonHoldTimes[GamepadEvents::RIGHT_STICK_UP] = 0;
 	}
 	if (previousRightStick.y < -0.5f && rightStick.y > -0.5f)
 	{
-	//	std::cout << "Sending GP Event: RS D U" << std::endl;
 		GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_UP, GamepadEvents::RIGHT_STICK_DOWN);
 				
 		if (buttonHoldTimes[GamepadEvents::RIGHT_STICK_DOWN] < PRESSLIMIT)
 		{
-	//		std::cout << "Sending GP Event: RS D P" << std::endl;
 			GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_PRESS, GamepadEvents::RIGHT_STICK_DOWN);
 		}
 		buttonHoldTimes[GamepadEvents::RIGHT_STICK_DOWN] = 0;
 	}
 	if (previousRightStick.x < -0.5f && rightStick.x > -0.5f)
 	{
-	//	std::cout << "Sending GP Event: RS L U" << std::endl;
 		GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_UP, GamepadEvents::RIGHT_STICK_LEFT);
 				
 		if (buttonHoldTimes[GamepadEvents::RIGHT_STICK_LEFT] < PRESSLIMIT)
 		{
-	//		std::cout << "Sending GP Event: RS L P" << std::endl;
 			GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_PRESS, GamepadEvents::RIGHT_STICK_LEFT);
 		}
 		buttonHoldTimes[GamepadEvents::RIGHT_STICK_LEFT] = 0;
@@ -200,20 +184,16 @@ void GamePad::Update(float msec)
 #endif
 	if (leftStick > T3Vector2(DEADZONE, DEADZONE))
 	{
-//		std::cout << leftStick << std::endl;
-//		std::cout << gamePadState.button[6] << ", " << gamePadState.button[7] << std::endl;
 		GameStateManager::Instance()->GamepadAnalogueDisplacement(playerID, GamepadEvents::LEFT_STICK, leftStick);
 		
 		if (leftStick.x > 0.5f)
 		{
 			if (previousLeftStick.x <= 0.5f)
 			{
-			//	std::cout << "Sending GP Event: LS R D" << std::endl;
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, GamepadEvents::LEFT_STICK_RIGHT);
 			}
 			else
 			{
-			//	std::cout << "Sending GP Event: LS R H" << std::endl;
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_HELD, GamepadEvents::LEFT_STICK_RIGHT);
 			}
 			buttonHoldTimes[GamepadEvents::LEFT_STICK_RIGHT] += msec;
@@ -223,12 +203,10 @@ void GamePad::Update(float msec)
 		{
 			if (previousLeftStick.x >= -0.5f)
 			{
-			//	std::cout << "Sending GP Event: LS L D" << std::endl;
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, GamepadEvents::LEFT_STICK_LEFT);
 			}
 			else
 			{
-			//	std::cout << "Sending GP Event: LS L H" << std::endl;
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_HELD, GamepadEvents::LEFT_STICK_LEFT);
 			}
 			buttonHoldTimes[GamepadEvents::LEFT_STICK_LEFT] += msec;
@@ -238,12 +216,10 @@ void GamePad::Update(float msec)
 		{
 			if (previousLeftStick.y >= -0.5f)
 			{
-			//	std::cout << "Sending GP Event: LS D D" << std::endl;
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, GamepadEvents::LEFT_STICK_DOWN);
 			}
 			else
 			{
-			//	std::cout << "Sending GP Event: LS D H" << std::endl;
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_HELD, GamepadEvents::LEFT_STICK_DOWN);
 			}
 			buttonHoldTimes[GamepadEvents::LEFT_STICK_DOWN] += msec;
@@ -253,12 +229,10 @@ void GamePad::Update(float msec)
 		{
 			if (previousLeftStick.y <= 0.5f)
 			{
-			//	std::cout << "Sending GP Event: LS U D" << std::endl;
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, GamepadEvents::LEFT_STICK_UP);
 			}
 			else
 			{
-			//	std::cout << "Sending GP Event: LS U H" << std::endl;
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_HELD, GamepadEvents::LEFT_STICK_UP);
 			}
 			buttonHoldTimes[GamepadEvents::LEFT_STICK_UP] += msec;
@@ -267,12 +241,10 @@ void GamePad::Update(float msec)
 
 	if (previousLeftStick.x > 0.5f && leftStick.x < 0.5f)
 	{
-	//	std::cout << "Sending GP Event: LS R U" << std::endl;
 		GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_UP, GamepadEvents::LEFT_STICK_RIGHT);
 				
 		if (buttonHoldTimes[GamepadEvents::LEFT_STICK_RIGHT] < PRESSLIMIT)
 		{
-		//	std::cout << "Sending GP Event: LS R P" << std::endl;
 			GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_PRESS, GamepadEvents::LEFT_STICK_RIGHT);
 		}
 		buttonHoldTimes[GamepadEvents::LEFT_STICK_RIGHT] = 0;
@@ -280,12 +252,10 @@ void GamePad::Update(float msec)
 
 	if (previousLeftStick.x < -0.5f && leftStick.x > -0.5f)
 	{
-		//std::cout << "Sending GP Event: LS L U" << std::endl;
 		GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_UP, GamepadEvents::LEFT_STICK_LEFT);
 				
 		if (buttonHoldTimes[GamepadEvents::LEFT_STICK_LEFT] < PRESSLIMIT)
 		{
-	//		std::cout << "Sending GP Event: LS L P" << std::endl;
 			GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_PRESS, GamepadEvents::LEFT_STICK_LEFT);
 		}
 		buttonHoldTimes[GamepadEvents::LEFT_STICK_LEFT] = 0;
@@ -293,12 +263,10 @@ void GamePad::Update(float msec)
 
 	if (previousLeftStick.y < -0.5f && leftStick.y > -0.5f)
 	{
-	//	std::cout << "Sending GP Event: LS D U" << std::endl;
 		GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_UP, GamepadEvents::LEFT_STICK_DOWN);
 				
 		if (buttonHoldTimes[GamepadEvents::LEFT_STICK_DOWN] < PRESSLIMIT)
 		{
-	//		std::cout << "Sending GP Event: LS D P" << std::endl;
 			GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_PRESS, GamepadEvents::LEFT_STICK_DOWN);
 		}
 		buttonHoldTimes[GamepadEvents::LEFT_STICK_DOWN] = 0;
@@ -306,12 +274,10 @@ void GamePad::Update(float msec)
 
 	if (previousLeftStick.y > 0.5f && leftStick.y < 0.5f)
 	{
-	//	std::cout << "Sending GP Event: LS U U" << std::endl;
 		GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_UP, GamepadEvents::LEFT_STICK_UP);
 				
 		if (buttonHoldTimes[GamepadEvents::LEFT_STICK_UP] < PRESSLIMIT)
 		{
-	//		std::cout << "Sending GP Event: LS U P" << std::endl;
 			GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_PRESS, GamepadEvents::LEFT_STICK_UP);
 		}
 		buttonHoldTimes[GamepadEvents::LEFT_STICK_UP] = 0;
@@ -328,7 +294,6 @@ void GamePad::Update(float msec)
 #endif
 	if (rightTrigger > DEADZONE)
 	{
-	//	std::cout << rightTrigger << std::endl;
 		GameStateManager::Instance()->GamepadAnalogueDisplacement(playerID, GamepadEvents::RIGHT_TRIGGER, rightTrigger);
 		if (rightTrigger > 0.5f)
 		{
@@ -366,7 +331,6 @@ void GamePad::Update(float msec)
 #endif
 	if (leftTrigger > DEADZONE)
 	{
-	//	std::cout << leftTrigger << std::endl;
 		GameStateManager::Instance()->GamepadAnalogueDisplacement(playerID, GamepadEvents::LEFT_TRIGGER, leftTrigger);
 		if (leftTrigger > 0.5f)
 		{
@@ -418,12 +382,10 @@ void GamePad::Update(float msec)
 			if (!(previousGamePadState.Gamepad.wButtons & (1 << i)))
 #endif
 			{	
-			//	std::cout << "Sending GP Event" << std::endl;
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, button);
 			}
 			else
 			{
-			//	std::cout << "Sending GP Event" << std::endl;
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_HELD, button);
 			}
 			buttonHoldTimes[i] += msec;
@@ -439,11 +401,9 @@ void GamePad::Update(float msec)
 #endif
 			{
 				GamepadEvents::Button button = (GamepadEvents::Button)i;
-			//	std::cout << "Sending GP Event" << std::endl;
 				GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_UP, button);
 				if (buttonHoldTimes[i] < PRESSLIMIT)
 				{
-				//	std::cout << "Sending GP Event" << std::endl;
 					GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_PRESS, button);
 				}
 			}
@@ -473,12 +433,10 @@ void GamePad::Update(float msec)
 				if (!(previousGamePadState.Gamepad.wButtons & (1 << (i + halfInput))))
 #endif
 				{			
-				//	std::cout << "Sending GP Event" << std::endl;
 					GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_DOWN, button);
 				}
 				else
 				{
-				//	std::cout << "Sending GP Event" << std::endl;
 					GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_HELD, button);
 				}
 				buttonHoldTimes[halfInput + i] += msec;
@@ -503,11 +461,9 @@ void GamePad::Update(float msec)
 #endif
 				{
 					GamepadEvents::Button button = (GamepadEvents::Button)(halfInput +i);
-				//	std::cout << "Sending GP Event" << std::endl;
 					GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_UP, button);
 					if (buttonHoldTimes[halfInput + i] < PRESSLIMIT)
 					{
-					//	std::cout << "Sending GP Event" << std::endl;
 						GameStateManager::Instance()->GamepadEvent(playerID, GamepadEvents::BUTTON_PRESS, button);
 					}
 				}
