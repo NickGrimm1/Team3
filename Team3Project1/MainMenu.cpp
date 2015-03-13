@@ -8,6 +8,8 @@ MainMenu::MainMenu(void)
 #endif
 	musicMuted = false;
 	soundMuted = false;
+	mainmenu_bgm = false;
+	mainmusic = new SoundEmitter();
 	playerOne = GamepadEvents::PLAYERINDEX_MAX;
 
 	connectionTime = 0.0;
@@ -51,6 +53,14 @@ MainMenu::~MainMenu(void)
 }
 
 void MainMenu::LoadContent() {
+
+	SoundManager::AddSound(SOUNDSDIR"bgm1_101sec.wav");
+	Mainmenu_BGM = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm1_101sec.wav");
+	mainmusic=GameStateManager::Audio()-> PlaySound (Mainmenu_BGM,SOUNDPRIORITY_ALWAYS,true, true);
+
+
+	
+
 	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	wallpaper = new MenuScreen3D();
 	GameStateManager::AddGameScreen(wallpaper);
@@ -72,6 +82,7 @@ void MainMenu::LoadContent() {
 	soundNoMuteHover	= GameStateManager::Assets()->LoadTexture(this, "Buttons/sound_nomute_selected", 0);
 	soundMute			= GameStateManager::Assets()->LoadTexture(this, "Buttons/sound_mute", 0);
 	soundMuteHover		= GameStateManager::Assets()->LoadTexture(this, "Buttons/sound_mute_selected", 0);
+
 
 	// Load Scoreboard
 #if WINDOWS_BUILD
@@ -198,6 +209,7 @@ void MainMenu::NewGameClicked(float x, float y)
 	std::cout << "New Game Clicked" << std::endl;
 	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	newGame->GetTexture()->SetTexture(buttonTexClicked);
+	GameStateManager::Audio()->StopSound(mainmusic);
 #if WINDOWS_BUILD
 	GameStateManager::Graphics()->EnableMousePointer(false);
 #endif

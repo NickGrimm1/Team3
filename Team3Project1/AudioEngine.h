@@ -81,10 +81,13 @@ public:
 
 	void SetMasterVolume ( float value );
 
-	void PlaySound ( Sound * s , T3Vector3 position, bool isLooping = false );
-	void PlaySound ( Sound * s , DrawableEntity3D* entity , bool isLooping = false);
+	SoundEmitter* PlaySoundA ( Sound * s , T3Vector3 position, bool isLooping = false );
+	void PlaySoundA ( Sound * s , DrawableEntity3D* entity , bool isLooping = false);
 	//void PlaySound ( Sound * s , bool isLooping = false, SoundPriority p = SOUNDPRIORTY_LOW);
-	void PlaySound ( Sound * s , SoundPriority p = SOUNDPRIORTY_LOW, bool isBGM=false, bool isLooping=false );
+	SoundEmitter* PlaySoundA ( Sound * s , SoundPriority p = SOUNDPRIORTY_LOW, bool isBGM=false, bool isLooping=false );
+
+	void StopSound(SoundEmitter* sound);
+
 
 	Sound * GetSound ( string name );
 
@@ -129,7 +132,7 @@ private:
 	vector < SoundEmitter * > temporaryEmitters ;
 
 	static AudioEngine* instance;
-	
+
 	//bool isRunning;
 };
 #endif

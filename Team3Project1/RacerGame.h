@@ -11,7 +11,9 @@
 #include "CheckPoint.h"
 #include "TrackSegment.h"
 #include "Gold_cion.h"
+#if WINDOWS_BUILD
 #include "HudTestScreen.h"
+#endif
 #include "GameStateManager.h"
 //#include "../Framework/SoundManager.h"
 class Vehicle;
@@ -66,8 +68,10 @@ public:
 	//sam
 	Texture* scoreTexture;
 	Texture* timeTexture;
+#if WINDOWS_BUILD
 	HudTestScreen* hud;
-
+	AudioTestClass* audio;
+#endif
 	static float g;
 	static float gx;
 	TrackSegment* Strack;
@@ -109,13 +113,16 @@ public:
 		  }
 			  if(obj1->GetType()=='p')
 		  {
-			  obj1->GetPhysicsNode().SetIsCollide(false);
-			  SetScore(1);
+	
 #ifdef WINDOWS_BUILD
 			 // SoundManager::AddSound(SOUNDSDIR"Tokyo Drift2.wav");
-			 // GameStateManager::Audio()->PlaySoundW(GameStateManager::Audio()->GetSound(SOUNDSDIR"Tokyo Drift2.wav"),SOUNDPRIORITY_ALWAYS);
-			 // GameStateManager::Audio()->PlaySound(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
+			  Sound* coins;
+			  coins=GameStateManager::Audio()->GetSound(SOUNDSDIR"coins.wav");
+			  GameStateManager::Audio()->PlaySoundA(coins, obj1->GetOriginPosition(), false);
+//			  GameStateManager::Audio()->PlaySound(coins,SOUNDPRIORITY_ALWAYS,false,false);
 #endif			  
+	  		  obj1->GetPhysicsNode().SetIsCollide(false);
+			  SetScore(1);
 			  cout<< "total point ="<<GetScore()<<endl; 
 			  GameStateManager::Graphics()->RemoveDrawable(obj1);
 	          obj1->DisconnectFromSystems();
@@ -123,6 +130,9 @@ public:
 		  }
 			   if(obj1->GetType()=='t')
 		  {
+			  Sound* time;
+			  time=GameStateManager::Audio()->GetSound(SOUNDSDIR"time.wav");
+			  GameStateManager::Audio()->PlaySoundA(time, obj1->GetOriginPosition(), false);
 			  obj1->GetPhysicsNode().SetIsCollide(false);
 			  SettimeOrScore(-(GettimeOrScore()));
 			  SetPlayTime(30);
@@ -159,5 +169,10 @@ private:
 	
 	DrawableEntity3D* ent;
 	DrawableEntity3D* ent2;
+	bool isplaystartegine;
+	bool isplayrunningegine;
+	bool moveenginesound;
+	bool carspeediszero;
+	SoundEmitter* Engine;
 };
 
