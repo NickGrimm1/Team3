@@ -12,6 +12,8 @@
 #include "Gold_cion.h"
 #include "HudTestScreen.h"
 #include "GameStateManager.h"
+#include "GameOver.h"
+
 class AudioTestClass;
 class Vehicle;
 class RacerGame : public GameScreen3D
@@ -58,7 +60,7 @@ public:
 	void SetMinSpeed(float value);
 	float GetMinSpeed(){return minSpeed;}
 
-	void GameOver();
+	void GameOverEvent();
 
 	void CreateTrack();
 	void DeleteTrack();

@@ -47,6 +47,7 @@ RacerGame::RacerGame(unsigned int lowestScore, GamepadEvents::PlayerIndex player
 	isplaymidspdegine=false;
 	moveenginesound=false;
 	carspeediszero=true;
+	isPaused = false;
 #if WINDOWS_BUILD
 	Engine0 = new SoundEmitter();
 	Engine1 = new SoundEmitter();
@@ -193,6 +194,7 @@ void RacerGame::Update()
 		moveenginesound=true;
 
 	}
+	if (!isPaused) {
 	if((Time-60)==0){
 		if(start>=0)
 	{
@@ -221,13 +223,15 @@ void RacerGame::Update()
 	
 	hud->SetScreen(GetScore(),GetPlayTime(),car->GetVehiclePhysicsNode()->GetF());
 	if(GetPlayTime()<0){
+			GameOverEvent();
 		cout<<"game over"<<endl;
-		GameOver();
-		
 	}
 	}
+	
 	Time+=1;
 	
+	
+}
 }
 void RacerGame::SetMinSpeed(float value){
 minSpeed+=value;
@@ -679,8 +683,9 @@ void RacerGame::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents:
 	case GamepadEvents::BUTTON_HELD:
 	case GamepadEvents::BUTTON_DOWN:
 		if (button == GamepadEvents::INPUT_R2_TRIGGER) {
-		
+#if WINDOWS_BUILD
 			GameStateManager::Audio()->PlaySoundA(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
+#endif
 			car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()+1.8);
 			if(car->GetVehiclePhysicsNode()->GetF()>GetMaxSpeed()) {
 				car->GetVehiclePhysicsNode()->SetF(GetMaxSpeed());
@@ -822,6 +827,7 @@ void RacerGame::Pause() {
 void RacerGame::Resume() {
 	camera->Resume();
 	GameStateManager::Physics()->Resume();
+	isPaused = false;
 	inputEnabled = true;
 	isplaylowspdegine=false;
 	isPaused = false;
@@ -869,9 +875,12 @@ void RacerGame::UnloadContent() {
 
 }
 
-void RacerGame::GameOver() {
+void RacerGame::GameOverEvent() 
+{
+#if WINDOWS_BUILD
 	Sound* over=GameStateManager::Audio()->GetSound(SOUNDSDIR"gameover2.6sec.wav");
 	GameStateManager::Audio()->PlaySoundA (over,SOUNDPRIORITY_ALWAYS,true, false);
+#endif
 	GameStateManager::Graphics()->EnableLoadingIcon(true);
 	gameOver = true;
 	inputEnabled = false;
@@ -881,9 +890,7 @@ void RacerGame::GameOver() {
 	GameStateManager::AddGameScreen(scoreboard);	
 	}
 	else {
-		GameStateManager::RemoveGameScreen(this);
-		GameStateManager::RemoveGameScreen(hud);
-		GameStateManager::AddGameScreen(new MainMenu);
+		GameStateManager::AddGameScreen(new GameOver(this, hud));
 	}
 	GameStateManager::Graphics()->EnableLoadingIcon(false);
 }
