@@ -142,7 +142,23 @@ void RacerGame::Update() {
 #endif
 		isplaystartegine=true;
 	}
-	if(isplaylowspdegine==false&&car->GetCarNode().GetLinearVelocity().Length()<170&&car->GetCarNode().GetLinearVelocity()!=T3Vector3(0,0,0))
+	if(isplaylowspdegine==false/*&&car->GetCarNode().GetLinearVelocity().Length()<170*/&&car->GetCarNode().GetLinearVelocity()!=T3Vector3(0,0,0))
+	{
+#if WINDOWS_BUILD
+		Sound* engine0=GameStateManager::Audio()->GetSound(SOUNDSDIR"midspeed.wav");
+		Engine0=GameStateManager::Audio()->PlaySoundA (engine0,SOUNDPRIORITY_ALWAYS,true, true);
+#endif
+		isplaylowspdegine=true;
+	}
+//	if(isplaylowspdegine==false&&car->GetCarNode().GetLinearVelocity().Length()>50&&car->GetCarNode().GetLinearVelocity()!=T3Vector3(0,0,0))
+//	{
+//#if WINDOWS_BUILD
+//		Sound* engine0=GameStateManager::Audio()->GetSound(SOUNDSDIR"lowspeedengine.wav");
+//		Engine0 = GameStateManager::Audio()->PlaySoundA (engine0,SOUNDPRIORITY_ALWAYS,true, true);
+//#endif		
+//		isplaylowspdegine==true;
+//	}
+	/*if(isplaylowspdegine==false&&car->GetCarNode().GetLinearVelocity().Length()<170&&car->GetCarNode().GetLinearVelocity()!=T3Vector3(0,0,0))
 	{
 #if WINDOWS_BUILD
 		Sound* engine0=GameStateManager::Audio()->GetSound(SOUNDSDIR"lowspeedengine.wav");
@@ -158,7 +174,7 @@ void RacerGame::Update() {
 		Engine1=GameStateManager::Audio()->PlaySoundA (engine1,SOUNDPRIORITY_ALWAYS,true, true);
 #endif
 		isplaymidspdegine=true;
-	}
+	}*/
 
 	if(carspeediszero==false&&moveenginesound==false&&car->GetCarNode().GetLinearVelocity()==T3Vector3(0,0,0))
 	{
@@ -176,19 +192,19 @@ void RacerGame::Update() {
 		}
 		if(start==4){
 			hud->SetStart("3");
-		}
+	}
 		if(start==3){
 			hud->SetStart("2");
-		}
+	}
 		if(start==2){
 			hud->SetStart("1");
-		}
+	}
 		if(start==1){
 			hud->SetStart("Go");
-		}
+	}
 		if(start==0){
 			hud->RemoveDrawable(hud->Start);
-		}
+	}
 		start=start-1;
 	}
 	SetPlayTime(-1);
@@ -383,7 +399,7 @@ void RacerGame::CreateTrack(){
 		TrackSegment* Strackn2 = (TrackSegment*) GameStateManager::Assets()->LoadTrackSegment(SplinePoint[4] - avg2,SplinePoint[5] - avg2,SplinePoint[6] - avg2, 5.0f, 50.0f);
 		TrackSegmentVector.push_back(Strackn2);
 			Texture* grassTex = GameStateManager::Assets()->LoadTexture(this, "trackTex", 0);
-	
+
 	PhysicsNode* proad2 = new PhysicsNode();
 	GameEntity* road2= new GameEntity(proad2);
 		road2->SetMesh(Strackn);
@@ -408,7 +424,7 @@ void RacerGame::CreateTrack(){
 		road2->ConnectToSystems();
 		AddDrawable(road2);
 		allEntities.push_back(road2);
-	
+
 	PhysicsNode* proad3 = new PhysicsNode();
 	GameEntity* road3= new GameEntity(proad3);
 		road3->SetMesh(Strackn2);
@@ -636,7 +652,7 @@ case KeyboardEvents::KEYBOARD_W:
 				GameStateManager::Pause();
 				break;
 			}
-	}
+			}
 	}
 }
 #endif
@@ -654,23 +670,23 @@ void RacerGame::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents:
 	case GamepadEvents::BUTTON_HELD:
 	case GamepadEvents::BUTTON_DOWN:
 		if (button == GamepadEvents::INPUT_R2_TRIGGER) {
-		
-			GameStateManager::Audio()->PlaySoundA(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
-			car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()+1.8);
-			if(car->GetVehiclePhysicsNode()->GetF()>GetMaxSpeed()) {
-				car->GetVehiclePhysicsNode()->SetF(GetMaxSpeed());
-		    }
-			T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
-			car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
-		}
 
+			GameStateManager::Audio()->PlaySoundA(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
+		car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()+1.8);
+			if(car->GetVehiclePhysicsNode()->GetF()>GetMaxSpeed()) {
+			car->GetVehiclePhysicsNode()->SetF(GetMaxSpeed());
+		}
+		T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+		car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
+		}
+			
 		if (button == GamepadEvents::INPUT_L2_TRIGGER) {
 			car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()-3.0);
 			if(car->GetVehiclePhysicsNode()->GetF() < (GetMinSpeed())) {
 				car->GetVehiclePhysicsNode()->SetF(GetMinSpeed());
-			}
-			T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
-			car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
+		}
+		T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+		car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
 		}
 		break;
 	}
@@ -702,7 +718,7 @@ void RacerGame::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents:
 	
 		//cout<<"Current Velocity: " << car->GetCarNode().GetLinearVelocity() << endl << endl << endl;
 	//}
-}
+	}
 	
 void RacerGame::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount)
 {
@@ -724,10 +740,10 @@ void RacerGame::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID,
 				 car->GetFrontRightTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 				 car->GetBackLeftTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 				 car->GetBackRightTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
-			}
+		}
 			
-			T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
-			car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
+		T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+		car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
 		}
 		else if (amount.x > 0.5f) {
 			if(car->GetCarNode().GetLinearVelocity().x>=0){
@@ -736,19 +752,19 @@ void RacerGame::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID,
 				 car->GetBackLeftTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 				  car->GetBackRightTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 				  car->GetCarNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
-		     }
+	}
 		if(car->GetCarNode().GetLinearVelocity().x<0){
 		    car->GetFrontLeftTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 		    car->GetFrontRightTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 			car->GetBackLeftTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 		    car->GetBackRightTire()->GetPhysicsNode().SetOrientation(car->GetCarNode().GetOrientation());
 			car->GetCarNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
-		}	
+		}
 
 		T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
 		car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
-		
-		}
+	
+	}
 	break;
 	}
 	//if(analogueControl == GamepadEvents::LEFT_STICK)
@@ -785,18 +801,25 @@ void RacerGame::Pause() {
 	GameStateManager::Physics()->Pause();
 	inputEnabled = false;
 	GameStateManager::AddGameScreen(new PauseScreen(this, hud));
-#ifdef WINDOWS_BUILD
-	GameStateManager::Graphics()->EnableMousePointer(true);
-#endif
+	GameStateManager::Audio()->StopSound(Engine0);
+	//GameStateManager::Audio()->StopSound(Engine1);
 }
 
 void RacerGame::Resume() {
 	camera->Resume();
 	GameStateManager::Physics()->Resume();
 	inputEnabled = true;
-#ifdef WINDOWS_BUILD
-	GameStateManager::Graphics()->EnableMousePointer(false);
-#endif
+	isplaylowspdegine=false;
+	//if(car->GetCarNode().GetLinearVelocity().Length()<170)
+	//{
+	//	Sound* engine0=GameStateManager::Audio()->GetSound(SOUNDSDIR"lowspeedengine.wav");
+	//}
+	//if(car->GetCarNode().GetLinearVelocity().Length()>=170)
+	//{
+	//	Sound* engine1=GameStateManager::Audio()->GetSound(SOUNDSDIR"midspeed.wav");
+	//	Engine1=GameStateManager::Audio()->PlaySoundA (engine1,SOUNDPRIORITY_ALWAYS,true, true);;
+	//}
+
 }
 
 void RacerGame::UnloadContent() {
