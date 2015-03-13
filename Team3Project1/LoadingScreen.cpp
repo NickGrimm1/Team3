@@ -12,17 +12,11 @@ void LoadingScreen::LoadContent() {
 
 void LoadingScreen::Update() {
 	if (isLoading) {
-		GraphicsTestScreen* game = new GraphicsTestScreen();
-		GameStateManager::Instance()->AddGameScreen(game);
-
-//		HudTestScreen* hud = new HudTestScreen();
-//		GameStateManager::Instance()->AddGameScreen(hud);
-		
-//		GameStateManager::Graphics()->EnableLoadingIcon(false);
-//		isLoading = false;
+//		GraphicsTestScreen* game = new GraphicsTestScreen();
+//		GameStateManager::Instance()->AddGameScreen(game);
 	
-//		MainMenu* menu = new MainMenu();
-//		GameStateManager::Instance()->AddGameScreen(menu);
+		MainMenu* menu = new MainMenu();
+		GameStateManager::Instance()->AddGameScreen(menu);
 	
 		GameStateManager::Graphics()->EnableLoadingIcon(false);
 		isLoading = false;
