@@ -36,8 +36,9 @@ RacerGame::RacerGame(unsigned int lowestScore)
 	SplinePoint.push_back(sp3);
 	score=0;
 	Time=60.0f;
-	PlayTime=20;
+	PlayTime=25;
 	timeOrScore=0;
+	start=4;
 	isplaystartegine=false;
 	isplaylowspdegine=false;
 	isplaymidspdegine=false;
@@ -169,6 +170,25 @@ void RacerGame::Update() {
 
 	}
 	if((Time-60)==0){
+		if(start>=0)
+	{
+		if(start==4){
+			hud->SetStart("3");
+		}
+		if(start==3){
+			hud->SetStart("2");
+		}
+		if(start==2){
+			hud->SetStart("1");
+		}
+		if(start==1){
+			hud->SetStart("Go");
+		}
+		if(start==0){
+			hud->RemoveDrawable(hud->Start);
+		}
+		start=start-1;
+	}
 	SetPlayTime(-1);
 	Time=0;
 	if(GetPlayTime()<0){
@@ -178,6 +198,7 @@ void RacerGame::Update() {
 	hud->SetScreen(GetScore(),GetPlayTime(),car->GetVehiclePhysicsNode()->GetF());
 	}
 	Time+=1;
+	
 }
 void RacerGame::SetMinSpeed(float value){
 minSpeed+=value;
@@ -490,6 +511,7 @@ float RacerGame::GetCreateAngle(){
 #if WINDOWS_BUILD
 void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
 	float R=0.707106829f;
+	if(start<0){
 	switch (type) {
 	case KeyboardEvents::KEY_DOWN:
 	case KeyboardEvents::KEY_HELD:
@@ -608,6 +630,7 @@ case KeyboardEvents::KEYBOARD_W:
 				GameStateManager::Pause();
 				break;
 			}
+	}
 	}
 }
 #endif
