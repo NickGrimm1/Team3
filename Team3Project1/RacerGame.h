@@ -51,12 +51,21 @@ public:
 	void SettimeOrScore(int value){timeOrScore+=value;}
 	int GettimeOrScore(){return timeOrScore;}
 
+	void SetMaxSpeed(float value){maxSpeed+=value;}
+	float GetMaxSpeed(){return maxSpeed;}
+	void SetMinSpeed(float value);
+	float GetMinSpeed(){return minSpeed;}
+
+	void GameOver(){}
+
 	void CreateTrack();
 	void DeleteTrack();
 	void Start();
 	float GetCreateAngle();
 	//float f;
 	float b;
+	float maxSpeed;
+	float minSpeed;
 	int Speed_Player;
 	float Speed_Rotate;
 	T3Vector3 tempPosition;
@@ -84,6 +93,14 @@ public:
 		  if(obj1->GetType()=='g')
 		  {
 			  if(obj1->GetPhysicsNode().GetIsCollide()==false){
+				  if(GettimeOrScore()>3){
+					  SetPlayTime(4);
+					 // if((GetMaxSpeed()-GetMinSpeed())>40){
+					  SetMinSpeed(10);
+					  SetMaxSpeed(10);
+					  //}
+			      
+			}
 			   CreateTrack();
 			   	GameStateManager::Graphics()->RemoveDrawable(checkPoint[0]);
 	            checkPoint[0]->DisconnectFromSystems();
@@ -126,8 +143,12 @@ public:
 			   if(obj1->GetType()=='t')
 		  {
 			  obj1->GetPhysicsNode().SetIsCollide(false);
-			  SettimeOrScore(-(GettimeOrScore()));
-			  SetPlayTime(30);
+			  if(GetScore()<40){
+			  SetPlayTime(2);
+			  }
+			  if(GetScore()>=40){
+				  SetMinSpeed(-40.0f);
+			  }
 			  GameStateManager::Graphics()->RemoveDrawable(obj1);
 	          obj1->DisconnectFromSystems();
 		  }

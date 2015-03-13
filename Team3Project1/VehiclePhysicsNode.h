@@ -29,11 +29,13 @@ public:
 		carMesh=GameStateManager::Assets()->LoadMesh(this, MESHDIR"CarPhysics.obj");
 		tireMesh=GameStateManager::Assets()->LoadMesh(this, MESHDIR"NovaTire.obj");
 		collisionVertices = new Vertex[carMesh->GetNumVertices() + 4 * tireMesh->GetNumVertices()];
-		f=0;
+		f=160.0f;
+		minSpeed=160.0f;
 	}
 
 	~VehiclePhysicsNode(void){}
-
+	void SetMinSpeed(float value){minSpeed=value;}
+	float GetMinSpeed(){return minSpeed;}
 	virtual void		Update(float msec) {
 		
 
@@ -47,31 +49,22 @@ public:
 		UpdatePhysicsMesh();
 
 
-		if(this->GetLinearVelocity()==T3Vector3(0,0,0) && f!=0)
-	{
-	  f=0;
-	}
+	
 
 
-		if(f>0){
+		if(f>=GetMinSpeed()){
 		f=f-0.35;
-	if(f<0)
+	if(f<GetMinSpeed())
 	{
-	f=0;
+	f=GetMinSpeed();
 	}
 	 T3Matrix4 m4 = this->GetOrientation().ToMatrix();
 				   this->SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
 	}
+		if(f<GetMinSpeed()){
+		f=GetMinSpeed();
+		}
 
-	if(f<0){
-		f=f+0.35;
-	if(f>0)
-	{
-	 f=0;
-	}
-	 T3Matrix4 m4 = this->GetOrientation().ToMatrix();
-				  this->SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*f);
-	}
 
 
 
@@ -141,7 +134,7 @@ private:
 	Vertex* collisionVertices;
 	float size;
 	float f;
-
+	float minSpeed;
 
 
 };

@@ -38,7 +38,7 @@ RacerGame::RacerGame(void)
 	SplinePoint.push_back(sp3);
 	score=0;
 	Time=60.0f;
-	PlayTime=30;
+	PlayTime=20;
 	timeOrScore=0;
 
 	DebugOverlay* debug = new DebugOverlay();
@@ -224,6 +224,8 @@ void RacerGame::LoadContent() {
 	Speed_Player = 2;
 	//f=0.0f;
 	b=0.0f;
+	maxSpeed=300.0f;
+	minSpeed=160.0f;
 	temp2=T3Vector3(0.0f,0.0f,0.0f);
 	Speed_Rotate = 1.0f;
 	tempPosition = T3Vector3(0.0f,350.0f,-800.0f);
@@ -319,12 +321,22 @@ void RacerGame::Update() {
 	if((Time-60)==0){
 	SetPlayTime(-1);
 	Time=0;
+	if(GetPlayTime()<0){
+		GameOver();
+		cout<<"game over"<<endl;
+	}
 #if WINDOWS_BUILD
-	hud->SetScreen(GetScore(),GetPlayTime());
+	hud->SetScreen(GetScore(),GetPlayTime(),car->GetVehiclePhysicsNode()->GetF());
+
 #endif
 	}
 	Time+=1;
 }
+void RacerGame::SetMinSpeed(float value){
+minSpeed+=value;
+	car->GetVehiclePhysicsNode()->SetMinSpeed(GetMinSpeed());	
+}
+
 void RacerGame::Start(){
 	cout << "RacerGame: Start()" << endl;
 	Gold_cion * gold_cion= new Gold_cion(20.0f);
@@ -720,7 +732,7 @@ void RacerGame::CreateTrack(){
 	AddDrawable(checkpoint2);
 	checkPoint.push_back(checkpoint2);
 
-	if(GettimeOrScore()!=3){
+	if(GettimeOrScore()!=4){
 	Gold_cion * gold_cion= new Gold_cion(20.0f);
 
 	gold_cion->SetOriginPosition(SplinePoint[4]+T3Vector3((rand() % 10)-5.0f,0.0f,(rand() % 10)-5.0f));
@@ -734,7 +746,7 @@ void RacerGame::CreateTrack(){
 	AddDrawable(gold_cion);
 	pickup.push_back(gold_cion);
 	}
-	if(GettimeOrScore()==3){
+	if(GettimeOrScore()==4){
 	Gold_cion * gold_cion= new Gold_cion(20.0f);
 
 	gold_cion->SetOriginPosition(SplinePoint[4]+T3Vector3((rand() % 10)-5.0f,0.0f,(rand() % 10)-5.0f));
@@ -746,9 +758,9 @@ void RacerGame::CreateTrack(){
 	gold_cion->GetPhysicsNode().SetPGE(gold_cion);
 
 	AddDrawable(gold_cion);
-	 SettimeOrScore(-(GettimeOrScore()));
+	SettimeOrScore(-(GettimeOrScore()));
 
-	 pickup.push_back(gold_cion);
+	pickup.push_back(gold_cion);
 	}
 
 }
@@ -1201,8 +1213,8 @@ case KeyboardEvents::KEYBOARD_7:
 
 			      // f=f+1.8;
 			car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()+1.8);
-				if(car->GetVehiclePhysicsNode()->GetF()>350) {
-				   car->GetVehiclePhysicsNode()->SetF(350);
+			if(car->GetVehiclePhysicsNode()->GetF()>GetMaxSpeed()) {
+				car->GetVehiclePhysicsNode()->SetF(GetMaxSpeed());
 		       }
 				   T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
 				   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
@@ -1212,8 +1224,8 @@ case KeyboardEvents::KEYBOARD_7:
 			{//camera->AddMovement(T3Vector3(0,0,1));
 				// f=f-3.0;
 				car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()-3.0);
-				if(car->GetVehiclePhysicsNode()->GetF() < (-90)) {
-					car->GetVehiclePhysicsNode()->SetF(-90);
+				if(car->GetVehiclePhysicsNode()->GetF() < (GetMinSpeed())) {
+					car->GetVehiclePhysicsNode()->SetF(GetMinSpeed());
 		}
            T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
 				   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
