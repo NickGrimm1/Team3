@@ -61,6 +61,23 @@ Renderer::Renderer(vector<Light*>& lightsVec, vector<SceneNode*>& SceneNodesVec,
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, width, height, 0, GL_RG, GL_HALF_FLOAT, 0);*/
 
 	// Generate Sky Buffer & initial static map.
+	cloudMap = new CellGcmTexture();
+	cloudMap->width = 128;
+	cloudMap->height = 128;
+	cloudMap->pitch = 128*4;
+	cloudMap->depth = 1;
+	char *rsxdata = (char*)localMemoryAlign(128, 128*4*128);
+	CreateStaticMap(rsxdata, 128, 0, 255); 
+	unsigned int offset;
+	cellGcmAddressToOffset(rsxdata, &offset);
+	cloudMap->location = CELL_GCM_LOCATION_LOCAL;	//We want the texture in graphics memory
+	cloudMap->offset = offset;						//at he following offset
+	cloudMap->format = CELL_GCM_TEXTURE_A8R8G8B8;	//ARGB format - there doesn't seem to be a RGB format!
+	cloudMap->format = CELL_GCM_TEXTURE_LN;		//Data is a 'linear' array of values
+	cloudMap->mipmap = 1;		//How many mipmap levels are there (1 == 'largest level mipmap')
+	cloudMap->cubemap = CELL_GCM_FALSE;	//No...it's not a cubemap
+	cloudMap->dimension	= CELL_GCM_TEXTURE_DIMENSION_2;	//It's a 2D Texture...
+
 	/*for (int i = 0; i < 2; ++i) {
 		glGenTextures(1, &skyColourBuffer[i]);
 		glBindTexture(GL_TEXTURE_2D, skyColourBuffer[i]);
@@ -173,11 +190,24 @@ Renderer::Renderer(vector<Light*>& lightsVec, vector<SceneNode*>& SceneNodesVec,
 
 	//glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); // cube sampling
 
-	//CreateStaticMap(&cloudMap, 128, 0, 255);
+	
 
 	shader = NULL;
 	loadedTextMeshes.clear();
 	//init = true;	
+}
+
+void Renderer::CreateStaticMap(char* data, const int resolution, unsigned char minValue, unsigned char maxValue)
+{
+	cout << "create static map" << endl;
+	for (int x = 0; x < resolution; ++x)
+		for (int y = 0; y < resolution; ++y)
+			for (int i = 0; i < 4; ++i)
+			{
+				data[x * resolution * 4 + y * 4 + i] = (rand() % (maxValue - minValue) + minValue) / (float)maxValue;
+				cout << x * resolution * 4 + y * 4 + i << endl;
+			}
+	cout << "static map created" << endl;
 }
 
 bool Renderer::LoadShaders()
@@ -259,9 +289,8 @@ bool Renderer::LoadAssets() {
 	coneMesh = GameStateManager::Assets()->LoadCone(this, 20); // Cone for spotlight rendering
 	skyDome = GameStateManager::Assets()->LoadMesh(this, MESHDIR"dome.obj"); // Skydome
 	quadMesh = GameStateManager::Assets()->LoadQuadAlt(this);
-	//nightSkyTex = (GameStateManager::Assets()->LoadTexture(this, "night_sky", 0))->GetTextureName();
-	//SetTextureRepeating(nightSkyTex, true);
-	//daySkyTex = (GameStateManager::Assets()->LoadTexture(this, "day_sky", 0))->GetTextureName();
+	nightSkyTex = GameStateManager::Assets()->LoadTexture(this, "night_sky", 0);
+	daySkyTex = GameStateManager::Assets()->LoadTexture(this, "day_sky", 0);
 
 	if (!sphereMesh || !coneMesh || !circleMesh || !screenMesh) 
 	{
@@ -279,8 +308,8 @@ void Renderer::UnloadAssets()
 	GameStateManager::Assets()->UnloadCone(this, 20); // Cone for spotlight rendering
 	GameStateManager::Assets()->UnloadMesh(this, MESHDIR"dome.obj"); // Skydome
 	GameStateManager::Assets()->UnloadQuadAlt(this);
-	//GameStateManager::Assets()->UnloadTexture(this, "night_sky");
-	//GameStateManager::Assets()->UnloadTexture(this, "day_sky");
+	GameStateManager::Assets()->UnloadTexture(this, "night_sky");
+	GameStateManager::Assets()->UnloadTexture(this, "day_sky");
 }
 
 Renderer::~Renderer(void)

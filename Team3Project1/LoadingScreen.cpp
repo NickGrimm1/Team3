@@ -12,8 +12,8 @@ void LoadingScreen::LoadContent() {
 
 void LoadingScreen::Update() {
 	if (isLoading) {
-		//GraphicsTestScreen* game = new GraphicsTestScreen();
-		//GameStateManager::Instance()->AddGameScreen(game);
+//		GraphicsTestScreen* game = new GraphicsTestScreen();
+//		GameStateManager::Instance()->AddGameScreen(game);
 
 //		HudTestScreen* hud = new HudTestScreen();
 //		GameStateManager::Instance()->AddGameScreen(hud);
@@ -58,7 +58,7 @@ void LoadingScreen::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEve
 		}
 		else if (button == GamepadEvents::INPUT_SELECT)
 		{
-			debugEnabled == !debugEnabled;
+			debugEnabled = !debugEnabled;
 			GameStateManager::Debug()->EnableDebugOverlay(debugEnabled);
 		}
 	}

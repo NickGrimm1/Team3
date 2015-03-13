@@ -74,6 +74,7 @@ GraphicsEngine::GraphicsEngine()
 	loadingTexture = new Texture("refresh", 0);
 #endif
 
+	cout << "Loading Texture loaded" << endl;
 	isLoading = true;
 	isLoadingDrawing = false;
 	
@@ -91,6 +92,8 @@ GraphicsEngine::GraphicsEngine()
 
 	renderer->SetLoadingIcon(loadingIcon);
 
+
+	cout << "Graphics Engine initialized" << endl;
 	isInitialised = true; // Graphics Engine has initialised successfully
 }
 

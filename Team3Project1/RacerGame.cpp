@@ -46,16 +46,18 @@ RacerGame::RacerGame(void)
 	PlayTime=20;
 	timeOrScore=0;
 	isplaystartegine=false;
-	isplayrunningegine=false;
+	isplaylowspdegine=false;
+	isplaymidspdegine=false;
 	moveenginesound=false;
 	carspeediszero=true;
 #if WINDOWS_BUILD
-	Engine = new SoundEmitter();
+	Engine0 = new SoundEmitter();
+	Engine1 = new SoundEmitter();
 #endif
 
 	//DebugOverlay* debug = new DebugOverlay();
 	//GameStateManager::Instance()->AddGameScreen(debug);
-
+		
 
 	//Strack = new TrackSegment(SplinePoint[0],SplinePoint[1],SplinePoint[2],5,50.f);
 	//TrackSegmentVector.push_back(Strack);
@@ -77,7 +79,6 @@ void RacerGame::LoadContent() {
 	GameStateManager::Instance()->AddGameScreen(hud);
 #if WINDOWS_BUILD
 	audio= new AudioTestClass();
-	
 	GameStateManager::Instance()->AddGameScreen(audio);
 #endif	
 	scoreTexture = GameStateManager::Assets()->LoadTexture(this, "score", 0);
@@ -167,7 +168,7 @@ void RacerGame::LoadContent() {
 	//chasecamera->AddYaw(500);
 	//chasecamera->AddPitch(90);
 	//car->SetPhysics(5,(vpn->GetCar()));
-	
+
 
 
 	car->GetVehiclePhysicsNode()->SetPGE(car);
@@ -284,7 +285,7 @@ void RacerGame::Update() {
 			else {
 				pickup[i]->FlipUpDown();
 				//pn.SetPosition(pn.GetPosition + T3Vector3(0.0f, -1.0f, 0.0f));
-			}
+	}
 		}
 		else {
 			if (pickup[i]->GetPhysicsNode().GetPosition().y > 3.0f)
@@ -295,7 +296,7 @@ void RacerGame::Update() {
 			}
 		}
 	}
-
+	
 	
 	//if(((abs(car->GetCarNode().GetLinearVelocity().x)+abs(car->GetCarNode().GetLinearVelocity().z))<0.5)&& f!=0)
 	//	
@@ -313,22 +314,34 @@ void RacerGame::Update() {
 		GameStateManager::Audio()->StopSound(audio->Getsoundemitter());
 #endif
 		isplaystartegine=true;
+
 	}
 
-	if(isplayrunningegine==false&&car->GetCarNode().GetLinearVelocity()!=T3Vector3(0,0,0))
+	if(isplaylowspdegine==false&&car->GetCarNode().GetLinearVelocity().Length()<170&&car->GetCarNode().GetLinearVelocity()!=T3Vector3(0,0,0))
 	{
 #if WINDOWS_BUILD
-		Sound* engine=GameStateManager::Audio()->GetSound(SOUNDSDIR"lowspeedengine.wav");
-		Engine=GameStateManager::Audio()->PlaySoundA (engine,SOUNDPRIORITY_ALWAYS,true, true);
+		Sound* engine0=GameStateManager::Audio()->GetSound(SOUNDSDIR"lowspeedengine.wav");
+		Engine0=GameStateManager::Audio()->PlaySoundA (engine0,SOUNDPRIORITY_ALWAYS,true, true);
 #endif
-		isplayrunningegine=true;
+		isplaylowspdegine=true;
 	}
+	if(isplaymidspdegine==false&&car->GetCarNode().GetLinearVelocity().Length()>=170)
+	{
+#if WINDOWS_BUILD
+		GameStateManager::Audio()->StopSound(Engine0);
+		Sound* engine1=GameStateManager::Audio()->GetSound(SOUNDSDIR"midspeed.wav");
+		Engine1=GameStateManager::Audio()->PlaySoundA (engine1,SOUNDPRIORITY_ALWAYS,true, true);
+#endif
+		isplaymidspdegine=true;
+	}
+
 	if(carspeediszero==false&&moveenginesound==false&&car->GetCarNode().GetLinearVelocity()==T3Vector3(0,0,0))
 	{
 #if WINDOWS_BUILD
-		GameStateManager::Audio()->StopSound(Engine);
+		GameStateManager::Audio()->StopSound(Engine1);
 #endif
 		moveenginesound=true;
+
 	}
 
 	/*if(car->GetVehiclePhysicsNode()->GetF()>0){
@@ -777,7 +790,7 @@ void RacerGame::CreateTrack(){
 
 
 
-	
+
 	//test road physics
 	PhysicsNode* proad2 = new PhysicsNode();
 	GameEntity* road2= new GameEntity(proad2);
@@ -804,7 +817,7 @@ void RacerGame::CreateTrack(){
 		AddDrawable(road2);
 		allEntities.push_back(road2);
 	//test end
-
+	
 
 	//add3
 	/*DrawableEntity3D* ent3 = new DrawableEntity3D(
@@ -1192,7 +1205,7 @@ void RacerGame::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents:
 		}
 		T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
 		car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
-			
+	
 		cout<<"Current Velocity: " << car->GetCarNode().GetLinearVelocity() << endl << endl << endl;
 	}
 };
@@ -1201,23 +1214,6 @@ void RacerGame::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID,
 {
 	cout << "RacerGame: analogue moved" << endl;
 	if(analogueControl == GamepadEvents::LEFT_STICK)
-	{
-		//if(abs(amount.y) > DEADZONE )
-		//{
-			car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()+1.8);
-		if(car->GetVehiclePhysicsNode()->GetF()>GetMaxSpeed())
-		{
-			car->GetVehiclePhysicsNode()->SetF(GetMaxSpeed());
-		}
-		T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
-		car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
-			
-		cout<<"Current Velocity: " << car->GetCarNode().GetLinearVelocity() << endl << endl << endl;
-			 /*T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
-			 car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*(abs(amount.y)));*/
-		//} 
-	}
-	if(analogueControl == GamepadEvents::RIGHT_STICK)
 	{
 		car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()+1.8);
 		if(car->GetVehiclePhysicsNode()->GetF()>GetMaxSpeed())
@@ -1228,13 +1224,20 @@ void RacerGame::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID,
 		car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
 			
 		cout<<"Current Velocity: " << car->GetCarNode().GetLinearVelocity() << endl << endl << endl;
-		//if(abs(amount.y) > DEADZONE)
-		//{
-		//	 T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
-		//	 car->GetCarNode().SetLinearVelocity(T3Vector3(10,10,10));//( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*(abs(amount.y)));
-		//} 
+			 
+	}
+	if(analogueControl == GamepadEvents::RIGHT_STICK)
+	{
+		car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()+1.8);
+		if(car->GetVehiclePhysicsNode()->GetF()>GetMaxSpeed())
+		{
+			car->GetVehiclePhysicsNode()->SetF(GetMaxSpeed());
+		}
+		T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+		car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
+	
+		cout<<"Current Velocity: " << car->GetCarNode().GetLinearVelocity() << endl << endl << endl;
+		
 	}
 	
-	
-	//camera->AddMovement(T3Vector3(amount.x,0,amount.y));
 };

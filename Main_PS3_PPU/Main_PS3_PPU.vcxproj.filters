@@ -31,4 +31,12 @@
     <CustomBuild Include="..\Resources\Shaders\TexturedVertex.cg" />
     <CustomBuild Include="..\Resources\Shaders\BlendedFragment.cg" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Resources\Shaders\SkyDomeFragment.cg">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Resources\Shaders\SkyDomeVertex.cg">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
 </Project>
