@@ -375,22 +375,16 @@ void RacerGame::Update() {
 }
 
 void RacerGame::Start(){
-	cout << "RacerGame: Start()" << endl;
+	
 	Gold_cion * gold_cion= new Gold_cion(20.0f);
-	cout << "RacerGame: Made a Gold_cion " << endl;
 	gold_cion->SetOriginPosition(T3Vector3(50.0f,50.0f,0.0f));
 	gold_cion->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
-
 	gold_cion->SetPhysics(8.0f,'p',T3Vector3(50.0f,0.0f,0.0f),Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
-	
 	gold_cion->SetType('p');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 	gold_cion->GetPhysicsNode().SetPGE(gold_cion);
-	cout << "RacerGame: Set Gold_cion params" << endl;
-
 	AddDrawable(gold_cion);
-	cout << "RacerGame: Added Gold_cion to drawables" << endl;
 	pickup.push_back(gold_cion);
-	cout << "RacerGame: Pushed Gold_cion to back of pickup vector" << endl;
+	
 
 	//starting track
 	float angle =0.0f;
@@ -988,26 +982,63 @@ void RacerGame::MouseMoved(T3Vector2& star, T3Vector2& finish) {
 
 void RacerGame::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button)
 {
-	
+	cout << "RacerGame: Button Pressed" << endl;
+	if(type == GamepadEvents::BUTTON_PRESS && button == GamepadEvents::INPUT_DPAD_UP)
+	{
+		car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()+1.8);
+		if(car->GetVehiclePhysicsNode()->GetF()>350) 
+		{
+		   car->GetVehiclePhysicsNode()->SetF(350);
+		}
+		T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+		car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
+	}
+	if(type == GamepadEvents::BUTTON_DOWN && button == GamepadEvents::INPUT_DPAD_UP)
+	{
+		car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()+1.8);
+		if(car->GetVehiclePhysicsNode()->GetF()>350) 
+		{
+		   car->GetVehiclePhysicsNode()->SetF(350);
+		}
+		T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+		car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
+	}
 };
 	
 void RacerGame::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount)
 {
+	cout << "RacerGame: analogue moved" << endl;
 	if(analogueControl == GamepadEvents::LEFT_STICK)
 	{
-		if(abs(amount.y) > DEADZONE )
-		{
-			 T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
-			 car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*(abs(amount.y)));
-		} 
+		//if(abs(amount.y) > DEADZONE )
+		//{
+			car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()+1.8);
+			if(car->GetVehiclePhysicsNode()->GetF()>350) 
+			{
+			   car->GetVehiclePhysicsNode()->SetF(350);
+		    }
+			   T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+			   car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
+			   
+			 /*T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+			 car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*(abs(amount.y)));*/
+		//} 
 	}
 	if(analogueControl == GamepadEvents::RIGHT_STICK)
 	{
-		if(abs(amount.y) > DEADZONE)
+		car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()+1.8);
+		if(car->GetVehiclePhysicsNode()->GetF()>350) 
 		{
-			 T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
-			 car->GetCarNode().SetLinearVelocity(T3Vector3(10,10,10));//( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*(abs(amount.y)));
-		} 
+		   car->GetVehiclePhysicsNode()->SetF(350);
+		}
+		T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+		car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
+
+		//if(abs(amount.y) > DEADZONE)
+		//{
+		//	 T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
+		//	 car->GetCarNode().SetLinearVelocity(T3Vector3(10,10,10));//( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*(abs(amount.y)));
+		//} 
 	}
 	
 	
