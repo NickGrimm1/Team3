@@ -19,7 +19,8 @@ Version: 0.0.1 03/02/2015.</summary>
  # include "../FrameWork/T3Vector3.h"
  # include "../FrameWork/SceneNode.h"
  # include "../FrameWork/T3Matrix4.h"
- # include "../FrameWork/camera.h"
+ # include "../FrameWork/camera.h"	
+ # include "MutexClass.h"
  //# include   "../FrameWork/Vehicle.h"
  using std :: vector ;
 
@@ -132,6 +133,7 @@ private:
 	vector < SoundEmitter * > temporaryEmitters ;
 
 	static AudioEngine* instance;
+	//MutexClass Mutex;
 
 	//bool isRunning;
 };

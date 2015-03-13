@@ -14,10 +14,12 @@
 	isRunning = true;
 	while (isRunning)
 	{
+		//Mutex.lock_mutex();
 		while (Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp <(1000.0f/(float) RENDER_HZ )){ ; } // Fix the timestep
 		float msec = (float) Window::GetWindow().GetTimer()->GetMS() - lastFrameTimeStamp;
 		lastFrameTimeStamp = (float) Window::GetWindow().GetTimer()->GetMS();
 		Update (msec);
+		//Mutex.unlock_mutex();
 	}
  }
 
@@ -256,7 +258,7 @@
 
  void	AudioEngine::CullNodes() {
 	//for(vector<SoundEmitter*>::iterator i = frameEmitters.begin(); i != emitters.end();) {
-
+	  //Mutex.lock_mutex();
 	  for(vector<SoundEmitter*>::iterator i = frameEmitters.begin(); i != frameEmitters.end();) {
 
 		float length;
@@ -277,30 +279,37 @@
 			++i;
 		}
 	 }
+	// Mutex.unlock_mutex();
 	//}
 }
 
  void AudioEngine :: DetachSources ( vector < SoundEmitter * >:: iterator from , vector < SoundEmitter * >:: iterator to ) {
+	// Mutex.lock_mutex();
 	 for ( vector < SoundEmitter * >:: iterator i = from ; i != to ; ++ i ) {
 		(* i ) -> DetachSource ();
 	 }
+	// Mutex.unlock_mutex();
  }
 
  void AudioEngine :: AttachSources ( vector < SoundEmitter * >:: iterator from , vector < SoundEmitter * >:: iterator to ) {
+	// Mutex.lock_mutex();
 	 for ( vector < SoundEmitter * >:: iterator i = from ; i != to ; ++ i ) {
 		 if (!(* i ) -> GetSource ()) {
 			(* i ) -> AttachSource ( GetSource ());
 		 }
 	 }
+	// Mutex.unlock_mutex();
  }
 
  OALSource * AudioEngine :: GetSource () {
+	// Mutex.lock_mutex();
 	 for ( vector < OALSource * >:: iterator i = sources.begin (); i != sources.end (); ++ i ) {
 		 OALSource * s = * i ;
 		 if (! s -> inUse ) {
 			return s ;
 		 }
 	 }
+	// Mutex.unlock_mutex();
 	 return NULL ;
  }
 

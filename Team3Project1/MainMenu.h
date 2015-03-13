@@ -101,4 +101,5 @@ private:
 	Scoreboard* scoreBoardConn;
 	vector<pair<DrawableText2D*, DrawableText2D*>> scores;
 #endif
+
 };

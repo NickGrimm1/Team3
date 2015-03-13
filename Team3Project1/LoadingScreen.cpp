@@ -27,6 +27,7 @@ void LoadingScreen::Update() {
 
 		GameStateManager::Graphics()->EnableLoadingIcon(false);
 		isLoading = false;
+		paused = false;
 	}
 }
 #if WINDOWS_BUILD
@@ -51,7 +52,13 @@ void LoadingScreen::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEve
 	{
 		if(button == GamepadEvents::INPUT_START)
 		{
-			// Pause
+			if (paused) {
+				GameStateManager::Resume();
+			}
+			else {
+				GameStateManager::Pause();
+			}
+			paused = !paused;
 		}
 		else if (button == GamepadEvents::INPUT_SELECT)
 		{

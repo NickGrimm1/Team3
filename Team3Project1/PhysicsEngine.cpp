@@ -410,11 +410,11 @@ void  PhysicsEngine::SortandSweep()
 						// if EPA
  						if (succeeded)
 				       {
-							CollisionHelper::AddCollisionImpulse(first, second, *data);
+							CollisionHelper::AddCollisionImpulse(first, second, *data);	
 				       }
 				   }
 					// the vehicle is going to drop 
-					second.SetIsDrop(true);					
+					second.SetIsDrop(true);	
 					
 				}
 
@@ -426,13 +426,21 @@ void  PhysicsEngine::SortandSweep()
 
 					if(car_y - floor_y < 5.5f)
 					   {
-						float err = abs(car_y - floor_y - 5.f)*2;
+						float err = abs(car_y - floor_y - 6.0f)*2;
 						T3Vector3 t3 = second.GetLinearVelocity();
 						t3.y = 0;
 						t3 =t3	+ T3Vector3(0,0.5,0) * (1+err);
 						second.SetLinearVelocity(t3);
 					   }
 				     }
+
+				if(second.GetPosition().y < -5.0f&& second.GetPosition().y > -8.0f)
+				{
+				if (gameClass != NULL) {
+						gameClass->carFall();
+					}
+				}
+				
 			}
 
 			if(second.Getplanecollision()==true && first.Getplanecollision()==false)
@@ -456,7 +464,7 @@ void  PhysicsEngine::SortandSweep()
 				       }
 				   }
 					// the vehicle is going to drop 
-					first.SetIsDrop(true);										
+					first.SetIsDrop(true);				
 				}
 
 				// keeping the vehicle on the track!
@@ -467,13 +475,20 @@ void  PhysicsEngine::SortandSweep()
 
 					if(car_y - floor_y < 5.5f)
 					   {
-						float err = abs(car_y - floor_y - 5.f)*2;
+						float err = abs(car_y - floor_y - 6.0f)*2;
 						T3Vector3 t3 = first.GetLinearVelocity();
 						t3.y = 0;
 						t3 =t3	+ T3Vector3(0,0.5,0) * (1+err);
 						first.SetLinearVelocity(t3);
 					   }
 				     }
+
+			if(first.GetPosition().y < -5.0f&& first.GetPosition().y > -8.0f)
+				{
+				if (gameClass != NULL) {
+						gameClass->carFall();
+					}
+				}
 			}
 			}
 
