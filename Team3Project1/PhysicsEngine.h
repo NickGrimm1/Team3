@@ -93,6 +93,10 @@ public:
 	void    OnCollision(PhysicsNode& p1, PhysicsNode& p2);
 
 	void    DrawDebug();
+
+	void	Pause() {paused = true;}
+	void	Resume() {paused = false;}
+
 private:
 #if WINDOWS_BUILD
 	PhysicsEngine()
@@ -100,6 +104,7 @@ private:
 	{
 		frameRate = 0;
 		gameClass = NULL;
+		paused = false;
 	}
 #endif
 #if PS3_BUILD
@@ -125,4 +130,6 @@ private:
 
 	void ThreadRun();
 	RacerGame* gameClass;
+
+	bool paused;
 };

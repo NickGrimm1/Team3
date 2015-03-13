@@ -204,7 +204,6 @@ bool Renderer::LoadAssets()
 	skyBoxShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"SkyDomeVertex.glsl", SHADERDIR"SkyDomeFragment.glsl");
 	cloudShader		 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"PassThroughVertex.glsl", SHADERDIR"PerlinFragment.glsl");
 	combineShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
-	particleShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
 	brightPassShader = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BrightPassFragment.glsl");
 	bloomCombShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BloomCombFragment.glsl");
 	gaussianShader	 = GameStateManager::Assets()->LoadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"GaussianFragment.glsl");
@@ -264,7 +263,6 @@ void Renderer::UnloadAssets()
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"SkyDomeVertex.glsl", SHADERDIR"SkyDomeFragment.glsl");
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"PassThroughVertex.glsl", SHADERDIR"PerlinFragment.glsl");
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"CombineVertex.glsl", SHADERDIR"CombineFragment.glsl");
-	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"ParticleVertex.glsl", SHADERDIR"ParticleFragment.glsl", SHADERDIR"ParticleGeometry.glsl");
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BrightPassFragment.glsl");//Bright-pass Shader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"BloomCombFragment.glsl");//Bloom combine Shader
 	GameStateManager::Assets()->UnloadShader(this, SHADERDIR"TexturedVertex.glsl", SHADERDIR"GaussianFragment.glsl");//Gaussian Blur Shader
@@ -327,7 +325,7 @@ void Renderer::RenderScene() {
 		GBufferPass(); // Split into separate pass from draw
 		DrawScene();
 
-		cout << "Meshes Last Frame: " << count << endl;
+		//cout << "Meshes Last Frame: " << count << endl;
 
 		count = 0;
 
@@ -475,12 +473,12 @@ void Renderer::DrawScene()
 	glClearColor(0.2f, 0.2f, 0.2f, 0.2f);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	
-	SetCurrentShader(basicShader);
+	//SetCurrentShader(basicShader);
 
 	// Bind Shader variables
 	viewMatrix = cameraMatrix;
 	projMatrix = perspectiveMatrix;
-	UpdateShaderMatrices();
+	//UpdateShaderMatrices();
 	
 	DrawNodes(true);
 
@@ -552,6 +550,13 @@ void Renderer::DrawNodes(bool enableTextures) {
 	for (unsigned int i = 0; i < sceneNodes.size(); i++) {
 		DrawableEntity3D& entity = *sceneNodes[i]->GetDrawableEntity();
 
+		if (entity.GetShader() == NULL) {
+			SetCurrentShader(basicShader);
+		}
+		else {
+			SetCurrentShader(entity.GetShader());
+		}
+
 		if (enableTextures) {
 			// Handle colour and bump textures
 			if (entity.GetTexture() && entity.GetTexture()->GetTextureName() > 0) {
@@ -583,7 +588,7 @@ void Renderer::DrawNodes(bool enableTextures) {
 		glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"),	1,false, (float*)&modelMatrix);
 		
 		textureMatrix.ToIdentity(); // add to texture/drawableentity class
-
+		UpdateShaderMatrices();
 		entity.GetMesh()->Draw();
 	}
 }

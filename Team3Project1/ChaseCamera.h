@@ -18,6 +18,7 @@ public:
 	{ }
 	
 	void UpdateCamera(); 
+
 private:
 	T3Vector3 expectedPosition;
 	float expectedPitch;

@@ -26,10 +26,12 @@ public:
 	RacerGame(void);
 	virtual ~RacerGame(void);
 	virtual void LoadContent();
-	virtual void UnloadContent() {}
+	virtual void UnloadContent();
 	virtual void Update();
 	static int update;
 
+	virtual void Pause();
+	virtual void Resume();
 
 	// Input Listener methods - not implemented
 #if WINDOWS_BUILD
@@ -104,11 +106,12 @@ public:
 			      
 			}
 			   CreateTrack();
-			   	GameStateManager::Graphics()->RemoveDrawable(checkPoint[0]);
+			  
 	            checkPoint[0]->DisconnectFromSystems();
+	delete checkPoint[0];
 	            checkPoint.erase(checkPoint.begin());
 			  }
-			  obj1->GetPhysicsNode().SetIsCollide(false);
+			 // obj1->GetPhysicsNode().SetIsCollide(false);
 			//  RacerGame::update=1;
 		 
 		  }
@@ -122,10 +125,10 @@ public:
 			 if(obj1->GetType()=='d')
 		  {
 			   DeleteTrack();
-			   GameStateManager::Graphics()->RemoveDrawable(checkPoint[0]);
 	checkPoint[0]->DisconnectFromSystems();
+	delete checkPoint[0];
 	checkPoint.erase(checkPoint.begin());
-			  obj1->GetPhysicsNode().SetIsCollide(false);
+			  //obj1->GetPhysicsNode().SetIsCollide(false);
 			  //RacerGame::update=2;
 			    SettimeOrScore(1);
 			  //RacerGame::update=2;
@@ -183,7 +186,6 @@ private:
 	#if WINDOWS_BUILD
 	SpotLight* light;
 #endif
-	FreeCamera* camera;
 	ChaseCamera* chasecamera;
 	Vehicle* car;
 

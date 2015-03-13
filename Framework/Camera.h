@@ -40,6 +40,7 @@ public:
 		originalRight(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix() * T3Vector3::UnitX()),
 		rotation(Quaternion::EulerAnglesToQuaternion(pitch, yaw, roll).ToMatrix())
 	{
+		isPaused = false;
 	}
 	virtual ~Camera(void){}
 
@@ -101,6 +102,10 @@ public:
 	<summary>Updates the camera</summary>
 	*/
 	virtual void UpdateCamera();
+
+	void Pause() {isPaused = true;}
+	void Resume() {isPaused = false;}
+
 	/**
 	<summary>Builds a view matrix for the current camera variables, suitable for sending straight
 	to a vertex shader (i.e it's already an 'inverse camera matrix')</summary>
@@ -116,4 +121,5 @@ protected:
 	T3Vector3 rotatedUp;
 	T3Vector3 rotatedRight;
 	bool invertY;
+	bool isPaused;
 };
