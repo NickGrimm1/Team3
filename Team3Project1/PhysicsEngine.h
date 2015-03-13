@@ -116,6 +116,7 @@ private:
 	{
 		frameRate = 0;
 		gameClass = NULL;
+		paused = false;
 	}
 #endif
 

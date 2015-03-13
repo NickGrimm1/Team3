@@ -36,8 +36,9 @@ RacerGame::RacerGame(unsigned int lowestScore)
 	SplinePoint.push_back(sp3);
 	score=0;
 	Time=60.0f;
-	PlayTime=20;
+	PlayTime=25;
 	timeOrScore=0;
+	start=4;
 	isplaystartegine=false;
 	isplaylowspdegine=false;
 	isplaymidspdegine=false;
@@ -168,6 +169,25 @@ void RacerGame::Update() {
 
 	}
 	if((Time-60)==0){
+		if(start>=0)
+	{
+		if(start==4){
+			hud->SetStart("3");
+		}
+		if(start==3){
+			hud->SetStart("2");
+		}
+		if(start==2){
+			hud->SetStart("1");
+		}
+		if(start==1){
+			hud->SetStart("Go");
+		}
+		if(start==0){
+			hud->RemoveDrawable(hud->Start);
+		}
+		start=start-1;
+	}
 	SetPlayTime(-1);
 	Time=0;
 	if(GetPlayTime()<0){
@@ -177,6 +197,7 @@ void RacerGame::Update() {
 	hud->SetScreen(GetScore(),GetPlayTime(),car->GetVehiclePhysicsNode()->GetF());
 	}
 	Time+=1;
+	
 }
 void RacerGame::SetMinSpeed(float value){
 minSpeed+=value;
@@ -331,9 +352,9 @@ void RacerGame::DeleteTrack(){
 	allEntities[1]->DisconnectFromSystems();
 	allEntities.erase(allEntities.begin());
 	allEntities.erase(allEntities.begin());
-	delete TrackSegmentVector[0];
+	GameStateManager::Assets()->UnloadTrackSegment(TrackSegmentVector[0]);
 	TrackSegmentVector.erase(TrackSegmentVector.begin());
-	delete TrackSegmentVector[0];
+	GameStateManager::Assets()->UnloadTrackSegment(TrackSegmentVector[0]);
 	TrackSegmentVector.erase(TrackSegmentVector.begin());
 	SplinePoint.erase(SplinePoint.begin());
 	SplinePoint.erase(SplinePoint.begin());
@@ -488,7 +509,9 @@ float RacerGame::GetCreateAngle(){
 
 #if WINDOWS_BUILD
 void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
+	if (!inputEnabled) return;
 	float R=0.707106829f;
+	if(start<0){
 	switch (type) {
 	case KeyboardEvents::KEY_DOWN:
 	case KeyboardEvents::KEY_HELD:
@@ -608,6 +631,7 @@ case KeyboardEvents::KEYBOARD_W:
 				break;
 			}
 	}
+	}
 }
 #endif
 #if WINDOWS_BUILD
@@ -699,33 +723,28 @@ void RacerGame::UnloadContent() {
 
 	SplinePoint.clear();	
 
-	for(int i=0;i<TrackSegmentVector.size();i++){
-	delete TrackSegmentVector[i];
-	}
-		TrackSegmentVector.clear();
-
-
 	for(int i=0;i<allEntities.size();i++){
-		GameStateManager::Graphics()->RemoveDrawable(allEntities[i]);
-	 allEntities[i]->DisconnectFromSystems();
-	
+		GameStateManager::Graphics()->RemoveDrawable(allEntities[i], false);
+		 allEntities[i]->DisconnectFromSystems();
 	}
 	allEntities.clear();
 
 	for(int i=0;i<pickup.size();i++){
-		GameStateManager::Graphics()->RemoveDrawable(pickup[i]);
-	 pickup[i]->DisconnectFromSystems();
-	
+		GameStateManager::Graphics()->RemoveDrawable(pickup[i], false);
+		pickup[i]->DisconnectFromSystems();
 	}
 	pickup.clear();
 
 	for(int i=0;i<checkPoint.size();i++){
-		GameStateManager::Graphics()->RemoveDrawable(checkPoint[i]);
-	 checkPoint[i]->DisconnectFromSystems();
-
+		GameStateManager::Graphics()->RemoveDrawable(checkPoint[i], false);
+		checkPoint[i]->DisconnectFromSystems();
 	}
 	checkPoint.clear();
 
+	for(int i=0;i<TrackSegmentVector.size();i++){
+		GameStateManager::Assets()->UnloadTrackSegment(TrackSegmentVector[i]);
+	}
+	TrackSegmentVector.clear();
 
 }
 
