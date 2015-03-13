@@ -547,31 +547,39 @@ void Renderer::DrawNodes(bool enableTextures)
 			// Handle colour and bump textures
 			if (entity.GetTexture() && entity.GetTexture()->GetTexture()) 
 			{
-				SetTextureSampler(shader->GetFragment()->GetParameter("texture"), entity.GetTexture()->GetTexture());
-				//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 1);	
-			}
-			else
+				CellGcmTexture* t = entity.GetTexture()->GetTexture(); //texture->GetTexture();
+				SetTextureSampler(shader->GetFragment()->GetParameter("texture"), t);
+				//SetTextureSampler(shader->GetFragment()->GetParameter("texture"), entity.GetTexture()->GetTexture());
+				
+			}else if(entity.GetMesh()->GetNormTex() && entity.GetMesh()->GetNormTex()->GetTexture())
 			{
-				//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 0);	
+				CellGcmTexture* t = entity.GetMesh()->GetNormTex()->GetTexture(); //texture->GetTexture();
+				SetTextureSampler(shader->GetFragment()->GetParameter("texture"), t);
 			}
+		}
 		
-			if (entity.GetBumpTexture() && entity.GetBumpTexture()->GetTexture()) 
-			{
-				//glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_NORMAL_TEXTURE_UNIT);
-				//glBindTexture(GL_TEXTURE_2D, entity.GetBumpTexture()->GetTextureName());
-				//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "normalTex"), MESH_OBJECT_NORMAL_TEXTURE_UNIT);
-				//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 1);	
-			}
-			else
-			{
-				//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
-			}
-		}
-		else 
-		{
-			//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 0);	
-			//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
-		}
+		//	else
+		//	{
+		//		//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 0);	
+		//	}
+		//
+		//	if (entity.GetBumpTexture() && entity.GetBumpTexture()->GetTexture()) 
+		//	{
+		//		//glActiveTexture(GL_TEXTURE0 + MESH_OBJECT_NORMAL_TEXTURE_UNIT);
+		//		//glBindTexture(GL_TEXTURE_2D, entity.GetBumpTexture()->GetTextureName());
+		//		//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "normalTex"), MESH_OBJECT_NORMAL_TEXTURE_UNIT);
+		//		//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 1);	
+		//	}
+		//	else
+		//	{
+		//		//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
+		//	}
+		//}
+		//else 
+		//{
+		//	//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 0);	
+		//	//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useNormalTex"), 0);
+		//}
 
 		// ignore shader for the minute
 
@@ -580,7 +588,7 @@ void Renderer::DrawNodes(bool enableTextures)
 			for (int y = 0; y < 4; ++y)
 				modelMatrix.setElem(x, y, m.values[y + x * 4]);
 		textureMatrix = Matrix4::identity(); // add to texture/drawableentity class
-
+		shader->GetVertex()->UpdateShaderMatrices(modelMatrix,viewMatrix,projMatrix);
 		entity.GetMesh()->Draw(shader);
 	}
 }

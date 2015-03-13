@@ -12,8 +12,8 @@ void LoadingScreen::LoadContent() {
 
 void LoadingScreen::Update() {
 	if (isLoading) {
-//		GraphicsTestScreen* game = new GraphicsTestScreen();
-//		GameStateManager::Instance()->AddGameScreen(game);
+		//GraphicsTestScreen* game = new GraphicsTestScreen();
+		//GameStateManager::Instance()->AddGameScreen(game);
 
 //		HudTestScreen* hud = new HudTestScreen();
 //		GameStateManager::Instance()->AddGameScreen(hud);
@@ -21,9 +21,10 @@ void LoadingScreen::Update() {
 //		GameStateManager::Graphics()->EnableLoadingIcon(false);
 //		isLoading = false;
 	
-		MainMenu* menu = new MainMenu();
-		GameStateManager::Instance()->AddGameScreen(menu);
-	
+//		MainMenu* menu = new MainMenu();
+//		GameStateManager::Instance()->AddGameScreen(menu);
+		RacerGame* game = new RacerGame();
+		GameStateManager::Instance()->AddGameScreen(game);
 		GameStateManager::Graphics()->EnableLoadingIcon(false);
 		isLoading = false;
 	}

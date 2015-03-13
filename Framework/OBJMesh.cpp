@@ -207,7 +207,6 @@ bool OBJMesh::BuildOBJMesh() {
 
 			m->numVertices	= sm->vertIndices.size();
 
-			
 			m->AssignVertexMemory();
 			for(unsigned int j = 0; j < sm->vertIndices.size(); ++j)
 			{
@@ -272,6 +271,7 @@ void OBJMesh::Draw() {
 		glUniform1i(glGetUniformLocation(prog, "useDiffuseTex"), 1);
 	}
 #endif
+
 #if WINDOWS_BUILD
 	Mesh::Draw();
 #endif//TODO fix for ps3
@@ -394,6 +394,11 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 			return;
 		}
 	}
+
+#if PS3_BUILD
+normTex = GameStateManager::Assets()->LoadTexture(this, texturePath,0);
+bumpTex = GameStateManager::Assets()->LoadTexture(this, texturePath,0);
+#endif
 }
 
 /*

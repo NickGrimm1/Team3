@@ -1,7 +1,7 @@
 #pragma once
-
 #include "GameScreen3D.h"
 #include "TrackSegment.h"
+#include "Heightmap.h"
 
 class GraphicsTestScreen : public GameScreen3D
 {
@@ -37,5 +37,10 @@ private:
 	TrackSegment* track;
 	vector<DrawableEntity3D*> gameEntities;
 	bool drawDeferredLights;
+	DrawableEntity3D* heightMap;
+	DrawableEntity3D* heightMapFront;
+	DrawableEntity3D* heightMapBack;
+	DrawableEntity3D* heightMapLeft;
+	DrawableEntity3D* heightMapRight;
 };
 

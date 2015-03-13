@@ -82,14 +82,20 @@ private:
 	Texture* soundNoMuteHover;
 	Texture* soundMute;
 	Texture* soundMuteHover;
-
+#if WINDOWS_BUILD
+	Sound* Mainmenu_BGM;
+	SoundEmitter* mainmusic;
+#endif
 	bool musicMuted;
 	bool soundMuted;
+	bool mainmenu_bgm;
 	MenuScreen3D* wallpaper;
 	DrawableText2D* pressStart;
 	GamepadEvents::PlayerIndex playerOne;
-
+	
+	GameTimer timer;
 	double connectionTime;
+	float CurrentTime;
 #if WINDOWS_BUILD
 	Scoreboard* scoreBoardConn;
 	vector<pair<DrawableText2D*, DrawableText2D*>> scores;

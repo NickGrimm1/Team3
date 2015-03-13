@@ -90,6 +90,7 @@
 		 alSourcei ( currentSource -> source , AL_BUFFER , sound -> GetBuffer ());
 		 ALuint error = alGetError();
 		 alSourcef ( currentSource -> source , AL_SEC_OFFSET ,( sound -> GetLength ()/ 1000.0) - ( timeLeft / 1000.0));
+		 alSourceRewind(currentSource->source);
 		 error = alGetError();
 		 if (error != 0) return;
 	 }

@@ -42,7 +42,7 @@ void GraphicsTestScreen::LoadContent() {
 	
 	DrawableEntity3D* ent;
 	
-	/*for (unsigned int i = 0; i < 8; i++) {
+	for (unsigned int i = 0; i < 8; i++) {
 		for (unsigned int j = 0; j < 8; j++) {
 			ent = new DrawableEntity3D(
 				quad,
@@ -56,20 +56,15 @@ void GraphicsTestScreen::LoadContent() {
 			gameEntities.push_back(ent);
 			AddDrawable(ent);
 		}
-	}*/
+	}
 	
-#if WINDOWS_BUILD
-	GameStateManager::Graphics()->GetRenderContext();
-#endif
+	//GameStateManager::Graphics()->GetRenderContext();
+	//track = new TrackSegment(T3Vector3(-400, 0, 0), T3Vector3(0,0,-400), T3Vector3(400,0,0), 10, 50.0);
+	//GameStateManager::Graphics()->DropRenderContext();
 
-	track = new TrackSegment(T3Vector3(-400, 0, 0), T3Vector3(0,0,-400), T3Vector3(400,0,0), 10, 50.0);
-
+	heightMap = new DrawableEntity3D(
 #if WINDOWS_BUILD
-	GameStateManager::Graphics()->DropRenderContext();
-#endif
-	ent = new DrawableEntity3D(
-#if WINDOWS_BUILD
-		GameStateManager::Assets()->LoadHeightmap(0, 15, true),
+		GameStateManager::Assets()->LoadHeightmap(0, 75, true),
 #endif
 #if PS3_BUILD //TODO : PS3 Needs to draw a heightmap instead of a quad, change when heightmap fixed
 		GameStateManager::Assets()->LoadQuad(this),
@@ -77,84 +72,148 @@ void GraphicsTestScreen::LoadContent() {
 		NULL,
 		grassTex,
 		NULL,
-		800.0f,
-		T3Vector3(-500,-100,-500),
+		3000.0f,
+		T3Vector3(-1000,-100,-1000),
 		Quaternion::EulerAnglesToQuaternion(0,0,0),
 		T3Vector3(1,1,1));
-	AddDrawable(ent);
+	AddDrawable(heightMap);
 
-	ent = new DrawableEntity3D(
-		track,
+	heightMapRight = new DrawableEntity3D(
+#if WINDOWS_BUILD
+		GameStateManager::Assets()->LoadHeightmap(0, 75, true),
+#endif
+#if PS3_BUILD //TODO : PS3 Needs to draw a heightmap instead of a quad, change when heightmap fixed
+		GameStateManager::Assets()->LoadQuad(this),
+#endif
 		NULL,
 		grassTex,
 		NULL,
-		800.0f,
-		T3Vector3(0,0,0),
+		3000.0f,
+		T3Vector3(3080,-100,-1000),
 		Quaternion::EulerAnglesToQuaternion(0,0,0),
 		T3Vector3(1,1,1));
-	gameEntities.push_back(ent);
-	AddDrawable(ent);
+	AddDrawable(heightMapRight);
 
-	ent = new DrawableEntity3D(
-		cylinder, 
+	heightMapFront = new DrawableEntity3D(
+#if WINDOWS_BUILD
+		GameStateManager::Assets()->LoadHeightmap(0, 75, true),
+#endif
+#if PS3_BUILD //TODO : PS3 Needs to draw a heightmap instead of a quad, change when heightmap fixed
+		GameStateManager::Assets()->LoadQuad(this),
+#endif
 		NULL,
-		calvinTex,
+		grassTex,
 		NULL,
-		30.0f, 
-		T3Vector3(35,0,35), 
+		3000.0f,
+		T3Vector3(-1000,-100,-5080),
 		Quaternion::EulerAnglesToQuaternion(0,0,0),
-		T3Vector3(15,30,15));
-	gameEntities.push_back(ent);
-	AddDrawable(ent);
+		T3Vector3(1,1,1));
+	AddDrawable(heightMapFront);
 	
-
-	ent = new DrawableEntity3D(
-		circle, 
-		NULL,
-		calvinTex,
-		NULL,
-		30.0f, // needs same bounding radius as cylinder
-		T3Vector3(35,30,35), 
-		Quaternion::EulerAnglesToQuaternion(0,0,0),
-		T3Vector3(15,1,15));
-	gameEntities.push_back(ent);
-	AddDrawable(ent);
-
+	heightMapBack = new DrawableEntity3D(
 #if WINDOWS_BUILD
-	ent = new DrawableEntity3D(
-		cylinder, 
-		NULL,
-#if WINDOWS_BUILD
-		calvinTex,
+		GameStateManager::Assets()->LoadHeightmap(0, 75, true),
 #endif
-#if PS3_BUILD
-		nclTex,
+#if PS3_BUILD //TODO : PS3 Needs to draw a heightmap instead of a quad, change when heightmap fixed
+		GameStateManager::Assets()->LoadQuad(this),
 #endif
 		NULL,
-		30.0f, // needs same bounding radius as cylinder
-		track->GetTrackCentreLeft(),
+		grassTex,
+		NULL,
+		3000.0f,
+		T3Vector3(-1000,-100,3080),
 		Quaternion::EulerAnglesToQuaternion(0,0,0),
-		T3Vector3(5,15,5));
-	gameEntities.push_back(ent);
-	AddDrawable(ent);
+		T3Vector3(1,1,1));
+	AddDrawable(heightMapBack);
 
-	ent = new DrawableEntity3D(
-		cylinder, 
-		NULL,
+	heightMapLeft = new DrawableEntity3D(
 #if WINDOWS_BUILD
-		calvinTex,
+		GameStateManager::Assets()->LoadHeightmap(0, 75, true),
 #endif
-#if PS3_BUILD
-		nclTex,
+#if PS3_BUILD //TODO : PS3 Needs to draw a heightmap instead of a quad, change when heightmap fixed
+		GameStateManager::Assets()->LoadQuad(this),
 #endif
 		NULL,
-		30.0f, // needs same bounding radius as cylinder
-		track->GetTrackCentreRight(),
+		grassTex,
+		NULL,
+		3000.0f,
+		T3Vector3(-5080,-100,-1000),
 		Quaternion::EulerAnglesToQuaternion(0,0,0),
-		T3Vector3(5,15,5));
-	gameEntities.push_back(ent);
-	AddDrawable(ent);
-#endif
+		T3Vector3(1,1,1));
+	AddDrawable(heightMapLeft);
+
+//	ent = new DrawableEntity3D(
+//		track,
+//		NULL,
+//		grassTex,
+//		NULL,
+//		800.0f,
+//		T3Vector3(0,0,0),
+//		Quaternion::EulerAnglesToQuaternion(0,0,0),
+//		T3Vector3(1,1,1));
+//	gameEntities.push_back(ent);
+//	AddDrawable(ent);
+//
+//	ent = new DrawableEntity3D(
+//		cylinder, 
+//		NULL,
+//		calvinTex,
+//		NULL,
+//		30.0f, 
+//		T3Vector3(35,0,35), 
+//		Quaternion::EulerAnglesToQuaternion(0,0,0),
+//		T3Vector3(15,30,15));
+//	gameEntities.push_back(ent);
+//	AddDrawable(ent);
+//	
+//
+//	ent = new DrawableEntity3D(
+//		circle, 
+//		NULL,
+//		calvinTex,
+//		NULL,
+//		30.0f, // needs same bounding radius as cylinder
+//		T3Vector3(35,30,35), 
+//		Quaternion::EulerAnglesToQuaternion(0,0,0),
+//		T3Vector3(15,1,15));
+//	gameEntities.push_back(ent);
+//	AddDrawable(ent);
+//
+//#if WINDOWS_BUILD
+//	ent = new DrawableEntity3D(
+//		cylinder, 
+//		NULL,
+//#if WINDOWS_BUILD
+//		calvinTex,
+//#endif
+//#if PS3_BUILD
+//		nclTex,
+//#endif
+//		NULL,
+//		30.0f, // needs same bounding radius as cylinder
+//		track->GetTrackCentreLeft(),
+//		Quaternion::EulerAnglesToQuaternion(0,0,0),
+//		T3Vector3(5,15,5));
+//	gameEntities.push_back(ent);
+//	AddDrawable(ent);
+//
+//	ent = new DrawableEntity3D(
+//		cylinder, 
+//		NULL,
+//#if WINDOWS_BUILD
+//		calvinTex,
+//#endif
+//#if PS3_BUILD
+//		nclTex,
+//#endif
+//		NULL,
+//		30.0f, // needs same bounding radius as cylinder
+//		track->GetTrackCentreRight(),
+//		Quaternion::EulerAnglesToQuaternion(0,0,0),
+//		T3Vector3(5,15,5));
+//	gameEntities.push_back(ent);
+//	AddDrawable(ent);
+//#endif
 	//ent = new DrawableEntity3D(
 	//	car,
 	//	NULL,
@@ -167,15 +226,15 @@ void GraphicsTestScreen::LoadContent() {
 	//gameEntities.push_back(ent);
 	//AddDrawable(ent);
 	
-	//bool enableShadows = false;
-	//AddSpotLight(T3Vector3(-10, 40, -10), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 45.0f, T3Vector4(1,0,0,1), T3Vector4(0,0,1,1), enableShadows);
+	bool enableShadows = true;
+	AddSpotLight(T3Vector3(-10, 40, -10), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 45.0f, T3Vector4(1,0,0,1), T3Vector4(0,0,1,1), enableShadows);
 	//AddSpotLight(T3Vector3(50, 40, 50), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 90.0f, T3Vector4(0.5,0.5,0.5,1), T3Vector4(0,0,1,1), enableShadows);
 	//AddPointLight(T3Vector3(-50,60,-50), 500, T3Vector4(1,0,1,1), T3Vector4(0,0.5,0,1), enableShadows); 
 	//AddPointLight(T3Vector3(50,60,50), 500, T3Vector4(0,1,0,1), T3Vector4(0,0.5,0,1), enableShadows); 
 	//
 	//directionalLight = GameStateManager::Graphics()->AddDirectionalLight(T3Vector3(-1, -1, -1), T3Vector4(1,1,1,1), T3Vector4(0,0,0,1));
 
-	DrawableEntity3D* myEnt = new DrawableEntity3D(
+	/*DrawableEntity3D* myEnt = new DrawableEntity3D(
 		quad,
 		NULL,
 		GameStateManager::Assets()->LoadTexture(this,"ncl",0),
@@ -185,11 +244,11 @@ void GraphicsTestScreen::LoadContent() {
 		Quaternion::EulerAnglesToQuaternion(0,0,0),
 		T3Vector3(5,5,5));
 	gameEntities.push_back(myEnt);
-	AddDrawable(myEnt);
+	AddDrawable(myEnt);*/
 
 	//SetPlayer(ent);
 	camera = new FreeCamera();//ChaseCamera(myEnt, T3Vector3(0, 2, 50), 0, 0, 0);
-	camera->SetPosition(T3Vector3(0,10,80));
+	camera->SetPosition(T3Vector3(0,250,0));
 	
 	SetCamera(camera);
 }
@@ -233,22 +292,22 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 		switch (key) {
 
 		case KeyboardEvents::KEYBOARD_W:
-			camera->AddMovement(T3Vector3(0,0,-1));
+			camera->AddMovement(T3Vector3(0,0,-10));
 			break;
 		case KeyboardEvents::KEYBOARD_S:
-			camera->AddMovement(T3Vector3(0,0,1));
+			camera->AddMovement(T3Vector3(0,0,10));
 			break;
 		case KeyboardEvents::KEYBOARD_A:
-			camera->AddMovement(T3Vector3(-1,0,0));
+			camera->AddMovement(T3Vector3(-10,0,0));
 			break;
 		case KeyboardEvents::KEYBOARD_D:
-			camera->AddMovement(T3Vector3(1,0,0));
+			camera->AddMovement(T3Vector3(10,0,0));
 			break;
 		case KeyboardEvents::KEYBOARD_SHIFT:
-			camera->AddMovement(T3Vector3(0,1,0));
+			camera->AddMovement(T3Vector3(0,10,0));
 			break;
 		case KeyboardEvents::KEYBOARD_SPACE:
-			camera->AddMovement(T3Vector3(0,-1,0));
+			camera->AddMovement(T3Vector3(0,-10,0));
 			break;
 		case KeyboardEvents::KEYBOARD_LEFT:
 			camera->AddYaw(1);
@@ -277,6 +336,46 @@ void GraphicsTestScreen::KeyboardEvent(KeyboardEvents::EventType type, KeyboardE
 			break;
 		case KeyboardEvents::KEYBOARD_ESCAPE:
 			GameStateManager::Instance()->Exit();
+			break;
+		case KeyboardEvents::KEYBOARD_R:
+			{
+				Mesh* a = GameStateManager::Assets()->LoadHeightmap(0, 75, true);
+				Mesh* b = heightMap->GetMesh();
+				heightMap->SetMesh(a);
+				GameStateManager::Assets()->UnloadHeightmap(b);
+			}
+			break;
+		case KeyboardEvents::KEYBOARD_I:
+			{
+				Mesh* a = GameStateManager::Assets()->LoadHeightmap(0, 75, true, (HeightMap*)heightMap->GetMesh(), Side::BACK);
+				Mesh* b = heightMapFront->GetMesh();
+				heightMapFront->SetMesh(a);
+				GameStateManager::Assets()->UnloadHeightmap(b);
+			}
+			break;
+		case KeyboardEvents::KEYBOARD_K:
+			{
+				Mesh* a = GameStateManager::Assets()->LoadHeightmap(0, 75, true, (HeightMap*)heightMap->GetMesh(), Side::FRONT);
+				Mesh* b = heightMapBack->GetMesh();
+				heightMapBack->SetMesh(a);
+				GameStateManager::Assets()->UnloadHeightmap(b);
+			}
+			break;
+		case KeyboardEvents::KEYBOARD_J:
+			{
+				Mesh* a = GameStateManager::Assets()->LoadHeightmap(0, 75, true, (HeightMap*)heightMap->GetMesh(), Side::RIGHT);
+				Mesh* b = heightMapLeft->GetMesh();
+				heightMapLeft->SetMesh(a);
+				GameStateManager::Assets()->UnloadHeightmap(b);
+			}
+			break;
+		case KeyboardEvents::KEYBOARD_L:
+			{
+				Mesh* a = GameStateManager::Assets()->LoadHeightmap(0, 75, true, (HeightMap*)heightMap->GetMesh(), Side::LEFT);
+				Mesh* b = heightMapRight->GetMesh();
+				heightMapRight->SetMesh(a);
+				GameStateManager::Assets()->UnloadHeightmap(b);
+			}
 			break;
 		}
 	}

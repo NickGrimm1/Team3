@@ -1,4 +1,3 @@
-
 struct output {
 	float4 position : POSITION;
 	float2 texCoord : TEXCOORD1;

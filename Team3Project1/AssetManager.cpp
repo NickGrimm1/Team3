@@ -852,7 +852,7 @@ void AssetManager::UnloadFont(void* callerID, string filePath)
 	}
 }
 
-Mesh* AssetManager::LoadHeightmap(void* callerID, string filename, bool useTextureWeights)
+Mesh* AssetManager::LoadHeightmap(void* callerID, string filename, bool useTextureWeights, HeightMap* tileTo, unsigned int tileSide)
 {
 /*Broken For PS3*/
 #if WINDOWS_BUILD //TODO : Fix For PS3
@@ -873,17 +873,17 @@ Mesh* AssetManager::LoadHeightmap(void* callerID, string filename, bool useTextu
 	{
 		// Load this mesh in...
 		GameStateManager::Graphics()->GetRenderContext();
-		loadedMeshes.insert(pair<string, LoadedMesh>(filename, LoadedMesh(new HeightMap(filename, useTextureWeights), callerID)));
+		loadedMeshes.insert(pair<string, LoadedMesh>(filename, LoadedMesh(new HeightMap(filename, useTextureWeights, 0, 0, tileTo, tileSide), callerID)));
 		GameStateManager::Graphics()->DropRenderContext();
 		meshMemory += loadedMeshes[filename].mesh->GetMemoryUsage();
 		return loadedMeshes[filename].mesh;
 	}
 #endif
 }
-Mesh* AssetManager::LoadHeightmap(unsigned char minHeight, unsigned char maxHeight, bool useTextureWeights)
+Mesh* AssetManager::LoadHeightmap(unsigned char minHeight, unsigned char maxHeight, bool useTextureWeights, HeightMap* tileTo, unsigned int tileSide)
 {
 	GameStateManager::Graphics()->GetRenderContext();
-	Mesh* mesh = new HeightMap("", useTextureWeights, minHeight, maxHeight);
+	Mesh* mesh = new HeightMap("", useTextureWeights, minHeight, maxHeight, tileTo, tileSide);
 	GameStateManager::Graphics()->DropRenderContext();
 	generatedHeightmaps.push_back(mesh);
 	meshMemory += mesh->GetMemoryUsage();
