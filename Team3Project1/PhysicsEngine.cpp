@@ -426,7 +426,7 @@ void  PhysicsEngine::SortandSweep()
 
 					if(car_y - floor_y < 5.5f)
 					   {
-						float err = abs(car_y - floor_y - 5.f)*2;
+						float err = abs(car_y - floor_y - 6.0f)*2;
 						T3Vector3 t3 = second.GetLinearVelocity();
 						t3.y = 0;
 						t3 =t3	+ T3Vector3(0,0.5,0) * (1+err);
@@ -475,7 +475,7 @@ void  PhysicsEngine::SortandSweep()
 
 					if(car_y - floor_y < 5.5f)
 					   {
-						float err = abs(car_y - floor_y - 5.f)*2;
+						float err = abs(car_y - floor_y - 6.0f)*2;
 						T3Vector3 t3 = first.GetLinearVelocity();
 						t3.y = 0;
 						t3 =t3	+ T3Vector3(0,0.5,0) * (1+err);

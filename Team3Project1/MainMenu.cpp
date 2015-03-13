@@ -222,7 +222,7 @@ void MainMenu::NewGameClicked(float x, float y)
 	GameStateManager::Instance()->RemoveGameScreen(wallpaper);
 	
 
-	RacerGame* game = new RacerGame(score);
+	RacerGame* game = new RacerGame(score, playerOne);
 	GameStateManager::Physics()->SetGame(game);
 	GameStateManager::Instance()->AddGameScreen(game);
 	GameStateManager::Instance()->RemoveGameScreen(this);

@@ -12,6 +12,8 @@
 #include "Gold_cion.h"
 #include "HudTestScreen.h"
 #include "GameStateManager.h"
+#include "GameOver.h"
+
 class AudioTestClass;
 class Vehicle;
 class RacerGame : public GameScreen3D
@@ -20,7 +22,7 @@ public:
 	#if WINDOWS_BUILD
 	AudioTestClass* audio;
 #endif
-	RacerGame(unsigned int lowestScore);
+	RacerGame(unsigned int lowestScore, GamepadEvents::PlayerIndex playerController);
 	virtual ~RacerGame(void);
 	virtual void LoadContent();
 	virtual void UnloadContent();
@@ -37,7 +39,14 @@ public:
 #endif
 	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button);
 	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount);
-	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID){}
+	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID)
+	{
+		if (isControllerControlled)
+		{
+			playerController = GamepadEvents::PLAYERINDEX_MAX;
+			GameStateManager::Pause();
+		}
+	}
 	void SetScore(int value){score+=value;}
 	float GetScore(){return score;}
 	void SetTime(int value){Time+=value;}
@@ -51,7 +60,7 @@ public:
 	void SetMinSpeed(float value);
 	float GetMinSpeed(){return minSpeed;}
 
-	void GameOver();
+	void GameOverEvent();
 
 	void CreateTrack();
 	void DeleteTrack();
@@ -166,5 +175,7 @@ private:
 	SoundEmitter* Engine0;
 	SoundEmitter* Engine1;
 #endif
+	GamepadEvents::PlayerIndex playerController;
+	bool isControllerControlled;
 };
 
