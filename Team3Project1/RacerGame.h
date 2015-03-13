@@ -15,11 +15,16 @@
 #include "HudTestScreen.h"
 
 #include "GameStateManager.h"
-//#include "../Framework/SoundManager.h"
+
+class AudioTestClass;
+
 class Vehicle;
 class RacerGame : public GameScreen3D
 {
 public:
+	#if WINDOWS_BUILD
+	AudioTestClass* audio;
+#endif
 	RacerGame(void);
 	virtual ~RacerGame(void);
 	virtual void LoadContent();
@@ -68,10 +73,7 @@ public:
 	//sam
 	Texture* scoreTexture;
 	Texture* timeTexture;
-#if WINDOWS_BUILD
-	HudTestScreen* hud;
-	AudioTestClass* audio;
-#endif
+
 	static float g;
 	static float gx;
 	TrackSegment* Strack;

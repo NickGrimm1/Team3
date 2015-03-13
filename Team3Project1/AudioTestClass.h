@@ -1,5 +1,6 @@
-#if WINDOWS_BUILD
 #pragma once
+#if WINDOWS_BUILD
+
 #include "../Framework/SoundManager.h"
 #include "../Framework/SoundEmitter.h"
 #include "../Framework/Vehicle.h"
