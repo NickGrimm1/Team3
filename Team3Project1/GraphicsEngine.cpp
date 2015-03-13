@@ -43,7 +43,7 @@ GraphicsEngine::GraphicsEngine()
 	: Thread(&GraphicsEngine::threadExecution), RENDER_TIME(1000.0f / RENDER_HZ)
 #endif
 {
-	std::cout << "New Graphics Engine" << std::endl;
+	//std::cout << "New Graphics Engine" << std::endl;
 	isInitialised = false;
 	width = SCREEN_WIDTH;
 	height = SCREEN_HEIGHT;
@@ -74,7 +74,7 @@ GraphicsEngine::GraphicsEngine()
 	loadingTexture = new Texture("refresh", 0);
 #endif
 
-	cout << "Loading Texture loaded" << endl;
+//	cout << "Loading Texture loaded" << endl;
 	isLoading = true;
 	isLoadingDrawing = false;
 	
@@ -93,7 +93,7 @@ GraphicsEngine::GraphicsEngine()
 	renderer->SetLoadingIcon(loadingIcon);
 
 
-	cout << "Graphics Engine initialized" << endl;
+	//cout << "Graphics Engine initialized" << endl;
 	isInitialised = true; // Graphics Engine has initialised successfully
 }
 

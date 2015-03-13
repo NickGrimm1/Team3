@@ -199,15 +199,15 @@ Renderer::Renderer(vector<Light*>& lightsVec, vector<SceneNode*>& SceneNodesVec,
 
 void Renderer::CreateStaticMap(char* data, const int resolution, unsigned char minValue, unsigned char maxValue)
 {
-	cout << "create static map" << endl;
+	//cout << "create static map" << endl;
 	for (int x = 0; x < resolution; ++x)
 		for (int y = 0; y < resolution; ++y)
 			for (int i = 0; i < 4; ++i)
 			{
 				data[x * resolution * 4 + y * 4 + i] = (rand() % (maxValue - minValue) + minValue) / (float)maxValue;
-				cout << x * resolution * 4 + y * 4 + i << endl;
+				//cout << x * resolution * 4 + y * 4 + i << endl;
 			}
-	cout << "static map created" << endl;
+	//cout << "static map created" << endl;
 }
 
 bool Renderer::LoadShaders()
