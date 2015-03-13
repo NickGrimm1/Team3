@@ -7,6 +7,9 @@
 #include "../Framework/ObjMesh.h"
 #include "TrackSegment.h"
 #include "../Framework/InertialMatrixHelper.h"
+#if WINDOWS_BUILD
+#include "AudioTestClass.h"
+#endif
 //#include "../Framework/Vehicle.h"
 #include <math.h>
 
@@ -18,7 +21,7 @@
 //#include "DrawableText2D.h"
 //#include "GameScreen2D.h"
 
-#include "HudTestScreen.h"
+
 
 int RacerGame::update =0;
 float RacerGame::g=0.0f;
@@ -57,9 +60,6 @@ RacerGame::~RacerGame(void)
 {
 
 	delete quad;
-#if WINDOWS_BUILD
-	delete light;
-#endif
 
 }
 
