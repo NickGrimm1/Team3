@@ -365,104 +365,6 @@ bool PhysicsEngine::triangle(T3Vector3& dir)
 	 return false;
  }
 
-
-
-
-//void  PhysicsEngine::SortandSweep()
-//{
-//
-//	
-//
-//	sort(narrowlist.begin(),narrowlist.end(), [](PhysicsNode* xleft, PhysicsNode* xright){return xleft->GetPosition().x < xright->GetPosition().x;});
-//
-//	for( vector<PhysicsNode*>::iterator i=narrowlist.begin(); i <narrowlist.end(); ++i) 
-//	{
-//		for( vector<PhysicsNode*>::iterator j= i +1; j !=narrowlist.end(); ++j) 
-//		{
-//			if((*i)->GetXend() > (*j)->GetXstart())
-//			{
-//				    PhysicsNode& first =*(*i);
-//				    PhysicsNode& second =*(*j);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//				
-//				  /*  switch((*i)->GetCollisionVolume()->GetType()) 
-//					{*/
-//								/* case COLLISION_VOL_SPHERE:
-//				
-//								 {
-//									  {
-//											   switch((*j)->GetCollisionVolume()->GetType()) 
-//											 {
-//												case COLLISION_VOL_PLANE:
-//												CollisionData data;
-//												if (CollisionHelper::PlaneSphereCollision(second, first, &data)) 
-//											   {
-//													CollisionHelper::AddCollisionImpulse(second, first, data);
-//											   }
-//				        						continue;
-//											 }
-//										   }
-//
-//											 switch((*j)->GetCollisionVolume()->GetType())  
-//										   {
-//												case COLLISION_VOL_SPHERE:
-//												CollisionData data;
-//												if (CollisionHelper::SphereSphereCollision(first, second, &data))
-//												{
-//					     						  CollisionHelper::AddCollisionImpulse(first, second, data);
-//												}
-//												continue;
-//										   }
-//						 
-//										 
-//								 }
-//				
-//								case COLLISION_VOL_PLANE:
-//								switch((*j)->GetCollisionVolume()->GetType()) 
-//								{
-//									 case COLLISION_VOL_SPHERE:
-//				    					CollisionData data;
-//									  if (CollisionHelper::PlaneSphereCollision(first, second, &data)) 
-//									  {
-//										CollisionHelper::AddCollisionImpulse(first, second, data);
-//									  }
-//										continue;
-//								  }*/
-//
-//								/*case COLLISION_VOL_AABB:
-//								switch((*j)->GetCollisionVolume()->GetType()) 
-//								{
-//									 case COLLISION_VOL_AABB:
-//				    					
-//									  if (CollisionHelper::AABBCollision(first, second )) 
-//									  {
-//									   first.SetLinearVelocity(T3Vector3(0,0,0));      
-//									   first.SetForce(T3Vector3(0,0,0));
-//									    second.SetLinearVelocity(T3Vector3(0,0,0));
-//								       second.SetForce(T3Vector3(0,0,0));
-//									  }
-//									 
-//										continue;
-//								  }*/
-//						}
-//		
-//				}
-//	
-//		}
-//	}
-	
-
-
-
-
 void  PhysicsEngine::SortandSweep()
 {
 
@@ -531,7 +433,6 @@ void  PhysicsEngine::SortandSweep()
 						second.SetLinearVelocity(t3);
 					   }
 				     }
-				cout<<second.GetPosition().y;
 			}
 
 			if(second.Getplanecollision()==true && first.Getplanecollision()==false)
@@ -573,7 +474,6 @@ void  PhysicsEngine::SortandSweep()
 						first.SetLinearVelocity(t3);
 					   }
 				     }
-				cout<<first.GetPosition().y;
 			}
 			}
 
@@ -595,28 +495,7 @@ void  PhysicsEngine::SortandSweep()
 				{
 					//OnCollision(first,second);
 					//OnCollision(first,second);
-						/*if(check==true)
-					{
 					
-					   if(first.GetType()=='c'||second.GetType()=='c')
-					   {
-						if(first.GetGameEntity()){
-						RacerGame::update=1;}
-					   }
-
-					   else{
-						if(second.GetGameEntity())
-					      {
-					RacerGame::update=1;
-						  }
-					    }
-					
-						check=false;
-					}*/
-					/*first.SetLinearVelocity(T3Vector3(0,0,0));
-					first.SetForce(T3Vector3(0,0,0));
-                    second.SetLinearVelocity(T3Vector3(0,0,0));
-					second.SetForce(T3Vector3(0,0,0));*/
 				}
 			
 				if ((first.GetIsCollide()==true && second.GetIsCollide ()==true) && ((first.Getcar_wheel()==true && second.Getcar_wheel()==true)))
@@ -638,129 +517,11 @@ void  PhysicsEngine::SortandSweep()
 	
 
 
-
-
-
 void	PhysicsEngine::BroadPhaseCollisions() {
 	SortandSweep();
 
 }
 
-void	PhysicsEngine::NarrowPhaseCollisions() {
-
-	
-	for (unsigned int i = 0; i < allNodes.size(); i++) {
-
-		if (allNodes[i]->GetPhysicsVertex() == NULL) continue;
-		PhysicsNode& first = *allNodes[i];
-	//	CollisionVolume* fv = first.GetCollisionVolume();
-	//	if (!fv) continue;
-		for (unsigned int j = i + 1; j < allNodes.size(); j++) {
-			if (allNodes[j]->GetPhysicsVertex() == NULL) continue;
-
-			PhysicsNode& second = *allNodes[j];
-		//	CollisionVolume* sv = second.GetCollisionVolume();
-			//if (!sv) continue;
-
-			// if the two shapes are track and vehicle
-			if(first.Getplanecollision()==true && second.Getplanecollision()==false)
-			{
-
-				AddCarEdge(second);
-				AddTrackEdge(first);
-
-				//if the vehicle has collision with the track's left or right side
-				if(TrackDetection())
-				{
-					if(CollisionDetection(first, second))
-					{
-						CollisionData* data = new CollisionData();
-						bool succeeded = EPA(first, second, data);
- 						if (succeeded)
-						{
-							CollisionHelper::AddCollisionImpulse(first, second, *data);
-			        	}					
-					}
-
-					second.SetIsDrop(true);
-				}
-
-				// keeping the vehicle on the track!
-				else if(!second.GetIsDrop())
-				{
-					float floor_y = first.GetPosition().y;
-					float car_y = second.GetPosition().y;
-			
-					if(car_y - floor_y < 5.5f)
-					{
-						float err = abs(car_y - floor_y - 5.f)*2;
-						T3Vector3 t3 = second.GetLinearVelocity();
-						t3.y = 0;
-						t3 =t3	+ T3Vector3(0,1,0) * (1+err);
-						second.SetLinearVelocity(t3);
-					}
-				}
-			}			
-
-			else{
-			
-			if(CollisionDetection(first, second))
-			{
-				//OnCollision(first,second);
-				if(first.GetIsCollide()==true && second.GetIsCollide ()==true)
-				{
-					//OnCollision(first,second);
-					//if(second.GetType()=='f'){
-					//OnCollision(first,second);
-					//}
-				}
-				if(first.GetIsCollide()==false || second.GetIsCollide ()==false)
-				{
-					//OnCollision(first,second);
-					//OnCollision(first,second);
-						/*if(check==true)
-					{
-
-					   if(first.GetType()=='c'||second.GetType()=='c')
-					   {
-						if(first.GetGameEntity()){
-						RacerGame::update=1;}
-					   }
-
-					   else{
-						if(second.GetGameEntity())
-					      {
-					RacerGame::update=1;
-						  }
-					    }
-					//	check=false;
-					//}*/
-					/*first.SetLinearVelocity(T3Vector3(0,0,0));
-					first.SetForce(T3Vector3(0,0,0));
-                    second.SetLinearVelocity(T3Vector3(0,0,0));
-					second.SetForce(T3Vector3(0,0,0));*/
-				}
-			
-				if ((first.GetIsCollide()==true && second.GetIsCollide ()==true) && ((first.Getcar_wheel()==true && second.Getcar_wheel()==true)))
-				{
-			
-
-					CollisionData* data = new CollisionData();
-					bool succeeded = EPA(first, second, data);
- 					if (succeeded)
-					{
-						CollisionHelper::AddCollisionImpulse(first, second, *data);
-
-
-					
-				}
-				}
-			}
-			}
-				
-		}
-	}
-}
 
 // line for lineline collision dectetion!
 struct Line
@@ -811,8 +572,6 @@ bool LineLineIntersection ( const Line & l0, const Line & l1, float * t0 = NULL,
 
 	return true;
 }
-
-
 
 void PhysicsEngine::AddCarEdge(PhysicsNode & shape1)
 {
@@ -1143,48 +902,64 @@ void PhysicsEngine::barycentric(const T3Vector3 &p, const T3Vector3 &a, const T3
 }
 
 void	PhysicsEngine::AddNode(PhysicsNode* n) {
+	ListGuard.lock_mutex();
+
 	allNodes.push_back(n);
+	ListGuard.unlock_mutex();
 }
 
 void	PhysicsEngine::RemoveNode(PhysicsNode* n) {
+	ListGuard.lock_mutex();
 	for(vector<PhysicsNode*>::iterator i = allNodes.begin(); i != allNodes.end(); ++i) {
 		if((*i) == n) {
 			allNodes.erase(i);
 			return;
 		}
 	}
+	ListGuard.unlock_mutex();
 }
 
 void	PhysicsEngine::AddConstraint(Constraint* s) {
+	ListGuard.lock_mutex();
 	allSprings.push_back(s);
+	ListGuard.unlock_mutex();
 }
 
 void	PhysicsEngine::RemoveConstraint(Constraint* c) {
+	ListGuard.lock_mutex();
 	for(vector<Constraint*>::iterator i = allSprings.begin(); i != allSprings.end(); ++i) {
 		if((*i) == c) {
 			allSprings.erase(i);
 			return;
 		}
 	}
+	ListGuard.unlock_mutex();
 }
 
 void	PhysicsEngine::AddDebugDraw(DebugDrawer* d) {
+	ListGuard.lock_mutex();
 	allDebug.push_back(d);
+	ListGuard.unlock_mutex();
 }
 
 void	PhysicsEngine::RemoveDebugDraw(DebugDrawer* d) {
+	ListGuard.lock_mutex();
 	for(vector<DebugDrawer*>::iterator i = allDebug.begin(); i != allDebug.end(); ++i) {
 		if((*i) == d) {
 			allDebug.erase(i);
 			return;
 		}
 	}
+	ListGuard.unlock_mutex();
 }
 
 void    PhysicsEngine::DrawDebug() {
+	ListGuard.lock_mutex();
 	for(vector<DebugDrawer*>::iterator i = allDebug.begin(); i != allDebug.end(); ++i) {
 		(*i)->DebugDraw();
+	
 	}
+	ListGuard.unlock_mutex();
 }
 
 void PhysicsEngine::OnCollision(PhysicsNode& p1, PhysicsNode& p2)
