@@ -40,8 +40,11 @@ RacerGame::RacerGame(void)
 	Time=60.0f;
 	PlayTime=30;
 	timeOrScore=0;
-
-
+	isplaystartegine=false;
+	isplayrunningegine=false;
+	moveenginesound=false;
+	carspeediszero=true;
+	Engine = new SoundEmitter();
 
 		
 
@@ -67,6 +70,9 @@ void RacerGame::LoadContent() {
 	
 	hud = new HudTestScreen();
 	GameStateManager::Instance()->AddGameScreen(hud);
+
+	audio= new AudioTestClass();
+	GameStateManager::Instance()->AddGameScreen(audio);
 	
 	scoreTexture = GameStateManager::Assets()->LoadTexture(this, "score", 0);
 	timeTexture = GameStateManager::Assets()->LoadTexture(this, "time", 0);
@@ -98,7 +104,7 @@ void RacerGame::LoadContent() {
 
 
 	camera = new FreeCamera();
-	camera->SetPosition(T3Vector3(10,50,400));
+
 	//checkpoint= new CheckPoint(10);
 	//checkpoint->SetPhysics(10,'c');
 	//checkpoint->SetType('g');
@@ -152,7 +158,7 @@ void RacerGame::LoadContent() {
 	//chasecamera->AddYaw(500);
 	//chasecamera->AddPitch(90);
 	//car->SetPhysics(5,(vpn->GetCar()));
-	
+
 	vpn->SetPGE(car);
 	vpn->getRFW()->SetPGE(car);
 	vpn->getRFW()->SetType('z');
@@ -167,7 +173,10 @@ void RacerGame::LoadContent() {
 	car->SetPhysics(5.0f, vpn);
 	AddDrawable(car);
 
+#if WINDOWS_BUILD
+	GameStateManager::Audio()->SetListener(car);
 
+#endif
 	FrontRightTire = new Vehicle_Wheel(5.0f);
 	FrontRightTire->SetOriginPosition(T3Vector3(10.0f, -2.0f, 8.0f));
 	FrontRightTire->SetPhysics(5.0f, (vpn->getRFW()));
@@ -215,9 +224,9 @@ void RacerGame::LoadContent() {
 	tempPosition = T3Vector3(0.0f,350.0f,-800.0f);
 	PlayerPosition=T3Vector3(500.0f,100.0f,-800.0f);
 
-	//camera->SetPosition(T3Vector3(0.0f,10.0f, 80.0f));
+	camera->SetPosition(T3Vector3(0.0f,10.0f, 80.0f));
 	//camera->SetYaw(180.0f);
-	GameStateManager::Graphics()->SetCamera(camera);
+	GameStateManager::Graphics()->SetCamera(chasecamera);
 
 	//GameStateManager::Graphics()->SetCamera(chasecamera);
 }
@@ -249,6 +258,27 @@ void RacerGame::Update() {
  // f=0;
  // //cout<<"reset f"<<endl;
 	//}
+	if(car->GetCarNode().GetLinearVelocity()!=T3Vector3(0,0,0))
+	{
+		carspeediszero=false;
+	}
+	if(isplaystartegine==false&&car->GetCarNode().GetLinearVelocity()!=T3Vector3(0,0,0))
+	{
+		GameStateManager::Audio()->StopSound(audio->Getsoundemitter());
+		isplaystartegine=true;
+	}
+
+	if(isplayrunningegine==false&&car->GetCarNode().GetLinearVelocity()!=T3Vector3(0,0,0))
+	{
+		Sound* engine=GameStateManager::Audio()->GetSound(SOUNDSDIR"lowspeedengine.wav");
+		Engine=GameStateManager::Audio()->PlaySoundA (engine,SOUNDPRIORITY_ALWAYS,true, true);
+		isplayrunningegine=true;
+	}
+	if(carspeediszero==false&&moveenginesound==false&&car->GetCarNode().GetLinearVelocity()==T3Vector3(0,0,0))
+	{
+		GameStateManager::Audio()->StopSound(Engine);
+		moveenginesound=true;
+	}
 	if(f>0){
 		f=f-0.35f;
 	if(f<0)
@@ -294,9 +324,9 @@ void RacerGame::Update() {
 	Time+=1;
 }
 void RacerGame::Start(){
-	cout << "RacerGame: Start()" << endl;
+
 	Gold_cion * gold_cion= new Gold_cion(8.0f);
-	cout << "RacerGame: Made a Gold_cion " << endl;
+
 	gold_cion->SetOriginPosition(T3Vector3(50.0f,0.0f,0.0f));
 	gold_cion->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
 	gold_cion->SetTexture(scoreTexture);
@@ -305,15 +335,14 @@ void RacerGame::Start(){
 	
 	gold_cion->SetType('p');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 	gold_cion->GetPhysicsNode().SetPGE(gold_cion);
-	cout << "RacerGame: Set Gold_cion params" << endl;
+
 	//T3Vector4 color(1.f,1.f,1.f,0.f);
 	//gold_cion->GetMesh()->SetColour(color);
 
 
 	AddDrawable(gold_cion);
-	cout << "RacerGame: Added Gold_cion to drawables" << endl;
 	pickup.push_back(gold_cion);
-	cout << "RacerGame: Pushed Gold_cion to back of pickup vector" << endl;
+
 
 
 
@@ -760,207 +789,6 @@ float RacerGame::GetCreateAngle(){
 
 
 #if WINDOWS_BUILD
-//void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
-//
-//
-//	PlayerPosition = car->GetPhysicsNode().GetPosition();
-//
-//
-//	switch (type) {
-//	case KeyboardEvents::KEY_DOWN:
-//	case KeyboardEvents::KEY_HELD:
-//		switch (key) {
-//
-//		case KeyboardEvents::KEYBOARD_W:
-//			{
-//				//camera->AddMovement(T3Vector3(1,0,0));
-//			 f=f+1;
-//			// car->GetPhysicsNode().SetForce(T3Vector3(10+f,0,0));
-//
-//
-//
-//				if(FrontRightTire->GetPhysicsNode().GetOrientation().y==0)
-//		{
-//		  
-//		car->GetPhysicsNode().SetForce(T3Vector3(f /*+ 100.0f*/,0,0));   
-//	
-//
-////		    f=f+100;
-//		}
-//		if(FrontRightTire->GetPhysicsNode().GetOrientation().y<0)
-//		{
-//		float angle=-0.5/90*FrontRightTire->GetPhysicsNode().GetOrientation().y;
-//
-//		float l= FrontRightTire->GetPhysicsNode().GetLinearVelocity().Length();
-//
-//		float x=l*sin(angle/2/3.14);
-//		float z=l*cos(angle/2/3.14);
-//	    f=f+100;
-//		//Player->GetPhysicsNode().SetForce(Vector3(0,0,0.3+f));  
-//		car->GetPhysicsNode().SetForce(T3Vector3(x+f,0,z+f));
-//		
-//	
-//	/*	tempPosition.x = PlayerPosition.x;*/
-//		/*tempPosition.z = PlayerPosition.z-1000;
-//		tempPosition.y = PlayerPosition.y+800;
-//*/
-//		
-//		}
-//
-//		if(FrontRightTire->GetPhysicsNode().GetOrientation().y>0)
-//		{
-//		float angle=0.5/90*FrontRightTire->GetPhysicsNode().GetOrientation().y;
-//
-//		float l= car->GetPhysicsNode().GetLinearVelocity().Length();
-//
-//		float x=-l*sin(angle/2/3.14);
-//		float z=l*cos(angle/2/3.14);
-//	    f=f+100;
-//
-//		car->GetPhysicsNode().SetForce(T3Vector3(z+f,0,x-f));
-//	
-//
-//				
-//		}
-//			
-//		/*	tempPosition.z = PlayerPosition.z-1000;
-//		     tempPosition.y = PlayerPosition.y+800;*/
-//
-//
-//			}
-//			 break;
-//			
-//		case KeyboardEvents::KEYBOARD_S:
-//			{//camera->AddMovement(T3Vector3(0,0,1));
-//			 f=f+100;
-//		     car->GetPhysicsNode().SetForce(T3Vector3(-10-f,0,0)); 
-//		  /*   tempPosition.z = PlayerPosition.z-1000;
-//		     tempPosition.y = PlayerPosition.y+800;*/
-//
-//
-//
-//			}
-//			break;
-//		case KeyboardEvents::KEYBOARD_A:
-//			{//camera->AddMovement(T3Vector3(1,0,0));
-//			/*if(car->GetPhysicsNode().GetOrientation().z>=-0.13)
-//			 {
-//			    car->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,Speed_Rotate));
-//		     }			
-//		     temp1 = car->GetPhysicsNode().GetLinearVelocity();
-//		     temp1.x=0.1*Speed_Player;
-//		     car->GetPhysicsNode().SetLinearVelocity(temp1);
-//		     tempPosition.x = PlayerPosition.x;
-//			*/
-//		    //	f=f+100;
-//
-//			if(car->GetPhysicsNode().GetOrientation().y<=0.8){
-//			 FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate+0.002,0));
-//			if( FrontLeftTire->GetPhysicsNode().GetOrientation().y>=0.2||FrontRightTire->GetPhysicsNode().GetOrientation().y>=0.2)
-//			{
-//			FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,0));
-//			FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,0));
-//			}
-//		     FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate+0.002,0));
-//			 BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
-//		     BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
-//			 car->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
-//		 
-//		//	 	
-//		//
-//		//float angle=-0.5/90*FrontRightTire->GetPhysicsNode().GetOrientation().z;
-//
-//		//float l= car->GetPhysicsNode().GetLinearVelocity().Length();
-//
-//		//float x=l*sin(angle/2/3.14);
-//		//float z=l*cos(angle/2/3.14);
-//	 //   f=f+100;
-//		//Player->GetPhysicsNode().SetForce(Vector3(0,0,0.3+f));  
-//	//	car->GetPhysicsNode().SetForce(T3Vector3(x+f,0,z+f));
-//		}		
-//		
-//			
-//			}
-//			break;
-//		case KeyboardEvents::KEYBOARD_D:
-//			{//camera->AddMovement(T3Vector3(-1,0,0));
-//			/*  if(car->GetPhysicsNode().GetOrientation().z<=0.13)
-//			  {
-//			    car->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,-Speed_Rotate));
-//		      }
-//		      temp1 = car->GetPhysicsNode().GetLinearVelocity();
-//		      temp1.x=-0.1*Speed_Player;
-//		      car->GetPhysicsNode().SetLinearVelocity(temp1);
-//		      tempPosition.x = PlayerPosition.x;*/
-//
-//
-//				if(FrontRightTire->GetPhysicsNode().GetOrientation().y>=-0.8){
-//		
-//			 FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate-0.002,0));
-//		     FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate-0.002,0));
-//			 BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
-//		     BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
-//			 car->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
-//		}			
-//
-//
-//			}
-//			break;
-//		case KeyboardEvents::KEYBOARD_SHIFT:
-//			camera->AddMovement(T3Vector3(0,1,0));
-//			break;
-//		case KeyboardEvents::KEYBOARD_SPACE:
-//			{camera->AddMovement(T3Vector3(0,-1,0));
-//			 temp1 = car->GetPhysicsNode().GetLinearVelocity();
-//			 car->GetPhysicsNode().SetUseGravity(TRUE);
-//			 temp1.y = 0.4;
-//			 car->GetPhysicsNode().SetLinearVelocity(temp1);	
-//			
-//			}
-//			break;
-//		case KeyboardEvents::KEYBOARD_I:
-//			camera->AddMovement(T3Vector3(0,0,-1));
-//			break;
-//		case KeyboardEvents::KEYBOARD_K:
-//			camera->AddMovement(T3Vector3(0,0,1));
-//			break;
-//		case KeyboardEvents::KEYBOARD_J:
-//			camera->AddMovement(T3Vector3(-1,0,0));
-//			break;
-//		case KeyboardEvents::KEYBOARD_L:
-//			camera->AddMovement(T3Vector3(1,0,0));
-//			break;
-//		case KeyboardEvents::KEYBOARD_U:
-//			camera->AddMovement(T3Vector3(0,1,0));
-//			break;
-//		case KeyboardEvents::KEYBOARD_O:
-//			camera->AddMovement(T3Vector3(0,-1,0));
-//			break;
-//		case KeyboardEvents::KEYBOARD_LEFT:
-//			camera->AddYaw(1);
-//			break;
-//		case KeyboardEvents::KEYBOARD_RIGHT:
-//			camera->AddYaw(-1);
-//			break;
-//		case KeyboardEvents::KEYBOARD_UP:
-//			camera->AddPitch(1);
-//			break;
-//		case KeyboardEvents::KEYBOARD_DOWN:
-//			camera->AddPitch(-1);
-//			break;
-//		case KeyboardEvents::KEYBOARD_Q:
-//			camera->AddRoll(-1);
-//			break;
-//		case KeyboardEvents::KEYBOARD_E:
-//			camera->AddRoll(1);
-//			break;
-//		
-//		}
-//		
-//	}
-//}
-#endif
-#if WINDOWS_BUILD
 void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key) {
 
 	float R=0.707106829f;
@@ -969,208 +797,6 @@ void RacerGame::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Ke
 	case KeyboardEvents::KEY_HELD:
 		switch (key) {
 
-//		case KeyboardEvents::KEYBOARD_W:
-//		{
-//				//camera->AddMovement(T3Vector3(1,0,0));
-//
-//
-//				//float E=R+(car->GetCarNode().GetOrientation().y);
-//			   //f=1200;
-//			   f=300;
-//				//  car->GetCarNode().SetForce(T3Vector3(10+f,0,0));
-//			   if(((car->GetCarNode().GetOrientation().y)+R)==0)
-//		       {
-//				   car->GetCarNode().SetForce(T3Vector3(f /*+ 100.0f*/,0,0));   
-//					//		    f=f+100;
-//		       }
-//
-//				if(((car->GetCarNode().GetOrientation().y)+R)<0)
-//				{
-//					float angle=-0.5/90*((car->GetCarNode().GetOrientation().y)+R);
-//					float l=  car->GetCarNode().GetLinearVelocity().Length();
-//					float x=l*sin(angle/2/3.14);
-//					float z=l*cos(angle/2/3.14);
-//				   // f=f+5;
-//					//Player->GetPhysicsNode().SetForce(Vector3(0,0,0.3+f));  
-//					 car->GetCarNode().SetForce(T3Vector3(x+f,0,z+f));
-//					/*	tempPosition.x = PlayerPosition.x;*/
-//						/*tempPosition.z = PlayerPosition.z-1000;
-//						tempPosition.y = PlayerPosition.y+800;
-//					*/
-//		
-//				}
-//
-//				if(((car->GetCarNode().GetOrientation().y)+R)>0)
-//				{
-//					float angle=0.5/90*((car->GetCarNode().GetOrientation().y)+R);
-//					float l=  car->GetCarNode().GetLinearVelocity().Length();
-//					float x=-l*sin(angle/2/3.14);
-//					float z=l*cos(angle/2/3.14);
-//					//f=f+5;
-//					 car->GetCarNode().SetForce(T3Vector3(z+f,0,x-f));	
-//				}
-//			
-//				 /*	tempPosition.z = PlayerPosition.z-1000;
-//					 tempPosition.y = PlayerPosition.y+800;*/
-//
-//						/*	if(f>4000)
-//							{
-//								f=3800;
-//							}*/
-//
-//		}
-//			 break;
-//			
-//		case KeyboardEvents::KEYBOARD_S:
-//			{//camera->AddMovement(T3Vector3(0,0,1));
-//			/* f=f+100;
-//		      car->GetCarNode().SetForce(T3Vector3(-10-f,0,0)); */
-//		  /*   tempPosition.z = PlayerPosition.z-1000;
-//		     tempPosition.y = PlayerPosition.y+800;*/
-//
-//
-//
-//				// f=f+5;
-//			//  car->GetCarNode().SetForce(T3Vector3(10+f,0,0));
-//
-//
-//
-//				if(((car->GetCarNode().GetOrientation().y)+R)==0)
-//		{
-//		  
-//		 car->GetCarNode().SetForce(T3Vector3(-f ,0,0));   
-//	
-//
-////		    f=f+100;
-//		}
-//		if(((car->GetCarNode().GetOrientation().y)+R)<0)
-//		{
-//		float angle=-0.5/90*((car->GetCarNode().GetOrientation().y)+R);
-//
-//		float l=  car->GetCarNode().GetLinearVelocity().Length();
-//
-//		float x=l*sin(angle/2/3.14);
-//		float z=l*cos(angle/2/3.14);
-//	    //f=f+5;
-//		//Player->GetPhysicsNode().SetForce(Vector3(0,0,0.3+f));  
-//		 car->GetCarNode().SetForce(T3Vector3(-(x+f),0,-(z+f)));
-//		
-//	
-//	/*	tempPosition.x = PlayerPosition.x;*/
-//		/*tempPosition.z = PlayerPosition.z-1000;
-//		tempPosition.y = PlayerPosition.y+800;
-//*/
-//		
-//		}
-//
-//		if(((car->GetCarNode().GetOrientation().y)+R)>0)
-//		{
-//		float angle=0.5/90*((car->GetCarNode().GetOrientation().y)+R);
-//
-//		float l=  car->GetCarNode().GetLinearVelocity().Length();
-//
-//		float x=-l*sin(angle/2/3.14);
-//		float z=l*cos(angle/2/3.14);
-//	    //f=f+5;
-//
-//		 car->GetCarNode().SetForce(T3Vector3(-(z+f),0,-(x-f)));
-//	
-//
-//				
-//		}
-//
-//
-//
-//			}
-//			break;
-//		case KeyboardEvents::KEYBOARD_A:
-//			{//camera->AddMovement(T3Vector3(1,0,0));
-//			/*if( car->GetCarNode().GetOrientation().z>=-0.13)
-//			 {
-//			     car->GetCarNode().SetAngularVelocity(T3Vector3(0,0,Speed_Rotate));
-//		     }			
-//		     temp1 =  car->GetCarNode().GetLinearVelocity();
-//		     temp1.x=0.1*Speed_Player;
-//		      car->GetCarNode().SetLinearVelocity(temp1);
-//		     tempPosition.x = PlayerPosition.x;
-//			*/
-//		    //	f=f+100;
-//
-//			if( ((car->GetCarNode().GetOrientation().y)+R)<=0.6){
-//
-//				// car->GetCarNode().SetOrientation( car->GetCarNode().GetOrientation()+Quaternion::FromMatrix(T3Matrix4::Rotation(30,T3Vector3(0,-1,0))));
-//
-//			 FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate-0.001,0));
-//			/*if( FrontLeftTire->GetPhysicsNode().GetOrientation().y>=0.2||FrontRightTire->GetPhysicsNode().GetOrientation().y>=0.2)
-//			{
-//			FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,0));
-//			FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,0,0));
-//			}*/
-//		     FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate-0.001,0));
-//			 BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
-//		     BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
-//			  car->GetCarNode().SetAngularVelocity(T3Vector3(0,-Speed_Rotate,0));
-//
-//		
-//			/* float angle=-0.5/90*FrontRightTire->GetPhysicsNode().GetOrientation().y;
-//
-//		    float l=  car->GetCarNode().GetLinearVelocity().Length();
-//
-//	    	float x=l*sin(angle/2/3.14);
-//	   float z=l*cos(angle/2/3.14);
-//	       f=f+100;*/
-//		////Player->GetPhysicsNode().SetForce(Vector3(0,0,0.3+f));  
-//		// car->GetCarNode().SetForce(T3Vector3(x+f,0,z+f));
-//			 
-//		
-//		
-//			 	
-//		
-//		/*float angle=-0.5/90*FrontRightTire->GetPhysicsNode().GetOrientation().y;
-//		float l=  car->GetCarNode().GetLinearVelocity().Length();
-//
-//		float x=l*sin(angle/2/3.14);
-//		float z=l*cos(angle/2/3.14);
-//	    f=f+5;
-//
-//		 car->GetCarNode().SetForce(T3Vector3(x+f,0,-(z+f)));*/
-//		}		
-//		
-//			
-//			}
-//			break;
-//		case KeyboardEvents::KEYBOARD_D:
-//			{//camera->AddMovement(T3Vector3(-1,0,0));
-//			/*  if( car->GetCarNode().GetOrientation().z<=0.13)
-//			  {
-//			     car->GetCarNode().SetAngularVelocity(T3Vector3(0,0,-Speed_Rotate));
-//		      }
-//		      temp1 =  car->GetCarNode().GetLinearVelocity();
-//		      temp1.x=-0.1*Speed_Player;
-//		       car->GetCarNode().SetLinearVelocity(temp1);
-//		      tempPosition.x = PlayerPosition.x;*/
-//
-//
-//				if( ((car->GetCarNode().GetOrientation().y)+R)>=-0.6){
-//		
-//			 FrontLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate-0.001,0));
-//		     FrontRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate-0.001,0));
-//			 BackLeftTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
-//		     BackRightTire->GetPhysicsNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
-//			  car->GetCarNode().SetAngularVelocity(T3Vector3(0,Speed_Rotate,0));
-//		}			
-//				/*float angle=0.5/90*FrontRightTire->GetPhysicsNode().GetOrientation().y;
-//
-//		       float l=  car->GetCarNode().GetLinearVelocity().Length();
-//
-//		     float x=-l*sin(angle/2/3.14);
-//		float z=l*cos(angle/2/3.14);
-//	    f=f+5;
-//
-//		 car->GetCarNode().SetForce(T3Vector3(z+f,0,-(x-f)));*/
-//	
-//
-//
 
 case KeyboardEvents::KEYBOARD_7:
 		{
@@ -1315,3 +941,16 @@ void RacerGame::MouseMoved(T3Vector2& star, T3Vector2& finish) {
 
 }
 #endif
+
+void RacerGame::GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button)
+{
+	
+};
+	
+void RacerGame::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount)
+{
+	
+	
+	
+	//camera->AddMovement(T3Vector3(amount.x,0,amount.y));
+};

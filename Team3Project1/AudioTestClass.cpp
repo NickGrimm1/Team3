@@ -1,10 +1,10 @@
 #if WINDOWS_BUILD
-
 #include "AudioTestClass.h"
 #include "GameStateManager.h"
 //#include "../Framework/SoundManager.h"
 #include "../Framework/T3Vector3.h"
 #include "DrawableEntity3D.h"
+
 #include <Windows.h>
 #include <MMsystem.h>
 #include <time.h>
@@ -12,7 +12,6 @@
 
 
 #define RENDER_HZ 60.0f
-
 
 AudioTestClass::AudioTestClass(void)
 {
@@ -23,8 +22,12 @@ AudioTestClass::AudioTestClass(void)
 	bgm2=false;
 	ready=false;
 	coins=false;
+	engine_start=false;
 	pressonce = false;
 	pressonce2 = false;
+	/*car= new Vehicle();*/
+	a = new SoundEmitter();
+
 
 }
 
@@ -43,6 +46,8 @@ void AudioTestClass::LoadContent() {
 	SoundManager::AddSound(SOUNDSDIR"gameover2.6sec.wav");
 	SoundManager::AddSound(SOUNDSDIR"coins.wav");
 	SoundManager::AddSound(SOUNDSDIR"engine_start.wav");
+	SoundManager::AddSound(SOUNDSDIR"lowspeedengine.wav");
+	SoundManager::AddSound(SOUNDSDIR"time.wav");
 	BGM1 = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm1_101sec.wav");
 	BGM2 = GameStateManager::Audio()->GetSound(SOUNDSDIR"bgm2_60sec.wav");
 	Coins = GameStateManager::Audio()->GetSound(SOUNDSDIR"coins.wav");
@@ -53,6 +58,7 @@ void AudioTestClass::LoadContent() {
 	//GameStateManager::Audio()-> PlaySound (BGM3, false,SOUNDPRIORITY_ALWAYS);//SOUNDPRIORTY_LOW);
 	/*GameStateManager::Audio()-> PlaySound (ready,T3Vector3(0,0,0), false);
 	GameStateManager::Audio()-> PlaySound (over,T3Vector3(100,0,0), false);*/
+	//GameStateManager::Audio()-> PlaySound (Engine_start,T3Vector3(0,0,0), true);
 }
 
 void AudioTestClass::Update() {
@@ -60,21 +66,27 @@ void AudioTestClass::Update() {
 	//GameStateManager::Audio()->PlaySoundW(GameStateManager::Audio()->GetSound("../Sounds/Tokyo Drift2.wav"),SOUNDPRIORITY_ALWAYS);
 	//GameStateManager::Audio()->Update ((1000.0f / ( float ) RENDER_HZ ))
 	CurrentTime=timer.GetMS();
-	if(coins==false){
-		GameStateManager::Audio()-> PlaySound (Coins,T3Vector3(100,0,0), true);
-		coins=true;
-	}
+	//if(coins==false){
+	//	GameStateManager::Audio()-> PlaySound (Coins,T3Vector3(100,0,0), true);
+	//	coins=true;
+	//}
 	if(ready==false){
-		GameStateManager::Audio()-> PlaySound (Ready,T3Vector3(0,0,0), true);
+		GameStateManager::Audio()-> PlaySound (Ready,T3Vector3(0,0,0), false);
 		ready=true;
 	}
-
+	if(ready==true&&engine_start==false){
+		a=GameStateManager::Audio()-> PlaySound (Engine_start,T3Vector3(0,0,0), true);
+		engine_start=true;
+	}
 	if(bgm1==false&&CurrentTime>=0&&CurrentTime<=102000){
-		GameStateManager::Audio()-> PlaySound (BGM1,SOUNDPRIORITY_ALWAYS,true, false);
+
+		GameStateManager::Audio()-> PlaySoundA (BGM1,SOUNDPRIORITY_ALWAYS,true, false);
 		bgm1=true;
 	}
 	if(bgm2==false&&CurrentTime>102000){
-		GameStateManager::Audio()-> PlaySound (BGM2,SOUNDPRIORITY_ALWAYS,true, true);
+		//GameStateManager::Audio()->StopSound(a);
+		//GameStateManager::Audio()->StopSound(BGM2);
+		GameStateManager::Audio()-> PlaySoundA (BGM2,SOUNDPRIORITY_ALWAYS,true, true);
 		bgm2=true;
 	}
 }
@@ -88,20 +100,19 @@ void AudioTestClass::KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvent
 		}
 	case KeyboardEvents::KEY_PRESS:
 		switch(key){
-		case KeyboardEvents::KEYBOARD_W:
-			if(!pressonce2){
-			pressonce2 = true;
-			GameStateManager::Audio()-> PlaySound (Coins,SOUNDPRIORTY_LOW ,false, false);
-			
-			}
-			break;
-		case KeyboardEvents::KEYBOARD_SPACE:
-			if (!pressonce) {
-			pressonce = true;
-			GameStateManager::Audio()-> PlaySound (Engine_start,SOUNDPRIORTY_LOW, false, false);//SOUNDPRIORTY_LOW);
-			
-			}
-			break;
+		//case KeyboardEvents::KEYBOARD_W:
+		//	/*if(!pressonce2){
+		//	pressonce2 = true;*/
+		//	GameStateManager::Audio()-> PlaySound (Coins,SOUNDPRIORTY_LOW ,false, false);
+		//	/*}*/
+		//	break;
+		//case KeyboardEvents::KEYBOARD_SPACE:
+		//	if (!pressonce) {
+		//	pressonce = true;
+		//	GameStateManager::Audio()-> PlaySound (Engine_start,SOUNDPRIORTY_LOW, false, false);//SOUNDPRIORTY_LOW);
+		//	
+		//	}
+		//	break;
 		case KeyboardEvents::KEYBOARD_ESCAPE:
 			GameStateManager::Instance()->Exit();
 			break;

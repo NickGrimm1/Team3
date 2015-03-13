@@ -42,7 +42,7 @@ void GraphicsTestScreen::LoadContent() {
 	
 	DrawableEntity3D* ent;
 	
-	/*for (unsigned int i = 0; i < 8; i++) {
+	for (unsigned int i = 0; i < 8; i++) {
 		for (unsigned int j = 0; j < 8; j++) {
 			ent = new DrawableEntity3D(
 				quad,
@@ -56,7 +56,7 @@ void GraphicsTestScreen::LoadContent() {
 			gameEntities.push_back(ent);
 			AddDrawable(ent);
 		}
-	}*/
+	}
 	
 	//GameStateManager::Graphics()->GetRenderContext();
 	//track = new TrackSegment(T3Vector3(-400, 0, 0), T3Vector3(0,0,-400), T3Vector3(400,0,0), 10, 50.0);
@@ -109,7 +109,7 @@ void GraphicsTestScreen::LoadContent() {
 		Quaternion::EulerAnglesToQuaternion(0,0,0),
 		T3Vector3(1,1,1));
 	AddDrawable(heightMapFront);
-
+	
 	heightMapBack = new DrawableEntity3D(
 #if WINDOWS_BUILD
 		GameStateManager::Assets()->LoadHeightmap(0, 75, true),
@@ -226,8 +226,8 @@ void GraphicsTestScreen::LoadContent() {
 	//gameEntities.push_back(ent);
 	//AddDrawable(ent);
 	
-	//bool enableShadows = false;
-	//AddSpotLight(T3Vector3(-10, 40, -10), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 45.0f, T3Vector4(1,0,0,1), T3Vector4(0,0,1,1), enableShadows);
+	bool enableShadows = true;
+	AddSpotLight(T3Vector3(-10, 40, -10), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 45.0f, T3Vector4(1,0,0,1), T3Vector4(0,0,1,1), enableShadows);
 	//AddSpotLight(T3Vector3(50, 40, 50), T3Vector3(35,0,35), T3Vector3(0,1,0), 2000.0f, 90.0f, T3Vector4(0.5,0.5,0.5,1), T3Vector4(0,0,1,1), enableShadows);
 	//AddPointLight(T3Vector3(-50,60,-50), 500, T3Vector4(1,0,1,1), T3Vector4(0,0.5,0,1), enableShadows); 
 	//AddPointLight(T3Vector3(50,60,50), 500, T3Vector4(0,1,0,1), T3Vector4(0,0.5,0,1), enableShadows); 

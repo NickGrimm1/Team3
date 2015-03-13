@@ -6,26 +6,29 @@
 Gold_cion::Gold_cion(float size):
 	carPhysicNode(carPhysicNode) 
 {
+	pickupTex = GameStateManager::Assets()->LoadTexture(this, "pickup",0);
+
 	mesh = GameStateManager::Assets()->LoadMesh(this, MESHDIR"cube.obj");
-	T3Vector3 position =T3Vector3(100.0f, -2.0f, 0.0f);
+	T3Vector3 position = T3Vector3(100.0f, -2.0f, 0.0f);
 	boundingRadius = size;
 	origin = position;
 	rotation = Quaternion::EulerAnglesToQuaternion(0,0,0);
 	scale = T3Vector3(0.3f*size,0.3f*size,0.3f*size);
-	texture =NULL;
+	texture = pickupTex;
 	bumpTexture = NULL;
 	shader = NULL;
-	
-	
 
-
+	upDown = true;
 }
 
 Gold_cion::~Gold_cion(void){
-	
+	GameStateManager::Assets()->UnloadTexture(this, "pickup");
+
+	if (texture)
+		delete texture;
+
+	delete carPhysicNode;
 }
-
-
 
 void Gold_cion::SetPhysics(float size)
 {

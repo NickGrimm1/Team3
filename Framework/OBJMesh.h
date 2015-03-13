@@ -152,6 +152,9 @@ public:
 
 	virtual void Draw();
 
+	Texture* GetBumpTex(){return bumpTex;}
+	Texture* GetNormTex(){return normTex;}
+
 protected:
 	bool	LoadOBJMesh(std::string filename);
 	bool	BuildOBJMesh();
@@ -164,7 +167,10 @@ protected:
 	string bumpPath;
 	Texture* texture;
 	Texture* bumpTexture;
-
+#if PS3_BUILD
+	Texture* bumpTex;
+	Texture* normTex;
+#endif
 	/*
 	SubMeshes temporarily get kept in here
 	*/

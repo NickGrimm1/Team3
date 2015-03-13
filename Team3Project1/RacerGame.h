@@ -5,15 +5,18 @@
 #include "../Framework/MyGame.h"
 #include "FreeCamera.h"
 #include "ChaseCamera.h"
+
 #include "Vehicle_Wheel.h"
 #include "VehiclePhysicsNode.h"
 #include "CheckPoint.h"
 #include "TrackSegment.h"
 #include "Gold_cion.h"
+#if WINDOWS_BUILD
 #include "HudTestScreen.h"
+#endif
 #include "GameStateManager.h"
 //#include "../Framework/SoundManager.h"
-
+class Vehicle;
 class RacerGame : public GameScreen3D
 {
 public:
@@ -32,8 +35,9 @@ public:
 	virtual void MouseScrolled(T3Vector2& position, int amount) {};
 	virtual void KeyboardEvent(KeyboardEvents::EventType type, KeyboardEvents::Key key);
 #endif
-	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button) {};
-	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount) {};
+	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button);
+	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount);
+
 	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID){}
 
 	void SetScore(int value){score+=value;}
@@ -64,8 +68,10 @@ public:
 	//sam
 	Texture* scoreTexture;
 	Texture* timeTexture;
+#if WINDOWS_BUILD
 	HudTestScreen* hud;
-
+	AudioTestClass* audio;
+#endif
 	static float g;
 	static float gx;
 	TrackSegment* Strack;
@@ -74,7 +80,7 @@ public:
 	vector<DrawableEntity3D*> allEntities;
 	vector<TrackSegment*> TrackSegmentVector;
 	vector<GameEntity*> checkPoint;
-	vector<GameEntity*> pickup;
+	vector<Gold_cion*> pickup;
 
 	 virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
 		  if(obj1->GetType()=='g')
@@ -107,13 +113,16 @@ public:
 		  }
 			  if(obj1->GetType()=='p')
 		  {
-			  obj1->GetPhysicsNode().SetIsCollide(false);
-			  SetScore(1);
+	
 #ifdef WINDOWS_BUILD
 			 // SoundManager::AddSound(SOUNDSDIR"Tokyo Drift2.wav");
-			 // GameStateManager::Audio()->PlaySoundW(GameStateManager::Audio()->GetSound(SOUNDSDIR"Tokyo Drift2.wav"),SOUNDPRIORITY_ALWAYS);
-			  GameStateManager::Audio()->PlaySound(GameStateManager::Audio()->GetSound (SOUNDSDIR"bgm2_42sec.wav"),SOUNDPRIORTY_LOW,false);
+			  Sound* coins;
+			  coins=GameStateManager::Audio()->GetSound(SOUNDSDIR"coins.wav");
+			  GameStateManager::Audio()->PlaySoundA(coins, obj1->GetOriginPosition(), false);
+//			  GameStateManager::Audio()->PlaySound(coins,SOUNDPRIORITY_ALWAYS,false,false);
 #endif			  
+	  		  obj1->GetPhysicsNode().SetIsCollide(false);
+			  SetScore(1);
 			  cout<< "total point ="<<GetScore()<<endl; 
 			  GameStateManager::Graphics()->RemoveDrawable(obj1);
 	          obj1->DisconnectFromSystems();
@@ -121,6 +130,9 @@ public:
 		  }
 			   if(obj1->GetType()=='t')
 		  {
+			  Sound* time;
+			  time=GameStateManager::Audio()->GetSound(SOUNDSDIR"time.wav");
+			  GameStateManager::Audio()->PlaySoundA(time, obj1->GetOriginPosition(), false);
 			  obj1->GetPhysicsNode().SetIsCollide(false);
 			  SettimeOrScore(-(GettimeOrScore()));
 			  SetPlayTime(30);
@@ -157,5 +169,10 @@ private:
 	
 	DrawableEntity3D* ent;
 	DrawableEntity3D* ent2;
+	bool isplaystartegine;
+	bool isplayrunningegine;
+	bool moveenginesound;
+	bool carspeediszero;
+	SoundEmitter* Engine;
 };
 

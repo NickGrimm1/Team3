@@ -207,7 +207,7 @@ bool OBJMesh::BuildOBJMesh() {
 
 			m->numVertices	= sm->vertIndices.size();
 
-			m->vertices	= new Vertex[m->numVertices];
+			m->AssignVertexMemory();
 			for(unsigned int j = 0; j < sm->vertIndices.size(); ++j)
 			{
 				m->vertices[j] = inputVertices[sm->vertIndices[j] - 1];
@@ -271,6 +271,7 @@ void OBJMesh::Draw() {
 		glUniform1i(glGetUniformLocation(prog, "useDiffuseTex"), 1);
 	}
 #endif
+
 #if WINDOWS_BUILD
 	Mesh::Draw();
 #endif//TODO fix for ps3
