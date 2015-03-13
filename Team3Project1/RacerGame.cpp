@@ -697,6 +697,36 @@ void RacerGame::UnloadContent() {
 	GameStateManager::Audio()->SetListener(NULL);
 #endif
 
+	SplinePoint.clear();	
+
+	for(int i=0;i<TrackSegmentVector.size();i++){
+	delete TrackSegmentVector[i];
+	}
+		TrackSegmentVector.clear();
+
+
+	for(int i=0;i<allEntities.size();i++){
+		GameStateManager::Graphics()->RemoveDrawable(allEntities[i]);
+	 allEntities[i]->DisconnectFromSystems();
+	
+	}
+	allEntities.clear();
+
+	for(int i=0;i<pickup.size();i++){
+		GameStateManager::Graphics()->RemoveDrawable(pickup[i]);
+	 pickup[i]->DisconnectFromSystems();
+	
+	}
+	pickup.clear();
+
+	for(int i=0;i<checkPoint.size();i++){
+		GameStateManager::Graphics()->RemoveDrawable(checkPoint[i]);
+	 checkPoint[i]->DisconnectFromSystems();
+
+	}
+	checkPoint.clear();
+
+
 }
 
 void RacerGame::GameOver() {
