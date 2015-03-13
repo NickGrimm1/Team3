@@ -1217,9 +1217,7 @@ void RacerGame::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID,
 	cout << "RacerGame: analogue moved" << endl;
 	if(analogueControl == GamepadEvents::LEFT_STICK)
 	{
-		//if(abs(amount.y) > DEADZONE )
-		//{
-			car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()+1.8);
+		car->GetVehiclePhysicsNode()->SetF(car->GetVehiclePhysicsNode()->GetF()+1.8);
 		if(car->GetVehiclePhysicsNode()->GetF()>GetMaxSpeed())
 		{
 			car->GetVehiclePhysicsNode()->SetF(GetMaxSpeed());
@@ -1228,9 +1226,7 @@ void RacerGame::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID,
 		car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
 			
 		cout<<"Current Velocity: " << car->GetCarNode().GetLinearVelocity() << endl << endl << endl;
-			 /*T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
-			 car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*(abs(amount.y)));*/
-		//} 
+			 
 	}
 	if(analogueControl == GamepadEvents::RIGHT_STICK)
 	{
@@ -1243,13 +1239,7 @@ void RacerGame::GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID,
 		car->GetCarNode().SetLinearVelocity( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*car->GetVehiclePhysicsNode()->GetF());
 	
 		cout<<"Current Velocity: " << car->GetCarNode().GetLinearVelocity() << endl << endl << endl;
-		//if(abs(amount.y) > DEADZONE)
-		//{
-		//	 T3Matrix4 m4 = car->GetCarNode().GetOrientation().ToMatrix();
-		//	 car->GetCarNode().SetLinearVelocity(T3Vector3(10,10,10));//( m4 *T3Matrix4::Rotation(90,T3Vector3(0,1,0))*(abs(amount.y)));
-		//} 
+		
 	}
 	
-	
-	//camera->AddMovement(T3Vector3(amount.x,0,amount.y));
 };

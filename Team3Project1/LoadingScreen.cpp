@@ -23,7 +23,7 @@ void LoadingScreen::Update() {
 	
 		MainMenu* menu = new MainMenu();
 		GameStateManager::Instance()->AddGameScreen(menu);
-	
+
 		GameStateManager::Graphics()->EnableLoadingIcon(false);
 		isLoading = false;
 	}
