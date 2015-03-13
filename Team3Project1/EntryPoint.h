@@ -60,7 +60,7 @@ namespace EntryPoint
 		//GameStateManager::Instance()->AddGameScreen(network);
 		//cout << "Entry Point: Let's Start The Game!" << endl;
 		//RacerGame* game = new RacerGame();
-		//cout << "Entry Point: Racer Game Initialised" << endl;
+		////cout << "Entry Point: Racer Game Initialised" << endl;
 		//PhysicsEngine::SetGame(game);
 		//GameStateManager::Instance()->AddGameScreen(game);
 		//cout << "Entry Point: Added Game to GameStateManager" << endl;

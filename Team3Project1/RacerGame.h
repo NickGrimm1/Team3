@@ -13,11 +13,16 @@
 #include "Gold_cion.h"
 #include "HudTestScreen.h"
 #include "GameStateManager.h"
-//#include "../Framework/SoundManager.h"
+
+class AudioTestClass;
+
 class Vehicle;
 class RacerGame : public GameScreen3D
 {
 public:
+	#if WINDOWS_BUILD
+	AudioTestClass* audio;
+#endif
 	RacerGame(void);
 	virtual ~RacerGame(void);
 	virtual void LoadContent();
@@ -49,12 +54,21 @@ public:
 	void SettimeOrScore(int value){timeOrScore+=value;}
 	int GettimeOrScore(){return timeOrScore;}
 
+	void SetMaxSpeed(float value){maxSpeed+=value;}
+	float GetMaxSpeed(){return maxSpeed;}
+	void SetMinSpeed(float value);
+	float GetMinSpeed(){return minSpeed;}
+
+	void GameOver(){}
+
 	void CreateTrack();
 	void DeleteTrack();
 	void Start();
 	float GetCreateAngle();
 	float f;
 	float b;
+	float maxSpeed;
+	float minSpeed;
 	int Speed_Player;
 	float Speed_Rotate;
 	T3Vector3 tempPosition;
@@ -66,16 +80,13 @@ public:
 	//sam
 	Texture* scoreTexture;
 	Texture* timeTexture;
-	HudTestScreen* hud;
-#if WINDOWS_BUILD
-	AudioTestClass* audio;
-#endif
+
 	static float g;
 	static float gx;
 	TrackSegment* Strack;
 
 	vector<T3Vector3> SplinePoint;
-	vector<DrawableEntity3D*> allEntities;
+	vector<GameEntity*> allEntities;
 	vector<TrackSegment*> TrackSegmentVector;
 	vector<GameEntity*> checkPoint;
 	vector<Gold_cion*> pickup;
@@ -84,6 +95,14 @@ public:
 		  if(obj1->GetType()=='g')
 		  {
 			  if(obj1->GetPhysicsNode().GetIsCollide()==false){
+				  if(GettimeOrScore()>3){
+					  SetPlayTime(4);
+					 // if((GetMaxSpeed()-GetMinSpeed())>40){
+					  SetMinSpeed(10);
+					  SetMaxSpeed(10);
+					  //}
+			      
+			}
 			   CreateTrack();
 			   	GameStateManager::Graphics()->RemoveDrawable(checkPoint[0]);
 	            checkPoint[0]->DisconnectFromSystems();
@@ -102,11 +121,15 @@ public:
 		  }*/
 			 if(obj1->GetType()=='d')
 		  {
+			   DeleteTrack();
+			   GameStateManager::Graphics()->RemoveDrawable(checkPoint[0]);
+	checkPoint[0]->DisconnectFromSystems();
+	checkPoint.erase(checkPoint.begin());
 			  obj1->GetPhysicsNode().SetIsCollide(false);
 			  //RacerGame::update=2;
 			    SettimeOrScore(1);
 			  //RacerGame::update=2;
-			  DeleteTrack();
+			 
 			  
 		  }
 			  if(obj1->GetType()=='p')
@@ -130,11 +153,17 @@ public:
 		  {
 #if WINDOWS_BUILD
 			  Sound* time;
+
 			  time=GameStateManager::Audio()->GetSound(SOUNDSDIR"time.wav");
 			  GameStateManager::Audio()->PlaySoundA(time, obj1->GetOriginPosition(), false);
+#endif
 			  obj1->GetPhysicsNode().SetIsCollide(false);
-			  SettimeOrScore(-(GettimeOrScore()));
-			  SetPlayTime(30);
+			  if(GetScore()<40){
+			  SetPlayTime(2);
+			  }
+			  if(GetScore()>=40){
+				  SetMinSpeed(-40.0f);
+			  }
 			  GameStateManager::Graphics()->RemoveDrawable(obj1);
 	          obj1->DisconnectFromSystems();
 #endif
@@ -152,7 +181,7 @@ private:
 	float Time;
 	int PlayTime;
 	int timeOrScore;
-#if WINDOWS_BUILD
+	#if WINDOWS_BUILD
 	SpotLight* light;
 #endif
 	FreeCamera* camera;
@@ -165,15 +194,17 @@ private:
 	Vehicle_Wheel * FrontLeftTire;
 	Vehicle_Wheel * BackRightTire;
 	Vehicle_Wheel * BackLeftTire;
-	
+	HudTestScreen* hud; 
 	DrawableEntity3D* ent;
 	DrawableEntity3D* ent2;
 	bool isplaystartegine;
-	bool isplayrunningegine;
+	bool isplaylowspdegine;
+	bool isplaymidspdegine;
 	bool moveenginesound;
 	bool carspeediszero;
 #if WINDOWS_BUILD
-	SoundEmitter* Engine;
+	SoundEmitter* Engine0;
+	SoundEmitter* Engine1;
 #endif
 };
 

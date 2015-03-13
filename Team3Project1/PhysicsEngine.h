@@ -76,6 +76,7 @@ public:
 
     vector<T3Vector3> worldpoints1;
     vector<T3Vector3> worldpoints2;
+	vector<T3Vector3> vertex_world;
 
 	void	AddNode(PhysicsNode* n);
 

@@ -1,5 +1,6 @@
-#if WINDOWS_BUILD
 #pragma once
+#if WINDOWS_BUILD
+
 #include "../Framework/SoundManager.h"
 #include "../Framework/SoundEmitter.h"
 #include "../Framework/Vehicle.h"
@@ -31,6 +32,7 @@ public:
 private:
 	Sound* BGM1;
 	Sound* BGM2;
+	Sound* BGM3;
 	Sound* Coins;
 	Sound* Engine_start;
 	Sound* Ready;
@@ -40,6 +42,7 @@ private:
 	float CurrentTime;
 	bool bgm1;
 	bool bgm2;
+	bool bgm3;
 	bool ready;
 	bool coins;
 	bool engine_start;

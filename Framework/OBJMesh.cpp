@@ -394,6 +394,11 @@ void	OBJMesh::SetTexturesFromMTL(string &mtlFile, string &mtlType, map<string, M
 			return;
 		}
 	}
+
+#if PS3_BUILD
+normTex = GameStateManager::Assets()->LoadTexture(this, texturePath,0);
+bumpTex = GameStateManager::Assets()->LoadTexture(this, texturePath,0);
+#endif
 }
 
 /*

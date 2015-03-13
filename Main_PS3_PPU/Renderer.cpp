@@ -346,7 +346,7 @@ Renderer::~Renderer(void)
 
 void Renderer::RenderScene() 
 {
-	cout << "Render Scene!" << endl;
+	//cout << "Render Scene!" << endl;
 	renderMutex.lock_mutex(); // prevent other threads from accessing OpenGL during rendering
 	SetViewport();
 	ClearBuffer();
@@ -362,7 +362,7 @@ void Renderer::RenderScene()
 
 		//Main Render
 		//ShadowPass();
-		cout << "Meshes Last Frame: " << count << endl;
+		//cout << "Meshes Last Frame: " << count << endl;
 
 		count = 0;
 		DrawScene();
@@ -580,8 +580,13 @@ void Renderer::DrawNodes(bool enableTextures)
 				SetTextureSampler(shader->GetFragment()->GetParameter("texture"), t);
 				//SetTextureSampler(shader->GetFragment()->GetParameter("texture"), entity.GetTexture()->GetTexture());
 				
+			}else if(entity.GetMesh()->GetNormTex() && entity.GetMesh()->GetNormTex()->GetTexture())
+			{
+				CellGcmTexture* t = entity.GetMesh()->GetNormTex()->GetTexture(); //texture->GetTexture();
+				SetTextureSampler(shader->GetFragment()->GetParameter("texture"), t);
 			}
 		}
+		
 		//	else
 		//	{
 		//		//glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDiffuseTex"), 0);	

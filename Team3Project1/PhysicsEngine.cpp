@@ -466,25 +466,36 @@ void  PhysicsEngine::SortandSweep()
 					if (first.GetPhysicsVertex() == NULL) continue;
 					if (second.GetPhysicsVertex() == NULL) continue;
 
-					if(first.Getplanecollision()==true && second.Getplanecollision()==false)
+			// plane and vehicle collision
+			if(first.Getplanecollision()==true && second.Getplanecollision()==false||second.Getplanecollision()==true && first.Getplanecollision()==false)
 			{
 
-				AddCarEdge(second);
+			if(first.Getplanecollision()==true && second.Getplanecollision()==false)
+			{
+				// make a boundry of vehicle by picking four vertexes
+ 				AddCarEdge(second);
+
+				// Add the lines of track's left and right 
+                // the two closest vertexes makes a line
 				AddTrackEdge(first);
 
 				//if the vehicle has collision with the track's left or right side
 				if(TrackDetection())
 				{
+					// if GJK
 					if(CollisionDetection(first, second))
-			    {
-						CollisionData* data = new CollisionData();
+			       {
+						CollisionData* data = new CollisionData();						
 						bool succeeded = EPA(first, second, data);
+						// if EPA
  						if (succeeded)
-				{
+				       {
 							CollisionHelper::AddCollisionImpulse(first, second, *data);
-				}
-					}
-					second.isDrop = true;
+				       }
+				   }
+					// the vehicle is going to drop 
+					second.SetIsDrop(true);					
+					
 				}
 
 				// keeping the vehicle on the track!
@@ -498,11 +509,54 @@ void  PhysicsEngine::SortandSweep()
 						float err = abs(car_y - floor_y - 5.f)*2;
 						T3Vector3 t3 = second.GetLinearVelocity();
 						t3.y = 0;
-						t3 =t3	+ T3Vector3(0,1,0) * (1+err);
+						t3 =t3	+ T3Vector3(0,0.5,0) * (1+err);
 						second.SetLinearVelocity(t3);
-					}
-				}
 					   }
+				     }
+			}
+
+			if(second.Getplanecollision()==true && first.Getplanecollision()==false)
+			{
+
+				AddCarEdge(first);
+				AddTrackEdge(second);
+
+				//if the vehicle has collision with the track's left or right side
+				if(TrackDetection())
+				{
+					// if GJK
+					if(CollisionDetection(first, second))
+			       {
+						CollisionData* data = new CollisionData();
+						bool succeeded = EPA(first, second, data);
+						// if EPA
+ 						if (succeeded)
+				       {
+							CollisionHelper::AddCollisionImpulse(first, second, *data);
+				       }
+				   }
+					// the vehicle is going to drop 
+					first.SetIsDrop(true);										
+				}
+
+				// keeping the vehicle on the track!
+				else if(!first.GetIsDrop())
+					{
+					float floor_y = second.GetPosition().y;
+					float car_y = first.GetPosition().y;
+
+					if(car_y - floor_y < 5.5f)
+					   {
+						float err = abs(car_y - floor_y - 5.f)*2;
+						T3Vector3 t3 = first.GetLinearVelocity();
+						t3.y = 0;
+						t3 =t3	+ T3Vector3(0,0.5,0) * (1+err);
+						first.SetLinearVelocity(t3);
+					   }
+				     }
+			}
+			}
+
 			else{
 			
 					if(CollisionDetection(first, second))
@@ -544,47 +598,20 @@ void  PhysicsEngine::SortandSweep()
 				}
 			
 				if ((first.GetIsCollide()==true && second.GetIsCollide ()==true) && ((first.Getcar_wheel()==true && second.Getcar_wheel()==true)))
-				{
-			
-					/*first.SetLinearVelocity(T3Vector3(0,0,0));
-					first.SetForce(T3Vector3(0,0,0));
-                    second.SetLinearVelocity(T3Vector3(0,0,0));
-					second.SetForce(T3Vector3(0,0,0));*/
+				{								
 
 					CollisionData* data = new CollisionData();
 					bool succeeded = EPA(first, second, data);
  					if (succeeded)
 					{
 						CollisionHelper::AddCollisionImpulse(first, second, *data);
-
-
-						if(first.Getplanecollision()==true && second.Getplanecollision()==false)
-
-						{
-							/*first.SetUseGravity(false);
-							second.SetUseGravity(false);
-							T3Vector3 temp1,temp2;
-							temp1 =  first.GetLinearVelocity();
-							temp1.y = 0;
-							first.SetLinearVelocity(temp1);
-							
-							temp2 =  second.GetLinearVelocity();
-							temp2.y = 0;
-							second.SetLinearVelocity(temp2);
-													
-			                second.SetPosition(second.GetPosition() + T3Vector3(0, 2.0f, 0));*/
-
+					}
+				}
+					}
 			}
-				}
-				}
-				}
-			}
-				
-
-						}
-				}
-		}
-
+        }
+     }
+  }
 }
 	
 
@@ -633,7 +660,7 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 			        	}					
 					}
 
-					second.isDrop = true;
+					second.SetIsDrop(true);
 				}
 
 				// keeping the vehicle on the track!
@@ -651,7 +678,8 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 						second.SetLinearVelocity(t3);
 					}
 				}
-			}
+			}			
+
 			else{
 			
 			if(CollisionDetection(first, second))
@@ -695,10 +723,6 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 				if ((first.GetIsCollide()==true && second.GetIsCollide ()==true) && ((first.Getcar_wheel()==true && second.Getcar_wheel()==true)))
 				{
 			
-					/*first.SetLinearVelocity(T3Vector3(0,0,0));
-					first.SetForce(T3Vector3(0,0,0));
-                    second.SetLinearVelocity(T3Vector3(0,0,0));
-					second.SetForce(T3Vector3(0,0,0));*/
 
 					CollisionData* data = new CollisionData();
 					bool succeeded = EPA(first, second, data);
@@ -707,117 +731,26 @@ void	PhysicsEngine::NarrowPhaseCollisions() {
 						CollisionHelper::AddCollisionImpulse(first, second, *data);
 
 
-						if(first.Getplanecollision()==true && second.Getplanecollision()==false)
-
-						{
-							/*first.SetUseGravity(false);
-							second.SetUseGravity(false);
-							T3Vector3 temp1,temp2;
-							temp1 =  first.GetLinearVelocity();
-							temp1.y = 0;
-							first.SetLinearVelocity(temp1);
-							
-							temp2 =  second.GetLinearVelocity();
-							temp2.y = 0;
-							second.SetLinearVelocity(temp2);
-													
-			                second.SetPosition(second.GetPosition() + T3Vector3(0, 2.0f, 0));*/
-
-			}
+					
 				}
 				}
 			}
 			}
 				
-
-
-
-
-		//	switch(fv->GetType()) {
-		//	/*case COLLISION_VOL_SPHERE:
-		//		switch(sv->GetType()) {
-		//		case COLLISION_VOL_SPHERE:
-		//			CollisionData data;
-		//			if (CollisionHelper::SphereSphereCollision(first, second, &data)) {
-		//				CollisionHelper::AddCollisionImpulse(first, second, data);
-		//			}
-		//			continue;
-		//		}
-		//	case COLLISION_VOL_PLANE:
-		//		switch(sv->GetType()) {
-		//		case COLLISION_VOL_SPHERE:
-		//			CollisionData data;
-		//			if (CollisionHelper::PlaneSphereCollision(first, second, &data)) {
-		//				CollisionHelper::AddCollisionImpulse(first, second, data);
-		//			}
-		//			continue;
-		//		}*/
-		//   	case COLLISION_AABB:
-		//						switch(sv->GetType()) 
-		//						{
-		//							 case COLLISION_AABB:
-		//		    					
-		//							  if (CollisionHelper::AABBCollision(first, second )) 
-		//							  {
-		//								 // if(count==false){
-		//									//  MyGame::newt=1 ;
-		//									//	  count=true;}
-
-
-		//							  //count=count+1;
-		//							  }
-		//							  continue;
-
-		//							  case COLLISION_VOL_BBAA:
-		//		    					
-		//							  if (CollisionHelper::BBAACollision(second,first )) 
-		//							  {
-		//								 
-
-
-		//								 // if(count==true){
-		//									//  MyGame::dt=1 ;
-		//							//	  count=false;}
-		//							 // count=count+1;
-		//							  }
-		//							 
-		//								continue;
-		//						  }
-
-
-		//case COLLISION_VOL_BBAA:
-		//						switch(sv->GetType()) 
-		//						{
-		//							 case COLLISION_AABB:
-		//		    					
-		//							  if (CollisionHelper::BBAACollision(first, second )) 
-		//							  {
-		//								 
-
-
-		//								//  if(count==true){
-		//									//  MyGame::dt=1 ;
-		//								//  count=false;}
-		//							 // count=count+1;
-		//							  }
-		//							 
-		//								continue;
-		//						  }
-		//	}
-		//
 		}
 	}
 }
 
+// line for lineline collision dectetion!
 struct Line
 {
-	T3Vector3 m_p0;
-	T3Vector3 m_p1;
+	T3Vector3 m1;
+	T3Vector3 m2;
 
 	Line(const T3Vector3& a, const T3Vector3 &b)
 	{
-		m_p0 = a;
-		m_p1 = b;
+		m1 = a;
+		m2 = b;
 	}
 };
 
@@ -827,12 +760,10 @@ std::vector<Line> lst_Car_Edge;
 
 bool LineLineIntersection ( const Line & l0, const Line & l1, float * t0 = NULL, float * t1 = NULL)
 {
-
-		
-	const T3Vector3 & p0 = l0. m_p0 ;
-	const T3Vector3 & p1 = l0. m_p1 ;
-	const T3Vector3 & p2 = l1. m_p0 ;
-	const T3Vector3 & p3 = l1. m_p1 ;
+	const T3Vector3 & p0 = l0. m1 ;
+	const T3Vector3 & p1 = l0. m2 ;
+	const T3Vector3 & p2 = l1. m1 ;
+	const T3Vector3 & p3 = l1. m2 ;
 
 	const float div = (p3.z-p2.z)*( p1.x-p0.x) - (p3.x-p2.x)*( p1.z-p0.z);
 
@@ -868,39 +799,23 @@ void PhysicsEngine::AddCarEdge(PhysicsNode & shape1)
 
 	T3Vector3 c1,c2,c3,c4,c5;
 	
-	/*c1.x=shape1.GetPosition().x + 1.5f;
-	c1.y=shape1.GetPosition().y;
-	c1.z=shape1.GetPosition().z + 3.3f;
-
-	c2.x=shape1.GetPosition().x - 1.5f;
-	c2.y=shape1.GetPosition().y;
-	c2.z=shape1.GetPosition().z + 3.3f;
-
-    c3.x=shape1.GetPosition().x - 1.5f;
-	c3.y=shape1.GetPosition().y;
-	c3.z=shape1.GetPosition().z - 3.3f;
-
-	c4.x=shape1.GetPosition().x - 1.5f;
-	c4.y=shape1.GetPosition().y;
-	c4.z=shape1.GetPosition().z + 3.3f;*/
 	// the car's four vertexes in two dimensional- x,z
 	c1= shape1.GetPosition();
 	c2= shape1.GetPosition();
 	c3= shape1.GetPosition();
 	c4= shape1.GetPosition();
 
-	//c1 = T3Matrix4::Translation(shape1.GetTarget()->GetOriginPosition()) * shape1.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape1.GetTarget()->GetScale()) * c1;
-	c1.x = c1.x + (shape1.GetTarget()->GetScale().x) *1.5f;
-	c1.z = c1.z + (shape1.GetTarget()->GetScale().z) *3.5f;
-	//c2 = T3Matrix4::Translation(shape1.GetTarget()->GetOriginPosition()) * shape1.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape1.GetTarget()->GetScale()) * c2;
-	c2.x = c2.x - (shape1.GetTarget()->GetScale().x) *1.5f;
-	c2.z = c2.z + (shape1.GetTarget()->GetScale().z) *3.5f;
-	//c3 = T3Matrix4::Translation(shape1.GetTarget()->GetOriginPosition()) * shape1.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape1.GetTarget()->GetScale()) * c3;
-	c3.x = c3.x - (shape1.GetTarget()->GetScale().x) *1.5f;
-	c3.z = c3.z - (shape1.GetTarget()->GetScale().z) *3.5f;
-	//c4 = T3Matrix4::Translation(shape1.GetTarget()->GetOriginPosition()) * shape1.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape1.GetTarget()->GetScale()) * c4;
-	c4.x = c4.x + (shape1.GetTarget()->GetScale().x) *1.5f;
-	c4.z = c4.z + (shape1.GetTarget()->GetScale().z) *3.5f;
+	c1.x = c1.x + (shape1.GetTarget()->GetScale().x) *1.5f *0.2f;
+	c1.z = c1.z + (shape1.GetTarget()->GetScale().z) *3.5f *0.2f;
+	
+	c2.x = c2.x - (shape1.GetTarget()->GetScale().x) *1.5f *0.2f;
+	c2.z = c2.z + (shape1.GetTarget()->GetScale().z) *3.5f *0.2f;
+	
+	c3.x = c3.x - (shape1.GetTarget()->GetScale().x) *1.5f *0.2f;
+	c3.z = c3.z - (shape1.GetTarget()->GetScale().z) *3.5f *0.2f;
+	
+	c4.x = c4.x + (shape1.GetTarget()->GetScale().x) *1.5f *0.2f;
+	c4.z = c4.z + (shape1.GetTarget()->GetScale().z) *3.5f *0.2f;
 #if PS3_BUILD
 	lst_Car_Edge.push_back(Line(c1,c2));
 	lst_Car_Edge.push_back(Line(c2,c3));
@@ -920,6 +835,7 @@ void PhysicsEngine::AddCarEdge(PhysicsNode & shape1)
 void PhysicsEngine::AddTrackEdge(PhysicsNode & shape1)
 {
 	lst_Track_Edge.clear();
+	vertex_world.clear();
 	
 	//Vertex number from track mesh
 	int tn = shape1.GetPhysicsMesh()->GetNumVertices();
@@ -927,11 +843,18 @@ void PhysicsEngine::AddTrackEdge(PhysicsNode & shape1)
 	//Vertexes from track mesh
 	Vertex * vertex_l = shape1.GetPhysicsMesh()->GetVertices();
 
+	// transfer the vertexes to world space
+	for(int i=0; i<tn;i++)
+	{		
+		vertex_world.push_back(T3Matrix4::Translation(shape1.GetTarget()->GetOriginPosition())* shape1.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape1.GetTarget()->GetScale())*vertex_l[i].GetPosition());
+	}
+
 	//Add the lines of track's left
 	for(int i = 0; i<(tn/2)-1;i++ )
 	{
+		
 #ifdef WINDOWS_BUILD
-		lst_Track_Edge.emplace_back(vertex_l[i].GetPosition(), vertex_l[i+1].GetPosition());
+		lst_Track_Edge.emplace_back(vertex_world[i], vertex_world[i+1]);
 #endif
 #ifdef PS3_BUILD
 		lst_Track_Edge.push_back(Line(vertex_l[i].GetPosition(), vertex_l[i+1].GetPosition()));
@@ -942,7 +865,7 @@ void PhysicsEngine::AddTrackEdge(PhysicsNode & shape1)
 	for(int j = tn/2; j<tn-1;j++)
 	{
 #ifdef WINDOWS_BUILD
-		lst_Track_Edge.emplace_back(vertex_l[j].GetPosition(), vertex_l[j+1].GetPosition());
+		lst_Track_Edge.emplace_back(vertex_world[j], vertex_world[j+1]);
 #endif
 #ifdef PS3_BUILD
 		lst_Track_Edge.push_back(Line(vertex_l[j].GetPosition(), vertex_l[j+1].GetPosition()));
@@ -987,7 +910,7 @@ float Dist(const T3Vector3& a, const T3Vector3& b)
 	struct EPA_Point
 	{
 		T3Vector3 v;
-	bool operator==(const EPA_Point &a) const { return v == a.v; }
+		bool operator==(const EPA_Point &a) const { return v == a.v; }
 	};
 
 	//the edge to store points of triangle
@@ -1037,7 +960,8 @@ float Dist(const T3Vector3& a, const T3Vector3& b)
 	};
 #endif
 
-	
+
+	// EPA for real time collision detection and generating collision data 
 bool PhysicsEngine::EPA(PhysicsNode& shape1, PhysicsNode& shape2, CollisionData* data)
 {
 
@@ -1119,7 +1043,7 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1, PhysicsNode& shape2, CollisionData*
 		{
 			float bary_x,bary_y,bary_z;
 
-			//calculate the barycentric coordinates of the closest point
+			//calculate the barycentric coordinates of the closest triangle
 
 			barycentric(closest_triangle->Triangle_normal * closest_distance,
 				closest_triangle->Point[0].v, closest_triangle->Point[1].v, closest_triangle->Point[2].v, 
@@ -1129,19 +1053,10 @@ bool PhysicsEngine::EPA(PhysicsNode& shape1, PhysicsNode& shape2, CollisionData*
 			contactpoint = ((closest_triangle->Point[0].v*bary_x)+
 						  (closest_triangle->Point[1].v*bary_y)+
 						  (closest_triangle->Point[2].v*bary_z));		
-
-		//  OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, closest_triangle->Point[0].v, closest_triangle->Point[1].v);
-		//	OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, closest_triangle->Point[0].v, closest_triangle->Point[2].v);
-		//	OGLRenderer::DrawDebugLine(DEBUGDRAW_PERSPECTIVE, closest_triangle->Point[1].v, closest_triangle->Point[2].v);
-
+	
 			//collision data
 			T3Matrix4 transform_1 = T3Matrix4::Translation(shape1.GetTarget()->GetOriginPosition()) * shape1.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape1.GetTarget()->GetScale());
 			T3Matrix4 transform_2 = T3Matrix4::Translation(shape2.GetTarget()->GetOriginPosition()) * shape2.GetTarget()->GetRotation().ToMatrix() * T3Matrix4::Scale(shape2.GetTarget()->GetScale());
-
-
-			//contactpoint = shape2.GetPosition() - contactpoint;
-			//OGLRenderer::DrawDebugCross(DEBUGDRAW_PERSPECTIVE, transform_1 * -contactpoint, T3Vector3(2, 2, 2), T3Vector3(1, 0, 1));
-			//OGLRenderer::DrawDebugCross(DEBUGDRAW_PERSPECTIVE, transform_2 * contactpoint, T3Vector3(2, 2, 2), T3Vector3(0, 1, 1));
 
 			data-> m_point1 = transform_1 * -contactpoint;
 			data-> m_point2 = transform_2 * -contactpoint;
