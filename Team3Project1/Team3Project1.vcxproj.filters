@@ -276,12 +276,6 @@
     <ClInclude Include="..\Framework\Quaternion.h">
       <Filter>Framework\Common\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Framework\Window.h">
-      <Filter>Framework\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Framework\CollisionVolume.h">
       <Filter>Framework\Physics\Header Files</Filter>
     </ClInclude>
@@ -340,9 +334,6 @@
       <Filter>Framework\Graphics\Windows\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\SceneNode.h">
-      <Filter>Framework\Graphics\Common\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Framework\Weather.h">
       <Filter>Framework\Graphics\Common\Header</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\Light.h">
@@ -534,6 +525,12 @@
     <ClInclude Include="AudioTestClass.h">
       <Filter>Game\MainGame\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Framework\Graphics\Windows\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Framework\Window.h">
+      <Filter>Framework\Graphics\Windows\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Framework\Frustum.cpp">
@@ -572,12 +569,6 @@
     <ClCompile Include="..\Framework\Quaternion.cpp">
       <Filter>Framework\Common\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Framework\Window.cpp">
-      <Filter>Framework\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Framework\ParticleEmitter.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
@@ -594,9 +585,6 @@
       <Filter>Framework\Graphics\Windows\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Framework\SceneNode.cpp">
-      <Filter>Framework\Graphics\Common\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Framework\Weather.cpp">
       <Filter>Framework\Graphics\Common\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\Framework\Light.cpp">
@@ -775,6 +763,12 @@
     </ClCompile>
     <ClCompile Include="AudioTestClass.cpp">
       <Filter>Game\MainGame\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Framework\Graphics\Windows\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Framework\Window.cpp">
+      <Filter>Framework\Graphics\Windows\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

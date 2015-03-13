@@ -28,10 +28,12 @@ public:
 	RacerGame(void);
 	virtual ~RacerGame(void);
 	virtual void LoadContent();
-	virtual void UnloadContent() {}
+	virtual void UnloadContent();
 	virtual void Update();
 	static int update;
 
+	virtual void Pause();
+	virtual void Resume();
 
 	// Input Listener methods - not implemented
 #if WINDOWS_BUILD
@@ -182,7 +184,6 @@ private:
 
 	SpotLight* light;
 #endif
-	FreeCamera* camera;
 	ChaseCamera* chasecamera;
 	Vehicle* car;
 

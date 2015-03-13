@@ -34,6 +34,7 @@ void PhysicsEngine::ThreadRun()
 #if PS3_BUILD
 		float msec = 8;
 #endif
+		if (paused) continue;
 		frameRate = (int)(1000.0f / msec);
 
 

@@ -7,9 +7,11 @@ last frame (default value is for simplicities sake...)
 */
 void Camera::UpdateCamera()	
 {
-	rotatedTarget = rotation * originalTarget;
-	rotatedUp = rotation * originalUp;
-	rotatedRight = rotation * originalRight;
+	if (!isPaused) {
+		rotatedTarget = rotation * originalTarget;
+		rotatedUp = rotation * originalUp;
+		rotatedRight = rotation * originalRight;
+	}
 }
 
 /*

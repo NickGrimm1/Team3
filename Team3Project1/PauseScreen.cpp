@@ -1,13 +1,15 @@
 #include "PauseScreen.h"
 
 
-PauseScreen::PauseScreen(void) {
+PauseScreen::PauseScreen(GameScreen3D* mainGame, GameScreen2D* hud) {
 #if WINDOWS_BUILD
 	GameStateManager::Graphics()->EnableMousePointer(true);
 #endif
 	//Set these to reflect the current state of the audio engine.
 	musicMuted = false;
 	soundMuted = false;
+	racerScreen = mainGame;
+	hudScreen = hud;
 }
 
 PauseScreen::~PauseScreen(void) {
@@ -111,13 +113,18 @@ void PauseScreen::UnloadContent() {
 
 void PauseScreen::ResumeClicked(float x, float y) {
 	resumeGame->GetTexture()->SetTexture(buttonTexClicked);
+	GameStateManager::Resume();
 }
 
 void PauseScreen::MainMenuClicked(float x, float y) {
 	mainMenu->GetTexture()->SetTexture(buttonTexClicked);
 	
 	MainMenu* menu = new MainMenu();
-	GameStateManager::ChangeScreen(menu);
+	//GameStateManager::ChangeScreen(menu);
+	GameStateManager::RemoveGameScreen(hudScreen);
+	GameStateManager::RemoveGameScreen(racerScreen);
+	GameStateManager::RemoveGameScreen(this);
+	GameStateManager::AddGameScreen(menu);
 }
 
 void PauseScreen::SoundsClicked(float x, float y) {
