@@ -122,36 +122,36 @@ void RacerGame::LoadContent() {
 	
 	//add road
 	
-	Texture* grassTex2 = GameStateManager::Assets()->LoadTexture(this, "trackTex", 0);
-	GameStateManager::Graphics()->GetRenderContext();
-	TrackSegment* trackr = new TrackSegment(T3Vector3(-100.0f,0.0f,0.0f),T3Vector3(0.0f,0.0f,0.0f),T3Vector3(100.0f,0.0f,0.0f), 5, 50.0f);
-	
-	//push back track
-	//TrackSegmentVector.push_back(trackr);
-	GameStateManager::Graphics()->DropRenderContext();
-	PhysicsNode* proad = new PhysicsNode();
-	GameEntity* road= new GameEntity(proad);
-		road->SetMesh(trackr);
-		road->SetShader(0);
-		road->SetTexture(grassTex2);
-		road->SetBumpTexture(NULL);
-		road->SetBoundingRadius(800.0f);
-		road->SetOriginPosition(T3Vector3(0.0f,-20.0f,0.0f));
-		road->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
-		road->SetScale(T3Vector3(1.0f,1.0f,1.0f));
-		road->GetPhysicsNode().SetMass(5.0f);
-		road->GetPhysicsNode().SetMesh(trackr);
-		road->GetPhysicsNode().SetInverseMass(0.0f);
-		road->GetPhysicsNode().SetUseGravity(false);
-		road->GetPhysicsNode().SetXstart(road->GetPhysicsNode().GetPosition().x-200);
-		road->GetPhysicsNode().SetXend(road->GetPhysicsNode().GetPosition().x+200);
-		road->GetPhysicsNode().SetIsCollide(true);
-	    road->GetPhysicsNode().Setcar_wheel(true);
-		road->GetPhysicsNode().Setplanecollision(true);
-		road->GetPhysicsNode().SetPosition(T3Vector3(0.0f,-20.0f,0.0f));
-		road->GetPhysicsNode().SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
-		road->ConnectToSystems();
-		AddDrawable(road);
+	//Texture* grassTex2 = GameStateManager::Assets()->LoadTexture(this, "trackTex", 0);
+	//GameStateManager::Graphics()->GetRenderContext();
+	//TrackSegment* trackr = new TrackSegment(T3Vector3(-100.0f,0.0f,0.0f),T3Vector3(0.0f,0.0f,0.0f),T3Vector3(100.0f,0.0f,0.0f), 5, 50.0f);
+	//
+	////push back track
+	////TrackSegmentVector.push_back(trackr);
+	//GameStateManager::Graphics()->DropRenderContext();
+	//PhysicsNode* proad = new PhysicsNode();
+	//GameEntity* road= new GameEntity(proad);
+	//	road->SetMesh(trackr);
+	//	road->SetShader(0);
+	//	road->SetTexture(grassTex2);
+	//	road->SetBumpTexture(NULL);
+	//	road->SetBoundingRadius(800.0f);
+	//	road->SetOriginPosition(T3Vector3(0.0f,-20.0f,0.0f));
+	//	road->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
+	//	road->SetScale(T3Vector3(1.0f,1.0f,1.0f));
+	//	road->GetPhysicsNode().SetMass(5.0f);
+	//	road->GetPhysicsNode().SetMesh(trackr);
+	//	road->GetPhysicsNode().SetInverseMass(0.0f);
+	//	road->GetPhysicsNode().SetUseGravity(false);
+	//	road->GetPhysicsNode().SetXstart(road->GetPhysicsNode().GetPosition().x-200);
+	//	road->GetPhysicsNode().SetXend(road->GetPhysicsNode().GetPosition().x+200);
+	//	road->GetPhysicsNode().SetIsCollide(true);
+	//    road->GetPhysicsNode().Setcar_wheel(true);
+	//	road->GetPhysicsNode().Setplanecollision(true);
+	//	road->GetPhysicsNode().SetPosition(T3Vector3(0.0f,-20.0f,0.0f));
+	//	road->GetPhysicsNode().SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
+	//	road->ConnectToSystems();
+	//	AddDrawable(road);
 	
 	/*	road =new Road (5);
 		road->SetPhysics(5);*/
@@ -407,9 +407,9 @@ minSpeed+=value;
 void RacerGame::Start(){
 
 	Gold_cion * gold_cion= new Gold_cion(20.0f);
-	gold_cion->SetOriginPosition(T3Vector3(50.0f,0.0f,0.0f));
+	gold_cion->SetOriginPosition(T3Vector3(450.0f,0.0f,0.0f));
 	gold_cion->SetRotation(Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
-	gold_cion->SetPhysics(8.0f,'p',T3Vector3(50.0f,0.0f,0.0f),Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
+	gold_cion->SetPhysics(8.0f,'p',T3Vector3(450.0f,0.0f,0.0f),Quaternion::EulerAnglesToQuaternion(0.0f,0.0f,0.0f));
 	gold_cion->SetType('p');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 	gold_cion->GetPhysicsNode().SetPGE(gold_cion);
 	AddDrawable(gold_cion);
