@@ -5,7 +5,6 @@
 #include "../Framework/MyGame.h"
 #include "FreeCamera.h"
 #include "ChaseCamera.h"
-
 #include "Vehicle_Wheel.h"
 #include "VehiclePhysicsNode.h"
 #include "CheckPoint.h"
@@ -13,9 +12,7 @@
 #include "Gold_cion.h"
 #include "HudTestScreen.h"
 #include "GameStateManager.h"
-
 class AudioTestClass;
-
 class Vehicle;
 class RacerGame : public GameScreen3D
 {
@@ -29,10 +26,8 @@ public:
 	virtual void UnloadContent();
 	virtual void Update();
 	static int update;
-
 	virtual void Pause();
 	virtual void Resume();
-
 	// Input Listener methods - not implemented
 #if WINDOWS_BUILD
 	virtual void MouseEvent(MouseEvents::EventType type, MouseEvents::MouseButtons button, T3Vector2& position) {};
@@ -42,26 +37,21 @@ public:
 #endif
 	virtual void GamepadEvent(GamepadEvents::PlayerIndex playerID, GamepadEvents::EventType type, GamepadEvents::Button button);
 	virtual void GamepadAnalogueDisplacement(GamepadEvents::PlayerIndex playerID, GamepadEvents::AnalogueControl analogueControl, T3Vector2& amount);
-
 	virtual void GamepadDisconnect(GamepadEvents::PlayerIndex playerID){}
-
 	void SetScore(int value){score+=value;}
 	float GetScore(){return score;}
 	void SetTime(int value){Time+=value;}
 	float GetTime(){return Time;}
-	
 	void SetPlayTime(int value){PlayTime+=value;}
 	int GetPlayTime(){return PlayTime;}
-
 	void SettimeOrScore(int value){timeOrScore+=value;}
 	int GettimeOrScore(){return timeOrScore;}
-
 	void SetMaxSpeed(float value){maxSpeed+=value;}
 	float GetMaxSpeed(){return maxSpeed;}
 	void SetMinSpeed(float value);
 	float GetMinSpeed(){return minSpeed;}
 
-	void GameOver(){}
+	void GameOver();
 
 	void CreateTrack();
 	void DeleteTrack();
@@ -76,74 +66,45 @@ public:
 	T3Vector3 tempPosition;
 	T3Vector3 temp,temp1,temp2;
 	T3Vector3 PlayerPosition;
-
-
-
-	//sam
 	Texture* scoreTexture;
 	Texture* timeTexture;
-
 	static float g;
 	static float gx;
 	TrackSegment* Strack;
-
 	vector<T3Vector3> SplinePoint;
 	vector<GameEntity*> allEntities;
 	vector<TrackSegment*> TrackSegmentVector;
 	vector<GameEntity*> checkPoint;
 	vector<Gold_cion*> pickup;
-
 	 virtual void CollisionBetween(GameEntity* obj1, GameEntity* obj2) {
 		  if(obj1->GetType()=='g')
 		  {
 			  if(obj1->GetPhysicsNode().GetIsCollide()==false){
 				  if(GettimeOrScore()>3){
 					  SetPlayTime(4);
-					 // if((GetMaxSpeed()-GetMinSpeed())>40){
 					  SetMinSpeed(10);
 					  SetMaxSpeed(10);
-					  //}
-			      
 			}
 			   CreateTrack();
-			  
 	            checkPoint[0]->DisconnectFromSystems();
 	delete checkPoint[0];
-	            checkPoint.erase(checkPoint.begin());
+	checkPoint.erase(checkPoint.begin());
 			  }
-			 // obj1->GetPhysicsNode().SetIsCollide(false);
-			//  RacerGame::update=1;
-		 
 		  }
-		 /*   if(obj2->GetType()=='g')
-		  {
-			  obj2->GetPhysicsNode().SetIsCollide(false);
-			
-			  RacerGame::update=1;
-			  
-		  }*/
 			 if(obj1->GetType()=='d')
 		  {
 			   DeleteTrack();
-	checkPoint[0]->DisconnectFromSystems();
+			   checkPoint[0]->DisconnectFromSystems();
 	delete checkPoint[0];
 	checkPoint.erase(checkPoint.begin());
-			  //obj1->GetPhysicsNode().SetIsCollide(false);
-			  //RacerGame::update=2;
 			    SettimeOrScore(1);
-			  //RacerGame::update=2;
-			 
-			  
 		  }
-			  if(obj1->GetType()=='p')
+			 if(obj1->GetType()=='p')
 		  {
-	
 #ifdef WINDOWS_BUILD
-			 // SoundManager::AddSound(SOUNDSDIR"Tokyo Drift2.wav");
 			  Sound* coins;
 			  coins=GameStateManager::Audio()->GetSound(SOUNDSDIR"coins.wav");
 			  GameStateManager::Audio()->PlaySoundA(coins, obj1->GetOriginPosition(), false);
-//			  GameStateManager::Audio()->PlaySound(coins,SOUNDPRIORITY_ALWAYS,false,false);
 #endif			  
 	  		  obj1->GetPhysicsNode().SetIsCollide(false);
 			  SetScore(1);
@@ -152,11 +113,10 @@ public:
 	          obj1->DisconnectFromSystems();
 			  pickup.erase(pickup.begin());
 		  }
-			   if(obj1->GetType()=='t')
+			 if(obj1->GetType()=='t')
 		  {
 #if WINDOWS_BUILD
 			  Sound* time;
-
 			  time=GameStateManager::Audio()->GetSound(SOUNDSDIR"time.wav");
 			  GameStateManager::Audio()->PlaySoundA(time, obj1->GetOriginPosition(), false);
 #endif
@@ -170,16 +130,11 @@ public:
 			  GameStateManager::Graphics()->RemoveDrawable(obj1);
 	          obj1->DisconnectFromSystems();
 		  }
-			   		  
    }
-	//sam
-
-
-
 private:
 	Mesh* quad;
 	Mesh* cylinder;
-	float score;
+	unsigned int score;
 	float Time;
 	int PlayTime;
 	int timeOrScore;
@@ -188,7 +143,6 @@ private:
 #endif
 	ChaseCamera* chasecamera;
 	Vehicle* car;
-
 	CheckPoint * checkpoint;
 	CheckPoint * checkpoint2;
 	Vehicle_Wheel * FrontRightTire;
@@ -203,6 +157,7 @@ private:
 	bool isplaymidspdegine;
 	bool moveenginesound;
 	bool carspeediszero;
+	bool gameOver;
 #if WINDOWS_BUILD
 	SoundEmitter* Engine0;
 	SoundEmitter* Engine1;
