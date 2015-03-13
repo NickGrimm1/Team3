@@ -4,6 +4,7 @@
 #include "GraphicsTestScreen.h"
 #include "HudTestScreen.h"
 #include "MainMenu.h"
+#include "PauseScreen.h"
 
 void LoadingScreen::LoadContent() {
 	isLoading = true;
@@ -23,10 +24,6 @@ void LoadingScreen::Update() {
 	
 		MainMenu* menu = new MainMenu();
 		GameStateManager::Instance()->AddGameScreen(menu);
-
-		//RacerGame* game = new RacerGame();
-		//PhysicsEngine::SetGame(game);
-		//GameStateManager::Instance()->AddGameScreen(game);
 
 		GameStateManager::Graphics()->EnableLoadingIcon(false);
 		isLoading = false;

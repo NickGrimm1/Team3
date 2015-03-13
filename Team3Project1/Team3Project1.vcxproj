@@ -279,7 +279,6 @@
     <ClInclude Include="..\Framework\T3Vector3.h" />
     <ClInclude Include="..\Framework\T3Vector4.h" />
     <ClInclude Include="..\Framework\Vehicle.h" />
-    <ClInclude Include="..\Framework\Weather.h" />
     <ClInclude Include="..\Framework\Window.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="AudioEngine.h" />
@@ -381,7 +380,6 @@
     <ClCompile Include="..\Framework\SoundManager.cpp" />
     <ClCompile Include="..\Framework\SpringDemo.cpp" />
     <ClCompile Include="..\Framework\Vehicle.cpp" />
-    <ClCompile Include="..\Framework\Weather.cpp" />
     <ClCompile Include="..\Framework\Window.cpp" />
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="AudioEngine.cpp" />

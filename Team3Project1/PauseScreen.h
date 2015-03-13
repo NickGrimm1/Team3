@@ -19,12 +19,14 @@ Version: 0.0.1 02/03/2015.</summary>
 class PauseScreen :	public GameScreen2D
 {
 public:
-	PauseScreen(void);
+	PauseScreen(GameScreen3D* mainGame, GameScreen2D* hud);
 	~PauseScreen(void);
 
 	virtual void LoadContent();
 	virtual void Update();
 	virtual void UnloadContent();
+
+	virtual void Resume() {GameStateManager::RemoveGameScreen(this);};
 
 #if WINDOWS_BUILD
 	virtual void MouseScrolled(T3Vector2& position, int amount) { }
@@ -77,5 +79,8 @@ private:
 
 	bool musicMuted;
 	bool soundMuted;
+
+	GameScreen3D* racerScreen;
+	GameScreen2D* hudScreen;
 };
 

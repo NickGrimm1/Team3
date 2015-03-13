@@ -91,6 +91,11 @@ void HudTestScreen::LoadContent() {
 
 void HudTestScreen::UnloadContent()
 {
+	RemoveDrawable(Playtime, false);
+	RemoveDrawable(Score, false);
+	RemoveDrawable(Speed, false);
+
+
 	GameStateManager::Assets()->UnloadFont(this, "tahoma");
 	GameStateManager::Assets()->UnloadTexture(this, "Grass_Color");
 	GameStateManager::Assets()->UnloadTexture(this, "calvin");
