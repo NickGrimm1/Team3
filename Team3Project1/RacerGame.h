@@ -74,8 +74,6 @@ public:
 	Texture* scoreTexture;
 	Texture* timeTexture;
 
-	HudTestScreen* hud;
-
 	static float g;
 	static float gx;
 	TrackSegment* Strack;
